@@ -1,0 +1,104 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter var', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Warm, calm neutrals — never clinical white/grey. These are the LIGHT
+     values; dark-mode overrides for the same custom property names live
+     below, outside @theme, so every var(--color-x) reference (Tailwind
+     utilities and inline styles alike) picks up the right value. */
+  --color-paper: #faf7f2;
+  --color-surface: #ffffff;
+  --color-surface-raised: #fffdf9;
+
+  --color-ink: #2b2733;
+  --color-ink-muted: #6f6a7c;
+  --color-hairline: #e7e1d8;
+
+  /* Brand accent — soft lavender, calm not clinical */
+  --color-brand: #7c6fa8;
+  --color-brand-soft: #efeaf9;
+
+  /* Pain-weather ordinal scale — light/warm (easy day) -> dark/cool (hard day)
+     Lightness decreases monotonically so the scale reads even without color.
+     Kept identical in dark mode (also mirrored as literal hex in
+     lib/theme.ts for the exported weather card, which always renders in
+     its own fixed light style regardless of the viewer's theme). */
+  --color-weather-1: #e3a73b;
+  --color-weather-1-soft: #fbf0dc;
+  --color-weather-2: #c7ab68;
+  --color-weather-2-soft: #f3ecd9;
+  --color-weather-3: #9b95a6;
+  --color-weather-3-soft: #eae7ee;
+  --color-weather-4: #5e7ea3;
+  --color-weather-4-soft: #e1e9f1;
+  --color-weather-5: #574a7a;
+  --color-weather-5-soft: #e7e2f0;
+
+  --radius-card: 1.25rem;
+}
+
+/* Dark-mode token overrides: reassigning the same --color-* custom
+   properties (not new -dark-suffixed ones) so every consumer — Tailwind
+   utilities generated from @theme and plain var(--color-x) inline styles —
+   updates automatically. Both the OS-level media query and an explicit
+   data-theme stamp are covered, and the stamp always wins (the :not()
+   guard stops a light stamp from being beaten by OS dark; the media rule
+   is what "Auto" relies on). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-paper: #17151c;
+    --color-surface: #211e29;
+    --color-surface-raised: #2a2633;
+    --color-ink: #f1eef7;
+    --color-ink-muted: #a79fbb;
+    --color-hairline: rgba(180, 170, 200, 0.16);
+    --color-brand: #a89bd6;
+    --color-brand-soft: #322c47;
+  }
+}
+
+:root[data-theme='dark'] {
+  --color-paper: #17151c;
+  --color-surface: #211e29;
+  --color-surface-raised: #2a2633;
+  --color-ink: #f1eef7;
+  --color-ink-muted: #a79fbb;
+  --color-hairline: rgba(180, 170, 200, 0.16);
+  --color-brand: #a89bd6;
+  --color-brand-soft: #322c47;
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100svh;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+/* Bigger, calmer tap targets everywhere — this app is used on hard days */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--color-brand-soft);
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  max-width: 560px;
+  margin: 0 auto;
+}

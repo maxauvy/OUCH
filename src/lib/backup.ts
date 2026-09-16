@@ -1,0 +1,86 @@
+import { db, getSettings } from '../db'
+import type { DailyEntry, Settings } from '../db/types'
+import { decryptJSON, encryptJSON, type EncryptedPayload } from './crypto'
+
+interface BackupBundle {
+  version: 1
+  exportedAt: string
+  entries: DailyEntry[]
+  settings: Settings
+}
+
+export async function exportEncryptedBackup(password: string): Promise<Blob> {
+  const [entries, settings] = await Promise.all([db.entries.toArray(), getSettings()])
+  const bundle: BackupBundle = { version: 1, exportedAt: new Date().toISOString(), entries, settings }
+  const payload = await encryptJSON(bundle, password)
+  return new Blob([JSON.stringify(payload)], { type: 'application/json' })
+}
+
+export function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
+}
+
+export type ImportMode = 'merge' | 'replace'
+
+export interface ImportResult {
+  imported: number
+  skipped: number
+}
+
+/**
+ * merge: entries are upserted by date (imported data wins on conflict — this
+ *   is meant for restoring onto a fresh device or reconciling two devices).
+ * replace: existing entries are wiped first.
+ */
+export async function importEncryptedBackup(
+  file: File,
+  password: string,
+  mode: ImportMode
+): Promise<ImportResult> {
+  const text = await file.text()
+  let payload: EncryptedPayload
+  try {
+    payload = JSON.parse(text)
+  } catch {
+    throw new Error('Ce fichier ne ressemble pas à une sauvegarde Accalmie.')
+  }
+  const bundle = await decryptJSON<BackupBundle>(payload, password)
+  if (!bundle || !Array.isArray(bundle.entries)) {
+    throw new Error('Sauvegarde invalide.')
+  }
+
+  let imported = 0
+  let skipped = 0
+
+  await db.transaction('rw', db.entries, db.settings, async () => {
+    if (mode === 'replace') {
+      await db.entries.clear()
+    }
+    for (const entry of bundle.entries) {
+      if (!entry.date) {
+        skipped++
+        continue
+      }
+      const existing = await db.entries.where('date').equals(entry.date).first()
+      const { id: _ignoredId, ...rest } = entry
+      if (existing) {
+        await db.entries.update(existing.id!, rest)
+      } else {
+        await db.entries.add(rest as DailyEntry)
+      }
+      imported++
+    }
+    if (bundle.settings) {
+      await db.settings.put({ ...bundle.settings, id: 1 })
+    }
+  })
+
+  return { imported, skipped }
+}

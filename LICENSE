@@ -1,0 +1,34 @@
+Accalmie
+Copyright (C) 2026 Maxime Auvy
+
+Ce logiciel est régi par la licence CeCILL v2.1 soumise au droit français et
+respectant les principes de diffusion des logiciels libres. Vous pouvez
+utiliser, modifier et/ou redistribuer ce programme sous les conditions de la
+licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA sur le site
+« http://www.cecill.info ».
+
+SPDX-License-Identifier: CECILL-2.1
+
+------------------------------------------------------------------------------
+TEXTE INTÉGRAL DE LA LICENCE — À COMPLÉTER AVANT PUBLICATION
+------------------------------------------------------------------------------
+
+Ce fichier contient volontairement la notice standard ci-dessus, mais PAS le
+texte intégral des 14 articles de la licence CeCILL v2.1 : pour un document
+contractuel comme celui-ci, la reproduction doit être parfaitement fidèle à
+l'original, et l'outil de récupération web dont dispose Claude ne permet pas
+de garantir une copie mot pour mot fiable (il fait relire le contenu par un
+modèle avant de le renvoyer, ce qui n'est pas acceptable pour un texte
+juridique).
+
+Pour finaliser ce fichier, la méthode la plus sûre :
+
+1. Va sur https://cecill.info/licences/Licence_CeCILL_V2.1-fr.html
+2. Copie le texte intégral de la licence (préambule + articles 1 à 14)
+3. Colle-le à la suite de ce fichier, à la place de cette section, ou
+   remplace entièrement ce fichier par le texte officiel + la notice
+   ci-dessus en en-tête.
+
+Tu peux aussi me coller le texte ici une fois récupéré : je l'intègre
+proprement et je republie le projet avec le fichier complet.
+------------------------------------------------------------------------------
