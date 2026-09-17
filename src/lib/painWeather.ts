@@ -1,12 +1,14 @@
 import type { DailyEntry, PainWeather, PainWeatherLevel } from '../db/types'
 import { theme } from './theme'
 
+// Display labels for each level live in the active translation
+// (`t.painWeatherLevels[level]`), not here.
 const LEVELS: Record<PainWeatherLevel, Omit<PainWeather, 'level'>> = {
-  1: { label: 'Ciel dégagé', icon: 'sun', color: theme.weather[1].color, soft: theme.weather[1].soft },
-  2: { label: 'Quelques nuages', icon: 'cloud-sun', color: theme.weather[2].color, soft: theme.weather[2].soft },
-  3: { label: 'Nuageux', icon: 'cloud', color: theme.weather[3].color, soft: theme.weather[3].soft },
-  4: { label: 'Pluie', icon: 'cloud-rain', color: theme.weather[4].color, soft: theme.weather[4].soft },
-  5: { label: 'Orage', icon: 'cloud-lightning', color: theme.weather[5].color, soft: theme.weather[5].soft },
+  1: { icon: 'sun', color: theme.weather[1].color, soft: theme.weather[1].soft },
+  2: { icon: 'cloud-sun', color: theme.weather[2].color, soft: theme.weather[2].soft },
+  3: { icon: 'cloud', color: theme.weather[3].color, soft: theme.weather[3].soft },
+  4: { icon: 'cloud-rain', color: theme.weather[4].color, soft: theme.weather[4].soft },
+  5: { icon: 'cloud-lightning', color: theme.weather[5].color, soft: theme.weather[5].soft },
 }
 
 /**

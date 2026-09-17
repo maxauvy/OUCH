@@ -1,4 +1,6 @@
-# Accalmie 🌤️
+# OUCH 🌤️
+
+*Ouch, Understand, Chart, Heal*
 
 *Licence [CeCILL v2.1](#licence) · 100% local · aucune donnée envoyée à un serveur*
 
@@ -10,7 +12,7 @@ souhaites.
 ## Pourquoi cette app
 
 Les carnets de suivi de douleur existants (Pain Diary, MyPainDiary…) sont soit
-fermés, soit franchement pénibles à utiliser. Accalmie part d'un principe
+fermés, soit franchement pénibles à utiliser. OUCH part d'un principe
 simple : **tout reste sur ton appareil**, l'interface est pensée pour les jours
 difficiles (gros boutons, pas de friction), et le partage avec l'entourage est
 une action volontaire, jamais automatique.
@@ -102,7 +104,7 @@ pour être ajusté.
 
 ## Licence
 
-Accalmie est distribué sous licence **[CeCILL v2.1](https://cecill.info/licences/Licence_CeCILL_V2.1-fr.html)**
+OUCH est distribué sous licence **[CeCILL v2.1](https://cecill.info/licences/Licence_CeCILL_V2.1-fr.html)**
 (identifiant SPDX `CECILL-2.1`) — une licence libre à copyleft fort, rédigée
 par le CEA, le CNRS et l'INRIA pour être nativement valide en droit français,
 et compatible GPL dans les deux sens.
@@ -112,7 +114,7 @@ logiciel librement. Toute personne qui distribue une version modifiée —
 y compris en la rendant simplement accessible via un site web ou un
 service en ligne — doit en fournir le code source sous CeCILL (ou une
 licence GPL compatible), sans pouvoir y ajouter de restriction
-supplémentaire. L'objectif : qu'Accalmie et ses dérivés restent toujours
+supplémentaire. L'objectif : qu'OUCH et ses dérivés restent toujours
 libres, pour la communauté fibromyalgie comme pour n'importe qui d'autre.
 
 Le texte complet de la licence se trouve dans le fichier [`LICENSE`](./LICENSE)

@@ -29,10 +29,20 @@ export function conditionFromWmoCode(code: number): WeatherInfo['condition'] {
   return WMO_TO_CONDITION[code] ?? 'variable'
 }
 
+/** Thrown with a translation key (see `t.errors`) rather than a message, so
+ * callers can display it in the active language. */
+export class WeatherError extends Error {
+  code: 'geolocationUnavailable' | 'weatherFetchFailed'
+  constructor(code: 'geolocationUnavailable' | 'weatherFetchFailed') {
+    super(code)
+    this.code = code
+  }
+}
+
 export async function getCurrentPosition(): Promise<{ lat: number; lon: number }> {
   return new Promise((resolve, reject) => {
     if (!('geolocation' in navigator)) {
-      reject(new Error('La géolocalisation n’est pas disponible sur cet appareil.'))
+      reject(new WeatherError('geolocationUnavailable'))
       return
     }
     navigator.geolocation.getCurrentPosition(
@@ -58,7 +68,7 @@ export async function fetchCurrentWeather(lat: number, lon: number): Promise<Fet
   url.searchParams.set('timezone', 'auto')
 
   const res = await fetch(url.toString())
-  if (!res.ok) throw new Error('Impossible de récupérer la météo pour le moment.')
+  if (!res.ok) throw new WeatherError('weatherFetchFailed')
   const data = await res.json()
   const current = data.current
   return {
@@ -69,12 +79,12 @@ export async function fetchCurrentWeather(lat: number, lon: number): Promise<Fet
 }
 
 /** Reverse-geocode to a short place label, purely cosmetic (shown in settings). */
-export async function reverseGeocode(lat: number, lon: number): Promise<string | undefined> {
+export async function reverseGeocode(lat: number, lon: number, language = 'fr'): Promise<string | undefined> {
   try {
     const url = new URL('https://geocoding-api.open-meteo.com/v1/reverse')
     url.searchParams.set('latitude', String(lat))
     url.searchParams.set('longitude', String(lon))
-    url.searchParams.set('language', 'fr')
+    url.searchParams.set('language', language)
     const res = await fetch(url.toString())
     if (!res.ok) return undefined
     const data = await res.json()

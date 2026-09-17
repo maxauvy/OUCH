@@ -3,21 +3,22 @@ import type { DailyEntry } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { theme } from '../../lib/theme'
+import { format, useLocale, useTranslation, type Translations } from '../../i18n'
 
-function formatCardDate(date: string): string {
+function formatCardDate(date: string, intlLocale: string): string {
   const d = new Date(date + 'T00:00:00')
-  return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })
+  return d.toLocaleDateString(intlLocale, { weekday: 'long', day: 'numeric', month: 'long' })
 }
 
-const FACTOR_ROWS: {
-  key: keyof DailyEntry
-  label: string
-  format: (e: DailyEntry) => string | null
-}[] = [
-  { key: 'sleepQuality', label: 'Sommeil', format: (e) => (e.sleepQuality != null ? `${e.sleepQuality}/10` : null) },
-  { key: 'fatigueLevel', label: 'Fatigue', format: (e) => (e.fatigueLevel != null ? `${e.fatigueLevel}/10` : null) },
-  { key: 'stressLevel', label: 'Stress', format: (e) => (e.stressLevel != null ? `${e.stressLevel}/10` : null) },
-]
+function factorRows(
+  t: Translations
+): { key: keyof DailyEntry; label: string; format: (e: DailyEntry) => string | null }[] {
+  return [
+    { key: 'sleepQuality', label: t.factors.sleep.label, format: (e) => (e.sleepQuality != null ? `${e.sleepQuality}/10` : null) },
+    { key: 'fatigueLevel', label: t.factors.fatigue.label, format: (e) => (e.fatigueLevel != null ? `${e.fatigueLevel}/10` : null) },
+    { key: 'stressLevel', label: t.factors.stress.label, format: (e) => (e.stressLevel != null ? `${e.stressLevel}/10` : null) },
+  ]
+}
 
 /** Rendered off-screen at a fixed size and captured to PNG via html-to-image.
  * Every color here is a literal hex from theme.ts (not a CSS var) so the
@@ -27,8 +28,12 @@ export const WeatherCard = forwardRef<
   HTMLDivElement,
   { entry: DailyEntry; displayName?: string; message?: string }
 >(function WeatherCard({ entry, displayName, message }, ref) {
+  const t = useTranslation()
+  const { intlLocale } = useLocale()
   const weather = computePainWeather(entry)
-  const rows = FACTOR_ROWS.map((f) => ({ label: f.label, value: f.format(entry) })).filter((r) => r.value)
+  const rows = factorRows(t)
+    .map((f) => ({ label: f.label, value: f.format(entry) }))
+    .filter((r) => r.value)
 
   return (
     <div
@@ -46,9 +51,9 @@ export const WeatherCard = forwardRef<
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
         <span style={{ fontSize: 15, fontWeight: 600, color: theme.inkMuted }}>
-          Météo{displayName ? ` de ${displayName}` : ' du jour'}
+          {displayName ? format(t.weatherCard.weatherOfName, { name: displayName }) : t.weatherCard.weatherOfDay}
         </span>
-        <span style={{ fontSize: 13, color: theme.inkMuted }}>{formatCardDate(entry.date)}</span>
+        <span style={{ fontSize: 13, color: theme.inkMuted }}>{formatCardDate(entry.date, intlLocale)}</span>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
@@ -69,10 +74,10 @@ export const WeatherCard = forwardRef<
         </div>
         <div>
           <div style={{ fontSize: 26, fontWeight: 700, color: weather.color, lineHeight: 1.15 }}>
-            {weather.label}
+            {t.painWeatherLevels[weather.level]}
           </div>
           <div style={{ fontSize: 15, color: theme.inkMuted, marginTop: 4 }}>
-            Douleur : <strong style={{ color: theme.ink }}>{entry.painLevel}/10</strong>
+            {t.weatherCard.painLabel} <strong style={{ color: theme.ink }}>{entry.painLevel}/10</strong>
           </div>
         </div>
       </div>
@@ -113,7 +118,7 @@ export const WeatherCard = forwardRef<
       )}
 
       <div style={{ fontSize: 12, color: theme.inkMuted, textAlign: 'right', letterSpacing: 0.3 }}>
-        Accalmie
+        OUCH
       </div>
     </div>
   )

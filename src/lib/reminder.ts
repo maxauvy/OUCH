@@ -1,4 +1,6 @@
-const LAST_SHOWN_KEY = 'accalmie:lastReminderShownDate'
+import { getTranslations, type Language } from '../i18n'
+
+const LAST_SHOWN_KEY = 'ouch:lastReminderShownDate'
 
 export function canNotify(): boolean {
   return 'Notification' in window
@@ -16,7 +18,12 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
  * mean a backend and an account, which this app deliberately avoids — so a
  * fully reliable reminder even with the app closed isn't possible.
  */
-export function maybeShowReminder(reminderTime: string, hasEntryToday: boolean, todayISO: string) {
+export function maybeShowReminder(
+  reminderTime: string,
+  hasEntryToday: boolean,
+  todayISO: string,
+  language: Language
+) {
   if (hasEntryToday) return
   if (!canNotify() || Notification.permission !== 'granted') return
 
@@ -29,10 +36,11 @@ export function maybeShowReminder(reminderTime: string, hasEntryToday: boolean, 
   const lastShown = localStorage.getItem(LAST_SHOWN_KEY)
   if (lastShown === todayISO) return
 
-  new Notification('Ta météo du jour t’attend', {
-    body: 'Deux minutes suffisent pour noter comment tu te sens aujourd’hui.',
+  const t = getTranslations(language)
+  new Notification(t.reminder.title, {
+    body: t.reminder.body,
     icon: '/icons/icon-192.png',
-    tag: 'accalmie-daily-reminder',
+    tag: 'ouch-daily-reminder',
   })
   localStorage.setItem(LAST_SHOWN_KEY, todayISO)
 }
