@@ -8,6 +8,8 @@ import { useSettings } from './hooks/useSettings'
 import { useTodayEntry } from './hooks/useEntries'
 import { updateSettings, todayISO } from './db'
 import { maybeShowReminder } from './lib/reminder'
+import { getTranslations, I18nProvider, useTranslation } from './i18n'
+import type { Language } from './i18n'
 
 function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   useEffect(() => {
@@ -19,29 +21,38 @@ function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   }, [theme])
 }
 
+function useAppliedLanguage(language: Language) {
+  useEffect(() => {
+    document.documentElement.lang = language
+    const t = getTranslations(language)
+    document.title = t.meta.htmlTitle
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t.meta.metaDescription)
+  }, [language])
+}
+
 function WelcomeOverlay({ onDone }: { onDone: () => void }) {
+  const t = useTranslation()
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-5" style={{ background: 'var(--color-paper)' }}>
       <div className="max-w-sm flex flex-col gap-4 text-center">
         <div className="text-[44px]">🌤️</div>
-        <h1 className="text-[22px] font-semibold">Bienvenue sur Accalmie</h1>
+        <h1 className="text-[22px] font-semibold">{t.welcome.title}</h1>
         <p className="text-[15px] leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
-          Note ta douleur et ce qui l'entoure en quelques secondes par jour, repère ce qui l'influence, et
-          partage ta météo du jour avec tes proches quand tu le souhaites. Tout reste sur cet appareil.
+          {t.welcome.body}
         </p>
         <button
           onClick={onDone}
           className="rounded-full py-3.5 text-[15px] font-semibold text-white mt-2"
           style={{ background: 'var(--color-brand)' }}
         >
-          Commencer
+          {t.welcome.start}
         </button>
       </div>
     </div>
   )
 }
 
-export default function App() {
+function AppShell() {
   const [tab, setTab] = useState<Tab>('today')
   const settings = useSettings()
   const todayEntry = useTodayEntry()
@@ -49,11 +60,11 @@ export default function App() {
 
   useEffect(() => {
     if (!settings.reminderEnabled) return
-    const check = () => maybeShowReminder(settings.reminderTime, !!todayEntry, todayISO())
+    const check = () => maybeShowReminder(settings.reminderTime, !!todayEntry, todayISO(), settings.language)
     check()
     const id = setInterval(check, 60_000)
     return () => clearInterval(id)
-  }, [settings.reminderEnabled, settings.reminderTime, todayEntry])
+  }, [settings.reminderEnabled, settings.reminderTime, settings.language, todayEntry])
 
   return (
     <>
@@ -66,5 +77,16 @@ export default function App() {
       <TabBar active={tab} onChange={setTab} />
       {!settings.onboardingDone && <WelcomeOverlay onDone={() => updateSettings({ onboardingDone: true })} />}
     </>
+  )
+}
+
+export default function App() {
+  const settings = useSettings()
+  useAppliedLanguage(settings.language)
+
+  return (
+    <I18nProvider language={settings.language}>
+      <AppShell />
+    </I18nProvider>
   )
 }

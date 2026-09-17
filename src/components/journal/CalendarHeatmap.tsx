@@ -10,14 +10,12 @@ import {
   startOfMonth,
   startOfWeek,
 } from 'date-fns'
-import { fr } from 'date-fns/locale'
 import type { DailyEntry } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
 import { themeFor } from '../../lib/theme'
 import { useSettings } from '../../hooks/useSettings'
 import { useIsDark } from '../../hooks/useIsDark'
-
-const WEEKDAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
+import { useLocale, useTranslation } from '../../i18n'
 
 export function CalendarHeatmap({
   entries,
@@ -31,6 +29,9 @@ export function CalendarHeatmap({
   const [cursor, setCursor] = useState(new Date())
   const settings = useSettings()
   const t = themeFor(useIsDark(settings.theme))
+  const i18n = useTranslation()
+  const { dateFnsLocale } = useLocale()
+  const WEEKDAYS = i18n.calendar.weekdaysShort
   const byDate = useMemo(() => {
     const m = new Map<string, DailyEntry>()
     for (const e of entries) m.set(e.date, e)
@@ -50,16 +51,18 @@ export function CalendarHeatmap({
           onClick={() => setCursor((c) => addMonths(c, -1))}
           className="w-9 h-9 rounded-full flex items-center justify-center text-[16px]"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
-          aria-label="Mois précédent"
+          aria-label={i18n.calendar.prevMonth}
         >
           ‹
         </button>
-        <span className="font-semibold text-[15px] capitalize">{format(cursor, 'MMMM yyyy', { locale: fr })}</span>
+        <span className="font-semibold text-[15px] capitalize">
+          {format(cursor, 'MMMM yyyy', { locale: dateFnsLocale })}
+        </span>
         <button
           onClick={() => setCursor((c) => addMonths(c, 1))}
           className="w-9 h-9 rounded-full flex items-center justify-center text-[16px]"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
-          aria-label="Mois suivant"
+          aria-label={i18n.calendar.nextMonth}
         >
           ›
         </button>

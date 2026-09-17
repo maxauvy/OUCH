@@ -8,28 +8,30 @@ import { analyzeFactor, bestAndWorstWeekday } from '../lib/insights'
 import { themeFor } from '../lib/theme'
 import { useIsDark } from '../hooks/useIsDark'
 import { subDays } from 'date-fns'
+import { format, useTranslation } from '../i18n'
 
-const RANGES = [
-  { label: '7 j', days: 7 },
-  { label: '30 j', days: 30 },
-  { label: '90 j', days: 90 },
-  { label: 'Tout', days: null as number | null },
-]
-
-const FACTOR_DEFS: { key: 'fatigueLevel' | 'sleepQuality' | 'stressLevel' | 'brainFog' | 'moodLevel' | 'activityLevel'; label: string; factorFlag: string; positivePhrasing?: boolean }[] = [
-  { key: 'sleepQuality', label: 'Qualité du sommeil', factorFlag: 'sleep', positivePhrasing: true },
-  { key: 'stressLevel', label: 'Stress', factorFlag: 'stress' },
-  { key: 'fatigueLevel', label: 'Fatigue', factorFlag: 'fatigue' },
-  { key: 'brainFog', label: 'Brouillard mental', factorFlag: 'brainFog' },
-  { key: 'moodLevel', label: 'Humeur', factorFlag: 'mood', positivePhrasing: true },
-  { key: 'activityLevel', label: 'Activité physique', factorFlag: 'activity' },
+const FACTOR_DEFS: { key: 'fatigueLevel' | 'sleepQuality' | 'stressLevel' | 'brainFog' | 'moodLevel' | 'activityLevel'; factorKey: 'sleep' | 'stress' | 'fatigue' | 'brainFog' | 'mood' | 'activity'; positivePhrasing?: boolean }[] = [
+  { key: 'sleepQuality', factorKey: 'sleep', positivePhrasing: true },
+  { key: 'stressLevel', factorKey: 'stress' },
+  { key: 'fatigueLevel', factorKey: 'fatigue' },
+  { key: 'brainFog', factorKey: 'brainFog' },
+  { key: 'moodLevel', factorKey: 'mood', positivePhrasing: true },
+  { key: 'activityLevel', factorKey: 'activity' },
 ]
 
 export function TrendsPage() {
   const entries = useAllEntries()
   const settings = useSettings()
+  const i18n = useTranslation()
   const t = themeFor(useIsDark(settings.theme))
   const [rangeIdx, setRangeIdx] = useState(1)
+
+  const RANGES = [
+    { label: i18n.trends.range7, days: 7 },
+    { label: i18n.trends.range30, days: 30 },
+    { label: i18n.trends.range90, days: 90 },
+    { label: i18n.trends.rangeAll, days: null as number | null },
+  ]
 
   const filtered = useMemo(() => {
     if (!entries) return []
@@ -37,20 +39,24 @@ export function TrendsPage() {
     if (days == null) return entries
     const cutoff = subDays(new Date(), days)
     return entries.filter((e) => new Date(e.date + 'T00:00:00') >= cutoff)
-  }, [entries, rangeIdx])
+  }, [entries, rangeIdx]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const avgPain = filtered.length ? filtered.reduce((s, e) => s + e.painLevel, 0) / filtered.length : null
-  const weekdayInsight = bestAndWorstWeekday(filtered)
+  const weekdayIndices = bestAndWorstWeekday(filtered)
+  const weekdayInsight = weekdayIndices
+    ? { best: i18n.weekdaysFull[weekdayIndices.bestIdx], worst: i18n.weekdaysFull[weekdayIndices.worstIdx] }
+    : null
 
-  const analyses = FACTOR_DEFS.filter((f) => settings.enabledFactors.includes(f.factorFlag as never)).map((f) =>
-    analyzeFactor(filtered, f.key, f.label, { positivePhrasing: f.positivePhrasing })
+  const bucketLabels: [string, string, string] = [i18n.trends.bucketLow, i18n.trends.bucketMid, i18n.trends.bucketHigh]
+  const analyses = FACTOR_DEFS.filter((f) => settings.enabledFactors.includes(f.factorKey)).map((f) =>
+    analyzeFactor(filtered, f.key, i18n.factors[f.factorKey].label, bucketLabels, { positivePhrasing: f.positivePhrasing })
   )
 
   if (!entries) return null
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
-      <h1 className="text-[22px] font-semibold px-1">Tendances</h1>
+      <h1 className="text-[22px] font-semibold px-1">{i18n.trends.title}</h1>
 
       <div className="flex gap-2 px-1">
         {RANGES.map((r, i) => (
@@ -71,7 +77,7 @@ export function TrendsPage() {
       {filtered.length === 0 ? (
         <Card>
           <p className="text-[14px] text-center py-4" style={{ color: t.inkMuted }}>
-            Pas encore de données sur cette période.
+            {i18n.trends.noData}
           </p>
         </Card>
       ) : (
@@ -82,7 +88,9 @@ export function TrendsPage() {
                 {filtered.length}
               </span>
               <span className="text-[12px]" style={{ color: t.inkMuted }}>
-                jour{filtered.length > 1 ? 's' : ''} suivi{filtered.length > 1 ? 's' : ''}
+                {format(filtered.length === 1 ? i18n.trends.daysTrackedOne : i18n.trends.daysTrackedOther, {
+                  n: filtered.length,
+                })}
               </span>
             </Card>
             <Card className="flex flex-col items-center py-4">
@@ -90,30 +98,32 @@ export function TrendsPage() {
                 {avgPain != null ? avgPain.toFixed(1) : '—'}
               </span>
               <span className="text-[12px]" style={{ color: t.inkMuted }}>
-                douleur moyenne
+                {i18n.trends.avgPain}
               </span>
             </Card>
           </div>
 
           <Card>
-            <SectionTitle>Évolution de la douleur</SectionTitle>
+            <SectionTitle>{i18n.trends.painEvolution}</SectionTitle>
             <PainTrendChart entries={filtered} />
           </Card>
 
           {weekdayInsight && (
             <Card>
               <p className="text-[14px] leading-snug">
-                🙂 Tes journées sont en moyenne meilleures le <strong>{weekdayInsight.best}</strong>, et plus
-                difficiles le <strong>{weekdayInsight.worst}</strong>.
+                {format(i18n.trends.weekdayInsight, {
+                  best: weekdayInsight.best,
+                  worst: weekdayInsight.worst,
+                })}
               </p>
             </Card>
           )}
 
           {analyses.some((a) => a.buckets.some((b) => b.count > 0)) && (
             <Card>
-              <SectionTitle>Ce qui semble jouer sur ta douleur</SectionTitle>
+              <SectionTitle>{i18n.trends.whatAffectsPain}</SectionTitle>
               <p className="text-[12px] -mt-2 mb-1" style={{ color: t.inkMuted }}>
-                Moyennes observées sur la période — une association, pas une preuve.
+                {i18n.trends.averagesObserved}
               </p>
               <div className="flex flex-col">
                 {analyses.map((a, i) => (

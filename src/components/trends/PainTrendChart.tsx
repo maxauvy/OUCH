@@ -1,17 +1,30 @@
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import type { Locale } from 'date-fns'
 import type { DailyEntry } from '../../db/types'
 import { themeFor } from '../../lib/theme'
 import { useSettings } from '../../hooks/useSettings'
 import { useIsDark } from '../../hooks/useIsDark'
+import { useLocale, useTranslation, type Translations } from '../../i18n'
 
 interface Point {
   date: string
   pain: number
 }
 
-function CustomTooltip({ active, payload, t }: { active?: boolean; payload?: { payload: Point }[]; t: ReturnType<typeof themeFor> }) {
+function CustomTooltip({
+  active,
+  payload,
+  t,
+  i18n,
+  dateFnsLocale,
+}: {
+  active?: boolean
+  payload?: { payload: Point }[]
+  t: ReturnType<typeof themeFor>
+  i18n: Translations
+  dateFnsLocale: Locale
+}) {
   if (!active || !payload?.length) return null
   const p = payload[0].payload
   return (
@@ -26,9 +39,11 @@ function CustomTooltip({ active, payload, t }: { active?: boolean; payload?: { p
       }}
     >
       <div style={{ color: t.inkMuted, marginBottom: 2 }}>
-        {format(new Date(p.date + 'T00:00:00'), 'EEEE d MMMM', { locale: fr })}
+        {format(new Date(p.date + 'T00:00:00'), 'EEEE d MMMM', { locale: dateFnsLocale })}
       </div>
-      <div style={{ color: t.ink, fontWeight: 600 }}>Douleur : {p.pain}/10</div>
+      <div style={{ color: t.ink, fontWeight: 600 }}>
+        {i18n.weatherCard.painLabel} {p.pain}/10
+      </div>
     </div>
   )
 }
@@ -37,6 +52,8 @@ export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
   const settings = useSettings()
   const isDark = useIsDark(settings.theme)
   const t = themeFor(isDark)
+  const i18n = useTranslation()
+  const { dateFnsLocale } = useLocale()
 
   const data: Point[] = [...entries]
     .sort((a, b) => a.date.localeCompare(b.date))
@@ -45,7 +62,7 @@ export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
   if (data.length < 2) {
     return (
       <p className="text-[14px] py-6 text-center" style={{ color: t.inkMuted }}>
-        Encore quelques jours de suivi et ta courbe apparaîtra ici.
+        {i18n.trends.notEnoughData}
       </p>
     )
   }
@@ -63,7 +80,7 @@ export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
           <CartesianGrid vertical={false} stroke={t.hairline} strokeDasharray="0" />
           <XAxis
             dataKey="date"
-            tickFormatter={(d: string) => format(new Date(d + 'T00:00:00'), 'd MMM', { locale: fr })}
+            tickFormatter={(d: string) => format(new Date(d + 'T00:00:00'), 'd MMM', { locale: dateFnsLocale })}
             tick={{ fontSize: 11, fill: t.inkMuted }}
             axisLine={{ stroke: t.hairline }}
             tickLine={false}
@@ -77,7 +94,10 @@ export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
             tickLine={false}
             width={24}
           />
-          <Tooltip content={<CustomTooltip t={t} />} cursor={{ stroke: t.brand, strokeWidth: 1, strokeDasharray: '3 3' }} />
+          <Tooltip
+            content={<CustomTooltip t={t} i18n={i18n} dateFnsLocale={dateFnsLocale} />}
+            cursor={{ stroke: t.brand, strokeWidth: 1, strokeDasharray: '3 3' }}
+          />
           <Area
             type="monotone"
             dataKey="pain"

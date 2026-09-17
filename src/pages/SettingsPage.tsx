@@ -7,16 +7,18 @@ import { Toggle } from '../components/ui/Toggle'
 import { BackupSection } from '../components/settings/BackupSection'
 import { canNotify, requestNotificationPermission } from '../lib/reminder'
 import { reverseGeocode, getCurrentPosition } from '../lib/weather'
-
-const THEME_OPTIONS: { value: ThemePref; label: string }[] = [
-  { value: 'system', label: 'Auto' },
-  { value: 'light', label: 'Clair' },
-  { value: 'dark', label: 'Sombre' },
-]
+import { format, LANGUAGES, useTranslation } from '../i18n'
 
 export function SettingsPage() {
   const settings = useSettings()
+  const t = useTranslation()
   const [locating, setLocating] = useState(false)
+
+  const THEME_OPTIONS: { value: ThemePref; label: string }[] = [
+    { value: 'system', label: t.settings.themeAuto },
+    { value: 'light', label: t.settings.themeLight },
+    { value: 'dark', label: t.settings.themeDark },
+  ]
 
   function toggleFactor(key: FactorKey) {
     const enabled = settings.enabledFactors.includes(key)
@@ -40,7 +42,7 @@ export function SettingsPage() {
     setLocating(true)
     try {
       const { lat, lon } = await getCurrentPosition()
-      const label = await reverseGeocode(lat, lon)
+      const label = await reverseGeocode(lat, lon, settings.language)
       await updateSettings({ autoWeatherEnabled: true, autoWeatherLat: lat, autoWeatherLon: lon, autoWeatherLabel: label })
     } catch {
       // silently ignore — the entry form's own button will surface the error when actually needed
@@ -51,38 +53,60 @@ export function SettingsPage() {
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
-      <h1 className="text-[22px] font-semibold px-1">Réglages</h1>
+      <h1 className="text-[22px] font-semibold px-1">{t.settings.title}</h1>
 
       <Card>
-        <SectionTitle>Ton prénom</SectionTitle>
+        <SectionTitle>{t.settings.firstNameTitle}</SectionTitle>
         <p className="text-[13px] mb-2" style={{ color: 'var(--color-ink-muted)' }}>
-          Utilisé sur la carte météo que tu partages ("Météo de {settings.displayName || '…'}")
+          {format(t.settings.firstNameHelper, { name: settings.displayName || '…' })}
         </p>
         <input
           key={settings.displayName}
           defaultValue={settings.displayName}
           onBlur={(e) => updateSettings({ displayName: e.target.value.trim() })}
-          placeholder="Ton prénom"
+          placeholder={t.settings.firstNamePlaceholder}
           className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
         />
       </Card>
 
       <Card>
-        <SectionTitle>Facteurs suivis</SectionTitle>
+        <SectionTitle>{t.settings.languageTitle}</SectionTitle>
         <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
-          Choisis ce qui apparaît dans ta saisie quotidienne. Tu peux changer d'avis à tout moment.
+          {t.settings.languageHelper}
+        </p>
+        <div className="flex gap-2">
+          {LANGUAGES.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => updateSettings({ language: lang.code })}
+              className="flex-1 rounded-full py-2 text-[14px] font-semibold"
+              style={{
+                background: settings.language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
+                color: settings.language === lang.code ? 'white' : 'var(--color-brand)',
+              }}
+            >
+              {lang.label}
+            </button>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
+        <SectionTitle>{t.settings.factorsTitle}</SectionTitle>
+        <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.settings.factorsHelper}
         </p>
         <div className="flex flex-col gap-3.5">
-          {ALL_FACTORS.map((f) => (
-            <div key={f.key} className="flex items-center justify-between gap-3">
+          {ALL_FACTORS.map((key) => (
+            <div key={key} className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-[14px] font-medium">{f.label}</p>
+                <p className="text-[14px] font-medium">{t.factors[key].label}</p>
                 <p className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
-                  {f.helper}
+                  {t.factors[key].helper}
                 </p>
               </div>
-              <Toggle checked={settings.enabledFactors.includes(f.key)} onChange={() => toggleFactor(f.key)} />
+              <Toggle checked={settings.enabledFactors.includes(key)} onChange={() => toggleFactor(key)} />
             </div>
           ))}
         </div>
@@ -90,9 +114,9 @@ export function SettingsPage() {
 
       <Card className="flex items-center justify-between">
         <div>
-          <p className="text-[14px] font-medium">Suivi du cycle menstruel</p>
+          <p className="text-[14px] font-medium">{t.settings.cycleTracking}</p>
           <p className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
-            Ajoute une case "règles" à la saisie du jour
+            {t.settings.cycleTrackingHelper}
           </p>
         </div>
         <Toggle checked={settings.cycleTrackingEnabled} onChange={(v) => updateSettings({ cycleTrackingEnabled: v })} />
@@ -100,11 +124,11 @@ export function SettingsPage() {
 
       {settings.enabledFactors.includes('weather') && (
         <Card>
-          <SectionTitle>Localisation météo</SectionTitle>
+          <SectionTitle>{t.settings.weatherLocationTitle}</SectionTitle>
           <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
             {settings.autoWeatherLabel
-              ? `Position enregistrée : ${settings.autoWeatherLabel}. Utilisée pour remplir la météo automatiquement.`
-              : "Pas encore de position enregistrée — tu peux toujours la définir depuis le bouton dans la saisie du jour."}
+              ? format(t.settings.weatherLocationSet, { label: settings.autoWeatherLabel })
+              : t.settings.weatherLocationUnset}
           </p>
           <button
             onClick={handleSetLocation}
@@ -112,16 +136,16 @@ export function SettingsPage() {
             className="rounded-full px-4 py-2 text-[13px] font-semibold"
             style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
           >
-            {locating ? 'Localisation…' : 'Mettre à jour ma position'}
+            {locating ? t.settings.locating : t.settings.updateLocation}
           </button>
         </Card>
       )}
 
       <Card>
-        <SectionTitle>Rappel quotidien</SectionTitle>
+        <SectionTitle>{t.settings.reminderTitle}</SectionTitle>
         <div className="flex items-center justify-between mb-3">
           <p className="text-[13px]" style={{ color: 'var(--color-ink-muted)' }}>
-            Une notification si tu n'as pas encore rempli ta météo
+            {t.settings.reminderHelper}
           </p>
           <Toggle checked={settings.reminderEnabled} onChange={handleReminderToggle} />
         </div>
@@ -135,39 +159,37 @@ export function SettingsPage() {
           />
         )}
         <p className="text-[12px] mt-2" style={{ color: 'var(--color-ink-muted)' }}>
-          Ce rappel fonctionne quand l'app est ouverte ou récemment utilisée. Sans serveur (par choix, pour
-          rester 100% local), il ne peut pas se déclencher app totalement fermée.
+          {t.settings.reminderNote}
         </p>
       </Card>
 
       <Card>
-        <SectionTitle>Apparence</SectionTitle>
+        <SectionTitle>{t.settings.appearanceTitle}</SectionTitle>
         <div className="flex gap-2">
-          {THEME_OPTIONS.map((t) => (
+          {THEME_OPTIONS.map((opt) => (
             <button
-              key={t.value}
-              onClick={() => updateSettings({ theme: t.value })}
+              key={opt.value}
+              onClick={() => updateSettings({ theme: opt.value })}
               className="flex-1 rounded-full py-2 text-[14px] font-semibold"
               style={{
-                background: settings.theme === t.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                color: settings.theme === t.value ? 'white' : 'var(--color-brand)',
+                background: settings.theme === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
+                color: settings.theme === opt.value ? 'white' : 'var(--color-brand)',
               }}
             >
-              {t.label}
+              {opt.label}
             </button>
           ))}
         </div>
       </Card>
 
       <Card>
-        <SectionTitle>Sauvegarde &amp; synchro</SectionTitle>
+        <SectionTitle>{t.settings.backupTitle}</SectionTitle>
         <BackupSection />
       </Card>
 
       <Card>
         <p className="text-[13px] leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
-          Accalmie garde toutes tes données sur cet appareil, dans son stockage local. Rien n'est envoyé à un
-          serveur — le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.
+          {t.settings.privacyNote}
         </p>
       </Card>
     </div>

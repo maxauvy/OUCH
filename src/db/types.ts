@@ -1,5 +1,7 @@
-// Domain types for Accalmie — kept in one place because the whole app
+// Domain types for OUCH — kept in one place because the whole app
 // (form, storage, charts, export) speaks this exact shape.
+
+import type { Language } from '../i18n/language'
 
 export type FactorKey =
   | 'fatigue'
@@ -14,18 +16,20 @@ export type FactorKey =
   | 'cycle'
   | 'notes'
 
-export const ALL_FACTORS: { key: FactorKey; label: string; helper: string }[] = [
-  { key: 'fatigue', label: 'Fatigue', helper: 'Niveau de fatigue générale' },
-  { key: 'sleep', label: 'Sommeil', helper: 'Qualité et durée de la nuit précédente' },
-  { key: 'stress', label: 'Stress', helper: 'Charge mentale / tension ressentie' },
-  { key: 'brainFog', label: 'Brouillard mental', helper: 'Concentration, mémoire, clarté d’esprit' },
-  { key: 'mood', label: 'Humeur', helper: 'Ressenti émotionnel global' },
-  { key: 'activity', label: 'Activité physique', helper: 'Niveau d’effort du jour' },
-  { key: 'weather', label: 'Météo extérieure', helper: 'Conditions et pression atmosphérique' },
-  { key: 'medications', label: 'Médicaments', helper: 'Traitements pris dans la journée' },
-  { key: 'painLocations', label: 'Localisation de la douleur', helper: 'Zones du corps touchées' },
-  { key: 'cycle', label: 'Cycle menstruel', helper: 'Suivi du cycle, si pertinent' },
-  { key: 'notes', label: 'Notes libres', helper: 'Tout ce qui ne rentre pas dans les cases' },
+// Display order for the factor list in Settings. Labels/helpers live in the
+// active translation (`t.factors[key]`), not here.
+export const ALL_FACTORS: FactorKey[] = [
+  'fatigue',
+  'sleep',
+  'stress',
+  'brainFog',
+  'mood',
+  'activity',
+  'weather',
+  'medications',
+  'painLocations',
+  'cycle',
+  'notes',
 ]
 
 export const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
@@ -41,20 +45,22 @@ export const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
   'notes',
 ]
 
+// Stable identifiers stored in entries — display labels live in the active
+// translation (`t.bodyZones[zone]`), not here.
 export const BODY_ZONES = [
-  'Tête',
-  'Cou',
-  'Épaules',
-  'Bras',
-  'Mains',
-  'Dos haut',
-  'Dos bas',
-  'Poitrine',
-  'Ventre',
-  'Hanches',
-  'Jambes',
-  'Pieds',
-  'Généralisée',
+  'head',
+  'neck',
+  'shoulders',
+  'arms',
+  'hands',
+  'upperBack',
+  'lowerBack',
+  'chest',
+  'stomach',
+  'hips',
+  'legs',
+  'feet',
+  'generalized',
 ] as const
 export type BodyZone = (typeof BODY_ZONES)[number]
 
@@ -65,15 +71,6 @@ export type ExternalWeatherCondition =
   | 'pluvieux'
   | 'orageux'
   | 'neige'
-
-export const EXTERNAL_WEATHER_LABELS: Record<ExternalWeatherCondition, string> = {
-  ensoleille: 'Ensoleillé',
-  variable: 'Variable',
-  nuageux: 'Nuageux',
-  pluvieux: 'Pluvieux',
-  orageux: 'Orageux',
-  neige: 'Neige',
-}
 
 export interface WeatherInfo {
   source: 'auto' | 'manual'
@@ -124,6 +121,7 @@ export interface Settings {
   autoWeatherLon?: number
   autoWeatherLabel?: string
   onboardingDone: boolean
+  language: Language
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -136,13 +134,13 @@ export const DEFAULT_SETTINGS: Settings = {
   displayName: '',
   autoWeatherEnabled: false,
   onboardingDone: false,
+  language: 'fr',
 }
 
 export type PainWeatherLevel = 1 | 2 | 3 | 4 | 5
 
 export interface PainWeather {
   level: PainWeatherLevel
-  label: string
   icon: string
   color: string
   soft: string

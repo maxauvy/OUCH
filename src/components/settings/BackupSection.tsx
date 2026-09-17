@@ -1,7 +1,9 @@
 import { useRef, useState } from 'react'
 import { exportEncryptedBackup, downloadBlob, importEncryptedBackup } from '../../lib/backup'
+import { format, useTranslation } from '../../i18n'
 
 export function BackupSection() {
+  const t = useTranslation()
   const [exportPassword, setExportPassword] = useState('')
   const [exportBusy, setExportBusy] = useState(false)
   const [exportMsg, setExportMsg] = useState<string | null>(null)
@@ -13,17 +15,17 @@ export function BackupSection() {
 
   async function handleExport() {
     if (exportPassword.length < 6) {
-      setExportMsg('Choisis un mot de passe d’au moins 6 caractères.')
+      setExportMsg(t.backup.exportPasswordTooShort)
       return
     }
     setExportBusy(true)
     setExportMsg(null)
     try {
       const blob = await exportEncryptedBackup(exportPassword)
-      downloadBlob(blob, `accalmie-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`)
-      setExportMsg('Sauvegarde téléchargée. Garde le mot de passe en lieu sûr : sans lui, ce fichier est illisible.')
+      downloadBlob(blob, `ouch-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`)
+      setExportMsg(t.backup.exportSuccess)
     } catch {
-      setExportMsg('Une erreur est survenue pendant l’export.')
+      setExportMsg(t.backup.exportError)
     } finally {
       setExportBusy(false)
     }
@@ -31,16 +33,23 @@ export function BackupSection() {
 
   async function handleImportFile(file: File) {
     if (!importPassword) {
-      setImportMsg({ text: 'Indique le mot de passe de la sauvegarde.', error: true })
+      setImportMsg({ text: t.backup.importMissingPassword, error: true })
       return
     }
     setImportBusy(true)
     setImportMsg(null)
     try {
-      const result = await importEncryptedBackup(file, importPassword, 'merge')
-      setImportMsg({ text: `${result.imported} jour${result.imported > 1 ? 's' : ''} importé${result.imported > 1 ? 's' : ''}.` })
+      const result = await importEncryptedBackup(file, importPassword, 'merge', {
+        invalidFile: t.backup.invalidFile,
+        invalidBackup: t.backup.invalidBackup,
+      })
+      setImportMsg({
+        text: format(result.imported === 1 ? t.backup.importSuccessOne : t.backup.importSuccessOther, {
+          n: result.imported,
+        }),
+      })
     } catch (e) {
-      setImportMsg({ text: e instanceof Error ? e.message : 'Import impossible.', error: true })
+      setImportMsg({ text: e instanceof Error ? e.message : t.backup.importGenericError, error: true })
     } finally {
       setImportBusy(false)
       if (fileRef.current) fileRef.current.value = ''
@@ -50,16 +59,15 @@ export function BackupSection() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <p className="font-medium text-[15px] mb-1">Exporter une sauvegarde</p>
+        <p className="font-medium text-[15px] mb-1">{t.backup.exportTitle}</p>
         <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
-          Un fichier chiffré avec un mot de passe que tu choisis. Garde-le où tu veux (cloud perso, e-mail à
-          toi-même) pour retrouver tes données sur un autre appareil.
+          {t.backup.exportHelper}
         </p>
         <input
           type="password"
           value={exportPassword}
           onChange={(e) => setExportPassword(e.target.value)}
-          placeholder="Mot de passe de la sauvegarde"
+          placeholder={t.backup.passwordPlaceholder}
           className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none mb-2"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
         />
@@ -69,7 +77,7 @@ export function BackupSection() {
           className="w-full rounded-full py-3 text-[15px] font-semibold text-white"
           style={{ background: 'var(--color-brand)' }}
         >
-          {exportBusy ? 'Export…' : 'Télécharger la sauvegarde'}
+          {exportBusy ? t.backup.exporting : t.backup.exportButton}
         </button>
         {exportMsg && (
           <p className="text-[13px] mt-2" style={{ color: 'var(--color-ink-muted)' }}>
@@ -79,15 +87,15 @@ export function BackupSection() {
       </div>
 
       <div style={{ borderTop: '1px solid var(--color-hairline)' }} className="pt-5">
-        <p className="font-medium text-[15px] mb-1">Importer une sauvegarde</p>
+        <p className="font-medium text-[15px] mb-1">{t.backup.importTitle}</p>
         <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
-          Les jours importés s'ajoutent à ceux déjà présents (en cas de doublon, la sauvegarde l'emporte).
+          {t.backup.importHelper}
         </p>
         <input
           type="password"
           value={importPassword}
           onChange={(e) => setImportPassword(e.target.value)}
-          placeholder="Mot de passe de la sauvegarde"
+          placeholder={t.backup.passwordPlaceholder}
           className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none mb-2"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
         />

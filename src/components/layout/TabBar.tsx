@@ -1,13 +1,22 @@
+import { useTranslation } from '../../i18n'
+
 export type Tab = 'today' | 'journal' | 'trends' | 'settings'
 
-const TABS: { id: Tab; label: string; icon: string }[] = [
-  { id: 'today', label: 'Aujourd’hui', icon: '☀️' },
-  { id: 'journal', label: 'Journal', icon: '📅' },
-  { id: 'trends', label: 'Tendances', icon: '📈' },
-  { id: 'settings', label: 'Réglages', icon: '⚙️' },
-]
+const TAB_ICONS: Record<Tab, string> = {
+  today: '☀️',
+  journal: '📅',
+  trends: '📈',
+  settings: '⚙️',
+}
 
 export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) => void }) {
+  const t = useTranslation()
+  const TABS: { id: Tab; label: string; icon: string }[] = [
+    { id: 'today', label: t.tabs.today, icon: TAB_ICONS.today },
+    { id: 'journal', label: t.tabs.journal, icon: TAB_ICONS.journal },
+    { id: 'trends', label: t.tabs.trends, icon: TAB_ICONS.trends },
+    { id: 'settings', label: t.tabs.settings, icon: TAB_ICONS.settings },
+  ]
   return (
     <nav
       className="fixed bottom-0 inset-x-0 z-40"
