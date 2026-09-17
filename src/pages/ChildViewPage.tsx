@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAllEntries, useTodayEntry } from '../hooks/useEntries'
 import { useSettings } from '../hooks/useSettings'
 import { computePainWeather } from '../lib/painWeather'
-import { getChildViewCopy, getIllnessExplanation, getIllnessLabel, type ChildTone } from '../lib/childView'
+import { getChildViewCopy, getIllnessExplanation, getIllnessTitle, type ChildTone } from '../lib/childView'
 import { WeatherIcon } from '../components/ui/WeatherIcon'
 import { format, useLanguage, useTranslation } from '../i18n'
 
@@ -44,7 +44,7 @@ export function ChildViewPage({ onClose }: { onClose: () => void }) {
 
   const weather = entry ? computePainWeather(entry) : null
   const copy = weather ? getChildViewCopy(language, weather.level, tone, settings.parentGender) : null
-  const illnessLabel = getIllnessLabel(language, settings.childIllness)
+  const illnessTitle = getIllnessTitle(language, settings.childIllness)
   const illnessText = getIllnessExplanation(language, settings.childIllness, tone, settings.parentGender)
 
   return (
@@ -131,7 +131,7 @@ export function ChildViewPage({ onClose }: { onClose: () => void }) {
                   className="w-full flex items-center justify-between gap-2.5 text-left"
                 >
                   <span className="text-[17px] font-bold" style={{ color: 'var(--color-kid-ink)' }}>
-                    {format(t.childView.aboutIllness, { illness: illnessLabel })}
+                    {format(t.childView.aboutIllness, { illness: illnessTitle })}
                   </span>
                   <svg
                     width="18"
