@@ -36,6 +36,17 @@
   --color-weather-5-soft: #e7e2f0;
 
   --radius-card: 1.25rem;
+
+  /* "Explain to my child" screen — a warmer, more playful palette than the
+     rest of the app (which stays deliberately calm/clinical-free but plain).
+     Kept separate from --color-* so the main app is untouched. */
+  --color-kid-bg: #fff6e9;
+  --color-kid-surface: #ffffff;
+  --color-kid-ink: #3a2e28;
+  --color-kid-ink-muted: #8d7a6e;
+  --color-kid-hairline: #ffe1c4;
+  --color-kid-accent: #ff8a5c;
+  --color-kid-accent-soft: #ffe4d3;
 }
 
 /* Dark-mode token overrides: reassigning the same --color-* custom
@@ -55,6 +66,13 @@
     --color-hairline: rgba(180, 170, 200, 0.16);
     --color-brand: #a89bd6;
     --color-brand-soft: #322c47;
+    --color-kid-bg: #2a1f2b;
+    --color-kid-surface: #372a39;
+    --color-kid-ink: #fbeee2;
+    --color-kid-ink-muted: #cbb6ab;
+    --color-kid-hairline: rgba(255, 190, 150, 0.18);
+    --color-kid-accent: #ffab78;
+    --color-kid-accent-soft: #4a3430;
   }
 }
 
@@ -67,6 +85,13 @@
   --color-hairline: rgba(180, 170, 200, 0.16);
   --color-brand: #a89bd6;
   --color-brand-soft: #322c47;
+  --color-kid-bg: #2a1f2b;
+  --color-kid-surface: #372a39;
+  --color-kid-ink: #fbeee2;
+  --color-kid-ink-muted: #cbb6ab;
+  --color-kid-hairline: rgba(255, 190, 150, 0.18);
+  --color-kid-accent: #ffab78;
+  --color-kid-accent-soft: #4a3430;
 }
 
 html {
