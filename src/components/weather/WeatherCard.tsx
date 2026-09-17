@@ -17,14 +17,6 @@ const FACTOR_ROWS: {
   { key: 'sleepQuality', label: 'Sommeil', format: (e) => (e.sleepQuality != null ? `${e.sleepQuality}/10` : null) },
   { key: 'fatigueLevel', label: 'Fatigue', format: (e) => (e.fatigueLevel != null ? `${e.fatigueLevel}/10` : null) },
   { key: 'stressLevel', label: 'Stress', format: (e) => (e.stressLevel != null ? `${e.stressLevel}/10` : null) },
-  {
-    key: 'weather',
-    label: 'Dehors',
-    format: (e) =>
-      e.weather?.condition
-        ? { ensoleille: 'Ensoleillé', variable: 'Variable', nuageux: 'Nuageux', pluvieux: 'Pluvieux', orageux: 'Orageux', neige: 'Neige' }[e.weather.condition]
-        : null,
-  },
 ]
 
 /** Rendered off-screen at a fixed size and captured to PNG via html-to-image.
