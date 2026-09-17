@@ -232,6 +232,11 @@ const en: Translations = {
     geolocationUnavailable: "Geolocation isn't available on this device.",
     weatherFetchFailed: 'Could not fetch the weather right now.',
   },
+
+  footer: {
+    credit: 'Made by Maxime Auvy',
+    sourceCode: 'Source code',
+  },
 }
 
 export default en

@@ -235,6 +235,11 @@ const fr: Translations = {
     geolocationUnavailable: "La géolocalisation n'est pas disponible sur cet appareil.",
     weatherFetchFailed: 'Impossible de récupérer la météo pour le moment.',
   },
+
+  footer: {
+    credit: 'Créé par Maxime Auvy',
+    sourceCode: 'Code source',
+  },
 }
 
 export default fr
