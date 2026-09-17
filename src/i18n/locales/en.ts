@@ -218,9 +218,30 @@ const en: Translations = {
     themeDark: 'Dark',
     languageTitle: 'Language',
     languageHelper: "Choose the app's language.",
+    parentGenderTitle: 'How to refer to you with your child',
+    parentGenderHelper: 'Used in the sentences on the "Explain to my child" page.',
+    parentGenderMaman: 'Mom',
+    parentGenderPapa: 'Dad',
+    childIllnessTitle: 'Illness to explain',
+    childIllnessHelper: 'The illness described on the "Explain to my child" page.',
     backupTitle: 'Backup & sync',
     privacyNote:
       "OUCH keeps all your data on this device, in local storage. Nothing is sent to a server — sharing your weather and making backups is always something you choose to do.",
+    childViewEntryTitle: 'Explain to my child',
+    childViewEntryHelper: 'A simple page to help them understand',
+    childViewEntryButton: 'Open',
+  },
+
+  childView: {
+    pageTitle: 'Explain to my child',
+    back: 'Back',
+    ageToggleLabel: "CHILD'S AGE",
+    ageYoung: '4–7 years',
+    ageOlder: '8–12 years',
+    howToHelp: 'How you can help',
+    aboutIllness: 'What is {{illness}}?',
+    privacyNote: 'This page stays private. It will only be shown if an adult opens it with you.',
+    noEntry: "No day logged yet — come back here once today's weather has been noted.",
   },
 
   reminder: {

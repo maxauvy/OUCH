@@ -4,6 +4,7 @@ import { TodayPage } from './pages/TodayPage'
 import { JournalPage } from './pages/JournalPage'
 import { TrendsPage } from './pages/TrendsPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { ChildViewPage } from './pages/ChildViewPage'
 import { useSettings } from './hooks/useSettings'
 import { useTodayEntry } from './hooks/useEntries'
 import { updateSettings, todayISO } from './db'
@@ -70,6 +71,7 @@ function WelcomeOverlay({ onDone }: { onDone: () => void }) {
 
 function AppShell() {
   const [tab, setTab] = useState<Tab>('today')
+  const [childViewOpen, setChildViewOpen] = useState(false)
   const settings = useSettings()
   const todayEntry = useTodayEntry()
   useAppliedTheme(settings.theme)
@@ -88,9 +90,10 @@ function AppShell() {
         {tab === 'today' && <TodayPage />}
         {tab === 'journal' && <JournalPage />}
         {tab === 'trends' && <TrendsPage />}
-        {tab === 'settings' && <SettingsPage />}
+        {tab === 'settings' && <SettingsPage onOpenChildView={() => setChildViewOpen(true)} />}
       </main>
       <TabBar active={tab} onChange={setTab} />
+      {childViewOpen && <ChildViewPage onClose={() => setChildViewOpen(false)} />}
       {!settings.onboardingDone && <WelcomeOverlay onDone={() => updateSettings({ onboardingDone: true })} />}
     </>
   )

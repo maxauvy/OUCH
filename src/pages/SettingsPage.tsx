@@ -1,19 +1,26 @@
 import { useState } from 'react'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
-import { ALL_FACTORS, type FactorKey, type ThemePref } from '../db/types'
+import { ALL_FACTORS, CHILD_ILLNESSES, type ChildIllness, type FactorKey, type ParentGender, type ThemePref } from '../db/types'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
 import { BackupSection } from '../components/settings/BackupSection'
 import { canNotify, requestNotificationPermission } from '../lib/reminder'
 import { reverseGeocode, getCurrentPosition } from '../lib/weather'
-import { format, LANGUAGES, useTranslation } from '../i18n'
+import { getIllnessLabel } from '../lib/childView'
+import { format, LANGUAGES, useLanguage, useTranslation } from '../i18n'
 
-export function SettingsPage() {
+export function SettingsPage({ onOpenChildView }: { onOpenChildView: () => void }) {
   const settings = useSettings()
   const t = useTranslation()
+  const language = useLanguage()
   const [locating, setLocating] = useState(false)
+
+  const PARENT_OPTIONS: { value: ParentGender; label: string }[] = [
+    { value: 'maman', label: t.settings.parentGenderMaman },
+    { value: 'papa', label: t.settings.parentGenderPapa },
+  ]
 
   const THEME_OPTIONS: { value: ThemePref; label: string }[] = [
     { value: 'system', label: t.settings.themeAuto },
@@ -91,6 +98,66 @@ export function SettingsPage() {
             </button>
           ))}
         </div>
+      </Card>
+
+      <Card>
+        <SectionTitle>{t.settings.parentGenderTitle}</SectionTitle>
+        <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.settings.parentGenderHelper}
+        </p>
+        <div className="flex gap-2">
+          {PARENT_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => updateSettings({ parentGender: opt.value })}
+              className="flex-1 rounded-full py-2 text-[14px] font-semibold"
+              style={{
+                background: settings.parentGender === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
+                color: settings.parentGender === opt.value ? 'white' : 'var(--color-brand)',
+              }}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
+        <SectionTitle>{t.settings.childIllnessTitle}</SectionTitle>
+        <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.settings.childIllnessHelper}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {CHILD_ILLNESSES.map((illness: ChildIllness) => (
+            <button
+              key={illness}
+              onClick={() => updateSettings({ childIllness: illness })}
+              className="rounded-full px-3.5 py-2 text-[13px] font-semibold"
+              style={{
+                background: settings.childIllness === illness ? 'var(--color-brand)' : 'var(--color-brand-soft)',
+                color: settings.childIllness === illness ? 'white' : 'var(--color-brand)',
+              }}
+            >
+              {getIllnessLabel(language, illness)}
+            </button>
+          ))}
+        </div>
+      </Card>
+
+      <Card className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[14px] font-medium">{t.settings.childViewEntryTitle}</p>
+          <p className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.settings.childViewEntryHelper}
+          </p>
+        </div>
+        <button
+          onClick={onOpenChildView}
+          className="rounded-full px-4 py-2 text-[13px] font-semibold shrink-0"
+          style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+        >
+          {t.settings.childViewEntryButton}
+        </button>
       </Card>
 
       <Card>

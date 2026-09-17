@@ -217,8 +217,29 @@ export interface Translations {
     themeDark: string
     languageTitle: string
     languageHelper: string
+    parentGenderTitle: string
+    parentGenderHelper: string
+    parentGenderMaman: string
+    parentGenderPapa: string
+    childIllnessTitle: string
+    childIllnessHelper: string
     backupTitle: string
     privacyNote: string
+    childViewEntryTitle: string
+    childViewEntryHelper: string
+    childViewEntryButton: string
+  }
+
+  childView: {
+    pageTitle: string
+    back: string
+    ageToggleLabel: string
+    ageYoung: string
+    ageOlder: string
+    howToHelp: string
+    aboutIllness: string
+    privacyNote: string
+    noEntry: string
   }
 
   reminder: {
