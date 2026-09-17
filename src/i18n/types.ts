@@ -230,4 +230,9 @@ export interface Translations {
     geolocationUnavailable: string
     weatherFetchFailed: string
   }
+
+  footer: {
+    credit: string
+    sourceCode: string
+  }
 }

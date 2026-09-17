@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useAllEntries } from '../hooks/useEntries'
 import { useSettings } from '../hooks/useSettings'
 import { Card, SectionTitle } from '../components/ui/Card'
+import { Footer } from '../components/layout/Footer'
 import { PainTrendChart } from '../components/trends/PainTrendChart'
 import { FactorAnalysisCard } from '../components/trends/FactorAnalysisCard'
 import { analyzeFactor, bestAndWorstWeekday } from '../lib/insights'
@@ -136,6 +137,7 @@ export function TrendsPage() {
           )}
         </>
       )}
+      <Footer />
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { updateSettings } from '../db'
 import { ALL_FACTORS, type FactorKey, type ThemePref } from '../db/types'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
+import { Footer } from '../components/layout/Footer'
 import { BackupSection } from '../components/settings/BackupSection'
 import { canNotify, requestNotificationPermission } from '../lib/reminder'
 import { reverseGeocode, getCurrentPosition } from '../lib/weather'
@@ -192,6 +193,8 @@ export function SettingsPage() {
           {t.settings.privacyNote}
         </p>
       </Card>
+
+      <Footer />
     </div>
   )
 }
