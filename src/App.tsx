@@ -8,7 +8,7 @@ import { useSettings } from './hooks/useSettings'
 import { useTodayEntry } from './hooks/useEntries'
 import { updateSettings, todayISO } from './db'
 import { maybeShowReminder } from './lib/reminder'
-import { getTranslations, I18nProvider, useTranslation } from './i18n'
+import { getTranslations, I18nProvider, LANGUAGES, useLocale, useTranslation } from './i18n'
 import type { Language } from './i18n'
 
 function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
@@ -32,9 +32,25 @@ function useAppliedLanguage(language: Language) {
 
 function WelcomeOverlay({ onDone }: { onDone: () => void }) {
   const t = useTranslation()
+  const { language } = useLocale()
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-5" style={{ background: 'var(--color-paper)' }}>
       <div className="max-w-sm flex flex-col gap-4 text-center">
+        <div className="flex justify-center gap-2">
+          {LANGUAGES.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => updateSettings({ language: lang.code })}
+              className="rounded-full px-4 py-1.5 text-[13px] font-semibold"
+              style={{
+                background: language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
+                color: language === lang.code ? 'white' : 'var(--color-brand)',
+              }}
+            >
+              {lang.label}
+            </button>
+          ))}
+        </div>
         <div className="text-[44px]">🌤️</div>
         <h1 className="text-[22px] font-semibold">{t.welcome.title}</h1>
         <p className="text-[15px] leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
