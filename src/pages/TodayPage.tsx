@@ -4,10 +4,12 @@ import { ShareSheet } from '../components/weather/ShareSheet'
 import { useTodayEntry } from '../hooks/useEntries'
 import { useSettings } from '../hooks/useSettings'
 import { todayISO } from '../db'
+import { useTranslation } from '../i18n'
 
 export function TodayPage() {
   const entry = useTodayEntry()
   const settings = useSettings()
+  const t = useTranslation()
   const [sharing, setSharing] = useState(false)
   const date = todayISO()
 
@@ -20,7 +22,7 @@ export function TodayPage() {
           className="rounded-full py-3.5 text-[15px] font-semibold text-white shadow-sm"
           style={{ background: 'var(--color-brand)' }}
         >
-          Partager ma météo du jour
+          {t.today.share}
         </button>
       )}
       {sharing && entry && (

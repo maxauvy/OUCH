@@ -3,14 +3,16 @@ import { toPng } from 'html-to-image'
 import type { DailyEntry } from '../../db/types'
 import { WeatherCard } from './WeatherCard'
 import { downloadBlob } from '../../lib/backup'
+import { useTranslation } from '../../i18n'
 
 export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry; displayName?: string; onClose: () => void }) {
+  const t = useTranslation()
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
   async function capture(): Promise<Blob> {
-    if (!cardRef.current) throw new Error('Carte introuvable')
+    if (!cardRef.current) throw new Error(t.shareSheet.cardNotFound)
     const dataUrl = await toPng(cardRef.current, { pixelRatio: 2, cacheBust: true })
     const res = await fetch(dataUrl)
     return res.blob()
@@ -22,7 +24,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
       const blob = await capture()
       const file = new File([blob], `meteo-${entry.date}.png`, { type: 'image/png' })
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'Météo du jour' })
+        await navigator.share({ files: [file], title: t.shareSheet.nativeShareTitle })
       } else {
         downloadBlob(blob, file.name)
       }
@@ -57,8 +59,8 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
         style={{ background: 'var(--color-paper)' }}
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-[17px] font-semibold">Partager ma météo</h2>
-          <button onClick={onClose} className="text-[20px] leading-none px-2" aria-label="Fermer">
+          <h2 className="text-[17px] font-semibold">{t.shareSheet.title}</h2>
+          <button onClick={onClose} className="text-[20px] leading-none px-2" aria-label={t.shareSheet.close}>
             ×
           </button>
         </div>
@@ -68,11 +70,11 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
         </div>
 
         <div>
-          <label className="text-[13px] font-medium block mb-1.5">Un mot pour tes proches (optionnel)</label>
+          <label className="text-[13px] font-medium block mb-1.5">{t.shareSheet.messageLabel}</label>
           <input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Ex : journée calme, merci d'être là"
+            placeholder={t.shareSheet.messagePlaceholder}
             maxLength={80}
             className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
             style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
@@ -86,7 +88,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
             className="flex-1 rounded-full py-3 text-[15px] font-semibold"
             style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
           >
-            Télécharger
+            {t.shareSheet.download}
           </button>
           <button
             onClick={handleShare}
@@ -94,11 +96,11 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
             className="flex-1 rounded-full py-3 text-[15px] font-semibold text-white"
             style={{ background: 'var(--color-brand)' }}
           >
-            {busy ? '…' : 'Envoyer'}
+            {busy ? t.shareSheet.sending : t.shareSheet.send}
           </button>
         </div>
         <p className="text-[12px] text-center" style={{ color: 'var(--color-ink-muted)' }}>
-          Rien n'est envoyé automatiquement : tu choisis toi-même à qui et quand l'envoyer.
+          {t.shareSheet.footer}
         </p>
       </div>
     </div>

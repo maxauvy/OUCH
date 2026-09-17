@@ -13,8 +13,8 @@ export default defineConfig({
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
         id: '/',
-        name: 'Accalmie — Journal de douleur',
-        short_name: 'Accalmie',
+        name: 'OUCH — Journal de douleur',
+        short_name: 'OUCH',
         description:
           "Un journal quotidien simple pour suivre la douleur, comprendre ce qui l'influence et partager sa météo du jour avec ses proches.",
         theme_color: '#7c6fa8',

@@ -1,21 +1,57 @@
 import Dexie, { type EntityTable } from 'dexie'
-import type { DailyEntry, Settings } from './types'
+import type { BodyZone, DailyEntry, Settings } from './types'
 import { DEFAULT_SETTINGS } from './types'
 
-class AccalmieDB extends Dexie {
+// v1 stored body zones as their French display label directly (e.g. 'Tête').
+// v2 introduced stable slugs (e.g. 'head') so labels can be translated —
+// this remaps any entries saved under v1.
+const V1_BODY_ZONE_TO_SLUG: Record<string, BodyZone> = {
+  Tête: 'head',
+  Cou: 'neck',
+  Épaules: 'shoulders',
+  Bras: 'arms',
+  Mains: 'hands',
+  'Dos haut': 'upperBack',
+  'Dos bas': 'lowerBack',
+  Poitrine: 'chest',
+  Ventre: 'stomach',
+  Hanches: 'hips',
+  Jambes: 'legs',
+  Pieds: 'feet',
+  Généralisée: 'generalized',
+}
+
+class OuchDB extends Dexie {
   entries!: EntityTable<DailyEntry, 'id'>
   settings!: EntityTable<Settings, 'id'>
 
   constructor() {
-    super('accalmie')
+    super('ouch')
     this.version(1).stores({
       entries: '++id, &date, painLevel, createdAt',
       settings: 'id',
     })
+    this.version(2)
+      .stores({
+        entries: '++id, &date, painLevel, createdAt',
+        settings: 'id',
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table<DailyEntry>('entries')
+          .toCollection()
+          .modify((entry) => {
+            if (Array.isArray(entry.painLocations)) {
+              entry.painLocations = entry.painLocations.map(
+                (z) => V1_BODY_ZONE_TO_SLUG[z as string] ?? z
+              )
+            }
+          })
+      })
   }
 }
 
-export const db = new AccalmieDB()
+export const db = new OuchDB()
 
 export async function getSettings(): Promise<Settings> {
   const s = await db.settings.get(1)

@@ -42,18 +42,19 @@ export interface ImportResult {
 export async function importEncryptedBackup(
   file: File,
   password: string,
-  mode: ImportMode
+  mode: ImportMode,
+  messages: { invalidFile: string; invalidBackup: string }
 ): Promise<ImportResult> {
   const text = await file.text()
   let payload: EncryptedPayload
   try {
     payload = JSON.parse(text)
   } catch {
-    throw new Error('Ce fichier ne ressemble pas à une sauvegarde Accalmie.')
+    throw new Error(messages.invalidFile)
   }
   const bundle = await decryptJSON<BackupBundle>(payload, password)
   if (!bundle || !Array.isArray(bundle.entries)) {
-    throw new Error('Sauvegarde invalide.')
+    throw new Error(messages.invalidBackup)
   }
 
   let imported = 0

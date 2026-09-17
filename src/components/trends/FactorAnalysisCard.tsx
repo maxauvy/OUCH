@@ -3,14 +3,26 @@ import { colorForPainValue } from '../../lib/painWeather'
 import { themeFor } from '../../lib/theme'
 import { useSettings } from '../../hooks/useSettings'
 import { useIsDark } from '../../hooks/useIsDark'
+import { format, useTranslation } from '../../i18n'
 
 export function FactorAnalysisCard({ analysis }: { analysis: FactorAnalysis }) {
   const settings = useSettings()
   const t = themeFor(useIsDark(settings.theme))
+  const i18n = useTranslation()
   const hasData = analysis.buckets.some((b) => b.count > 0)
   if (!hasData) return null
 
   const maxAvg = Math.max(...analysis.buckets.map((b) => b.avgPain ?? 0), 1)
+  const insightText = analysis.insight
+    ? format(
+        analysis.insight.painHigherWhenFactorHigh ? i18n.trends.insightHigher : i18n.trends.insightLower,
+        {
+          label: analysis.label.toLowerCase(),
+          diff: analysis.insight.diffAbs.toFixed(1),
+          points: analysis.insight.diffAbs >= 2 ? i18n.trends.pointPlural : i18n.trends.pointSingular,
+        }
+      )
+    : null
 
   return (
     <div className="py-3">
@@ -40,9 +52,9 @@ export function FactorAnalysisCard({ analysis }: { analysis: FactorAnalysis }) {
           </div>
         ))}
       </div>
-      {analysis.insight && (
+      {insightText && (
         <p className="text-[13px] mt-2.5 leading-snug" style={{ color: t.ink }}>
-          💡 {analysis.insight}
+          💡 {insightText}
         </p>
       )}
     </div>
