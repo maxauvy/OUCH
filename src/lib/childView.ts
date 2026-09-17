@@ -168,7 +168,13 @@ const EN_LEVELS: Record<PainWeatherLevel, LevelTones> = {
 }
 
 interface IllnessCopy {
+  /** Bare name, for chip/button lists ("Fibromyalgie", "Migraine"...). */
   label: string
+  /** Capitalized, with its article, for use as a sentence subject — French
+   * needs this (a bare disease name can't head a sentence: "Fibromyalgie,
+   * c'est quoi ?" is wrong, "La fibromyalgie, c'est quoi ?" is right), so
+   * this is the one place per illness where that article is decided. */
+  titleWithArticle: string
   young: (p: ParentInfo) => string
   older: (p: ParentInfo) => string
 }
@@ -176,36 +182,43 @@ interface IllnessCopy {
 const FR_ILLNESSES: Record<ChildIllness, IllnessCopy> = {
   fibromyalgie: {
     label: 'Fibromyalgie',
+    titleWithArticle: 'La fibromyalgie',
     young: (P) => `${P.Noun} a une maladie qui s'appelle fibromyalgie. ${P.Subj} a souvent mal un peu partout et ${P.subj} est très ${agree('fatigué', P.fem)}, même quand ${P.subj} a bien dormi. On ne l'attrape pas comme un rhume, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie chronique qui s'appelle fibromyalgie. Elle provoque des douleurs et une grande fatigue qui changent d'un jour à l'autre, parfois sans raison précise. C'est une maladie invisible : ${P.subj} peut avoir mal même si ${P.subj} n'en a pas l'air. Ce n'est jamais à cause de toi.`,
   },
   arthrite: {
     label: 'Arthrite',
+    titleWithArticle: "L'arthrite",
     young: (P) => `${P.Noun} a une maladie qui s'appelle polyarthrite rhumatoïde. Ça fait gonfler et fait mal aux articulations (genoux, mains...), surtout le matin. Ce n'est pas contagieux, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie inflammatoire chronique, la polyarthrite rhumatoïde : le corps attaque un peu ses propres articulations, ce qui cause douleurs, gonflements et raideur, surtout le matin. Les jours changent selon l'inflammation du moment. Ce n'est jamais à cause de toi.`,
   },
   endometriose: {
     label: 'Endométriose',
+    titleWithArticle: "L'endométriose",
     young: (P) => `${P.Noun} a une maladie qui s'appelle endométriose. Ça lui donne des douleurs fortes dans le ventre, surtout certains jours. Ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie chronique appelée endométriose, qui provoque des douleurs parfois très fortes dans le ventre et le bas du dos, surtout à certaines périodes. La douleur va et vient, et n'est pas toujours visible de l'extérieur. Ce n'est jamais à cause de toi.`,
   },
   migraine: {
     label: 'Migraine',
+    titleWithArticle: 'La migraine',
     young: (P) => `${P.Noun} a des migraines : de très fortes douleurs de tête qui reviennent souvent. Quand ça arrive, ${P.subj} a besoin de calme, de silence et parfois d'obscurité. Ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} souffre de migraine chronique : des maux de tête intenses, parfois avec nausées ou sensibilité à la lumière, qui reviennent plusieurs fois par mois. Le calme et le repos aident à passer la crise. Ce n'est jamais à cause de toi.`,
   },
   lombalgie: {
     label: 'Mal de dos',
+    titleWithArticle: 'Le mal de dos',
     young: (P) => `${P.Noun} a mal au dos très souvent. Rester assis·e ou debout longtemps peut lui faire mal. Ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} vit avec des douleurs de dos chroniques : une douleur installée depuis longtemps, plus ou moins forte selon les jours, la fatigue ou la position. Ce n'est jamais à cause de toi.`,
   },
   sep: {
     label: 'Sclérose en plaques',
+    titleWithArticle: 'La sclérose en plaques',
     young: (P) => `${P.Noun} a une maladie qui s'appelle sclérose en plaques. Elle peut donner beaucoup de fatigue, des picotements ou du mal à bouger certains jours. Ce n'est pas contagieux, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie chronique du système nerveux appelée sclérose en plaques. Elle peut provoquer fatigue intense, troubles de l'équilibre ou de la sensibilité, qui varient beaucoup d'un jour à l'autre. Ce n'est jamais à cause de toi.`,
   },
   autre: {
     label: 'Autre',
+    titleWithArticle: 'Cette maladie',
     young: (P) => `${P.Noun} a une maladie qui dure longtemps et qui lui donne mal ou rend très ${agree('fatigué', P.fem)}, selon les jours. Ce n'est pas quelque chose qu'on attrape, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} vit avec une maladie chronique : elle dure dans le temps et son intensité varie d'un jour à l'autre, parfois sans raison visible. Ce n'est jamais à cause de toi.`,
   },
@@ -214,36 +227,43 @@ const FR_ILLNESSES: Record<ChildIllness, IllnessCopy> = {
 const EN_ILLNESSES: Record<ChildIllness, IllnessCopy> = {
   fibromyalgie: {
     label: 'Fibromyalgia',
+    titleWithArticle: 'Fibromyalgia',
     young: (P) => `${P.Noun} has an illness called fibromyalgia. ${P.Subj} often hurts all over and gets very tired, even after a good night's sleep. You can't catch it like a cold, and it's never your fault.`,
     older: (P) => `${P.Noun} has a chronic illness called fibromyalgia. It causes pain and deep fatigue that change from day to day, sometimes for no clear reason. It's an invisible illness: ${P.subj} can be in pain even when ${P.subj} doesn't look like it. It's never your fault.`,
   },
   arthrite: {
     label: 'Arthritis',
+    titleWithArticle: 'Arthritis',
     young: (P) => `${P.Noun} has an illness called rheumatoid arthritis. It makes ${P.poss} joints (like knees and hands) swell and hurt, especially in the morning. It's not contagious, and it's never your fault.`,
     older: (P) => `${P.Noun} has a chronic inflammatory illness called rheumatoid arthritis: the body attacks its own joints a little, causing pain, swelling and stiffness, especially in the morning. Some days are worse than others depending on the inflammation. It's never your fault.`,
   },
   endometriose: {
     label: 'Endometriosis',
+    titleWithArticle: 'Endometriosis',
     young: (P) => `${P.Noun} has an illness called endometriosis. It gives ${P.obj} strong pain in ${P.poss} belly, especially on certain days. It's never your fault.`,
     older: (P) => `${P.Noun} has a chronic illness called endometriosis, which causes pain — sometimes very intense — in the belly and lower back, especially at certain times. The pain comes and goes, and isn't always visible from the outside. It's never your fault.`,
   },
   migraine: {
     label: 'Migraine',
+    titleWithArticle: 'Migraine',
     young: (P) => `${P.Noun} gets migraines: very strong headaches that come back often. When it happens, ${P.subj} needs calm, quiet, and sometimes darkness. It's never your fault.`,
     older: (P) => `${P.Noun} has chronic migraine: intense headaches, sometimes with nausea or sensitivity to light, that come back several times a month. Calm and rest help the attack pass. It's never your fault.`,
   },
   lombalgie: {
     label: 'Back pain',
+    titleWithArticle: 'Back pain',
     young: (P) => `${P.Poss} back hurts very often. Sitting or standing for a long time can make it worse. It's never your fault.`,
     older: (P) => `${P.Noun} lives with chronic back pain: pain that has lasted a long time, more or less intense depending on the day, tiredness, or posture. It's never your fault.`,
   },
   sep: {
     label: 'Multiple sclerosis',
+    titleWithArticle: 'Multiple sclerosis',
     young: (P) => `${P.Noun} has an illness called multiple sclerosis. It can cause a lot of tiredness, tingling, or trouble moving on some days. It's not contagious, and it's never your fault.`,
     older: (P) => `${P.Noun} has a chronic illness of the nervous system called multiple sclerosis. It can cause intense fatigue, balance issues, or changes in sensation, which vary a lot from day to day. It's never your fault.`,
   },
   autre: {
     label: 'Other',
+    titleWithArticle: 'This illness',
     young: (P) => `${P.Noun} has an illness that lasts a long time and makes ${P.obj} hurt or feel very tired, depending on the day. It's not something you catch, and it's never your fault.`,
     older: (P) => `${P.Noun} lives with a chronic illness: it lasts over time and its intensity changes from day to day, sometimes for no visible reason. It's never your fault.`,
   },
@@ -266,6 +286,13 @@ export function getChildViewCopy(
 
 export function getIllnessLabel(language: Language, illness: ChildIllness): string {
   return (language === 'en' ? EN_ILLNESSES : FR_ILLNESSES)[illness].label
+}
+
+/** The illness name as a sentence subject, with its article in French
+ * ("La fibromyalgie", "L'arthrite"...) — use this instead of `getIllnessLabel`
+ * anywhere the name opens a sentence. */
+export function getIllnessTitle(language: Language, illness: ChildIllness): string {
+  return (language === 'en' ? EN_ILLNESSES : FR_ILLNESSES)[illness].titleWithArticle
 }
 
 export function getIllnessExplanation(
