@@ -7,7 +7,7 @@ import { Toggle } from '../components/ui/Toggle'
 import { BackupSection } from '../components/settings/BackupSection'
 import { canNotify, requestNotificationPermission } from '../lib/reminder'
 import { reverseGeocode, getCurrentPosition } from '../lib/weather'
-import { format, LANGUAGES, useTranslation, type Language } from '../i18n'
+import { format, LANGUAGES, useTranslation } from '../i18n'
 
 export function SettingsPage() {
   const settings = useSettings()
@@ -79,7 +79,7 @@ export function SettingsPage() {
           {LANGUAGES.map((lang) => (
             <button
               key={lang.code}
-              onClick={() => updateSettings({ language: lang.code as Language })}
+              onClick={() => updateSettings({ language: lang.code })}
               className="flex-1 rounded-full py-2 text-[14px] font-semibold"
               style={{
                 background: settings.language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
