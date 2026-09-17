@@ -5,7 +5,7 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => {
-  const base = command === 'build' ? '/accalmie/' : '/'
+  const base = command === 'build' ? '/OUCH/' : '/'
 
   return {
     base,
