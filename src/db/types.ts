@@ -108,6 +108,33 @@ export interface DailyEntry {
 
 export type ThemePref = 'system' | 'light' | 'dark'
 
+// How the app refers to the tracked parent on the child view (and, once
+// gender-agreement is involved, in its generated sentences — see
+// lib/childView.ts). Not exposed as a translation key: it drives grammar,
+// not just a label.
+export type ParentGender = 'maman' | 'papa'
+
+// Stable identifiers for the chronic illness explained on the child view.
+// Labels and per-age copy live in lib/childView.ts, keyed by language.
+export type ChildIllness =
+  | 'fibromyalgie'
+  | 'arthrite'
+  | 'endometriose'
+  | 'migraine'
+  | 'lombalgie'
+  | 'sep'
+  | 'autre'
+
+export const CHILD_ILLNESSES: ChildIllness[] = [
+  'fibromyalgie',
+  'arthrite',
+  'endometriose',
+  'migraine',
+  'lombalgie',
+  'sep',
+  'autre',
+]
+
 export interface Settings {
   id: 1
   enabledFactors: FactorKey[]
@@ -122,6 +149,8 @@ export interface Settings {
   autoWeatherLabel?: string
   onboardingDone: boolean
   language: Language
+  parentGender: ParentGender
+  childIllness: ChildIllness
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -135,6 +164,8 @@ export const DEFAULT_SETTINGS: Settings = {
   autoWeatherEnabled: false,
   onboardingDone: false,
   language: 'fr',
+  parentGender: 'maman',
+  childIllness: 'fibromyalgie',
 }
 
 export type PainWeatherLevel = 1 | 2 | 3 | 4 | 5

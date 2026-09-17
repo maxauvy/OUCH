@@ -221,9 +221,30 @@ const fr: Translations = {
     themeDark: 'Sombre',
     languageTitle: 'Langue',
     languageHelper: "Choisis la langue de l'application.",
+    parentGenderTitle: 'Comment te désigner auprès de ton enfant',
+    parentGenderHelper: 'Utilisé dans les phrases de la page « Expliquer à mon enfant ».',
+    parentGenderMaman: 'Maman',
+    parentGenderPapa: 'Papa',
+    childIllnessTitle: 'Maladie à expliquer',
+    childIllnessHelper: 'La maladie décrite sur la page « Expliquer à mon enfant ».',
     backupTitle: 'Sauvegarde & synchro',
     privacyNote:
       "OUCH garde toutes tes données sur cet appareil, dans son stockage local. Rien n'est envoyé à un serveur — le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
+    childViewEntryTitle: 'Expliquer à mon enfant',
+    childViewEntryHelper: "Une page simple pour l'aider à comprendre",
+    childViewEntryButton: 'Ouvrir',
+  },
+
+  childView: {
+    pageTitle: 'Expliquer à mon enfant',
+    back: 'Retour',
+    ageToggleLabel: "ÂGE DE L'ENFANT",
+    ageYoung: '4–7 ans',
+    ageOlder: '8–12 ans',
+    howToHelp: 'Comment tu peux aider',
+    aboutIllness: '{{illness}}, c’est quoi ?',
+    privacyNote: "Cette page reste privée. Elle ne sera montrée que si un adulte l'ouvre avec toi.",
+    noEntry: "Pas encore de journée enregistrée — reviens ici une fois qu'une météo du jour aura été notée.",
   },
 
   reminder: {
