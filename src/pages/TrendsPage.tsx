@@ -9,15 +9,31 @@ import { analyzeFactor, bestAndWorstWeekday } from '../lib/insights'
 import { themeFor } from '../lib/theme'
 import { useIsDark } from '../hooks/useIsDark'
 import { subDays } from 'date-fns'
-import { format, useTranslation } from '../i18n'
+import { format, useTranslation, type Translations } from '../i18n'
+import type { DailyEntry, Settings } from '../db/types'
 
-const FACTOR_DEFS: { key: 'fatigueLevel' | 'sleepQuality' | 'stressLevel' | 'brainFog' | 'moodLevel' | 'activityLevel'; factorKey: 'sleep' | 'stress' | 'fatigue' | 'brainFog' | 'mood' | 'activity'; positivePhrasing?: boolean }[] = [
-  { key: 'sleepQuality', factorKey: 'sleep', positivePhrasing: true },
-  { key: 'stressLevel', factorKey: 'stress' },
-  { key: 'fatigueLevel', factorKey: 'fatigue' },
-  { key: 'brainFog', factorKey: 'brainFog' },
-  { key: 'moodLevel', factorKey: 'mood', positivePhrasing: true },
-  { key: 'activityLevel', factorKey: 'activity' },
+const FACTOR_DEFS: {
+  key: string
+  getValue: (e: DailyEntry) => number | null | undefined
+  label: (i18n: Translations) => string
+  positivePhrasing?: boolean
+  bucketing?: 'fixed' | 'terciles'
+  /** Which settings toggle gates this factor; defaults to matching enabledFactors by key. */
+  isEnabled: (settings: Settings) => boolean
+}[] = [
+  { key: 'sleepQuality', getValue: (e) => e.sleepQuality, label: (i18n) => i18n.factors.sleep.label, positivePhrasing: true, isEnabled: (s) => s.enabledFactors.includes('sleep') },
+  { key: 'stressLevel', getValue: (e) => e.stressLevel, label: (i18n) => i18n.factors.stress.label, isEnabled: (s) => s.enabledFactors.includes('stress') },
+  { key: 'fatigueLevel', getValue: (e) => e.fatigueLevel, label: (i18n) => i18n.factors.fatigue.label, isEnabled: (s) => s.enabledFactors.includes('fatigue') },
+  { key: 'brainFog', getValue: (e) => e.brainFog, label: (i18n) => i18n.factors.brainFog.label, isEnabled: (s) => s.enabledFactors.includes('brainFog') },
+  { key: 'moodLevel', getValue: (e) => e.moodLevel, label: (i18n) => i18n.factors.mood.label, positivePhrasing: true, isEnabled: (s) => s.enabledFactors.includes('mood') },
+  { key: 'activityLevel', getValue: (e) => e.activityLevel, label: (i18n) => i18n.factors.activity.label, isEnabled: (s) => s.enabledFactors.includes('activity') },
+  {
+    key: 'tempC',
+    getValue: (e) => e.weather?.tempC,
+    label: (i18n) => i18n.trends.temperatureLabel,
+    bucketing: 'terciles',
+    isEnabled: (s) => s.enabledFactors.includes('weather'),
+  },
 ]
 
 export function TrendsPage() {
@@ -49,8 +65,11 @@ export function TrendsPage() {
     : null
 
   const bucketLabels: [string, string, string] = [i18n.trends.bucketLow, i18n.trends.bucketMid, i18n.trends.bucketHigh]
-  const analyses = FACTOR_DEFS.filter((f) => settings.enabledFactors.includes(f.factorKey)).map((f) =>
-    analyzeFactor(filtered, f.key, i18n.factors[f.factorKey].label, bucketLabels, { positivePhrasing: f.positivePhrasing })
+  const analyses = FACTOR_DEFS.filter((f) => f.isEnabled(settings)).map((f) =>
+    analyzeFactor(filtered, f.getValue, f.key, f.label(i18n), bucketLabels, {
+      positivePhrasing: f.positivePhrasing,
+      bucketing: f.bucketing,
+    })
   )
 
   if (!entries) return null
