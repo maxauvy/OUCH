@@ -118,7 +118,7 @@ export const WeatherCard = forwardRef<
       )}
 
       <div style={{ fontSize: 12, color: theme.inkMuted, textAlign: 'right', letterSpacing: 0.3 }}>
-        OUCH
+        OUCH <span style={{ fontStyle: 'italic' }}>– Ouch, Understand, Chart, Heal</span>
       </div>
     </div>
   )
