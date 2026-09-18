@@ -55,6 +55,7 @@ const en: Translations = {
     insightLower: 'When {{label}} is high, your average pain is {{diff}} {{points}} lower.',
     pointSingular: 'point',
     pointPlural: 'points',
+    temperatureLabel: 'Outdoor temperature',
   },
 
   weekdaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -143,6 +144,8 @@ const en: Translations = {
     autoFill: '📍 Fill in automatically',
     fetching: 'Fetching…',
     unknownError: 'Unknown error',
+    temperatureLabel: 'Temperature (°C)',
+    temperaturePlaceholder: 'e.g. 18',
   },
 
   calendar: {

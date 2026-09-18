@@ -19,24 +19,43 @@ export interface FactorAnalysis {
   insight: FactorInsight | null
 }
 
-const BUCKET_TESTS = [(v: number) => v <= 3, (v: number) => v > 3 && v <= 6, (v: number) => v > 6]
+type BucketTest = (v: number) => boolean
 
-/** Buckets a 0–10 factor into low/mid/high and reports the average pain in
- * each. Kept deliberately simple (tercile-ish buckets, plain averages) so
- * the result is something a person can sanity-check, not a black box.
- * `bucketLabels` (low/mid/high) come from the active translation. */
+const FIXED_BUCKET_TESTS: BucketTest[] = [(v) => v <= 3, (v) => v > 3 && v <= 6, (v) => v > 6]
+
+/** Splits values into three roughly equal-sized groups (lowest/mid/highest
+ * third of THIS dataset) rather than fixed thresholds. Needed for factors
+ * with no natural 0–10 scale (e.g. temperature), where a fixed cutoff would
+ * be arbitrary and climate-dependent. */
+function tercileBucketTests(values: number[]): BucketTest[] {
+  const sorted = [...values].sort((a, b) => a - b)
+  const cut1 = sorted[Math.floor(sorted.length / 3) - 1] ?? sorted[0]
+  const cut2 = sorted[Math.floor((2 * sorted.length) / 3) - 1] ?? sorted[sorted.length - 1]
+  return [(v) => v <= cut1, (v) => v > cut1 && v <= cut2, (v) => v > cut2]
+}
+
+/** Buckets a factor into low/mid/high and reports the average pain in each.
+ * Kept deliberately simple (plain averages) so the result is something a
+ * person can sanity-check, not a black box. `bucketLabels` (low/mid/high)
+ * come from the active translation. */
 export function analyzeFactor(
   entries: DailyEntry[],
-  key: keyof DailyEntry,
+  getValue: (entry: DailyEntry) => number | null | undefined,
+  key: string,
   label: string,
   bucketLabels: [string, string, string],
-  options?: { positivePhrasing?: boolean }
+  options?: { positivePhrasing?: boolean; bucketing?: 'fixed' | 'terciles' }
 ): FactorAnalysis {
-  const withValues = entries.filter((e) => typeof e[key] === 'number' && typeof e.painLevel === 'number')
+  const withValues = entries
+    .map((e) => ({ entry: e, value: getValue(e) }))
+    .filter((x): x is { entry: DailyEntry; value: number } => typeof x.value === 'number' && typeof x.entry.painLevel === 'number')
 
-  const buckets: Bucket[] = BUCKET_TESTS.map((test, i) => {
-    const matches = withValues.filter((e) => test(e[key] as number))
-    const avg = matches.length ? matches.reduce((s, e) => s + e.painLevel, 0) / matches.length : null
+  const bucketTests =
+    options?.bucketing === 'terciles' ? tercileBucketTests(withValues.map((x) => x.value)) : FIXED_BUCKET_TESTS
+
+  const buckets: Bucket[] = bucketTests.map((test, i) => {
+    const matches = withValues.filter((x) => test(x.value))
+    const avg = matches.length ? matches.reduce((s, x) => s + x.entry.painLevel, 0) / matches.length : null
     return { label: bucketLabels[i], avgPain: avg, count: matches.length }
   })
 

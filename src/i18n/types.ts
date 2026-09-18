@@ -64,6 +64,7 @@ export interface Translations {
     insightLower: string
     pointSingular: string
     pointPlural: string
+    temperatureLabel: string
   }
 
   /** Sunday-first, matching Date#getDay(). */
@@ -147,6 +148,8 @@ export interface Translations {
     autoFill: string
     fetching: string
     unknownError: string
+    temperatureLabel: string
+    temperaturePlaceholder: string
   }
 
   calendar: {

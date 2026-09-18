@@ -58,6 +58,7 @@ const fr: Translations = {
     insightLower: 'Quand {{label}} est élevé, ta douleur moyenne est {{diff}} {{points}} plus basse.',
     pointSingular: 'point',
     pointPlural: 'points',
+    temperatureLabel: 'Température extérieure',
   },
 
   weekdaysFull: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
@@ -146,6 +147,8 @@ const fr: Translations = {
     autoFill: '📍 Remplir automatiquement',
     fetching: 'Récupération…',
     unknownError: 'Erreur inconnue',
+    temperatureLabel: 'Température (°C)',
+    temperaturePlaceholder: 'ex. 18',
   },
 
   calendar: {

@@ -21,6 +21,11 @@ export function WeatherField({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  function handleManualTemp(raw: string) {
+    const tempC = raw === '' ? undefined : Number(raw)
+    onChange({ ...value, source: 'manual', tempC: tempC === undefined || Number.isNaN(tempC) ? undefined : tempC })
+  }
+
   async function handleAutoFetch() {
     setLoading(true)
     setError(null)
@@ -61,11 +66,25 @@ export function WeatherField({
           {error}
         </p>
       )}
-      {value?.source === 'auto' && (
+      {value?.source === 'auto' && value.pressureHpa != null && (
         <p className="text-[13px] mb-2" style={{ color: 'var(--color-ink-muted)' }}>
-          {value.tempC}°C · {value.pressureHpa} hPa
+          {value.pressureHpa} hPa
         </p>
       )}
+      <div className="flex items-center gap-2 mb-3">
+        <label className="text-[13px]" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.weatherField.temperatureLabel}
+        </label>
+        <input
+          type="number"
+          inputMode="numeric"
+          value={value?.tempC ?? ''}
+          onChange={(e) => handleManualTemp(e.target.value)}
+          placeholder={t.weatherField.temperaturePlaceholder}
+          className="w-20 rounded-xl px-3 py-1.5 text-[14px] outline-none"
+          style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
+        />
+      </div>
       <div className="flex flex-wrap gap-2">
         {CONDITIONS.map((c) => (
           <Chip
