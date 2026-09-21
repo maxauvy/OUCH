@@ -18,7 +18,7 @@ Les carnets de suivi existants (Pain Diary, MyPainDiary, etc.) sont soit fermés
 
 **Tendances.** Courbe de douleur, moyennes par jour de la semaine, et une analyse basique de ce qui semble corrélé aux douleurs (sommeil, stress, météo...). Présenté comme une observation, pas une preuve scientifique.
 
-**Expliquer à mon enfant.** Un écran à part, pensé pour être montré à un enfant : la météo du jour reformulée en langage simple ("aujourd'hui maman a un ciel un peu voilé"), des idées concrètes pour aider, et une explication de la maladie elle-même (fibromyalgie, arthrite, endométriose, migraine, lombalgie, SEP...) adaptée à son âge. Le ton (petit / plus grand) et le parent concerné se règlent à la volée.
+**Expliquer à mon enfant.** Un écran à part, pensé pour être montré à un enfant : la météo du jour reformulée en langage simple ("aujourd'hui maman a un ciel un peu voilé"), des idées concrètes pour aider, et une explication de la maladie elle-même (fibromyalgie, arthrite, spondylarthrite, endométriose, migraine, lombalgie, SEP...) adaptée à son âge. Le ton (petit / plus grand) et le parent concerné se règlent à la volée.
 
 **Bilingue.** Français et anglais, choix à la première ouverture et modifiable à tout moment dans les réglages.
 

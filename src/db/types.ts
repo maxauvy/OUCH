@@ -119,6 +119,7 @@ export type ParentGender = 'maman' | 'papa'
 export type ChildIllness =
   | 'fibromyalgie'
   | 'arthrite'
+  | 'spondylarthrite'
   | 'endometriose'
   | 'migraine'
   | 'lombalgie'
@@ -128,6 +129,7 @@ export type ChildIllness =
 export const CHILD_ILLNESSES: ChildIllness[] = [
   'fibromyalgie',
   'arthrite',
+  'spondylarthrite',
   'endometriose',
   'migraine',
   'lombalgie',
