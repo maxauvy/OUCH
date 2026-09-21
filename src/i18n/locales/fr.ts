@@ -19,8 +19,33 @@ const fr: Translations = {
 
   welcome: {
     title: 'Bienvenue sur OUCH',
-    body: "Note ta douleur et ce qui l'entoure en quelques secondes par jour, repère ce qui l'influence, et partage ta météo du jour avec tes proches quand tu le souhaites. Tout reste sur cet appareil.",
     start: 'Commencer',
+  },
+
+  about: {
+    title: "À propos d'OUCH",
+    tagline: 'Ouch, Understand, Chart, Heal',
+    intro:
+      "OUCH est un petit carnet pour vivre au mieux avec la douleur chronique. Il t'aide à y voir plus clair, et à en parler plus facilement, à toi comme à ceux qui t'entourent.",
+    points: {
+      track: {
+        title: 'Mieux comprendre',
+        body: "Note tes symptômes en quelques secondes par jour. Avec le temps, tu repères ce qui les influence (sommeil, stress, météo…) pour anticiper et mieux traverser les crises.",
+      },
+      share: {
+        title: 'Dire sa forme du jour',
+        body: "Ta journée devient une « météo de la douleur » : une image simple à partager avec tes proches, sans avoir à tout expliquer.",
+      },
+      kids: {
+        title: 'Expliquer aux enfants',
+        body: "Une page pensée pour eux, avec des mots doux : comment tu vas aujourd'hui, ce qu'est ta maladie, et comment ils peuvent aider.",
+      },
+      private: {
+        title: '100 % privé',
+        body: "Tout reste sur ton appareil. Rien n'est envoyé sans que tu le décides.",
+      },
+    },
+    note: "Pas de pression : les jours difficiles, une seule info suffit (ta douleur). OUCH ne remplace pas un avis médical, et les tendances sont des pistes à explorer, pas des preuves.",
   },
 
   today: {

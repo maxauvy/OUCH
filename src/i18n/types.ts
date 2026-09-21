@@ -26,8 +26,15 @@ export interface Translations {
 
   welcome: {
     title: string
-    body: string
     start: string
+  }
+
+  about: {
+    title: string
+    tagline: string
+    intro: string
+    points: Record<'track' | 'share' | 'kids' | 'private', { title: string; body: string }>
+    note: string
   }
 
   today: {
