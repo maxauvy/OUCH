@@ -192,6 +192,12 @@ const FR_ILLNESSES: Record<ChildIllness, IllnessCopy> = {
     young: (P) => `${P.Noun} a une maladie qui s'appelle polyarthrite rhumatoïde. Ça fait gonfler et fait mal aux articulations (genoux, mains...), surtout le matin. Ce n'est pas contagieux, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie inflammatoire chronique, la polyarthrite rhumatoïde : le corps attaque un peu ses propres articulations, ce qui cause douleurs, gonflements et raideur, surtout le matin. Les jours changent selon l'inflammation du moment. Ce n'est jamais à cause de toi.`,
   },
+  spondylarthrite: {
+    label: 'Spondylarthrite',
+    titleWithArticle: 'La spondylarthrite',
+    young: (P) => `${P.Noun} a une maladie qui s'appelle spondylarthrite. Ça fait mal au dos et ça raidit le corps, surtout la nuit et le matin au réveil. Bouger doucement ${P.obj} aide à aller mieux. Ce n'est pas contagieux, et ce n'est jamais à cause de toi.`,
+    older: (P) => `${P.Noun} a une maladie inflammatoire chronique, la spondylarthrite : elle touche surtout le dos et le bassin, et provoque douleurs et raideur, surtout la nuit et le matin. Bouger aide souvent à se sentir mieux, alors que rester longtemps immobile aggrave la raideur. Les jours changent selon l'inflammation du moment. Ce n'est jamais à cause de toi.`,
+  },
   endometriose: {
     label: 'Endométriose',
     titleWithArticle: "L'endométriose",
@@ -236,6 +242,12 @@ const EN_ILLNESSES: Record<ChildIllness, IllnessCopy> = {
     titleWithArticle: 'Arthritis',
     young: (P) => `${P.Noun} has an illness called rheumatoid arthritis. It makes ${P.poss} joints (like knees and hands) swell and hurt, especially in the morning. It's not contagious, and it's never your fault.`,
     older: (P) => `${P.Noun} has a chronic inflammatory illness called rheumatoid arthritis: the body attacks its own joints a little, causing pain, swelling and stiffness, especially in the morning. Some days are worse than others depending on the inflammation. It's never your fault.`,
+  },
+  spondylarthrite: {
+    label: 'Spondyloarthritis',
+    titleWithArticle: 'Spondyloarthritis',
+    young: (P) => `${P.Noun} has an illness called spondyloarthritis. It makes ${P.poss} back hurt and ${P.poss} body feel stiff, especially at night and when ${P.subj} wakes up. Moving gently helps ${P.obj} feel better. It's not contagious, and it's never your fault.`,
+    older: (P) => `${P.Noun} has a chronic inflammatory illness called spondyloarthritis: it mainly affects the spine and pelvis, causing pain and stiffness, especially at night and in the morning. Moving often helps ${P.obj} feel better, while staying still for a long time makes the stiffness worse. Some days are worse than others depending on the inflammation. It's never your fault.`,
   },
   endometriose: {
     label: 'Endometriosis',
