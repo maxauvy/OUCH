@@ -7,5 +7,22 @@
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-  <path transform="translate(256 268)" d="M-118 92a70 70 0 0 1 9-140 88 88 0 0 1 168 25 63 63 0 0 1-13 115H-118Z" fill="#ffffff"/>
+  <g transform="translate(281 300) scale(1.12)">
+    <g transform="translate(-78 -72)">
+      <circle r="66" fill="#ffd27a"/>
+      <g stroke="#ffd27a" stroke-width="14" stroke-linecap="round">
+        <line x1="-90" y1="0" x2="-110" y2="0"/>
+        <line x1="-63.6" y1="-63.6" x2="-77.8" y2="-77.8"/>
+        <line x1="0" y1="-90" x2="0" y2="-110"/>
+        <line x1="63.6" y1="-63.6" x2="77.8" y2="-77.8"/>
+        <line x1="-63.6" y1="63.6" x2="-77.8" y2="77.8"/>
+      </g>
+    </g>
+    <g fill="#ffffff">
+      <rect x="-140" y="0" width="280" height="110" rx="55"/>
+      <circle cx="20" cy="-5" r="74"/>
+      <circle cx="-65" cy="20" r="52"/>
+    </g>
+    <path d="M-116 50H-60L-38 8-8 92 22 12 40 50H116" fill="none" stroke="#7c6fa8" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
 </svg>
