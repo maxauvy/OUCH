@@ -6,6 +6,7 @@ import { TrendsPage } from './pages/TrendsPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { ChildViewPage } from './pages/ChildViewPage'
 import { AboutCard } from './components/about/AboutCard'
+import { Acronym } from './components/about/Acronym'
 import { AppLogo } from './components/ui/AppLogo'
 import { useSettings } from './hooks/useSettings'
 import { useTodayEntry } from './hooks/useEntries'
@@ -56,7 +57,10 @@ function WelcomeOverlay({ onDone }: { onDone: () => void }) {
             ))}
           </div>
           <AppLogo size={72} className="self-center" />
-          <h1 className="text-[22px] font-semibold">{t.welcome.title}</h1>
+          <div>
+            <h1 className="text-[22px] font-semibold">{t.welcome.title}</h1>
+            <Acronym className="text-[13px] mt-1" />
+          </div>
           <AboutCard />
           {/* Sticky so the CTA stays reachable even when the about card is taller than the screen */}
           <div className="sticky bottom-0 -mx-1 px-1 pt-2 pb-5" style={{ background: 'var(--color-paper)' }}>

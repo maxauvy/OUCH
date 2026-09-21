@@ -24,7 +24,6 @@ const fr: Translations = {
 
   about: {
     title: "À propos d'OUCH",
-    tagline: 'Ouch, Understand, Chart, Heal',
     intro:
       "OUCH est un petit carnet pour vivre au mieux avec la douleur chronique. Il t'aide à y voir plus clair, et à en parler plus facilement, à toi comme à ceux qui t'entourent.",
     points: {

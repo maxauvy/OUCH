@@ -1,6 +1,7 @@
 import { Card } from '../ui/Card'
 import { AppLogo } from '../ui/AppLogo'
 import { useTranslation } from '../../i18n'
+import { Acronym } from './Acronym'
 
 const POINT_ICONS = { track: '🔍', share: '🌤️', kids: '🧒', private: '🔒' } as const
 
@@ -18,9 +19,7 @@ export function AboutCard({ withHeader = false }: { withHeader?: boolean }) {
           <AppLogo size={48} className="shrink-0" />
           <div>
             <h2 className="text-[17px] font-semibold leading-tight">{t.about.title}</h2>
-            <p className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
-              {t.about.tagline}
-            </p>
+            <Acronym className="text-[12px]" />
           </div>
         </div>
       )}

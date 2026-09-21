@@ -22,7 +22,6 @@ const en: Translations = {
 
   about: {
     title: 'About OUCH',
-    tagline: 'Ouch, Understand, Chart, Heal',
     intro:
       "OUCH is a small journal to help you live as well as you can with chronic pain. It helps you see things more clearly, and talk about them more easily, for yourself and for the people around you.",
     points: {
