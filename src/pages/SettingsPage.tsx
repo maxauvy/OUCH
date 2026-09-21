@@ -5,6 +5,7 @@ import { ALL_FACTORS, CHILD_ILLNESSES, type ChildIllness, type FactorKey, type P
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
+import { AboutCard } from '../components/about/AboutCard'
 import { BackupSection } from '../components/settings/BackupSection'
 import { canNotify, requestNotificationPermission } from '../lib/reminder'
 import { reverseGeocode, getCurrentPosition } from '../lib/weather'
@@ -62,6 +63,8 @@ export function SettingsPage({ onOpenChildView }: { onOpenChildView: () => void 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       <h1 className="text-[22px] font-semibold px-1">{t.settings.title}</h1>
+
+      <AboutCard withHeader />
 
       <Card>
         <SectionTitle>{t.settings.firstNameTitle}</SectionTitle>

@@ -17,8 +17,32 @@ const en: Translations = {
 
   welcome: {
     title: 'Welcome to OUCH',
-    body: "Log your pain and what surrounds it in a few seconds a day, spot what influences it, and share your daily weather with your loved ones whenever you want. Everything stays on this device.",
     start: 'Get started',
+  },
+
+  about: {
+    title: 'About OUCH',
+    intro:
+      "OUCH is a small journal to help you live as well as you can with chronic pain. It helps you see things more clearly, and talk about them more easily, for yourself and for the people around you.",
+    points: {
+      track: {
+        title: 'Understand more',
+        body: "Log your symptoms in a few seconds a day. Over time, you spot what influences them (sleep, stress, weather…) so you can anticipate and get through flare-ups more gently.",
+      },
+      share: {
+        title: 'Share how you feel today',
+        body: "Your day becomes a \"pain weather\": a simple picture to share with your loved ones, without having to explain everything.",
+      },
+      kids: {
+        title: 'Explain it to children',
+        body: "A page made for them, in gentle words: how you are today, what your illness is, and how they can help.",
+      },
+      private: {
+        title: '100% private',
+        body: "Everything stays on your device. Nothing is sent unless you decide to.",
+      },
+    },
+    note: "No pressure: on hard days, a single entry is enough (your pain). OUCH doesn't replace medical advice, and trends are leads to explore, not proof.",
   },
 
   today: {
