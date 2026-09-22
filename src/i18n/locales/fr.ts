@@ -221,7 +221,8 @@ const fr: Translations = {
     importTitle: 'Importer une sauvegarde',
     importHelper:
       "Les jours importés s'ajoutent à ceux déjà présents (en cas de doublon, la sauvegarde l'emporte).",
-    importMissingPassword: 'Indique le mot de passe de la sauvegarde.',
+    importButton: 'Importer',
+    importing: 'Import…',
     importSuccessOne: '{{n}} jour importé.',
     importSuccessOther: '{{n}} jours importés.',
     importGenericError: 'Import impossible.',

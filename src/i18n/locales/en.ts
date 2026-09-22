@@ -218,7 +218,8 @@ const en: Translations = {
     importTitle: 'Import a backup',
     importHelper:
       'Imported days are added to those already present (in case of a conflict, the backup wins).',
-    importMissingPassword: 'Enter the backup password.',
+    importButton: 'Import',
+    importing: 'Importing…',
     importSuccessOne: '{{n}} day imported.',
     importSuccessOther: '{{n}} days imported.',
     importGenericError: 'Import failed.',
