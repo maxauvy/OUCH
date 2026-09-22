@@ -57,6 +57,9 @@ export function DailyEntryForm({ date }: { date: string }) {
   const knownMedications = Array.from(
     new Set((allEntries ?? []).flatMap((e) => e.medications ?? []))
   )
+  const knownPositiveActions = Array.from(
+    new Set((allEntries ?? []).flatMap((e) => e.positiveActions ?? []))
+  )
 
   const zones = local.painLocations ?? []
   function toggleZone(z: BodyZone) {
@@ -193,6 +196,18 @@ export function DailyEntryForm({ date }: { date: string }) {
             onChange={(v) => setField('medications', v)}
             placeholder={t.entryForm.addMedicationPlaceholder}
             suggestions={knownMedications}
+          />
+        </Card>
+      )}
+
+      {has('positiveActions') && (
+        <Card>
+          <SectionTitle>{t.entryForm.positiveActionsTitle}</SectionTitle>
+          <TagInput
+            values={local.positiveActions ?? []}
+            onChange={(v) => setField('positiveActions', v)}
+            placeholder={t.entryForm.addPositiveActionPlaceholder}
+            suggestions={knownPositiveActions.length ? knownPositiveActions : t.entryForm.positiveActionsSuggestions}
           />
         </Card>
       )}

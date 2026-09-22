@@ -65,6 +65,11 @@ export interface Translations {
     pointSingular: string
     pointPlural: string
     temperatureLabel: string
+    whatHelps: string
+    bucketWith: string
+    bucketWithout: string
+    insightTagHigher: string
+    insightTagLower: string
   }
 
   /** Sunday-first, matching Date#getDay(). */
@@ -79,6 +84,7 @@ export interface Translations {
     activity: FactorText
     weather: FactorText
     medications: FactorText
+    positiveActions: FactorText
     painLocations: FactorText
     cycle: FactorText
     notes: FactorText
@@ -137,6 +143,9 @@ export interface Translations {
     activityEndIntense: string
     medicationsTaken: string
     addMedicationPlaceholder: string
+    positiveActionsTitle: string
+    addPositiveActionPlaceholder: string
+    positiveActionsSuggestions: string[]
     periodToday: string
     periodHelper: string
     notes: string

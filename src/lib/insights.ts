@@ -74,6 +74,52 @@ export function analyzeFactor(
   return { key: key as string, label, buckets, insight }
 }
 
+/** Same idea as `analyzeFactor`, but for "did you do this" tags rather than a
+ * 0–10 scale: compares average pain on days a tag is present vs absent.
+ * Returns one FactorAnalysis per tag with enough data on both sides (>=3
+ * days each, same as analyzeFactor's threshold), sorted with the biggest
+ * apparent pain reduction first. Like analyzeFactor, this is an association
+ * only — a good day also makes someone more likely to go for a walk, not
+ * just the other way around. */
+export function analyzeTagPresence(
+  entries: DailyEntry[],
+  getTags: (entry: DailyEntry) => string[] | undefined,
+  bucketLabels: [string, string]
+): FactorAnalysis[] {
+  const withPain = entries.filter((e) => typeof e.painLevel === 'number')
+  const allTags = new Set<string>()
+  for (const e of withPain) (getTags(e) ?? []).forEach((tag) => allTags.add(tag))
+
+  const results: FactorAnalysis[] = []
+  for (const tag of allTags) {
+    const withEntries = withPain.filter((e) => (getTags(e) ?? []).includes(tag))
+    const withoutEntries = withPain.filter((e) => !(getTags(e) ?? []).includes(tag))
+    if (withEntries.length < 3 || withoutEntries.length < 3) continue
+
+    const withAvg = withEntries.reduce((s, e) => s + e.painLevel, 0) / withEntries.length
+    const withoutAvg = withoutEntries.reduce((s, e) => s + e.painLevel, 0) / withoutEntries.length
+    const diff = withAvg - withoutAvg
+    if (Math.abs(diff) < 1.2) continue
+
+    results.push({
+      key: tag,
+      label: tag,
+      buckets: [
+        { label: bucketLabels[0], avgPain: withoutAvg, count: withoutEntries.length },
+        { label: bucketLabels[1], avgPain: withAvg, count: withEntries.length },
+      ],
+      insight: { diffAbs: Math.abs(diff), painHigherWhenFactorHigh: diff > 0 },
+    })
+  }
+
+  return results.sort((a, b) => {
+    const aHelps = a.insight ? !a.insight.painHigherWhenFactorHigh : false
+    const bHelps = b.insight ? !b.insight.painHigherWhenFactorHigh : false
+    if (aHelps !== bHelps) return aHelps ? -1 : 1
+    return (b.insight?.diffAbs ?? 0) - (a.insight?.diffAbs ?? 0)
+  })
+}
+
 /** Returns the Sunday-first weekday indices (matching Date#getDay()) with
  * the lowest / highest average pain — the caller maps these to localized
  * weekday names via the active translation. */

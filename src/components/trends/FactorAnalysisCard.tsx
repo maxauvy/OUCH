@@ -5,7 +5,17 @@ import { useSettings } from '../../hooks/useSettings'
 import { useIsDark } from '../../hooks/useIsDark'
 import { format, useTranslation } from '../../i18n'
 
-export function FactorAnalysisCard({ analysis }: { analysis: FactorAnalysis }) {
+export function FactorAnalysisCard({
+  analysis,
+  insightHigherText,
+  insightLowerText,
+}: {
+  analysis: FactorAnalysis
+  /** Overrides the default "when X is high" phrasing — used for tag-presence
+   * analyses ("on days with X") where that phrasing doesn't read naturally. */
+  insightHigherText?: string
+  insightLowerText?: string
+}) {
   const settings = useSettings()
   const t = themeFor(useIsDark(settings.theme))
   const i18n = useTranslation()
@@ -15,7 +25,9 @@ export function FactorAnalysisCard({ analysis }: { analysis: FactorAnalysis }) {
   const maxAvg = Math.max(...analysis.buckets.map((b) => b.avgPain ?? 0), 1)
   const insightText = analysis.insight
     ? format(
-        analysis.insight.painHigherWhenFactorHigh ? i18n.trends.insightHigher : i18n.trends.insightLower,
+        analysis.insight.painHigherWhenFactorHigh
+          ? insightHigherText ?? i18n.trends.insightHigher
+          : insightLowerText ?? i18n.trends.insightLower,
         {
           label: analysis.label.toLowerCase(),
           diff: analysis.insight.diffAbs.toFixed(1),

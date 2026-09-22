@@ -5,7 +5,7 @@ import { Card, SectionTitle } from '../components/ui/Card'
 import { Footer } from '../components/layout/Footer'
 import { PainTrendChart } from '../components/trends/PainTrendChart'
 import { FactorAnalysisCard } from '../components/trends/FactorAnalysisCard'
-import { analyzeFactor, bestAndWorstWeekday } from '../lib/insights'
+import { analyzeFactor, analyzeTagPresence, bestAndWorstWeekday } from '../lib/insights'
 import { themeFor } from '../lib/theme'
 import { useIsDark } from '../hooks/useIsDark'
 import { subDays } from 'date-fns'
@@ -71,6 +71,10 @@ export function TrendsPage() {
       bucketing: f.bucketing,
     })
   )
+
+  const positiveActionAnalyses = settings.enabledFactors.includes('positiveActions')
+    ? analyzeTagPresence(filtered, (e) => e.positiveActions, [i18n.trends.bucketWithout, i18n.trends.bucketWith])
+    : []
 
   if (!entries) return null
 
@@ -149,6 +153,26 @@ export function TrendsPage() {
                 {analyses.map((a, i) => (
                   <div key={a.key} style={i > 0 ? { borderTop: `1px solid ${t.hairline}` } : undefined}>
                     <FactorAnalysisCard analysis={a} />
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+
+          {positiveActionAnalyses.length > 0 && (
+            <Card>
+              <SectionTitle>{i18n.trends.whatHelps}</SectionTitle>
+              <p className="text-[12px] -mt-2 mb-1" style={{ color: t.inkMuted }}>
+                {i18n.trends.averagesObserved}
+              </p>
+              <div className="flex flex-col">
+                {positiveActionAnalyses.map((a, i) => (
+                  <div key={a.key} style={i > 0 ? { borderTop: `1px solid ${t.hairline}` } : undefined}>
+                    <FactorAnalysisCard
+                      analysis={a}
+                      insightHigherText={i18n.trends.insightTagHigher}
+                      insightLowerText={i18n.trends.insightTagLower}
+                    />
                   </div>
                 ))}
               </div>
