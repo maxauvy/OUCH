@@ -9,6 +9,7 @@ export function BackupSection() {
   const [exportMsg, setExportMsg] = useState<string | null>(null)
 
   const [importPassword, setImportPassword] = useState('')
+  const [importFile, setImportFile] = useState<File | null>(null)
   const [importBusy, setImportBusy] = useState(false)
   const [importMsg, setImportMsg] = useState<{ text: string; error?: boolean } | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -31,15 +32,12 @@ export function BackupSection() {
     }
   }
 
-  async function handleImportFile(file: File) {
-    if (!importPassword) {
-      setImportMsg({ text: t.backup.importMissingPassword, error: true })
-      return
-    }
+  async function handleImport() {
+    if (!importFile || !importPassword) return
     setImportBusy(true)
     setImportMsg(null)
     try {
-      const result = await importEncryptedBackup(file, importPassword, 'merge', {
+      const result = await importEncryptedBackup(importFile, importPassword, 'merge', {
         invalidFile: t.backup.invalidFile,
         invalidBackup: t.backup.invalidBackup,
       })
@@ -48,11 +46,13 @@ export function BackupSection() {
           n: result.imported,
         }),
       })
+      setImportFile(null)
+      setImportPassword('')
+      if (fileRef.current) fileRef.current.value = ''
     } catch (e) {
       setImportMsg({ text: e instanceof Error ? e.message : t.backup.importGenericError, error: true })
     } finally {
       setImportBusy(false)
-      if (fileRef.current) fileRef.current.value = ''
     }
   }
 
@@ -92,6 +92,17 @@ export function BackupSection() {
           {t.backup.importHelper}
         </p>
         <input
+          ref={fileRef}
+          type="file"
+          accept="application/json"
+          onChange={(e) => {
+            setImportFile(e.target.files?.[0] ?? null)
+            setImportMsg(null)
+          }}
+          disabled={importBusy}
+          className="w-full text-[14px] mb-2"
+        />
+        <input
           type="password"
           value={importPassword}
           onChange={(e) => setImportPassword(e.target.value)}
@@ -99,14 +110,14 @@ export function BackupSection() {
           className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none mb-2"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
         />
-        <input
-          ref={fileRef}
-          type="file"
-          accept="application/json"
-          onChange={(e) => e.target.files?.[0] && handleImportFile(e.target.files[0])}
-          disabled={importBusy}
-          className="w-full text-[14px]"
-        />
+        <button
+          onClick={handleImport}
+          disabled={importBusy || !importFile || !importPassword}
+          className="w-full rounded-full py-3 text-[15px] font-semibold text-white disabled:opacity-40"
+          style={{ background: 'var(--color-brand)' }}
+        >
+          {importBusy ? t.backup.importing : t.backup.importButton}
+        </button>
         {importMsg && (
           <p className="text-[13px] mt-2" style={{ color: importMsg.error ? 'var(--color-weather-5)' : 'var(--color-ink-muted)' }}>
             {importMsg.text}

@@ -169,7 +169,8 @@ export interface Translations {
     exportError: string
     importTitle: string
     importHelper: string
-    importMissingPassword: string
+    importButton: string
+    importing: string
     importSuccessOne: string
     importSuccessOther: string
     importGenericError: string
