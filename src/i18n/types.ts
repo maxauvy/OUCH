@@ -111,6 +111,13 @@ export interface Translations {
 
   painWeatherLevels: Record<1 | 2 | 3 | 4 | 5, string>
 
+  /** Four words for a 0–10 factor score, low to high (e.g. brainFog: ['Low', 'Moderate', 'High', 'Very high']). */
+  factorIntensity: {
+    fatigue: [string, string, string, string]
+    stress: [string, string, string, string]
+    brainFog: [string, string, string, string]
+  }
+
   entryForm: {
     saving: string
     saved: string
@@ -194,6 +201,7 @@ export interface Translations {
     weatherOfName: string
     weatherOfDay: string
     painLabel: string
+    painCaption: string
     outside: string
   }
 

@@ -107,6 +107,12 @@ const en: Translations = {
     5: 'Storm',
   },
 
+  factorIntensity: {
+    fatigue: ['Low', 'Moderate', 'High', 'Very high'],
+    stress: ['Low', 'Moderate', 'High', 'Very high'],
+    brainFog: ['Low', 'Moderate', 'High', 'Very high'],
+  },
+
   entryForm: {
     saving: 'Saving…',
     saved: 'Saved',
@@ -193,6 +199,7 @@ const en: Translations = {
     weatherOfName: "{{name}}'s weather",
     weatherOfDay: "Today's weather",
     painLabel: 'Pain:',
+    painCaption: 'Pain felt today',
     outside: 'Outside',
   },
 

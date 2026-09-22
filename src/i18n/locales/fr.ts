@@ -110,6 +110,12 @@ const fr: Translations = {
     5: 'Orage',
   },
 
+  factorIntensity: {
+    fatigue: ['Faible', 'Modérée', 'Élevée', 'Très élevée'],
+    stress: ['Faible', 'Modéré', 'Élevé', 'Très élevé'],
+    brainFog: ['Faible', 'Modéré', 'Élevé', 'Très élevé'],
+  },
+
   entryForm: {
     saving: 'Enregistrement…',
     saved: 'Enregistré',
@@ -196,6 +202,7 @@ const fr: Translations = {
     weatherOfName: 'Météo de {{name}}',
     weatherOfDay: 'Météo du jour',
     painLabel: 'Douleur :',
+    painCaption: "Douleur ressentie aujourd'hui",
     outside: 'Dehors',
   },
 
