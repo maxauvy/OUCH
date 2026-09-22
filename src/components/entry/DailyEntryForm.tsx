@@ -28,12 +28,14 @@ export function DailyEntryForm({ date }: { date: string }) {
   const [local, setLocal] = useState<Partial<DailyEntry>>({})
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle')
   const dirtyRef = useRef(false)
+  const pendingRef = useRef({ date, local })
 
   useEffect(() => {
     setLocal(dbEntry ?? {})
   }, [date, dbEntry?.id, dbEntry?.updatedAt])
 
   useEffect(() => {
+    pendingRef.current = { date, local }
     const t = setTimeout(() => {
       if (!dirtyRef.current) return
       dirtyRef.current = false
@@ -44,6 +46,18 @@ export function DailyEntryForm({ date }: { date: string }) {
     }, 350)
     return () => clearTimeout(t)
   }, [local, date])
+
+  // Flushes a still-pending edit when the user navigates to another day or
+  // away from this form before the debounce above fires — otherwise it's
+  // silently discarded (clearTimeout with no save) instead of ever written.
+  useEffect(() => {
+    return () => {
+      if (!dirtyRef.current) return
+      dirtyRef.current = false
+      const { date: pendingDate, local: pendingLocal } = pendingRef.current
+      upsertEntry(pendingDate, pendingLocal).catch(() => {})
+    }
+  }, [date])
 
   function setField<K extends keyof DailyEntry>(key: K, value: DailyEntry[K]) {
     dirtyRef.current = true
@@ -56,6 +70,9 @@ export function DailyEntryForm({ date }: { date: string }) {
 
   const knownMedications = Array.from(
     new Set((allEntries ?? []).flatMap((e) => e.medications ?? []))
+  )
+  const knownPositiveActions = Array.from(
+    new Set((allEntries ?? []).flatMap((e) => e.positiveActions ?? []))
   )
 
   const zones = local.painLocations ?? []
@@ -193,6 +210,18 @@ export function DailyEntryForm({ date }: { date: string }) {
             onChange={(v) => setField('medications', v)}
             placeholder={t.entryForm.addMedicationPlaceholder}
             suggestions={knownMedications}
+          />
+        </Card>
+      )}
+
+      {has('positiveActions') && (
+        <Card>
+          <SectionTitle>{t.entryForm.positiveActionsTitle}</SectionTitle>
+          <TagInput
+            values={local.positiveActions ?? []}
+            onChange={(v) => setField('positiveActions', v)}
+            placeholder={t.entryForm.addPositiveActionPlaceholder}
+            suggestions={knownPositiveActions.length ? knownPositiveActions : t.entryForm.positiveActionsSuggestions}
           />
         </Card>
       )}

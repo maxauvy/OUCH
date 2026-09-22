@@ -1,4 +1,4 @@
-import { db, getSettings } from '../db'
+import { db, getSettings, updateSettings } from '../db'
 import type { DailyEntry, Settings } from '../db/types'
 import { decryptJSON, encryptJSON, type EncryptedPayload } from './crypto'
 
@@ -60,7 +60,7 @@ export async function importEncryptedBackup(
   let imported = 0
   let skipped = 0
 
-  await db.transaction('rw', db.entries, db.settings, async () => {
+  await db.transaction('rw', db.entries, async () => {
     if (mode === 'replace') {
       await db.entries.clear()
     }
@@ -78,10 +78,13 @@ export async function importEncryptedBackup(
       }
       imported++
     }
-    if (bundle.settings) {
-      await db.settings.put({ ...bundle.settings, id: 1 })
-    }
   })
+
+  // Merged (not replaced): a backup exported before a setting existed, or
+  // from another device, must not erase settings it simply doesn't know about.
+  if (bundle.settings) {
+    await updateSettings(bundle.settings)
+  }
 
   return { imported, skipped }
 }

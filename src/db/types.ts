@@ -12,6 +12,7 @@ export type FactorKey =
   | 'activity'
   | 'weather'
   | 'medications'
+  | 'positiveActions'
   | 'painLocations'
   | 'cycle'
   | 'notes'
@@ -27,6 +28,7 @@ export const ALL_FACTORS: FactorKey[] = [
   'activity',
   'weather',
   'medications',
+  'positiveActions',
   'painLocations',
   'cycle',
   'notes',
@@ -41,6 +43,7 @@ export const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
   'activity',
   'weather',
   'medications',
+  'positiveActions',
   'painLocations',
   'notes',
 ]
@@ -101,6 +104,7 @@ export interface DailyEntry {
 
   weather?: WeatherInfo
   medications?: string[]
+  positiveActions?: string[]
   painLocations?: BodyZone[]
   periodDay?: boolean
   notes?: string
