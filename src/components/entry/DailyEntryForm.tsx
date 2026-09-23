@@ -72,7 +72,10 @@ export function DailyEntryForm({ date }: { date: string }) {
     new Set((allEntries ?? []).flatMap((e) => e.medications ?? []))
   )
   const knownPositiveActions = Array.from(
-    new Set((allEntries ?? []).flatMap((e) => e.positiveActions ?? []))
+    new Set([
+      ...(allEntries ?? []).flatMap((e) => e.positiveActions ?? []),
+      ...t.entryForm.positiveActionsSuggestions,
+    ])
   )
 
   const zones = local.painLocations ?? []
@@ -221,7 +224,7 @@ export function DailyEntryForm({ date }: { date: string }) {
             values={local.positiveActions ?? []}
             onChange={(v) => setField('positiveActions', v)}
             placeholder={t.entryForm.addPositiveActionPlaceholder}
-            suggestions={knownPositiveActions.length ? knownPositiveActions : t.entryForm.positiveActionsSuggestions}
+            suggestions={knownPositiveActions}
           />
         </Card>
       )}

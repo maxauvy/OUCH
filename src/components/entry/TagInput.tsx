@@ -21,7 +21,7 @@ export function TagInput({
     setDraft('')
   }
 
-  const unusedSuggestions = suggestions.filter((s) => !values.includes(s)).slice(0, 6)
+  const unusedSuggestions = suggestions.filter((s) => !values.includes(s)).slice(0, 10)
 
   return (
     <div>
