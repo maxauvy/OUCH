@@ -1,8 +1,6 @@
 import type { FactorAnalysis } from '../../lib/insights'
 import { colorForPainValue } from '../../lib/painWeather'
-import { themeFor } from '../../lib/theme'
-import { useSettings } from '../../hooks/useSettings'
-import { useIsDark } from '../../hooks/useIsDark'
+import { usePalette } from '../../hooks/useDesign'
 import { format, useTranslation } from '../../i18n'
 
 export function FactorAnalysisCard({
@@ -16,8 +14,7 @@ export function FactorAnalysisCard({
   insightHigherText?: string
   insightLowerText?: string
 }) {
-  const settings = useSettings()
-  const t = themeFor(useIsDark(settings.theme))
+  const t = usePalette()
   const i18n = useTranslation()
   const hasData = analysis.buckets.some((b) => b.count > 0)
   if (!hasData) return null

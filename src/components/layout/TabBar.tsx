@@ -1,8 +1,10 @@
+import { IconCalendar, IconChartLine, IconHeartbeat, IconMoodKid, IconSettings, type Icon } from '@tabler/icons-react'
+import { useDesign } from '../../hooks/useDesign'
 import { useTranslation } from '../../i18n'
 
 export type Tab = 'today' | 'journal' | 'trends' | 'kids' | 'settings'
 
-const TAB_ICONS: Record<Tab, string> = {
+const TAB_EMOJI: Record<Tab, string> = {
   today: '☀️',
   journal: '📅',
   trends: '📈',
@@ -10,49 +12,57 @@ const TAB_ICONS: Record<Tab, string> = {
   settings: '⚙️',
 }
 
+const TAB_ICONS: Record<Tab, Icon> = {
+  today: IconHeartbeat,
+  journal: IconCalendar,
+  trends: IconChartLine,
+  kids: IconMoodKid,
+  settings: IconSettings,
+}
+
 export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) => void }) {
   const t = useTranslation()
-  const TABS: { id: Tab; label: string; icon: string }[] = [
-    { id: 'today', label: t.tabs.today, icon: TAB_ICONS.today },
-    { id: 'journal', label: t.tabs.journal, icon: TAB_ICONS.journal },
-    { id: 'trends', label: t.tabs.trends, icon: TAB_ICONS.trends },
-    { id: 'kids', label: t.tabs.kids, icon: TAB_ICONS.kids },
-    { id: 'settings', label: t.tabs.settings, icon: TAB_ICONS.settings },
+  const health = useDesign() === 'health'
+  const TABS: { id: Tab; label: string }[] = [
+    { id: 'today', label: t.tabs.today },
+    { id: 'journal', label: t.tabs.journal },
+    { id: 'trends', label: t.tabs.trends },
+    { id: 'kids', label: t.tabs.kids },
+    { id: 'settings', label: t.tabs.settings },
   ]
   return (
     <nav
       className="fixed bottom-0 inset-x-0 z-40"
       style={{
         borderTop: '1px solid var(--color-hairline)',
-        background: 'color-mix(in srgb, var(--color-paper) 92%, transparent)',
-        backdropFilter: 'blur(10px)',
+        background: health ? 'var(--color-surface)' : 'color-mix(in srgb, var(--color-paper) 92%, transparent)',
+        backdropFilter: health ? undefined : 'blur(10px)',
       }}
     >
       <div className="max-w-[560px] mx-auto flex" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => onChange(t.id)}
-            className="flex-1 flex flex-col items-center gap-0.5 py-2.5"
-          >
-            <span className="text-[19px]" style={{ opacity: active === t.id ? 1 : 0.55 }}>
-              {t.icon}
-            </span>
-            <span
-              className="text-[11px] font-medium"
-              style={{
-                color:
-                  active !== t.id
-                    ? 'var(--color-ink-muted)'
-                    : t.id === 'kids'
-                      ? 'var(--color-kid-accent)'
-                      : 'var(--color-brand)',
-              }}
+        {TABS.map((tab) => {
+          const isActive = active === tab.id
+          const activeColor = tab.id === 'kids' ? 'var(--color-kid-accent)' : 'var(--color-brand)'
+          const Icon = TAB_ICONS[tab.id]
+          return (
+            <button
+              key={tab.id}
+              onClick={() => onChange(tab.id)}
+              aria-current={isActive ? 'page' : undefined}
+              className="flex-1 flex flex-col items-center gap-0.5 py-2.5"
+              style={{ color: isActive ? activeColor : 'var(--color-ink-muted)' }}
             >
-              {t.label}
-            </span>
-          </button>
-        ))}
+              {health ? (
+                <Icon size={22} stroke={isActive ? 2 : 1.6} aria-hidden />
+              ) : (
+                <span className="text-[19px]" style={{ opacity: isActive ? 1 : 0.55 }}>
+                  {TAB_EMOJI[tab.id]}
+                </span>
+              )}
+              <span className={`text-[11px] ${health && isActive ? 'font-semibold' : 'font-medium'}`}>{tab.label}</span>
+            </button>
+          )
+        })}
       </div>
     </nav>
   )

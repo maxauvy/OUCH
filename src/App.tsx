@@ -9,11 +9,13 @@ import { AboutCard } from './components/about/AboutCard'
 import { Acronym } from './components/about/Acronym'
 import { AppLogo } from './components/ui/AppLogo'
 import { useSettings } from './hooks/useSettings'
+import { DesignContext } from './hooks/useDesign'
 import { useTodayEntry } from './hooks/useEntries'
 import { updateSettings, todayISO } from './db'
 import { maybeShowReminder } from './lib/reminder'
 import { getTranslations, I18nProvider, LANGUAGES, useLocale, useTranslation } from './i18n'
 import type { Language } from './i18n'
+import type { DesignStyle } from './db/types'
 
 function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   useEffect(() => {
@@ -23,6 +25,18 @@ function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
       document.documentElement.dataset.theme = theme
     }
   }, [theme])
+}
+
+// index.html ships data-design="health" so the default design paints on the
+// first frame; this keeps the attribute (and the browser chrome color) in
+// sync with the setting afterwards.
+function useAppliedDesign(design: DesignStyle) {
+  useEffect(() => {
+    document.documentElement.dataset.design = design
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', design === 'health' ? '#f3f6f8' : '#7c6fa8')
+  }, [design])
 }
 
 function useAppliedLanguage(language: Language) {
@@ -46,10 +60,10 @@ function WelcomeOverlay({ onDone }: { onDone: () => void }) {
               <button
                 key={lang.code}
                 onClick={() => updateSettings({ language: lang.code })}
-                className="rounded-full px-4 py-1.5 text-[13px] font-semibold"
+                className="rounded-[var(--radius-control)] px-4 py-1.5 text-[13px] font-semibold"
                 style={{
                   background: language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                  color: language === lang.code ? 'white' : 'var(--color-brand)',
+                  color: language === lang.code ? 'var(--color-on-brand)' : 'var(--color-brand)',
                 }}
               >
                 {lang.label}
@@ -66,7 +80,7 @@ function WelcomeOverlay({ onDone }: { onDone: () => void }) {
           <div className="sticky bottom-0 -mx-1 px-1 pt-2 pb-5" style={{ background: 'var(--color-paper)' }}>
             <button
               onClick={onDone}
-              className="w-full rounded-full py-3.5 text-[15px] font-semibold text-white"
+              className="w-full rounded-[var(--radius-control)] py-3.5 text-[15px] font-semibold text-[var(--color-on-brand)]"
               style={{ background: 'var(--color-brand)' }}
             >
               {t.welcome.start}
@@ -110,10 +124,13 @@ function AppShell() {
 export default function App() {
   const settings = useSettings()
   useAppliedLanguage(settings.language)
+  useAppliedDesign(settings.design)
 
   return (
     <I18nProvider language={settings.language}>
-      <AppShell />
+      <DesignContext.Provider value={settings.design}>
+        <AppShell />
+      </DesignContext.Provider>
     </I18nProvider>
   )
 }

@@ -69,12 +69,12 @@ export function BackupSection() {
           onChange={(e) => setExportPassword(e.target.value)}
           placeholder={t.backup.passwordPlaceholder}
           className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none mb-2"
-          style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
+          style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
         />
         <button
           onClick={handleExport}
           disabled={exportBusy}
-          className="w-full rounded-full py-3 text-[15px] font-semibold text-white"
+          className="w-full rounded-[var(--radius-control)] py-3 text-[15px] font-semibold text-[var(--color-on-brand)]"
           style={{ background: 'var(--color-brand)' }}
         >
           {exportBusy ? t.backup.exporting : t.backup.exportButton}
@@ -108,12 +108,12 @@ export function BackupSection() {
           onChange={(e) => setImportPassword(e.target.value)}
           placeholder={t.backup.passwordPlaceholder}
           className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none mb-2"
-          style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
+          style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
         />
         <button
           onClick={handleImport}
           disabled={importBusy || !importFile || !importPassword}
-          className="w-full rounded-full py-3 text-[15px] font-semibold text-white disabled:opacity-40"
+          className="w-full rounded-[var(--radius-control)] py-3 text-[15px] font-semibold text-[var(--color-on-brand)] disabled:opacity-40"
           style={{ background: 'var(--color-brand)' }}
         >
           {importBusy ? t.backup.importing : t.backup.importButton}

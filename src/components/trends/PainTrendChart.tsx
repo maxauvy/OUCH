@@ -3,8 +3,7 @@ import { format } from 'date-fns'
 import type { Locale } from 'date-fns'
 import type { DailyEntry } from '../../db/types'
 import { themeFor } from '../../lib/theme'
-import { useSettings } from '../../hooks/useSettings'
-import { useIsDark } from '../../hooks/useIsDark'
+import { usePalette } from '../../hooks/useDesign'
 import { useLocale, useTranslation, type Translations } from '../../i18n'
 
 interface Point {
@@ -49,9 +48,7 @@ function CustomTooltip({
 }
 
 export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
-  const settings = useSettings()
-  const isDark = useIsDark(settings.theme)
-  const t = themeFor(isDark)
+  const t = usePalette()
   const i18n = useTranslation()
   const { dateFnsLocale } = useLocale()
 

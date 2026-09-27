@@ -6,8 +6,7 @@ import { Footer } from '../components/layout/Footer'
 import { PainTrendChart } from '../components/trends/PainTrendChart'
 import { FactorAnalysisCard } from '../components/trends/FactorAnalysisCard'
 import { analyzeFactor, analyzeTagPresence, bestAndWorstWeekday } from '../lib/insights'
-import { themeFor } from '../lib/theme'
-import { useIsDark } from '../hooks/useIsDark'
+import { usePalette } from '../hooks/useDesign'
 import { subDays } from 'date-fns'
 import { format, useTranslation, type Translations } from '../i18n'
 import type { DailyEntry, Settings } from '../db/types'
@@ -40,7 +39,7 @@ export function TrendsPage() {
   const entries = useAllEntries()
   const settings = useSettings()
   const i18n = useTranslation()
-  const t = themeFor(useIsDark(settings.theme))
+  const t = usePalette()
   const [rangeIdx, setRangeIdx] = useState(1)
 
   const RANGES = [
@@ -87,10 +86,10 @@ export function TrendsPage() {
           <button
             key={r.label}
             onClick={() => setRangeIdx(i)}
-            className="rounded-full px-3.5 py-1.5 text-[13px] font-semibold"
+            className="rounded-[var(--radius-control)] px-3.5 py-1.5 text-[13px] font-semibold"
             style={{
               background: i === rangeIdx ? t.brand : t.brandSoft,
-              color: i === rangeIdx ? 'white' : t.brand,
+              color: i === rangeIdx ? 'var(--color-on-brand)' : t.brand,
             }}
           >
             {r.label}

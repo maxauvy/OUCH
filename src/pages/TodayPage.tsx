@@ -6,12 +6,15 @@ import { useTodayEntry } from '../hooks/useEntries'
 import { useSettings } from '../hooks/useSettings'
 import { todayISO } from '../db'
 import { useTranslation } from '../i18n'
+import { useDesign } from '../hooks/useDesign'
+import { IconShare } from '@tabler/icons-react'
 
 export function TodayPage() {
   const entry = useTodayEntry()
   const settings = useSettings()
   const t = useTranslation()
   const [sharing, setSharing] = useState(false)
+  const health = useDesign() === 'health'
   const date = todayISO()
 
   return (
@@ -20,9 +23,10 @@ export function TodayPage() {
       {entry && (
         <button
           onClick={() => setSharing(true)}
-          className="rounded-full py-3.5 text-[15px] font-semibold text-white shadow-sm"
+          className={`rounded-[var(--radius-control)] py-3.5 text-[15px] font-semibold text-[var(--color-on-brand)] flex items-center justify-center gap-2 ${health ? '' : 'shadow-sm'}`}
           style={{ background: 'var(--color-brand)' }}
         >
+          {health && <IconShare size={18} aria-hidden />}
           {t.today.share}
         </button>
       )}
