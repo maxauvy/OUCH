@@ -127,7 +127,7 @@ export const WeatherCard = forwardRef<
               fontWeight: 700,
               letterSpacing: 0.4,
               textTransform: 'uppercase',
-              color: weather.color,
+              color: weather.ink,
               background: 'rgba(255,255,255,0.65)',
               borderRadius: 999,
               padding: '5px 12px',
@@ -136,7 +136,7 @@ export const WeatherCard = forwardRef<
             {t.painWeatherLevels[weather.level]}
           </span>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6 }}>
-            <span style={{ fontSize: 96, fontWeight: 800, color: weather.color, lineHeight: 0.8, letterSpacing: -3 }}>
+            <span style={{ fontSize: 96, fontWeight: 800, color: weather.ink, lineHeight: 0.8, letterSpacing: -3 }}>
               {entry.painLevel}
             </span>
             <span style={{ fontSize: 22, fontWeight: 600, color: theme.inkMuted, paddingBottom: 10 }}>/10</span>
@@ -261,7 +261,7 @@ export const HealthWeatherCard = forwardRef<
             height: 56,
             borderRadius: 12,
             background: weather.soft,
-            color: weather.color,
+            color: weather.ink,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

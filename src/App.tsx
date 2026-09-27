@@ -16,6 +16,7 @@ import { maybeShowReminder } from './lib/reminder'
 import { getTranslations, I18nProvider, LANGUAGES, useLocale, useTranslation } from './i18n'
 import type { Language } from './i18n'
 import type { DesignStyle } from './db/types'
+import { radioGroupProps, radioProps } from './lib/a11y'
 
 function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   useEffect(() => {
@@ -35,7 +36,7 @@ function useAppliedDesign(design: DesignStyle) {
     document.documentElement.dataset.design = design
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', design === 'health' ? '#f3f6f8' : '#7c6fa8')
+      ?.setAttribute('content', design === 'health' ? '#f3f6f8' : '#6c5f9c')
   }, [design])
 }
 
@@ -55,10 +56,11 @@ function WelcomeOverlay({ onDone }: { onDone: () => void }) {
     <div className="fixed inset-0 z-50 overflow-y-auto" style={{ background: 'var(--color-paper)' }}>
       <div className="min-h-full flex items-center justify-center px-5 pt-5">
         <div className="max-w-sm flex flex-col gap-4 text-center">
-          <div className="flex justify-center gap-2">
+          <div className="flex justify-center gap-2" {...radioGroupProps(t.settings.languageTitle)}>
             {LANGUAGES.map((lang) => (
               <button
                 key={lang.code}
+                {...radioProps(language === lang.code)}
                 onClick={() => updateSettings({ language: lang.code })}
                 className="rounded-[var(--radius-control)] px-4 py-1.5 text-[13px] font-semibold"
                 style={{

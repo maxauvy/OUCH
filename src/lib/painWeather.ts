@@ -4,11 +4,41 @@ import { theme } from './theme'
 // Display labels for each level live in the active translation
 // (`t.painWeatherLevels[level]`), not here.
 const LEVELS: Record<PainWeatherLevel, Omit<PainWeather, 'level'>> = {
-  1: { icon: 'sun', color: theme.weather[1].color, soft: theme.weather[1].soft },
-  2: { icon: 'cloud-sun', color: theme.weather[2].color, soft: theme.weather[2].soft },
-  3: { icon: 'cloud', color: theme.weather[3].color, soft: theme.weather[3].soft },
-  4: { icon: 'cloud-rain', color: theme.weather[4].color, soft: theme.weather[4].soft },
-  5: { icon: 'cloud-lightning', color: theme.weather[5].color, soft: theme.weather[5].soft },
+  1: {
+    icon: 'sun',
+    color: theme.weather[1].color,
+    soft: theme.weather[1].soft,
+    ink: theme.weather[1].ink,
+    text: 'var(--color-weather-1-text)',
+  },
+  2: {
+    icon: 'cloud-sun',
+    color: theme.weather[2].color,
+    soft: theme.weather[2].soft,
+    ink: theme.weather[2].ink,
+    text: 'var(--color-weather-2-text)',
+  },
+  3: {
+    icon: 'cloud',
+    color: theme.weather[3].color,
+    soft: theme.weather[3].soft,
+    ink: theme.weather[3].ink,
+    text: 'var(--color-weather-3-text)',
+  },
+  4: {
+    icon: 'cloud-rain',
+    color: theme.weather[4].color,
+    soft: theme.weather[4].soft,
+    ink: theme.weather[4].ink,
+    text: 'var(--color-weather-4-text)',
+  },
+  5: {
+    icon: 'cloud-lightning',
+    color: theme.weather[5].color,
+    soft: theme.weather[5].soft,
+    ink: theme.weather[5].ink,
+    text: 'var(--color-weather-5-text)',
+  },
 }
 
 /**

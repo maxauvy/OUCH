@@ -80,18 +80,27 @@ export function CalendarHeatmap({
           const inMonth = isSameMonth(day, cursor)
           const weather = entry ? computePainWeather(entry) : null
           const selected = key === selectedDate
+          const today = isToday(day)
+          const dayLabel = format(day, 'd MMMM yyyy', { locale: dateFnsLocale })
 
           return (
             <button
               key={key}
               onClick={() => onSelectDate(key)}
+              aria-label={weather ? `${dayLabel}, ${i18n.painWeatherLevels[weather.level]}` : dayLabel}
+              aria-current={today ? 'date' : undefined}
+              aria-pressed={selected}
               className="aspect-square rounded-xl flex flex-col items-center justify-center relative text-[13px] font-medium"
               style={{
                 background: weather ? weather.soft : 'transparent',
-                color: weather ? weather.color : 'var(--color-ink-muted)',
+                // The weather color stays on the background and the dot; the
+                // number itself needs the ink color to stay readable (the
+                // light weathers are under 2.5:1 against their own tint).
+                color: weather ? t.ink : 'var(--color-ink-muted)',
                 opacity: inMonth ? 1 : 0.35,
-                outline: selected ? `2px solid ${t.brand}` : isToday(day) ? `1.5px solid ${t.inkMuted}` : 'none',
-                outlineOffset: -2,
+                // Inset rings rather than outlines, so the keyboard focus
+                // outline stays free.
+                boxShadow: selected ? `inset 0 0 0 2px ${t.brand}` : today ? `inset 0 0 0 1.5px ${t.inkMuted}` : undefined,
               }}
             >
               {format(day, 'd')}

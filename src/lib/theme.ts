@@ -7,12 +7,15 @@ import type { DesignStyle } from '../db/types'
 // the brand hue shouldn't shift with the viewer's theme, only the neutrals
 // (ink/surface/hairline) that need to contrast against the mode's background.
 
+// `ink` is a darker shade of each hue for text and icons on light
+// backgrounds (its own `soft` tint, white, the kid cream): ≥ 4.6:1 on all of
+// them, where the lighter weathers' `color` falls under 2:1.
 const WEATHER = {
-  1: { color: '#e3a73b', soft: '#fbf0dc' },
-  2: { color: '#c7ab68', soft: '#f3ecd9' },
-  3: { color: '#9b95a6', soft: '#eae7ee' },
-  4: { color: '#5e7ea3', soft: '#e1e9f1' },
-  5: { color: '#574a7a', soft: '#e7e2f0' },
+  1: { color: '#e3a73b', soft: '#fbf0dc', ink: '#8b662f' },
+  2: { color: '#c7ab68', soft: '#f3ecd9', ink: '#776647' },
+  3: { color: '#9b95a6', soft: '#eae7ee', ink: '#6a6473' },
+  4: { color: '#5e7ea3', soft: '#e1e9f1', ink: '#506989' },
+  5: { color: '#574a7a', soft: '#e7e2f0', ink: '#574a7a' },
 } as const
 
 const LIGHT = {
@@ -22,7 +25,7 @@ const LIGHT = {
   ink: '#2b2733',
   inkMuted: '#6f6a7c',
   hairline: '#e7e1d8',
-  brand: '#7c6fa8',
+  brand: '#6c5f9c',
   brandSoft: '#efeaf9',
   weather: WEATHER,
 }

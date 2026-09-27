@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { toPng } from 'html-to-image'
 import type { DailyEntry } from '../../db/types'
 import { HealthWeatherCard, WeatherCard } from './WeatherCard'
@@ -9,6 +9,7 @@ import { useTranslation } from '../../i18n'
 export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry; displayName?: string; onClose: () => void }) {
   const t = useTranslation()
   const Card = useDesign() === 'health' ? HealthWeatherCard : WeatherCard
+  const messageId = useId()
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
@@ -72,8 +73,9 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
         </div>
 
         <div>
-          <label className="text-[13px] font-medium block mb-1.5">{t.shareSheet.messageLabel}</label>
+          <label htmlFor={messageId} className="text-[13px] font-medium block mb-1.5">{t.shareSheet.messageLabel}</label>
           <input
+            id={messageId}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={t.shareSheet.messagePlaceholder}

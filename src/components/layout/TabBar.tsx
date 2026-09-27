@@ -42,7 +42,7 @@ export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) =
       <div className="max-w-[560px] mx-auto flex" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {TABS.map((tab) => {
           const isActive = active === tab.id
-          const activeColor = tab.id === 'kids' && !health ? 'var(--color-kid-accent)' : 'var(--color-brand)'
+          const activeColor = tab.id === 'kids' && !health ? 'var(--color-kid-accent-text)' : 'var(--color-brand)'
           const Icon = TAB_ICONS[tab.id]
           return (
             <button
@@ -55,7 +55,7 @@ export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) =
               {health ? (
                 <Icon size={22} stroke={isActive ? 2 : 1.6} aria-hidden />
               ) : (
-                <span className="text-[19px]" style={{ opacity: isActive ? 1 : 0.55 }}>
+                <span className="text-[19px]" style={{ opacity: isActive ? 1 : 0.55 }} aria-hidden>
                   {TAB_EMOJI[tab.id]}
                 </span>
               )}

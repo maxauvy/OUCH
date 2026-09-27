@@ -31,7 +31,8 @@ import type { PainWeather, PainWeatherLevel } from '../../db/types'
 import { CHILD_TONES, type ChildTone } from '../../lib/childView'
 import { painWeatherByLevel } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
-import { useTranslation } from '../../i18n'
+import { format, useTranslation } from '../../i18n'
+import { radioGroupProps, radioProps, splitLeadingEmoji } from '../../lib/a11y'
 
 // The help texts are shared with the classic design, where they open with an
 // emoji. The health design swaps that emoji for a line icon.
@@ -64,11 +65,8 @@ const HELP_ICONS: Record<string, Icon> = {
 }
 
 function splitHelp(text: string): { icon: Icon; label: string } {
-  const match = text.match(/^(\S+)\s+(.*)$/su)
-  if (match && /\p{Extended_Pictographic}/u.test(match[1]!)) {
-    return { icon: HELP_ICONS[match[1]!.replace(/️/g, '')] ?? IconHeart, label: match[2]! }
-  }
-  return { icon: IconHeart, label: text }
+  const { emoji, label } = splitLeadingEmoji(text)
+  return { icon: (emoji && HELP_ICONS[emoji.replace(/️/g, '')]) || IconHeart, label }
 }
 
 // One hue per help card, borrowed from the measure categories.
@@ -105,7 +103,7 @@ function Sky({ weather }: { weather: PainWeather }) {
       {weather.level >= 3 && <Puff style={{ left: 18, top: 72, width: 44, height: 14 }} />}
       <span
         className="absolute left-1/2 top-[18px] -translate-x-1/2 w-[76px] h-[76px] rounded-full flex items-center justify-center"
-        style={{ background: 'var(--color-surface)', color: weather.color }}
+        style={{ background: 'var(--color-surface)', color: weather.text }}
       >
         <WeatherIcon name={weather.icon as never} size={46} />
       </span>
@@ -118,7 +116,7 @@ function Sky({ weather }: { weather: PainWeather }) {
 function WeatherScale({ level }: { level: PainWeatherLevel }) {
   const t = useTranslation()
   return (
-    <div role="img" aria-label={t.painWeatherLevels[level]}>
+    <div role="img" aria-label={format(t.childView.scaleLevel, { level: t.painWeatherLevels[level], n: level })}>
       <div className="flex items-center gap-1">
         {LEVELS.map((l) => {
           const w = painWeatherByLevel(l)
@@ -131,7 +129,8 @@ function WeatherScale({ level }: { level: PainWeatherLevel }) {
                 flex: active ? 1.4 : 1,
                 height: active ? 44 : 34,
                 background: active ? w.color : `color-mix(in srgb, ${w.color} 16%, transparent)`,
-                color: active ? '#ffffff' : w.color,
+                // Dark icon on the light weathers (1–3), white on the dark ones.
+                color: active ? (l <= 3 ? '#14212b' : '#ffffff') : w.text,
               }}
             >
               <WeatherIcon name={w.icon as never} size={active ? 26 : 20} />
@@ -150,14 +149,14 @@ function WeatherScale({ level }: { level: PainWeatherLevel }) {
 function AgeControl({ tone, onChange }: { tone: ChildTone; onChange: (tone: ChildTone) => void }) {
   const t = useTranslation()
   return (
-    <div role="group" aria-label={t.childView.ageToggleLabel} className="flex gap-1 rounded-[var(--radius-control)] p-1" style={{ background: 'var(--color-brand-soft)' }}>
+    <div {...radioGroupProps(t.childView.ageToggleLabel)} className="flex gap-1 rounded-[var(--radius-control)] p-1" style={{ background: 'var(--color-brand-soft)' }}>
       {CHILD_TONES.map((value) => {
         const active = tone === value
         return (
           <button
             key={value}
+            {...radioProps(active)}
             onClick={() => onChange(value)}
-            aria-pressed={active}
             className="flex-1 rounded-[calc(var(--radius-control)-2px)] py-2 text-[14px] font-semibold"
             style={{
               background: active ? 'var(--color-brand)' : 'transparent',

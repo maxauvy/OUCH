@@ -439,7 +439,7 @@ export function HealthEntryLayout({
               {t.entryForm.periodHelper}
             </p>
           </div>
-          <Toggle checked={!!local.periodDay} onChange={(v) => setField('periodDay', v)} />
+          <Toggle checked={!!local.periodDay} onChange={(v) => setField('periodDay', v)} label={t.entryForm.periodToday} />
         </Card>
       )}
 

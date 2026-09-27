@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import type { ExternalWeatherCondition, WeatherInfo } from '../../db/types'
 import { Chip } from '../ui/Chip'
 import { fetchDailyWeather, getCurrentPosition, WeatherError } from '../../lib/weather'
@@ -23,6 +23,7 @@ export function WeatherField({
 }) {
   const t = useTranslation()
   const health = useDesign() === 'health'
+  const tempId = useId()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -55,7 +56,7 @@ export function WeatherField({
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <label className="font-medium text-[15px]">{t.weatherField.label}</label>
+        <span className="font-medium text-[15px]">{t.weatherField.label}</span>
         <button
           type="button"
           onClick={handleAutoFetch}
@@ -63,12 +64,12 @@ export function WeatherField({
           className="text-[13px] font-semibold rounded-[var(--radius-control)] px-3 py-1.5 inline-flex items-center gap-1"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
         >
-          {!loading && (health ? <IconMapPin size={15} aria-hidden /> : '📍 ')}
+          {!loading && (health ? <IconMapPin size={15} aria-hidden /> : <span aria-hidden>📍 </span>)}
           {loading ? t.weatherField.fetching : t.weatherField.autoFill}
         </button>
       </div>
       {error && (
-        <p className="text-[13px] mb-2" style={{ color: 'var(--color-weather-5)' }}>
+        <p className="text-[13px] mb-2" style={{ color: 'var(--color-weather-5-text)' }}>
           {error}
         </p>
       )}
@@ -78,10 +79,11 @@ export function WeatherField({
         </p>
       )}
       <div className="flex items-center gap-2 mb-3">
-        <label className="text-[13px]" style={{ color: 'var(--color-ink-muted)' }}>
+        <label htmlFor={tempId} className="text-[13px]" style={{ color: 'var(--color-ink-muted)' }}>
           {t.weatherField.temperatureLabel}
         </label>
         <input
+          id={tempId}
           type="number"
           inputMode="numeric"
           value={value?.tempC ?? ''}

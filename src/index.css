@@ -16,8 +16,9 @@
   --color-ink-muted: #6f6a7c;
   --color-hairline: #e7e1d8;
 
-  /* Brand accent — soft lavender, calm not clinical */
-  --color-brand: #7c6fa8;
+  /* Brand accent — soft lavender, calm not clinical. Dark enough for white
+     text (5.6:1) and for brand text on --color-brand-soft (4.7:1). */
+  --color-brand: #6c5f9c;
   --color-brand-soft: #efeaf9;
 
   /* Pain-weather ordinal scale — light/warm (easy day) -> dark/cool (hard day)
@@ -35,6 +36,13 @@
   --color-weather-4-soft: #e1e9f1;
   --color-weather-5: #574a7a;
   --color-weather-5-soft: #e7e2f0;
+  /* Text shades of the scale (mirrored as `ink` in lib/theme.ts): the lighter
+     weathers are under 2:1 as text. Dark mode swaps in lighter shades. */
+  --color-weather-1-text: #8b662f;
+  --color-weather-2-text: #776647;
+  --color-weather-3-text: #6a6473;
+  --color-weather-4-text: #506989;
+  --color-weather-5-text: #574a7a;
 
   --radius-card: 1.25rem;
   /* Buttons, chips and inputs: pills in the classic design, softly squared
@@ -48,10 +56,18 @@
   --color-kid-bg: #fff6e9;
   --color-kid-surface: #ffffff;
   --color-kid-ink: #3a2e28;
-  --color-kid-ink-muted: #8d7a6e;
+  --color-kid-ink-muted: #7a6558;
   --color-kid-hairline: #ffe1c4;
   --color-kid-accent: #ff8a5c;
   --color-kid-accent-soft: #ffe4d3;
+  /* Text on --color-kid-accent (5.7:1), and accent-colored text or icons on
+     the kid surfaces (5:1 on --color-kid-accent-soft). */
+  --color-kid-on-accent: #3a2e28;
+  --color-kid-accent-text: #a8431c;
+
+  /* Off state of switches and the empty part of slider tracks: 3:1 against
+     the surface so the control's shape reads (WCAG 1.4.11). */
+  --color-control-off: #8f8899;
 }
 
 /* Dark-mode token overrides: reassigning the same --color-* custom
@@ -78,6 +94,15 @@
     --color-kid-hairline: rgba(255, 190, 150, 0.18);
     --color-kid-accent: #ffab78;
     --color-kid-accent-soft: #4a3430;
+    --color-kid-on-accent: #2a1f2b;
+    --color-kid-accent-text: #ffab78;
+    --color-control-off: #7d7594;
+    --color-on-brand: #17151c;
+    --color-weather-1-text: #e3a73b;
+    --color-weather-2-text: #c7ab68;
+    --color-weather-3-text: #9b95a6;
+    --color-weather-4-text: #819ab7;
+    --color-weather-5-text: #9e96b2;
   }
 }
 
@@ -97,6 +122,15 @@
   --color-kid-hairline: rgba(255, 190, 150, 0.18);
   --color-kid-accent: #ffab78;
   --color-kid-accent-soft: #4a3430;
+  --color-kid-on-accent: #2a1f2b;
+  --color-kid-accent-text: #ffab78;
+  --color-control-off: #7d7594;
+  --color-on-brand: #17151c;
+  --color-weather-1-text: #e3a73b;
+  --color-weather-2-text: #c7ab68;
+  --color-weather-3-text: #9b95a6;
+  --color-weather-4-text: #819ab7;
+  --color-weather-5-text: #9e96b2;
 }
 
 /* ---------------------------------------------------------------------
@@ -115,13 +149,15 @@
   --color-hairline: #e1e7eb;
   --color-brand: #0d5c8c;
   --color-brand-soft: #e3eef6;
+  --color-control-off: #8a94a0;
   --radius-card: 0.75rem;
   --radius-control: 0.625rem;
   --card-shadow: none;
 }
 
-/* Text on a brand-filled button. White everywhere except health dark,
-   whose light blue brand needs dark text to stay readable. */
+/* Text on a brand-filled button. White in light mode; both dark palettes
+   use a light brand that needs dark text (the dark values are set with the
+   other dark tokens, and those selectors are more specific than :root). */
 :root {
   --color-on-brand: #ffffff;
 }
@@ -179,6 +215,7 @@
     --color-hairline: rgba(160, 185, 200, 0.16);
     --color-brand: #62aee0;
     --color-brand-soft: #173247;
+    --color-control-off: #5f6f7a;
     --cat-pain: #f28b82;
     --cat-pain-soft: #3d1f1d;
     --cat-fatigue: #f2b75c;
@@ -211,6 +248,7 @@
   --color-hairline: rgba(160, 185, 200, 0.16);
   --color-brand: #62aee0;
   --color-brand-soft: #173247;
+  --color-control-off: #5f6f7a;
   --cat-pain: #f28b82;
   --cat-pain-soft: #3d1f1d;
   --cat-fatigue: #f2b75c;
@@ -265,4 +303,22 @@ textarea {
   flex-direction: column;
   max-width: 560px;
   margin: 0 auto;
+}
+
+/* Keyboard focus. Unlayered, so it beats Tailwind's layered `outline-none`
+   on text fields. :focus-visible keeps it off for mouse and touch taps. */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }

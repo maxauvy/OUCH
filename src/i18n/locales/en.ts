@@ -274,6 +274,7 @@ const en: Translations = {
     reminderNote:
       "This reminder works while the app is open or recently used. Without a server (by choice, to stay 100% local), it can't trigger while the app is fully closed.",
     appearanceTitle: 'Appearance',
+    themeTitle: 'Theme',
     themeAuto: 'Auto',
     themeLight: 'Light',
     themeDark: 'Dark',
@@ -296,7 +297,8 @@ const en: Translations = {
 
   childView: {
     pageTitle: 'Explain to my child',
-    ageToggleLabel: "CHILD'S AGE",
+    ageToggleLabel: "Child's age",
+    scaleLevel: '{{level}}, level {{n}} of 5',
     ages: { young: '4–7 years', older: '8–12 years', teen: '13–17 years' },
     howToHelp: 'How you can help',
     aboutIllness: 'What is {{illness}}?',
