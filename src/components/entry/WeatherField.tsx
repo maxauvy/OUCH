@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { ExternalWeatherCondition, WeatherInfo } from '../../db/types'
 import { Chip } from '../ui/Chip'
-import { fetchCurrentWeather, getCurrentPosition, WeatherError } from '../../lib/weather'
+import { fetchDailyWeather, getCurrentPosition, WeatherError } from '../../lib/weather'
 import { updateSettings } from '../../db'
 import type { Settings } from '../../db/types'
 import { useTranslation } from '../../i18n'
@@ -9,10 +9,12 @@ import { useTranslation } from '../../i18n'
 const CONDITIONS: ExternalWeatherCondition[] = ['ensoleille', 'variable', 'nuageux', 'pluvieux', 'orageux', 'neige']
 
 export function WeatherField({
+  date,
   value,
   onChange,
   settings,
 }: {
+  date: string
   value: WeatherInfo | undefined
   onChange: (w: WeatherInfo) => void
   settings: Settings
@@ -38,7 +40,7 @@ export function WeatherField({
         lon = pos.lon
         await updateSettings({ autoWeatherLat: lat, autoWeatherLon: lon, autoWeatherEnabled: true })
       }
-      const w = await fetchCurrentWeather(lat, lon)
+      const w = await fetchDailyWeather(lat, lon, date)
       onChange({ source: 'auto', condition: w.condition, tempC: w.tempC, pressureHpa: w.pressureHpa })
     } catch (e) {
       setError(e instanceof WeatherError ? t.errors[e.code] : t.weatherField.unknownError)

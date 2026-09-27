@@ -201,7 +201,7 @@ export function DailyEntryForm({ date }: { date: string }) {
 
       {has('weather') && (
         <Card>
-          <WeatherField value={local.weather} onChange={(w) => setField('weather', w)} settings={settings} />
+          <WeatherField date={date} value={local.weather} onChange={(w) => setField('weather', w)} settings={settings} />
         </Card>
       )}
 

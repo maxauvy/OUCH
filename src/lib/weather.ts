@@ -59,22 +59,37 @@ export interface FetchedWeather {
   condition: WeatherInfo['condition']
 }
 
-/** Direct call to Open-Meteo from the browser — no server, no key, nothing to self-host. */
-export async function fetchCurrentWeather(lat: number, lon: number): Promise<FetchedWeather> {
-  const url = new URL('https://api.open-meteo.com/v1/forecast')
+// The forecast API only reaches ~92 days back; older days come from the archive API.
+const FORECAST_PAST_DAYS_LIMIT = 90
+
+/** Direct call to Open-Meteo from the browser — no server, no key, nothing to self-host.
+ * Returns the day's max temperature, mean pressure and dominant condition for `date`
+ * (YYYY-MM-DD, local to the location), so the value reflects the whole day rather than
+ * the moment the button was pressed. */
+export async function fetchDailyWeather(lat: number, lon: number, date: string): Promise<FetchedWeather> {
+  const daysAgo = (Date.now() - new Date(date + 'T00:00:00').getTime()) / 86_400_000
+  const base =
+    daysAgo > FORECAST_PAST_DAYS_LIMIT
+      ? 'https://archive-api.open-meteo.com/v1/archive'
+      : 'https://api.open-meteo.com/v1/forecast'
+  const url = new URL(base)
   url.searchParams.set('latitude', String(lat))
   url.searchParams.set('longitude', String(lon))
-  url.searchParams.set('current', 'temperature_2m,pressure_msl,weather_code')
+  url.searchParams.set('daily', 'temperature_2m_max,pressure_msl_mean,weather_code')
   url.searchParams.set('timezone', 'auto')
+  url.searchParams.set('start_date', date)
+  url.searchParams.set('end_date', date)
 
   const res = await fetch(url.toString())
   if (!res.ok) throw new WeatherError('weatherFetchFailed')
   const data = await res.json()
-  const current = data.current
+  const daily = data.daily
+  const tempMax = daily?.temperature_2m_max?.[0]
+  if (tempMax == null) throw new WeatherError('weatherFetchFailed')
   return {
-    tempC: Math.round(current.temperature_2m),
-    pressureHpa: Math.round(current.pressure_msl),
-    condition: conditionFromWmoCode(current.weather_code),
+    tempC: Math.round(tempMax),
+    pressureHpa: Math.round(daily.pressure_msl_mean?.[0]),
+    condition: conditionFromWmoCode(daily.weather_code?.[0]),
   }
 }
 
