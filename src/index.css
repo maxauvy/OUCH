@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/public-sans';
 
 @theme {
   --font-sans: 'Inter var', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -36,6 +37,10 @@
   --color-weather-5-soft: #e7e2f0;
 
   --radius-card: 1.25rem;
+  /* Buttons, chips and inputs: pills in the classic design, softly squared
+     in the health design. */
+  --radius-control: 9999px;
+  --card-shadow: 0 1px 2px rgba(20, 15, 35, 0.04);
 
   /* "Explain to my child" screen — a warmer, more playful palette than the
      rest of the app (which stays deliberately calm/clinical-free but plain).
@@ -92,6 +97,140 @@
   --color-kid-hairline: rgba(255, 190, 150, 0.18);
   --color-kid-accent: #ffab78;
   --color-kid-accent-soft: #4a3430;
+}
+
+/* ---------------------------------------------------------------------
+   Health design (default). Overrides the same tokens as above when
+   <html data-design="health">. Selectors are one notch more specific than
+   the classic ones and come after them, so the health values win in every
+   light/dark combination.
+   --------------------------------------------------------------------- */
+:root[data-design='health'] {
+  --font-sans: 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --color-paper: #f3f6f8;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f8fafb;
+  --color-ink: #14212b;
+  --color-ink-muted: #5b6b76;
+  --color-hairline: #e1e7eb;
+  --color-brand: #0d5c8c;
+  --color-brand-soft: #e3eef6;
+  --radius-card: 0.75rem;
+  --radius-control: 0.625rem;
+  --card-shadow: none;
+}
+
+/* Text on a brand-filled button. White everywhere except health dark,
+   whose light blue brand needs dark text to stay readable. */
+:root {
+  --color-on-brand: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-design='health']:not([data-theme='light']) {
+    --color-on-brand: #0b1a24;
+  }
+}
+:root[data-design='health'][data-theme='dark'] {
+  --color-on-brand: #0b1a24;
+}
+
+/* Text fields: tinted in the classic design, outlined in the health one. */
+:root {
+  --color-input: var(--color-brand-soft);
+  --color-input-ring: transparent;
+}
+:root[data-design='health'] {
+  --color-input: var(--color-surface-raised);
+  --color-input-ring: var(--color-hairline);
+}
+
+/* Measure categories (health design): each measure gets its own hue, as in
+   health apps, so a tile is recognisable before its label is read. */
+:root {
+  --cat-pain: #b3261e;
+  --cat-pain-soft: #fdeaea;
+  --cat-fatigue: #9a5b00;
+  --cat-fatigue-soft: #fff1dc;
+  --cat-sleep: #3b3fa6;
+  --cat-sleep-soft: #e8e9fb;
+  --cat-stress: #b4461b;
+  --cat-stress-soft: #fdece3;
+  --cat-fog: #0d5c8c;
+  --cat-fog-soft: #e3eef6;
+  --cat-mood: #1c7a4a;
+  --cat-mood-soft: #e4f4ea;
+  --cat-activity: #0f766e;
+  --cat-activity-soft: #ddf3f0;
+  --cat-weather: #52606d;
+  --cat-weather-soft: #eceff2;
+  --cat-meds: #1c7a4a;
+  --cat-meds-soft: #e4f4ea;
+  --cat-cycle: #a3245f;
+  --cat-cycle-soft: #fbe7f0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-design='health']:not([data-theme='light']) {
+    --color-paper: #0e1418;
+    --color-surface: #172026;
+    --color-surface-raised: #1d2830;
+    --color-ink: #e6edf1;
+    --color-ink-muted: #93a3ae;
+    --color-hairline: rgba(160, 185, 200, 0.16);
+    --color-brand: #62aee0;
+    --color-brand-soft: #173247;
+    --cat-pain: #f28b82;
+    --cat-pain-soft: #3d1f1d;
+    --cat-fatigue: #f2b75c;
+    --cat-fatigue-soft: #3a2c14;
+    --cat-sleep: #a5a8f5;
+    --cat-sleep-soft: #25264a;
+    --cat-stress: #f29b72;
+    --cat-stress-soft: #3d2519;
+    --cat-fog: #62aee0;
+    --cat-fog-soft: #173247;
+    --cat-mood: #6fcf97;
+    --cat-mood-soft: #173327;
+    --cat-activity: #5fd0c3;
+    --cat-activity-soft: #13322f;
+    --cat-weather: #aab7c2;
+    --cat-weather-soft: #232d35;
+    --cat-meds: #6fcf97;
+    --cat-meds-soft: #173327;
+    --cat-cycle: #f08cbc;
+    --cat-cycle-soft: #3b1c2b;
+  }
+}
+
+:root[data-design='health'][data-theme='dark'] {
+  --color-paper: #0e1418;
+  --color-surface: #172026;
+  --color-surface-raised: #1d2830;
+  --color-ink: #e6edf1;
+  --color-ink-muted: #93a3ae;
+  --color-hairline: rgba(160, 185, 200, 0.16);
+  --color-brand: #62aee0;
+  --color-brand-soft: #173247;
+  --cat-pain: #f28b82;
+  --cat-pain-soft: #3d1f1d;
+  --cat-fatigue: #f2b75c;
+  --cat-fatigue-soft: #3a2c14;
+  --cat-sleep: #a5a8f5;
+  --cat-sleep-soft: #25264a;
+  --cat-stress: #f29b72;
+  --cat-stress-soft: #3d2519;
+  --cat-fog: #62aee0;
+  --cat-fog-soft: #173247;
+  --cat-mood: #6fcf97;
+  --cat-mood-soft: #173327;
+  --cat-activity: #5fd0c3;
+  --cat-activity-soft: #13322f;
+  --cat-weather: #aab7c2;
+  --cat-weather-soft: #232d35;
+  --cat-meds: #6fcf97;
+  --cat-meds-soft: #173327;
+  --cat-cycle: #f08cbc;
+  --cat-cycle-soft: #3b1c2b;
 }
 
 html {

@@ -1,3 +1,5 @@
+import { useDesign } from '../../hooks/useDesign'
+
 interface SliderProps {
   label: string
   helper?: string
@@ -10,6 +12,8 @@ interface SliderProps {
   endLabels?: [string, string]
   accent?: string
   format?: (v: number) => string
+  /** Track only: the caller already shows the label and value. */
+  bare?: boolean
 }
 
 /** A big, thumb-friendly 0–10 slider. Fibromyalgia hands don't want fiddly
@@ -26,36 +30,60 @@ export function Slider({
   endLabels = ['Aucune', 'Extrême'],
   accent = 'var(--color-brand)',
   format,
+  bare = false,
 }: SliderProps) {
+  const health = useDesign() === 'health'
+  const trackHeight = health ? 6 : 10
   const displayValue = value ?? min
   const pct = ((displayValue - min) / (max - min)) * 100
 
   return (
     <div className="w-full">
-      <div className="flex items-baseline justify-between gap-2">
-        <label className="font-medium text-[15px]" style={{ color: 'var(--color-ink)' }}>
-          {label}
-        </label>
-        <span
-          className="tabular-nums text-sm font-semibold rounded-full px-2.5 py-0.5"
-          style={{ background: value === undefined ? 'transparent' : accent, color: value === undefined ? 'var(--color-ink-muted)' : 'white' }}
-        >
-          {value === undefined ? '—' : format ? format(displayValue) : displayValue}
-        </span>
-      </div>
-      {helper && (
+      {!bare && (
+        <div className="flex items-baseline justify-between gap-2">
+          <label className="font-medium text-[15px]" style={{ color: 'var(--color-ink)' }}>
+            {label}
+          </label>
+          {health ? (
+            <span className="tabular-nums text-[15px] font-bold" style={{ color: 'var(--color-ink)' }}>
+              {value === undefined ? '—' : format ? format(displayValue) : displayValue}
+              {value !== undefined && !format && (
+                <span className="text-[12px] font-medium" style={{ color: 'var(--color-ink-muted)' }}>
+                  {' '}/ {max}
+                </span>
+              )}
+            </span>
+          ) : (
+            <span
+              className="tabular-nums text-sm font-semibold rounded-full px-2.5 py-0.5"
+              style={{ background: value === undefined ? 'transparent' : accent, color: value === undefined ? 'var(--color-ink-muted)' : 'white' }}
+            >
+              {value === undefined ? '—' : format ? format(displayValue) : displayValue}
+            </span>
+          )}
+        </div>
+      )}
+      {!bare && helper && (
         <p className="text-[13px] mt-0.5 mb-2" style={{ color: 'var(--color-ink-muted)' }}>
           {helper}
         </p>
       )}
       <div className="relative py-3 touch-none select-none">
         <div
-          className="h-2.5 rounded-full w-full"
-          style={{ background: 'color-mix(in srgb, ' + accent + ' 18%, var(--color-hairline))' }}
+          className="rounded-full w-full"
+          style={{
+            height: trackHeight,
+            background: health ? 'var(--color-hairline)' : 'color-mix(in srgb, ' + accent + ' 18%, var(--color-hairline))',
+          }}
         >
           <div
-            className="h-2.5 rounded-full"
-            style={{ width: `${pct}%`, background: accent, transition: 'width 120ms ease' }}
+            className="rounded-full"
+            style={{
+              height: trackHeight,
+              width: `${pct}%`,
+              background: value === undefined && health ? 'transparent' : accent,
+              transition: 'width 120ms ease',
+            }}
           />
         </div>
         <input
@@ -77,7 +105,7 @@ export function Slider({
             left: `calc(${pct}% - 14px)`,
             transform: 'translateY(-50%)',
             background: 'var(--color-surface)',
-            border: `3px solid ${accent}`,
+            border: `3px solid ${value === undefined && health ? 'var(--color-hairline)' : accent}`,
             transition: 'left 120ms ease',
           }}
         />

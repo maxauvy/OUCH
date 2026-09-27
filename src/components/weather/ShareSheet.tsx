@@ -1,12 +1,14 @@
 import { useRef, useState } from 'react'
 import { toPng } from 'html-to-image'
 import type { DailyEntry } from '../../db/types'
-import { WeatherCard } from './WeatherCard'
+import { HealthWeatherCard, WeatherCard } from './WeatherCard'
+import { useDesign } from '../../hooks/useDesign'
 import { downloadBlob } from '../../lib/backup'
 import { useTranslation } from '../../i18n'
 
 export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry; displayName?: string; onClose: () => void }) {
   const t = useTranslation()
+  const Card = useDesign() === 'health' ? HealthWeatherCard : WeatherCard
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
@@ -66,7 +68,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
         </div>
 
         <div className="rounded-2xl overflow-hidden self-center" style={{ border: '1px solid var(--color-hairline)' }}>
-          <WeatherCard ref={cardRef} entry={entry} displayName={displayName} message={message || undefined} />
+          <Card ref={cardRef} entry={entry} displayName={displayName} message={message || undefined} />
         </div>
 
         <div>
@@ -77,7 +79,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
             placeholder={t.shareSheet.messagePlaceholder}
             maxLength={80}
             className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
-            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
+            style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
           />
         </div>
 
@@ -85,7 +87,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
           <button
             onClick={handleDownload}
             disabled={busy}
-            className="flex-1 rounded-full py-3 text-[15px] font-semibold"
+            className="flex-1 rounded-[var(--radius-control)] py-3 text-[15px] font-semibold"
             style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
           >
             {t.shareSheet.download}
@@ -93,7 +95,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
           <button
             onClick={handleShare}
             disabled={busy}
-            className="flex-1 rounded-full py-3 text-[15px] font-semibold text-white"
+            className="flex-1 rounded-[var(--radius-control)] py-3 text-[15px] font-semibold text-[var(--color-on-brand)]"
             style={{ background: 'var(--color-brand)' }}
           >
             {busy ? t.shareSheet.sending : t.shareSheet.send}

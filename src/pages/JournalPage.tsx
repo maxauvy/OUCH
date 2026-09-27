@@ -38,7 +38,7 @@ export function JournalPage() {
             {selectedEntry && (
               <button
                 onClick={() => setSharing(true)}
-                className="flex-1 rounded-full py-3 text-[15px] font-semibold"
+                className="flex-1 rounded-[var(--radius-control)] py-3 text-[15px] font-semibold"
                 style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
               >
                 {t.journal.share}
@@ -52,7 +52,7 @@ export function JournalPage() {
                     setSelected(null)
                   }
                 }}
-                className="rounded-full py-3 px-5 text-[15px] font-semibold"
+                className="rounded-[var(--radius-control)] py-3 px-5 text-[15px] font-semibold"
                 style={{ background: 'transparent', color: 'var(--color-weather-5, #574a7a)', border: '1px solid var(--color-hairline)' }}
               >
                 {t.journal.delete}

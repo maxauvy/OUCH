@@ -2,12 +2,16 @@ import { forwardRef } from 'react'
 import type { DailyEntry } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
-import { theme } from '../../lib/theme'
+import { healthTheme, theme } from '../../lib/theme'
 import { format, useLocale, useTranslation, type Translations } from '../../i18n'
 
 function formatCardDate(date: string, intlLocale: string): string {
   const d = new Date(date + 'T00:00:00')
   return d.toLocaleDateString(intlLocale, { weekday: 'long', day: 'numeric', month: 'long' })
+}
+
+function capitalizeFirst(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
 /** 0–2 low, 3–5 moderate, 6–8 high, 9–10 very high. */
@@ -201,6 +205,97 @@ export const WeatherCard = forwardRef<
         <div style={{ fontSize: 12, color: theme.inkMuted, textAlign: 'right', letterSpacing: 0.3 }}>
           OUCH <span style={{ fontStyle: 'italic' }}>– Ouch, Understand, Chart, Heal</span>
         </div>
+      </div>
+    </div>
+  )
+})
+
+/** Health-design version of the shared card: a plain summary sheet (level,
+ * a few numbers, the personal note) instead of the gradient poster above.
+ * Same capture constraints: literal colors only. */
+export const HealthWeatherCard = forwardRef<
+  HTMLDivElement,
+  { entry: DailyEntry; displayName?: string; message?: string }
+>(function HealthWeatherCard({ entry, displayName, message }, ref) {
+  const t = useTranslation()
+  const { intlLocale } = useLocale()
+  const weather = computePainWeather(entry)
+  const c = healthTheme
+
+  const metrics = [
+    { label: t.entryForm.pain, value: `${entry.painLevel}` },
+    ...(entry.fatigueLevel != null ? [{ label: t.factors.fatigue.label, value: `${entry.fatigueLevel}` }] : []),
+    ...(entry.sleepHours != null ? [{ label: t.factors.sleep.label, value: `${new Intl.NumberFormat(intlLocale).format(entry.sleepHours)} h` }] : []),
+    ...(entry.stressLevel != null ? [{ label: t.factors.stress.label, value: `${entry.stressLevel}` }] : []),
+    ...(entry.brainFog != null ? [{ label: t.factors.brainFog.label, value: `${entry.brainFog}` }] : []),
+  ].slice(0, 4)
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        width: 420,
+        position: 'relative',
+        background: c.surface,
+        fontFamily: '"Public Sans Variable", system-ui, -apple-system, "Segoe UI", sans-serif',
+        color: c.ink,
+        padding: '28px 28px 22px 34px',
+        boxSizing: 'border-box',
+      }}
+    >
+      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 6, background: weather.color }} />
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+        <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.8, textTransform: 'uppercase', color: c.inkMuted }}>
+          {displayName ? format(t.weatherCard.weatherOfName, { name: displayName }) : t.weatherCard.weatherOfDay}
+        </span>
+        <span style={{ fontSize: 12, color: c.inkMuted }}>
+          {new Date(entry.date + 'T00:00:00').toLocaleDateString(intlLocale)}
+        </span>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14, margin: '18px 0' }}>
+        <div
+          style={{
+            width: 56,
+            height: 56,
+            borderRadius: 12,
+            background: weather.soft,
+            color: weather.color,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <WeatherIcon name={weather.icon as never} size={34} />
+        </div>
+        <div>
+          <div style={{ fontSize: 22, fontWeight: 700 }}>{t.painWeatherLevels[weather.level]}</div>
+          <div style={{ fontSize: 13, color: c.inkMuted }}>{capitalizeFirst(formatCardDate(entry.date, intlLocale))}</div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${metrics.length}, 1fr)`,
+          border: `1px solid ${c.hairline}`,
+          borderRadius: 10,
+          textAlign: 'center',
+        }}
+      >
+        {metrics.map((m, i) => (
+          <div key={m.label} style={{ padding: '10px 4px', borderLeft: i ? `1px solid ${c.hairline}` : 'none' }}>
+            <div style={{ fontSize: 11, color: c.inkMuted }}>{m.label}</div>
+            <div style={{ fontSize: 20, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{m.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {message && <p style={{ margin: '16px 0 0', fontSize: 15, lineHeight: 1.45, color: c.ink }}>{message}</p>}
+
+      <div style={{ marginTop: 18, fontSize: 11, color: c.inkMuted, letterSpacing: 0.5 }}>
+        <strong>OUCH</strong> · Ouch, Understand, Chart, Heal
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
-import { ALL_FACTORS, CHILD_ILLNESSES, type ChildIllness, type FactorKey, type ParentGender, type ThemePref } from '../db/types'
+import { ALL_FACTORS, CHILD_ILLNESSES, type ChildIllness, type FactorKey, type DesignStyle, type ParentGender, type ThemePref } from '../db/types'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
@@ -27,6 +27,11 @@ export function SettingsPage() {
     { value: 'system', label: t.settings.themeAuto },
     { value: 'light', label: t.settings.themeLight },
     { value: 'dark', label: t.settings.themeDark },
+  ]
+
+  const DESIGN_OPTIONS: { value: DesignStyle; label: string }[] = [
+    { value: 'health', label: t.settings.designHealth },
+    { value: 'classic', label: t.settings.designClassic },
   ]
 
   function toggleFactor(key: FactorKey) {
@@ -77,7 +82,7 @@ export function SettingsPage() {
           onBlur={(e) => updateSettings({ displayName: e.target.value.trim() })}
           placeholder={t.settings.firstNamePlaceholder}
           className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
-          style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
+          style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
         />
       </Card>
 
@@ -91,10 +96,10 @@ export function SettingsPage() {
             <button
               key={lang.code}
               onClick={() => updateSettings({ language: lang.code })}
-              className="flex-1 rounded-full py-2 text-[14px] font-semibold"
+              className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
               style={{
                 background: settings.language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                color: settings.language === lang.code ? 'white' : 'var(--color-brand)',
+                color: settings.language === lang.code ? 'var(--color-on-brand)' : 'var(--color-brand)',
               }}
             >
               {lang.label}
@@ -113,10 +118,10 @@ export function SettingsPage() {
             <button
               key={opt.value}
               onClick={() => updateSettings({ parentGender: opt.value })}
-              className="flex-1 rounded-full py-2 text-[14px] font-semibold"
+              className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
               style={{
                 background: settings.parentGender === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                color: settings.parentGender === opt.value ? 'white' : 'var(--color-brand)',
+                color: settings.parentGender === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
               }}
             >
               {opt.label}
@@ -135,10 +140,10 @@ export function SettingsPage() {
             <button
               key={illness}
               onClick={() => updateSettings({ childIllness: illness })}
-              className="rounded-full px-3.5 py-2 text-[13px] font-semibold"
+              className="rounded-[var(--radius-control)] px-3.5 py-2 text-[13px] font-semibold"
               style={{
                 background: settings.childIllness === illness ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                color: settings.childIllness === illness ? 'white' : 'var(--color-brand)',
+                color: settings.childIllness === illness ? 'var(--color-on-brand)' : 'var(--color-brand)',
               }}
             >
               {getIllnessLabel(language, illness)}
@@ -188,7 +193,7 @@ export function SettingsPage() {
           <button
             onClick={handleSetLocation}
             disabled={locating}
-            className="rounded-full px-4 py-2 text-[13px] font-semibold"
+            className="rounded-[var(--radius-control)] px-4 py-2 text-[13px] font-semibold"
             style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
           >
             {locating ? t.settings.locating : t.settings.updateLocation}
@@ -210,7 +215,7 @@ export function SettingsPage() {
             value={settings.reminderTime}
             onChange={(e) => updateSettings({ reminderTime: e.target.value })}
             className="rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
-            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
+            style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
           />
         )}
         <p className="text-[12px] mt-2" style={{ color: 'var(--color-ink-muted)' }}>
@@ -220,15 +225,35 @@ export function SettingsPage() {
 
       <Card>
         <SectionTitle>{t.settings.appearanceTitle}</SectionTitle>
+        <p className="text-[14px] font-medium">{t.settings.designTitle}</p>
+        <p className="text-[12px] mb-2" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.settings.designHelper}
+        </p>
+        <div className="flex gap-2 mb-4">
+          {DESIGN_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => updateSettings({ design: opt.value })}
+              aria-pressed={settings.design === opt.value}
+              className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
+              style={{
+                background: settings.design === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
+                color: settings.design === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
+              }}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
         <div className="flex gap-2">
           {THEME_OPTIONS.map((opt) => (
             <button
               key={opt.value}
               onClick={() => updateSettings({ theme: opt.value })}
-              className="flex-1 rounded-full py-2 text-[14px] font-semibold"
+              className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
               style={{
                 background: settings.theme === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                color: settings.theme === opt.value ? 'white' : 'var(--color-brand)',
+                color: settings.theme === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
               }}
             >
               {opt.label}

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Chip } from '../ui/Chip'
+import { useDesign } from '../../hooks/useDesign'
 
 export function TagInput({
   values,
@@ -13,6 +14,7 @@ export function TagInput({
   suggestions?: string[]
 }) {
   const [draft, setDraft] = useState('')
+  const health = useDesign() === 'health'
 
   function commit(raw: string) {
     const v = raw.trim()
@@ -31,8 +33,12 @@ export function TagInput({
             key={v}
             type="button"
             onClick={() => onChange(values.filter((x) => x !== v))}
-            className="rounded-full pl-3.5 pr-2.5 py-2 text-[14px] font-medium inline-flex items-center gap-1.5"
-            style={{ background: 'var(--color-brand)', color: 'white' }}
+            className="rounded-[var(--radius-control)] pl-3.5 pr-2.5 py-2 text-[14px] font-medium inline-flex items-center gap-1.5"
+            style={
+              health
+                ? { background: 'var(--color-brand-soft)', color: 'var(--color-brand)', boxShadow: 'inset 0 0 0 1px var(--color-brand)' }
+                : { background: 'var(--color-brand)', color: 'var(--color-on-brand)' }
+            }
           >
             {v}
             <span aria-hidden>×</span>
@@ -51,7 +57,7 @@ export function TagInput({
         onBlur={() => draft && commit(draft)}
         placeholder={placeholder}
         className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
-        style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
+        style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
       />
       {unusedSuggestions.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-2">

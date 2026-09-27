@@ -1,3 +1,5 @@
+import type { DesignStyle } from '../db/types'
+
 // Palette for anything that can't lean on CSS custom properties (canvas /
 // SVG chart libraries, and the exported weather card). Mirrors index.css's
 // --color-* tokens. The weather ordinal scale and the brand accent stay
@@ -37,11 +39,41 @@ const DARK = {
   weather: WEATHER,
 }
 
+// Health design (default) — mirrors the :root[data-design='health'] tokens.
+const HEALTH_LIGHT = {
+  paper: '#f3f6f8',
+  surface: '#ffffff',
+  surfaceRaised: '#f8fafb',
+  ink: '#14212b',
+  inkMuted: '#5b6b76',
+  hairline: '#e1e7eb',
+  brand: '#0d5c8c',
+  brandSoft: '#e3eef6',
+  weather: WEATHER,
+}
+
+const HEALTH_DARK = {
+  paper: '#0e1418',
+  surface: '#172026',
+  surfaceRaised: '#1d2830',
+  ink: '#e6edf1',
+  inkMuted: '#93a3ae',
+  hairline: 'rgba(160, 185, 200, 0.16)',
+  brand: '#62aee0',
+  brandSoft: '#173247',
+  weather: WEATHER,
+}
+
 /** Default export — the light palette. Used by the exported weather card,
  * which always renders in its fixed light style regardless of the app's
  * live theme (a shared image shouldn't depend on the sender's dark mode). */
 export const theme = LIGHT
 
-export function themeFor(isDark: boolean) {
+/** The exported health-style weather card's fixed palette, for the same
+ * reason as `theme` above. */
+export const healthTheme = HEALTH_LIGHT
+
+export function themeFor(isDark: boolean, design: DesignStyle = 'classic') {
+  if (design === 'health') return isDark ? HEALTH_DARK : HEALTH_LIGHT
   return isDark ? DARK : LIGHT
 }

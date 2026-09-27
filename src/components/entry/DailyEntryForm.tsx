@@ -12,6 +12,8 @@ import { computePainWeather } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { Toggle } from '../ui/Toggle'
 import { useLocale, useTranslation } from '../../i18n'
+import { useDesign } from '../../hooks/useDesign'
+import { HealthEntryLayout } from './HealthEntryLayout'
 
 function formatDateHeading(date: string, intlLocale: string): string {
   const d = new Date(date + 'T00:00:00')
@@ -25,6 +27,7 @@ export function DailyEntryForm({ date }: { date: string }) {
   const allEntries = useAllEntries()
   const t = useTranslation()
   const { intlLocale } = useLocale()
+  const design = useDesign()
   const [local, setLocal] = useState<Partial<DailyEntry>>({})
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle')
   const dirtyRef = useRef(false)
@@ -81,6 +84,21 @@ export function DailyEntryForm({ date }: { date: string }) {
   const zones = local.painLocations ?? []
   function toggleZone(z: BodyZone) {
     setField('painLocations', zones.includes(z) ? zones.filter((x) => x !== z) : [...zones, z])
+  }
+
+  if (design === 'health') {
+    return (
+      <HealthEntryLayout
+        date={date}
+        local={local}
+        setField={setField}
+        settings={settings}
+        saveState={saveState}
+        allEntries={allEntries ?? []}
+        knownMedications={knownMedications}
+        knownPositiveActions={knownPositiveActions}
+      />
+    )
   }
 
   return (
@@ -250,7 +268,7 @@ export function DailyEntryForm({ date }: { date: string }) {
             placeholder={t.entryForm.notesPlaceholder}
             rows={3}
             className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none resize-none"
-            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-ink)' }}
+            style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
           />
         </Card>
       )}

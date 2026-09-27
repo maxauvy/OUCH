@@ -12,9 +12,7 @@ import {
 } from 'date-fns'
 import type { DailyEntry } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
-import { themeFor } from '../../lib/theme'
-import { useSettings } from '../../hooks/useSettings'
-import { useIsDark } from '../../hooks/useIsDark'
+import { usePalette } from '../../hooks/useDesign'
 import { useLocale, useTranslation } from '../../i18n'
 
 export function CalendarHeatmap({
@@ -27,8 +25,7 @@ export function CalendarHeatmap({
   selectedDate?: string
 }) {
   const [cursor, setCursor] = useState(new Date())
-  const settings = useSettings()
-  const t = themeFor(useIsDark(settings.theme))
+  const t = usePalette()
   const i18n = useTranslation()
   const { dateFnsLocale } = useLocale()
   const WEEKDAYS = i18n.calendar.weekdaysShort
@@ -49,7 +46,7 @@ export function CalendarHeatmap({
       <div className="flex items-center justify-between mb-3">
         <button
           onClick={() => setCursor((c) => addMonths(c, -1))}
-          className="w-9 h-9 rounded-full flex items-center justify-center text-[16px]"
+          className="w-9 h-9 rounded-[var(--radius-control)] flex items-center justify-center text-[16px]"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
           aria-label={i18n.calendar.prevMonth}
         >
@@ -60,7 +57,7 @@ export function CalendarHeatmap({
         </span>
         <button
           onClick={() => setCursor((c) => addMonths(c, 1))}
-          className="w-9 h-9 rounded-full flex items-center justify-center text-[16px]"
+          className="w-9 h-9 rounded-[var(--radius-control)] flex items-center justify-center text-[16px]"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
           aria-label={i18n.calendar.nextMonth}
         >
