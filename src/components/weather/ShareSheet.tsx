@@ -19,6 +19,28 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
+  const previewAreaRef = useRef<HTMLDivElement>(null)
+  const [fit, setFit] = useState<{ scale: number; width: number; height: number } | null>(null)
+
+  // The card is rendered at its export size (the PNG is captured from it),
+  // which is wider than a phone screen. The preview shrinks it to the sheet's
+  // width with a transform on a wrapper: the captured node itself keeps its
+  // full size, so the exported image is unchanged.
+  useEffect(() => {
+    const area = previewAreaRef.current
+    const card = cardRef.current
+    if (!area || !card) return
+    const update = () => {
+      const width = card.offsetWidth
+      const height = card.offsetHeight
+      // 2px for the preview's border
+      setFit({ scale: Math.min(1, (area.clientWidth - 2) / width), width, height })
+    }
+    const observer = new ResizeObserver(update)
+    observer.observe(area)
+    observer.observe(card) // the height changes with the message
+    return () => observer.disconnect()
+  }, [])
 
   async function capture(): Promise<Blob> {
     if (!cardRef.current) throw new Error(t.shareSheet.cardNotFound)
@@ -116,16 +138,26 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
           </div>
 
           {/* The card is read as one image with a summary, not line by line. */}
-          <div
-            role="img"
-            aria-label={format(t.shareSheet.previewLabel, {
-              weather: t.painWeatherLevels[weather.level],
-              pain: entry.painLevel,
-            })}
-            className="rounded-2xl overflow-hidden self-center"
-            style={{ border: '1px solid var(--color-hairline)' }}
-          >
-            <Card ref={cardRef} entry={entry} displayName={displayName} message={message || undefined} />
+          <div ref={previewAreaRef} className="flex justify-center">
+            <div
+              role="img"
+              aria-label={format(t.shareSheet.previewLabel, {
+                weather: t.painWeatherLevels[weather.level],
+                pain: entry.painLevel,
+              })}
+              className="rounded-2xl overflow-hidden shrink-0"
+              style={{
+                border: '1px solid var(--color-hairline)',
+                width: fit ? fit.width * fit.scale + 2 : undefined,
+                height: fit ? fit.height * fit.scale + 2 : undefined,
+              }}
+            >
+              <div
+                style={{ width: fit?.width, transform: fit ? `scale(${fit.scale})` : undefined, transformOrigin: 'top left' }}
+              >
+                <Card ref={cardRef} entry={entry} displayName={displayName} message={message || undefined} />
+              </div>
+            </div>
           </div>
 
           <div>
