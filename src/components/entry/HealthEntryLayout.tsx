@@ -67,8 +67,8 @@ function MetricRow({
     <div className="px-4 pt-3.5 pb-3" style={{ borderTop: '1px solid var(--color-hairline)' }}>
       <div className="flex items-center gap-2.5">
         <CategoryIcon icon={icon} cat={cat} />
-        <span className="flex-1 text-[15px] font-medium">{label}</span>
-        <span className="tabular-nums text-[17px] font-bold">
+        <span className="flex-1 text-body font-medium">{label}</span>
+        <span className="tabular-nums text-heading font-bold">
           {value === undefined ? (
             <span style={{ color: 'var(--color-ink-muted)', fontWeight: 500 }}>—</span>
           ) : formatValue ? (
@@ -76,7 +76,7 @@ function MetricRow({
           ) : (
             <>
               {value}
-              <span className="text-[12px] font-medium" style={{ color: 'var(--color-ink-muted)' }}>
+              <span className="text-caption font-medium" style={{ color: 'var(--color-ink-muted)' }}>
                 {' '}/ {max}
               </span>
             </>
@@ -289,15 +289,15 @@ export function HealthEntryLayout({
       <div className="flex items-center justify-between px-1">
         <div>
           {isToday && (
-            <p className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
+            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
               {longDateCap}
             </p>
           )}
-          <h1 className="text-[22px] font-bold leading-tight">{isToday ? t.tabs.today : longDateCap}</h1>
+          <h1 className="text-title font-bold leading-tight">{isToday ? t.tabs.today : longDateCap}</h1>
         </div>
         {isToday && settings.displayName && (
           <span
-            className="w-9 h-9 rounded-full flex items-center justify-center text-[13px] font-semibold"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-caption font-semibold"
             style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
             aria-hidden
           >
@@ -310,24 +310,24 @@ export function HealthEntryLayout({
         <div className="flex items-center justify-between gap-2">
           <span className="flex items-center gap-2">
             <CategoryIcon icon={IconActivityHeartbeat} cat="pain" />
-            <span className="text-[15px] font-semibold">{t.entryForm.pain}</span>
+            <span className="text-body font-semibold">{t.entryForm.pain}</span>
           </span>
-          <span className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
+          <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
             {statusText}
           </span>
         </div>
 
         <div className="flex items-end justify-between mt-3">
           <div>
-            <p className="tabular-nums text-[36px] font-bold leading-none">
+            <p className="tabular-nums text-hero font-bold leading-none">
               {local.painLevel ?? <span style={{ color: 'var(--color-ink-muted)' }}>—</span>}
-              <span className="text-[15px] font-medium" style={{ color: 'var(--color-ink-muted)' }}>
+              <span className="text-body font-medium" style={{ color: 'var(--color-ink-muted)' }}>
                 {' '}/ 10
               </span>
             </p>
             {delta !== null && (
               <p
-                className="text-[12px] mt-1.5 flex items-center gap-1"
+                className="text-caption mt-1.5 flex items-center gap-1"
                 style={{
                   color:
                     Math.abs(delta) < 0.25 ? 'var(--color-ink-muted)' : delta < 0 ? 'var(--cat-mood)' : 'var(--cat-pain)',
@@ -364,7 +364,7 @@ export function HealthEntryLayout({
         </div>
 
         <div
-          className="flex items-center gap-2 mt-3 pt-3 text-[13px]"
+          className="flex items-center gap-2 mt-3 pt-3 text-caption"
           style={{ borderTop: '1px solid var(--color-hairline)' }}
         >
           <span style={{ color: weather.color }} className="inline-flex" aria-hidden>
@@ -434,8 +434,8 @@ export function HealthEntryLayout({
         <Card className="!p-4 flex items-center gap-3">
           <CategoryIcon icon={IconDroplet} cat="cycle" />
           <div className="flex-1">
-            <p className="font-medium text-[15px]">{t.entryForm.periodToday}</p>
-            <p className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
+            <p className="font-medium text-body">{t.entryForm.periodToday}</p>
+            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
               {t.entryForm.periodHelper}
             </p>
           </div>
@@ -452,7 +452,7 @@ export function HealthEntryLayout({
               onChange={(e) => setField('notes', e.target.value)}
               placeholder={t.entryForm.notesPlaceholder}
               rows={3}
-              className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none resize-none"
+              className="w-full rounded-xl px-3.5 py-2.5 text-body outline-none resize-none"
               style={{
                 background: 'var(--color-input)',
                 color: 'var(--color-ink)',

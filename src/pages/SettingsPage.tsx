@@ -68,13 +68,13 @@ export function SettingsPage() {
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
-      <h1 className="text-[22px] font-semibold px-1">{t.settings.title}</h1>
+      <h1 className="text-title font-semibold px-1">{t.settings.title}</h1>
 
       <AboutCard withHeader />
 
       <Card>
         <SectionTitle>{t.settings.firstNameTitle}</SectionTitle>
-        <p className="text-[13px] mb-2" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-caption mb-2" style={{ color: 'var(--color-ink-muted)' }}>
           {format(t.settings.firstNameHelper, { name: settings.displayName || '…' })}
         </p>
         <input
@@ -83,14 +83,14 @@ export function SettingsPage() {
           onBlur={(e) => updateSettings({ displayName: e.target.value.trim() })}
           placeholder={t.settings.firstNamePlaceholder}
           aria-label={t.settings.firstNameTitle}
-          className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
+          className="w-full rounded-xl px-3.5 py-2.5 text-body outline-none"
           style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
         />
       </Card>
 
       <Card>
         <SectionTitle>{t.settings.languageTitle}</SectionTitle>
-        <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.languageHelper}
         </p>
         <div className="flex gap-2" {...radioGroupProps(t.settings.languageTitle)}>
@@ -99,7 +99,7 @@ export function SettingsPage() {
               key={lang.code}
               {...radioProps(settings.language === lang.code)}
               onClick={() => updateSettings({ language: lang.code })}
-              className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
+              className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
               style={{
                 background: settings.language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
                 color: settings.language === lang.code ? 'var(--color-on-brand)' : 'var(--color-brand)',
@@ -113,7 +113,7 @@ export function SettingsPage() {
 
       <Card>
         <SectionTitle>{t.settings.parentGenderTitle}</SectionTitle>
-        <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.parentGenderHelper}
         </p>
         <div className="flex gap-2" {...radioGroupProps(t.settings.parentGenderTitle)}>
@@ -122,7 +122,7 @@ export function SettingsPage() {
               key={opt.value}
               {...radioProps(settings.parentGender === opt.value)}
               onClick={() => updateSettings({ parentGender: opt.value })}
-              className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
+              className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
               style={{
                 background: settings.parentGender === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
                 color: settings.parentGender === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
@@ -136,7 +136,7 @@ export function SettingsPage() {
 
       <Card>
         <SectionTitle>{t.settings.childIllnessTitle}</SectionTitle>
-        <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.childIllnessHelper}
         </p>
         <div className="flex flex-wrap gap-2" {...radioGroupProps(t.settings.childIllnessTitle)}>
@@ -145,7 +145,7 @@ export function SettingsPage() {
               key={illness}
               {...radioProps(settings.childIllness === illness)}
               onClick={() => updateSettings({ childIllness: illness })}
-              className="rounded-[var(--radius-control)] px-3.5 py-2 text-[13px] font-semibold"
+              className="rounded-[var(--radius-control)] px-3.5 py-2 text-caption font-semibold"
               style={{
                 background: settings.childIllness === illness ? 'var(--color-brand)' : 'var(--color-brand-soft)',
                 color: settings.childIllness === illness ? 'var(--color-on-brand)' : 'var(--color-brand)',
@@ -159,15 +159,15 @@ export function SettingsPage() {
 
       <Card>
         <SectionTitle>{t.settings.factorsTitle}</SectionTitle>
-        <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.factorsHelper}
         </p>
         <div className="flex flex-col gap-3.5">
           {ALL_FACTORS.map((key) => (
             <div key={key} className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-[14px] font-medium">{t.factors[key].label}</p>
-                <p className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
+                <p className="text-control font-medium">{t.factors[key].label}</p>
+                <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
                   {t.factors[key].helper}
                 </p>
               </div>
@@ -183,8 +183,8 @@ export function SettingsPage() {
 
       <Card className="flex items-center justify-between">
         <div>
-          <p className="text-[14px] font-medium">{t.settings.cycleTracking}</p>
-          <p className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
+          <p className="text-control font-medium">{t.settings.cycleTracking}</p>
+          <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
             {t.settings.cycleTrackingHelper}
           </p>
         </div>
@@ -198,7 +198,7 @@ export function SettingsPage() {
       {settings.enabledFactors.includes('weather') && (
         <Card>
           <SectionTitle>{t.settings.weatherLocationTitle}</SectionTitle>
-          <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+          <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
             {settings.autoWeatherLabel
               ? format(t.settings.weatherLocationSet, { label: settings.autoWeatherLabel })
               : t.settings.weatherLocationUnset}
@@ -206,7 +206,7 @@ export function SettingsPage() {
           <button
             onClick={handleSetLocation}
             disabled={locating}
-            className="rounded-[var(--radius-control)] px-4 py-2 text-[13px] font-semibold"
+            className="rounded-[var(--radius-control)] px-4 py-2 text-caption font-semibold"
             style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
           >
             {locating ? t.settings.locating : t.settings.updateLocation}
@@ -217,7 +217,7 @@ export function SettingsPage() {
       <Card>
         <SectionTitle>{t.settings.reminderTitle}</SectionTitle>
         <div className="flex items-center justify-between mb-3">
-          <p className="text-[13px]" style={{ color: 'var(--color-ink-muted)' }}>
+          <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
             {t.settings.reminderHelper}
           </p>
           <Toggle checked={settings.reminderEnabled} onChange={handleReminderToggle} label={t.settings.reminderTitle} />
@@ -228,19 +228,19 @@ export function SettingsPage() {
             aria-label={t.settings.reminderTitle}
             value={settings.reminderTime}
             onChange={(e) => updateSettings({ reminderTime: e.target.value })}
-            className="rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
+            className="rounded-xl px-3.5 py-2.5 text-body outline-none"
             style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
           />
         )}
-        <p className="text-[12px] mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.reminderNote}
         </p>
       </Card>
 
       <Card>
         <SectionTitle>{t.settings.appearanceTitle}</SectionTitle>
-        <p className="text-[14px] font-medium">{t.settings.designTitle}</p>
-        <p className="text-[12px] mb-2" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-control font-medium">{t.settings.designTitle}</p>
+        <p className="text-caption mb-2" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.designHelper}
         </p>
         <div className="flex gap-2 mb-4" {...radioGroupProps(t.settings.designTitle)}>
@@ -249,7 +249,7 @@ export function SettingsPage() {
               key={opt.value}
               {...radioProps(settings.design === opt.value)}
               onClick={() => updateSettings({ design: opt.value })}
-              className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
+              className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
               style={{
                 background: settings.design === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
                 color: settings.design === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
@@ -265,7 +265,7 @@ export function SettingsPage() {
               key={opt.value}
               {...radioProps(settings.theme === opt.value)}
               onClick={() => updateSettings({ theme: opt.value })}
-              className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
+              className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
               style={{
                 background: settings.theme === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
                 color: settings.theme === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
@@ -283,7 +283,7 @@ export function SettingsPage() {
       </Card>
 
       <Card>
-        <p className="text-[13px] leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-caption leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.privacyNote}
         </p>
       </Card>

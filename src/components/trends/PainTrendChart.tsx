@@ -33,7 +33,7 @@ function CustomTooltip({
         border: `1px solid ${t.hairline}`,
         borderRadius: 10,
         padding: '8px 12px',
-        fontSize: 13,
+        fontSize: 'var(--text-caption)',
         boxShadow: '0 4px 12px rgba(20,15,35,0.24)',
       }}
     >
@@ -58,7 +58,7 @@ export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
 
   if (data.length < 2) {
     return (
-      <p className="text-[14px] py-6 text-center" style={{ color: t.inkMuted }}>
+      <p className="text-control py-6 text-center" style={{ color: t.inkMuted }}>
         {i18n.trends.notEnoughData}
       </p>
     )
@@ -78,7 +78,7 @@ export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
           <XAxis
             dataKey="date"
             tickFormatter={(d: string) => format(new Date(d + 'T00:00:00'), 'd MMM', { locale: dateFnsLocale })}
-            tick={{ fontSize: 11, fill: t.inkMuted }}
+            tick={{ fontSize: 13, fill: t.inkMuted }}
             axisLine={{ stroke: t.hairline }}
             tickLine={false}
             minTickGap={28}
@@ -86,7 +86,7 @@ export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
           <YAxis
             domain={[0, 10]}
             ticks={[0, 5, 10]}
-            tick={{ fontSize: 11, fill: t.inkMuted }}
+            tick={{ fontSize: 13, fill: t.inkMuted }}
             axisLine={false}
             tickLine={false}
             width={24}

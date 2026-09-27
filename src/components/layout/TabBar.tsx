@@ -59,7 +59,16 @@ export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) =
                   {TAB_EMOJI[tab.id]}
                 </span>
               )}
-              <span className={`text-[11px] ${health && isActive ? 'font-semibold' : 'font-medium'}`}>{tab.label}</span>
+              {/* Capped: five labels share the screen width, so they only grow
+                  as far as the longest one ("Aujourd'hui") still fits — 13px on
+                  a 360px phone, up to 16px on wider screens. iOS caps its own
+                  tab bar labels the same way. */}
+              <span
+                className={health && isActive ? 'font-semibold' : 'font-medium'}
+                style={{ fontSize: 'min(var(--text-caption), max(13px, 3.5vw), 16px)' }}
+              >
+                {tab.label}
+              </span>
             </button>
           )
         })}

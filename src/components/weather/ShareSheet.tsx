@@ -101,7 +101,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
           style={{ background: 'var(--color-paper)' }}
         >
           <div className="flex items-center justify-between">
-            <h2 id={titleId} className="text-[17px] font-semibold">
+            <h2 id={titleId} className="text-heading font-semibold">
               {t.shareSheet.title}
             </h2>
             <button
@@ -129,14 +129,14 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
           </div>
 
           <div>
-            <label htmlFor={messageId} className="text-[13px] font-medium block mb-1.5">{t.shareSheet.messageLabel}</label>
+            <label htmlFor={messageId} className="text-caption font-medium block mb-1.5">{t.shareSheet.messageLabel}</label>
             <input
               id={messageId}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder={t.shareSheet.messagePlaceholder}
               maxLength={80}
-              className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
+              className="w-full rounded-xl px-3.5 py-2.5 text-body outline-none"
               style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
             />
           </div>
@@ -145,7 +145,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
             <button
               onClick={handleDownload}
               disabled={busy}
-              className="flex-1 rounded-[var(--radius-control)] py-3 text-[15px] font-semibold"
+              className="flex-1 rounded-[var(--radius-control)] py-3 text-body font-semibold"
               style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
             >
               {t.shareSheet.download}
@@ -153,13 +153,13 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
             <button
               onClick={handleShare}
               disabled={busy}
-              className="flex-1 rounded-[var(--radius-control)] py-3 text-[15px] font-semibold text-[var(--color-on-brand)]"
+              className="flex-1 rounded-[var(--radius-control)] py-3 text-body font-semibold text-[var(--color-on-brand)]"
               style={{ background: 'var(--color-brand)' }}
             >
               {busy ? t.shareSheet.sending : t.shareSheet.send}
             </button>
           </div>
-          <p className="text-[12px] text-center" style={{ color: 'var(--color-ink-muted)' }}>
+          <p className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
             {t.shareSheet.footer}
           </p>
         </div>

@@ -138,7 +138,7 @@ function WeatherScale({ level }: { level: PainWeatherLevel }) {
           )
         })}
       </div>
-      <div className="flex justify-between text-[11px] mt-1.5" style={{ color: 'var(--color-ink-muted)' }}>
+      <div className="flex justify-between text-caption mt-1.5" style={{ color: 'var(--color-ink-muted)' }}>
         <span>{t.painWeatherLevels[1]}</span>
         <span>{t.painWeatherLevels[5]}</span>
       </div>
@@ -157,7 +157,7 @@ function AgeControl({ tone, onChange }: { tone: ChildTone; onChange: (tone: Chil
             key={value}
             {...radioProps(active)}
             onClick={() => onChange(value)}
-            className="flex-1 rounded-[calc(var(--radius-control)-2px)] py-2 text-[14px] font-semibold"
+            className="flex-1 rounded-[calc(var(--radius-control)-2px)] py-2 text-control font-semibold"
             style={{
               background: active ? 'var(--color-brand)' : 'transparent',
               color: active ? 'var(--color-on-brand)' : 'var(--color-brand)',
@@ -194,10 +194,10 @@ export function HealthChildView({
 
   return (
     <div className="flex flex-col gap-3 px-4 pt-4 pb-28">
-      <h1 className="text-[22px] font-bold leading-tight px-1">{t.childView.pageTitle}</h1>
+      <h1 className="text-title font-bold leading-tight px-1">{t.childView.pageTitle}</h1>
 
       {!weather || !copy ? (
-        <p className="text-[14px] text-center mt-10 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-control text-center mt-10 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
           {t.childView.noEntry}
         </p>
       ) : (
@@ -207,8 +207,8 @@ export function HealthChildView({
           <div className="rounded-[var(--radius-card)] overflow-hidden" style={card}>
             <Sky weather={weather} />
             <div className="px-5 pt-4 pb-5 text-center">
-              <div className="text-[19px] font-bold leading-snug">{copy.headline}</div>
-              <div className="text-[15px] mt-2 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
+              <div className="text-heading font-bold leading-snug">{copy.headline}</div>
+              <div className="text-body mt-2 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
                 {copy.body}
               </div>
             </div>
@@ -218,7 +218,7 @@ export function HealthChildView({
           </div>
 
           <p
-            className="text-[12px] font-semibold uppercase tracking-[0.06em] px-1 -mb-1 mt-1"
+            className="text-caption font-semibold uppercase tracking-[0.06em] px-1 -mb-1 mt-1"
             style={{ color: 'var(--color-ink-muted)' }}
           >
             {t.childView.howToHelp}
@@ -235,7 +235,7 @@ export function HealthChildView({
                 >
                   <I size={26} stroke={1.8} style={{ color: `var(--cat-${hue})` }} aria-hidden />
                   <span
-                    className="text-[14px] font-semibold leading-snug"
+                    className="text-control font-semibold leading-snug hyphens-auto"
                     style={{ color: `color-mix(in srgb, var(--cat-${hue}) 65%, var(--color-ink))` }}
                   >
                     {label}
@@ -258,7 +258,7 @@ export function HealthChildView({
               >
                 <IconBulb size={18} stroke={1.8} />
               </span>
-              <span className="flex-1 text-[15px] font-semibold">{illnessQuestion}</span>
+              <span className="flex-1 text-body font-semibold">{illnessQuestion}</span>
               <svg
                 width="18"
                 height="18"
@@ -276,7 +276,7 @@ export function HealthChildView({
               </svg>
             </button>
             {illnessOpen && (
-              <div className="text-[14px] mt-3 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
+              <div className="text-control mt-3 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
                 {illnessText}
               </div>
             )}
@@ -284,7 +284,7 @@ export function HealthChildView({
 
           <div className="flex flex-col items-center gap-1.5 px-3 mt-2 text-center">
             <ClosingIcon size={22} stroke={1.8} style={{ color: 'var(--color-brand)' }} aria-hidden />
-            <p className="text-[14px] leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
+            <p className="text-control leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
               {closingText}
             </p>
           </div>

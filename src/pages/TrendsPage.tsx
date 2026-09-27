@@ -79,14 +79,14 @@ export function TrendsPage() {
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
-      <h1 className="text-[22px] font-semibold px-1">{i18n.trends.title}</h1>
+      <h1 className="text-title font-semibold px-1">{i18n.trends.title}</h1>
 
       <div className="flex gap-2 px-1">
         {RANGES.map((r, i) => (
           <button
             key={r.label}
             onClick={() => setRangeIdx(i)}
-            className="rounded-[var(--radius-control)] px-3.5 py-1.5 text-[13px] font-semibold"
+            className="rounded-[var(--radius-control)] px-3.5 py-1.5 text-caption font-semibold"
             style={{
               background: i === rangeIdx ? t.brand : t.brandSoft,
               color: i === rangeIdx ? 'var(--color-on-brand)' : t.brand,
@@ -99,7 +99,7 @@ export function TrendsPage() {
 
       {filtered.length === 0 ? (
         <Card>
-          <p className="text-[14px] text-center py-4" style={{ color: t.inkMuted }}>
+          <p className="text-control text-center py-4" style={{ color: t.inkMuted }}>
             {i18n.trends.noData}
           </p>
         </Card>
@@ -107,20 +107,20 @@ export function TrendsPage() {
         <>
           <div className="grid grid-cols-2 gap-3">
             <Card className="flex flex-col items-center py-4">
-              <span className="text-[28px] font-bold" style={{ color: t.ink }}>
+              <span className="text-display font-bold" style={{ color: t.ink }}>
                 {filtered.length}
               </span>
-              <span className="text-[12px]" style={{ color: t.inkMuted }}>
+              <span className="text-caption" style={{ color: t.inkMuted }}>
                 {format(filtered.length === 1 ? i18n.trends.daysTrackedOne : i18n.trends.daysTrackedOther, {
                   n: filtered.length,
                 })}
               </span>
             </Card>
             <Card className="flex flex-col items-center py-4">
-              <span className="text-[28px] font-bold" style={{ color: t.ink }}>
+              <span className="text-display font-bold" style={{ color: t.ink }}>
                 {avgPain != null ? avgPain.toFixed(1) : '—'}
               </span>
-              <span className="text-[12px]" style={{ color: t.inkMuted }}>
+              <span className="text-caption" style={{ color: t.inkMuted }}>
                 {i18n.trends.avgPain}
               </span>
             </Card>
@@ -133,7 +133,7 @@ export function TrendsPage() {
 
           {weekdayInsight && (
             <Card>
-              <p className="text-[14px] leading-snug">
+              <p className="text-control leading-snug">
                 {format(i18n.trends.weekdayInsight, {
                   best: weekdayInsight.best,
                   worst: weekdayInsight.worst,
@@ -145,7 +145,7 @@ export function TrendsPage() {
           {analyses.some((a) => a.buckets.some((b) => b.count > 0)) && (
             <Card>
               <SectionTitle>{i18n.trends.whatAffectsPain}</SectionTitle>
-              <p className="text-[12px] -mt-2 mb-1" style={{ color: t.inkMuted }}>
+              <p className="text-caption -mt-2 mb-1" style={{ color: t.inkMuted }}>
                 {i18n.trends.averagesObserved}
               </p>
               <div className="flex flex-col">
@@ -161,7 +161,7 @@ export function TrendsPage() {
           {positiveActionAnalyses.length > 0 && (
             <Card>
               <SectionTitle>{i18n.trends.whatHelps}</SectionTitle>
-              <p className="text-[12px] -mt-2 mb-1" style={{ color: t.inkMuted }}>
+              <p className="text-caption -mt-2 mb-1" style={{ color: t.inkMuted }}>
                 {i18n.trends.averagesObserved}
               </p>
               <div className="flex flex-col">
