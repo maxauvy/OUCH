@@ -12,7 +12,7 @@ import { reverseGeocode, getCurrentPosition } from '../lib/weather'
 import { getIllnessLabel } from '../lib/childView'
 import { format, LANGUAGES, useLanguage, useTranslation } from '../i18n'
 
-export function SettingsPage({ onOpenChildView }: { onOpenChildView: () => void }) {
+export function SettingsPage() {
   const settings = useSettings()
   const t = useTranslation()
   const language = useLanguage()
@@ -145,22 +145,6 @@ export function SettingsPage({ onOpenChildView }: { onOpenChildView: () => void 
             </button>
           ))}
         </div>
-      </Card>
-
-      <Card className="flex items-center justify-between gap-3">
-        <div>
-          <p className="text-[14px] font-medium">{t.settings.childViewEntryTitle}</p>
-          <p className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.settings.childViewEntryHelper}
-          </p>
-        </div>
-        <button
-          onClick={onOpenChildView}
-          className="rounded-full px-4 py-2 text-[13px] font-semibold shrink-0"
-          style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
-        >
-          {t.settings.childViewEntryButton}
-        </button>
       </Card>
 
       <Card>
