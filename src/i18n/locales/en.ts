@@ -236,6 +236,7 @@ const en: Translations = {
   shareSheet: {
     title: "Share my weather",
     close: 'Close',
+    previewLabel: 'Image preview: {{weather}}, pain {{pain}} out of 10',
     messageLabel: 'A note for your loved ones (optional)',
     messagePlaceholder: 'E.g.: quiet day, thanks for being there',
     download: 'Download',

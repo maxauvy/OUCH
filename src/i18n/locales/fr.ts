@@ -239,6 +239,7 @@ const fr: Translations = {
   shareSheet: {
     title: 'Partager ma météo',
     close: 'Fermer',
+    previewLabel: "Aperçu de l'image : {{weather}}, douleur {{pain}} sur 10",
     messageLabel: 'Un mot pour tes proches (optionnel)',
     messagePlaceholder: "Ex : journée calme, merci d'être là",
     download: 'Télécharger',
