@@ -4,6 +4,8 @@ import { useSettings } from '../hooks/useSettings'
 import { computePainWeather } from '../lib/painWeather'
 import { CHILD_TONES, getChildViewClosing, getChildViewCopy, getIllnessExplanation, getIllnessTitle, type ChildTone } from '../lib/childView'
 import { WeatherIcon } from '../components/ui/WeatherIcon'
+import { HealthChildView } from '../components/kids/HealthChildView'
+import { useDesign } from '../hooks/useDesign'
 import { format, useLanguage, useTranslation } from '../i18n'
 
 function ToggleRow({ label, options }: { label: string; options: { text: string; active: boolean; onClick: () => void }[] }) {
@@ -35,6 +37,7 @@ export function ChildViewPage() {
   const t = useTranslation()
   const language = useLanguage()
   const settings = useSettings()
+  const health = useDesign() === 'health'
   const todayEntry = useTodayEntry()
   const allEntries = useAllEntries()
   const entry = todayEntry ?? allEntries?.[0]
@@ -48,14 +51,30 @@ export function ChildViewPage() {
   const illnessText = getIllnessExplanation(language, settings.childIllness, tone, settings.parentGender)
 
   // The page's warm palette should reach the screen edges (and the overscroll
-  // area) even on wide screens, where #root is only a centered column.
+  // area) even on wide screens, where #root is only a centered column. The
+  // health design keeps the app's own background.
   useEffect(() => {
+    if (health) return
     const previous = document.body.style.background
     document.body.style.background = 'var(--color-kid-bg)'
     return () => {
       document.body.style.background = previous
     }
-  }, [])
+  }, [health])
+
+  if (health) {
+    return (
+      <HealthChildView
+        tone={tone}
+        onToneChange={setTone}
+        weather={entry ? weather : null}
+        copy={copy}
+        illnessQuestion={format(t.childView.aboutIllness, { illness: illnessTitle })}
+        illnessText={illnessText}
+        closing={getChildViewClosing(language, tone, settings.parentGender)}
+      />
+    )
+  }
 
   return (
     <div
