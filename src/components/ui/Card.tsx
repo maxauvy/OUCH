@@ -22,7 +22,7 @@ export function SectionTitle({ children, action }: PropsWithChildren<{ action?: 
     <div className="flex items-center justify-between mb-3">
       <h2
         className={
-          design === 'health' ? 'text-[12px] font-semibold uppercase tracking-[0.06em]' : 'text-[17px] font-semibold'
+          design === 'health' ? 'text-caption font-semibold uppercase tracking-[0.06em]' : 'text-heading font-semibold'
         }
         style={{ color: design === 'health' ? 'var(--color-ink-muted)' : 'var(--color-ink)' }}
       >
@@ -37,7 +37,7 @@ export function SectionTitle({ children, action }: PropsWithChildren<{ action?: 
 export function GroupCaption({ children }: PropsWithChildren) {
   return (
     <p
-      className="text-[12px] font-semibold uppercase tracking-[0.06em] px-1 -mb-1 mt-1"
+      className="text-caption font-semibold uppercase tracking-[0.06em] px-1 -mb-1 mt-1"
       style={{ color: 'var(--color-ink-muted)' }}
     >
       {children}

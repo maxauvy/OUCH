@@ -19,14 +19,14 @@ export function JournalPage() {
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
-      <h1 className="text-[22px] font-semibold px-1">{t.journal.title}</h1>
+      <h1 className="text-title font-semibold px-1">{t.journal.title}</h1>
 
       <Card>
         <CalendarHeatmap entries={entries ?? []} onSelectDate={setSelected} selectedDate={selected ?? undefined} />
       </Card>
 
       {entries && entries.length === 0 && (
-        <p className="text-[14px] text-center mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-control text-center mt-2" style={{ color: 'var(--color-ink-muted)' }}>
           {t.journal.empty}
         </p>
       )}
@@ -38,7 +38,7 @@ export function JournalPage() {
             {selectedEntry && (
               <button
                 onClick={() => setSharing(true)}
-                className="flex-1 rounded-[var(--radius-control)] py-3 text-[15px] font-semibold"
+                className="flex-1 rounded-[var(--radius-control)] py-3 text-body font-semibold"
                 style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
               >
                 {t.journal.share}
@@ -52,7 +52,7 @@ export function JournalPage() {
                     setSelected(null)
                   }
                 }}
-                className="rounded-[var(--radius-control)] py-3 px-5 text-[15px] font-semibold"
+                className="rounded-[var(--radius-control)] py-3 px-5 text-body font-semibold"
                 style={{ background: 'transparent', color: 'var(--color-weather-5-text)', border: '1px solid var(--color-hairline)' }}
               >
                 {t.journal.delete}

@@ -104,10 +104,10 @@ export function DailyEntryForm({ date }: { date: string }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between px-1">
-        <h1 className="text-[19px] font-semibold capitalize" style={{ color: 'var(--color-ink)' }}>
+        <h1 className="text-heading font-semibold capitalize" style={{ color: 'var(--color-ink)' }}>
           {formatDateHeading(date, intlLocale)}
         </h1>
-        <span className="text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
+        <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
           {saveState === 'saving' ? t.entryForm.saving : saveState === 'saved' ? t.entryForm.saved : ' '}
         </span>
       </div>
@@ -120,10 +120,10 @@ export function DailyEntryForm({ date }: { date: string }) {
           <WeatherIcon name={preview.icon as never} size={36} />
         </div>
         <div>
-          <p className="text-[13px]" style={{ color: 'var(--color-ink-muted)' }}>
+          <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
             {t.entryForm.weatherOfDay}
           </p>
-          <p className="text-[17px] font-semibold" style={{ color: preview.text }}>
+          <p className="text-heading font-semibold" style={{ color: preview.text }}>
             {t.painWeatherLevels[preview.level]}
           </p>
         </div>
@@ -250,8 +250,8 @@ export function DailyEntryForm({ date }: { date: string }) {
       {settings.cycleTrackingEnabled && (
         <Card className="flex items-center justify-between">
           <div>
-            <p className="font-medium text-[15px]">{t.entryForm.periodToday}</p>
-            <p className="text-[13px]" style={{ color: 'var(--color-ink-muted)' }}>
+            <p className="font-medium text-body">{t.entryForm.periodToday}</p>
+            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
               {t.entryForm.periodHelper}
             </p>
           </div>
@@ -267,7 +267,7 @@ export function DailyEntryForm({ date }: { date: string }) {
             onChange={(e) => setField('notes', e.target.value)}
             placeholder={t.entryForm.notesPlaceholder}
             rows={3}
-            className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none resize-none"
+            className="w-full rounded-xl px-3.5 py-2.5 text-body outline-none resize-none"
             style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
           />
         </Card>

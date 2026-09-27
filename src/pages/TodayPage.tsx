@@ -23,7 +23,7 @@ export function TodayPage() {
       {entry && (
         <button
           onClick={() => setSharing(true)}
-          className={`rounded-[var(--radius-control)] py-3.5 text-[15px] font-semibold text-[var(--color-on-brand)] flex items-center justify-center gap-2 ${health ? '' : 'shadow-sm'}`}
+          className={`rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)] flex items-center justify-center gap-2 ${health ? '' : 'shadow-sm'}`}
           style={{ background: 'var(--color-brand)' }}
         >
           {health && <IconShare size={18} aria-hidden />}

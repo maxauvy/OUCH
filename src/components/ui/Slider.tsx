@@ -43,21 +43,21 @@ export function Slider({
     <div className="w-full">
       {!bare && (
         <div className="flex items-baseline justify-between gap-2">
-          <label htmlFor={id} className="font-medium text-[15px]" style={{ color: 'var(--color-ink)' }}>
+          <label htmlFor={id} className="font-medium text-body" style={{ color: 'var(--color-ink)' }}>
             {label}
           </label>
           {health ? (
-            <span className="tabular-nums text-[15px] font-bold" style={{ color: 'var(--color-ink)' }}>
+            <span className="tabular-nums text-body font-bold" style={{ color: 'var(--color-ink)' }}>
               {value === undefined ? '—' : format ? format(displayValue) : displayValue}
               {value !== undefined && !format && (
-                <span className="text-[12px] font-medium" style={{ color: 'var(--color-ink-muted)' }}>
+                <span className="text-caption font-medium" style={{ color: 'var(--color-ink-muted)' }}>
                   {' '}/ {max}
                 </span>
               )}
             </span>
           ) : (
             <span
-              className="tabular-nums text-sm font-semibold rounded-full px-2.5 py-0.5"
+              className="tabular-nums text-control font-semibold rounded-full px-2.5 py-0.5"
               style={{
                 background: value === undefined ? 'transparent' : accent,
                 color:
@@ -74,7 +74,7 @@ export function Slider({
         </div>
       )}
       {!bare && helper && (
-        <p className="text-[13px] mt-0.5 mb-2" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-caption mt-0.5 mb-2" style={{ color: 'var(--color-ink-muted)' }}>
           {helper}
         </p>
       )}
@@ -123,7 +123,7 @@ export function Slider({
           }}
         />
       </div>
-      <div className="flex justify-between text-[12px]" style={{ color: 'var(--color-ink-muted)' }}>
+      <div className="flex justify-between text-caption" style={{ color: 'var(--color-ink-muted)' }}>
         <span>{endLabels[0]}</span>
         <span>{endLabels[1]}</span>
       </div>

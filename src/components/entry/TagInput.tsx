@@ -33,7 +33,7 @@ export function TagInput({
             key={v}
             type="button"
             onClick={() => onChange(values.filter((x) => x !== v))}
-            className="rounded-[var(--radius-control)] pl-3.5 pr-2.5 py-2 text-[14px] font-medium inline-flex items-center gap-1.5"
+            className="rounded-[var(--radius-control)] pl-3.5 pr-2.5 py-2 text-control font-medium inline-flex items-center gap-1.5"
             style={
               health
                 ? { background: 'var(--color-brand-soft)', color: 'var(--color-brand)', boxShadow: 'inset 0 0 0 1px var(--color-brand)' }
@@ -56,7 +56,7 @@ export function TagInput({
         }}
         onBlur={() => draft && commit(draft)}
         placeholder={placeholder}
-        className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
+        className="w-full rounded-xl px-3.5 py-2.5 text-body outline-none"
         style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
       />
       {unusedSuggestions.length > 0 && (

@@ -55,13 +55,13 @@ export function WeatherField({
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-2">
-        <span className="font-medium text-[15px]">{t.weatherField.label}</span>
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <span className="font-medium text-body">{t.weatherField.label}</span>
         <button
           type="button"
           onClick={handleAutoFetch}
           disabled={loading}
-          className="text-[13px] font-semibold rounded-[var(--radius-control)] px-3 py-1.5 inline-flex items-center gap-1"
+          className="text-caption font-semibold rounded-[var(--radius-control)] px-3 py-1.5 inline-flex items-center gap-1"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
         >
           {!loading && (health ? <IconMapPin size={15} aria-hidden /> : <span aria-hidden>📍 </span>)}
@@ -69,17 +69,17 @@ export function WeatherField({
         </button>
       </div>
       {error && (
-        <p className="text-[13px] mb-2" style={{ color: 'var(--color-weather-5-text)' }}>
+        <p className="text-caption mb-2" style={{ color: 'var(--color-weather-5-text)' }}>
           {error}
         </p>
       )}
       {value?.source === 'auto' && value.pressureHpa != null && (
-        <p className="text-[13px] mb-2" style={{ color: 'var(--color-ink-muted)' }}>
+        <p className="text-caption mb-2" style={{ color: 'var(--color-ink-muted)' }}>
           {value.pressureHpa} hPa
         </p>
       )}
       <div className="flex items-center gap-2 mb-3">
-        <label htmlFor={tempId} className="text-[13px]" style={{ color: 'var(--color-ink-muted)' }}>
+        <label htmlFor={tempId} className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
           {t.weatherField.temperatureLabel}
         </label>
         <input
@@ -89,7 +89,7 @@ export function WeatherField({
           value={value?.tempC ?? ''}
           onChange={(e) => handleManualTemp(e.target.value)}
           placeholder={t.weatherField.temperaturePlaceholder}
-          className="w-20 rounded-xl px-3 py-1.5 text-[14px] outline-none"
+          className="w-[5.5em] rounded-xl px-3 py-1.5 text-control outline-none"
           style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
         />
       </div>

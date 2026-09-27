@@ -4,6 +4,27 @@
 @theme {
   --font-sans: 'Inter var', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
+  /* Type scale, in rem so text follows the size chosen in the browser or
+     the phone's settings (see the root rules at the end of this file).
+     Pixel values at the default size in comments. Only text scales:
+     spacing is pinned to px below. */
+  --text-caption: calc(0.8125rem * var(--type-scale)); /* 13px */
+  --text-control: calc(0.875rem * var(--type-scale)); /* 14px */
+  --text-body: calc(0.9375rem * var(--type-scale)); /* 15px */
+  --text-heading: calc(1.0625rem * var(--type-scale)); /* 17px */
+  --text-title: calc(1.375rem * var(--type-scale)); /* 22px */
+  --text-display: calc(1.75rem * var(--type-scale)); /* 28px */
+  --text-hero: calc(2.25rem * var(--type-scale)); /* 36px */
+
+  /* Tailwind's spacing unit is 0.25rem by default; pinned so paddings, gaps
+     and control sizes stay as designed when the text grows. Same for the
+     corner radii. */
+  --spacing: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+
   /* Warm, calm neutrals — never clinical white/grey. These are the LIGHT
      values; dark-mode overrides for the same custom property names live
      below, outside @theme, so every var(--color-x) reference (Tailwind
@@ -44,7 +65,7 @@
   --color-weather-4-text: #506989;
   --color-weather-5-text: #574a7a;
 
-  --radius-card: 1.25rem;
+  --radius-card: 20px;
   /* Buttons, chips and inputs: pills in the classic design, softly squared
      in the health design. */
   --radius-control: 9999px;
@@ -150,8 +171,8 @@
   --color-brand: #0d5c8c;
   --color-brand-soft: #e3eef6;
   --color-control-off: #8a94a0;
-  --radius-card: 0.75rem;
-  --radius-control: 0.625rem;
+  --radius-card: 12px;
+  --radius-control: 10px;
   --card-shadow: none;
 }
 
@@ -281,6 +302,9 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  /* At large text sizes a long word ("tranquillement") can be wider than
+     its box; let it break rather than push the page sideways. */
+  overflow-wrap: break-word;
   min-height: 100svh;
   transition: background-color 150ms ease, color 150ms ease;
 }
@@ -320,5 +344,26 @@ textarea {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Follow the phone's text size setting.
+   - Android / Chrome: <meta name="text-scale" content="scale"> in
+     index.html makes the root font size follow the OS setting.
+   - iOS (Safari and the installed PWA): the -apple-system-body font follows
+     Dynamic Type. It also sets the family and line height, which are put
+     back, and its default size is 17px rather than 16px, which
+     --type-scale cancels so the default look is unchanged. The
+     -webkit-touch-callout test limits this to iOS: on desktop Safari the
+     same font is 13px. */
+:root {
+  --type-scale: 1;
+}
+@supports (font: -apple-system-body) and (-webkit-touch-callout: default) {
+  :root {
+    font: -apple-system-body;
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    --type-scale: calc(16 / 17);
   }
 }

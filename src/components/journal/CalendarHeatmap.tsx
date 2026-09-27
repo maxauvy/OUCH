@@ -52,7 +52,7 @@ export function CalendarHeatmap({
         >
           ‹
         </button>
-        <span className="font-semibold text-[15px] capitalize">
+        <span className="font-semibold text-body capitalize">
           {format(cursor, 'MMMM yyyy', { locale: dateFnsLocale })}
         </span>
         <button
@@ -67,7 +67,7 @@ export function CalendarHeatmap({
 
       <div className="grid grid-cols-7 gap-1.5 mb-1.5">
         {WEEKDAYS.map((d, i) => (
-          <div key={i} className="text-center text-[11px] font-medium" style={{ color: 'var(--color-ink-muted)' }}>
+          <div key={i} className="text-center text-caption font-medium" style={{ color: 'var(--color-ink-muted)' }}>
             {d}
           </div>
         ))}
@@ -90,7 +90,7 @@ export function CalendarHeatmap({
               aria-label={weather ? `${dayLabel}, ${i18n.painWeatherLevels[weather.level]}` : dayLabel}
               aria-current={today ? 'date' : undefined}
               aria-pressed={selected}
-              className="aspect-square rounded-xl flex flex-col items-center justify-center relative text-[13px] font-medium"
+              className="aspect-square rounded-xl flex flex-col items-center justify-center relative text-caption font-medium"
               style={{
                 background: weather ? weather.soft : 'transparent',
                 // The weather color stays on the background and the dot; the

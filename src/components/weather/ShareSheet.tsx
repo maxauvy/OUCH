@@ -1,15 +1,21 @@
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { toPng } from 'html-to-image'
+import { IconX } from '@tabler/icons-react'
 import type { DailyEntry } from '../../db/types'
+import { computePainWeather } from '../../lib/painWeather'
 import { HealthWeatherCard, WeatherCard } from './WeatherCard'
 import { useDesign } from '../../hooks/useDesign'
 import { downloadBlob } from '../../lib/backup'
-import { useTranslation } from '../../i18n'
+import { format, useTranslation } from '../../i18n'
 
 export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry; displayName?: string; onClose: () => void }) {
   const t = useTranslation()
   const Card = useDesign() === 'health' ? HealthWeatherCard : WeatherCard
   const messageId = useId()
+  const titleId = useId()
+  const dialogRef = useRef<HTMLDialogElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const weather = computePainWeather(entry)
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
@@ -50,63 +56,114 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
     }
   }
 
+  // A native modal <dialog> brings most of the accessibility for free:
+  // announced as a dialog, the rest of the page made inert, and Escape
+  // reported as a `cancel` event. Focus goes to the close button on open;
+  // the parent unmounts the sheet instead of calling close(), so focus is
+  // handed back to the button that opened it here. Page scrolling is locked
+  // while it's open.
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+    const opener = document.activeElement as HTMLElement | null
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    dialog.showModal()
+    // Otherwise Chrome may focus the scrollable sheet itself.
+    closeRef.current?.focus()
+    return () => {
+      // Closing first lifts the page's inertness, so the opener can take
+      // focus again (and StrictMode's remount captures the right opener).
+      dialog.close()
+      document.body.style.overflow = previousOverflow
+      opener?.focus()
+    }
+  }, [])
+
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
-      style={{ background: 'rgba(20, 15, 35, 0.45)' }}
-      onClick={onClose}
+    <dialog
+      ref={dialogRef}
+      aria-labelledby={titleId}
+      onCancel={(e) => {
+        e.preventDefault()
+        onClose()
+      }}
+      className="fixed inset-0 m-0 p-0 w-full h-full max-w-none max-h-none bg-transparent backdrop:bg-transparent"
     >
       <div
-        onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 flex flex-col gap-4 max-h-[92vh] overflow-y-auto"
-        style={{ background: 'var(--color-paper)' }}
+        className="w-full h-full flex items-end sm:items-center justify-center"
+        style={{ background: 'rgba(20, 15, 35, 0.45)' }}
+        onClick={onClose}
       >
-        <div className="flex items-center justify-between">
-          <h2 className="text-[17px] font-semibold">{t.shareSheet.title}</h2>
-          <button onClick={onClose} className="text-[20px] leading-none px-2" aria-label={t.shareSheet.close}>
-            ×
-          </button>
-        </div>
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 flex flex-col gap-4 max-h-[92vh] overflow-y-auto"
+          style={{ background: 'var(--color-paper)' }}
+        >
+          <div className="flex items-center justify-between">
+            <h2 id={titleId} className="text-heading font-semibold">
+              {t.shareSheet.title}
+            </h2>
+            <button
+              ref={closeRef}
+              onClick={onClose}
+              className="w-11 h-11 -my-2 -mr-2 rounded-[var(--radius-control)] flex items-center justify-center"
+              style={{ color: 'var(--color-ink-muted)' }}
+              aria-label={t.shareSheet.close}
+            >
+              <IconX size={22} aria-hidden />
+            </button>
+          </div>
 
-        <div className="rounded-2xl overflow-hidden self-center" style={{ border: '1px solid var(--color-hairline)' }}>
-          <Card ref={cardRef} entry={entry} displayName={displayName} message={message || undefined} />
-        </div>
-
-        <div>
-          <label htmlFor={messageId} className="text-[13px] font-medium block mb-1.5">{t.shareSheet.messageLabel}</label>
-          <input
-            id={messageId}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder={t.shareSheet.messagePlaceholder}
-            maxLength={80}
-            className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
-            style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
-          />
-        </div>
-
-        <div className="flex gap-3">
-          <button
-            onClick={handleDownload}
-            disabled={busy}
-            className="flex-1 rounded-[var(--radius-control)] py-3 text-[15px] font-semibold"
-            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+          {/* The card is read as one image with a summary, not line by line. */}
+          <div
+            role="img"
+            aria-label={format(t.shareSheet.previewLabel, {
+              weather: t.painWeatherLevels[weather.level],
+              pain: entry.painLevel,
+            })}
+            className="rounded-2xl overflow-hidden self-center"
+            style={{ border: '1px solid var(--color-hairline)' }}
           >
-            {t.shareSheet.download}
-          </button>
-          <button
-            onClick={handleShare}
-            disabled={busy}
-            className="flex-1 rounded-[var(--radius-control)] py-3 text-[15px] font-semibold text-[var(--color-on-brand)]"
-            style={{ background: 'var(--color-brand)' }}
-          >
-            {busy ? t.shareSheet.sending : t.shareSheet.send}
-          </button>
+            <Card ref={cardRef} entry={entry} displayName={displayName} message={message || undefined} />
+          </div>
+
+          <div>
+            <label htmlFor={messageId} className="text-caption font-medium block mb-1.5">{t.shareSheet.messageLabel}</label>
+            <input
+              id={messageId}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder={t.shareSheet.messagePlaceholder}
+              maxLength={80}
+              className="w-full rounded-xl px-3.5 py-2.5 text-body outline-none"
+              style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
+            />
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              onClick={handleDownload}
+              disabled={busy}
+              className="flex-1 rounded-[var(--radius-control)] py-3 text-body font-semibold"
+              style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+            >
+              {t.shareSheet.download}
+            </button>
+            <button
+              onClick={handleShare}
+              disabled={busy}
+              className="flex-1 rounded-[var(--radius-control)] py-3 text-body font-semibold text-[var(--color-on-brand)]"
+              style={{ background: 'var(--color-brand)' }}
+            >
+              {busy ? t.shareSheet.sending : t.shareSheet.send}
+            </button>
+          </div>
+          <p className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.shareSheet.footer}
+          </p>
         </div>
-        <p className="text-[12px] text-center" style={{ color: 'var(--color-ink-muted)' }}>
-          {t.shareSheet.footer}
-        </p>
       </div>
-    </div>
+    </dialog>
   )
 }

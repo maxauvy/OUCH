@@ -62,7 +62,7 @@ function WelcomeOverlay({ onDone }: { onDone: () => void }) {
                 key={lang.code}
                 {...radioProps(language === lang.code)}
                 onClick={() => updateSettings({ language: lang.code })}
-                className="rounded-[var(--radius-control)] px-4 py-1.5 text-[13px] font-semibold"
+                className="rounded-[var(--radius-control)] px-4 py-1.5 text-caption font-semibold"
                 style={{
                   background: language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
                   color: language === lang.code ? 'var(--color-on-brand)' : 'var(--color-brand)',
@@ -74,15 +74,15 @@ function WelcomeOverlay({ onDone }: { onDone: () => void }) {
           </div>
           <AppLogo size={72} className="self-center" />
           <div>
-            <h1 className="text-[22px] font-semibold">{t.welcome.title}</h1>
-            <Acronym className="text-[13px] mt-1" />
+            <h1 className="text-title font-semibold">{t.welcome.title}</h1>
+            <Acronym className="text-caption mt-1" />
           </div>
           <AboutCard />
           {/* Sticky so the CTA stays reachable even when the about card is taller than the screen */}
           <div className="sticky bottom-0 -mx-1 px-1 pt-2 pb-5" style={{ background: 'var(--color-paper)' }}>
             <button
               onClick={onDone}
-              className="w-full rounded-[var(--radius-control)] py-3.5 text-[15px] font-semibold text-[var(--color-on-brand)]"
+              className="w-full rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)]"
               style={{ background: 'var(--color-brand)' }}
             >
               {t.welcome.start}

@@ -12,7 +12,7 @@ import { radioGroupProps, radioProps, splitLeadingEmoji } from '../lib/a11y'
 function ToggleRow({ label, options }: { label: string; options: { text: string; active: boolean; onClick: () => void }[] }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="text-[11px] font-bold tracking-wide uppercase px-0.5" style={{ color: 'var(--color-kid-ink-muted)' }} aria-hidden>
+      <span className="text-caption font-bold tracking-wide uppercase px-0.5" style={{ color: 'var(--color-kid-ink-muted)' }} aria-hidden>
         {label}
       </span>
       <div className="flex gap-1.5 rounded-full p-1" style={{ background: 'var(--color-kid-accent-soft)' }} {...radioGroupProps(label)}>
@@ -21,7 +21,7 @@ function ToggleRow({ label, options }: { label: string; options: { text: string;
             key={opt.text}
             {...radioProps(opt.active)}
             onClick={opt.onClick}
-            className="flex-1 rounded-full py-2.5 text-[14px] font-bold"
+            className="flex-1 rounded-full py-2.5 text-control font-bold"
             style={{
               background: opt.active ? 'var(--color-kid-accent)' : 'transparent',
               color: opt.active ? 'var(--color-kid-on-accent)' : 'var(--color-kid-accent-text)',
@@ -100,7 +100,7 @@ export function ChildViewPage() {
         className="sticky top-0 z-10 flex-shrink-0 h-14 flex items-center px-4"
         style={{ background: 'var(--color-kid-accent-soft)', borderBottom: '1px solid var(--color-kid-hairline)' }}
       >
-        <h1 className="text-[17px] font-bold" style={{ color: 'var(--color-kid-ink)' }}>
+        <h1 className="text-heading font-bold" style={{ color: 'var(--color-kid-ink)' }}>
           <span aria-hidden>🧡 </span>
           {t.childView.pageTitle}
         </h1>
@@ -108,7 +108,7 @@ export function ChildViewPage() {
 
       <div className="flex-1 px-4 pt-5 pb-28 flex flex-col gap-3.5">
         {!entry || !weather || !copy ? (
-          <p className="text-[14px] text-center mt-10 leading-relaxed" style={{ color: 'var(--color-kid-ink-muted)' }}>
+          <p className="text-control text-center mt-10 leading-relaxed" style={{ color: 'var(--color-kid-ink-muted)' }}>
             {t.childView.noEntry}
           </p>
         ) : (
@@ -133,17 +133,17 @@ export function ChildViewPage() {
                 <WeatherIcon name={weather.icon as never} size={48} />
               </div>
               <div>
-                <div className="text-[22px] font-bold leading-tight" style={{ color: weather.text }}>
+                <div className="text-title font-bold leading-tight" style={{ color: weather.text }}>
                   {copy.headline}
                 </div>
-                <div className="text-[15px] mt-2 leading-relaxed" style={{ color: 'var(--color-kid-ink-muted)' }}>
+                <div className="text-body mt-2 leading-relaxed" style={{ color: 'var(--color-kid-ink-muted)' }}>
                   {copy.body}
                 </div>
               </div>
             </div>
 
             <div className="rounded-[28px] p-5" style={{ background: 'var(--color-kid-surface)', border: '1px solid var(--color-kid-hairline)' }}>
-              <div className="text-[17px] font-bold mb-3" style={{ color: 'var(--color-kid-ink)' }}>
+              <div className="text-heading font-bold mb-3" style={{ color: 'var(--color-kid-ink)' }}>
                 {t.childView.howToHelp}
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -152,7 +152,7 @@ export function ChildViewPage() {
                   return (
                     <div
                       key={text}
-                      className="rounded-2xl px-2.5 py-3 text-[13px] leading-snug font-medium"
+                      className="rounded-2xl px-2.5 py-3 text-caption leading-snug font-medium hyphens-auto"
                       style={{ background: 'var(--color-kid-accent-soft)', color: 'var(--color-kid-ink)' }}
                     >
                       {emoji && <span aria-hidden>{emoji} </span>}
@@ -169,7 +169,7 @@ export function ChildViewPage() {
                 aria-expanded={illnessOpen}
                 className="w-full flex items-center justify-between gap-2.5 text-left"
               >
-                <span className="text-[17px] font-bold" style={{ color: 'var(--color-kid-ink)' }}>
+                <span className="text-heading font-bold" style={{ color: 'var(--color-kid-ink)' }}>
                   {format(t.childView.aboutIllness, { illness: illnessTitle })}
                 </span>
                 <svg
@@ -189,13 +189,13 @@ export function ChildViewPage() {
                 </svg>
               </button>
               {illnessOpen && (
-                <div className="text-[14px] mt-3 leading-relaxed" style={{ color: 'var(--color-kid-ink-muted)' }}>
+                <div className="text-control mt-3 leading-relaxed" style={{ color: 'var(--color-kid-ink-muted)' }}>
                   {illnessText}
                 </div>
               )}
             </div>
 
-            <p className="text-[14px] text-center leading-relaxed px-3 mt-1" style={{ color: 'var(--color-kid-ink)' }}>
+            <p className="text-control text-center leading-relaxed px-3 mt-1" style={{ color: 'var(--color-kid-ink)' }}>
               <ClosingText text={getChildViewClosing(language, tone, settings.parentGender)} />
             </p>
           </>

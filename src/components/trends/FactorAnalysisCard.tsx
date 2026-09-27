@@ -36,12 +36,12 @@ export function FactorAnalysisCard({
   return (
     <div className="py-3">
       <div className="flex items-baseline justify-between mb-2">
-        <span className="font-medium text-[14px]">{analysis.label}</span>
+        <span className="font-medium text-control">{analysis.label}</span>
       </div>
       <div className="flex flex-col gap-1.5">
         {analysis.buckets.map((b) => (
           <div key={b.label} className="flex items-center gap-2.5">
-            <span className="text-[12px] w-14 shrink-0" style={{ color: t.inkMuted }}>
+            <span className="text-caption w-[4.5em] shrink-0" style={{ color: t.inkMuted }}>
               {b.label}
             </span>
             <div className="flex-1 h-3 rounded-full" style={{ background: t.brandSoft }}>
@@ -55,15 +55,16 @@ export function FactorAnalysisCard({
                 />
               )}
             </div>
-            <span className="text-[12px] tabular-nums w-16 text-right shrink-0" style={{ color: t.inkMuted }}>
+            <span className="text-caption tabular-nums w-[5em] text-right shrink-0" style={{ color: t.inkMuted }}>
               {b.avgPain != null ? `${b.avgPain.toFixed(1)}/10` : `n=${b.count}`}
             </span>
           </div>
         ))}
       </div>
       {insightText && (
-        <p className="text-[13px] mt-2.5 leading-snug" style={{ color: t.ink }}>
-          💡 {insightText}
+        <p className="text-caption mt-2.5 leading-snug" style={{ color: t.ink }}>
+          <span aria-hidden>💡 </span>
+          {insightText}
         </p>
       )}
     </div>
