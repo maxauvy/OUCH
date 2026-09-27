@@ -42,7 +42,7 @@ export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) =
       <div className="max-w-[560px] mx-auto flex" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {TABS.map((tab) => {
           const isActive = active === tab.id
-          const activeColor = tab.id === 'kids' ? 'var(--color-kid-accent)' : 'var(--color-brand)'
+          const activeColor = tab.id === 'kids' && !health ? 'var(--color-kid-accent)' : 'var(--color-brand)'
           const Icon = TAB_ICONS[tab.id]
           return (
             <button
