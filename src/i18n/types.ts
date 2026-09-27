@@ -211,6 +211,8 @@ export interface Translations {
   shareSheet: {
     title: string
     close: string
+    /** Accessible summary of the card preview. */
+    previewLabel: string
     messageLabel: string
     messagePlaceholder: string
     download: string
