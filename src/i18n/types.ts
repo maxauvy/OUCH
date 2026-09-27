@@ -247,6 +247,8 @@ export interface Translations {
     reminderHelper: string
     reminderNote: string
     appearanceTitle: string
+    /** Accessible name of the light/dark choice (no visible title). */
+    themeTitle: string
     themeAuto: string
     themeLight: string
     themeDark: string
@@ -269,6 +271,8 @@ export interface Translations {
   childView: {
     pageTitle: string
     ageToggleLabel: string
+    /** Accessible name of the 5-step weather scale, e.g. "Sunny, level 1 of 5". */
+    scaleLevel: string
     ages: Record<ChildTone, string>
     howToHelp: string
     aboutIllness: string

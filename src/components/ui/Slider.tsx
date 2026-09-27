@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import { useDesign } from '../../hooks/useDesign'
 
 interface SliderProps {
@@ -33,6 +34,7 @@ export function Slider({
   bare = false,
 }: SliderProps) {
   const health = useDesign() === 'health'
+  const id = useId()
   const trackHeight = health ? 6 : 10
   const displayValue = value ?? min
   const pct = ((displayValue - min) / (max - min)) * 100
@@ -41,7 +43,7 @@ export function Slider({
     <div className="w-full">
       {!bare && (
         <div className="flex items-baseline justify-between gap-2">
-          <label className="font-medium text-[15px]" style={{ color: 'var(--color-ink)' }}>
+          <label htmlFor={id} className="font-medium text-[15px]" style={{ color: 'var(--color-ink)' }}>
             {label}
           </label>
           {health ? (
@@ -56,7 +58,15 @@ export function Slider({
           ) : (
             <span
               className="tabular-nums text-sm font-semibold rounded-full px-2.5 py-0.5"
-              style={{ background: value === undefined ? 'transparent' : accent, color: value === undefined ? 'var(--color-ink-muted)' : 'white' }}
+              style={{
+                background: value === undefined ? 'transparent' : accent,
+                color:
+                  value === undefined
+                    ? 'var(--color-ink-muted)'
+                    : accent === 'var(--color-brand)'
+                      ? 'var(--color-on-brand)'
+                      : 'white',
+              }}
             >
               {value === undefined ? '—' : format ? format(displayValue) : displayValue}
             </span>
@@ -73,7 +83,7 @@ export function Slider({
           className="rounded-full w-full"
           style={{
             height: trackHeight,
-            background: health ? 'var(--color-hairline)' : 'color-mix(in srgb, ' + accent + ' 18%, var(--color-hairline))',
+            background: health ? 'var(--color-control-off)' : 'color-mix(in srgb, ' + accent + ' 18%, var(--color-hairline))',
           }}
         >
           <div
@@ -93,12 +103,15 @@ export function Slider({
           step={step}
           value={displayValue}
           onChange={(e) => onChange(Number(e.target.value))}
-          aria-label={label}
-          className="absolute inset-x-0 top-0 w-full h-10 opacity-0 cursor-pointer"
+          id={id}
+          aria-label={bare ? label : undefined}
+          aria-valuetext={format ? format(displayValue) : undefined}
+          className="peer absolute inset-x-0 top-0 w-full h-10 opacity-0 cursor-pointer"
           style={{ marginTop: '-2px' }}
         />
+        {/* The real input is invisible, so the thumb carries its keyboard focus ring. */}
         <div
-          className="absolute top-1/2 rounded-full shadow-md pointer-events-none"
+          className="absolute top-1/2 rounded-full shadow-md pointer-events-none peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-[var(--color-brand)]"
           style={{
             width: 28,
             height: 28,

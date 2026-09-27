@@ -115,7 +115,7 @@ export function DailyEntryForm({ date }: { date: string }) {
       <Card className="flex items-center gap-4">
         <div
           className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0"
-          style={{ background: preview.soft, color: preview.color }}
+          style={{ background: preview.soft, color: preview.ink }}
         >
           <WeatherIcon name={preview.icon as never} size={36} />
         </div>
@@ -123,7 +123,7 @@ export function DailyEntryForm({ date }: { date: string }) {
           <p className="text-[13px]" style={{ color: 'var(--color-ink-muted)' }}>
             {t.entryForm.weatherOfDay}
           </p>
-          <p className="text-[17px] font-semibold" style={{ color: preview.color }}>
+          <p className="text-[17px] font-semibold" style={{ color: preview.text }}>
             {t.painWeatherLevels[preview.level]}
           </p>
         </div>
@@ -255,7 +255,7 @@ export function DailyEntryForm({ date }: { date: string }) {
               {t.entryForm.periodHelper}
             </p>
           </div>
-          <Toggle checked={!!local.periodDay} onChange={(v) => setField('periodDay', v)} />
+          <Toggle checked={!!local.periodDay} onChange={(v) => setField('periodDay', v)} label={t.entryForm.periodToday} />
         </Card>
       )}
 

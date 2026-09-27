@@ -53,7 +53,7 @@ export function JournalPage() {
                   }
                 }}
                 className="rounded-[var(--radius-control)] py-3 px-5 text-[15px] font-semibold"
-                style={{ background: 'transparent', color: 'var(--color-weather-5, #574a7a)', border: '1px solid var(--color-hairline)' }}
+                style={{ background: 'transparent', color: 'var(--color-weather-5-text)', border: '1px solid var(--color-hairline)' }}
               >
                 {t.journal.delete}
               </button>

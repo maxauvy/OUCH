@@ -119,7 +119,7 @@ export function BackupSection() {
           {importBusy ? t.backup.importing : t.backup.importButton}
         </button>
         {importMsg && (
-          <p className="text-[13px] mt-2" style={{ color: importMsg.error ? 'var(--color-weather-5)' : 'var(--color-ink-muted)' }}>
+          <p className="text-[13px] mt-2" style={{ color: importMsg.error ? 'var(--color-weather-5-text)' : 'var(--color-ink-muted)' }}>
             {importMsg.text}
           </p>
         )}

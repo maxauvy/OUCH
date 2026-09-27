@@ -11,6 +11,7 @@ import { canNotify, requestNotificationPermission } from '../lib/reminder'
 import { reverseGeocode, getCurrentPosition } from '../lib/weather'
 import { getIllnessLabel } from '../lib/childView'
 import { format, LANGUAGES, useLanguage, useTranslation } from '../i18n'
+import { radioGroupProps, radioProps } from '../lib/a11y'
 
 export function SettingsPage() {
   const settings = useSettings()
@@ -81,6 +82,7 @@ export function SettingsPage() {
           defaultValue={settings.displayName}
           onBlur={(e) => updateSettings({ displayName: e.target.value.trim() })}
           placeholder={t.settings.firstNamePlaceholder}
+          aria-label={t.settings.firstNameTitle}
           className="w-full rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
           style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
         />
@@ -91,10 +93,11 @@ export function SettingsPage() {
         <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.languageHelper}
         </p>
-        <div className="flex gap-2">
+        <div className="flex gap-2" {...radioGroupProps(t.settings.languageTitle)}>
           {LANGUAGES.map((lang) => (
             <button
               key={lang.code}
+              {...radioProps(settings.language === lang.code)}
               onClick={() => updateSettings({ language: lang.code })}
               className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
               style={{
@@ -113,10 +116,11 @@ export function SettingsPage() {
         <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.parentGenderHelper}
         </p>
-        <div className="flex gap-2">
+        <div className="flex gap-2" {...radioGroupProps(t.settings.parentGenderTitle)}>
           {PARENT_OPTIONS.map((opt) => (
             <button
               key={opt.value}
+              {...radioProps(settings.parentGender === opt.value)}
               onClick={() => updateSettings({ parentGender: opt.value })}
               className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
               style={{
@@ -135,10 +139,11 @@ export function SettingsPage() {
         <p className="text-[13px] mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.childIllnessHelper}
         </p>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2" {...radioGroupProps(t.settings.childIllnessTitle)}>
           {CHILD_ILLNESSES.map((illness: ChildIllness) => (
             <button
               key={illness}
+              {...radioProps(settings.childIllness === illness)}
               onClick={() => updateSettings({ childIllness: illness })}
               className="rounded-[var(--radius-control)] px-3.5 py-2 text-[13px] font-semibold"
               style={{
@@ -166,7 +171,11 @@ export function SettingsPage() {
                   {t.factors[key].helper}
                 </p>
               </div>
-              <Toggle checked={settings.enabledFactors.includes(key)} onChange={() => toggleFactor(key)} />
+              <Toggle
+                checked={settings.enabledFactors.includes(key)}
+                onChange={() => toggleFactor(key)}
+                label={t.factors[key].label}
+              />
             </div>
           ))}
         </div>
@@ -179,7 +188,11 @@ export function SettingsPage() {
             {t.settings.cycleTrackingHelper}
           </p>
         </div>
-        <Toggle checked={settings.cycleTrackingEnabled} onChange={(v) => updateSettings({ cycleTrackingEnabled: v })} />
+        <Toggle
+          checked={settings.cycleTrackingEnabled}
+          onChange={(v) => updateSettings({ cycleTrackingEnabled: v })}
+          label={t.settings.cycleTracking}
+        />
       </Card>
 
       {settings.enabledFactors.includes('weather') && (
@@ -207,11 +220,12 @@ export function SettingsPage() {
           <p className="text-[13px]" style={{ color: 'var(--color-ink-muted)' }}>
             {t.settings.reminderHelper}
           </p>
-          <Toggle checked={settings.reminderEnabled} onChange={handleReminderToggle} />
+          <Toggle checked={settings.reminderEnabled} onChange={handleReminderToggle} label={t.settings.reminderTitle} />
         </div>
         {settings.reminderEnabled && (
           <input
             type="time"
+            aria-label={t.settings.reminderTitle}
             value={settings.reminderTime}
             onChange={(e) => updateSettings({ reminderTime: e.target.value })}
             className="rounded-xl px-3.5 py-2.5 text-[15px] outline-none"
@@ -229,12 +243,12 @@ export function SettingsPage() {
         <p className="text-[12px] mb-2" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.designHelper}
         </p>
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-2 mb-4" {...radioGroupProps(t.settings.designTitle)}>
           {DESIGN_OPTIONS.map((opt) => (
             <button
               key={opt.value}
+              {...radioProps(settings.design === opt.value)}
               onClick={() => updateSettings({ design: opt.value })}
-              aria-pressed={settings.design === opt.value}
               className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
               style={{
                 background: settings.design === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
@@ -245,10 +259,11 @@ export function SettingsPage() {
             </button>
           ))}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2" {...radioGroupProps(t.settings.themeTitle)}>
           {THEME_OPTIONS.map((opt) => (
             <button
               key={opt.value}
+              {...radioProps(settings.theme === opt.value)}
               onClick={() => updateSettings({ theme: opt.value })}
               className="flex-1 rounded-[var(--radius-control)] py-2 text-[14px] font-semibold"
               style={{

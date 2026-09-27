@@ -188,4 +188,8 @@ export interface PainWeather {
   icon: string
   color: string
   soft: string
+  /** Text or icon color on a light background (`soft`, or the exported card). */
+  ink: string
+  /** Text color on the app's own surfaces, light or dark (a CSS variable). */
+  text: string
 }
