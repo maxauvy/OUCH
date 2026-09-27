@@ -1,11 +1,12 @@
 import { useTranslation } from '../../i18n'
 
-export type Tab = 'today' | 'journal' | 'trends' | 'settings'
+export type Tab = 'today' | 'journal' | 'trends' | 'kids' | 'settings'
 
 const TAB_ICONS: Record<Tab, string> = {
   today: '☀️',
   journal: '📅',
   trends: '📈',
+  kids: '🧸',
   settings: '⚙️',
 }
 
@@ -15,6 +16,7 @@ export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) =
     { id: 'today', label: t.tabs.today, icon: TAB_ICONS.today },
     { id: 'journal', label: t.tabs.journal, icon: TAB_ICONS.journal },
     { id: 'trends', label: t.tabs.trends, icon: TAB_ICONS.trends },
+    { id: 'kids', label: t.tabs.kids, icon: TAB_ICONS.kids },
     { id: 'settings', label: t.tabs.settings, icon: TAB_ICONS.settings },
   ]
   return (
@@ -38,7 +40,14 @@ export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) =
             </span>
             <span
               className="text-[11px] font-medium"
-              style={{ color: active === t.id ? 'var(--color-brand)' : 'var(--color-ink-muted)' }}
+              style={{
+                color:
+                  active !== t.id
+                    ? 'var(--color-ink-muted)'
+                    : t.id === 'kids'
+                      ? 'var(--color-kid-accent)'
+                      : 'var(--color-brand)',
+              }}
             >
               {t.label}
             </span>

@@ -2,6 +2,8 @@
 // here means adding it to *every* locale file — TypeScript will point at
 // each one that's missing it.
 
+import type { ChildTone } from '../lib/childView'
+
 export interface FactorText {
   label: string
   helper: string
@@ -21,6 +23,7 @@ export interface Translations {
     today: string
     journal: string
     trends: string
+    kids: string
     settings: string
   }
 
@@ -252,20 +255,14 @@ export interface Translations {
     childIllnessHelper: string
     backupTitle: string
     privacyNote: string
-    childViewEntryTitle: string
-    childViewEntryHelper: string
-    childViewEntryButton: string
   }
 
   childView: {
     pageTitle: string
-    back: string
     ageToggleLabel: string
-    ageYoung: string
-    ageOlder: string
+    ages: Record<ChildTone, string>
     howToHelp: string
     aboutIllness: string
-    privacyNote: string
     noEntry: string
   }
 
