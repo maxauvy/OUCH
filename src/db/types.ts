@@ -14,7 +14,6 @@ export type FactorKey =
   | 'medications'
   | 'positiveActions'
   | 'painLocations'
-  | 'cycle'
   | 'notes'
 
 // Display order for the factor list in Settings. Labels/helpers live in the
@@ -30,7 +29,6 @@ export const ALL_FACTORS: FactorKey[] = [
   'medications',
   'positiveActions',
   'painLocations',
-  'cycle',
   'notes',
 ]
 
@@ -236,10 +234,13 @@ export interface Settings {
   illnesses: Illness[]
 }
 
-/** Settings saved before schema v4, which held a single illness (then only
- * used by the child view). Only migration and backup import deal with it. */
-export interface LegacySettings extends Partial<Settings> {
+/** Settings saved before schema v5. Before v4 they held a single illness
+ * (then only used by the child view); before v5 the factor list could hold
+ * 'cycle', a toggle that did nothing (cycle tracking is `cycleTrackingEnabled`).
+ * Only migration and backup import deal with them. */
+export interface LegacySettings extends Omit<Partial<Settings>, 'enabledFactors'> {
   childIllness?: Illness
+  enabledFactors?: (FactorKey | 'cycle')[]
 }
 
 export const DEFAULT_SETTINGS: Settings = {

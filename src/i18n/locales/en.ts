@@ -167,7 +167,6 @@ const en: Translations = {
     medications: { label: 'Medications', helper: 'Treatments taken during the day' },
     positiveActions: { label: 'What helped', helper: 'Actions or strategies used during the day' },
     painLocations: { label: 'Pain location', helper: 'Areas of the body affected' },
-    cycle: { label: 'Menstrual cycle', helper: 'Cycle tracking, if relevant' },
     notes: { label: 'Free notes', helper: "Anything that doesn't fit the boxes" },
   },
 
