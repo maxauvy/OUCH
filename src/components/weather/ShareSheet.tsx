@@ -3,6 +3,8 @@ import { toPng } from 'html-to-image'
 import { IconX } from '@tabler/icons-react'
 import type { DailyEntry } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
+import { painTrend, painTrendText, painWordIndex } from '../../lib/painTrend'
+import { useAllEntries } from '../../hooks/useEntries'
 import { HealthWeatherCard, WeatherCard } from './WeatherCard'
 import { useDesign } from '../../hooks/useDesign'
 import { downloadBlob } from '../../lib/backup'
@@ -16,6 +18,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
   const dialogRef = useRef<HTMLDialogElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const weather = computePainWeather(entry)
+  const trend = painTrend(entry, useAllEntries() ?? [])
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
@@ -55,7 +58,21 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
       const blob = await capture()
       const file = new File([blob], `meteo-${entry.date}.png`, { type: 'image/png' })
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: t.shareSheet.nativeShareTitle })
+        // Messaging apps don't carry an image description, so a short text
+        // summary goes along for people who can't see the image.
+        const title = displayName ? format(t.weatherCard.weatherOfName, { name: displayName }) : t.weatherCard.weatherOfDay
+        const summary =
+          format(t.weatherCard.shareSummary, {
+            title,
+            weather: t.painWeatherLevels[weather.level],
+            painWord: t.weatherCard.painWords[painWordIndex(entry.painLevel)].toLocaleLowerCase(),
+            pain: entry.painLevel,
+          }) + (trend ? `, ${painTrendText(t, trend).toLocaleLowerCase()}.` : '.')
+        await navigator.share({
+          files: [file],
+          title: t.shareSheet.nativeShareTitle,
+          text: message ? `${summary} ${message}` : summary,
+        })
       } else {
         downloadBlob(blob, file.name)
       }

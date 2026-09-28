@@ -224,6 +224,18 @@ export interface Translations {
   }
 
   weatherCard: {
+    /** Under the level name on the health card, e.g. "Level 2 of 5". */
+    levelOf: string
+    /** Text sent along with the shared image, for people who can't see it. */
+    shareSummary: string
+    /** Pain in words: none, mild, moderate, severe, very severe. */
+    painWords: [string, string, string, string, string]
+    /** Mood in words, low to high (a high mood score is a good day). */
+    moodWords: [string, string, string, string]
+    /** Pain compared with the previous days. */
+    trendLower: string
+    trendSame: string
+    trendHigher: string
     weatherOfName: string
     weatherOfDay: string
     painLabel: string

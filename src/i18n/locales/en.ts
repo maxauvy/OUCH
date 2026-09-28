@@ -248,6 +248,13 @@ const en: Translations = {
   },
 
   weatherCard: {
+    levelOf: 'Level {{n}} of 5',
+    shareSummary: '{{title}}: {{weather}}, pain: {{painWord}} ({{pain}} out of 10)',
+    painWords: ['None', 'Mild', 'Moderate', 'Severe', 'Very severe'],
+    moodWords: ['Hard', 'Mixed', 'Good', 'Very good'],
+    trendLower: 'Less than recent days',
+    trendSame: 'Same as recent days',
+    trendHigher: 'More than recent days',
     weatherOfName: "{{name}}'s weather",
     weatherOfDay: "Today's weather",
     painLabel: 'Pain:',
