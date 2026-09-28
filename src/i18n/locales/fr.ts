@@ -166,7 +166,7 @@ const fr: Translations = {
     stressEndCalm: 'Calme',
     stressEndTense: 'Sous pression',
     brainFogEndClear: 'Esprit clair',
-    brainFogEndConfused: 'Esprit embrouillé',
+    brainFogEndConfused: 'Confusion',
     moodEndHard: 'Difficile',
     moodEndGreat: 'Très bonne',
     activityEndRest: 'Repos total',
