@@ -1,13 +1,13 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { IconCheck } from '@tabler/icons-react'
 import { db, updateSettings } from '../../db'
-import { ALL_FACTORS, CHILD_ILLNESSES, type FactorKey } from '../../db/types'
+import { ALL_FACTORS, type FactorKey } from '../../db/types'
 import { useSettings } from '../../hooks/useSettings'
 import { useMedications } from '../../hooks/useMedications'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { canNotify, requestNotificationPermission } from '../../lib/reminder'
 import { radioGroupProps, radioProps } from '../../lib/a11y'
-import { getIllnessLabel } from '../../lib/childView'
+import { formatIllnessList } from '../../lib/childView'
 import { format, LANGUAGES, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { AboutCard } from '../about/AboutCard'
 import { Acronym } from '../about/Acronym'
@@ -16,6 +16,7 @@ import { Card } from '../ui/Card'
 import { Chip } from '../ui/Chip'
 import { Toggle } from '../ui/Toggle'
 import { MedicationsSection } from '../settings/MedicationsSection'
+import { IllnessPicker } from '../settings/IllnessPicker'
 
 // First-run setup. Every step is optional and saved as soon as it is changed
 // (same as Settings), so leaving halfway keeps what was chosen. The steps
@@ -269,36 +270,12 @@ function LanguagePicker() {
 
 function IllnessStep({ heading }: { heading: ReactNode }) {
   const t = useTranslation()
-  const language = useLanguage()
-  const settings = useSettings()
   return (
     <>
       {heading}
       <Intro>{t.setup.illnessIntro}</Intro>
       <Card>
-        {/* Nothing looks selected until a choice is made: the stored default is not an answer. */}
-        <div className="flex flex-wrap gap-2" {...radioGroupProps(t.setup.illnessTitle)}>
-          {CHILD_ILLNESSES.map((illness, i) => {
-            const selected = settings.illnessChosen && settings.childIllness === illness
-            return (
-              <button
-                key={illness}
-                type="button"
-                {...radioProps(selected)}
-                // With no choice yet, the first option is the one Tab reaches.
-                tabIndex={selected || (!settings.illnessChosen && i === 0) ? 0 : -1}
-                onClick={() => updateSettings({ childIllness: illness, illnessChosen: true })}
-                className="min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
-                style={{
-                  background: selected ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                  color: selected ? 'var(--color-on-brand)' : 'var(--color-brand)',
-                }}
-              >
-                {getIllnessLabel(language, illness)}
-              </button>
-            )
-          })}
-        </div>
+        <IllnessPicker />
       </Card>
       <Hint>{t.setup.illnessOther}</Hint>
     </>
@@ -365,9 +342,9 @@ function DoneStep({ heading }: { heading: ReactNode }) {
   const language = useLanguage()
   const items: { done: boolean; text: string }[] = [
     {
-      done: settings.illnessChosen,
-      text: settings.illnessChosen
-        ? format(t.setup.checkIllness, { illness: getIllnessLabel(language, settings.childIllness) })
+      done: settings.illnesses.length > 0,
+      text: settings.illnesses.length
+        ? format(t.setup.checkIllness, { illness: formatIllnessList(language, settings.illnesses) })
         : t.setup.checkNoIllness,
     },
     { done: !!settings.displayName, text: settings.displayName ? format(t.setup.checkName, { name: settings.displayName }) : t.setup.checkNoName },

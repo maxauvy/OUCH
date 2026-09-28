@@ -331,6 +331,9 @@ export interface Translations {
     runningPainClinic: string
     patient: string
     bornOn: string
+    /** Illness(es) as declared by the patient in the app */
+    declaredIllness: string
+    declaredIllnesses: string
     period: string
     periodDays: string
     comparedTo: string
@@ -563,8 +566,8 @@ export interface Translations {
     parentGenderHelper: string
     parentGenderMaman: string
     parentGenderPapa: string
-    childIllnessTitle: string
-    childIllnessHelper: string
+    illnessesTitle: string
+    illnessesHelper: string
     backupTitle: string
     privacyNote: string
   }

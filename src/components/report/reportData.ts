@@ -1,4 +1,4 @@
-import type { DailyEntry, Medication } from '../../db/types'
+import type { DailyEntry, Illness, Medication } from '../../db/types'
 import type { Language } from '../../i18n'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
 import { reportFormat, type ReportFormat } from './reportFormat'
@@ -14,6 +14,8 @@ export interface ReportOptions {
   end: string
   patientName: string
   birthDate?: string
+  /** As declared in the app's settings; not a diagnosis made by the report */
+  illnesses: Illness[]
   agenda: string[]
   includeNotes: boolean
   includeCycle: boolean

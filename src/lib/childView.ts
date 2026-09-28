@@ -1,5 +1,5 @@
 import type { Language } from '../i18n/language'
-import type { ChildIllness, ParentGender, PainWeatherLevel } from '../db/types'
+import type { Illness, ParentGender, PainWeatherLevel } from '../db/types'
 
 export type ChildTone = 'young' | 'older' | 'teen'
 
@@ -240,7 +240,7 @@ interface IllnessCopy {
 
 // French note: the illnesses are feminine nouns, so a bare "Elle provoque…"
 // would read as "maman". Refer to the illness as "cette maladie" instead.
-const FR_ILLNESSES: Record<ChildIllness, IllnessCopy> = {
+const FR_ILLNESSES: Record<Illness, IllnessCopy> = {
   fibromyalgie: {
     label: 'Fibromyalgie',
     titleWithArticle: 'La fibromyalgie',
@@ -299,7 +299,7 @@ const FR_ILLNESSES: Record<ChildIllness, IllnessCopy> = {
   },
 }
 
-const EN_ILLNESSES: Record<ChildIllness, IllnessCopy> = {
+const EN_ILLNESSES: Record<Illness, IllnessCopy> = {
   fibromyalgie: {
     label: 'Fibromyalgia',
     titleWithArticle: 'Fibromyalgia',
@@ -398,20 +398,33 @@ export function getChildViewCopy(
   return { headline: entry.headline(P), body: entry.body(P), help: entry.help(P) }
 }
 
-export function getIllnessLabel(language: Language, illness: ChildIllness): string {
+export function getIllnessLabel(language: Language, illness: Illness): string {
   return (language === 'en' ? EN_ILLNESSES : FR_ILLNESSES)[illness].label
+}
+
+/** "Other" means nothing inside a sentence; this is what lists say instead. */
+const OTHER_IN_LIST: Record<Language, string> = { fr: 'autre maladie chronique', en: 'other chronic illness' }
+
+/** "Fibromyalgie, endométriose et migraine": one sentence-case list, in the
+ * given language (the report's may differ from the app's). */
+export function formatIllnessList(language: Language, illnesses: Illness[]): string {
+  const names = illnesses.map((illness, i) => {
+    const label = illness === 'autre' ? OTHER_IN_LIST[language] : getIllnessLabel(language, illness)
+    return i === 0 ? label.charAt(0).toUpperCase() + label.slice(1) : label.toLocaleLowerCase(language)
+  })
+  return new Intl.ListFormat(language, { type: 'conjunction' }).format(names)
 }
 
 /** The illness name as a sentence subject, with its article in French
  * ("La fibromyalgie", "L'arthrite"...) — use this instead of `getIllnessLabel`
  * anywhere the name opens a sentence. */
-export function getIllnessTitle(language: Language, illness: ChildIllness): string {
+export function getIllnessTitle(language: Language, illness: Illness): string {
   return (language === 'en' ? EN_ILLNESSES : FR_ILLNESSES)[illness].titleWithArticle
 }
 
 export function getIllnessExplanation(
   language: Language,
-  illness: ChildIllness,
+  illness: Illness,
   tone: ChildTone,
   gender: ParentGender
 ): string {

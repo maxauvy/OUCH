@@ -191,9 +191,10 @@ export type DesignStyle = 'health' | 'classic'
 // not just a label.
 export type ParentGender = 'maman' | 'papa'
 
-// Stable identifiers for the chronic illness explained on the child view.
+// Stable identifiers for the illnesses the person tracks (asked by the
+// setup, shown on the doctor report and explained on the child view).
 // Labels and per-age copy live in lib/childView.ts, keyed by language.
-export type ChildIllness =
+export type Illness =
   | 'fibromyalgie'
   | 'arthrite'
   | 'spondylarthrite'
@@ -203,7 +204,7 @@ export type ChildIllness =
   | 'sep'
   | 'autre'
 
-export const CHILD_ILLNESSES: ChildIllness[] = [
+export const ILLNESSES: Illness[] = [
   'fibromyalgie',
   'arthrite',
   'spondylarthrite',
@@ -230,12 +231,15 @@ export interface Settings {
   onboardingDone: boolean
   language: Language
   parentGender: ParentGender
-  /** The person's own condition. Named after its first use (the child
-   * view); the setup assistant and Settings now ask for it as "your illness". */
-  childIllness: ChildIllness
-  /** False until the illness was picked on purpose: `childIllness` always
-   * holds a value (the default), which must not look like an answer. */
-  illnessChosen: boolean
+  /** The illnesses being tracked, in the order they were picked; empty
+   * until the person says (nothing is assumed). */
+  illnesses: Illness[]
+}
+
+/** Settings saved before schema v4, which held a single illness (then only
+ * used by the child view). Only migration and backup import deal with it. */
+export interface LegacySettings extends Partial<Settings> {
+  childIllness?: Illness
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -251,8 +255,7 @@ export const DEFAULT_SETTINGS: Settings = {
   onboardingDone: false,
   language: 'fr',
   parentGender: 'maman',
-  childIllness: 'fibromyalgie',
-  illnessChosen: false,
+  illnesses: [],
 }
 
 export type PainWeatherLevel = 1 | 2 | 3 | 4 | 5
