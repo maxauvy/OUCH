@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { IconChevronRight, IconFileText } from '@tabler/icons-react'
 import { useAllEntries } from '../hooks/useEntries'
 import { useSettings } from '../hooks/useSettings'
@@ -44,6 +44,7 @@ export function TrendsPage() {
   const t = usePalette()
   const [rangeIdx, setRangeIdx] = useState(1)
   const [reporting, setReporting] = useState(false)
+  const reportIds = useId()
   const reportButtonRef = useRef<HTMLButtonElement>(null)
   const returningFromReport = useRef(false)
 
@@ -109,6 +110,8 @@ export function TrendsPage() {
           ref={reportButtonRef}
           type="button"
           onClick={() => setReporting(true)}
+          aria-labelledby={`${reportIds}-title`}
+          aria-describedby={`${reportIds}-help`}
           className="text-left rounded-[var(--radius-card)] p-4 flex items-center gap-3"
           style={{ background: 'var(--color-surface)', border: '1px solid var(--color-hairline)', boxShadow: 'var(--card-shadow)' }}
         >
@@ -120,8 +123,10 @@ export function TrendsPage() {
             <IconFileText size={22} />
           </span>
           <span className="flex-1">
-            <span className="block text-body font-semibold">{i18n.doctorReport.entryTitle}</span>
-            <span className="block text-caption" style={{ color: t.inkMuted }}>
+            <span id={`${reportIds}-title`} className="block text-body font-semibold">
+              {i18n.doctorReport.entryTitle}
+            </span>
+            <span id={`${reportIds}-help`} className="block text-caption" style={{ color: t.inkMuted }}>
               {i18n.doctorReport.entryHelper}
             </span>
           </span>

@@ -13,11 +13,14 @@
   --r-axis: #c9c5bd;
   --r-band: #f5f3ef;
   --r-blue-250: #86b6ef;
+  /* Daily dots: 3:1 on white and on the grey band, lighter than the mean line. */
+  --r-blue-350: #3987e5;
   --r-blue: #2a78d6;
   --r-blue-550: #1c5cab;
   --r-blue-700: #0d366b;
   --r-orange: #eb6834;
-  --r-prev: #bdb9b1;
+  /* Previous-period bars and missing days: 3.2:1 on white. */
+  --r-prev: #908c83;
   --r-brand: #6c5f9c;
   --r-brand-soft: #efeaf9;
   color: var(--r-ink);
@@ -61,7 +64,7 @@
   font-size: 10px;
 }
 
-.report h1 {
+.report .r-h1 {
   font-size: 20px;
   line-height: 1.2;
   margin: 0;
@@ -72,7 +75,7 @@
   color: var(--r-muted);
   margin-top: 3px;
 }
-.report h2 {
+.report .r-h2 {
   font-size: 14px;
   font-weight: 700;
   margin: 14px 0 6px;
@@ -80,15 +83,15 @@
   align-items: baseline;
   gap: 8px;
 }
-.report h2:first-child {
+.report .r-h2:first-child {
   margin-top: 0;
 }
-.report h2 .r-hint {
+.report .r-h2 .r-hint {
   font-weight: 400;
   color: var(--r-faint);
   font-size: 11px;
 }
-.report h3 {
+.report .r-h3 {
   font-size: 12.5px;
   font-weight: 700;
   margin: 10px 0 4px;

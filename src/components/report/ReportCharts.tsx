@@ -64,7 +64,7 @@ function PeriodBand({ p, top, bottom, labels, f }: { p: ReportPeriods; top: numb
       <line x1={split} x2={split} y1={top - (labels ? 14 : 0)} y2={bottom} stroke="var(--r-ink)" strokeDasharray="3 3" />
       {labels && (
         <>
-          <text x={LEFT + 4} y={top - 5} fontSize={10} fill="var(--r-faint)">
+          <text x={LEFT + 4} y={top - 5} fontSize={10} fill="var(--r-muted)">
             {f.t.previousPeriod}
           </text>
           <text x={split + 5} y={top - 5} fontSize={10} fill="var(--r-ink)" fontWeight={600}>
@@ -76,13 +76,26 @@ function PeriodBand({ p, top, bottom, labels, f }: { p: ReportPeriods; top: numb
   )
 }
 
-export function PainChart({ entries, p, f, height = 190 }: { entries: DailyEntry[]; p: ReportPeriods; f: ReportFormat; height?: number }) {
+export function PainChart({
+  entries,
+  p,
+  f,
+  height = 190,
+  summary,
+}: {
+  entries: DailyEntry[]
+  p: ReportPeriods
+  f: ReportFormat
+  height?: number
+  /** Read by screen readers instead of the plot, e.g. the means per period */
+  summary: string
+}) {
   const { x } = frame(p)
   const top = 20
   const bottom = height - 22
   const y = (v: number) => top + ((10 - v) * (bottom - top)) / 10
   return (
-    <svg viewBox={`0 0 ${W} ${height}`} role="img" aria-label={`${f.t.painChart} (${f.t.chartHint})`}>
+    <svg viewBox={`0 0 ${W} ${height}`} role="img" aria-label={`${f.t.painChart} : ${summary}`}>
       <PeriodBand p={p} top={top} bottom={bottom} labels f={f} />
       {[0, 2, 4, 6, 8, 10].map((v) => (
         <g key={v}>
@@ -97,7 +110,7 @@ export function PainChart({ entries, p, f, height = 190 }: { entries: DailyEntry
         {f.t.severeThreshold}
       </text>
       {entries.map((e) => (
-        <circle key={e.date} cx={x(p.dayIndex(e.date))} cy={y(e.painLevel)} r={3} fill="var(--r-blue-250)">
+        <circle key={e.date} cx={x(p.dayIndex(e.date))} cy={y(e.painLevel)} r={2.75} fill="var(--r-blue-350)">
           <title>{`${f.dayMonth(e.date)} : ${e.painLevel}/10`}</title>
         </circle>
       ))}
@@ -155,7 +168,7 @@ export function SmallMultiple({
       {entries.map((e) => {
         const v = get(e)
         return typeof v === 'number' ? (
-          <circle key={e.date} cx={x(p.dayIndex(e.date))} cy={y(Math.min(max, v))} r={2} fill="var(--r-blue-250)">
+          <circle key={e.date} cx={x(p.dayIndex(e.date))} cy={y(Math.min(max, v))} r={2} fill="var(--r-blue-350)">
             <title>{`${f.dayMonth(e.date)} : ${v}`}</title>
           </circle>
         ) : null
@@ -327,11 +340,23 @@ export function PainCalendar({ entries, p, f }: { entries: DailyEntry[]; p: Repo
       ))}
       {cells.map(({ date, cx, cy, entry }) =>
         entry ? (
-          <rect key={date} x={cx} y={cy} width={cell} height={cell} rx={3} fill={rampColor(entry.painLevel)}>
+          // The lightest steps nearly vanish on white: a thin outline keeps
+          // low-pain days visible as logged.
+          <rect
+            key={date}
+            x={cx + 0.25}
+            y={cy + 0.25}
+            width={cell - 0.5}
+            height={cell - 0.5}
+            rx={3}
+            fill={rampColor(entry.painLevel)}
+            stroke={entry.painLevel <= 3 ? 'var(--r-prev)' : 'none'}
+            strokeWidth={0.5}
+          >
             <title>{`${f.dayMonth(date)} : ${entry.painLevel}/10`}</title>
           </rect>
         ) : (
-          <rect key={date} x={cx + 0.5} y={cy + 0.5} width={cell - 1} height={cell - 1} rx={3} fill="none" stroke="var(--r-axis)" strokeDasharray="2 2">
+          <rect key={date} x={cx + 0.5} y={cy + 0.5} width={cell - 1} height={cell - 1} rx={3} fill="none" stroke="var(--r-prev)" strokeDasharray="2 2">
             <title>{`${f.dayMonth(date)} : ${f.t.notLogged}`}</title>
           </rect>
         )

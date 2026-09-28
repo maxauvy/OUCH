@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { createContext, createElement, useContext, type ReactNode } from 'react'
 import './report.css'
 import type { DailyEntry } from '../../db/types'
 import { periodOn } from '../../lib/medications'
@@ -32,13 +32,23 @@ const REFERENCES = [
   'Dixon WG, Beukenhorst AL, Yimer BB, et al. How the weather affects the pain of citizen scientists using a smartphone app. NPJ Digit Med. 2019;2:105.',
 ]
 
+/** How many levels the report's headings sit below the page's own: 0 when
+ * printed (the report is the whole document), 2 in the on-screen preview,
+ * where it lives under the page title and the "Preview" heading. */
+const HeadingOffset = createContext(0)
+
+function H({ level, children }: { level: 1 | 2 | 3; children: ReactNode }) {
+  const offset = useContext(HeadingOffset)
+  return createElement(`h${Math.min(6, level + offset)}`, { className: `r-h${level}` }, children)
+}
+
 /** The report as A4 page sections, to wrap in an element with class "report". */
-export function ReportDocument({ data }: { data: ReportData }) {
+export function ReportDocument({ data, headingOffset = 0 }: { data: ReportData; headingOffset?: number }) {
   const { options, f, p } = data
   const pages = options.variant === 'gp' ? gpPages(data) : painClinicPages(data)
   const running = options.variant === 'gp' ? f.t.runningGp : f.t.runningPainClinic
   return (
-    <>
+    <HeadingOffset.Provider value={headingOffset}>
       {pages.map((body, i) => (
         <section className="report-page" key={i}>
           <div className="r-running">
@@ -54,7 +64,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
           </div>
         </section>
       ))}
-    </>
+    </HeadingOffset.Provider>
   )
 }
 
@@ -67,36 +77,36 @@ function gpPages(d: ReportData): ReactNode[] {
     <>
       <Header d={d} />
       <Agenda d={d} />
-      <h2>{f.t.keyPoints}</h2>
+      <H level={2}>{f.t.keyPoints}</H>
       <KeyPoints d={d} />
-      <h2>
+      <H level={2}>
         {f.t.keyFigures} <span className="r-hint">{f.t.keyFiguresHint}</span>
-      </h2>
+      </H>
       <Tiles d={d} detailed={false} />
-      <h2>
+      <H level={2}>
         {f.t.painChart} <span className="r-hint">{f.t.chartHint}</span>
-      </h2>
-      <PainChart entries={d.all} p={d.p} f={f} height={200} />
+      </H>
+      <PainChart entries={d.all} p={d.p} f={f} height={200} summary={painSummary(d)} />
     </>,
     <>
       {d.meds.length > 0 && (
         <>
-          <h2>{f.t.treatments}</h2>
+          <H level={2}>{f.t.treatments}</H>
           <TreatmentsTable d={d} detailed={false} />
         </>
       )}
       <div className="r-grid2 wide-left">
         <div>
-          <h2>{f.t.symptoms}</h2>
+          <H level={2}>{f.t.symptoms}</H>
           <SymptomsTable d={d} />
         </div>
         <div>
-          <h2>{f.t.zones}</h2>
+          <H level={2}>{f.t.zones}</H>
           <ZoneBars d={d} limit={6} />
         </div>
       </div>
       {d.options.includeNotes && <Notes d={d} all={false} />}
-      <h2>{f.t.method}</h2>
+      <H level={2}>{f.t.method}</H>
       <div className="r-method">
         <p>{f.t.methodGp}</p>
       </div>
@@ -112,11 +122,11 @@ function painClinicPages(d: ReportData): ReactNode[] {
     <>
       <Header d={d} />
       <Completeness d={d} />
-      <h2>{f.t.keyPoints}</h2>
+      <H level={2}>{f.t.keyPoints}</H>
       <KeyPoints d={d} />
-      <h2>{f.t.intensity}</h2>
+      <H level={2}>{f.t.intensity}</H>
       <Tiles d={d} detailed />
-      <h3>{f.t.distribution}</h3>
+      <H level={3}>{f.t.distribution}</H>
       <div className="r-legend">
         {d.painPrev && (
           <span>
@@ -134,14 +144,14 @@ function painClinicPages(d: ReportData): ReactNode[] {
       <p className="r-small">{f.t.categoriesNote}</p>
     </>,
     <>
-      <h2>
+      <H level={2}>
         {f.t.evolution} <span className="r-hint">{f.t.chartHint}</span>
-      </h2>
-      <h3>{f.t.painChart}</h3>
-      <PainChart entries={d.all} p={p} f={f} height={170} />
+      </H>
+      <H level={3}>{f.t.painChart}</H>
+      <PainChart entries={d.all} p={p} f={f} height={170} summary={painSummary(d)} />
       {d.meds.length > 0 && (
         <>
-          <h3>{f.t.treatments}</h3>
+          <H level={3}>{f.t.treatments}</H>
           <div className="r-legend">
             <span>
               <i style={{ background: 'var(--r-blue)' }} />
@@ -155,7 +165,7 @@ function painClinicPages(d: ReportData): ReactNode[] {
           <TreatmentTimeline entries={d.all} meds={medicationReports(d.all, d.medications, p)} p={p} f={f} />
         </>
       )}
-      {symptoms.length > 0 && <h3>{f.t.symptoms}</h3>}
+      {symptoms.length > 0 && <H level={3}>{f.t.symptoms}</H>}
       {symptoms.map((s, i) => {
         const [label, hint] = f.t.symptomLabels[s.key]
         const cur = meanOf(d.current, s.key)!
@@ -181,23 +191,23 @@ function painClinicPages(d: ReportData): ReactNode[] {
       <Agenda d={d} />
       {d.meds.length > 0 && (
         <>
-          <h2>
+          <H level={2}>
             {f.t.treatments} <span className="r-hint">{f.t.treatmentsSince}</span>
-          </h2>
+          </H>
           <TreatmentsTable d={d} detailed />
-          <h3>{f.t.weekly}</h3>
+          <H level={3}>{f.t.weekly}</H>
           <WeeklyTable d={d} />
         </>
       )}
       <NonDrug d={d} />
     </>,
     <>
-      <h2>{f.t.calendar}</h2>
+      <H level={2}>{f.t.calendar}</H>
       <PainCalendar entries={d.all} p={p} f={f} />
       <div className="r-legend" style={{ marginTop: 4 }}>
         0
         {[0, 2, 4, 6, 8, 10].map((v) => (
-          <i key={v} style={{ background: rampColor(v), marginRight: 0 }} />
+          <i key={v} style={{ background: rampColor(v), marginRight: 0, boxShadow: v <= 3 ? 'inset 0 0 0 0.5px var(--r-prev)' : undefined }} />
         ))}
         10 ·
         <span>
@@ -209,14 +219,14 @@ function painClinicPages(d: ReportData): ReactNode[] {
           {f.t.consultation}
         </span>
       </div>
-      <h2>{f.t.zones}</h2>
+      <H level={2}>{f.t.zones}</H>
       <ZoneBars d={d} limit={13} columns={2} />
       <p className="r-small">{f.t.zonesWpi}</p>
       <Associations d={d} />
     </>,
     <>
       {d.options.includeNotes && <Notes d={d} all />}
-      <h2>{f.t.method}</h2>
+      <H level={2}>{f.t.method}</H>
       <div className="r-method">
         {[f.t.methodCollect, f.t.methodCalc, f.t.methodLimits].map((text) => {
           // "Collection. Daily diary…": the first word is a run-in heading.
@@ -237,11 +247,18 @@ function painClinicPages(d: ReportData): ReactNode[] {
 // ---------------------------------------------------------------------------
 // Blocks
 
+/** What the pain chart shows, in words: mean pain before and since. */
+function painSummary({ f, pain, painPrev }: ReportData): string {
+  const tile = f.t.tileMeanPain.toLocaleLowerCase()
+  if (!pain) return ''
+  return painPrev ? `${tile} ${f.format(f.t.before, { v: f.nf(painPrev.mean) })} → ${f.nf(pain.mean)}/10` : `${tile} ${f.nf(pain.mean)}/10`
+}
+
 function Header({ d }: { d: ReportData }) {
   const { f, p, options } = d
   return (
     <>
-      <h1>{options.variant === 'gp' ? f.t.titleGp : f.t.titlePainClinic}</h1>
+      <H level={1}>{options.variant === 'gp' ? f.t.titleGp : f.t.titlePainClinic}</H>
       <div className="r-sub">{f.t.subtitle}</div>
       <div className="r-id">
         <div>
@@ -737,9 +754,9 @@ function NonDrug({ d }: { d: ReportData }) {
   if (!shares.length) return null
   return (
     <>
-      <h2>
+      <H level={2}>
         {f.t.nonDrug} <span className="r-hint">{f.t.nonDrugHint}</span>
-      </h2>
+      </H>
       <div className="r-bars wide">
         {shares.map(([action, share]) => (
           <div className="r-row" key={action}>
@@ -760,7 +777,7 @@ function Agenda({ d }: { d: ReportData }) {
   if (!items.length) return null
   return (
     <>
-      <h2>{d.f.t.agenda}</h2>
+      <H level={2}>{d.f.t.agenda}</H>
       <div className="r-quote">
         <ul>
           {items.map((a, i) => (
@@ -780,9 +797,9 @@ function Notes({ d, all }: { d: ReportData; all: boolean }) {
   if (!list.length) return null
   return (
     <>
-      <h2>
+      <H level={2}>
         {f.t.notes} <span className="r-hint">{all ? f.t.notesHintAll : f.t.notesHintGp}</span>
-      </h2>
+      </H>
       <ul className="r-notes">
         {list.map((e) => (
           <li key={e.date}>
@@ -826,7 +843,7 @@ function Associations({ d }: { d: ReportData }) {
   )
   return (
     <>
-      <h2>{t.associations}</h2>
+      <H level={2}>{t.associations}</H>
       {rows.length > 0 && (
         <table>
           <thead>
@@ -894,7 +911,7 @@ function Associations({ d }: { d: ReportData }) {
 function References({ count, title }: { count: number; title: string }) {
   return (
     <>
-      <h3>{title}</h3>
+      <H level={3}>{title}</H>
       <ol className="r-refs">
       {REFERENCES.slice(0, count).map((r) => (
           <li key={r}>{r}</li>

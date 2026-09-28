@@ -107,6 +107,8 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
                 key={v}
                 type="button"
                 {...radioProps(selected)}
+                aria-labelledby={`${ids}-${v}-label`}
+                aria-describedby={`${ids}-${v}-help`}
                 onClick={() => setVariant(v)}
                 className="text-left rounded-xl px-4 py-3"
                 style={{
@@ -114,11 +116,11 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
                   boxShadow: `inset 0 0 0 ${selected ? 2 : 1}px ${selected ? 'var(--color-brand)' : 'var(--color-hairline)'}`,
                 }}
               >
-                <span className="block text-body font-semibold" style={{ color: selected ? 'var(--color-brand)' : 'var(--color-ink)' }}>
+                <span id={`${ids}-${v}-label`} className="block text-body font-semibold" style={{ color: selected ? 'var(--color-brand)' : 'var(--color-ink)' }}>
                   {t.doctorReport.recipients[v].label}
                 </span>
                 {/* Muted grey on the selected tint misses 4.5:1 in the classic design. */}
-                <span className="block text-caption mt-0.5" style={{ color: selected ? 'var(--color-ink)' : 'var(--color-ink-muted)' }}>
+                <span id={`${ids}-${v}-help`} className="block text-caption mt-0.5" style={{ color: selected ? 'var(--color-ink)' : 'var(--color-ink-muted)' }}>
                   {t.doctorReport.recipients[v].helper}
                 </span>
               </button>
@@ -272,7 +274,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
           </h2>
           <ScaledPreview>
             <div className="report report-preview" lang={language}>
-              <ReportDocument data={data} />
+              <ReportDocument data={data} headingOffset={2} />
             </div>
           </ScaledPreview>
           {/* The copy that gets printed: full size, hidden on screen. */}
