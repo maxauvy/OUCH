@@ -5,7 +5,9 @@
 //
 // Data is deterministic (seeded PRNG) and built so the Trends page has real
 // patterns to show: pain follows sleep, stress, pressure drops and flares,
-// and eases on days with positive actions.
+// and eases on days with positive actions. Medications use the structured
+// registry (schema v3): an ongoing treatment whose dose is raised halfway,
+// and as-needed painkillers with relief ratings and a few side effects.
 
 import { webcrypto as crypto } from 'node:crypto'
 import { writeFileSync } from 'node:fs'
@@ -27,6 +29,21 @@ function rand() {
   let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
   t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
   return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+}
+// Second, independent PRNG for medication details, so adding them left the
+// pain history (driven by `rand`) exactly as it was.
+let seed2 = 7
+function rand2() {
+  seed2 = (seed2 + 0x6d2b79f5) | 0
+  let t = Math.imul(seed2 ^ (seed2 >>> 15), 1 | seed2)
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+}
+/** Index drawn from a list of weights summing to 1. */
+function weighted(weights) {
+  let x = rand2()
+  for (let i = 0; i < weights.length - 1; i++) if ((x -= weights[i]) <= 0) return i
+  return weights.length - 1
 }
 const noise = (amp) => (rand() * 2 - 1) * amp
 const clamp = (v, lo = 0, hi = 10) => Math.min(hi, Math.max(lo, v))
@@ -87,6 +104,44 @@ const NOTES_HARD = [
 
 const entries = []
 const startDate = addDays(endDate, -(DAYS - 1))
+
+// Duloxetine goes from 30 to 60 mg halfway through (a typical dose change
+// after a consultation), with a week of nausea right after.
+const DOSE_CHANGE_DAY = 45
+const doseChangeDate = addDays(startDate, DOSE_CHANGE_DAY)
+const now = Date.parse(`${endDate}T20:00:00Z`)
+const MED = { dulox: 'demo-duloxetine', para: 'demo-paracetamol', trama: 'demo-tramadol', ibu: 'demo-ibuprofene' }
+const medications = [
+  {
+    id: MED.dulox, name: 'Duloxétine', regimen: 'scheduled', reason: 'Douleurs diffuses',
+    periods: [
+      { start: addDays(startDate, -200), end: addDays(doseChangeDate, -1), dose: { amount: 30, unit: 'mg' }, perDay: 1 },
+      { start: doseChangeDate, dose: { amount: 60, unit: 'mg' }, perDay: 1 },
+    ],
+  },
+  { id: MED.para, name: 'Paracétamol', regimen: 'asNeeded', reason: 'Douleur', periods: [{ start: addDays(startDate, -400), dose: { amount: 1, unit: 'g' }, perDay: 3 }] },
+  { id: MED.trama, name: 'Tramadol', regimen: 'asNeeded', reason: 'Poussées', periods: [{ start: addDays(startDate, -120), dose: { amount: 50, unit: 'mg' }, perDay: 2 }] },
+  { id: MED.ibu, name: 'Ibuprofène', regimen: 'asNeeded', reason: 'Douleurs de règles', periods: [{ start: addDays(startDate, -900), dose: { amount: 400, unit: 'mg' }, perDay: 3 }] },
+].map((m) => ({ ...m, createdAt: now, updatedAt: now }))
+
+function intakesFor(names, painLevel, i) {
+  return names.map((name) => {
+    if (name === 'Duloxétine') {
+      const missed = rand2() < 0.04
+      const nausea = i > DOSE_CHANGE_DAY && i <= DOSE_CHANGE_DAY + 8 && rand2() < 0.7
+      return { medicationId: MED.dulox, doses: missed ? 0 : 1, ...(nausea && !missed && { sideEffects: ['Nausées'] }) }
+    }
+    if (name === 'Paracétamol') {
+      const doses = Math.max(1, (painLevel >= 7 ? 3 : painLevel >= 6 ? 2 : 1) - (rand2() < 0.25 ? 1 : 0))
+      return { medicationId: MED.para, doses, relief: weighted([0.15, 0.5, 0.3, 0.05]) }
+    }
+    if (name === 'Tramadol') {
+      const dizzy = rand2() < 0.3
+      return { medicationId: MED.trama, doses: painLevel >= 8 ? 2 : 1, relief: weighted([0.05, 0.25, 0.5, 0.2]), ...(dizzy && { sideEffects: ['Vertiges'] }) }
+    }
+    return { medicationId: MED.ibu, doses: rand2() < 0.5 ? 2 : 1, relief: weighted([0.05, 0.2, 0.5, 0.25]) }
+  })
+}
 let pressure = 1016
 let prevPressure = null
 let prevActivity = 5
@@ -179,7 +234,7 @@ for (let i = 0; i < DAYS; i++) {
       pressureHpa: Math.round(pressure),
       ...(pressureDelta !== undefined && { pressureDeltaFromPrevious: pressureDelta }),
     },
-    medications,
+    intakes: intakesFor(medications, painLevel, i),
     positiveActions,
     painLocations: [...zones],
     periodDay: isPeriodDay(i),
@@ -189,7 +244,7 @@ for (let i = 0; i < DAYS; i++) {
 
 // No `settings` on purpose: import merges settings when present, and a demo
 // file shouldn't overwrite the user's language, theme or name.
-const bundle = { version: 1, exportedAt: new Date().toISOString(), entries }
+const bundle = { version: 2, exportedAt: new Date().toISOString(), entries, medications }
 
 const toBase64 = (bytes) => Buffer.from(bytes).toString('base64')
 const salt = crypto.getRandomValues(new Uint8Array(16))
