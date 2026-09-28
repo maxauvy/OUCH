@@ -18,7 +18,53 @@ const en: Translations = {
 
   welcome: {
     title: 'Welcome to OUCH',
-    start: 'Get started',
+  },
+
+  setup: {
+    progress: 'Step {{n}} of {{total}}',
+    skipAll: 'Skip',
+    begin: 'Set up my tracking',
+    next: 'Next',
+    back: 'Back',
+    finishRerun: 'Done',
+    finish: 'Log my first day',
+    welcomeIntro:
+      'A few quick settings so your tracking is useful, including the report you can show your doctor. Everything is optional and can be changed later in Settings.',
+    profileTitle: 'What should we call you?',
+    profileIntro: 'Your first name appears on the daily weather you share, and prefills the report for your doctor.',
+    profileHelper: 'Optional. It stays on this device.',
+    trackingTitle: 'What you want to track',
+    trackingIntro:
+      'Pain is always logged. The rest is up to you: what you track here shows up in the report (sleep, fatigue, mood, painful areas…). Fewer factors means a quicker entry on hard days.',
+    changeLater: 'You can add or remove factors at any time in Settings.',
+    medicationsTitle: 'Your medications',
+    medicationsIntro:
+      'Your doctor will want to know what you take, at what dose, and what changed since last time. The report shows it when your medications are described here.',
+    medicationsLater: 'You can also do this later, in Settings → Medications.',
+    reminderTitle: 'A little reminder?',
+    reminderIntro:
+      'The report is more reliable when it covers many days: it states how many days were logged over the period. An evening reminder helps you not forget.',
+    reminderTime: 'Reminder time',
+    reminderDenied:
+      'Notifications are blocked for this site. You can allow them in your browser settings, then turn the reminder back on in Settings.',
+    doneTitle: 'You’re all set',
+    doneIntro: 'Here is where things stand. Nothing is required: you can complete all of this later in Settings.',
+    checkName: 'First name: {{name}}',
+    checkNoName: 'No first name (the report will ask for it)',
+    checkFactors: 'Pain and {{n}} other factors tracked',
+    checkMedications: 'Medications described: {{n}}',
+    checkNoMedications: 'No medication described yet',
+    checkReminder: 'Reminder every day at {{time}}',
+    checkNoReminder: 'No daily reminder',
+    reportTitle: 'The report for your doctor',
+    reportBody:
+      'As the days go by, you can create it from the Trends tab: it sums up the period since your last appointment. A few weeks of entries make it meaningful.',
+    backupTitle: 'Remember to back up',
+    backupBody:
+      'Your data stays on this device and nowhere else. If you lose it or clear the browser, it is gone: every now and then, make an encrypted backup from Settings.',
+    rerunTitle: 'Setup assistant',
+    rerunHelper: 'Go through the getting-started steps again: first name, tracked factors, medications, reminder.',
+    rerunButton: 'Run the setup again',
   },
 
   about: {

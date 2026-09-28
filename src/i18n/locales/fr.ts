@@ -20,7 +20,53 @@ const fr: Translations = {
 
   welcome: {
     title: 'Bienvenue sur OUCH',
-    start: 'Commencer',
+  },
+
+  setup: {
+    progress: 'Étape {{n}} sur {{total}}',
+    skipAll: 'Passer',
+    begin: 'Préparer mon suivi',
+    next: 'Suivant',
+    back: 'Retour',
+    finishRerun: 'Terminer',
+    finish: 'Noter ma première journée',
+    welcomeIntro:
+      'Quelques réglages rapides pour que ton suivi soit utile, y compris le rapport à montrer à ton médecin. Tout est facultatif et modifiable plus tard dans Réglages.',
+    profileTitle: 'Comment t’appeler ?',
+    profileIntro: 'Ton prénom apparaît sur la météo du jour que tu partages, et pré-remplit le rapport pour ton médecin.',
+    profileHelper: 'Facultatif. Il reste sur cet appareil.',
+    trackingTitle: 'Ce que tu veux suivre',
+    trackingIntro:
+      'La douleur est toujours notée. Le reste est au choix : ce que tu suis ici se retrouve dans le rapport (sommeil, fatigue, humeur, zones douloureuses…). Moins de facteurs, c’est une saisie plus rapide les jours difficiles.',
+    changeLater: 'Tu pourras en ajouter ou en retirer à tout moment dans Réglages.',
+    medicationsTitle: 'Tes traitements',
+    medicationsIntro:
+      'Ton médecin voudra savoir ce que tu prends, à quelle dose, et ce qui a changé depuis la dernière fois. Le rapport le montre si tes traitements sont décrits ici.',
+    medicationsLater: 'Tu peux aussi le faire plus tard, dans Réglages → Médicaments.',
+    reminderTitle: 'Un petit rappel ?',
+    reminderIntro:
+      'Le rapport est d’autant plus fiable qu’il couvre beaucoup de jours : il indique combien de jours ont été notés sur la période. Un rappel le soir aide à ne pas oublier.',
+    reminderTime: 'Heure du rappel',
+    reminderDenied:
+      'Les notifications sont bloquées pour ce site. Tu peux les autoriser dans les réglages du navigateur, puis réactiver le rappel dans Réglages.',
+    doneTitle: 'C’est prêt',
+    doneIntro: 'Voici où tu en es. Rien n’est obligatoire : tu peux compléter tout ça plus tard dans Réglages.',
+    checkName: 'Prénom : {{name}}',
+    checkNoName: 'Pas de prénom (le rapport te le demandera)',
+    checkFactors: 'La douleur et {{n}} autres facteurs suivis',
+    checkMedications: 'Traitements décrits : {{n}}',
+    checkNoMedications: 'Aucun traitement décrit pour l’instant',
+    checkReminder: 'Rappel chaque jour à {{time}}',
+    checkNoReminder: 'Pas de rappel quotidien',
+    reportTitle: 'Le rapport pour ton médecin',
+    reportBody:
+      'Au fil des jours, tu pourras le créer depuis l’onglet Tendances : il résume la période depuis ta dernière consultation. Il vaut mieux quelques semaines de saisies pour qu’il ait du sens.',
+    backupTitle: 'Pense à sauvegarder',
+    backupBody:
+      'Tes données restent sur cet appareil, nulle part ailleurs. Si tu le perds ou vides le navigateur, elles disparaissent : de temps en temps, fais une sauvegarde chiffrée depuis Réglages.',
+    rerunTitle: 'Assistant de démarrage',
+    rerunHelper: 'Revoir les étapes de mise en route : prénom, facteurs suivis, traitements, rappel.',
+    rerunButton: 'Relancer l’assistant',
   },
 
   about: {

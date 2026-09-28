@@ -291,6 +291,20 @@ export function SettingsPage() {
       </Card>
 
       <Card>
+        <SectionTitle>{t.setup.rerunTitle}</SectionTitle>
+        <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.setup.rerunHelper}
+        </p>
+        <button
+          onClick={() => updateSettings({ onboardingDone: false })}
+          className="rounded-[var(--radius-control)] px-4 py-2 text-caption font-semibold"
+          style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+        >
+          {t.setup.rerunButton}
+        </button>
+      </Card>
+
+      <Card>
         <p className="text-caption leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
           {t.settings.privacyNote}
         </p>

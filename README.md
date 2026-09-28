@@ -10,6 +10,8 @@ Les carnets de suivi existants (Pain Diary, MyPainDiary, etc.) sont soit fermés
 
 ## Ce que ça fait
 
+**Assistant de démarrage.** À la première ouverture, quelques étapes facultatives préparent le suivi : prénom, facteurs suivis, traitements, rappel quotidien. C'est ce dont le rapport pour le médecin a besoin. Tout est enregistré au fil de l'eau, on peut passer à tout moment et le relancer depuis les réglages.
+
 **Saisie du jour.** Douleur (seule donnée obligatoire), fatigue, sommeil, stress, brouillard mental, humeur, activité, localisation de la douleur, médicaments (traitements de fond cochés d'office, prises au besoin avec leur soulagement), météo extérieure (géolocalisation ou saisie manuelle), cycle menstruel en option. Chaque facteur peut être désactivé dans les réglages si on ne s'en sert pas.
 
 **Météo de la douleur.** Les mesures du jour se résument en une image, du ciel dégagé à l'orage, exportable en PNG avec un petit mot si on veut, pour l'envoyer soi-même à qui on veut.
