@@ -1,25 +1,21 @@
-import { createContext, useContext, type PropsWithChildren } from 'react'
+import { useContext } from 'react'
 import { fr as dateFnsFr, enUS as dateFnsEnUS, type Locale as DateFnsLocale } from 'date-fns/locale'
 import type { Translations } from './types'
 import type { Language } from './language'
 import fr from './locales/fr'
 import en from './locales/en'
+import { I18nContext } from './context'
 
 export type { Language } from './language'
 export { LANGUAGES, DEFAULT_LANGUAGE } from './language'
 export { format } from './format'
 export type { Translations } from './types'
+export { I18nProvider } from './I18nProvider'
 
 const DICTIONARIES: Record<Language, Translations> = { fr, en }
 
 const DATE_FNS_LOCALES: Record<Language, DateFnsLocale> = { fr: dateFnsFr, en: dateFnsEnUS }
 const INTL_LOCALES: Record<Language, string> = { fr: 'fr-FR', en: 'en-US' }
-
-const I18nContext = createContext<Language>('fr')
-
-export function I18nProvider({ language, children }: PropsWithChildren<{ language: Language }>) {
-  return <I18nContext.Provider value={language}>{children}</I18nContext.Provider>
-}
 
 export function useLanguage(): Language {
   return useContext(I18nContext)

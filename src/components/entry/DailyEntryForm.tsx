@@ -28,14 +28,20 @@ export function DailyEntryForm({ date }: { date: string }) {
   const t = useTranslation()
   const { intlLocale } = useLocale()
   const design = useDesign()
-  const [local, setLocal] = useState<Partial<DailyEntry>>({})
+  const [local, setLocal] = useState<Partial<DailyEntry>>(() => dbEntry ?? {})
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle')
   const dirtyRef = useRef(false)
   const pendingRef = useRef({ date, local })
 
-  useEffect(() => {
+  // Reload the draft when another day is shown or the stored entry changes
+  // (first load, a save, an import). Done during render rather than in an
+  // effect, so the form never paints a frame with the previous day's values.
+  const syncKey = `${date}|${dbEntry?.id}|${dbEntry?.updatedAt}`
+  const [syncedKey, setSyncedKey] = useState(syncKey)
+  if (syncKey !== syncedKey) {
+    setSyncedKey(syncKey)
     setLocal(dbEntry ?? {})
-  }, [date, dbEntry?.id, dbEntry?.updatedAt])
+  }
 
   useEffect(() => {
     pendingRef.current = { date, local }
