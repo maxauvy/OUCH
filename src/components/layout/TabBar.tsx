@@ -20,6 +20,11 @@ const TAB_ICONS: Record<Tab, Icon> = {
   settings: IconSettings,
 }
 
+// The classic bar is translucent: content scrolling under it can darken the
+// background enough to take plain muted ink under 4.5:1. A touch of ink keeps
+// inactive labels at 5.5:1 or more, still clearly lighter than the active one.
+const CLASSIC_INACTIVE = 'color-mix(in srgb, var(--color-ink-muted) 70%, var(--color-ink))'
+
 export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) => void }) {
   const t = useTranslation()
   const health = useDesign() === 'health'
@@ -50,7 +55,7 @@ export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) =
               onClick={() => onChange(tab.id)}
               aria-current={isActive ? 'page' : undefined}
               className="flex-1 flex flex-col items-center gap-0.5 py-2.5"
-              style={{ color: isActive ? activeColor : 'var(--color-ink-muted)' }}
+              style={{ color: isActive ? activeColor : health ? 'var(--color-ink-muted)' : CLASSIC_INACTIVE }}
             >
               {health ? (
                 <Icon size={22} stroke={isActive ? 2 : 1.6} aria-hidden />
