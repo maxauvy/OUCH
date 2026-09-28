@@ -170,7 +170,6 @@ const fr: Translations = {
     medications: { label: 'Médicaments', helper: 'Traitements pris dans la journée' },
     positiveActions: { label: 'Ce qui a aidé', helper: 'Actions ou stratégies mises en place dans la journée' },
     painLocations: { label: 'Localisation de la douleur', helper: 'Zones du corps touchées' },
-    cycle: { label: 'Cycle menstruel', helper: 'Suivi du cycle, si pertinent' },
     notes: { label: 'Notes libres', helper: 'Tout ce qui ne rentre pas dans les cases' },
   },
 

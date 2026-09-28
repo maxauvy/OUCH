@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { IconCheck } from '@tabler/icons-react'
 import { db, updateSettings } from '../../db'
-import { ALL_FACTORS, type FactorKey } from '../../db/types'
+import { ALL_FACTORS } from '../../db/types'
 import { useSettings } from '../../hooks/useSettings'
 import { useMedications } from '../../hooks/useMedications'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -26,8 +26,6 @@ import { IllnessPicker } from '../settings/IllnessPicker'
 
 type Step = 'welcome' | 'illness' | 'profile' | 'tracking' | 'medications' | 'reminder' | 'done'
 
-// 'cycle' is driven by its own switch (cycleTrackingEnabled), shown below the chips.
-const TRACKABLE: FactorKey[] = ALL_FACTORS.filter((k) => k !== 'cycle')
 
 const inputStyle = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 
@@ -152,7 +150,7 @@ export function SetupWizard({ onDone }: { onDone: () => void }) {
                   {t.settings.factorsTitle}
                 </p>
                 <div role="group" aria-labelledby={`${ids}-factors`} className="flex flex-wrap gap-2">
-                  {TRACKABLE.map((key) => {
+                  {ALL_FACTORS.map((key) => {
                     const on = settings.enabledFactors.includes(key)
                     return (
                       <Chip
@@ -348,7 +346,7 @@ function DoneStep({ heading }: { heading: ReactNode }) {
         : t.setup.checkNoIllness,
     },
     { done: !!settings.displayName, text: settings.displayName ? format(t.setup.checkName, { name: settings.displayName }) : t.setup.checkNoName },
-    { done: true, text: format(t.setup.checkFactors, { n: settings.enabledFactors.filter((k) => k !== 'cycle').length }) },
+    { done: true, text: format(t.setup.checkFactors, { n: settings.enabledFactors.length }) },
     ...(tracksMedications
       ? [{ done: described > 0, text: described > 0 ? format(t.setup.checkMedications, { n: described }) : t.setup.checkNoMedications }]
       : []),

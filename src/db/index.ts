@@ -81,13 +81,30 @@ class OuchDB extends Dexie {
       .upgrade(async (tx) => {
         await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
       })
+    // v5 dropped the 'cycle' factor, which duplicated cycleTrackingEnabled
+    // without doing anything. Whoever switched it on wanted cycle tracking.
+    this.version(5)
+      .stores({
+        entries: '++id, &date, painLevel, createdAt',
+        settings: 'id',
+        medications: 'id, name',
+      })
+      .upgrade(async (tx) => {
+        await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
+      })
   }
 }
 
-/** In place: moves a pre-v4 `childIllness` into `illnesses`. */
-export function upgradeLegacySettings(s: LegacySettings) {
+/** In place, and safe to run on current settings: moves a pre-v4
+ * `childIllness` into `illnesses`, and turns a pre-v5 'cycle' factor into
+ * `cycleTrackingEnabled`. */
+export function upgradeLegacySettings(s: LegacySettings): asserts s is Partial<Settings> {
   if (s.childIllness && !s.illnesses) s.illnesses = [s.childIllness]
   delete s.childIllness
+  if (s.enabledFactors?.includes('cycle')) {
+    s.enabledFactors = s.enabledFactors.filter((k) => k !== 'cycle')
+    s.cycleTrackingEnabled = true
+  }
 }
 
 export const db = new OuchDB()

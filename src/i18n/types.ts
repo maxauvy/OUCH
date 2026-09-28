@@ -154,7 +154,6 @@ export interface Translations {
     medications: FactorText
     positiveActions: FactorText
     painLocations: FactorText
-    cycle: FactorText
     notes: FactorText
   }
 
