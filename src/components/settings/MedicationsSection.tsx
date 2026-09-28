@@ -249,14 +249,16 @@ function MedicationEditor({
       </Field>
 
       <Field label={t.medications.regimenTitle}>
-        <div className="flex gap-2" {...radioGroupProps(t.medications.regimenTitle)} aria-describedby={`${ids}-regimen-help`}>
+        {/* Labels stay on one line; the row wraps instead when the three no
+            longer fit side by side (large text on a narrow screen). */}
+        <div className="flex flex-wrap gap-2" {...radioGroupProps(t.medications.regimenTitle)} aria-describedby={`${ids}-regimen-help`}>
           {MEDICATION_REGIMENS.map((r) => (
             <button
               key={r}
               type="button"
               {...radioProps(regimen === r)}
               onClick={() => setRegimen(r)}
-              className="flex-1 rounded-[var(--radius-control)] px-2 py-2 text-caption font-semibold"
+              className="flex-1 whitespace-nowrap rounded-[var(--radius-control)] px-2 py-2 text-caption font-semibold"
               style={{
                 background: regimen === r ? 'var(--color-brand)' : 'var(--color-brand-soft)',
                 color: regimen === r ? 'var(--color-on-brand)' : 'var(--color-brand)',
