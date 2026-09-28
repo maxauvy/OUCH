@@ -4,13 +4,18 @@ import { useAllEntries } from '../hooks/useEntries'
 import { useSettings } from '../hooks/useSettings'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Footer } from '../components/layout/Footer'
-import { PainTrendChart } from '../components/trends/PainTrendChart'
+import { PainTrendChart, type ChartMarker } from '../components/trends/PainTrendChart'
+import { MedicationsCard } from '../components/trends/MedicationsCard'
+import { useMedications } from '../hooks/useMedications'
+import { todayISO } from '../db'
+import { formatPosology } from '../lib/medicationFormat'
 import { FactorAnalysisCard } from '../components/trends/FactorAnalysisCard'
 import { DoctorReportPage } from './DoctorReportPage'
 import { analyzeFactor, analyzeTagPresence, bestAndWorstWeekday } from '../lib/insights'
 import { usePalette } from '../hooks/useDesign'
 import { subDays } from 'date-fns'
-import { format, useTranslation, type Translations } from '../i18n'
+import { format, useLocale, useTranslation, type Translations } from '../i18n'
+import { shiftISO } from '../lib/medications'
 import type { DailyEntry, Settings } from '../db/types'
 
 const FACTOR_DEFS: {
@@ -43,6 +48,8 @@ export function TrendsPage() {
   const i18n = useTranslation()
   const t = usePalette()
   const [rangeIdx, setRangeIdx] = useState(1)
+  const medications = useMedications()
+  const { intlLocale } = useLocale()
   const [reporting, setReporting] = useState(false)
   const reportIds = useId()
   const reportButtonRef = useRef<HTMLButtonElement>(null)
@@ -83,6 +90,24 @@ export function TrendsPage() {
       bucketing: f.bucketing,
     })
   )
+
+  // The range as dates, for medication periods (the entry filter above works
+  // on timestamps). "All" starts at the first logged day.
+  const today = todayISO()
+  const rangeDays = RANGES[rangeIdx].days
+  const rangeFrom = rangeDays == null ? (entries?.at(-1)?.date ?? today) : shiftISO(today, -rangeDays)
+  const medicationsTracked = settings.enabledFactors.includes('medications')
+  const doseMarkers: ChartMarker[] = medicationsTracked
+    ? (medications ?? []).flatMap((m) =>
+        m.regimen !== 'scheduled'
+          ? []
+          : m.periods.flatMap((p, i) =>
+              i > 0 && p.start >= rangeFrom && p.start <= today
+                ? [{ date: p.start, label: format(i18n.trends.posologyChangeMarker, { name: m.name, dose: formatPosology(i18n, m.regimen, p, intlLocale) }) }]
+                : []
+            )
+      )
+    : []
 
   const positiveActionAnalyses = settings.enabledFactors.includes('positiveActions')
     ? analyzeTagPresence(filtered, (e) => e.positiveActions, [i18n.trends.bucketWithout, i18n.trends.bucketWith])
@@ -181,8 +206,12 @@ export function TrendsPage() {
 
           <Card>
             <SectionTitle>{i18n.trends.painEvolution}</SectionTitle>
-            <PainTrendChart entries={filtered} />
+            <PainTrendChart entries={filtered} markers={doseMarkers} />
           </Card>
+
+          {medicationsTracked && medications && (
+            <MedicationsCard entries={filtered} allEntries={entries} medications={medications} from={rangeFrom} to={today} />
+          )}
 
           {weekdayInsight && (
             <Card>
