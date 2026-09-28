@@ -6,8 +6,9 @@
 // Data is deterministic (seeded PRNG) and built so the Trends page has real
 // patterns to show: pain follows sleep, stress, pressure drops and flares,
 // and eases on days with positive actions. Medications use the structured
-// registry (schema v3): an ongoing treatment whose dose is raised halfway,
-// and as-needed painkillers with relief ratings and a few side effects.
+// registry (schema v3): an ongoing treatment whose dose is raised halfway
+// (pain eases over the following weeks), a second one stopped early for side
+// effects, and as-needed painkillers with relief ratings.
 
 import { webcrypto as crypto } from 'node:crypto'
 import { writeFileSync } from 'node:fs'
@@ -110,7 +111,10 @@ const startDate = addDays(endDate, -(DAYS - 1))
 const DOSE_CHANGE_DAY = 45
 const doseChangeDate = addDays(startDate, DOSE_CHANGE_DAY)
 const now = Date.parse(`${endDate}T20:00:00Z`)
-const MED = { dulox: 'demo-duloxetine', para: 'demo-paracetamol', trama: 'demo-tramadol', ibu: 'demo-ibuprofene' }
+// Pregabalin, taken twice a day, is stopped in the first weeks because of
+// drowsiness — it also clouds the mind while it lasts.
+const PREGABALIN_STOP_DAY = 18
+const MED = { prega: 'demo-pregabaline', dulox: 'demo-duloxetine', para: 'demo-paracetamol', trama: 'demo-tramadol', ibu: 'demo-ibuprofene' }
 const medications = [
   {
     id: MED.dulox, name: 'Duloxétine', regimen: 'scheduled', reason: 'Douleurs diffuses',
@@ -118,6 +122,10 @@ const medications = [
       { start: addDays(startDate, -200), end: addDays(doseChangeDate, -1), dose: { amount: 30, unit: 'mg' }, perDay: 1 },
       { start: doseChangeDate, dose: { amount: 60, unit: 'mg' }, perDay: 1 },
     ],
+  },
+  {
+    id: MED.prega, name: 'Prégabaline', regimen: 'scheduled', reason: 'Douleurs neuropathiques',
+    periods: [{ start: addDays(startDate, -35), end: addDays(startDate, PREGABALIN_STOP_DAY), dose: { amount: 75, unit: 'mg' }, perDay: 2, stopReason: 'sideEffects' }],
   },
   { id: MED.para, name: 'Paracétamol', regimen: 'asNeeded', reason: 'Douleur', periods: [{ start: addDays(startDate, -400), dose: { amount: 1, unit: 'g' }, perDay: 3 }] },
   { id: MED.trama, name: 'Tramadol', regimen: 'asNeeded', reason: 'Poussées', periods: [{ start: addDays(startDate, -120), dose: { amount: 50, unit: 'mg' }, perDay: 2 }] },
@@ -130,6 +138,11 @@ function intakesFor(names, painLevel, i) {
       const missed = rand2() < 0.04
       const nausea = i > DOSE_CHANGE_DAY && i <= DOSE_CHANGE_DAY + 8 && rand2() < 0.7
       return { medicationId: MED.dulox, doses: missed ? 0 : 1, ...(nausea && !missed && { sideEffects: ['Nausées'] }) }
+    }
+    if (name === 'Prégabaline') {
+      const doses = rand2() < 0.1 ? 1 : 2
+      const effects = [rand2() < 0.6 && 'Somnolence', rand2() < 0.2 && 'Prise de poids'].filter(Boolean)
+      return { medicationId: MED.prega, doses, ...(effects.length && { sideEffects: effects }) }
     }
     if (name === 'Paracétamol') {
       const doses = Math.max(1, (painLevel >= 7 ? 3 : painLevel >= 6 ? 2 : 1) - (rand2() < 0.25 ? 1 : 0))
@@ -176,6 +189,10 @@ for (let i = 0; i < DAYS; i++) {
   const helpedCount = Math.max(0, Math.round(1.2 + noise(1.2) + (isWeekend ? 0.6 : 0)))
   const positiveActions = [...new Set(Array.from({ length: helpedCount }, () => pick(POSITIVE_ACTIONS)))]
 
+  // The higher duloxetine dose takes about three weeks to show.
+  const doseEffect = i < DOSE_CHANGE_DAY ? 0 : Math.min(1, (i - DOSE_CHANGE_DAY) / 21) * 0.9
+  const onPregabalin = i <= PREGABALIN_STOP_DAY
+
   const pressureDrop = pressureDelta !== undefined && pressureDelta < -3 ? Math.min(2, -pressureDelta / 5) : 0
   const pain = clamp(
     3.2 +
@@ -186,7 +203,8 @@ for (let i = 0; i < DAYS; i++) {
       flareBoost(i) +
       (isPeriodDay(i) ? 1 : 0) +
       (prevActivity >= 8 ? 1 : 0) - // overdid it yesterday
-      positiveActions.length * 0.35 +
+      positiveActions.length * 0.35 -
+      doseEffect +
       noise(0.9)
   )
   const painLevel = Math.round(pain)
@@ -195,10 +213,10 @@ for (let i = 0; i < DAYS; i++) {
   prevActivity = activityLevel
 
   const fatigueLevel = round(pain * 0.6 + (7 - sleepQuality) * 0.35 + noise(1))
-  const brainFog = round(fatigueLevel * 0.7 + noise(1.3))
+  const brainFog = round(fatigueLevel * 0.7 + (onPregabalin ? 1.5 : 0) + noise(1.3))
   const moodLevel = round(8 - pain * 0.45 - stress * 0.25 + positiveActions.length * 0.4 + noise(1))
 
-  const medications = ['Duloxétine']
+  const medications = onPregabalin ? ['Prégabaline', 'Duloxétine'] : ['Duloxétine']
   if (painLevel >= 5) medications.push('Paracétamol')
   if (painLevel >= 7 && chance(0.7)) medications.push('Tramadol')
   if (isPeriodDay(i) && painLevel >= 4 && chance(0.6)) medications.push('Ibuprofène')
