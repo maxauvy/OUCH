@@ -79,6 +79,19 @@ export interface Translations {
     bucketWithout: string
     insightTagHigher: string
     insightTagLower: string
+    medicationsTitle: string
+    medicationsCaption: string
+    daysOne: string
+    daysOther: string
+    dosesOne: string
+    dosesOther: string
+    takenScheduled: string
+    takenAsNeeded: string
+    takenAsNeededWithDoses: string
+    reliefShare: string
+    sideEffects: string
+    posologyChange: string
+    posologyChangeMarker: string
   }
 
   /** Sunday-first, matching Date#getDay(). */

@@ -95,6 +95,7 @@ export function BackupSection() {
           ref={fileRef}
           type="file"
           accept="application/json"
+          aria-label={t.backup.importTitle}
           onChange={(e) => {
             setImportFile(e.target.files?.[0] ?? null)
             setImportMsg(null)

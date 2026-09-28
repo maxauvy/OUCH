@@ -1,4 +1,4 @@
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { format } from 'date-fns'
 import type { Locale } from 'date-fns'
 import type { DailyEntry } from '../../db/types'
@@ -47,7 +47,12 @@ function CustomTooltip({
   )
 }
 
-export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
+export interface ChartMarker {
+  date: string
+  label: string
+}
+
+export function PainTrendChart({ entries, markers = [] }: { entries: DailyEntry[]; markers?: ChartMarker[] }) {
   const t = usePalette()
   const i18n = useTranslation()
   const { dateFnsLocale } = useLocale()
@@ -55,6 +60,13 @@ export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
   const data: Point[] = [...entries]
     .sort((a, b) => a.date.localeCompare(b.date))
     .map((e) => ({ date: e.date, pain: e.painLevel }))
+
+  // The x axis is categorical (logged days only): a marker falling on a day
+  // without an entry is drawn at the next logged day.
+  const placed = markers.flatMap((m) => {
+    const at = data.find((d) => d.date >= m.date)
+    return at ? [{ ...m, x: at.date }] : []
+  })
 
   if (data.length < 2) {
     return (
@@ -95,6 +107,15 @@ export function PainTrendChart({ entries }: { entries: DailyEntry[] }) {
             content={<CustomTooltip t={t} i18n={i18n} dateFnsLocale={dateFnsLocale} />}
             cursor={{ stroke: t.brand, strokeWidth: 1, strokeDasharray: '3 3' }}
           />
+          {placed.map((m) => (
+            <ReferenceLine
+              key={`${m.date}-${m.label}`}
+              x={m.x}
+              stroke={t.inkMuted}
+              strokeDasharray="3 3"
+              label={{ value: m.label, position: 'insideTopLeft', fontSize: 12, fill: t.inkMuted }}
+            />
+          ))}
           <Area
             type="monotone"
             dataKey="pain"
