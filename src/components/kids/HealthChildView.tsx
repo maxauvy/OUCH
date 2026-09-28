@@ -176,20 +176,17 @@ export function HealthChildView({
   onToneChange,
   weather,
   copy,
-  illnessQuestion,
-  illnessText,
+  illnesses,
   closing,
 }: {
   tone: ChildTone
   onToneChange: (tone: ChildTone) => void
   weather: PainWeather | null
   copy: { headline: string; body: string; help: string[] } | null
-  illnessQuestion: string
-  illnessText: string
+  illnesses: { id: string; question: string; text: string }[]
   closing: string
 }) {
   const t = useTranslation()
-  const [illnessOpen, setIllnessOpen] = useState(true)
   const { icon: ClosingIcon, label: closingText } = splitHelp(closing)
 
   return (
@@ -245,42 +242,9 @@ export function HealthChildView({
             })}
           </div>
 
-          <div className="rounded-[var(--radius-card)] px-4 py-3.5 mt-1" style={card}>
-            <button
-              onClick={() => setIllnessOpen((v) => !v)}
-              aria-expanded={illnessOpen}
-              className="w-full flex items-center gap-2.5 text-left"
-            >
-              <span
-                className="inline-flex items-center justify-center shrink-0 rounded-[7px] w-7 h-7"
-                style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
-                aria-hidden
-              >
-                <IconBulb size={18} stroke={1.8} />
-              </span>
-              <span className="flex-1 text-body font-semibold">{illnessQuestion}</span>
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="var(--color-brand)"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="shrink-0 transition-transform"
-                style={{ transform: illnessOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                aria-hidden
-              >
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </button>
-            {illnessOpen && (
-              <div className="text-control mt-3 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
-                {illnessText}
-              </div>
-            )}
-          </div>
+          {illnesses.map((illness) => (
+            <IllnessCard key={illness.id} question={illness.question} text={illness.text} defaultOpen={illnesses.length === 1} />
+          ))}
 
           <div className="flex flex-col items-center gap-1.5 px-3 mt-2 text-center">
             <ClosingIcon size={22} stroke={1.8} style={{ color: 'var(--color-brand)' }} aria-hidden />
@@ -289,6 +253,46 @@ export function HealthChildView({
             </p>
           </div>
         </>
+      )}
+    </div>
+  )
+}
+
+/** One collapsible explanation. Several illnesses start folded, so the
+ * child sees the list of questions first. */
+function IllnessCard({ question, text, defaultOpen }: { question: string; text: string; defaultOpen: boolean }) {
+  const [open, setOpen] = useState(defaultOpen)
+  return (
+    <div className="rounded-[var(--radius-card)] px-4 py-3.5 mt-1" style={card}>
+      <button onClick={() => setOpen((v) => !v)} aria-expanded={open} className="w-full flex items-center gap-2.5 text-left">
+        <span
+          className="inline-flex items-center justify-center shrink-0 rounded-[7px] w-7 h-7"
+          style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+          aria-hidden
+        >
+          <IconBulb size={18} stroke={1.8} />
+        </span>
+        <span className="flex-1 text-body font-semibold">{question}</span>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--color-brand)"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="shrink-0 transition-transform"
+          style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          aria-hidden
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+      {open && (
+        <div className="text-control mt-3 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
+          {text}
+        </div>
       )}
     </div>
   )

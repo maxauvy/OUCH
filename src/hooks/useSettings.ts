@@ -8,3 +8,10 @@ export function useSettings(): Settings {
   // back to its default instead of being `undefined`.
   return s ? { ...DEFAULT_SETTINGS, ...s } : DEFAULT_SETTINGS
 }
+
+/** False until the stored settings have been read. `useSettings` falls back
+ * to the defaults meanwhile, which is wrong for anything decided once, like
+ * whether to show the first-run setup. */
+export function useSettingsLoaded(): boolean {
+  return useLiveQuery(() => db.settings.get(1).then(() => true), []) ?? false
+}

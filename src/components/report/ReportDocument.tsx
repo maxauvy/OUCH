@@ -2,6 +2,7 @@ import { createContext, createElement, useContext, type ReactNode } from 'react'
 import './report.css'
 import type { DailyEntry } from '../../db/types'
 import { periodOn } from '../../lib/medications'
+import { formatIllnessList } from '../../lib/childView'
 import {
   association,
   compareContext,
@@ -267,6 +268,13 @@ function Header({ d }: { d: ReportData }) {
             {options.patientName || '—'}
             {options.birthDate && <small> · {f.format(f.t.bornOn, { date: f.fullDate(options.birthDate) })}</small>}
           </div>
+          {options.illnesses.length > 0 && (
+            <div className="r-note">
+              {f.format(options.illnesses.length === 1 ? f.t.declaredIllness : f.t.declaredIllnesses, {
+                list: formatIllnessList(options.language, options.illnesses),
+              })}
+            </div>
+          )}
         </div>
         <div>
           <div className="r-k">{f.t.period}</div>

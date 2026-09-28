@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie'
-import type { BodyZone, DailyEntry, LegacyDailyEntry, Medication, Settings } from './types'
+import type { BodyZone, DailyEntry, LegacyDailyEntry, LegacySettings, Medication, Settings } from './types'
 import { DEFAULT_SETTINGS } from './types'
 import { createLegacyConverter } from '../lib/medications'
 
@@ -70,7 +70,24 @@ class OuchDB extends Dexie {
           delete entry.medications
         })
       })
+    // v4 turned the single illness (childIllness) into a list. It was
+    // shown on the child view, so it is kept as the first tracked illness.
+    this.version(4)
+      .stores({
+        entries: '++id, &date, painLevel, createdAt',
+        settings: 'id',
+        medications: 'id, name',
+      })
+      .upgrade(async (tx) => {
+        await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
+      })
   }
+}
+
+/** In place: moves a pre-v4 `childIllness` into `illnesses`. */
+export function upgradeLegacySettings(s: LegacySettings) {
+  if (s.childIllness && !s.illnesses) s.illnesses = [s.childIllness]
+  delete s.childIllness
 }
 
 export const db = new OuchDB()

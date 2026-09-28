@@ -1,5 +1,5 @@
-import { db, getSettings, updateSettings } from '../db'
-import type { DailyEntry, LegacyDailyEntry, Medication, Settings } from '../db/types'
+import { db, getSettings, updateSettings, upgradeLegacySettings } from '../db'
+import type { DailyEntry, LegacyDailyEntry, LegacySettings, Medication } from '../db/types'
 import { decryptJSON, encryptJSON, type EncryptedPayload } from './crypto'
 import { createLegacyConverter, sameName } from './medications'
 
@@ -10,7 +10,8 @@ interface BackupBundle {
   exportedAt: string
   entries: LegacyDailyEntry[]
   medications?: Medication[]
-  settings?: Settings
+  /** Settings exported before app schema v4 hold a single `childIllness`. */
+  settings?: LegacySettings
 }
 
 export async function exportEncryptedBackup(password: string): Promise<Blob> {
@@ -120,7 +121,9 @@ export async function importEncryptedBackup(
   // Merged (not replaced): a backup exported before a setting existed, or
   // from another device, must not erase settings it simply doesn't know about.
   if (bundle.settings) {
-    await updateSettings(bundle.settings)
+    const settings = { ...bundle.settings }
+    upgradeLegacySettings(settings)
+    await updateSettings(settings)
   }
 
   return { imported, skipped }

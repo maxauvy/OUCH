@@ -20,7 +20,59 @@ const fr: Translations = {
 
   welcome: {
     title: 'Bienvenue sur OUCH',
-    start: 'Commencer',
+  },
+
+  setup: {
+    progress: 'Étape {{n}} sur {{total}}',
+    skipAll: 'Passer',
+    begin: 'Préparer mon suivi',
+    next: 'Suivant',
+    back: 'Retour',
+    finishRerun: 'Terminer',
+    finish: 'Noter ma première journée',
+    welcomeIntro:
+      'Quelques réglages rapides pour que ton suivi soit utile, y compris le rapport à montrer à ton médecin. Tout est facultatif et modifiable plus tard dans Réglages.',
+    illnessTitle: 'Qu’est-ce que tu suis ?',
+    illnessIntro:
+      'C’est le point de départ. Tu peux en choisir plusieurs : elles figureront sur le rapport pour ton médecin, et pourront être expliquées avec des mots simples à tes enfants.',
+    illnessOther: 'Si une maladie n’est pas dans la liste, choisis « Autre » : le suivi fonctionne pareil.',
+    checkIllness: 'Suivi : {{illness}}',
+    checkNoIllness: 'Maladie pas encore précisée',
+    profileTitle: 'Comment t’appeler ?',
+    profileIntro: 'Ton prénom apparaît sur la météo du jour que tu partages, et pré-remplit le rapport pour ton médecin.',
+    profileHelper: 'Facultatif. Il reste sur cet appareil.',
+    trackingTitle: 'Ce que tu veux suivre',
+    trackingIntro:
+      'La douleur est toujours notée. Le reste est au choix : ce que tu suis ici se retrouve dans le rapport (sommeil, fatigue, humeur, zones douloureuses…). Moins de facteurs, c’est une saisie plus rapide les jours difficiles.',
+    changeLater: 'Tu pourras en ajouter ou en retirer à tout moment dans Réglages.',
+    medicationsTitle: 'Tes traitements',
+    medicationsIntro:
+      'Ton médecin voudra savoir ce que tu prends, à quelle dose, et ce qui a changé depuis la dernière fois. Le rapport le montre si tes traitements sont décrits ici.',
+    medicationsLater: 'Tu peux aussi le faire plus tard, dans Réglages → Médicaments.',
+    reminderTitle: 'Un petit rappel ?',
+    reminderIntro:
+      'Le rapport est d’autant plus fiable qu’il couvre beaucoup de jours : il indique combien de jours ont été notés sur la période. Un rappel le soir aide à ne pas oublier.',
+    reminderTime: 'Heure du rappel',
+    reminderDenied:
+      'Les notifications sont bloquées pour ce site. Tu peux les autoriser dans les réglages du navigateur, puis réactiver le rappel dans Réglages.',
+    doneTitle: 'C’est prêt',
+    doneIntro: 'Voici où tu en es. Rien n’est obligatoire : tu peux compléter tout ça plus tard dans Réglages.',
+    checkName: 'Prénom : {{name}}',
+    checkNoName: 'Pas de prénom (le rapport te le demandera)',
+    checkFactors: 'La douleur et {{n}} autres facteurs suivis',
+    checkMedications: 'Traitements décrits : {{n}}',
+    checkNoMedications: 'Aucun traitement décrit pour l’instant',
+    checkReminder: 'Rappel chaque jour à {{time}}',
+    checkNoReminder: 'Pas de rappel quotidien',
+    reportTitle: 'Le rapport pour ton médecin',
+    reportBody:
+      'Au fil des jours, tu pourras le créer depuis l’onglet Tendances : il résume la période depuis ta dernière consultation. Il vaut mieux quelques semaines de saisies pour qu’il ait du sens.',
+    backupTitle: 'Pense à sauvegarder',
+    backupBody:
+      'Tes données restent sur cet appareil, nulle part ailleurs. Si tu le perds ou vides le navigateur, elles disparaissent : de temps en temps, fais une sauvegarde chiffrée depuis Réglages.',
+    rerunTitle: 'Assistant de démarrage',
+    rerunHelper: 'Revoir les étapes de mise en route : maladie, prénom, facteurs suivis, traitements, rappel.',
+    rerunButton: 'Relancer l’assistant',
   },
 
   about: {
@@ -318,6 +370,8 @@ const fr: Translations = {
     runningPainClinic: 'Rapport consultation douleur',
     patient: 'Patient',
     bornOn: 'né(e) le {{date}}',
+    declaredIllness: 'Maladie déclarée par le patient : {{list}}',
+    declaredIllnesses: 'Maladies déclarées par le patient : {{list}}',
     period: 'Période analysée',
     periodDays: '{{n}} j',
     comparedTo: 'comparée aux {{n}} jours précédents',
@@ -579,8 +633,8 @@ const fr: Translations = {
     parentGenderHelper: 'Utilisé dans les phrases de la page « Expliquer à mon enfant » (onglet Enfants).',
     parentGenderMaman: 'Maman',
     parentGenderPapa: 'Papa',
-    childIllnessTitle: 'Maladie à expliquer',
-    childIllnessHelper: 'La maladie décrite sur la page « Expliquer à mon enfant » (onglet Enfants).',
+    illnessesTitle: 'Tes maladies',
+    illnessesHelper: 'Ce que tu suis avec OUCH, plusieurs choix possibles. C’est indiqué sur le rapport pour ton médecin et expliqué sur la page « Expliquer à mon enfant » (onglet Enfants).',
     backupTitle: 'Sauvegarde & synchro',
     privacyNote:
       "OUCH garde toutes tes données sur cet appareil, dans son stockage local. Rien n'est envoyé à un serveur — le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",

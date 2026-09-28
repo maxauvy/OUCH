@@ -1,23 +1,22 @@
 import { useState } from 'react'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
-import { ALL_FACTORS, CHILD_ILLNESSES, type ChildIllness, type FactorKey, type DesignStyle, type ParentGender, type ThemePref } from '../db/types'
+import { ALL_FACTORS, type FactorKey, type DesignStyle, type ParentGender, type ThemePref } from '../db/types'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
 import { AboutCard } from '../components/about/AboutCard'
 import { BackupSection } from '../components/settings/BackupSection'
 import { MedicationsSection } from '../components/settings/MedicationsSection'
+import { IllnessPicker } from '../components/settings/IllnessPicker'
 import { canNotify, requestNotificationPermission } from '../lib/reminder'
 import { reverseGeocode, getCurrentPosition } from '../lib/weather'
-import { getIllnessLabel } from '../lib/childView'
-import { format, LANGUAGES, useLanguage, useTranslation } from '../i18n'
+import { format, LANGUAGES, useTranslation } from '../i18n'
 import { radioGroupProps, radioProps } from '../lib/a11y'
 
 export function SettingsPage() {
   const settings = useSettings()
   const t = useTranslation()
-  const language = useLanguage()
   const [locating, setLocating] = useState(false)
 
   const PARENT_OPTIONS: { value: ParentGender; label: string }[] = [
@@ -136,26 +135,11 @@ export function SettingsPage() {
       </Card>
 
       <Card>
-        <SectionTitle>{t.settings.childIllnessTitle}</SectionTitle>
+        <SectionTitle>{t.settings.illnessesTitle}</SectionTitle>
         <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
-          {t.settings.childIllnessHelper}
+          {t.settings.illnessesHelper}
         </p>
-        <div className="flex flex-wrap gap-2" {...radioGroupProps(t.settings.childIllnessTitle)}>
-          {CHILD_ILLNESSES.map((illness: ChildIllness) => (
-            <button
-              key={illness}
-              {...radioProps(settings.childIllness === illness)}
-              onClick={() => updateSettings({ childIllness: illness })}
-              className="rounded-[var(--radius-control)] px-3.5 py-2 text-caption font-semibold"
-              style={{
-                background: settings.childIllness === illness ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                color: settings.childIllness === illness ? 'var(--color-on-brand)' : 'var(--color-brand)',
-              }}
-            >
-              {getIllnessLabel(language, illness)}
-            </button>
-          ))}
-        </div>
+        <IllnessPicker />
       </Card>
 
       <Card>
@@ -288,6 +272,20 @@ export function SettingsPage() {
       <Card>
         <SectionTitle>{t.settings.backupTitle}</SectionTitle>
         <BackupSection />
+      </Card>
+
+      <Card>
+        <SectionTitle>{t.setup.rerunTitle}</SectionTitle>
+        <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.setup.rerunHelper}
+        </p>
+        <button
+          onClick={() => updateSettings({ onboardingDone: false })}
+          className="rounded-[var(--radius-control)] px-4 py-2 text-caption font-semibold"
+          style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+        >
+          {t.setup.rerunButton}
+        </button>
       </Card>
 
       <Card>

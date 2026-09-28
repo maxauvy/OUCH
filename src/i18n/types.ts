@@ -29,7 +29,53 @@ export interface Translations {
 
   welcome: {
     title: string
-    start: string
+  }
+
+  setup: {
+    /** "Step {{n}} of {{total}}" */
+    progress: string
+    skipAll: string
+    begin: string
+    next: string
+    back: string
+    finish: string
+    finishRerun: string
+    welcomeIntro: string
+    illnessTitle: string
+    illnessIntro: string
+    illnessOther: string
+    checkIllness: string
+    checkNoIllness: string
+    profileTitle: string
+    profileIntro: string
+    profileHelper: string
+    trackingTitle: string
+    trackingIntro: string
+    changeLater: string
+    medicationsTitle: string
+    medicationsIntro: string
+    medicationsLater: string
+    reminderTitle: string
+    reminderIntro: string
+    reminderTime: string
+    reminderDenied: string
+    doneTitle: string
+    doneIntro: string
+    checkName: string
+    checkNoName: string
+    checkFactors: string
+    checkMedications: string
+    checkNoMedications: string
+    checkReminder: string
+    checkNoReminder: string
+    reportTitle: string
+    reportBody: string
+    backupTitle: string
+    backupBody: string
+    /** Settings: button that reopens the setup */
+    rerunTitle: string
+    rerunHelper: string
+    rerunButton: string
   }
 
   about: {
@@ -285,6 +331,9 @@ export interface Translations {
     runningPainClinic: string
     patient: string
     bornOn: string
+    /** Illness(es) as declared by the patient in the app */
+    declaredIllness: string
+    declaredIllnesses: string
     period: string
     periodDays: string
     comparedTo: string
@@ -517,8 +566,8 @@ export interface Translations {
     parentGenderHelper: string
     parentGenderMaman: string
     parentGenderPapa: string
-    childIllnessTitle: string
-    childIllnessHelper: string
+    illnessesTitle: string
+    illnessesHelper: string
     backupTitle: string
     privacyNote: string
   }

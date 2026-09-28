@@ -5,18 +5,15 @@ import { JournalPage } from './pages/JournalPage'
 import { TrendsPage } from './pages/TrendsPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { ChildViewPage } from './pages/ChildViewPage'
-import { AboutCard } from './components/about/AboutCard'
-import { Acronym } from './components/about/Acronym'
-import { AppLogo } from './components/ui/AppLogo'
-import { useSettings } from './hooks/useSettings'
+import { SetupWizard } from './components/setup/SetupWizard'
+import { useSettings, useSettingsLoaded } from './hooks/useSettings'
 import { DesignContext } from './hooks/useDesign'
 import { useTodayEntry } from './hooks/useEntries'
 import { updateSettings, todayISO } from './db'
 import { maybeShowReminder } from './lib/reminder'
-import { getTranslations, I18nProvider, LANGUAGES, useLocale, useTranslation } from './i18n'
+import { getTranslations, I18nProvider } from './i18n'
 import type { Language } from './i18n'
 import type { DesignStyle } from './db/types'
-import { radioGroupProps, radioProps } from './lib/a11y'
 
 function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   useEffect(() => {
@@ -49,54 +46,10 @@ function useAppliedLanguage(language: Language) {
   }, [language])
 }
 
-function WelcomeOverlay({ onDone }: { onDone: () => void }) {
-  const t = useTranslation()
-  const { language } = useLocale()
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto" style={{ background: 'var(--color-paper)' }}>
-      <div className="min-h-full flex items-center justify-center px-5 pt-5">
-        <div className="max-w-sm flex flex-col gap-4 text-center">
-          <div className="flex justify-center gap-2" {...radioGroupProps(t.settings.languageTitle)}>
-            {LANGUAGES.map((lang) => (
-              <button
-                key={lang.code}
-                {...radioProps(language === lang.code)}
-                onClick={() => updateSettings({ language: lang.code })}
-                className="rounded-[var(--radius-control)] px-4 py-1.5 text-caption font-semibold"
-                style={{
-                  background: language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                  color: language === lang.code ? 'var(--color-on-brand)' : 'var(--color-brand)',
-                }}
-              >
-                {lang.label}
-              </button>
-            ))}
-          </div>
-          <AppLogo size={72} className="self-center" />
-          <div>
-            <h1 className="text-title font-semibold">{t.welcome.title}</h1>
-            <Acronym className="text-caption mt-1" />
-          </div>
-          <AboutCard />
-          {/* Sticky so the CTA stays reachable even when the about card is taller than the screen */}
-          <div className="sticky bottom-0 -mx-1 px-1 pt-2 pb-5" style={{ background: 'var(--color-paper)' }}>
-            <button
-              onClick={onDone}
-              className="w-full rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)]"
-              style={{ background: 'var(--color-brand)' }}
-            >
-              {t.welcome.start}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 function AppShell() {
   const [tab, setTab] = useState<Tab>('today')
   const settings = useSettings()
+  const settingsLoaded = useSettingsLoaded()
   const todayEntry = useTodayEntry()
   useAppliedTheme(settings.theme)
 
@@ -108,6 +61,22 @@ function AppShell() {
     return () => clearInterval(id)
   }, [settings.reminderEnabled, settings.reminderTime, settings.language, todayEntry])
 
+  // Wait for the stored settings, or the setup would flash on every launch.
+  if (!settingsLoaded) return null
+
+  // The setup covers the whole screen; the app behind it is not rendered, so
+  // neither focus nor a screen reader can wander into it.
+  if (!settings.onboardingDone) {
+    return (
+      <SetupWizard
+        onDone={() => {
+          setTab('today')
+          updateSettings({ onboardingDone: true })
+        }}
+      />
+    )
+  }
+
   return (
     <>
       <main className="flex-1">
@@ -118,7 +87,6 @@ function AppShell() {
         {tab === 'settings' && <SettingsPage />}
       </main>
       <TabBar active={tab} onChange={setTab} />
-      {!settings.onboardingDone && <WelcomeOverlay onDone={() => updateSettings({ onboardingDone: true })} />}
     </>
   )
 }

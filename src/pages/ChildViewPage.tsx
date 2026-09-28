@@ -55,12 +55,15 @@ export function ChildViewPage() {
   const entry = todayEntry ?? allEntries?.[0]
 
   const [tone, setTone] = useState<ChildTone>('young')
-  const [illnessOpen, setIllnessOpen] = useState(true)
 
   const weather = entry ? computePainWeather(entry) : null
   const copy = weather ? getChildViewCopy(language, weather.level, tone, settings.parentGender) : null
-  const illnessTitle = getIllnessTitle(language, settings.childIllness)
-  const illnessText = getIllnessExplanation(language, settings.childIllness, tone, settings.parentGender)
+  // Nothing picked yet: explain a chronic illness in general rather than guess one.
+  const illnesses = (settings.illnesses.length ? settings.illnesses : (['autre'] as const)).map((illness) => ({
+    id: illness,
+    question: format(t.childView.aboutIllness, { illness: getIllnessTitle(language, illness) }),
+    text: getIllnessExplanation(language, illness, tone, settings.parentGender),
+  }))
 
   // The page's warm palette should reach the screen edges (and the overscroll
   // area) even on wide screens, where #root is only a centered column. The
@@ -81,8 +84,7 @@ export function ChildViewPage() {
         onToneChange={setTone}
         weather={entry ? weather : null}
         copy={copy}
-        illnessQuestion={format(t.childView.aboutIllness, { illness: illnessTitle })}
-        illnessText={illnessText}
+        illnesses={illnesses}
         closing={getChildViewClosing(language, tone, settings.parentGender)}
       />
     )
@@ -163,37 +165,9 @@ export function ChildViewPage() {
               </div>
             </div>
 
-            <div className="rounded-[28px] p-5" style={{ background: 'var(--color-kid-surface)', border: '1px solid var(--color-kid-hairline)' }}>
-              <button
-                onClick={() => setIllnessOpen((v) => !v)}
-                aria-expanded={illnessOpen}
-                className="w-full flex items-center justify-between gap-2.5 text-left"
-              >
-                <span className="text-heading font-bold" style={{ color: 'var(--color-kid-ink)' }}>
-                  {format(t.childView.aboutIllness, { illness: illnessTitle })}
-                </span>
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="var(--color-kid-accent-text)"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="shrink-0 transition-transform"
-                  style={{ transform: illnessOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                  aria-hidden
-                >
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
-              </button>
-              {illnessOpen && (
-                <div className="text-control mt-3 leading-relaxed" style={{ color: 'var(--color-kid-ink-muted)' }}>
-                  {illnessText}
-                </div>
-              )}
-            </div>
+            {illnesses.map((illness) => (
+              <KidIllnessCard key={illness.id} question={illness.question} text={illness.text} defaultOpen={illnesses.length === 1} />
+            ))}
 
             <p className="text-control text-center leading-relaxed px-3 mt-1" style={{ color: 'var(--color-kid-ink)' }}>
               <ClosingText text={getChildViewClosing(language, tone, settings.parentGender)} />
@@ -201,6 +175,41 @@ export function ChildViewPage() {
           </>
         )}
       </div>
+    </div>
+  )
+}
+
+/** One collapsible explanation. Several illnesses start folded, so the
+ * child sees the list of questions first. */
+function KidIllnessCard({ question, text, defaultOpen }: { question: string; text: string; defaultOpen: boolean }) {
+  const [open, setOpen] = useState(defaultOpen)
+  return (
+    <div className="rounded-[28px] p-5" style={{ background: 'var(--color-kid-surface)', border: '1px solid var(--color-kid-hairline)' }}>
+      <button onClick={() => setOpen((v) => !v)} aria-expanded={open} className="w-full flex items-center justify-between gap-2.5 text-left">
+        <span className="text-heading font-bold" style={{ color: 'var(--color-kid-ink)' }}>
+          {question}
+        </span>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--color-kid-accent-text)"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="shrink-0 transition-transform"
+          style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          aria-hidden
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+      {open && (
+        <div className="text-control mt-3 leading-relaxed" style={{ color: 'var(--color-kid-ink-muted)' }}>
+          {text}
+        </div>
+      )}
     </div>
   )
 }
