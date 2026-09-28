@@ -7,6 +7,7 @@ import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
 import { AboutCard } from '../components/about/AboutCard'
 import { BackupSection } from '../components/settings/BackupSection'
+import { MedicationsSection } from '../components/settings/MedicationsSection'
 import { canNotify, requestNotificationPermission } from '../lib/reminder'
 import { reverseGeocode, getCurrentPosition } from '../lib/weather'
 import { getIllnessLabel } from '../lib/childView'
@@ -180,6 +181,13 @@ export function SettingsPage() {
           ))}
         </div>
       </Card>
+
+      {settings.enabledFactors.includes('medications') && (
+        <Card>
+          <SectionTitle>{t.medications.title}</SectionTitle>
+          <MedicationsSection />
+        </Card>
+      )}
 
       <Card className="flex items-center justify-between">
         <div>

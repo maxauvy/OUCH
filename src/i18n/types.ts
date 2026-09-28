@@ -173,6 +173,58 @@ export interface Translations {
     vsAverageSame: string
   }
 
+  medications: {
+    // Daily form
+    taken: string
+    missedHint: string
+    fewerIntakes: string
+    moreIntakes: string
+    reliefQuestion: string
+    relief: [string, string, string, string]
+    reportSideEffect: string
+    sideEffectsTitle: string
+    sideEffectsPlaceholder: string
+    sideEffectsSuggestions: string[]
+    unspecifiedHint: string
+    // Registry (Settings)
+    title: string
+    helper: string
+    empty: string
+    add: string
+    name: string
+    namePlaceholder: string
+    nameTaken: string
+    regimenTitle: string
+    regimens: Record<'scheduled' | 'asNeeded' | 'unspecified', string>
+    regimenHelpers: Record<'scheduled' | 'asNeeded' | 'unspecified', string>
+    dose: string
+    doseAmountPlaceholder: string
+    unit: string
+    units: Record<'mg' | 'g' | 'µg' | 'ml' | 'drop' | 'puff' | 'patch', string>
+    perDayScheduled: string
+    perDayAsNeeded: string
+    reason: string
+    reasonPlaceholder: string
+    since: string
+    edit: string
+    save: string
+    cancel: string
+    changePosology: string
+    changeFrom: string
+    stop: string
+    stopDate: string
+    stopReasonTitle: string
+    stopReasons: Record<'ineffective' | 'sideEffects' | 'improved' | 'other', string>
+    resume: string
+    delete: string
+    deleteConfirm: string
+    stoppedSection: string
+    stoppedOn: string
+    perDayShort: string
+    maxPerDayShort: string
+    history: string
+  }
+
   weatherField: {
     label: string
     autoFill: string

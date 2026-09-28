@@ -1,6 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie'
-import type { BodyZone, DailyEntry, Settings } from './types'
+import type { BodyZone, DailyEntry, LegacyDailyEntry, Medication, Settings } from './types'
 import { DEFAULT_SETTINGS } from './types'
+import { createLegacyConverter } from '../lib/medications'
 
 // v1 stored body zones as their French display label directly (e.g. 'Tête').
 // v2 introduced stable slugs (e.g. 'head') so labels can be translated —
@@ -24,7 +25,7 @@ const V1_BODY_ZONE_TO_SLUG: Record<string, BodyZone> = {
 class OuchDB extends Dexie {
   entries!: EntityTable<DailyEntry, 'id'>
   settings!: EntityTable<Settings, 'id'>
-
+  medications!: EntityTable<Medication, 'id'>
   constructor() {
     super('ouch')
     this.version(1).stores({
@@ -47,6 +48,27 @@ class OuchDB extends Dexie {
               )
             }
           })
+      })
+    // v3 replaced free-text medication names with a medication registry and
+    // per-day intakes. Each distinct name becomes an 'unspecified'
+    // medication the person can describe later; nothing is guessed.
+    this.version(3)
+      .stores({
+        entries: '++id, &date, painLevel, createdAt',
+        settings: 'id',
+        medications: 'id, name',
+      })
+      .upgrade(async (tx) => {
+        const entries = tx.table<LegacyDailyEntry>('entries')
+        const all = await entries.orderBy('date').toArray()
+        const { intakesFor, created } = createLegacyConverter([])
+        const intakesById = new Map(all.map((e) => [e.id, intakesFor(e.medications, e.date)]))
+        await tx.table<Medication>('medications').bulkAdd(created)
+        await entries.toCollection().modify((entry) => {
+          const intakes = intakesById.get(entry.id)
+          if (intakes?.length) entry.intakes = intakes
+          delete entry.medications
+        })
       })
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { BodyZone, DailyEntry } from '../../db/types'
 import { BODY_ZONES } from '../../db/types'
 import { useAllEntries, useEntry, upsertEntry } from '../../hooks/useEntries'
@@ -7,6 +7,9 @@ import { Slider } from '../ui/Slider'
 import { Card, SectionTitle } from '../ui/Card'
 import { Chip } from '../ui/Chip'
 import { TagInput } from './TagInput'
+import { MedicationsField } from './MedicationsField'
+import { useMedications } from '../../hooks/useMedications'
+import { defaultIntakes } from '../../lib/medications'
 import { WeatherField } from './WeatherField'
 import { computePainWeather } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
@@ -25,6 +28,7 @@ export function DailyEntryForm({ date }: { date: string }) {
   const dbEntry = useEntry(date)
   const settings = useSettings()
   const allEntries = useAllEntries()
+  const medications = useMedications()
   const t = useTranslation()
   const { intlLocale } = useLocale()
   const design = useDesign()
@@ -43,18 +47,30 @@ export function DailyEntryForm({ date }: { date: string }) {
     setLocal(dbEntry ?? {})
   }
 
+  // A brand-new day starts with its ongoing treatments ticked as taken, so
+  // only a missed dose needs a tap. Never applied to a day already saved:
+  // that would rewrite history for days logged before a treatment existed.
+  const medicationsEnabled = settings.enabledFactors.includes('medications')
+  const draft = useMemo<Partial<DailyEntry>>(
+    () =>
+      !dbEntry && local.intakes === undefined && medications && medicationsEnabled
+        ? { ...local, intakes: defaultIntakes(medications, date) }
+        : local,
+    [dbEntry, local, medications, medicationsEnabled, date]
+  )
+
   useEffect(() => {
-    pendingRef.current = { date, local }
+    pendingRef.current = { date, local: draft }
     const t = setTimeout(() => {
       if (!dirtyRef.current) return
       dirtyRef.current = false
       setSaveState('saving')
-      upsertEntry(date, local)
+      upsertEntry(date, draft)
         .then(() => setSaveState('saved'))
         .catch(() => setSaveState('idle'))
     }, 350)
     return () => clearTimeout(t)
-  }, [local, date])
+  }, [draft, date])
 
   // Flushes a still-pending edit when the user navigates to another day or
   // away from this form before the debounce above fires — otherwise it's
@@ -77,9 +93,6 @@ export function DailyEntryForm({ date }: { date: string }) {
   const painLevel = local.painLevel ?? 0
   const preview = computePainWeather({ painLevel, fatigueLevel: local.fatigueLevel, brainFog: local.brainFog })
 
-  const knownMedications = Array.from(
-    new Set((allEntries ?? []).flatMap((e) => e.medications ?? []))
-  )
   const knownPositiveActions = Array.from(
     new Set([
       ...(allEntries ?? []).flatMap((e) => e.positiveActions ?? []),
@@ -96,12 +109,12 @@ export function DailyEntryForm({ date }: { date: string }) {
     return (
       <HealthEntryLayout
         date={date}
-        local={local}
+        local={draft}
         setField={setField}
         settings={settings}
         saveState={saveState}
         allEntries={allEntries ?? []}
-        knownMedications={knownMedications}
+        medications={medications ?? []}
         knownPositiveActions={knownPositiveActions}
       />
     )
@@ -232,11 +245,12 @@ export function DailyEntryForm({ date }: { date: string }) {
       {has('medications') && (
         <Card>
           <SectionTitle>{t.entryForm.medicationsTaken}</SectionTitle>
-          <TagInput
-            values={local.medications ?? []}
-            onChange={(v) => setField('medications', v)}
+          <MedicationsField
+            date={date}
+            medications={medications ?? []}
+            intakes={draft.intakes ?? []}
+            onChange={(v) => setField('intakes', v)}
             placeholder={t.entryForm.addMedicationPlaceholder}
-            suggestions={knownMedications}
           />
         </Card>
       )}
