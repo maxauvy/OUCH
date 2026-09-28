@@ -231,6 +231,176 @@ export interface Translations {
     history: string
   }
 
+  /** Export page (in the app's language). */
+  doctorReport: {
+    entryTitle: string
+    entryHelper: string
+    title: string
+    back: string
+    recipientTitle: string
+    recipients: Record<'gp' | 'painClinic', { label: string; helper: string }>
+    consultationTitle: string
+    consultationHelper: string
+    periodSummary: string
+    fewDaysWarning: string
+    noData: string
+    languageTitle: string
+    patientTitle: string
+    patientName: string
+    patientNamePlaceholder: string
+    birthDate: string
+    optional: string
+    privacyNote: string
+    agendaTitle: string
+    agendaHelper: string
+    agendaPlaceholder: string
+    optionsTitle: string
+    includeNotes: string
+    includeCycle: string
+    print: string
+    printHelper: string
+    preview: string
+    previewLabel: string
+  }
+
+  /** The report itself (in the language chosen for the report). */
+  report: {
+    titleGp: string
+    titlePainClinic: string
+    subtitle: string
+    runningGp: string
+    runningPainClinic: string
+    patient: string
+    bornOn: string
+    period: string
+    periodDays: string
+    comparedTo: string
+    logged: string
+    loggedPrev: string
+    caveat: string
+    footer: string
+    page: string
+    keyPoints: string
+    painChange: string
+    painChangeAbove: string
+    painChangeBelow: string
+    painOnly: string
+    severeDays: string
+    severeDaysNoPrev: string
+    flaresNone: string
+    flares: string
+    flareRange: string
+    doseChange: string
+    medStarted: string
+    medStopped: string
+    sideEffectReported: string
+    sideEffectReportedOnce: string
+    missedDoses: string
+    rescueDays: string
+    rescueItem: string
+    rescueItemNoCount: string
+    keyFigures: string
+    keyFiguresHint: string
+    tileMeanPain: string
+    tileSevere: string
+    tileMild: string
+    tileSleep: string
+    tileMedian: string
+    tileVariability: string
+    before: string
+    range: string
+    sleepQuality: string
+    hours: string
+    painChart: string
+    chartHint: string
+    previousPeriod: string
+    sinceConsultation: string
+    severeThreshold: string
+    treatments: string
+    treatmentsSince: string
+    colTreatment: string
+    colPosology: string
+    colUse: string
+    colRelief: string
+    colSideEffects: string
+    regimens: Record<'scheduled' | 'asNeeded' | 'unspecified', string>
+    takenDays: string
+    adherence: string
+    prnUse: string
+    usedDays: string
+    maxUsed: string
+    aboveMax: string
+    withoutCount: string
+    notAsked: string
+    reliefModStrong: string
+    ofIntakes: string
+    none: string
+    perIntake: string
+    maxPrescribed: string
+    until: string
+    notDescribed: string
+    reliefLevels: [string, string, string, string]
+    reliefLegend: string
+    symptoms: string
+    colSymptom: string
+    colBefore: string
+    colPeriod: string
+    colDiff: string
+    colTrend: string
+    trendStable: string
+    trendBetter: string
+    trendWorse: string
+    symptomsNote: string
+    symptomLabels: Record<'fatigueLevel' | 'sleepQuality' | 'sleepHours' | 'brainFog' | 'moodLevel' | 'stressLevel' | 'activityLevel', [string, string]>
+    zones: string
+    zonesNote: string
+    zonesWpi: string
+    agenda: string
+    notes: string
+    notesHintGp: string
+    notesHintAll: string
+    method: string
+    methodGp: string
+    methodCollect: string
+    methodCalc: string
+    methodLimits: string
+    references: string
+    completeness: string
+    intensity: string
+    distribution: string
+    distPrev: string
+    distCur: string
+    colMeanSd: string
+    colMedianIqr: string
+    colMinMax: string
+    colFlares: string
+    categoriesNote: string
+    evolution: string
+    timelineScheduled: string
+    timelineAsNeeded: string
+    weekly: string
+    colWeek: string
+    colDays: string
+    colMeanPain: string
+    nonDrug: string
+    nonDrugHint: string
+    calendar: string
+    notLogged: string
+    consultation: string
+    weekdayInitials: [string, string, string, string, string, string, string]
+    associations: string
+    colFactor: string
+    colStrength: string
+    strengths: [string, string, string, string]
+    factorLabels: Record<'sleepQuality' | 'sleepHours' | 'stress' | 'activityPrev' | 'positiveActions' | 'pressure' | 'fatigue', string>
+    factorNotes: Record<'positiveActions' | 'pressure' | 'fatigue', string>
+    contexts: string
+    yes: string
+    otherwise: string
+    contextLabels: Record<'afterActive' | 'actions' | 'period', string>
+    associationsNote: string
+  }
+
   weatherField: {
     label: string
     autoFill: string

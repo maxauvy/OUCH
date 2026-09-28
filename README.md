@@ -10,13 +10,15 @@ Les carnets de suivi existants (Pain Diary, MyPainDiary, etc.) sont soit fermés
 
 ## Ce que ça fait
 
-**Saisie du jour.** Douleur (seule donnée obligatoire), fatigue, sommeil, stress, brouillard mental, humeur, activité, localisation de la douleur, médicaments, météo extérieure (géolocalisation ou saisie manuelle), cycle menstruel en option. Chaque facteur peut être désactivé dans les réglages si on ne s'en sert pas.
+**Saisie du jour.** Douleur (seule donnée obligatoire), fatigue, sommeil, stress, brouillard mental, humeur, activité, localisation de la douleur, médicaments (traitements de fond cochés d'office, prises au besoin avec leur soulagement), météo extérieure (géolocalisation ou saisie manuelle), cycle menstruel en option. Chaque facteur peut être désactivé dans les réglages si on ne s'en sert pas.
 
 **Météo de la douleur.** Les mesures du jour se résument en une image, du ciel dégagé à l'orage, exportable en PNG avec un petit mot si on veut, pour l'envoyer soi-même à qui on veut.
 
 **Journal.** Calendrier mensuel coloré par intensité, on peut revenir corriger n'importe quel jour après coup.
 
 **Tendances.** Courbe de douleur, moyennes par jour de la semaine, et une analyse basique de ce qui semble corrélé aux douleurs (sommeil, stress, météo...). Présenté comme une observation, pas une preuve scientifique.
+
+**Rapport pour mon médecin.** Depuis Tendances, un rapport imprimable (ou enregistrable en PDF) couvrant la période depuis la dernière consultation, comparée à la même durée juste avant. Deux versions : une synthèse de 2 pages pour le médecin traitant, un rapport détaillé de 5 pages pour un centre douleur (CETD). Le rapport décrit les données sans rien interpréter, et ses seuils sont sourcés (IMMPACT, HAS). Il est créé sur l'appareil, et le nom et la date de naissance qu'on y met ne sont pas enregistrés.
 
 **Expliquer à mon enfant.** Un écran à part, pensé pour être montré à un enfant : la météo du jour reformulée en langage simple ("aujourd'hui maman a un ciel un peu voilé"), des idées concrètes pour aider, et une explication de la maladie elle-même (fibromyalgie, arthrite, spondylarthrite, endométriose, migraine, lombalgie, SEP...) adaptée à son âge. Le ton (petit / plus grand) et le parent concerné se règlent à la volée.
 
@@ -67,7 +69,7 @@ src/
 
 ## Pistes pour la suite
 
-- Export PDF/CSV du journal pour l'apporter en consultation.
+- Export CSV du journal.
 - Carte du corps interactive (SVG) plutôt qu'une liste de zones.
 - Vrai rappel push (nécessite un petit backend).
 - Plusieurs profils sur le même appareil.

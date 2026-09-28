@@ -1,10 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { IconChevronRight, IconFileText } from '@tabler/icons-react'
 import { useAllEntries } from '../hooks/useEntries'
 import { useSettings } from '../hooks/useSettings'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Footer } from '../components/layout/Footer'
 import { PainTrendChart } from '../components/trends/PainTrendChart'
 import { FactorAnalysisCard } from '../components/trends/FactorAnalysisCard'
+import { DoctorReportPage } from './DoctorReportPage'
 import { analyzeFactor, analyzeTagPresence, bestAndWorstWeekday } from '../lib/insights'
 import { usePalette } from '../hooks/useDesign'
 import { subDays } from 'date-fns'
@@ -41,6 +43,16 @@ export function TrendsPage() {
   const i18n = useTranslation()
   const t = usePalette()
   const [rangeIdx, setRangeIdx] = useState(1)
+  const [reporting, setReporting] = useState(false)
+  const reportButtonRef = useRef<HTMLButtonElement>(null)
+  const returningFromReport = useRef(false)
+
+  // Coming back from the report: focus returns to the button that opened it.
+  useEffect(() => {
+    if (reporting || !returningFromReport.current) return
+    returningFromReport.current = false
+    reportButtonRef.current?.focus()
+  }, [reporting])
 
   const RANGES = [
     { label: i18n.trends.range7, days: 7 },
@@ -75,11 +87,47 @@ export function TrendsPage() {
     ? analyzeTagPresence(filtered, (e) => e.positiveActions, [i18n.trends.bucketWithout, i18n.trends.bucketWith])
     : []
 
+  if (reporting) {
+    return (
+      <DoctorReportPage
+        onBack={() => {
+          returningFromReport.current = true
+          setReporting(false)
+        }}
+      />
+    )
+  }
+
   if (!entries) return null
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       <h1 className="text-title font-semibold px-1">{i18n.trends.title}</h1>
+
+      {entries.length > 0 && (
+        <button
+          ref={reportButtonRef}
+          type="button"
+          onClick={() => setReporting(true)}
+          className="text-left rounded-[var(--radius-card)] p-4 flex items-center gap-3"
+          style={{ background: 'var(--color-surface)', border: '1px solid var(--color-hairline)', boxShadow: 'var(--card-shadow)' }}
+        >
+          <span
+            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+            aria-hidden
+          >
+            <IconFileText size={22} />
+          </span>
+          <span className="flex-1">
+            <span className="block text-body font-semibold">{i18n.doctorReport.entryTitle}</span>
+            <span className="block text-caption" style={{ color: t.inkMuted }}>
+              {i18n.doctorReport.entryHelper}
+            </span>
+          </span>
+          <IconChevronRight size={20} aria-hidden style={{ color: t.inkMuted }} />
+        </button>
+      )}
 
       <div className="flex gap-2 px-1">
         {RANGES.map((r, i) => (
