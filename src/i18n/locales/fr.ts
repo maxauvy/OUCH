@@ -32,6 +32,12 @@ const fr: Translations = {
     finish: 'Noter ma première journée',
     welcomeIntro:
       'Quelques réglages rapides pour que ton suivi soit utile, y compris le rapport à montrer à ton médecin. Tout est facultatif et modifiable plus tard dans Réglages.',
+    illnessTitle: 'Quelle maladie suis-tu ?',
+    illnessIntro:
+      'C’est le point de départ : OUCH s’en sert pour t’accompagner, et pour l’expliquer avec des mots simples à tes enfants si tu le souhaites.',
+    illnessOther: 'Si ta maladie n’est pas dans la liste, choisis « Autre » : le suivi fonctionne pareil.',
+    checkIllness: 'Maladie suivie : {{illness}}',
+    checkNoIllness: 'Maladie pas encore précisée',
     profileTitle: 'Comment t’appeler ?',
     profileIntro: 'Ton prénom apparaît sur la météo du jour que tu partages, et pré-remplit le rapport pour ton médecin.',
     profileHelper: 'Facultatif. Il reste sur cet appareil.',
@@ -65,7 +71,7 @@ const fr: Translations = {
     backupBody:
       'Tes données restent sur cet appareil, nulle part ailleurs. Si tu le perds ou vides le navigateur, elles disparaissent : de temps en temps, fais une sauvegarde chiffrée depuis Réglages.',
     rerunTitle: 'Assistant de démarrage',
-    rerunHelper: 'Revoir les étapes de mise en route : prénom, facteurs suivis, traitements, rappel.',
+    rerunHelper: 'Revoir les étapes de mise en route : maladie, prénom, facteurs suivis, traitements, rappel.',
     rerunButton: 'Relancer l’assistant',
   },
 
@@ -625,8 +631,8 @@ const fr: Translations = {
     parentGenderHelper: 'Utilisé dans les phrases de la page « Expliquer à mon enfant » (onglet Enfants).',
     parentGenderMaman: 'Maman',
     parentGenderPapa: 'Papa',
-    childIllnessTitle: 'Maladie à expliquer',
-    childIllnessHelper: 'La maladie décrite sur la page « Expliquer à mon enfant » (onglet Enfants).',
+    childIllnessTitle: 'Ta maladie',
+    childIllnessHelper: 'La maladie que tu suis avec OUCH. C’est aussi celle qui est expliquée sur la page « Expliquer à mon enfant » (onglet Enfants).',
     backupTitle: 'Sauvegarde & synchro',
     privacyNote:
       "OUCH garde toutes tes données sur cet appareil, dans son stockage local. Rien n'est envoyé à un serveur — le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",

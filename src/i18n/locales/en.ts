@@ -30,6 +30,12 @@ const en: Translations = {
     finish: 'Log my first day',
     welcomeIntro:
       'A few quick settings so your tracking is useful, including the report you can show your doctor. Everything is optional and can be changed later in Settings.',
+    illnessTitle: 'Which illness are you tracking?',
+    illnessIntro:
+      'This is the starting point: OUCH uses it to support you, and to explain it in simple words to your children if you wish.',
+    illnessOther: 'If your illness is not in the list, choose “Other”: tracking works just the same.',
+    checkIllness: 'Illness tracked: {{illness}}',
+    checkNoIllness: 'Illness not specified yet',
     profileTitle: 'What should we call you?',
     profileIntro: 'Your first name appears on the daily weather you share, and prefills the report for your doctor.',
     profileHelper: 'Optional. It stays on this device.',
@@ -63,7 +69,7 @@ const en: Translations = {
     backupBody:
       'Your data stays on this device and nowhere else. If you lose it or clear the browser, it is gone: every now and then, make an encrypted backup from Settings.',
     rerunTitle: 'Setup assistant',
-    rerunHelper: 'Go through the getting-started steps again: first name, tracked factors, medications, reminder.',
+    rerunHelper: 'Go through the getting-started steps again: illness, first name, tracked factors, medications, reminder.',
     rerunButton: 'Run the setup again',
   },
 
@@ -619,8 +625,8 @@ const en: Translations = {
     parentGenderHelper: 'Used in the sentences on the "Explain to my child" page (Kids tab).',
     parentGenderMaman: 'Mom',
     parentGenderPapa: 'Dad',
-    childIllnessTitle: 'Illness to explain',
-    childIllnessHelper: 'The illness described on the "Explain to my child" page (Kids tab).',
+    childIllnessTitle: 'Your illness',
+    childIllnessHelper: 'The illness you track with OUCH. It is also the one explained on the "Explain to my child" page (Kids tab).',
     backupTitle: 'Backup & sync',
     privacyNote:
       "OUCH keeps all your data on this device, in local storage. Nothing is sent to a server — sharing your weather and making backups is always something you choose to do.",

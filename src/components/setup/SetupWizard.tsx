@@ -1,13 +1,14 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { IconCheck } from '@tabler/icons-react'
 import { db, updateSettings } from '../../db'
-import { ALL_FACTORS, type FactorKey } from '../../db/types'
+import { ALL_FACTORS, CHILD_ILLNESSES, type FactorKey } from '../../db/types'
 import { useSettings } from '../../hooks/useSettings'
 import { useMedications } from '../../hooks/useMedications'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { canNotify, requestNotificationPermission } from '../../lib/reminder'
 import { radioGroupProps, radioProps } from '../../lib/a11y'
-import { format, LANGUAGES, useLocale, useTranslation } from '../../i18n'
+import { getIllnessLabel } from '../../lib/childView'
+import { format, LANGUAGES, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { AboutCard } from '../about/AboutCard'
 import { Acronym } from '../about/Acronym'
 import { AppLogo } from '../ui/AppLogo'
@@ -18,10 +19,11 @@ import { MedicationsSection } from '../settings/MedicationsSection'
 
 // First-run setup. Every step is optional and saved as soon as it is changed
 // (same as Settings), so leaving halfway keeps what was chosen. The steps
-// are the things the doctor report relies on: a name to prefill, the
-// factors it describes, the medication registry, and regular logging.
+// start from the illness being tracked, then cover what the doctor report
+// relies on: a name to prefill, the factors it describes, the medication
+// registry, and regular logging.
 
-type Step = 'welcome' | 'profile' | 'tracking' | 'medications' | 'reminder' | 'done'
+type Step = 'welcome' | 'illness' | 'profile' | 'tracking' | 'medications' | 'reminder' | 'done'
 
 // 'cycle' is driven by its own switch (cycleTrackingEnabled), shown below the chips.
 const TRACKABLE: FactorKey[] = ALL_FACTORS.filter((k) => k !== 'cycle')
@@ -34,7 +36,7 @@ export function SetupWizard({ onDone }: { onDone: () => void }) {
   const ids = useId()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const tracksMedications = settings.enabledFactors.includes('medications')
-  const steps: Step[] = ['welcome', 'profile', 'tracking', ...(tracksMedications ? (['medications'] as const) : []), 'reminder', 'done']
+  const steps: Step[] = ['welcome', 'illness', 'profile', 'tracking', ...(tracksMedications ? (['medications'] as const) : []), 'reminder', 'done']
   const [step, setStep] = useState<Step>('welcome')
   // Run again from Settings by someone who already logs: no "first day".
   const hasEntries = !!useLiveQuery(() => db.entries.count(), [])
@@ -54,8 +56,11 @@ export function SetupWizard({ onDone }: { onDone: () => void }) {
   const go = (delta: number) => setStep(steps[Math.min(steps.length - 1, Math.max(0, index + delta))]!)
   const isLast = step === 'done'
 
+  const progress = format(t.setup.progress, { n: index + 1, total: steps.length })
+  // Focus lands on the title at each step, so the step number is read with it.
   const heading = (text: string) => (
     <h1 id={`${ids}-title`} ref={headingRef} tabIndex={-1} className="text-title font-semibold outline-none">
+      {step !== 'welcome' && <span className="sr-only">{progress}, </span>}
       {text}
     </h1>
   )
@@ -66,16 +71,17 @@ export function SetupWizard({ onDone }: { onDone: () => void }) {
       aria-modal="true"
       aria-labelledby={`${ids}-title`}
       className="fixed inset-0 z-50 overflow-y-auto"
-      style={{ background: 'var(--color-paper)' }}
+      // Keeps keyboard focus clear of the sticky buttons at the bottom.
+      style={{ background: 'var(--color-paper)', scrollPaddingBottom: 96 }}
     >
       <div className="min-h-full flex justify-center px-5 pt-5">
         <div className="w-full max-w-sm flex flex-col gap-4">
-          <div className="flex items-center justify-between gap-3 min-h-11">
+          <div className="flex flex-wrap items-center justify-between gap-3 min-h-11">
             {step === 'welcome' ? (
               <LanguagePicker />
             ) : (
-              <p className="text-caption font-medium" style={{ color: 'var(--color-ink-muted)' }}>
-                {format(t.setup.progress, { n: index + 1, total: steps.length })}
+              <p className="text-caption font-medium" style={{ color: 'var(--color-ink-muted)' }} aria-hidden>
+                {progress}
               </p>
             )}
             {!isLast && (
@@ -107,6 +113,8 @@ export function SetupWizard({ onDone }: { onDone: () => void }) {
               <Intro>{t.setup.welcomeIntro}</Intro>
             </>
           )}
+
+          {step === 'illness' && <IllnessStep heading={heading(t.setup.illnessTitle)} />}
 
           {step === 'profile' && (
             <>
@@ -246,7 +254,7 @@ function LanguagePicker() {
           type="button"
           {...radioProps(language === lang.code)}
           onClick={() => updateSettings({ language: lang.code })}
-          className="rounded-[var(--radius-control)] px-4 py-1.5 text-caption font-semibold"
+          className="min-h-11 rounded-[var(--radius-control)] px-4 text-caption font-semibold"
           style={{
             background: language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
             color: language === lang.code ? 'var(--color-on-brand)' : 'var(--color-brand)',
@@ -256,6 +264,44 @@ function LanguagePicker() {
         </button>
       ))}
     </div>
+  )
+}
+
+function IllnessStep({ heading }: { heading: ReactNode }) {
+  const t = useTranslation()
+  const language = useLanguage()
+  const settings = useSettings()
+  return (
+    <>
+      {heading}
+      <Intro>{t.setup.illnessIntro}</Intro>
+      <Card>
+        {/* Nothing looks selected until a choice is made: the stored default is not an answer. */}
+        <div className="flex flex-wrap gap-2" {...radioGroupProps(t.setup.illnessTitle)}>
+          {CHILD_ILLNESSES.map((illness, i) => {
+            const selected = settings.illnessChosen && settings.childIllness === illness
+            return (
+              <button
+                key={illness}
+                type="button"
+                {...radioProps(selected)}
+                // With no choice yet, the first option is the one Tab reaches.
+                tabIndex={selected || (!settings.illnessChosen && i === 0) ? 0 : -1}
+                onClick={() => updateSettings({ childIllness: illness, illnessChosen: true })}
+                className="min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
+                style={{
+                  background: selected ? 'var(--color-brand)' : 'var(--color-brand-soft)',
+                  color: selected ? 'var(--color-on-brand)' : 'var(--color-brand)',
+                }}
+              >
+                {getIllnessLabel(language, illness)}
+              </button>
+            )
+          })}
+        </div>
+      </Card>
+      <Hint>{t.setup.illnessOther}</Hint>
+    </>
   )
 }
 
@@ -316,7 +362,14 @@ function DoneStep({ heading }: { heading: ReactNode }) {
   const tracksMedications = settings.enabledFactors.includes('medications')
   const described = medications?.filter((m) => m.regimen !== 'unspecified').length ?? 0
 
+  const language = useLanguage()
   const items: { done: boolean; text: string }[] = [
+    {
+      done: settings.illnessChosen,
+      text: settings.illnessChosen
+        ? format(t.setup.checkIllness, { illness: getIllnessLabel(language, settings.childIllness) })
+        : t.setup.checkNoIllness,
+    },
     { done: !!settings.displayName, text: settings.displayName ? format(t.setup.checkName, { name: settings.displayName }) : t.setup.checkNoName },
     { done: true, text: format(t.setup.checkFactors, { n: settings.enabledFactors.filter((k) => k !== 'cycle').length }) },
     ...(tracksMedications

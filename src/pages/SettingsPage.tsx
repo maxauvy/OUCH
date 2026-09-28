@@ -145,7 +145,7 @@ export function SettingsPage() {
             <button
               key={illness}
               {...radioProps(settings.childIllness === illness)}
-              onClick={() => updateSettings({ childIllness: illness })}
+              onClick={() => updateSettings({ childIllness: illness, illnessChosen: true })}
               className="rounded-[var(--radius-control)] px-3.5 py-2 text-caption font-semibold"
               style={{
                 background: settings.childIllness === illness ? 'var(--color-brand)' : 'var(--color-brand-soft)',

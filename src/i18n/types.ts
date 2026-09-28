@@ -41,6 +41,11 @@ export interface Translations {
     finish: string
     finishRerun: string
     welcomeIntro: string
+    illnessTitle: string
+    illnessIntro: string
+    illnessOther: string
+    checkIllness: string
+    checkNoIllness: string
     profileTitle: string
     profileIntro: string
     profileHelper: string

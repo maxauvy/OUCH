@@ -230,7 +230,12 @@ export interface Settings {
   onboardingDone: boolean
   language: Language
   parentGender: ParentGender
+  /** The person's own condition. Named after its first use (the child
+   * view); the setup assistant and Settings now ask for it as "your illness". */
   childIllness: ChildIllness
+  /** False until the illness was picked on purpose: `childIllness` always
+   * holds a value (the default), which must not look like an answer. */
+  illnessChosen: boolean
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -247,6 +252,7 @@ export const DEFAULT_SETTINGS: Settings = {
   language: 'fr',
   parentGender: 'maman',
   childIllness: 'fibromyalgie',
+  illnessChosen: false,
 }
 
 export type PainWeatherLevel = 1 | 2 | 3 | 4 | 5
