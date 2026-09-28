@@ -103,11 +103,79 @@ export interface DailyEntry {
   activityLevel?: number
 
   weather?: WeatherInfo
-  medications?: string[]
+  /** What was taken that day, pointing at the Medication registry. */
+  intakes?: MedicationIntake[]
   positiveActions?: string[]
   painLocations?: BodyZone[]
   periodDay?: boolean
   notes?: string
+}
+
+/** Shape of entries saved before schema v3, which stored medication names
+ * as free text. Only migration and backup import deal with it. */
+export interface LegacyDailyEntry extends DailyEntry {
+  medications?: string[]
+}
+
+// Medications are a registry (what is prescribed, and how that changed over
+// time) plus per-day intakes (what was actually taken). The doctor report
+// needs both: dose changes to mark on the timeline, and daily use to count.
+
+/** 'scheduled': background treatment taken every day; 'asNeeded': taken
+ * when needed, up to a maximum; 'unspecified': not described yet (every
+ * medication typed before schema v3, or added on the fly from the form). */
+export type MedicationRegimen = 'scheduled' | 'asNeeded' | 'unspecified'
+export const MEDICATION_REGIMENS: MedicationRegimen[] = ['scheduled', 'asNeeded', 'unspecified']
+
+export const DOSE_UNITS = ['mg', 'g', 'µg', 'ml', 'drop', 'puff', 'patch'] as const
+export type DoseUnit = (typeof DOSE_UNITS)[number]
+
+export interface Dose {
+  amount: number
+  unit: DoseUnit
+}
+
+export const MEDICATION_STOP_REASONS = ['ineffective', 'sideEffects', 'improved', 'other'] as const
+export type MedicationStopReason = (typeof MEDICATION_STOP_REASONS)[number]
+
+/** One stretch of time with a given posology. A dose change closes the
+ * current period and opens a new one, so the history stays readable. */
+export interface MedicationPeriod {
+  /** ISO date 'YYYY-MM-DD', inclusive */
+  start: string
+  /** ISO date, inclusive; absent while the period is ongoing */
+  end?: string
+  /** Amount per intake */
+  dose?: Dose
+  /** scheduled: prescribed intakes per day; asNeeded: maximum per day */
+  perDay?: number
+  stopReason?: MedicationStopReason
+}
+
+export interface Medication {
+  /** Random UUID rather than an auto-increment, so backups from two
+   * devices can be merged without id collisions. */
+  id: string
+  name: string
+  regimen: MedicationRegimen
+  /** What it is taken for, in the person's own words */
+  reason?: string
+  /** Oldest first; the last one is the current or most recent posology */
+  periods: MedicationPeriod[]
+  createdAt: number
+  updatedAt: number
+}
+
+export type ReliefLevel = 0 | 1 | 2 | 3
+
+export interface MedicationIntake {
+  medicationId: string
+  /** Number of intakes; 0 = scheduled dose missed; absent = taken, count not
+   * recorded (all intakes migrated from the free-text era). */
+  doses?: number
+  /** How much it helped: none, slight, moderate, strong */
+  relief?: ReliefLevel
+  sideEffects?: string[]
 }
 
 export type ThemePref = 'system' | 'light' | 'dark'

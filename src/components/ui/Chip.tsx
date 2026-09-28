@@ -1,13 +1,18 @@
 import { useDesign } from '../../hooks/useDesign'
 
+/** A toggle chip (aria-pressed). Pass `actionLabel` for a chip that performs
+ * an action instead, like adding a suggestion: it is then announced as a
+ * plain button with that name, not as a toggle that is "not pressed". */
 export function Chip({
   label,
   selected,
   onClick,
+  actionLabel,
 }: {
   label: string
   selected: boolean
   onClick: () => void
+  actionLabel?: string
 }) {
   const design = useDesign()
   const style =
@@ -25,7 +30,8 @@ export function Chip({
     <button
       type="button"
       onClick={onClick}
-      aria-pressed={selected}
+      aria-pressed={actionLabel ? undefined : selected}
+      aria-label={actionLabel}
       className="rounded-[var(--radius-control)] px-3.5 py-2 text-control font-medium transition-colors"
       style={style}
     >

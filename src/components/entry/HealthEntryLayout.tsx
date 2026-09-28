@@ -15,7 +15,7 @@ import {
   IconWalk,
   type Icon,
 } from '@tabler/icons-react'
-import type { BodyZone, DailyEntry, Settings } from '../../db/types'
+import type { BodyZone, DailyEntry, Medication, Settings } from '../../db/types'
 import { BODY_ZONES } from '../../db/types'
 import { todayISO } from '../../db'
 import { computePainWeather } from '../../lib/painWeather'
@@ -25,6 +25,7 @@ import { Slider } from '../ui/Slider'
 import { Toggle } from '../ui/Toggle'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { TagInput } from './TagInput'
+import { MedicationsField } from './MedicationsField'
 import { WeatherField } from './WeatherField'
 import { format, useLocale, useTranslation } from '../../i18n'
 
@@ -148,7 +149,7 @@ export function HealthEntryLayout({
   settings,
   saveState,
   allEntries,
-  knownMedications,
+  medications,
   knownPositiveActions,
 }: {
   date: string
@@ -157,7 +158,7 @@ export function HealthEntryLayout({
   settings: Settings
   saveState: 'idle' | 'saving' | 'saved'
   allEntries: DailyEntry[]
-  knownMedications: string[]
+  medications: Medication[]
   knownPositiveActions: string[]
 }) {
   const t = useTranslation()
@@ -406,11 +407,12 @@ export function HealthEntryLayout({
         <>
           <GroupCaption>{t.entryForm.medicationsTaken}</GroupCaption>
           <Card className="!p-4">
-            <TagInput
-              values={local.medications ?? []}
-              onChange={(v) => setField('medications', v)}
+            <MedicationsField
+              date={date}
+              medications={medications}
+              intakes={local.intakes ?? []}
+              onChange={(v) => setField('intakes', v)}
               placeholder={t.entryForm.addMedicationPlaceholder}
-              suggestions={knownMedications}
             />
           </Card>
         </>
@@ -424,6 +426,7 @@ export function HealthEntryLayout({
               values={local.positiveActions ?? []}
               onChange={(v) => setField('positiveActions', v)}
               placeholder={t.entryForm.addPositiveActionPlaceholder}
+              label={t.entryForm.positiveActionsTitle}
               suggestions={knownPositiveActions}
             />
           </Card>
