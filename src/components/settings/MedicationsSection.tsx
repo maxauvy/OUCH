@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { todayISO } from '../../db'
 import {
   DOSE_UNITS,
@@ -20,10 +20,31 @@ import { Chip } from '../ui/Chip'
 const inputStyle = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 const inputClass = 'w-full rounded-xl px-3.5 py-2.5 text-body outline-none'
 
+const editButtonId = (medId: string) => `medication-edit-${medId}`
+const ADD_BUTTON_ID = 'medication-add'
+
 export function MedicationsSection() {
   const t = useTranslation()
   const medications = useMedications()
   const [editing, setEditing] = useState<string | 'new' | null>(null)
+  // Closing an editor unmounts whatever had focus inside it; send focus back
+  // to the button that opened it (or to the new medication's own button),
+  // once the list has re-rendered, so keyboard users don't land on <body>.
+  // After a save, the list only refreshes a moment later (and a stopped or
+  // resumed item moves to the other list, remounting its button), so the
+  // target is kept until the refreshed data has rendered.
+  const focusTarget = useRef<{ id: string; until?: Medication[] } | null>(null)
+  useEffect(() => {
+    const target = focusTarget.current
+    if (!target) return
+    document.getElementById(target.id)?.focus()
+    if (!target.until || medications !== target.until) focusTarget.current = null
+  }, [editing, medications])
+
+  function close(focusId: string, dataChanged: boolean) {
+    focusTarget.current = { id: focusId, until: dataChanged ? medications : undefined }
+    setEditing(null)
+  }
 
   if (!medications) return null
   const active = medications.filter((m) => !isStopped(m))
@@ -42,31 +63,47 @@ export function MedicationsSection() {
       )}
 
       {active.map((m) => (
-        <MedicationItem key={m.id} med={m} all={medications} open={editing === m.id} onOpen={(o) => setEditing(o ? m.id : null)} />
+        <MedicationItem
+          key={m.id}
+          med={m}
+          all={medications}
+          open={editing === m.id}
+          onToggle={() => setEditing(editing === m.id ? null : m.id)}
+          onDone={(r) => close(r?.deleted ? ADD_BUTTON_ID : editButtonId(m.id), !!r)}
+        />
       ))}
 
       {editing === 'new' ? (
         <div className="pt-3" style={{ borderTop: active.length ? '1px solid var(--color-hairline)' : undefined }}>
-          <MedicationEditor all={medications} onDone={() => setEditing(null)} />
+          <MedicationEditor all={medications} onDone={(r) => close(r?.savedId ? editButtonId(r.savedId) : ADD_BUTTON_ID, !!r)} />
         </div>
       ) : (
         <button
+          id={ADD_BUTTON_ID}
           type="button"
           onClick={() => setEditing('new')}
           className="rounded-[var(--radius-control)] px-4 py-2 mt-3 text-caption font-semibold self-start"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
         >
-          + {t.medications.add}
+          <span aria-hidden>+ </span>
+          {t.medications.add}
         </button>
       )}
 
       {stopped.length > 0 && (
         <>
-          <p className="text-caption font-semibold uppercase tracking-[0.06em] mt-5 mb-1" style={{ color: 'var(--color-ink-muted)' }}>
+          <h3 className="text-caption font-semibold uppercase tracking-[0.06em] mt-5 mb-1" style={{ color: 'var(--color-ink-muted)' }}>
             {t.medications.stoppedSection}
-          </p>
+          </h3>
           {stopped.map((m) => (
-            <MedicationItem key={m.id} med={m} all={medications} open={editing === m.id} onOpen={(o) => setEditing(o ? m.id : null)} />
+            <MedicationItem
+              key={m.id}
+              med={m}
+              all={medications}
+              open={editing === m.id}
+              onToggle={() => setEditing(editing === m.id ? null : m.id)}
+              onDone={(r) => close(r?.deleted ? ADD_BUTTON_ID : editButtonId(m.id), !!r)}
+            />
           ))}
         </>
       )}
@@ -78,12 +115,14 @@ function MedicationItem({
   med,
   all,
   open,
-  onOpen,
+  onToggle,
+  onDone,
 }: {
   med: Medication
   all: Medication[]
   open: boolean
-  onOpen: (open: boolean) => void
+  onToggle: () => void
+  onDone: (result?: EditorResult) => void
 }) {
   const t = useTranslation()
   const { intlLocale } = useLocale()
@@ -102,29 +141,53 @@ function MedicationItem({
             {summary}
           </p>
         </div>
+        {/* Same visible label on every row: the accessible name adds the
+            medication, and aria-expanded tells whether the editor is open. */}
         <button
+          id={editButtonId(med.id)}
           type="button"
-          onClick={() => onOpen(!open)}
+          onClick={onToggle}
           aria-expanded={open}
+          aria-controls={open ? `${editButtonId(med.id)}-editor` : undefined}
+          aria-label={format(t.medications.editItem, { name: med.name })}
           className="rounded-[var(--radius-control)] px-3 py-1.5 text-caption font-semibold"
-          style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+          style={
+            open
+              ? { background: 'var(--color-brand)', color: 'var(--color-on-brand)' }
+              : { background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }
+          }
         >
-          {open ? t.medications.cancel : t.medications.edit}
+          {t.medications.edit}
         </button>
       </div>
       {open && (
-        <div className="mt-3">
-          <MedicationEditor med={med} all={all} onDone={() => onOpen(false)} />
+        <div className="mt-3" id={`${editButtonId(med.id)}-editor`}>
+          <MedicationEditor med={med} all={all} onDone={onDone} />
         </div>
       )}
     </div>
   )
 }
 
+/** How an editor closed, so focus can go somewhere that still exists. */
+interface EditorResult {
+  savedId?: string
+  deleted?: boolean
+}
+
 /** Create (no `med`) or edit a medication. Editing the dose fields corrects
  * the current period; "Change the dosage" starts a new dated one instead. */
-function MedicationEditor({ med, all, onDone }: { med?: Medication; all: Medication[]; onDone: () => void }) {
+function MedicationEditor({
+  med,
+  all,
+  onDone,
+}: {
+  med?: Medication
+  all: Medication[]
+  onDone: (result?: EditorResult) => void
+}) {
   const t = useTranslation()
+  const ids = useId()
   const { intlLocale } = useLocale()
   const period = med ? currentPeriod(med) : undefined
   const [name, setName] = useState(med?.name ?? '')
@@ -156,28 +219,37 @@ function MedicationEditor({ med, all, onDone }: { med?: Medication; all: Medicat
     const last = periods.length - 1
     periods[last] = { ...periods[last], dose: posology.dose, perDay: posology.perDay }
     await saveMedication({ ...base, name, regimen, reason: reason.trim() || undefined, periods })
-    onDone()
+    onDone({ savedId: base.id })
   }
 
   async function update(periods: Medication['periods']) {
     if (!med) return
     await saveMedication({ ...med, periods })
-    onDone()
+    onDone({ savedId: med.id })
   }
 
   return (
     <div className="flex flex-col gap-3">
-      <Field label={t.medications.name}>
-        <input value={name} aria-label={t.medications.name} onChange={(e) => setName(e.target.value)} placeholder={t.medications.namePlaceholder} className={inputClass} style={inputStyle} />
-        {nameTaken && (
-          <p className="text-caption mt-1" style={{ color: 'var(--color-weather-5-text)' }}>
-            {t.medications.nameTaken}
-          </p>
-        )}
+      <Field label={t.medications.name} htmlFor={`${ids}-name`}>
+        <input
+          id={`${ids}-name`}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder={t.medications.namePlaceholder}
+          aria-invalid={nameTaken || undefined}
+          aria-describedby={nameTaken ? `${ids}-name-error` : undefined}
+          autoFocus
+          className={inputClass}
+          style={inputStyle}
+        />
+        {/* Always rendered, so the live region exists before the message appears. */}
+        <p id={`${ids}-name-error`} aria-live="polite" className="text-caption" style={{ color: 'var(--color-weather-5-text)' }}>
+          {nameTaken ? t.medications.nameTaken : ''}
+        </p>
       </Field>
 
       <Field label={t.medications.regimenTitle}>
-        <div className="flex gap-2" {...radioGroupProps(t.medications.regimenTitle)}>
+        <div className="flex gap-2" {...radioGroupProps(t.medications.regimenTitle)} aria-describedby={`${ids}-regimen-help`}>
           {MEDICATION_REGIMENS.map((r) => (
             <button
               key={r}
@@ -194,19 +266,19 @@ function MedicationEditor({ med, all, onDone }: { med?: Medication; all: Medicat
             </button>
           ))}
         </div>
-        <p className="text-caption mt-1" style={{ color: 'var(--color-ink-muted)' }}>
+        <p id={`${ids}-regimen-help`} className="text-caption mt-1" style={{ color: 'var(--color-ink-muted)' }}>
           {t.medications.regimenHelpers[regimen]}
         </p>
       </Field>
 
       {regimen !== 'unspecified' && <DoseInputs value={dose} onChange={setDose} regimen={regimen} />}
 
-      <Field label={t.medications.reason}>
-        <input value={reason} aria-label={t.medications.reason} onChange={(e) => setReason(e.target.value)} placeholder={t.medications.reasonPlaceholder} className={inputClass} style={inputStyle} />
+      <Field label={t.medications.reason} htmlFor={`${ids}-reason`}>
+        <input id={`${ids}-reason`} value={reason} onChange={(e) => setReason(e.target.value)} placeholder={t.medications.reasonPlaceholder} className={inputClass} style={inputStyle} />
       </Field>
 
-      <Field label={t.medications.since}>
-        <input type="date" aria-label={t.medications.since} value={since} max={todayISO()} onChange={(e) => e.target.value && setSince(e.target.value)} className={inputClass} style={inputStyle} />
+      <Field label={t.medications.since} htmlFor={`${ids}-since`}>
+        <input id={`${ids}-since`} type="date" value={since} max={todayISO()} onChange={(e) => e.target.value && setSince(e.target.value)} className={inputClass} style={inputStyle} />
       </Field>
 
       <div className="flex gap-2">
@@ -221,7 +293,7 @@ function MedicationEditor({ med, all, onDone }: { med?: Medication; all: Medicat
         </button>
         <button
           type="button"
-          onClick={onDone}
+          onClick={() => onDone()}
           className="rounded-[var(--radius-control)] px-4 py-2.5 text-control font-semibold"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
         >
@@ -232,16 +304,22 @@ function MedicationEditor({ med, all, onDone }: { med?: Medication; all: Medicat
       {med && (
         <div className="flex flex-wrap gap-2 pt-3" style={{ borderTop: '1px solid var(--color-hairline)' }}>
           {!stopped && med.regimen !== 'unspecified' && (
-            <SecondaryButton onClick={() => setPanel(panel === 'posology' ? null : 'posology')}>{t.medications.changePosology}</SecondaryButton>
+            <SecondaryButton expanded={panel === 'posology'} onClick={() => setPanel(panel === 'posology' ? null : 'posology')}>
+              {t.medications.changePosology}
+            </SecondaryButton>
           )}
-          {!stopped && <SecondaryButton onClick={() => setPanel(panel === 'stop' ? null : 'stop')}>{t.medications.stop}</SecondaryButton>}
+          {!stopped && (
+            <SecondaryButton expanded={panel === 'stop'} onClick={() => setPanel(panel === 'stop' ? null : 'stop')}>
+              {t.medications.stop}
+            </SecondaryButton>
+          )}
           {stopped && <SecondaryButton onClick={() => update(resumeMedication(med, todayISO()))}>{t.medications.resume}</SecondaryButton>}
           {!used && (
             <SecondaryButton
               onClick={async () => {
                 if (!window.confirm(format(t.medications.deleteConfirm, { name: med.name }))) return
                 await deleteMedication(med.id)
-                onDone()
+                onDone({ deleted: true })
               }}
             >
               {t.medications.delete}
@@ -278,10 +356,11 @@ function PosologyPanel({ med, onSave }: { med: Medication; onSave: (periods: Med
   const period = currentPeriod(med)
   const [from, setFrom] = useState(todayISO())
   const [dose, setDose] = useState<DoseFields>(toFields(period?.dose, period?.perDay))
+  const id = useId()
   return (
-    <div className="flex flex-col gap-3 rounded-xl p-3" style={{ background: 'var(--color-brand-soft)' }}>
-      <Field label={t.medications.changeFrom}>
-        <input type="date" aria-label={t.medications.changeFrom} value={from} min={med.periods[0]?.start} onChange={(e) => e.target.value && setFrom(e.target.value)} className={inputClass} style={inputStyle} />
+    <div className="flex flex-col gap-3 rounded-xl p-3" style={{ background: 'var(--color-paper)', boxShadow: 'inset 0 0 0 1px var(--color-hairline)' }}>
+      <Field label={t.medications.changeFrom} htmlFor={id}>
+        <input id={id} autoFocus type="date" value={from} min={med.periods[0]?.start} onChange={(e) => e.target.value && setFrom(e.target.value)} className={inputClass} style={inputStyle} />
       </Field>
       <DoseInputs value={dose} onChange={setDose} regimen={med.regimen} />
       <PrimaryButton onClick={() => onSave(changePosology(med, from, fromFields(dose)))}>{t.medications.save}</PrimaryButton>
@@ -293,12 +372,13 @@ function StopPanel({ med, onSave }: { med: Medication; onSave: (periods: Medicat
   const t = useTranslation()
   const [end, setEnd] = useState(todayISO())
   const [reason, setReason] = useState<MedicationStopReason | undefined>()
+  const id = useId()
   return (
-    <div className="flex flex-col gap-3 rounded-xl p-3" style={{ background: 'var(--color-brand-soft)' }}>
-      <Field label={t.medications.stopDate}>
-        <input type="date" aria-label={t.medications.stopDate} value={end} min={currentPeriod(med)?.start} onChange={(e) => e.target.value && setEnd(e.target.value)} className={inputClass} style={inputStyle} />
+    <div className="flex flex-col gap-3 rounded-xl p-3" style={{ background: 'var(--color-paper)', boxShadow: 'inset 0 0 0 1px var(--color-hairline)' }}>
+      <Field label={t.medications.stopDate} htmlFor={id}>
+        <input id={id} autoFocus type="date" value={end} min={currentPeriod(med)?.start} onChange={(e) => e.target.value && setEnd(e.target.value)} className={inputClass} style={inputStyle} />
       </Field>
-      <Field label={t.medications.stopReasonTitle}>
+      <Field label={t.medications.stopReasonTitle} group>
         <div className="flex flex-wrap gap-2">
           {MEDICATION_STOP_REASONS.map((r) => (
             <Chip key={r} label={t.medications.stopReasons[r]} selected={reason === r} onClick={() => setReason(reason === r ? undefined : r)} />
@@ -333,9 +413,10 @@ function fromFields(f: DoseFields): { dose?: Dose; perDay?: number } {
 function DoseInputs({ value, onChange, regimen }: { value: DoseFields; onChange: (v: DoseFields) => void; regimen: MedicationRegimen }) {
   const t = useTranslation()
   const perDayLabel = regimen === 'asNeeded' ? t.medications.perDayAsNeeded : t.medications.perDayScheduled
+  const perDayId = useId()
   return (
     <>
-      <Field label={t.medications.dose}>
+      <Field label={t.medications.dose} group>
         <div className="flex gap-2">
           <input
             inputMode="decimal"
@@ -361,13 +442,13 @@ function DoseInputs({ value, onChange, regimen }: { value: DoseFields; onChange:
           </select>
         </div>
       </Field>
-      <Field label={perDayLabel}>
+      <Field label={perDayLabel} htmlFor={perDayId}>
         <input
+          id={perDayId}
           inputMode="numeric"
           value={value.perDay}
           onChange={(e) => onChange({ ...value, perDay: e.target.value.replace(/\D/g, '') })}
           placeholder="1"
-          aria-label={perDayLabel}
           className="w-24 rounded-xl px-3.5 py-2.5 text-body outline-none"
           style={inputStyle}
         />
@@ -376,14 +457,27 @@ function DoseInputs({ value, onChange, regimen }: { value: DoseFields; onChange:
   )
 }
 
-// A group rather than a <label>: some fields hold several controls (amount
-// + unit, the regimen buttons), each with its own accessible name.
-function Field({ label, children, className = '' }: { label: string; children: ReactNode; className?: string }) {
+/**
+ * A visible caption above one or more controls, named once for screen readers:
+ * - `htmlFor`: a single control, captioned by a real <label>;
+ * - `group`: several controls (amount + unit, reason chips) named as a group;
+ * - neither: the control names itself (the regimen radiogroup), so the
+ *   caption is only visual.
+ */
+function Field({ label, htmlFor, group, children }: { label: string; htmlFor?: string; group?: boolean; children: ReactNode }) {
+  const captionClass = 'block text-caption font-medium mb-1'
+  const captionStyle = { color: 'var(--color-ink-muted)' }
   return (
-    <div role="group" aria-label={label} className={className}>
-      <span className="block text-caption font-medium mb-1" style={{ color: 'var(--color-ink-muted)' }} aria-hidden>
-        {label}
-      </span>
+    <div role={group ? 'group' : undefined} aria-label={group ? label : undefined}>
+      {htmlFor ? (
+        <label htmlFor={htmlFor} className={captionClass} style={captionStyle}>
+          {label}
+        </label>
+      ) : (
+        <span className={captionClass} style={captionStyle} aria-hidden>
+          {label}
+        </span>
+      )}
       {children}
     </div>
   )
@@ -402,11 +496,12 @@ function PrimaryButton({ onClick, children }: { onClick: () => void; children: R
   )
 }
 
-function SecondaryButton({ onClick, children }: { onClick: () => void; children: ReactNode }) {
+function SecondaryButton({ onClick, expanded, children }: { onClick: () => void; expanded?: boolean; children: ReactNode }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      aria-expanded={expanded}
       className="rounded-[var(--radius-control)] px-3.5 py-1.5 text-caption font-semibold"
       style={{ background: 'var(--color-surface)', color: 'var(--color-brand)', boxShadow: 'inset 0 0 0 1px var(--color-brand)' }}
     >

@@ -4,7 +4,7 @@ import type { Medication, MedicationIntake, ReliefLevel } from '../../db/types'
 import { periodOn, sameName } from '../../lib/medications'
 import { formatPosology } from '../../lib/medicationFormat'
 import { findOrCreateMedication } from '../../hooks/useMedications'
-import { useLocale, useTranslation } from '../../i18n'
+import { format, useLocale, useTranslation } from '../../i18n'
 import { Chip } from '../ui/Chip'
 import { Toggle } from '../ui/Toggle'
 import { TagInput } from './TagInput'
@@ -113,7 +113,13 @@ export function MedicationsField({
       {others.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-2">
           {others.slice(0, 10).map((m) => (
-            <Chip key={m.id} label={m.name} selected={false} onClick={() => addByName(m.name)} />
+            <Chip
+              key={m.id}
+              label={m.name}
+              selected={false}
+              onClick={() => addByName(m.name)}
+              actionLabel={format(t.entryForm.addTag, { tag: m.name })}
+            />
           ))}
         </div>
       )}
@@ -164,14 +170,19 @@ function MedicationRow({
             label={`${med.name} : ${t.medications.taken}`}
           />
         ) : (
-          <div className="flex items-center gap-1" role="group" aria-label={med.name}>
-            <StepButton label={t.medications.fewerIntakes} disabled={!taken} onClick={() => setDoses(doses - 1)}>
+          <div className="flex items-center gap-1">
+            <StepButton label={format(t.medications.fewerIntakes, { name: med.name })} disabled={!taken} onClick={() => setDoses(doses - 1)}>
               <IconMinus size={16} aria-hidden />
             </StepButton>
-            <span className="tabular-nums text-heading font-bold w-7 text-center" aria-live="polite">
+            {/* The bare number is for the eye; screen readers get the
+                medication and unit, announced on every change. */}
+            <span className="tabular-nums text-heading font-bold w-7 text-center" aria-hidden>
               {doses}
             </span>
-            <StepButton label={t.medications.moreIntakes} onClick={() => setDoses(doses + 1)}>
+            <span className="sr-only" aria-live="polite">
+              {format(t.medications.doseCount, { name: med.name, n: doses })}
+            </span>
+            <StepButton label={format(t.medications.moreIntakes, { name: med.name })} onClick={() => setDoses(doses + 1)}>
               <IconPlus size={16} aria-hidden />
             </StepButton>
           </div>
@@ -185,8 +196,8 @@ function MedicationRow({
       )}
 
       {med.regimen === 'asNeeded' && taken && (
-        <div className="mt-2.5">
-          <p className="text-caption mb-1.5" style={{ color: 'var(--color-ink-muted)' }}>
+        <div className="mt-2.5" role="group" aria-label={format(t.medications.reliefFor, { name: med.name })}>
+          <p className="text-caption mb-1.5" style={{ color: 'var(--color-ink-muted)' }} aria-hidden>
             {t.medications.reliefQuestion}
           </p>
           <div className="flex flex-wrap gap-2">
@@ -206,25 +217,28 @@ function MedicationRow({
 
       {taken &&
         (showSideEffects || sideEffects.length > 0 ? (
-          <div className="mt-2.5">
-            <p className="text-caption mb-1.5" style={{ color: 'var(--color-ink-muted)' }}>
+          <div className="mt-2.5" role="group" aria-label={format(t.medications.sideEffectsFor, { name: med.name })}>
+            <p className="text-caption mb-1.5" style={{ color: 'var(--color-ink-muted)' }} aria-hidden>
               {t.medications.sideEffectsTitle}
             </p>
             <TagInput
               values={sideEffects}
               onChange={(v) => onChange({ ...intake!, medicationId: med.id, sideEffects: v.length ? v : undefined })}
               placeholder={t.medications.sideEffectsPlaceholder}
+              label={format(t.medications.sideEffectsFor, { name: med.name })}
               suggestions={t.medications.sideEffectsSuggestions}
+              autoFocus={showSideEffects && sideEffects.length === 0}
             />
           </div>
         ) : (
           <button
             type="button"
             onClick={() => setShowSideEffects(true)}
-            className="text-caption font-medium mt-2 underline underline-offset-2"
+            className="text-caption font-medium mt-1 min-h-6 py-1 underline underline-offset-2"
             style={{ color: 'var(--color-ink-muted)' }}
           >
             {t.medications.reportSideEffect}
+            <span className="sr-only"> ({med.name})</span>
           </button>
         ))}
     </div>
@@ -242,13 +256,15 @@ function StepButton({
   onClick: () => void
   children: ReactNode
 }) {
+  // aria-disabled rather than disabled: "−" reaches 0 while focused, and a
+  // disabled button would drop keyboard focus onto the page.
   return (
     <button
       type="button"
       aria-label={label}
-      disabled={disabled}
-      onClick={onClick}
-      className="w-9 h-9 rounded-full flex items-center justify-center disabled:opacity-35"
+      aria-disabled={disabled || undefined}
+      onClick={disabled ? undefined : onClick}
+      className="w-9 h-9 rounded-full flex items-center justify-center aria-disabled:opacity-35"
       style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
     >
       {children}

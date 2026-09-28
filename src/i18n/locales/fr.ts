@@ -173,6 +173,8 @@ const fr: Translations = {
     activityEndIntense: 'Intense',
     medicationsTaken: 'Médicaments pris',
     addMedicationPlaceholder: 'Ajouter un médicament…',
+    removeTag: 'Retirer {{tag}}',
+    addTag: 'Ajouter {{tag}}',
     positiveActionsTitle: 'Ce qui a aidé aujourd’hui',
     addPositiveActionPlaceholder: 'Ajouter une action…',
     positiveActionsSuggestions: [
@@ -201,8 +203,12 @@ const fr: Translations = {
   medications: {
     taken: 'Pris',
     missedHint: 'Décoche en cas d’oubli',
-    fewerIntakes: 'Une prise de moins',
-    moreIntakes: 'Une prise de plus',
+    fewerIntakes: '{{name}} : une prise de moins',
+    moreIntakes: '{{name}} : une prise de plus',
+    doseCount: '{{name}} : {{n}} prise(s)',
+    reliefFor: 'Soulagement de {{name}}',
+    sideEffectsFor: 'Effets indésirables de {{name}}',
+    editItem: 'Modifier {{name}}',
     reliefQuestion: 'Soulagement',
     relief: ['Aucun', 'Léger', 'Modéré', 'Important'],
     reportSideEffect: 'Signaler un effet indésirable',

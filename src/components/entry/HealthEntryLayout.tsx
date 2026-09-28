@@ -426,6 +426,7 @@ export function HealthEntryLayout({
               values={local.positiveActions ?? []}
               onChange={(v) => setField('positiveActions', v)}
               placeholder={t.entryForm.addPositiveActionPlaceholder}
+              label={t.entryForm.positiveActionsTitle}
               suggestions={knownPositiveActions}
             />
           </Card>

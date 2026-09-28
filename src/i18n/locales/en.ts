@@ -170,6 +170,8 @@ const en: Translations = {
     activityEndIntense: 'Intense',
     medicationsTaken: 'Medications taken',
     addMedicationPlaceholder: 'Add a medication…',
+    removeTag: 'Remove {{tag}}',
+    addTag: 'Add {{tag}}',
     positiveActionsTitle: 'What helped today',
     addPositiveActionPlaceholder: 'Add an action…',
     positiveActionsSuggestions: [
@@ -198,8 +200,12 @@ const en: Translations = {
   medications: {
     taken: 'Taken',
     missedHint: 'Untick if you missed it',
-    fewerIntakes: 'One dose fewer',
-    moreIntakes: 'One more dose',
+    fewerIntakes: '{{name}}: one dose fewer',
+    moreIntakes: '{{name}}: one more dose',
+    doseCount: '{{name}}: {{n}} dose(s)',
+    reliefFor: 'Relief from {{name}}',
+    sideEffectsFor: 'Side effects of {{name}}',
+    editItem: 'Edit {{name}}',
     reliefQuestion: 'Relief',
     relief: ['None', 'Slight', 'Moderate', 'Strong'],
     reportSideEffect: 'Report a side effect',

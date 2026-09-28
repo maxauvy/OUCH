@@ -159,6 +159,8 @@ export interface Translations {
     activityEndIntense: string
     medicationsTaken: string
     addMedicationPlaceholder: string
+    removeTag: string
+    addTag: string
     positiveActionsTitle: string
     addPositiveActionPlaceholder: string
     positiveActionsSuggestions: string[]
@@ -179,6 +181,10 @@ export interface Translations {
     missedHint: string
     fewerIntakes: string
     moreIntakes: string
+    doseCount: string
+    reliefFor: string
+    sideEffectsFor: string
+    editItem: string
     reliefQuestion: string
     relief: [string, string, string, string]
     reportSideEffect: string
