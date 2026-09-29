@@ -1,6 +1,7 @@
 import { db, getSettings, updateSettings, upgradeLegacySettings } from '../db'
 import type { DailyEntry, LegacyDailyEntry, LegacySettings, Medication } from '../db/types'
-import { decryptJSON, encryptJSON, type EncryptedPayload } from './crypto'
+import { decryptJSON, encryptJSON, isEncryptedPayload } from './crypto'
+import { sanitizeBackup } from './backupSanitize'
 import { createLegacyConverter, sameName } from './medications'
 
 // v1: entries carry medication names as free text (LegacyDailyEntry).
@@ -38,6 +39,10 @@ export function downloadBlob(blob: Blob, filename: string) {
 
 export type ImportMode = 'merge' | 'replace'
 
+/** A real backup is a few hundred KB; this only stops a huge file from being
+ * read into memory. */
+export const MAX_BACKUP_BYTES = 25 * 1024 * 1024
+
 export interface ImportResult {
   imported: number
   skipped: number
@@ -52,22 +57,22 @@ export async function importEncryptedBackup(
   file: File,
   password: string,
   mode: ImportMode,
-  messages: { invalidFile: string; invalidBackup: string }
+  messages: { invalidFile: string; invalidBackup: string; fileTooLarge: string }
 ): Promise<ImportResult> {
-  const text = await file.text()
-  let payload: EncryptedPayload
+  if (file.size > MAX_BACKUP_BYTES) throw new Error(messages.fileTooLarge)
+  let payload: unknown
   try {
-    payload = JSON.parse(text)
+    payload = JSON.parse(await file.text())
   } catch {
     throw new Error(messages.invalidFile)
   }
-  const bundle = await decryptJSON<BackupBundle>(payload, password)
-  if (!bundle || !Array.isArray(bundle.entries)) {
-    throw new Error(messages.invalidBackup)
-  }
+  if (!isEncryptedPayload(payload)) throw new Error(messages.invalidFile)
+  // Decrypted content is not trusted either: it is rebuilt field by field.
+  const bundle = sanitizeBackup(await decryptJSON<unknown>(payload, password))
+  if (!bundle) throw new Error(messages.invalidBackup)
 
   let imported = 0
-  let skipped = 0
+  let skipped = bundle.skipped
 
   await db.transaction('rw', db.entries, db.medications, async () => {
     if (mode === 'replace') {
@@ -81,7 +86,7 @@ export async function importEncryptedBackup(
     // remapped to it.
     const idMap = new Map<string, string>()
     const local = await db.medications.toArray()
-    for (const med of bundle.medications ?? []) {
+    for (const med of bundle.medications) {
       const sameId = local.find((m) => m.id === med.id)
       const namesake = sameId ? undefined : local.find((m) => sameName(m.name, med.name))
       if (namesake) {
@@ -99,13 +104,9 @@ export async function importEncryptedBackup(
     }
     const legacy = createLegacyConverter(local)
 
-    for (const entry of [...bundle.entries].sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''))) {
-      if (!entry.date) {
-        skipped++
-        continue
-      }
+    for (const entry of [...bundle.entries].sort((a, b) => a.date.localeCompare(b.date))) {
       const existing = await db.entries.where('date').equals(entry.date).first()
-      const { id: _ignoredId, medications: legacyNames, ...rest } = entry
+      const { medications: legacyNames, ...rest } = entry
       if (legacyNames) rest.intakes = legacy.intakesFor(legacyNames, entry.date)
       else if (rest.intakes) rest.intakes = rest.intakes.map((i) => ({ ...i, medicationId: idMap.get(i.medicationId) ?? i.medicationId }))
       if (existing) {

@@ -2,6 +2,8 @@ import { useRef, useState } from 'react'
 import { exportEncryptedBackup, downloadBlob, importEncryptedBackup } from '../../lib/backup'
 import { format, useTranslation } from '../../i18n'
 
+const MIN_EXPORT_PASSWORD_LENGTH = 10
+
 export function BackupSection() {
   const t = useTranslation()
   const [exportPassword, setExportPassword] = useState('')
@@ -15,7 +17,7 @@ export function BackupSection() {
   const fileRef = useRef<HTMLInputElement>(null)
 
   async function handleExport() {
-    if (exportPassword.length < 6) {
+    if (exportPassword.length < MIN_EXPORT_PASSWORD_LENGTH) {
       setExportMsg(t.backup.exportPasswordTooShort)
       return
     }
@@ -40,6 +42,7 @@ export function BackupSection() {
       const result = await importEncryptedBackup(importFile, importPassword, 'merge', {
         invalidFile: t.backup.invalidFile,
         invalidBackup: t.backup.invalidBackup,
+        fileTooLarge: t.backup.fileTooLarge,
       })
       setImportMsg({
         text: format(result.imported === 1 ? t.backup.importSuccessOne : t.backup.importSuccessOther, {

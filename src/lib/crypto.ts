@@ -11,6 +11,10 @@ const LEGACY_PBKDF2_ITERATIONS = 250_000
 const SALT_BYTES = 16
 const IV_BYTES = 12
 const MAGIC = 'OUCH1'
+// The iteration count is read from the file, and a crafted one (billions) would
+// freeze the browser while the key is derived. Real files sit between the
+// legacy count and the current one; the ceiling leaves room to raise it later.
+const MAX_ACCEPTED_ITERATIONS = 2_000_000
 
 async function deriveKey(password: string, salt: Uint8Array, iterations: number): Promise<CryptoKey> {
   const enc = new TextEncoder()
@@ -48,6 +52,27 @@ export interface EncryptedPayload {
   iterations?: number
 }
 
+function isBase64(v: unknown, bytes?: number): v is string {
+  if (typeof v !== 'string' || !/^[A-Za-z0-9+/]*={0,2}$/.test(v) || v.length % 4 !== 0) return false
+  return bytes === undefined || fromBase64(v).length === bytes
+}
+
+/** Whether `value` has the shape of a backup written by `encryptJSON`, with
+ * an iteration count in the accepted range. Checked before any key derivation. */
+export function isEncryptedPayload(value: unknown): value is EncryptedPayload {
+  if (typeof value !== 'object' || value === null) return false
+  const p = value as Record<string, unknown>
+  if (p.magic !== MAGIC) return false
+  if (!isBase64(p.salt, SALT_BYTES) || !isBase64(p.iv, IV_BYTES) || !isBase64(p.ciphertext)) return false
+  if (p.iterations === undefined) return true
+  return (
+    typeof p.iterations === 'number' &&
+    Number.isInteger(p.iterations) &&
+    p.iterations >= LEGACY_PBKDF2_ITERATIONS &&
+    p.iterations <= MAX_ACCEPTED_ITERATIONS
+  )
+}
+
 export async function encryptJSON(data: unknown, password: string): Promise<EncryptedPayload> {
   const salt = crypto.getRandomValues(new Uint8Array(SALT_BYTES))
   const iv = crypto.getRandomValues(new Uint8Array(IV_BYTES))
@@ -65,7 +90,7 @@ export async function encryptJSON(data: unknown, password: string): Promise<Encr
 }
 
 export async function decryptJSON<T = unknown>(payload: EncryptedPayload, password: string): Promise<T> {
-  if (payload.magic !== MAGIC) throw new Error('Fichier de sauvegarde non reconnu.')
+  if (!isEncryptedPayload(payload)) throw new Error('Fichier de sauvegarde non reconnu.')
   const salt = fromBase64(payload.salt)
   const iv = fromBase64(payload.iv)
   const key = await deriveKey(password, salt, payload.iterations ?? LEGACY_PBKDF2_ITERATIONS)
