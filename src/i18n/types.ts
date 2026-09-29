@@ -110,6 +110,10 @@ export interface Translations {
     daysTrackedOther: string
     avgPain: string
     painEvolution: string
+    dailyRating: string
+    weeklyMean: string
+    weeklyMeanLegend: string
+    notLogged: string
     weekdayInsight: string
     whatAffectsPain: string
     averagesObserved: string

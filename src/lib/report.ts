@@ -173,13 +173,17 @@ export function rollingMean(
   minValues = 4
 ): (number | null)[] {
   const byIndex = new Map(entries.map((e) => [p.dayIndex(e.date), get(e)]))
-  return Array.from({ length: p.totalDays }, (_, i) => {
-    const values: number[] = []
-    for (let k = i - window + 1; k <= i; k++) {
-      const v = byIndex.get(k)
-      if (typeof v === 'number') values.push(v)
-    }
-    return values.length >= minValues ? mean(values) : null
+  return trailingMeans(Array.from({ length: p.totalDays }, (_, i) => byIndex.get(i)), window, minValues)
+}
+
+/** For a day-by-day series (undefined = not logged), the mean of each day and
+ * the `window - 1` days before it, once at least `minValues` of them are
+ * known. A 7-day mean is how pain trials summarise daily ratings (IMMPACT),
+ * and it evens out weekday effects. Shared by the report and Trends. */
+export function trailingMeans(values: (number | undefined)[], window = 7, minValues = 4): (number | null)[] {
+  return values.map((_, i) => {
+    const known = values.slice(Math.max(0, i - window + 1), i + 1).filter((v): v is number => typeof v === 'number')
+    return known.length >= minValues ? mean(known) : null
   })
 }
 

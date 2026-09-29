@@ -125,6 +125,10 @@ const fr: Translations = {
     daysTrackedOther: '{{n}} jours suivis',
     avgPain: 'douleur moyenne',
     painEvolution: 'Évolution de la douleur',
+    dailyRating: 'Note du jour',
+    weeklyMean: 'Moyenne sur 7 jours :',
+    weeklyMeanLegend: 'Moyenne des 7 derniers jours (dès 4 jours notés)',
+    notLogged: 'Non renseigné',
     weekdayInsight:
       '🙂 Tes journées sont en moyenne meilleures le {{best}}, et plus difficiles le {{worst}}.',
     whatAffectsPain: 'Ce qui semble jouer sur ta douleur',
