@@ -587,6 +587,18 @@ const en: Translations = {
     fileTooLarge: 'This file is too large to be an OUCH backup.',
   },
 
+  storage: {
+    title: 'Protection against erasure',
+    protected: 'The browser has committed to not erasing your data on its own. It is still deleted if you clear the site data: keep backups.',
+    notProtected:
+      'The browser may erase your data on its own, for example when the device runs low on space. Ask it to keep it, and make backups: they are what really protects you.',
+    unsupported:
+      'This browser cannot protect the data against automatic erasure. Make regular backups.',
+    refused:
+      'The browser did not grant the protection. Installing the app on the home screen and using it regularly often helps; meanwhile, export a backup.',
+    request: 'Ask for protection',
+  },
+
   crash: {
     title: 'Something went wrong',
     body: 'The app could not display this screen. Your data is still on this device: reloading often fixes it. If the error comes back every time, some data may be damaged; you can then erase everything from this device (backups you already exported are not affected).',

@@ -515,6 +515,15 @@ export interface Translations {
     fileTooLarge: string
   }
 
+  storage: {
+    title: string
+    protected: string
+    notProtected: string
+    unsupported: string
+    refused: string
+    request: string
+  }
+
   crash: {
     title: string
     body: string

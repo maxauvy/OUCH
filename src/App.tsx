@@ -11,6 +11,7 @@ import { DesignContext } from './hooks/useDesign'
 import { useTodayEntry } from './hooks/useEntries'
 import { updateSettings, todayISO } from './db'
 import { maybeShowReminder } from './lib/reminder'
+import { requestStorageProtection } from './lib/storage'
 import { getTranslations, I18nProvider } from './i18n'
 import type { Language } from './i18n'
 import type { DesignStyle } from './db/types'
@@ -60,6 +61,13 @@ function AppShell() {
     const id = setInterval(check, 60_000)
     return () => clearInterval(id)
   }, [settings.reminderEnabled, settings.reminderTime, settings.language, todayEntry])
+
+  // Once there is a first entry to lose, ask the browser to keep the data
+  // (silent in most browsers; Firefox asks, which makes sense after a save).
+  const hasEntry = !!todayEntry
+  useEffect(() => {
+    if (settings.onboardingDone && hasEntry) void requestStorageProtection()
+  }, [settings.onboardingDone, hasEntry])
 
   // Wait for the stored settings, or the setup would flash on every launch.
   if (!settingsLoaded) return null
