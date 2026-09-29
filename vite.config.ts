@@ -14,6 +14,8 @@ export default defineConfig(({ command }) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        // Registered by hand in main.tsx, without the plugin's reload on update.
+        injectRegister: false,
         includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
         manifest: {
           id: base,
@@ -41,6 +43,10 @@ export default defineConfig(({ command }) => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+          // A new release takes over as soon as it is installed; the open page
+          // is left alone (see main.tsx).
+          skipWaiting: true,
+          clientsClaim: true,
         },
       }),
     ],

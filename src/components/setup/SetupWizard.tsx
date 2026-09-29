@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { IconCheck } from '@tabler/icons-react'
 import { db, updateSettings } from '../../db'
-import { ALL_FACTORS } from '../../db/types'
+import { ALL_FACTORS, type ParentGender } from '../../db/types'
 import { useSettings } from '../../hooks/useSettings'
 import { useMedications } from '../../hooks/useMedications'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -138,6 +138,9 @@ export function SetupWizard({ onDone }: { onDone: () => void }) {
                   {t.setup.profileHelper}
                 </p>
               </Card>
+              <Card>
+                <ParentPicker />
+              </Card>
             </>
           )}
 
@@ -266,6 +269,45 @@ function LanguagePicker() {
   )
 }
 
+/** Same choice as in Settings: the Kids tab's sentences are written for
+ * "maman" or "papa", with the matching French agreement. */
+function ParentPicker() {
+  const t = useTranslation()
+  const settings = useSettings()
+  const ids = useId()
+  const options: { value: ParentGender; label: string }[] = [
+    { value: 'maman', label: t.settings.parentGenderMaman },
+    { value: 'papa', label: t.settings.parentGenderPapa },
+  ]
+  return (
+    <>
+      <p className="text-control font-medium mb-1">
+        {t.settings.parentGenderTitle}
+      </p>
+      <p id={`${ids}-parent-help`} className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+        {t.settings.parentGenderHelper}
+      </p>
+      <div className="flex gap-2" {...radioGroupProps(t.settings.parentGenderTitle)} aria-describedby={`${ids}-parent-help`}>
+        {options.map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            {...radioProps(settings.parentGender === opt.value)}
+            onClick={() => updateSettings({ parentGender: opt.value })}
+            className="flex-1 min-h-11 rounded-[var(--radius-control)] py-2 text-control font-semibold"
+            style={{
+              background: settings.parentGender === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
+              color: settings.parentGender === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
+            }}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </>
+  )
+}
+
 function IllnessStep({ heading }: { heading: ReactNode }) {
   const t = useTranslation()
   return (
@@ -346,6 +388,12 @@ function DoneStep({ heading }: { heading: ReactNode }) {
         : t.setup.checkNoIllness,
     },
     { done: !!settings.displayName, text: settings.displayName ? format(t.setup.checkName, { name: settings.displayName }) : t.setup.checkNoName },
+    {
+      done: true,
+      text: format(t.setup.checkParent, {
+        parent: settings.parentGender === 'papa' ? t.settings.parentGenderPapa : t.settings.parentGenderMaman,
+      }),
+    },
     { done: true, text: format(t.setup.checkFactors, { n: settings.enabledFactors.length }) },
     ...(tracksMedications
       ? [{ done: described > 0, text: described > 0 ? format(t.setup.checkMedications, { n: described }) : t.setup.checkNoMedications }]

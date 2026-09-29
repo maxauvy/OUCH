@@ -327,6 +327,25 @@ textarea {
   flex-direction: column;
   max-width: 560px;
   margin: 0 auto;
+  /* Anything wider than the screen would make the phone zoom the whole page
+     out to fit it, fixed tab bar included. Clip, not hidden: sticky headers
+     keep working. */
+  overflow-x: clip;
+}
+
+/* Date and time fields: iOS gives them a native minimum width that pushes
+   them past their card on a narrow phone, centers the value, and collapses
+   an empty one to a sliver. */
+input[type='date'],
+input[type='time'] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 2.75em;
+}
+input::-webkit-date-and-time-value {
+  text-align: left;
 }
 
 /* Keyboard focus. Unlayered, so it beats Tailwind's layered `outline-none`
@@ -365,5 +384,15 @@ textarea {
     font-family: var(--font-sans);
     line-height: 1.5;
     --type-scale: calc(16 / 17);
+  }
+
+  /* iOS zooms the page into any text field under 16px when it gets focus,
+     and doesn't zoom back out: the layout then sits off-screen, tab bar
+     included. Fields never go under 16px here, and still grow with
+     Dynamic Type. */
+  input:not([type='checkbox'], [type='radio'], [type='range']),
+  select,
+  textarea {
+    font-size: max(16px, var(--text-body));
   }
 }

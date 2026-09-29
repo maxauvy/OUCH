@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import {
   addMonths,
   eachDayOfInterval,
@@ -10,8 +10,9 @@ import {
   startOfMonth,
   startOfWeek,
 } from 'date-fns'
-import type { DailyEntry } from '../../db/types'
-import { computePainWeather } from '../../lib/painWeather'
+import type { DailyEntry, PainWeatherLevel } from '../../db/types'
+import { computePainWeather, painWeatherByLevel } from '../../lib/painWeather'
+import { WeatherIcon } from '../ui/WeatherIcon'
 import { usePalette } from '../../hooks/useDesign'
 import { useLocale, useTranslation } from '../../i18n'
 
@@ -79,6 +80,9 @@ export function CalendarHeatmap({
           const entry = byDate.get(key)
           const inMonth = isSameMonth(day, cursor)
           const weather = entry ? computePainWeather(entry) : null
+          // Days of the neighbouring months keep only the dot: no tint, and a
+          // muted number that still reads (fading the whole cell didn't).
+          const tinted = weather && inMonth ? weather : null
           const selected = key === selectedDate
           const today = isToday(day)
           const dayLabel = format(day, 'd MMMM yyyy', { locale: dateFnsLocale })
@@ -90,17 +94,17 @@ export function CalendarHeatmap({
               aria-label={weather ? `${dayLabel}, ${i18n.painWeatherLevels[weather.level]}` : dayLabel}
               aria-current={today ? 'date' : undefined}
               aria-pressed={selected}
-              className="aspect-square rounded-xl flex flex-col items-center justify-center relative text-caption font-medium"
+              className={`aspect-square rounded-xl flex flex-col items-center justify-center relative text-caption ${inMonth ? 'font-medium' : 'font-normal'}`}
               style={{
-                background: weather ? weather.soft : 'transparent',
+                background: tinted ? tinted.soft : 'transparent',
                 // The weather color stays on the background and the dot; the
-                // number itself needs the ink color to stay readable (the
-                // light weathers are under 2.5:1 against their own tint).
-                color: weather ? t.ink : 'var(--color-ink-muted)',
-                opacity: inMonth ? 1 : 0.35,
+                // number takes the weather's own dark shade (4.6:1 or more on
+                // its tint). The tints stay light in dark mode, so the app's
+                // ink, light there, can't be used on them.
+                color: tinted ? tinted.ink : 'var(--color-ink-muted)',
                 // Inset rings rather than outlines, so the keyboard focus
                 // outline stays free.
-                boxShadow: selected ? `inset 0 0 0 2px ${t.brand}` : today ? `inset 0 0 0 1.5px ${t.inkMuted}` : undefined,
+                boxShadow: selected ? `inset 0 0 0 2px ${t.brand}` : today ? `inset 0 0 0 1.5px ${tinted ? tinted.ink : t.inkMuted}` : undefined,
               }}
             >
               {format(day, 'd')}
@@ -115,6 +119,44 @@ export function CalendarHeatmap({
           )
         })}
       </div>
+
+      <WeatherLegend />
+    </div>
+  )
+}
+
+const LEVELS: PainWeatherLevel[] = [1, 2, 3, 4, 5]
+
+/** The five weathers, easiest day first, so the calendar's colors can be read. */
+function WeatherLegend() {
+  const i18n = useTranslation()
+  const id = useId()
+  return (
+    <div className="mt-4 pt-3" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+      <p id={id} className="sr-only">
+        {i18n.calendar.legend}
+      </p>
+      {/* Wraps rather than squeezing five labels into five columns: "Quelques
+          nuages" doesn't fit a fifth of a phone, less so with larger text. */}
+      <ul aria-labelledby={id} className="flex flex-wrap gap-x-3 gap-y-2">
+        {LEVELS.map((level) => {
+          const w = painWeatherByLevel(level)
+          return (
+            <li key={level} className="flex items-center gap-1.5">
+              <span
+                className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center"
+                style={{ background: w.soft, color: w.ink }}
+                aria-hidden
+              >
+                <WeatherIcon name={w.icon as never} size={18} />
+              </span>
+              <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+                {i18n.painWeatherLevels[level]}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
     </div>
   )
 }

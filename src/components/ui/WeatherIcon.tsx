@@ -87,7 +87,8 @@ export function WeatherIcon({ name, size = 40, className }: { name: IconName; si
             d="M11 26a9 9 0 0 1 1.2-18 11 11 0 0 1 21 3.4A8 8 0 0 1 32 26H11Z"
             fill="currentColor"
           />
-          <path d="M26 27 19 38h6l-3 8 11-13h-6l3-6Z" fill="currentColor" />
+          {/* Centered under the cloud, whose middle is at x = 20, not 24 */}
+          <path d="M20 27 13 38h6l-3 8 11-13h-6l3-6Z" fill="currentColor" />
         </svg>
       )
   }

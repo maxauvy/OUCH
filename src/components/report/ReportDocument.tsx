@@ -18,7 +18,7 @@ import {
   type PainStats,
 } from '../../lib/report'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
-import { RELIEF_COLORS, rampColor } from './reportColors'
+import { R, RELIEF_COLORS, rampColor } from './reportColors'
 import { SYMPTOMS, type ReportData } from './reportData'
 
 // Cited by number in the method sections and key points. Kept in their
@@ -879,8 +879,8 @@ function Associations({ d }: { d: ReportData }) {
                   <td className="r">{f.signed(a.rho, 2)}</td>
                   <td aria-hidden>
                     <svg viewBox="0 0 100 10" style={{ width: 100 }}>
-                      <line x1={50} x2={50} y1={0} y2={10} stroke="var(--r-axis)" />
-                      <rect x={a.rho < 0 ? 50 + a.rho * 50 : 50} y={2} width={Math.abs(a.rho) * 50} height={6} rx={2} fill={a.rho < 0 ? 'var(--r-blue)' : 'var(--r-orange)'} />
+                      <line x1={50} x2={50} y1={0} y2={10} stroke={R.axis} />
+                      <rect x={a.rho < 0 ? 50 + a.rho * 50 : 50} y={2} width={Math.abs(a.rho) * 50} height={6} rx={2} fill={a.rho < 0 ? R.blue : R.orange} />
                     </svg>
                   </td>
                   <td>{t.strengths[strengthIndex(a.rho)]}</td>
