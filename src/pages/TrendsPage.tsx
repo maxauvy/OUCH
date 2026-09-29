@@ -206,7 +206,7 @@ export function TrendsPage() {
 
           <Card>
             <SectionTitle>{i18n.trends.painEvolution}</SectionTitle>
-            <PainTrendChart entries={filtered} markers={doseMarkers} />
+            <PainTrendChart entries={entries ?? []} from={rangeFrom} to={today} markers={doseMarkers} showMean={rangeDays !== 7} />
           </Card>
 
           {medicationsTracked && medications && (
