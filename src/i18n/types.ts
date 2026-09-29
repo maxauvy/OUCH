@@ -63,6 +63,7 @@ export interface Translations {
     doneIntro: string
     checkName: string
     checkNoName: string
+    checkParent: string
     checkFactors: string
     checkMedications: string
     checkNoMedications: string
@@ -315,8 +316,12 @@ export interface Translations {
     optionsTitle: string
     includeNotes: string
     includeCycle: string
+    exportPdf: string
+    exporting: string
+    exportHelper: string
+    exportFailed: string
+    fileName: string
     print: string
-    printHelper: string
     preview: string
     previewLabel: string
   }
@@ -474,6 +479,7 @@ export interface Translations {
   calendar: {
     prevMonth: string
     nextMonth: string
+    legend: string
     weekdaysShort: Week<string>
   }
 

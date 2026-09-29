@@ -1,13 +1,18 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { registerSW } from 'virtual:pwa-register'
 import './index.css'
 import App from './App.tsx'
 
-// With registerType 'autoUpdate', this reloads the page as soon as a new service
-// worker takes over, so an installed PWA shows a new release on the very next
-// launch instead of one launch later.
-registerSW({ immediate: true })
+// A new release installs in the background and takes over straight away
+// (skipWaiting + clientsClaim in vite.config.ts), but the page is not
+// reloaded: a reload a second after launch flashes the screen and
+// wipes whatever was being typed. The running page keeps its code (it is one
+// bundle, nothing loaded later), and the new release shows from the next
+// launch or reload.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  const base = import.meta.env.BASE_URL
+  navigator.serviceWorker.register(`${base}sw.js`, { scope: base }).catch(() => {})
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

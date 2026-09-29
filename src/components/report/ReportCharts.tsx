@@ -4,7 +4,7 @@ import { rollingMean, type ReportPeriods } from '../../lib/report'
 import type { MedicationReport } from '../../lib/report'
 import { periodOn } from '../../lib/medications'
 import type { ReportFormat } from './reportFormat'
-import { rampColor } from './reportColors'
+import { R, rampColor } from './reportColors'
 
 // Every time chart shares this frame, so pain, treatments and symptoms line
 // up day for day when stacked. viewBox units; the SVG scales to the page.
@@ -46,8 +46,8 @@ function XTicks({ p, f, y }: { p: ReportPeriods; f: ReportFormat; y: number }) {
     <g>
       {ticks.map(({ i, date }) => (
         <g key={date}>
-          <line x1={x(i)} x2={x(i)} y1={y} y2={y + 4} stroke="var(--r-axis)" />
-          <text x={x(i)} y={y + 15} fontSize={10} fill="var(--r-faint)" textAnchor="middle">
+          <line x1={x(i)} x2={x(i)} y1={y} y2={y + 4} stroke={R.axis} />
+          <text x={x(i)} y={y + 15} fontSize={10} fill={R.faint} textAnchor="middle">
             {f.dayMonth(date)}
           </text>
         </g>
@@ -60,14 +60,14 @@ function PeriodBand({ p, top, bottom, labels, f }: { p: ReportPeriods; top: numb
   const { split } = frame(p)
   return (
     <g>
-      <rect x={LEFT} y={top} width={split - LEFT} height={bottom - top} fill="var(--r-band)" />
-      <line x1={split} x2={split} y1={top - (labels ? 14 : 0)} y2={bottom} stroke="var(--r-ink)" strokeDasharray="3 3" />
+      <rect x={LEFT} y={top} width={split - LEFT} height={bottom - top} fill={R.band} />
+      <line x1={split} x2={split} y1={top - (labels ? 14 : 0)} y2={bottom} stroke={R.ink} strokeDasharray="3 3" />
       {labels && (
         <>
-          <text x={LEFT + 4} y={top - 5} fontSize={10} fill="var(--r-muted)">
+          <text x={LEFT + 4} y={top - 5} fontSize={10} fill={R.muted}>
             {f.t.previousPeriod}
           </text>
-          <text x={split + 5} y={top - 5} fontSize={10} fill="var(--r-ink)" fontWeight={600}>
+          <text x={split + 5} y={top - 5} fontSize={10} fill={R.ink} fontWeight={600}>
             {f.format(f.t.sinceConsultation, { date: f.dayMonth(p.start) })}
           </text>
         </>
@@ -99,23 +99,23 @@ export function PainChart({
       <PeriodBand p={p} top={top} bottom={bottom} labels f={f} />
       {[0, 2, 4, 6, 8, 10].map((v) => (
         <g key={v}>
-          <line x1={LEFT} x2={W - RIGHT} y1={y(v)} y2={y(v)} stroke="var(--r-hair)" />
-          <text x={LEFT - 6} y={y(v) + 3.5} fontSize={10} fill="var(--r-faint)" textAnchor="end">
+          <line x1={LEFT} x2={W - RIGHT} y1={y(v)} y2={y(v)} stroke={R.hair} />
+          <text x={LEFT - 6} y={y(v) + 3.5} fontSize={10} fill={R.faint} textAnchor="end">
             {v}
           </text>
         </g>
       ))}
-      <line x1={LEFT} x2={W - RIGHT} y1={y(7)} y2={y(7)} stroke="var(--r-muted)" strokeDasharray="2 3" />
-      <text x={W - RIGHT} y={y(7) - 4} fontSize={10} fill="var(--r-muted)" textAnchor="end">
+      <line x1={LEFT} x2={W - RIGHT} y1={y(7)} y2={y(7)} stroke={R.muted} strokeDasharray="2 3" />
+      <text x={W - RIGHT} y={y(7) - 4} fontSize={10} fill={R.muted} textAnchor="end">
         {f.t.severeThreshold}
       </text>
       {entries.map((e) => (
-        <circle key={e.date} cx={x(p.dayIndex(e.date))} cy={y(e.painLevel)} r={2.75} fill="var(--r-blue-350)">
+        <circle key={e.date} cx={x(p.dayIndex(e.date))} cy={y(e.painLevel)} r={2.75} fill={R.blue350}>
           <title>{`${f.dayMonth(e.date)} : ${e.painLevel}/10`}</title>
         </circle>
       ))}
-      <path d={linePath(rollingMean(entries, (e) => e.painLevel, p), x, y)} fill="none" stroke="var(--r-blue-550)" strokeWidth={2} strokeLinejoin="round" />
-      <line x1={LEFT} x2={W - RIGHT} y1={bottom} y2={bottom} stroke="var(--r-axis)" />
+      <path d={linePath(rollingMean(entries, (e) => e.painLevel, p), x, y)} fill="none" stroke={R.blue550} strokeWidth={2} strokeLinejoin="round" />
+      <line x1={LEFT} x2={W - RIGHT} y1={bottom} y2={bottom} stroke={R.axis} />
       <XTicks p={p} f={f} y={bottom} />
     </svg>
   )
@@ -150,30 +150,30 @@ export function SmallMultiple({
   return (
     <svg viewBox={`0 0 ${W} ${height}`} role="img" aria-label={`${label} (${hint}) : ${summary}`}>
       <PeriodBand p={p} top={top} bottom={bottom} f={f} />
-      <text x={0} y={10} fontSize={11} fontWeight={600} fill="var(--r-ink)">
+      <text x={0} y={10} fontSize={11} fontWeight={600} fill={R.ink}>
         {label}
-        <tspan fontWeight={400} fill="var(--r-faint)" fontSize={10}>{`  ${hint}`}</tspan>
+        <tspan fontWeight={400} fill={R.faint} fontSize={10}>{`  ${hint}`}</tspan>
       </text>
-      <text x={W - RIGHT} y={10} fontSize={10.5} fill="var(--r-muted)" textAnchor="end">
+      <text x={W - RIGHT} y={10} fontSize={10.5} fill={R.muted} textAnchor="end">
         {summary}
       </text>
-      <line x1={LEFT} x2={W - RIGHT} y1={y(0)} y2={y(0)} stroke="var(--r-axis)" />
-      <line x1={LEFT} x2={W - RIGHT} y1={y(max)} y2={y(max)} stroke="var(--r-hair)" />
-      <text x={LEFT - 6} y={y(0) + 3} fontSize={9.5} fill="var(--r-faint)" textAnchor="end">
+      <line x1={LEFT} x2={W - RIGHT} y1={y(0)} y2={y(0)} stroke={R.axis} />
+      <line x1={LEFT} x2={W - RIGHT} y1={y(max)} y2={y(max)} stroke={R.hair} />
+      <text x={LEFT - 6} y={y(0) + 3} fontSize={9.5} fill={R.faint} textAnchor="end">
         0
       </text>
-      <text x={LEFT - 6} y={y(max) + 3} fontSize={9.5} fill="var(--r-faint)" textAnchor="end">
+      <text x={LEFT - 6} y={y(max) + 3} fontSize={9.5} fill={R.faint} textAnchor="end">
         {max}
       </text>
       {entries.map((e) => {
         const v = get(e)
         return typeof v === 'number' ? (
-          <circle key={e.date} cx={x(p.dayIndex(e.date))} cy={y(Math.min(max, v))} r={2} fill="var(--r-blue-350)">
+          <circle key={e.date} cx={x(p.dayIndex(e.date))} cy={y(Math.min(max, v))} r={2} fill={R.blue350}>
             <title>{`${f.dayMonth(e.date)} : ${v}`}</title>
           </circle>
         ) : null
       })}
-      <path d={linePath(rollingMean(entries, get, p).map((v) => (v === null ? null : Math.min(max, v))), x, y)} fill="none" stroke="var(--r-blue-550)" strokeWidth={2} strokeLinejoin="round" />
+      <path d={linePath(rollingMean(entries, get, p).map((v) => (v === null ? null : Math.min(max, v))), x, y)} fill="none" stroke={R.blue550} strokeWidth={2} strokeLinejoin="round" />
       {last && <XTicks p={p} f={f} y={bottom} />}
     </svg>
   )
@@ -201,10 +201,10 @@ export function TreatmentTimeline({ entries, meds, p, f }: { entries: DailyEntry
         const max = current?.perDay || Math.max(1, m.maxDosesInADay)
         return (
           <g key={m.med.id}>
-            <text x={LEFT + 4} y={y0 + 10} fontSize={10.5} fill="var(--r-ink)" fontWeight={600}>
+            <text x={LEFT + 4} y={y0 + 10} fontSize={10.5} fill={R.ink} fontWeight={600}>
               {label}
             </text>
-            <line x1={LEFT} x2={W - RIGHT} y1={barY + barH} y2={barY + barH} stroke="var(--r-hair)" />
+            <line x1={LEFT} x2={W - RIGHT} y1={barY + barH} y2={barY + barH} stroke={R.hair} />
             {m.regimen === 'scheduled'
               ? m.med.periods.map((per) => {
                   const a = Math.max(0, p.dayIndex(per.start))
@@ -215,7 +215,7 @@ export function TreatmentTimeline({ entries, meds, p, f }: { entries: DailyEntry
                   const text = f.posology('scheduled', per)
                   return (
                     <g key={per.start}>
-                      <rect x={x1 + 1} y={barY} width={Math.max(2, x2 - x1 - 2)} height={barH} rx={3} fill="var(--r-blue)">
+                      <rect x={x1 + 1} y={barY} width={Math.max(2, x2 - x1 - 2)} height={barH} rx={3} fill={R.blue}>
                         <title>{`${m.med.name} ${text}`}</title>
                       </rect>
                       {x2 - x1 > text.length * 5.5 + 12 && (
@@ -239,7 +239,7 @@ export function TreatmentTimeline({ entries, meds, p, f }: { entries: DailyEntry
                   }
                   const h = Math.max(3, (barH * Math.min(max, i.doses ?? 1)) / max)
                   return (
-                    <rect key={e.date} x={cx - 2.5} y={barY + barH - h} width={5} height={h} rx={1} fill="var(--r-orange)">
+                    <rect key={e.date} x={cx - 2.5} y={barY + barH - h} width={5} height={h} rx={1} fill={R.orange}>
                       <title>{`${f.dayMonth(e.date)} : ${i.doses ?? '?'}`}</title>
                     </rect>
                   )
@@ -267,8 +267,8 @@ export function PainHistogram({ prev, cur, f }: { prev: number[] | null; cur: nu
     <svg viewBox={`0 0 ${W} ${height}`} role="img" aria-label={f.t.distribution}>
       {grid.map((g) => (
         <g key={g}>
-          <line x1={LEFT} x2={W - RIGHT} y1={y(g)} y2={y(g)} stroke="var(--r-hair)" />
-          <text x={LEFT - 6} y={y(g) + 3.5} fontSize={10} fill="var(--r-faint)" textAnchor="end">
+          <line x1={LEFT} x2={W - RIGHT} y1={y(g)} y2={y(g)} stroke={R.hair} />
+          <text x={LEFT - 6} y={y(g) + 3.5} fontSize={10} fill={R.faint} textAnchor="end">
             {f.pct(g)}
           </text>
         </g>
@@ -279,22 +279,22 @@ export function PainHistogram({ prev, cur, f }: { prev: number[] | null; cur: nu
         return (
           <g key={level}>
             {pv > 0 && (
-              <rect x={cx - barW - 1} y={y(pv)} width={barW} height={y(0) - y(pv)} rx={3} fill="var(--r-prev)">
+              <rect x={cx - barW - 1} y={y(pv)} width={barW} height={y(0) - y(pv)} rx={3} fill={R.prev}>
                 <title>{`${f.t.previousPeriod}, ${level}/10 : ${f.pct(pv)}`}</title>
               </rect>
             )}
             {c > 0 && (
-              <rect x={prev ? cx + 1 : cx - barW / 2} y={y(c)} width={barW} height={y(0) - y(c)} rx={3} fill="var(--r-blue)">
+              <rect x={prev ? cx + 1 : cx - barW / 2} y={y(c)} width={barW} height={y(0) - y(c)} rx={3} fill={R.blue}>
                 <title>{`${level}/10 : ${f.pct(c)}`}</title>
               </rect>
             )}
-            <text x={cx} y={height - 6} fontSize={10} fill="var(--r-faint)" textAnchor="middle">
+            <text x={cx} y={height - 6} fontSize={10} fill={R.faint} textAnchor="middle">
               {level}
             </text>
           </g>
         )
       })}
-      <line x1={LEFT} x2={W - RIGHT} y1={y(0)} y2={y(0)} stroke="var(--r-axis)" />
+      <line x1={LEFT} x2={W - RIGHT} y1={y(0)} y2={y(0)} stroke={R.axis} />
     </svg>
   )
 }
@@ -328,13 +328,13 @@ export function PainCalendar({ entries, p, f }: { entries: DailyEntry[]; p: Repo
     <svg viewBox={`0 0 ${width} ${height}`} style={{ maxWidth: width }} role="img" aria-label={f.t.calendar}>
       {f.t.weekdayInitials.map((d, r) =>
         r % 2 === 0 ? (
-          <text key={r} x={0} y={top + r * (cell + gap) + cell * 0.72} fontSize={9.5} fill="var(--r-faint)">
+          <text key={r} x={0} y={top + r * (cell + gap) + cell * 0.72} fontSize={9.5} fill={R.faint}>
             {d}
           </text>
         ) : null
       )}
       {months.map((m) => (
-        <text key={m.x} x={m.x} y={10} fontSize={9.5} fill="var(--r-faint)">
+        <text key={m.x} x={m.x} y={10} fontSize={9.5} fill={R.faint}>
           {m.label}
         </text>
       ))}
@@ -350,13 +350,13 @@ export function PainCalendar({ entries, p, f }: { entries: DailyEntry[]; p: Repo
             height={cell - 0.5}
             rx={3}
             fill={rampColor(entry.painLevel)}
-            stroke={entry.painLevel <= 3 ? 'var(--r-prev)' : 'none'}
+            stroke={entry.painLevel <= 3 ? R.prev : 'none'}
             strokeWidth={0.5}
           >
             <title>{`${f.dayMonth(date)} : ${entry.painLevel}/10`}</title>
           </rect>
         ) : (
-          <rect key={date} x={cx + 0.5} y={cy + 0.5} width={cell - 1} height={cell - 1} rx={3} fill="none" stroke="var(--r-prev)" strokeDasharray="2 2">
+          <rect key={date} x={cx + 0.5} y={cy + 0.5} width={cell - 1} height={cell - 1} rx={3} fill="none" stroke={R.prev} strokeDasharray="2 2">
             <title>{`${f.dayMonth(date)} : ${f.t.notLogged}`}</title>
           </rect>
         )
@@ -364,7 +364,7 @@ export function PainCalendar({ entries, p, f }: { entries: DailyEntry[]; p: Repo
       {cells
         .filter((c) => c.date === p.start)
         .map((c) => (
-          <rect key="consult" x={c.cx - 1.5} y={c.cy - 1.5} width={cell + 3} height={cell + 3} rx={4} fill="none" stroke="var(--r-ink)" strokeWidth={1.5} />
+          <rect key="consult" x={c.cx - 1.5} y={c.cy - 1.5} width={cell + 3} height={cell + 3} rx={4} fill="none" stroke={R.ink} strokeWidth={1.5} />
         ))}
     </svg>
   )

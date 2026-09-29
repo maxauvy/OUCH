@@ -1,12 +1,15 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { IconArrowLeft, IconPrinter } from '@tabler/icons-react'
+import { IconArrowLeft, IconFileTypePdf, IconPrinter } from '@tabler/icons-react'
+import { toCanvas } from 'html-to-image'
 import { todayISO } from '../db'
 import { useAllEntries } from '../hooks/useEntries'
 import { useMedications } from '../hooks/useMedications'
 import { useSettings } from '../hooks/useSettings'
 import { shiftISO } from '../lib/medications'
 import { formatISODate } from '../lib/medicationFormat'
+import { buildImagePdf, type PdfImage } from '../lib/pdf'
+import { downloadBlob } from '../lib/backup'
 import { radioGroupProps, radioProps } from '../lib/a11y'
 import { format, LANGUAGES, useLanguage, useLocale, useTranslation, type Language } from '../i18n'
 import { Card, SectionTitle } from '../components/ui/Card'
@@ -20,6 +23,29 @@ const PAGE_WIDTH = 794
 const inputStyle = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 const inputClass = 'w-full rounded-xl px-3.5 py-2.5 text-body outline-none'
 
+// An app installed from Safari on iPhone has no print dialog: window.print()
+// does nothing there, so only the PDF is offered.
+const canPrint = !(navigator as Navigator & { standalone?: boolean }).standalone
+
+/** The preview's pages as JPEGs, at twice the A4 size in CSS pixels (about
+ * 190 dpi once printed). */
+async function capturePages(container: HTMLElement): Promise<PdfImage[]> {
+  const images: PdfImage[] = []
+  for (const page of Array.from(container.querySelectorAll<HTMLElement>('.report-page'))) {
+    const canvas = await toCanvas(page, {
+      pixelRatio: 2,
+      backgroundColor: '#ffffff',
+      // The preview's page shadow and spacing aren't part of the page.
+      style: { boxShadow: 'none', margin: '0' },
+    })
+    const blob = await new Promise<Blob>((resolve, reject) =>
+      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('JPEG encoding failed'))), 'image/jpeg', 0.9)
+    )
+    images.push({ jpeg: new Uint8Array(await blob.arrayBuffer()), width: canvas.width, height: canvas.height })
+  }
+  return images
+}
+
 export function DoctorReportPage({ onBack }: { onBack: () => void }) {
   const t = useTranslation()
   const appLanguage = useLanguage()
@@ -29,6 +55,9 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
   const medications = useMedications()
   const ids = useId()
   const headingRef = useRef<HTMLHeadingElement>(null)
+  const previewRef = useRef<HTMLDivElement>(null)
+  const [exporting, setExporting] = useState(false)
+  const [exportFailed, setExportFailed] = useState(false)
 
   const today = todayISO()
   const [variant, setVariant] = useState<ReportVariant>('gp')
@@ -77,6 +106,35 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
       document.title = previous
     }
   }, [t, today])
+
+  async function exportPdf() {
+    if (!previewRef.current) return
+    setExporting(true)
+    setExportFailed(false)
+    try {
+      const blob = buildImagePdf(await capturePages(previewRef.current), `${t.doctorReport.title} ${today}`)
+      const file = new File([blob], `${t.doctorReport.fileName}-${today}.pdf`, { type: 'application/pdf' })
+      // On a phone the share sheet is the way to keep the file (Files, mail,
+      // print…); a computer just downloads it.
+      const phone = window.matchMedia('(pointer: coarse)').matches
+      if (phone && navigator.canShare?.({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: t.doctorReport.title })
+          return
+        } catch (e) {
+          if (e instanceof DOMException && e.name === 'AbortError') return
+          // Making the file can take long enough for the browser to stop
+          // counting the tap as the reason for sharing; download instead.
+        }
+      }
+      downloadBlob(blob, file.name)
+    } catch (e) {
+      console.error(e)
+      setExportFailed(true)
+    } finally {
+      setExporting(false)
+    }
+  }
 
   const logged = data?.current.length ?? 0
   const notesTracked = settings.enabledFactors.includes('notes')
@@ -251,20 +309,35 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
         </div>
       </Card>
 
-      <div>
+      <div className="flex flex-col gap-2">
         <button
           type="button"
-          onClick={() => window.print()}
-          disabled={!logged}
-          aria-describedby={`${ids}-print-help`}
+          onClick={exportPdf}
+          disabled={!logged || exporting}
+          aria-describedby={`${ids}-export-help`}
           className="w-full rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)] flex items-center justify-center gap-2 disabled:opacity-40"
           style={{ background: 'var(--color-brand)' }}
         >
-          <IconPrinter size={18} aria-hidden />
-          {t.doctorReport.print}
+          <IconFileTypePdf size={18} aria-hidden />
+          {exporting ? t.doctorReport.exporting : t.doctorReport.exportPdf}
         </button>
-        <p id={`${ids}-print-help`} className="text-caption mt-2 text-center" style={{ color: 'var(--color-ink-muted)' }}>
-          {t.doctorReport.printHelper}
+        {canPrint && (
+          <button
+            type="button"
+            onClick={() => window.print()}
+            disabled={!logged}
+            className="w-full rounded-[var(--radius-control)] py-3 text-body font-semibold flex items-center justify-center gap-2 disabled:opacity-40"
+            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+          >
+            <IconPrinter size={18} aria-hidden />
+            {t.doctorReport.print}
+          </button>
+        )}
+        <p id={`${ids}-export-help`} className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.doctorReport.exportHelper}
+        </p>
+        <p role="alert" className="text-caption text-center font-medium" style={{ color: 'var(--color-weather-5-text)' }}>
+          {exportFailed ? t.doctorReport.exportFailed : ''}
         </p>
       </div>
 
@@ -274,7 +347,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             {t.doctorReport.preview}
           </h2>
           <ScaledPreview>
-            <div className="report report-preview" lang={language}>
+            <div ref={previewRef} className="report report-preview" lang={language}>
               <ReportDocument data={data} headingOffset={2} />
             </div>
           </ScaledPreview>
