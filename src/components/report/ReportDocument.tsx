@@ -166,6 +166,12 @@ function painClinicPages(d: ReportData): ReactNode[] {
           <TreatmentTimeline entries={d.all} meds={medicationReports(d.all, d.medications, p)} p={p} f={f} />
         </>
       )}
+      {d.meds.length === 0 && (
+        <>
+          <H level={3}>{f.t.treatments}</H>
+          <p className="r-small">{f.t.noTreatments}</p>
+        </>
+      )}
       {symptoms.length > 0 && <H level={3}>{f.t.symptoms}</H>}
       {symptoms.map((s, i) => {
         const [label, hint] = f.t.symptomLabels[s.key]
@@ -188,20 +194,26 @@ function painClinicPages(d: ReportData): ReactNode[] {
         )
       })}
     </>,
-    <>
-      <Agenda d={d} />
-      {d.meds.length > 0 && (
-        <>
-          <H level={2}>
-            {f.t.treatments} <span className="r-hint">{f.t.treatmentsSince}</span>
-          </H>
-          <TreatmentsTable d={d} detailed />
-          <H level={3}>{f.t.weekly}</H>
-          <WeeklyTable d={d} />
-        </>
-      )}
-      <NonDrug d={d} />
-    </>,
+    // Everything on this page is optional: with no agenda, no medication and
+    // no positive action, it would print blank but for its header and footer.
+    ...(agendaItems(d).length || d.meds.length || nonDrugShares(d).length
+      ? [
+          <>
+            <Agenda d={d} />
+            {d.meds.length > 0 && (
+              <>
+                <H level={2}>
+                  {f.t.treatments} <span className="r-hint">{f.t.treatmentsSince}</span>
+                </H>
+                <TreatmentsTable d={d} detailed />
+                <H level={3}>{f.t.weekly}</H>
+                <WeeklyTable d={d} />
+              </>
+            )}
+            <NonDrug d={d} />
+          </>,
+        ]
+      : []),
     <>
       <H level={2}>{f.t.calendar}</H>
       <PainCalendar entries={d.all} p={p} f={f} />
@@ -756,9 +768,13 @@ function ZoneBars({ d, limit, columns = 1 }: { d: ReportData; limit: number; col
   )
 }
 
+function nonDrugShares(d: ReportData) {
+  return tagShares(d.current, (e) => e.positiveActions)
+}
+
 function NonDrug({ d }: { d: ReportData }) {
   const { f } = d
-  const shares = tagShares(d.current, (e) => e.positiveActions)
+  const shares = nonDrugShares(d)
   if (!shares.length) return null
   return (
     <>
@@ -780,8 +796,12 @@ function NonDrug({ d }: { d: ReportData }) {
   )
 }
 
+function agendaItems(d: ReportData): string[] {
+  return d.options.agenda.map((a) => a.trim()).filter(Boolean)
+}
+
 function Agenda({ d }: { d: ReportData }) {
-  const items = d.options.agenda.map((a) => a.trim()).filter(Boolean)
+  const items = agendaItems(d)
   if (!items.length) return null
   return (
     <>

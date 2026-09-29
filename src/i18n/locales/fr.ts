@@ -335,7 +335,7 @@ const fr: Translations = {
       gp: { label: 'Médecin traitant', helper: '2 pages : l’essentiel en deux minutes.' },
       painClinic: {
         label: 'Centre douleur (CETD)',
-        helper: '5 pages : données détaillées, consommation d’antalgiques, facteurs associés.',
+        helper: 'Jusqu’à 5 pages : données détaillées, consommation d’antalgiques, facteurs associés.',
       },
     },
     consultationTitle: 'Date de ta dernière consultation',
@@ -423,6 +423,7 @@ const fr: Translations = {
     severeThreshold: 'seuil douleur sévère (7)',
     treatments: 'Traitements',
     treatmentsSince: 'sur la période analysée',
+    noTreatments: 'Aucun traitement renseigné dans le journal.',
     colTreatment: 'Traitement',
     colPosology: 'Posologie',
     colUse: 'Sur la période',

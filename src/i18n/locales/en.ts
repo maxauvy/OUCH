@@ -330,7 +330,7 @@ const en: Translations = {
     recipientTitle: 'Who is it for?',
     recipients: {
       gp: { label: 'General practitioner', helper: '2 pages: the essentials in two minutes.' },
-      painClinic: { label: 'Pain clinic', helper: '5 pages: detailed data, painkiller use, associated factors.' },
+      painClinic: { label: 'Pain clinic', helper: 'Up to 5 pages: detailed data, painkiller use, associated factors.' },
     },
     consultationTitle: 'Date of your last appointment',
     consultationHelper: 'The report covers the time since that date, compared with the same length of time just before.',
@@ -417,6 +417,7 @@ const en: Translations = {
     severeThreshold: 'severe pain threshold (7)',
     treatments: 'Treatments',
     treatmentsSince: 'over the period covered',
+    noTreatments: 'No treatment recorded in the diary.',
     colTreatment: 'Treatment',
     colPosology: 'Dosage',
     colUse: 'Over the period',
