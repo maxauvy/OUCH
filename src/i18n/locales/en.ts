@@ -688,6 +688,8 @@ const en: Translations = {
   footer: {
     credit: 'Made by Maxime Auvy',
     sourceCode: 'Source code',
+    updateAvailable: 'Update available',
+    reload: 'Reload',
   },
 }
 
