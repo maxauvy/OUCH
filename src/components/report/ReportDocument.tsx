@@ -1,4 +1,4 @@
-import { createContext, createElement, useContext, type ReactNode } from 'react'
+import { createContext, createElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
 import './report.css'
 import type { DailyEntry } from '../../db/types'
 import { periodOn } from '../../lib/medications'
@@ -16,10 +16,13 @@ import {
   type Association,
   type ContextComparison,
   type PainStats,
+  type WeekRow,
 } from '../../lib/report'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
 import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
 import { SYMPTOMS, type ReportData } from './reportData'
+import type { ReportFormat } from './reportFormat'
+import { buildSheets, findCut, rowsBlock, type Block, type Cut } from './pagination'
 
 // Cited by number in the method sections and key points. Kept in their
 // original language, as a bibliography would be.
@@ -48,15 +51,42 @@ function H({ level, children }: { level: 1 | 2 | 3; children: ReactNode }) {
   return createElement(`h${Math.min(6, level + offset)}`, { className: `r-h${level}` }, children)
 }
 
-/** The report as A4 page sections, to wrap in an element with class "report". */
-export function ReportDocument({ data, headingOffset = 0 }: { data: ReportData; headingOffset?: number }) {
+/** The report as A4 page sections, to wrap in an element with class "report".
+ * `cuts` move overflowing content to continuation sheets; the instance given
+ * `onCut` measures its sheets (so it must be laid out) and reports the next
+ * cut needed, until everything fits. */
+export function ReportDocument({
+  data,
+  headingOffset = 0,
+  cuts = [],
+  onCut,
+}: {
+  data: ReportData
+  headingOffset?: number
+  cuts?: Cut[]
+  onCut?: (cut: Cut) => void
+}) {
   const { options, f, p } = data
   const pages = options.variant === 'gp' ? gpPages(data) : painClinicPages(data)
   const running = options.variant === 'gp' ? f.t.runningGp : f.t.runningPainClinic
+  const sheets = buildSheets(pages, cuts)
+  const sectionRefs = useRef<HTMLElement[]>([])
+  useLayoutEffect(() => {
+    if (!onCut) return
+    const cut = findCut(sectionRefs.current, sheets, cuts)
+    if (cut) onCut(cut)
+  })
+
   return (
     <HeadingOffset.Provider value={headingOffset}>
-      {pages.map((body, i) => (
-        <section className="report-page" key={i}>
+      {sheets.map((sheet, i) => (
+        <section
+          className="report-page"
+          key={i}
+          ref={(el) => {
+            if (el) sectionRefs.current[i] = el
+          }}
+        >
           <div className="r-running">
             <span>
               OUCH · {running}
@@ -71,10 +101,16 @@ export function ReportDocument({ data, headingOffset = 0 }: { data: ReportData; 
               {f.fullDate(p.start)} → {f.fullDate(p.end)}
             </span>
           </div>
-          <div className="r-body">{body}</div>
+          <div className="r-body">
+            {sheet.parts.map((part) => (
+              <div className="r-part" data-part key={`${part.page}-${part.block}-${part.from}`}>
+                {part.node}
+              </div>
+            ))}
+          </div>
           <div className="r-foot">
             <span>{f.format(f.t.footer, { date: f.fullDate(p.end) })}</span>
-            <span className="num">{f.format(f.t.page, { n: i + 1, total: pages.length })}</span>
+            <span className="num">{f.format(f.t.page, { n: i + 1, total: sheets.length })}</span>
           </div>
         </section>
       ))}
@@ -82,14 +118,25 @@ export function ReportDocument({ data, headingOffset = 0 }: { data: ReportData; 
   )
 }
 
+/** " (continued)" after the heading of a list or table split across sheets. */
+function Continued({ f, on }: { f: ReportFormat; on: boolean }) {
+  return on ? <span className="r-hint"> ({f.t.continued})</span> : null
+}
+
 // ---------------------------------------------------------------------------
 // Variants
 
-function gpPages(d: ReportData): ReactNode[] {
+// Pages are lists of blocks, not rendered as arrays: each block is placed in
+// its own keyed wrapper (see ReportDocument), so the blocks need no key.
+/* oxlint-disable react/jsx-key */
+
+function gpPages(d: ReportData): Block[][] {
   const { f } = d
+  const keyPoints = keyPointItems(d)
+  const notes = noteItems(d, false)
   return [
-    <>
-      <Header d={d} />
+    [
+      <Header d={d} />,
       <div className="r-dash">
         <div className="r-card r-chart">
           <H level={2}>{f.t.painChart}</H>
@@ -100,24 +147,29 @@ function gpPages(d: ReportData): ReactNode[] {
         </div>
         <GpFigures d={d} />
         <DayMix d={d} />
-        <div className="r-card wide">
-          <H level={2}>{f.t.keyPoints}</H>
-          <KeyPoints d={d} />
+      </div>,
+      rowsBlock(keyPoints.length, (from, to, continued) => (
+        <div className="r-card r-after-dash">
+          <H level={2}>
+            {f.t.keyPoints}
+            <Continued f={f} on={continued} />
+          </H>
+          <KeyPointList items={keyPoints} from={from} to={to} />
         </div>
-        {agendaItems(d).length > 0 && (
-          <div className="r-wide">
-            <Agenda d={d} />
-          </div>
-        )}
-      </div>
-    </>,
-    <>
-      {d.meds.length > 0 && (
-        <>
-          <H level={2}>{f.t.treatments}</H>
-          <TreatmentsTable d={d} detailed={false} />
-        </>
-      )}
+      )),
+      <Agenda d={d} />,
+    ],
+    [
+      d.meds.length > 0 &&
+        rowsBlock(d.meds.length, (from, to, continued) => (
+          <>
+            <H level={2}>
+              {f.t.treatments}
+              <Continued f={f} on={continued} />
+            </H>
+            <TreatmentsTable d={d} detailed={false} from={from} to={to} />
+          </>
+        )),
       <div className="r-grid2 wide-left">
         <div>
           <H level={2}>{f.t.symptoms}</H>
@@ -127,52 +179,72 @@ function gpPages(d: ReportData): ReactNode[] {
           <H level={2}>{f.t.zones}</H>
           <ZoneBars d={d} limit={6} />
         </div>
-      </div>
-      {d.options.includeNotes && <Notes d={d} all={false} />}
-      <H level={2}>{f.t.method}</H>
-      <div className="r-method">
-        <p>{f.t.methodGp}</p>
-      </div>
-      <References count={3} title={f.t.references} />
-    </>,
+      </div>,
+      d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all={false} list={notes} from={from} to={to} continued={continued} />),
+      <>
+        <H level={2}>{f.t.method}</H>
+        <div className="r-method">
+          <p>{f.t.methodGp}</p>
+        </div>
+      </>,
+      <References count={3} title={f.t.references} />,
+    ],
   ]
 }
 
-function painClinicPages(d: ReportData): ReactNode[] {
+function painClinicPages(d: ReportData): Block[][] {
   const { f, p } = d
   const symptoms = SYMPTOMS.filter((s) => meanOf(d.current, s.key))
+  const keyPoints = keyPointItems(d)
+  const weeks = weeklyRows(d.current, p)
+  const notes = noteItems(d, true)
   return [
-    <>
-      <Header d={d} />
-      <Completeness d={d} />
-      <H level={2}>{f.t.keyPoints}</H>
-      <KeyPoints d={d} />
-      <H level={2}>{f.t.intensity}</H>
-      <Tiles d={d} detailed />
-      <H level={3}>{f.t.distribution}</H>
-      <div className="r-legend">
-        {d.painPrev && (
+    [
+      <Header d={d} />,
+      <Completeness d={d} />,
+      rowsBlock(keyPoints.length, (from, to, continued) => (
+        <>
+          <H level={2}>
+            {f.t.keyPoints}
+            <Continued f={f} on={continued} />
+          </H>
+          <KeyPointList items={keyPoints} from={from} to={to} />
+        </>
+      )),
+      <>
+        <H level={2}>{f.t.intensity}</H>
+        <Tiles d={d} detailed />
+      </>,
+      <>
+        <H level={3}>{f.t.distribution}</H>
+        <div className="r-legend">
+          {d.painPrev && (
+            <span>
+              <i style={{ background: 'var(--r-prev)' }} />
+              {f.format(f.t.distPrev, { n: d.painPrev.n })}
+            </span>
+          )}
           <span>
-            <i style={{ background: 'var(--r-prev)' }} />
-            {f.format(f.t.distPrev, { n: d.painPrev.n })}
+            <i style={{ background: 'var(--r-blue)' }} />
+            {f.format(f.t.distCur, { n: d.pain?.n ?? 0 })}
           </span>
-        )}
-        <span>
-          <i style={{ background: 'var(--r-blue)' }} />
-          {f.format(f.t.distCur, { n: d.pain?.n ?? 0 })}
-        </span>
-      </div>
-      <PainHistogram prev={d.painPrev?.distribution ?? null} cur={d.pain?.distribution ?? []} f={f} />
-      <PainStatsTable d={d} />
-      <p className="r-small">{f.t.categoriesNote}</p>
-    </>,
-    <>
-      <H level={2}>
-        {f.t.evolution} <span className="r-hint">{f.t.chartHint}</span>
-      </H>
-      <H level={3}>{f.t.painChart}</H>
-      <PainChart entries={d.all} p={p} f={f} height={170} summary={painSummary(d)} />
-      {d.meds.length > 0 && (
+        </div>
+        <PainHistogram prev={d.painPrev?.distribution ?? null} cur={d.pain?.distribution ?? []} f={f} />
+      </>,
+      <>
+        <PainStatsTable d={d} />
+        <p className="r-small">{f.t.categoriesNote}</p>
+      </>,
+    ],
+    [
+      <>
+        <H level={2}>
+          {f.t.evolution} <span className="r-hint">{f.t.chartHint}</span>
+        </H>
+        <H level={3}>{f.t.painChart}</H>
+        <PainChart entries={d.all} p={p} f={f} height={170} summary={painSummary(d)} />
+      </>,
+      d.meds.length > 0 ? (
         <>
           <H level={3}>{f.t.treatments}</H>
           <div className="r-legend">
@@ -187,97 +259,124 @@ function painClinicPages(d: ReportData): ReactNode[] {
           </div>
           <TreatmentTimeline entries={d.all} meds={medicationReports(d.all, d.medications, p)} p={p} f={f} />
         </>
-      )}
-      {d.meds.length === 0 && (
+      ) : (
         <>
           <H level={3}>{f.t.treatments}</H>
           <p className="r-small">{f.t.noTreatments}</p>
         </>
-      )}
-      {symptoms.length > 0 && <H level={3}>{f.t.symptoms}</H>}
-      {symptoms.map((s, i) => {
-        const [label, hint] = f.t.symptomLabels[s.key]
-        const cur = meanOf(d.current, s.key)!
-        const prev = meanOf(d.previous, s.key)
-        const summary = prev ? `${f.format(f.t.before, { v: f.nf(prev.mean) })} → ${f.nf(cur.mean)}` : f.nf(cur.mean)
-        return (
-          <SmallMultiple
-            key={s.key}
-            entries={d.all}
-            get={(e) => e[s.key]}
-            label={label}
-            hint={hint}
-            max={s.max}
-            summary={summary}
-            last={i === symptoms.length - 1}
-            p={p}
-            f={f}
-          />
-        )
-      })}
-    </>,
+      ),
+      symptoms.length > 0 &&
+        rowsBlock(symptoms.length, (from, to, continued) => (
+          <>
+            <H level={3}>
+              {f.t.symptoms}
+              <Continued f={f} on={continued} />
+            </H>
+            {symptoms.slice(from, to).map((s, i) => {
+              const [label, hint] = f.t.symptomLabels[s.key]
+              const cur = meanOf(d.current, s.key)!
+              const prev = meanOf(d.previous, s.key)
+              const summary = prev ? `${f.format(f.t.before, { v: f.nf(prev.mean) })} → ${f.nf(cur.mean)}` : f.nf(cur.mean)
+              return (
+                <div key={s.key} data-row>
+                  <SmallMultiple
+                    entries={d.all}
+                    get={(e) => e[s.key]}
+                    label={label}
+                    hint={hint}
+                    max={s.max}
+                    summary={summary}
+                    // The date axis goes under the last chart of each sheet.
+                    last={from + i === to - 1}
+                    p={p}
+                    f={f}
+                  />
+                </div>
+              )
+            })}
+          </>
+        )),
+    ],
     // Everything on this page is optional: with no agenda, no medication and
     // no positive action, it would print blank but for its header and footer.
     ...(agendaItems(d).length || d.meds.length || nonDrugShares(d).length
       ? [
-          <>
-            <Agenda d={d} />
-            {d.meds.length > 0 && (
-              <>
-                <H level={2}>
-                  {f.t.treatments} <span className="r-hint">{f.t.treatmentsSince}</span>
-                </H>
-                <TreatmentsTable d={d} detailed />
-                <H level={3}>{f.t.weekly}</H>
-                <WeeklyTable d={d} />
-              </>
-            )}
-            <NonDrug d={d} />
-          </>,
+          [
+            <Agenda d={d} />,
+            d.meds.length > 0 &&
+              rowsBlock(d.meds.length, (from, to, continued) => (
+                <>
+                  <H level={2}>
+                    {f.t.treatments} <span className="r-hint">{f.t.treatmentsSince}</span>
+                    <Continued f={f} on={continued} />
+                  </H>
+                  <TreatmentsTable d={d} detailed from={from} to={to} />
+                </>
+              )),
+            d.meds.length > 0 &&
+              rowsBlock(weeks.length, (from, to, continued) => (
+                <>
+                  <H level={3}>
+                    {f.t.weekly}
+                    <Continued f={f} on={continued} />
+                  </H>
+                  <WeeklyTable d={d} weeks={weeks} from={from} to={to} />
+                </>
+              )),
+            <NonDrug d={d} />,
+          ],
         ]
       : []),
-    <>
-      <H level={2}>{f.t.calendar}</H>
-      <PainCalendar entries={d.all} p={p} f={f} />
-      <div className="r-legend" style={{ marginTop: 4 }}>
-        0
-        {[0, 2, 4, 6, 8, 10].map((v) => (
-          <i key={v} style={{ background: rampColor(v), marginRight: 0, boxShadow: v <= 3 ? 'inset 0 0 0 0.5px var(--r-prev)' : undefined }} />
-        ))}
-        10 ·
-        <span>
-          <i style={{ border: '1px dashed var(--r-axis)', background: 'none' }} />
-          {f.t.notLogged}
-        </span>
-        <span>
-          <i style={{ border: '1.5px solid var(--r-ink)', background: 'none' }} />
-          {f.t.consultation}
-        </span>
-      </div>
-      <H level={2}>{f.t.zones}</H>
-      <ZoneBars d={d} limit={13} columns={2} />
-      <p className="r-small">{f.t.zonesWpi}</p>
-      <Associations d={d} />
-    </>,
-    <>
-      {d.options.includeNotes && <Notes d={d} all />}
-      <H level={2}>{f.t.method}</H>
-      <div className="r-method">
-        {[f.t.methodCollect, f.t.methodCalc, f.t.methodLimits].map((text) => {
-          // "Collection. Daily diary…": the first word is a run-in heading.
-          const cut = text.indexOf('. ') + 1
-          return (
-            <p key={cut + text.slice(0, 12)}>
-              <b>{text.slice(0, cut)}</b>
-              {text.slice(cut)}
-            </p>
-          )
-        })}
-      </div>
-      <References count={REFERENCES.length} title={f.t.references} />
-    </>,
+    [
+      <>
+        <H level={2}>{f.t.calendar}</H>
+        <PainCalendar entries={d.all} p={p} f={f} />
+        <div className="r-legend" style={{ marginTop: 4 }}>
+          0
+          {[0, 2, 4, 6, 8, 10].map((v) => (
+            <i key={v} style={{ background: rampColor(v), marginRight: 0, boxShadow: v <= 3 ? 'inset 0 0 0 0.5px var(--r-prev)' : undefined }} />
+          ))}
+          10 ·
+          <span>
+            <i style={{ border: '1px dashed var(--r-axis)', background: 'none' }} />
+            {f.t.notLogged}
+          </span>
+          <span>
+            <i style={{ border: '1.5px solid var(--r-ink)', background: 'none' }} />
+            {f.t.consultation}
+          </span>
+        </div>
+      </>,
+      <>
+        <H level={2}>{f.t.zones}</H>
+        <ZoneBars d={d} limit={13} columns={2} />
+        <p className="r-small">{f.t.zonesWpi}</p>
+      </>,
+      <Associations d={d} />,
+    ],
+    [
+      d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all list={notes} from={from} to={to} continued={continued} />),
+      <>
+        <H level={2}>{f.t.method}</H>
+        <div className="r-method">
+          {[f.t.methodCollect, f.t.methodCalc, f.t.methodLimits].map((text) => {
+            // "Collection. Daily diary…": the first word is a run-in heading.
+            const cut = text.indexOf('. ') + 1
+            return (
+              <p key={cut + text.slice(0, 12)}>
+                <b>{text.slice(0, cut)}</b>
+                {text.slice(cut)}
+              </p>
+            )
+          })}
+        </div>
+      </>,
+      <References count={REFERENCES.length} title={f.t.references} />,
+    ],
   ]
 }
+
+/* oxlint-enable react/jsx-key */
 
 // ---------------------------------------------------------------------------
 // Blocks
@@ -330,9 +429,10 @@ function Header({ d }: { d: ReportData }) {
   )
 }
 
-function KeyPoints({ d }: { d: ReportData }) {
+/** The key points, one sentence each. */
+function keyPointItems(d: ReportData): string[] {
   const { f, pain, painPrev, p } = d
-  if (!pain) return null
+  if (!pain) return []
   const items: string[] = []
 
   if (painPrev && painPrev.mean > 0) {
@@ -407,11 +507,17 @@ function KeyPoints({ d }: { d: ReportData }) {
     )
   }
 
+  // An abbreviated month ends a sentence: "23 sept.." → "23 sept."
+  return items.map((text) => text.replace(/\.\.(?=\s|$)/g, '.'))
+}
+
+function KeyPointList({ items, from, to }: { items: string[]; from: number; to: number }) {
   return (
     <ul className="r-key">
-      {items.map((text, i) => (
-        // An abbreviated month ends a sentence: "23 sept.." → "23 sept."
-        <li key={i}>{text.replace(/\.\.(?=\s|$)/g, '.')}</li>
+      {items.slice(from, to).map((text, i) => (
+        <li key={from + i} data-row>
+          {text}
+        </li>
       ))}
     </ul>
   )
@@ -646,7 +752,8 @@ function Completeness({ d }: { d: ReportData }) {
   return list ? <p className="r-small">{f.format(f.t.completeness, { list })}</p> : null
 }
 
-function TreatmentsTable({ d, detailed }: { d: ReportData; detailed: boolean }) {
+/** Rows `from` to `to` of the treatments table; the legend goes with the last row. */
+function TreatmentsTable({ d, detailed, from, to }: { d: ReportData; detailed: boolean; from: number; to: number }) {
   const { f, p } = d
   return (
     <>
@@ -661,14 +768,14 @@ function TreatmentsTable({ d, detailed }: { d: ReportData; detailed: boolean }) 
           </tr>
         </thead>
         <tbody>
-          {d.meds.map((m) => {
+          {d.meds.slice(from, to).map((m) => {
             const current = periodOn(m.med, p.end) ?? m.med.periods[m.med.periods.length - 1]
             const index = current ? m.med.periods.indexOf(current) : -1
             const earlier = index > 0 && current.start > p.prevStart ? m.med.periods[index - 1] : undefined
             const ratedTotal = m.relief.reduce((a, b) => a + b, 0)
             const explicitDays = m.daysTaken + m.daysMissed
             return (
-              <tr key={m.med.id}>
+              <tr key={m.med.id} data-row>
                 <td>
                   <b>{m.med.name}</b>
                   <span className={`r-pill ${m.regimen}`}>{f.t.regimens[m.regimen]}</span>
@@ -746,7 +853,7 @@ function TreatmentsTable({ d, detailed }: { d: ReportData; detailed: boolean }) 
           })}
         </tbody>
       </table>
-      {detailed && d.meds.some((m) => m.relief.some(Boolean)) && (
+      {detailed && to === d.meds.length && d.meds.some((m) => m.relief.some(Boolean)) && (
         <div className="r-legend" style={{ marginTop: 6 }}>
           {f.t.reliefLegend}
           {f.t.reliefLevels.map((label, level) => (
@@ -761,13 +868,12 @@ function TreatmentsTable({ d, detailed }: { d: ReportData; detailed: boolean }) 
   )
 }
 
-function WeeklyTable({ d }: { d: ReportData }) {
-  const { f, p } = d
-  const weeks = weeklyRows(d.current, p)
+function WeeklyTable({ d, weeks, from, to }: { d: ReportData; weeks: WeekRow[]; from: number; to: number }) {
+  const { f } = d
   // At most five medication columns: those actually taken, ongoing ones first.
   const columns = d.meds.filter((m) => m.daysTaken > 0).slice(0, 5)
   return (
-    <table>
+    <table className="r-weekly">
       <thead>
         <tr>
           <th>{f.t.colWeek}</th>
@@ -781,8 +887,8 @@ function WeeklyTable({ d }: { d: ReportData }) {
         </tr>
       </thead>
       <tbody>
-        {weeks.map((w) => (
-          <tr key={w.start}>
+        {weeks.slice(from, to).map((w) => (
+          <tr key={w.start} data-row>
             <td className="num">
               {f.dayMonth(w.start)} – {f.dayMonth(w.end)}
             </td>
@@ -925,20 +1031,24 @@ function Agenda({ d }: { d: ReportData }) {
   )
 }
 
-function Notes({ d, all }: { d: ReportData; all: boolean }) {
-  const { f } = d
+/** Notes on the report: all of them, or the GP's last three on hard days. */
+function noteItems(d: ReportData, all: boolean): DailyEntry[] {
   const withNotes = d.current.filter((e) => e.notes?.trim())
   const hard = withNotes.filter((e) => e.painLevel >= 6)
-  const list = all ? withNotes : (hard.length ? hard : withNotes).slice(-3)
-  if (!list.length) return null
+  return all ? withNotes : (hard.length ? hard : withNotes).slice(-3)
+}
+
+function Notes({ d, all, list, from, to, continued }: { d: ReportData; all: boolean; list: DailyEntry[]; from: number; to: number; continued: boolean }) {
+  const { f } = d
   return (
     <>
       <H level={2}>
         {f.t.notes} <span className="r-hint">{all ? f.t.notesHintAll : f.t.notesHintGp}</span>
+        <Continued f={f} on={continued} />
       </H>
       <ul className="r-notes">
-        {list.map((e) => (
-          <li key={e.date}>
+        {list.slice(from, to).map((e) => (
+          <li key={e.date} data-row>
             <span className="r-muted">{f.weekdayDate(e.date)}</span>
             <span className="num">{e.painLevel}/10</span>
             <span>{e.notes}</span>

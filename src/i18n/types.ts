@@ -340,6 +340,7 @@ export interface Translations {
     subtitle: string
     runningGp: string
     runningPainClinic: string
+    continued: string
     patient: string
     bornOn: string
     /** Illness(es) as declared by the patient in the app */

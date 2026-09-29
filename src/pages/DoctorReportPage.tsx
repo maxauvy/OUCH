@@ -16,6 +16,7 @@ import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
 import { ReportDocument } from '../components/report/ReportDocument'
 import { buildReportData, type ReportVariant } from '../components/report/reportData'
+import { withCut, type Cut } from '../components/report/pagination'
 
 /** A4 width in CSS pixels (210 mm at 96 dpi): the preview is scaled from it. */
 const PAGE_WIDTH = 794
@@ -135,6 +136,25 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
       setExporting(false)
     }
   }
+
+  // Continuation sheets for content that doesn't fit its page: found by
+  // measuring the preview, shared with the printed copy, and started over
+  // whenever the report changes, or once the web font is in (text metrics
+  // change with it).
+  const [fontsReady, setFontsReady] = useState(false)
+  useEffect(() => {
+    let live = true
+    document.fonts?.ready.then(() => live && setFontsReady(true))
+    return () => {
+      live = false
+    }
+  }, [])
+  const layoutKey = data && { data, fontsReady }
+  const [pagination, setPagination] = useState<{ key: typeof layoutKey; cuts: Cut[] }>({ key: null, cuts: [] })
+  const current = (key: typeof layoutKey) => key?.data === data && key?.fontsReady === fontsReady
+  const cuts = current(pagination.key) ? pagination.cuts : []
+  const addCut = (cut: Cut) =>
+    setPagination((prev) => ({ key: layoutKey, cuts: withCut(current(prev.key) ? prev.cuts : [], cut) }))
 
   const logged = data?.current.length ?? 0
   const notesTracked = settings.enabledFactors.includes('notes')
@@ -348,13 +368,13 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
           </h2>
           <ScaledPreview>
             <div ref={previewRef} className="report report-preview" lang={language}>
-              <ReportDocument data={data} headingOffset={2} />
+              <ReportDocument data={data} headingOffset={2} cuts={cuts} onCut={addCut} />
             </div>
           </ScaledPreview>
           {/* The copy that gets printed: full size, hidden on screen. */}
           {createPortal(
             <div className="report report-print" lang={language}>
-              <ReportDocument data={data} />
+              <ReportDocument data={data} cuts={cuts} />
             </div>,
             document.body
           )}
