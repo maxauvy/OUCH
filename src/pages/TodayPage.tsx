@@ -8,8 +8,9 @@ import { todayISO } from '../db'
 import { useTranslation } from '../i18n'
 import { useDesign } from '../hooks/useDesign'
 import { IconShare } from '@tabler/icons-react'
+import { BackupReminderCard } from '../components/backup/BackupReminderCard'
 
-export function TodayPage() {
+export function TodayPage({ onGoToBackup }: { onGoToBackup: () => void }) {
   const entry = useTodayEntry()
   const settings = useSettings()
   const t = useTranslation()
@@ -19,6 +20,7 @@ export function TodayPage() {
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
+      <BackupReminderCard onBackup={onGoToBackup} />
       <DailyEntryForm date={date} />
       {entry && (
         <button

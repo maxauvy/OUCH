@@ -1,12 +1,16 @@
 import { useRef, useState } from 'react'
 import { exportEncryptedBackup, downloadBlob, importEncryptedBackup } from '../../lib/backup'
-import { format, useTranslation } from '../../i18n'
+import { format, useLocale, useTranslation } from '../../i18n'
+import { useSettings } from '../../hooks/useSettings'
+import { updateSettings } from '../../db'
 import { StorageProtection } from './StorageProtection'
 
 const MIN_EXPORT_PASSWORD_LENGTH = 10
 
 export function BackupSection() {
   const t = useTranslation()
+  const { intlLocale } = useLocale()
+  const { lastBackupAt } = useSettings()
   const [exportPassword, setExportPassword] = useState('')
   const [exportBusy, setExportBusy] = useState(false)
   const [exportMsg, setExportMsg] = useState<string | null>(null)
@@ -27,6 +31,7 @@ export function BackupSection() {
     try {
       const blob = await exportEncryptedBackup(exportPassword)
       downloadBlob(blob, `ouch-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`)
+      await updateSettings({ lastBackupAt: Date.now(), backupReminderSnoozedUntil: undefined })
       setExportMsg(t.backup.exportSuccess)
     } catch {
       setExportMsg(t.backup.exportError)
@@ -68,6 +73,13 @@ export function BackupSection() {
         <p className="font-medium text-body mb-1">{t.backup.exportTitle}</p>
         <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.backup.exportHelper}
+        </p>
+        <p className="text-caption mb-3 font-medium" style={{ color: 'var(--color-ink)' }}>
+          {lastBackupAt === undefined
+            ? t.backup.neverBackedUp
+            : format(t.backup.lastBackup, {
+                date: new Date(lastBackupAt).toLocaleDateString(intlLocale, { day: 'numeric', month: 'long', year: 'numeric' }),
+              })}
         </p>
         <input
           type="password"

@@ -591,6 +591,18 @@ const fr: Translations = {
     invalidFile: 'Ce fichier ne ressemble pas à une sauvegarde OUCH.',
     invalidBackup: 'Sauvegarde invalide.',
     fileTooLarge: 'Ce fichier est trop volumineux pour être une sauvegarde OUCH.',
+    lastBackup: 'Dernière sauvegarde : {{date}}',
+    neverBackedUp: 'Aucune sauvegarde pour l’instant.',
+  },
+
+  backupReminder: {
+    title: 'Pense à sauvegarder ton journal',
+    never:
+      'Ton journal compte déjà {{n}} {{n:jour|jours}}, mais il n’a jamais été sauvegardé. Si cet appareil est perdu ou réinitialisé, tout disparaît.',
+    stale:
+      'Ta dernière sauvegarde date d’il y a {{n}} jours, et ton journal a changé depuis. Une sauvegarde à jour te met à l’abri d’une perte.',
+    backup: 'Sauvegarder',
+    later: 'Plus tard',
   },
 
   storage: {
