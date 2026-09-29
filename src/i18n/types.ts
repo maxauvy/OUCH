@@ -384,6 +384,7 @@ export interface Translations {
     severeThreshold: string
     treatments: string
     treatmentsSince: string
+    noTreatments: string
     colTreatment: string
     colPosology: string
     colUse: string
