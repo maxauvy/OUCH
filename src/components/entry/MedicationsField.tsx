@@ -143,6 +143,7 @@ function MedicationRow({
   posology: string
 }) {
   const t = useTranslation()
+  const { language } = useLocale()
   const doses = intake?.doses ?? (intake ? 1 : 0)
   const taken = doses > 0
   const [showSideEffects, setShowSideEffects] = useState(false)
@@ -180,7 +181,7 @@ function MedicationRow({
               {doses}
             </span>
             <span className="sr-only" aria-live="polite">
-              {format(t.medications.doseCount, { name: med.name, n: doses })}
+              {format(t.medications.doseCount, { name: med.name, n: doses }, language)}
             </span>
             <StepButton label={format(t.medications.moreIntakes, { name: med.name })} onClick={() => setDoses(doses + 1)}>
               <IconPlus size={16} aria-hidden />

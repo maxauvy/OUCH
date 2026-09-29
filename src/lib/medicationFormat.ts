@@ -1,8 +1,14 @@
-import type { Dose, MedicationPeriod, MedicationRegimen } from '../db/types'
+import type { Dose, DoseUnit, MedicationPeriod, MedicationRegimen } from '../db/types'
 import { format, type Translations } from '../i18n'
 
+/** The unit agreed with the amount: "1 goutte", "2 gouttes", "0,5 goutte". */
+export function unitWord(t: Translations, unit: DoseUnit, amount: number, intlLocale: string): string {
+  const [one, other] = t.medications.unitWords[unit]
+  return new Intl.PluralRules(intlLocale).select(amount) === 'one' ? one : other
+}
+
 export function formatDose(t: Translations, dose: Dose, intlLocale: string): string {
-  return `${new Intl.NumberFormat(intlLocale).format(dose.amount)} ${t.medications.units[dose.unit]}`
+  return `${new Intl.NumberFormat(intlLocale).format(dose.amount)} ${unitWord(t, dose.unit, dose.amount, intlLocale)}`
 }
 
 /** "60 mg · 1/day", "1 g · max 3/day", or '' when nothing is described. */

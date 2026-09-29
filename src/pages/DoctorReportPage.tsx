@@ -210,7 +210,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
               end: formatISODate(data.p.end, intlLocale),
               n: logged,
               days: data.p.periodDays,
-            })}{' '}
+            }, appLanguage)}{' '}
             {logged === 0 ? t.doctorReport.noData : logged < 7 ? t.doctorReport.fewDaysWarning : ''}
           </p>
         )}

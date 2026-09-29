@@ -269,7 +269,10 @@ export interface Translations {
     dose: string
     doseAmountPlaceholder: string
     unit: string
+    /** Unit picker labels */
     units: Record<'mg' | 'g' | 'µg' | 'ml' | 'drop' | 'puff' | 'patch', string>
+    /** Units after an amount: singular, plural */
+    unitWords: Record<'mg' | 'g' | 'µg' | 'ml' | 'drop' | 'puff' | 'patch', [string, string]>
     perDayScheduled: string
     perDayAsNeeded: string
     reason: string
