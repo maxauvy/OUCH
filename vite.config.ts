@@ -2,6 +2,20 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vite'
+import { execSync } from 'node:child_process'
+
+// Short commit of the build, so the footer tells which release a browser runs.
+function commitSha(): string {
+  const fromCi = process.env.GITHUB_SHA
+  if (fromCi) return fromCi.slice(0, 7)
+  try {
+    return execSync('git rev-parse --short=7 HEAD', { stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString()
+      .trim()
+  } catch {
+    return 'unknown'
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => {
@@ -9,6 +23,10 @@ export default defineConfig(({ command }) => {
 
   return {
     base,
+    define: {
+      __APP_COMMIT__: JSON.stringify(command === 'build' ? commitSha() : 'dev'),
+      __APP_BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+    },
     plugins: [
       react(),
       tailwindcss(),
