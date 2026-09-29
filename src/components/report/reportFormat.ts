@@ -1,6 +1,6 @@
-import type { MedicationPeriod, MedicationRegimen } from '../../db/types'
+import type { DoseUnit, MedicationPeriod, MedicationRegimen } from '../../db/types'
 import { format, getTranslations, type Language, type Translations } from '../../i18n'
-import { formatPosology } from '../../lib/medicationFormat'
+import { formatPosology, unitWord } from '../../lib/medicationFormat'
 
 const LOCALES: Record<Language, string> = { fr: 'fr-FR', en: 'en-US' }
 
@@ -23,6 +23,8 @@ export interface ReportFormat {
   fullDate: (iso: string) => string
   weekdayDate: (iso: string) => string
   posology: (regimen: MedicationRegimen, period: MedicationPeriod | undefined) => string
+  /** The unit agreed with the amount */
+  unit: (unit: DoseUnit, amount: number) => string
 }
 
 export function reportFormat(language: Language): ReportFormat {
@@ -41,7 +43,8 @@ export function reportFormat(language: Language): ReportFormat {
   return {
     t: all.report,
     all,
-    format,
+    // Plurals in the report's language, which may differ from the app's.
+    format: (template, vars) => format(template, vars, language),
     nf,
     nfx: (v) => nf(v, Number.isInteger(v) ? 0 : 1),
     pct,
@@ -52,5 +55,6 @@ export function reportFormat(language: Language): ReportFormat {
     fullDate: (iso) => date(iso, { day: '2-digit', month: '2-digit', year: 'numeric' }),
     weekdayDate: (iso) => date(iso, { weekday: 'short', day: 'numeric', month: 'short' }),
     posology: (regimen, period) => formatPosology(all, regimen, period, locale),
+    unit: (unit, amount) => unitWord(all, unit, amount, locale),
   }
 }

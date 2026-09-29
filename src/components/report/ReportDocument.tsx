@@ -793,7 +793,7 @@ function WeeklyTable({ d }: { d: ReportData }) {
             {columns.map((m) => {
               const n = w.byMedication.get(m.med.id) ?? 0
               const dose = periodOn(m.med, w.start)?.dose
-              const total = m.regimen === 'asNeeded' && dose && n ? ` (${f.nfx(n * dose.amount)} ${f.all.medications.units[dose.unit]})` : ''
+              const total = m.regimen === 'asNeeded' && dose && n ? ` (${f.nfx(n * dose.amount)} ${f.unit(dose.unit, n * dose.amount)})` : ''
               return (
                 <td key={m.med.id} className="r">
                   {m.regimen === 'scheduled' ? `${n}/${w.logged}` : n}
