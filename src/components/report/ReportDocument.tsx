@@ -18,7 +18,7 @@ import {
   type PainStats,
 } from '../../lib/report'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
-import { R, RELIEF_COLORS, rampColor } from './reportColors'
+import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
 import { SYMPTOMS, type ReportData } from './reportData'
 
 // Cited by number in the method sections and key points. Kept in their
@@ -32,6 +32,11 @@ const REFERENCES = [
   'Broderick JE, Schwartz JE, Vikingstad G, et al. The accuracy of pain and fatigue items across different reporting periods. Pain. 2008;139(1):146-157.',
   'Dixon WG, Beukenhorst AL, Yimer BB, et al. How the weather affects the pain of citizen scientists using a smartphone app. NPJ Digit Med. 2019;2:105.',
 ]
+
+/** The dashboard chart's viewBox width: its card's inner width in CSS pixels
+ * (two thirds of the 182 mm text width, less the gap and padding), so the
+ * chart prints at the same scale as the full-width ones. */
+const DASH_CHART_WIDTH = 430
 
 /** How many levels the report's headings sit below the page's own: 0 when
  * printed (the report is the whole document), 2 in the on-screen preview,
@@ -53,7 +58,15 @@ export function ReportDocument({ data, headingOffset = 0 }: { data: ReportData; 
       {pages.map((body, i) => (
         <section className="report-page" key={i}>
           <div className="r-running">
-            <span>{['OUCH', running, options.patientName].filter(Boolean).join(' · ')}</span>
+            <span>
+              OUCH · {running}
+              {options.patientName && (
+                <>
+                  {' · '}
+                  <span className="r-who">{options.patientName}</span>
+                </>
+              )}
+            </span>
             <span className="num">
               {f.fullDate(p.start)} → {f.fullDate(p.end)}
             </span>
@@ -77,17 +90,26 @@ function gpPages(d: ReportData): ReactNode[] {
   return [
     <>
       <Header d={d} />
-      <Agenda d={d} />
-      <H level={2}>{f.t.keyPoints}</H>
-      <KeyPoints d={d} />
-      <H level={2}>
-        {f.t.keyFigures} <span className="r-hint">{f.t.keyFiguresHint}</span>
-      </H>
-      <Tiles d={d} detailed={false} />
-      <H level={2}>
-        {f.t.painChart} <span className="r-hint">{f.t.chartHint}</span>
-      </H>
-      <PainChart entries={d.all} p={d.p} f={f} height={200} summary={painSummary(d)} />
+      <div className="r-dash">
+        <div className="r-card r-chart">
+          <H level={2}>{f.t.painChart}</H>
+          <p className="r-small" style={{ marginTop: -4 }}>
+            {f.t.chartHint}
+          </p>
+          <PainChart entries={d.all} p={d.p} f={f} width={DASH_CHART_WIDTH} height={250} summary={painSummary(d)} />
+        </div>
+        <GpFigures d={d} />
+        <DayMix d={d} />
+        <div className="r-card wide">
+          <H level={2}>{f.t.keyPoints}</H>
+          <KeyPoints d={d} />
+        </div>
+        {agendaItems(d).length > 0 && (
+          <div className="r-wide">
+            <Agenda d={d} />
+          </div>
+        )}
+      </div>
     </>,
     <>
       {d.meds.length > 0 && (
@@ -462,6 +484,92 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
       <Tile key="sd" label={f.t.tileVariability} value={f.nf(pain.sd)} compare={painPrev ? before(f.nf(painPrev.sd)) : undefined} />
     )
   return <div className={`r-tiles${detailed ? ' six' : ''}`}>{tiles}</div>
+}
+
+/** The GP dashboard's figures: mean pain, then sleep when it is logged, or
+ * else the median. */
+function GpFigures({ d }: { d: ReportData }) {
+  const { f, pain, painPrev } = d
+  if (!pain) return null
+  const sleep = meanOf(d.current, 'sleepHours')
+  const sleepPrev = meanOf(d.previous, 'sleepHours')
+  const quality = meanOf(d.current, 'sleepQuality')
+  return (
+    <div className="r-card tint">
+      <div className="r-kpi">
+        <div className="r-k">{f.t.tileMeanPain}</div>
+        <div className="r-big num">
+          {f.nf(pain.mean)}
+          <small> /10</small>
+        </div>
+        {painPrev && painPrev.mean > 0 && (
+          <div className="r-cmp">
+            {f.format(f.t.before, { v: f.nf(painPrev.mean) })} · {f.signedPct((pain.mean - painPrev.mean) / painPrev.mean)}
+          </div>
+        )}
+      </div>
+      {sleep ? (
+        <div className="r-kpi">
+          <div className="r-k">{f.t.tileSleep}</div>
+          <div className="r-big num">
+            {f.nf(sleep.mean)}
+            <small> h</small>
+          </div>
+          <div className="r-cmp">
+            {[sleepPrev && f.format(f.t.before, { v: f.format(f.t.hours, { v: f.nf(sleepPrev.mean) }) }), quality && f.format(f.t.sleepQuality, { v: f.nf(quality.mean) })]
+              .filter(Boolean)
+              .join(' · ')}
+          </div>
+        </div>
+      ) : (
+        <div className="r-kpi">
+          <div className="r-k">{f.t.tileMedian}</div>
+          <div className="r-big num">
+            {f.nfx(pain.median)}
+            <small>
+              {' '}
+              [{f.nf(pain.q1)}–{f.nf(pain.q3)}]
+            </small>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/** Share of mild, moderate and severe days, with the previous period's. */
+function DayMix({ d }: { d: ReportData }) {
+  const { f, pain, painPrev } = d
+  if (!pain) return null
+  const rows = [
+    [f.t.mixMild, pain.mild, painPrev?.mild],
+    [f.t.mixModerate, pain.moderate, painPrev?.moderate],
+    [f.t.mixSevere, pain.severe, painPrev?.severe],
+  ] as const
+  return (
+    <div className="r-card">
+      <div className="r-k">{f.t.dayMix}</div>
+      <div className="r-mix" aria-hidden>
+        {rows.map(([label, share], i) => (
+          <span key={label} style={{ flex: share, background: MIX_COLORS[i] }} />
+        ))}
+      </div>
+      <ul className="r-mix-rows">
+        {rows.map(([label, share, prev], i) => (
+          <li key={label}>
+            <span>
+              <i style={{ background: MIX_COLORS[i] }} aria-hidden />
+              {label}
+            </span>
+            <span className="num">
+              <b>{f.pct(share)}</b>
+              {prev !== undefined && <span className="r-faint"> · {f.format(f.t.before, { v: f.pct(prev) })}</span>}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }
 
 function PainStatsTable({ d }: { d: ReportData }) {

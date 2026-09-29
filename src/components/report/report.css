@@ -1,30 +1,36 @@
 /* The doctor report is a printed document: fixed A4 pages, always light,
    whatever the app's theme or design. Everything is scoped under .report so
-   none of it leaks into the app. Chart colors follow a validated palette
-   (blue ramp for magnitude, orange for as-needed intakes, grey for the
-   comparison period). */
+   none of it leaks into the app. "Clinical blue" palette: a navy identity
+   band, the app's health blue for data and accents, a blue ramp for
+   magnitude, orange for as-needed intakes, cool grey for the comparison
+   period. Every value that matters is also written out, so the report
+   reads the same printed in greys. Mirrored as literals in reportColors.ts
+   for SVG attributes. */
 
 .report {
   color-scheme: light;
-  --r-ink: #1f1d24;
-  --r-muted: #5d5866;
-  --r-faint: #767180;
-  --r-hair: #e6e3de;
-  --r-axis: #c9c5bd;
-  --r-band: #f5f3ef;
-  --r-blue-250: #86b6ef;
+  --r-ink: #1b2430;
+  --r-navy: #0d2b40;
+  --r-muted: #56606b;
+  --r-faint: #6b7480;
+  --r-hair: #d7dde2;
+  --r-axis: #c3cbd2;
+  --r-band: #f3f6f8;
+  --r-blue-250: #a9c9e6;
   /* Daily dots: 3:1 on white and on the grey band, lighter than the mean line. */
-  --r-blue-350: #3987e5;
-  --r-blue: #2a78d6;
-  --r-blue-550: #1c5cab;
-  --r-blue-700: #0d366b;
+  --r-blue-350: #5b93c7;
+  --r-blue: #2f74b0;
+  --r-blue-550: #0d5c8c;
+  --r-blue-700: #123f66;
   --r-orange: #eb6834;
+  /* Severe pain threshold: ochre, set apart from the blues without alarm. */
+  --r-severe: #9a5b00;
   /* Previous-period bars and missing days: 3.2:1 on white. */
-  --r-prev: #908c83;
-  --r-brand: #6c5f9c;
-  --r-brand-soft: #efeaf9;
+  --r-prev: #8a939c;
+  --r-brand: #0d5c8c;
+  --r-brand-soft: #eaf1f6;
   color: var(--r-ink);
-  font: 12.5px/1.45 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font: 12.5px/1.45 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   text-align: left;
 }
 
@@ -53,9 +59,18 @@
   font-size: 10.5px;
 }
 .report .r-running {
-  border-bottom: 1px solid var(--r-hair);
-  padding-bottom: 6px;
-  margin-bottom: 10px;
+  /* Bleeds to the page edges (the page padding is 9mm 14mm). */
+  margin: -9mm -14mm 12px;
+  padding: 7px 14mm;
+  background: var(--r-navy);
+  color: #fff;
+  font-size: 10.5px;
+}
+.report .r-running .r-who {
+  font-weight: 600;
+}
+.report .r-running .num {
+  color: #bcd3e3;
 }
 .report .r-foot {
   border-top: 1px solid var(--r-hair);
@@ -65,6 +80,7 @@
 }
 
 .report .r-h1 {
+  color: var(--r-navy);
   font-size: 20px;
   line-height: 1.2;
   margin: 0;
@@ -76,6 +92,7 @@
   margin-top: 3px;
 }
 .report .r-h2 {
+  color: var(--r-navy);
   font-size: 14px;
   font-weight: 700;
   margin: 14px 0 6px;
@@ -92,6 +109,7 @@
   font-size: 11px;
 }
 .report .r-h3 {
+  color: var(--r-navy);
   font-size: 12.5px;
   font-weight: 700;
   margin: 10px 0 4px;
@@ -114,7 +132,7 @@
 .report .r-id {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border: 1px solid var(--r-hair);
+  background: var(--r-brand-soft);
   border-radius: 8px;
   margin: 12px 0 10px;
 }
@@ -122,13 +140,20 @@
   padding: 8px 10px;
 }
 .report .r-id > div + div {
-  border-left: 1px solid var(--r-hair);
+  border-left: 1px solid #fff;
 }
 .report .r-k {
   color: var(--r-faint);
   font-size: 10.5px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+/* On the blue tint, the faint grey falls to 4:1; labels there take the
+   darker one (5.6:1). */
+.report .r-id .r-k,
+.report .r-tile .r-k,
+.report .r-card.tint .r-k {
+  color: var(--r-muted);
 }
 .report .r-v {
   font-weight: 600;
@@ -172,13 +197,14 @@
   grid-template-columns: repeat(6, 1fr);
 }
 .report .r-tile {
-  border: 1px solid var(--r-hair);
+  background: var(--r-brand-soft);
   border-radius: 8px;
   padding: 8px 10px;
 }
 .report .r-tile .r-big {
+  color: var(--r-navy);
   font-size: 20px;
-  font-weight: 650;
+  font-weight: 700;
   line-height: 1.15;
   margin-top: 2px;
 }
@@ -232,7 +258,7 @@
   margin-left: 4px;
 }
 .report .r-pill.scheduled {
-  background: #e2eefc;
+  background: var(--r-brand-soft);
   color: var(--r-blue-550);
 }
 .report .r-pill.asNeeded {
@@ -242,6 +268,90 @@
 .report .r-pill.unspecified {
   background: var(--r-band);
   color: var(--r-muted);
+}
+
+/* Dashboard (first page of the GP report): the chart on two thirds of the
+   width, the figures beside it, key points below. */
+.report .r-dash {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.report .r-card {
+  border: 1px solid var(--r-hair);
+  border-radius: 8px;
+  padding: 8px 10px;
+  min-width: 0;
+}
+.report .r-card.tint {
+  background: var(--r-brand-soft);
+  border-color: var(--r-brand-soft);
+}
+.report .r-card.wide,
+.report .r-wide {
+  grid-column: 1 / -1;
+}
+.report .r-wide > .r-h2 {
+  margin-top: 4px;
+}
+.report .r-card > .r-h2,
+.report .r-card > .r-h3 {
+  margin-top: 0;
+}
+.report .r-dash .r-chart {
+  grid-row: span 2;
+}
+.report .r-kpi + .r-kpi {
+  border-top: 1px solid #fff;
+  margin-top: 8px;
+  padding-top: 8px;
+}
+.report .r-kpi .r-big {
+  color: var(--r-navy);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.report .r-kpi .r-big small {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--r-muted);
+}
+.report .r-kpi .r-cmp {
+  font-size: 11px;
+  color: var(--r-muted);
+}
+.report .r-mix {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+  margin: 6px 0 5px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.report .r-mix > span {
+  display: block;
+}
+.report .r-mix-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 11px;
+}
+.report .r-mix-rows li {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 1px 0;
+}
+.report .r-mix-rows i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  margin-right: 5px;
+  vertical-align: -1px;
 }
 
 .report .r-grid2 {
