@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { exportEncryptedBackup, downloadBlob, importEncryptedBackup } from '../../lib/backup'
 import { format, useTranslation } from '../../i18n'
+import { StorageProtection } from './StorageProtection'
 
 const MIN_EXPORT_PASSWORD_LENGTH = 10
 
@@ -61,7 +62,9 @@ export function BackupSection() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
+      <StorageProtection />
+
+      <div style={{ borderTop: '1px solid var(--color-hairline)' }} className="pt-5">
         <p className="font-medium text-body mb-1">{t.backup.exportTitle}</p>
         <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.backup.exportHelper}

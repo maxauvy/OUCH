@@ -593,6 +593,18 @@ const fr: Translations = {
     fileTooLarge: 'Ce fichier est trop volumineux pour être une sauvegarde OUCH.',
   },
 
+  storage: {
+    title: 'Protection contre l’effacement',
+    protected: 'Le navigateur s’est engagé à ne pas effacer tes données de lui-même. Elles sont tout de même supprimées si tu vides les données du site : garde des sauvegardes.',
+    notProtected:
+      'Le navigateur peut effacer tes données de lui-même, par exemple si l’appareil manque de place. Demande-lui de les garder, et fais des sauvegardes : ce sont elles qui te protègent vraiment.',
+    unsupported:
+      'Ce navigateur ne permet pas de protéger les données contre l’effacement automatique. Fais des sauvegardes régulières.',
+    refused:
+      'Le navigateur n’a pas accordé la protection. Installer l’app sur l’écran d’accueil et l’utiliser régulièrement aide souvent ; en attendant, exporte une sauvegarde.',
+    request: 'Demander la protection',
+  },
+
   crash: {
     title: 'Un problème est survenu',
     body: "L'application n'a pas pu afficher cet écran. Tes données sont toujours sur cet appareil : recharger règle souvent le problème. Si l'erreur revient à chaque ouverture, une donnée est peut-être abîmée ; tu peux alors tout effacer de cet appareil (les sauvegardes déjà exportées ne sont pas touchées).",
