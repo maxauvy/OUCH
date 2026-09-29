@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import { execSync } from 'node:child_process'
 
 // Short commit of the build, so the footer tells which release a browser runs.
@@ -17,17 +17,38 @@ function commitSha(): string {
   }
 }
 
+// Tiny file next to the app that says which release is deployed. The running
+// page compares it with its own commit (see useLatestCommit). Not precached
+// (globPatterns has no json), so the service worker never serves a stale copy.
+function versionFile(commit: string, date: string): Plugin {
+  return {
+    name: 'version-file',
+    apply: 'build',
+    generateBundle() {
+      this.emitFile({
+        type: 'asset',
+        fileName: 'version.json',
+        source: JSON.stringify({ commit, date }),
+      })
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ command }) => {
   const base = command === 'build' ? '/OUCH/' : '/'
 
+  const commit = command === 'build' ? commitSha() : 'dev'
+  const date = new Date().toISOString().slice(0, 10)
+
   return {
     base,
     define: {
-      __APP_COMMIT__: JSON.stringify(command === 'build' ? commitSha() : 'dev'),
-      __APP_BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+      __APP_COMMIT__: JSON.stringify(commit),
+      __APP_BUILD_DATE__: JSON.stringify(date),
     },
     plugins: [
+      versionFile(commit, date),
       react(),
       tailwindcss(),
       VitePWA({

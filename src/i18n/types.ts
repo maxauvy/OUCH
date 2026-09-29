@@ -612,5 +612,7 @@ export interface Translations {
   footer: {
     credit: string
     sourceCode: string
+    updateAvailable: string
+    reload: string
   }
 }
