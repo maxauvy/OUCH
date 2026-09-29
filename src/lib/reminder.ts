@@ -39,7 +39,7 @@ export function maybeShowReminder(
   const t = getTranslations(language)
   new Notification(t.reminder.title, {
     body: t.reminder.body,
-    icon: '/icons/icon-192.png',
+    icon: `${import.meta.env.BASE_URL}icons/icon-192.png`,
     tag: 'ouch-daily-reminder',
   })
   localStorage.setItem(LAST_SHOWN_KEY, todayISO)

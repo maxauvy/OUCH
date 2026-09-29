@@ -1,0 +1,12 @@
+# Weekly update PRs for npm packages and for the GitHub Actions pinned by SHA
+# in the deploy workflow.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

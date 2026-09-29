@@ -66,7 +66,8 @@ src/
 ## Vie privée
 
 - Rien ne quitte l'appareil sans action explicite (export, ou partage de la météo du jour).
-- La météo extérieure automatique appelle [Open-Meteo](https://open-meteo.com/) directement depuis le navigateur, sans clé ni compte. C'est le seul appel réseau que l'app fait de son propre chef, et seulement si cette fonctionnalité est activée.
+- Les données du journal sont stockées **en clair** dans le navigateur (IndexedDB) : quiconque a accès à l'appareil déverrouillé, ou à son profil de navigateur, peut les lire. Seuls les fichiers de sauvegarde exportés sont chiffrés (AES-GCM 256, clé dérivée du mot de passe par PBKDF2). Sans le mot de passe, une sauvegarde est irrécupérable.
+- La météo extérieure automatique appelle [Open-Meteo](https://open-meteo.com/) directement depuis le navigateur, sans clé ni compte. Chaque récupération envoie à Open-Meteo les **coordonnées** (latitude et longitude) de l'appareil, et le service voit forcément l'adresse IP de la requête. C'est le seul appel réseau que l'app fait de son propre chef, et seulement si cette fonctionnalité est activée. Une politique de sécurité de contenu (CSP) limite d'ailleurs les appels sortants du build de production à ce service.
 - Le rappel quotidien passe par l'API Notification du navigateur. Il n'y a volontairement pas de serveur d'envoi : ça marche quand l'app est ouverte ou a été utilisée récemment, pas app totalement fermée. Un vrai rappel push demanderait un petit backend, à voir si c'est vraiment utile un jour.
 
 ## Pistes pour la suite
