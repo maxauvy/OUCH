@@ -44,7 +44,7 @@ export function analyzeFactor(
   key: string,
   label: string,
   bucketLabels: [string, string, string],
-  options?: { positivePhrasing?: boolean; bucketing?: 'fixed' | 'terciles' }
+  options?: { bucketing?: 'fixed' | 'terciles' }
 ): FactorAnalysis {
   const withValues = entries
     .map((e) => ({ entry: e, value: getValue(e) }))
@@ -65,9 +65,7 @@ export function analyzeFactor(
   if (low.avgPain != null && high.avgPain != null && low.count >= 3 && high.count >= 3) {
     const diff = high.avgPain - low.avgPain
     if (Math.abs(diff) >= 1.2) {
-      const worseWhenHigh = diff > 0
-      const painHigherWhenFactorHigh = options?.positivePhrasing ? !worseWhenHigh : worseWhenHigh
-      insight = { diffAbs: Math.abs(diff), painHigherWhenFactorHigh }
+      insight = { diffAbs: Math.abs(diff), painHigherWhenFactorHigh: diff > 0 }
     }
   }
 

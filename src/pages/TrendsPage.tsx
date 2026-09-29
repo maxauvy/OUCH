@@ -22,16 +22,15 @@ const FACTOR_DEFS: {
   key: string
   getValue: (e: DailyEntry) => number | null | undefined
   label: (i18n: Translations) => string
-  positivePhrasing?: boolean
   bucketing?: 'fixed' | 'terciles'
   /** Which settings toggle gates this factor; defaults to matching enabledFactors by key. */
   isEnabled: (settings: Settings) => boolean
 }[] = [
-  { key: 'sleepQuality', getValue: (e) => e.sleepQuality, label: (i18n) => i18n.factors.sleep.label, positivePhrasing: true, isEnabled: (s) => s.enabledFactors.includes('sleep') },
+  { key: 'sleepQuality', getValue: (e) => e.sleepQuality, label: (i18n) => i18n.factors.sleep.label, isEnabled: (s) => s.enabledFactors.includes('sleep') },
   { key: 'stressLevel', getValue: (e) => e.stressLevel, label: (i18n) => i18n.factors.stress.label, isEnabled: (s) => s.enabledFactors.includes('stress') },
   { key: 'fatigueLevel', getValue: (e) => e.fatigueLevel, label: (i18n) => i18n.factors.fatigue.label, isEnabled: (s) => s.enabledFactors.includes('fatigue') },
   { key: 'brainFog', getValue: (e) => e.brainFog, label: (i18n) => i18n.factors.brainFog.label, isEnabled: (s) => s.enabledFactors.includes('brainFog') },
-  { key: 'moodLevel', getValue: (e) => e.moodLevel, label: (i18n) => i18n.factors.mood.label, positivePhrasing: true, isEnabled: (s) => s.enabledFactors.includes('mood') },
+  { key: 'moodLevel', getValue: (e) => e.moodLevel, label: (i18n) => i18n.factors.mood.label, isEnabled: (s) => s.enabledFactors.includes('mood') },
   { key: 'activityLevel', getValue: (e) => e.activityLevel, label: (i18n) => i18n.factors.activity.label, isEnabled: (s) => s.enabledFactors.includes('activity') },
   {
     key: 'tempC',
@@ -86,7 +85,6 @@ export function TrendsPage() {
   const bucketLabels: [string, string, string] = [i18n.trends.bucketLow, i18n.trends.bucketMid, i18n.trends.bucketHigh]
   const analyses = FACTOR_DEFS.filter((f) => f.isEnabled(settings)).map((f) =>
     analyzeFactor(filtered, f.getValue, f.key, f.label(i18n), bucketLabels, {
-      positivePhrasing: f.positivePhrasing,
       bucketing: f.bucketing,
     })
   )
