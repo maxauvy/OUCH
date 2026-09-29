@@ -1,14 +1,20 @@
-// Generates a realistic 90-day demo history as an encrypted OUCH backup,
-// importable from Settings → Backup (password: see DEMO_PASSWORD).
+// Generates a 90-day demo history as an encrypted OUCH backup, importable
+// from Settings → Backup (password: see DEMO_PASSWORD).
 //
 //   node scripts/generate-demo-history.mjs [output.json] [end-date YYYY-MM-DD]
 //
-// Data is deterministic (seeded PRNG) and built so the Trends page has real
-// patterns to show: pain follows sleep, stress, pressure drops and flares,
-// and eases on days with positive actions. Medications use the structured
-// registry (schema v3): an ongoing treatment whose dose is raised halfway
-// (pain eases over the following weeks), a second one stopped early for side
-// effects, and as-needed painkillers with relief ratings.
+// Built to demo the app straight after import. Data is deterministic
+// (seeded PRNG) and tells one story every screen can show:
+// - a flare in late summer, a consultation where the duloxetine dose is
+//   raised (about four weeks before the end, so it shows in Trends' default
+//   30-day view), then pain easing over the following weeks;
+// - an earlier background treatment stopped for side effects, as-needed
+//   painkillers with relief ratings;
+// - pain following sleep, stress, pressure drops, storms and periods, and
+//   "what helped" tags with clear associations (and one reverse one: rest is
+//   taken on bad days);
+// - settings for a finished setup (name, illness, cycle tracking), so the
+//   report and the Kids tab work without going through the setup.
 
 import { webcrypto as crypto } from 'node:crypto'
 import { writeFileSync } from 'node:fs'
@@ -58,10 +64,12 @@ function addDays(iso, n) {
   return d.toISOString().slice(0, 10)
 }
 
-// Flare windows (day offsets from start) — a big one and a smaller one.
+// Day offsets from the start. The second flare leads to the consultation;
+// the last, milder and shorter, comes once the new dose has settled.
 const FLARES = [
-  { start: 24, length: 6, intensity: 3 },
-  { start: 63, length: 4, intensity: 2 },
+  { start: 22, length: 6, intensity: 3.5 },
+  { start: 53, length: 7, intensity: 2.5 },
+  { start: 77, length: 4, intensity: 2.5 },
 ]
 function flareBoost(i) {
   for (const f of FLARES) {
@@ -76,44 +84,53 @@ function flareBoost(i) {
 // Period every ~28 days, 5 days long.
 const isPeriodDay = (i) => (i + 9) % 28 < 5
 
-const POSITIVE_ACTIONS = [
-  'Repos / sieste',
-  'Chaleur',
-  'Étirements doux',
-  'Marche courte',
-  'Méditation / respiration',
-  'Bain chaud',
-  'Kiné / soins',
-  'Moment social agréable',
-  'Activité plaisir',
+// Duloxetine goes from 30 to 60 mg at a consultation after the second flare,
+// with a week of nausea right after; the higher dose takes about three weeks
+// to show. Pregabalin, taken twice a day, was stopped early because of
+// drowsiness — it also clouds the mind while it lasts.
+const DOSE_CHANGE_DAY = 62
+const PREGABALIN_STOP_DAY = 18
+const KEY_DAYS = new Set([PREGABALIN_STOP_DAY, DOSE_CHANGE_DAY])
+
+/** What helped: how likely on a day of a given baseline pain, and how much
+ * it eases pain. Rest is mostly taken on bad days, so it ends up associated
+ * with more pain — Trends is honest about that being an association. */
+const ACTIONS = [
+  { name: 'Méditation / respiration', p: () => 0.35, effect: 1.5 },
+  { name: 'Marche courte', p: (base) => (base < 4.5 ? 0.45 : 0.12), effect: 0.8 },
+  { name: 'Kiné / soins', p: (_, weekday) => (weekday === 2 ? 0.9 : 0), effect: 1.4 },
+  { name: 'Étirements doux', p: () => 0.3, effect: 0.6 },
+  { name: 'Bain chaud', p: () => 0.2, effect: 0.6 },
+  { name: 'Moment social agréable', p: (_, weekday) => (weekday === 0 || weekday === 6 ? 0.5 : 0.12), effect: 1 },
+  { name: 'Repos / sieste', p: (base) => (base >= 6 ? 0.75 : 0.08), effect: 0.3 },
 ]
+
 const NOTES_CALM = [
   'Bonne journée, balade au parc avec les enfants.',
-  'Séance de kiné, ça a fait du bien.',
   'Journée tranquille à la maison.',
   'Déjeuner avec une amie, bon moment.',
   'Yoga doux le matin, je me sens plus souple.',
+  'J’ai pu jardiner une petite heure sans douleur particulière.',
 ]
 const NOTES_HARD = [
   'Réveil difficile, raideur dans tout le corps.',
   'Grosse journée au travail, beaucoup de tension.',
-  'Orage dans la soirée, douleurs dès le matin.',
-  'Crise, obligée d’annuler ma sortie.',
   'Nuit hachée, très fatiguée.',
   'Trop forcé hier au ménage, je le paie aujourd’hui.',
 ]
+const NOTE_FLARE = ['Crise, obligée d’annuler ma sortie.', 'Poussée : douleurs partout, je reste allongée.', 'Troisième jour de crise, le tramadol soulage un peu.']
+const NOTE_KINE = ['Séance de kiné, ça a fait du bien.', 'Kiné : travail sur le dos, détendue après.']
+const NOTE_STORM = 'Orage dans la soirée, douleurs dès le matin.'
+const NOTE_PERIOD = 'Règles, ventre et bas du dos douloureux.'
+const KEY_NOTES = {
+  [PREGABALIN_STOP_DAY]: 'Arrêt de la prégabaline avec l’accord du médecin : trop de somnolence.',
+  [DOSE_CHANGE_DAY]: 'Consultation chez le médecin traitant : duloxétine passée de 30 à 60 mg.',
+}
 
 const entries = []
 const startDate = addDays(endDate, -(DAYS - 1))
-
-// Duloxetine goes from 30 to 60 mg halfway through (a typical dose change
-// after a consultation), with a week of nausea right after.
-const DOSE_CHANGE_DAY = 45
 const doseChangeDate = addDays(startDate, DOSE_CHANGE_DAY)
 const now = Date.parse(`${endDate}T20:00:00Z`)
-// Pregabalin, taken twice a day, is stopped in the first weeks because of
-// drowsiness — it also clouds the mind while it lasts.
-const PREGABALIN_STOP_DAY = 18
 const MED = { prega: 'demo-pregabaline', dulox: 'demo-duloxetine', para: 'demo-paracetamol', trama: 'demo-tramadol', ibu: 'demo-ibuprofene' }
 const medications = [
   {
@@ -135,7 +152,7 @@ const medications = [
 function intakesFor(names, painLevel, i) {
   return names.map((name) => {
     if (name === 'Duloxétine') {
-      const missed = rand2() < 0.04
+      const missed = !KEY_DAYS.has(i) && rand2() < 0.04
       const nausea = i > DOSE_CHANGE_DAY && i <= DOSE_CHANGE_DAY + 8 && rand2() < 0.7
       return { medicationId: MED.dulox, doses: missed ? 0 : 1, ...(nausea && !missed && { sideEffects: ['Nausées'] }) }
     }
@@ -179,42 +196,44 @@ for (let i = 0; i < DAYS; i++) {
   const seasonalTemp = 27 - (i / DAYS) * 9
   const tempC = Math.round(seasonalTemp + noise(3) - (condition === 'pluvieux' || condition === 'orageux' ? 4 : 0))
 
-  // Missed days (~6%), except the last week so the demo looks active.
-  if (i < DAYS - 7 && chance(0.06)) continue
+  // Missed days (~6%), except key days and the last week so the demo looks active.
+  if (i < DAYS - 7 && !KEY_DAYS.has(i) && chance(0.06)) continue
 
-  const stress = clamp(isWeekend ? 3 + noise(2) : 5 + noise(2.5))
-  const sleepHours = Math.round(clamp(7 - stress * 0.2 + noise(1.3) - flareBoost(i) * 0.4, 4, 9.5) * 2) / 2
-  const sleepQuality = clamp((sleepHours - 4) * 1.6 + noise(1.5) - flareBoost(i) * 0.5)
+  const stress = clamp(isWeekend ? 3 + noise(2.5) : 5.5 + noise(3.5))
+  const sleepHours = Math.round(clamp(7.2 - (stress - 4) * 0.3 + noise(1.6) - flareBoost(i) * 0.4, 4, 9.5) * 2) / 2
+  const sleepQuality = clamp((sleepHours - 4.5) * 2 + noise(1.8) - flareBoost(i) * 0.6)
 
-  const helpedCount = Math.max(0, Math.round(1.2 + noise(1.2) + (isWeekend ? 0.6 : 0)))
-  const positiveActions = [...new Set(Array.from({ length: helpedCount }, () => pick(POSITIVE_ACTIONS)))]
-
-  // The higher duloxetine dose takes about three weeks to show.
   const doseEffect = i < DOSE_CHANGE_DAY ? 0 : Math.min(1, (i - DOSE_CHANGE_DAY) / 21) * 0.9
   const onPregabalin = i <= PREGABALIN_STOP_DAY
+  const isStorm = condition === 'orageux'
 
   const pressureDrop = pressureDelta !== undefined && pressureDelta < -3 ? Math.min(2, -pressureDelta / 5) : 0
-  const pain = clamp(
-    3.2 +
-      (6 - sleepQuality) * 0.35 +
-      (stress - 4) * 0.3 +
-      pressureDrop +
-      (condition === 'orageux' ? 0.8 : 0) +
-      flareBoost(i) +
-      (isPeriodDay(i) ? 1 : 0) +
-      (prevActivity >= 8 ? 1 : 0) - // overdid it yesterday
-      positiveActions.length * 0.35 -
-      doseEffect +
-      noise(0.9)
-  )
+  // Pain before whatever helped: decides what gets tried that day.
+  const basePain =
+    4.8 +
+    (6 - sleepQuality) * 0.3 +
+    (stress - 4) * 0.3 +
+    pressureDrop +
+    (isStorm ? 0.8 : 0) +
+    flareBoost(i) +
+    (isPeriodDay(i) ? 1 : 0) +
+    (prevActivity >= 8 ? 1 : 0) - // overdid it yesterday
+    doseEffect +
+    noise(0.9)
+  // Today opens the demo: an ordinary middling day, not a random extreme.
+  const isToday = i === DAYS - 1
+  const helped = ACTIONS.filter((a) => chance(a.p(basePain, weekday))).slice(0, isToday ? 1 : undefined)
+  const positiveActions = helped.map((a) => a.name)
+  // Never quite pain-free: that is what living with a chronic illness looks like.
+  const pain = isToday ? 4 : clamp(basePain - helped.reduce((s, a) => s + a.effect, 0), 1)
   const painLevel = Math.round(pain)
 
-  const activityLevel = round(isWeekend ? 5 + noise(3) : 4 - (pain - 4) * 0.5 + noise(2))
+  const activityLevel = round(isWeekend ? 5.5 + noise(3.5) : 4.5 - (pain - 4) * 0.6 + noise(2.5))
   prevActivity = activityLevel
 
-  const fatigueLevel = round(pain * 0.6 + (7 - sleepQuality) * 0.35 + noise(1))
-  const brainFog = round(fatigueLevel * 0.7 + (onPregabalin ? 1.5 : 0) + noise(1.3))
-  const moodLevel = round(8 - pain * 0.45 - stress * 0.25 + positiveActions.length * 0.4 + noise(1))
+  const fatigueLevel = round(1 + pain * 0.6 + (6 - sleepQuality) * 0.3 + noise(1.8))
+  const brainFog = round(fatigueLevel * 0.7 + (onPregabalin ? 1.5 : 0) + noise(1.8))
+  const moodLevel = round(7.5 - pain * 0.5 - (stress - 4) * 0.25 + positiveActions.length * 0.4 + noise(1.8))
 
   const medications = onPregabalin ? ['Prégabaline', 'Duloxétine'] : ['Duloxétine']
   if (painLevel >= 5) medications.push('Paracétamol')
@@ -228,8 +247,16 @@ for (let i = 0; i < DAYS; i++) {
   if (painLevel >= 8 && chance(0.5)) zones.add('generalized')
   if (isPeriodDay(i) && chance(0.6)) zones.add('stomach')
 
-  let notes
-  if (chance(0.3)) notes = painLevel >= 6 ? pick(NOTES_HARD) : pick(NOTES_CALM)
+  // Notes follow what happened, most specific first.
+  const noteRoll = rand()
+  const notes =
+    KEY_NOTES[i] ??
+    (flareBoost(i) > 1.5 && noteRoll < 0.7 ? pick(NOTE_FLARE) :
+    isStorm && painLevel >= 5 && noteRoll < 0.6 ? NOTE_STORM :
+    positiveActions.includes('Kiné / soins') && noteRoll < 0.5 ? pick(NOTE_KINE) :
+    isPeriodDay(i) && (i + 9) % 28 === 0 ? NOTE_PERIOD :
+    noteRoll < 0.2 ? (painLevel >= 6 ? pick(NOTES_HARD) : pick(NOTES_CALM)) :
+    undefined)
 
   const loggedAt = new Date(`${date}T${String(19 + Math.floor(rand() * 3)).padStart(2, '0')}:${String(Math.floor(rand() * 60)).padStart(2, '0')}:00`).getTime()
 
@@ -260,9 +287,18 @@ for (let i = 0; i < DAYS; i++) {
   })
 }
 
-// No `settings` on purpose: import merges settings when present, and a demo
-// file shouldn't overwrite the user's language, theme or name.
-const bundle = { version: 2, exportedAt: new Date().toISOString(), entries, medications }
+// A finished setup, so the demo opens on the app itself with the report and
+// the Kids tab filled in. Language, theme and design are left out: they stay
+// whatever the device already uses.
+const settings = {
+  onboardingDone: true,
+  displayName: 'Camille',
+  illnesses: ['fibromyalgie'],
+  parentGender: 'maman',
+  cycleTrackingEnabled: true,
+  enabledFactors: ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes'],
+}
+const bundle = { version: 2, exportedAt: new Date().toISOString(), entries, medications, settings }
 
 const toBase64 = (bytes) => Buffer.from(bytes).toString('base64')
 const salt = crypto.getRandomValues(new Uint8Array(16))
