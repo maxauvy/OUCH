@@ -8,15 +8,20 @@ export const RELIEF_COLORS = ['#86b6ef', '#3987e5', '#1c5cab', '#0d366b']
  * can't rely on those variables: the PDF export captures each page on its
  * own, outside the .report element that defines them. Keep both in sync. */
 export const R = {
-  ink: '#1f1d24',
-  muted: '#5d5866',
-  faint: '#767180',
-  hair: '#e6e3de',
-  axis: '#c9c5bd',
-  band: '#f5f3ef',
-  blue350: '#3987e5',
-  blue: '#2a78d6',
-  blue550: '#1c5cab',
+  ink: '#1b2430',
+  muted: '#56606b',
+  faint: '#6b7480',
+  hair: '#d7dde2',
+  axis: '#c3cbd2',
+  band: '#f3f6f8',
+  blue350: '#5b93c7',
+  blue: '#2f74b0',
+  blue550: '#0d5c8c',
   orange: '#eb6834',
-  prev: '#908c83',
+  severe: '#9a5b00',
+  prev: '#8a939c',
 } as const
+
+/** The days-by-intensity bar: mild, moderate, severe. Light to dark, so the
+ * order survives a greyscale print; each share is also written out. */
+export const MIX_COLORS = ['#c9def0', '#5b93c7', '#123f66'] as const

@@ -12,8 +12,10 @@ const W = 680
 const LEFT = 34
 const RIGHT = 12
 
-function frame(p: ReportPeriods) {
-  const x = (i: number) => LEFT + (i * (W - LEFT - RIGHT)) / Math.max(1, p.totalDays - 1)
+// `w` narrows the frame for a chart that only gets part of the page's width
+// (the GP dashboard), so its text keeps its printed size.
+function frame(p: ReportPeriods, w = W) {
+  const x = (i: number) => LEFT + (i * (w - LEFT - RIGHT)) / Math.max(1, p.totalDays - 1)
   // Where the previous period ends and the reported one begins.
   const split = (x(p.periodDays - 1) + x(p.periodDays)) / 2
   return { x, split }
@@ -33,9 +35,10 @@ function linePath(values: (number | null)[], x: (i: number) => number, y: (v: nu
   return d
 }
 
-function XTicks({ p, f, y }: { p: ReportPeriods; f: ReportFormat; y: number }) {
-  const { x } = frame(p)
-  const everyFortnight = p.totalDays <= 120
+function XTicks({ p, f, y, w = W }: { p: ReportPeriods; f: ReportFormat; y: number; w?: number }) {
+  const { x } = frame(p, w)
+  // Ticks on the 1st and 15th only while they have room.
+  const everyFortnight = (p.totalDays * W) / w <= 120
   const ticks: { i: number; date: string }[] = []
   for (let i = 0; i < p.totalDays; i++) {
     const date = shiftISO(p.prevStart, i)
@@ -56,8 +59,8 @@ function XTicks({ p, f, y }: { p: ReportPeriods; f: ReportFormat; y: number }) {
   )
 }
 
-function PeriodBand({ p, top, bottom, labels, f }: { p: ReportPeriods; top: number; bottom: number; labels?: boolean; f: ReportFormat }) {
-  const { split } = frame(p)
+function PeriodBand({ p, top, bottom, labels, f, w = W }: { p: ReportPeriods; top: number; bottom: number; labels?: boolean; f: ReportFormat; w?: number }) {
+  const { split } = frame(p, w)
   return (
     <g>
       <rect x={LEFT} y={top} width={split - LEFT} height={bottom - top} fill={R.band} />
@@ -81,42 +84,47 @@ export function PainChart({
   p,
   f,
   height = 190,
+  width = W,
   summary,
 }: {
   entries: DailyEntry[]
   p: ReportPeriods
   f: ReportFormat
   height?: number
+  /** viewBox width: the page's by default, less for a chart set in a column */
+  width?: number
   /** Read by screen readers instead of the plot, e.g. the means per period */
   summary: string
 }) {
-  const { x } = frame(p)
+  const { x } = frame(p, width)
   const top = 20
   const bottom = height - 22
   const y = (v: number) => top + ((10 - v) * (bottom - top)) / 10
   return (
-    <svg viewBox={`0 0 ${W} ${height}`} role="img" aria-label={`${f.t.painChart} : ${summary}`}>
-      <PeriodBand p={p} top={top} bottom={bottom} labels f={f} />
+    <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${f.t.painChart} : ${summary}`}>
+      <PeriodBand p={p} top={top} bottom={bottom} labels f={f} w={width} />
       {[0, 2, 4, 6, 8, 10].map((v) => (
         <g key={v}>
-          <line x1={LEFT} x2={W - RIGHT} y1={y(v)} y2={y(v)} stroke={R.hair} />
+          <line x1={LEFT} x2={width - RIGHT} y1={y(v)} y2={y(v)} stroke={R.hair} />
           <text x={LEFT - 6} y={y(v) + 3.5} fontSize={10} fill={R.faint} textAnchor="end">
             {v}
           </text>
         </g>
       ))}
-      <line x1={LEFT} x2={W - RIGHT} y1={y(7)} y2={y(7)} stroke={R.muted} strokeDasharray="2 3" />
-      <text x={W - RIGHT} y={y(7) - 4} fontSize={10} fill={R.muted} textAnchor="end">
-        {f.t.severeThreshold}
-      </text>
+      <line x1={LEFT} x2={width - RIGHT} y1={y(7)} y2={y(7)} stroke={R.severe} strokeDasharray="3 3" />
       {entries.map((e) => (
         <circle key={e.date} cx={x(p.dayIndex(e.date))} cy={y(e.painLevel)} r={2.75} fill={R.blue350}>
           <title>{`${f.dayMonth(e.date)} : ${e.painLevel}/10`}</title>
         </circle>
       ))}
       <path d={linePath(rollingMean(entries, (e) => e.painLevel, p), x, y)} fill="none" stroke={R.blue550} strokeWidth={2} strokeLinejoin="round" />
-      <line x1={LEFT} x2={W - RIGHT} y1={bottom} y2={bottom} stroke={R.axis} />
-      <XTicks p={p} f={f} y={bottom} />
+      <line x1={LEFT} x2={width - RIGHT} y1={bottom} y2={bottom} stroke={R.axis} />
+      {/* A white outline keeps the label readable over the data, drawn
+          after it for that reason. */}
+      <text x={width - RIGHT} y={y(7) - 4} fontSize={10} fill={R.severe} textAnchor="end" stroke="#fff" strokeWidth={3} paintOrder="stroke">
+        {f.t.severeThreshold}
+      </text>
+      <XTicks p={p} f={f} y={bottom} w={width} />
     </svg>
   )
 }

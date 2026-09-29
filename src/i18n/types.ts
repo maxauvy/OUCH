@@ -369,14 +369,16 @@ export interface Translations {
     rescueDays: string
     rescueItem: string
     rescueItemNoCount: string
-    keyFigures: string
-    keyFiguresHint: string
     tileMeanPain: string
     tileSevere: string
     tileMild: string
     tileSleep: string
     tileMedian: string
     tileVariability: string
+    dayMix: string
+    mixMild: string
+    mixModerate: string
+    mixSevere: string
     before: string
     range: string
     sleepQuality: string
