@@ -566,11 +566,11 @@ const en: Translations = {
   backup: {
     exportTitle: 'Export a backup',
     exportHelper:
-      'An encrypted file with a password you choose. Keep it wherever you like (personal cloud, an email to yourself) to get your data back on another device.',
+      'An encrypted file with a password you choose. Keep it wherever you like (personal cloud, an email to yourself) to get your data back on another device. If you lose the password, the backup cannot be recovered.',
     passwordPlaceholder: 'Backup password',
     exportButton: 'Download backup',
     exporting: 'Exporting…',
-    exportPasswordTooShort: 'Choose a password of at least 6 characters.',
+    exportPasswordTooShort: 'Choose a password of at least 10 characters.',
     exportSuccess:
       'Backup downloaded. Keep the password somewhere safe: without it, this file is unreadable.',
     exportError: 'Something went wrong during the export.',
@@ -584,6 +584,15 @@ const en: Translations = {
     importGenericError: 'Import failed.',
     invalidFile: "This file doesn't look like an OUCH backup.",
     invalidBackup: 'Invalid backup.',
+    fileTooLarge: 'This file is too large to be an OUCH backup.',
+  },
+
+  crash: {
+    title: 'Something went wrong',
+    body: 'The app could not display this screen. Your data is still on this device: reloading often fixes it. If the error comes back every time, some data may be damaged; you can then erase everything from this device (backups you already exported are not affected).',
+    reload: 'Reload',
+    erase: 'Erase data from this device',
+    eraseConfirm: 'Erase all data from this device? This cannot be undone unless you have a backup.',
   },
 
   shareSheet: {

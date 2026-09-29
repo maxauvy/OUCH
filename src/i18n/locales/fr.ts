@@ -572,11 +572,11 @@ const fr: Translations = {
   backup: {
     exportTitle: 'Exporter une sauvegarde',
     exportHelper:
-      'Un fichier chiffré avec un mot de passe que tu choisis. Garde-le où tu veux (cloud perso, e-mail à toi-même) pour retrouver tes données sur un autre appareil.',
+      'Un fichier chiffré avec un mot de passe que tu choisis. Garde-le où tu veux (cloud perso, e-mail à toi-même) pour retrouver tes données sur un autre appareil. Si tu perds le mot de passe, la sauvegarde est irrécupérable.',
     passwordPlaceholder: 'Mot de passe de la sauvegarde',
     exportButton: 'Télécharger la sauvegarde',
     exporting: 'Export…',
-    exportPasswordTooShort: 'Choisis un mot de passe d’au moins 6 caractères.',
+    exportPasswordTooShort: 'Choisis un mot de passe d’au moins 10 caractères.',
     exportSuccess:
       'Sauvegarde téléchargée. Garde le mot de passe en lieu sûr : sans lui, ce fichier est illisible.',
     exportError: 'Une erreur est survenue pendant l’export.',
@@ -590,6 +590,15 @@ const fr: Translations = {
     importGenericError: 'Import impossible.',
     invalidFile: 'Ce fichier ne ressemble pas à une sauvegarde OUCH.',
     invalidBackup: 'Sauvegarde invalide.',
+    fileTooLarge: 'Ce fichier est trop volumineux pour être une sauvegarde OUCH.',
+  },
+
+  crash: {
+    title: 'Un problème est survenu',
+    body: "L'application n'a pas pu afficher cet écran. Tes données sont toujours sur cet appareil : recharger règle souvent le problème. Si l'erreur revient à chaque ouverture, une donnée est peut-être abîmée ; tu peux alors tout effacer de cet appareil (les sauvegardes déjà exportées ne sont pas touchées).",
+    reload: 'Recharger',
+    erase: 'Effacer les données de cet appareil',
+    eraseConfirm: 'Effacer toutes les données de cet appareil ? Cette action est définitive, sauf si tu as une sauvegarde.',
   },
 
   shareSheet: {

@@ -3,6 +3,23 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vite'
 
+// Content-Security-Policy, as a <meta> because GitHub Pages sets no headers.
+// Everything is same-origin except the Open-Meteo calls. `data:` and `blob:`
+// are for the weather card and report images (html-to-image), which are
+// built in the page and re-read with fetch(). Inline styles are React
+// `style` attributes. `frame-ancestors` cannot be set from a <meta>.
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self' data:",
+  "connect-src 'self' data: blob: https://api.open-meteo.com https://archive-api.open-meteo.com https://geocoding-api.open-meteo.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'none'",
+].join('; ')
+
 // https://vite.dev/config/
 export default defineConfig(({ command }) => {
   const base = command === 'build' ? '/OUCH/' : '/'
@@ -10,6 +27,18 @@ export default defineConfig(({ command }) => {
   return {
     base,
     plugins: [
+      // Build only: the dev server injects inline scripts for hot reload.
+      {
+        name: 'content-security-policy',
+        apply: 'build',
+        transformIndexHtml: () => [
+          {
+            tag: 'meta',
+            attrs: { 'http-equiv': 'Content-Security-Policy', content: CONTENT_SECURITY_POLICY },
+            injectTo: 'head-prepend',
+          },
+        ],
+      },
       react(),
       tailwindcss(),
       VitePWA({
