@@ -345,10 +345,10 @@ const fr: Translations = {
     back: 'Retour',
     recipientTitle: 'Pour qui ?',
     recipients: {
-      gp: { label: 'Médecin traitant', helper: '2 pages : l’essentiel en deux minutes.' },
+      gp: { label: 'Médecin traitant', helper: 'Environ 2 pages : l’essentiel en deux minutes.' },
       painClinic: {
         label: 'Centre douleur (CETD)',
-        helper: 'Jusqu’à 5 pages : données détaillées, consommation d’antalgiques, facteurs associés.',
+        helper: 'Environ 5 pages : données détaillées, consommation d’antalgiques, facteurs associés.',
       },
     },
     consultationTitle: 'Date de ta dernière consultation',
@@ -385,6 +385,7 @@ const fr: Translations = {
     subtitle: 'Journal quotidien tenu par le patient dans l’application OUCH',
     runningGp: 'Synthèse médecin traitant',
     runningPainClinic: 'Rapport consultation douleur',
+    continued: 'suite',
     patient: 'Patient',
     bornOn: 'né(e) le {{date}}',
     declaredIllness: 'Maladie déclarée par le patient : {{list}}',

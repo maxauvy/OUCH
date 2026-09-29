@@ -100,8 +100,15 @@
   align-items: baseline;
   gap: 8px;
 }
-.report .r-h2:first-child {
+/* A heading opening a sheet or a card doesn't need space above it. Blocks
+   are wrapped in .r-part (see pagination.ts), which takes no part in the
+   layout. */
+.report .r-body > .r-part:first-child > .r-h2:first-child,
+.report .r-card > .r-h2:first-child {
   margin-top: 0;
+}
+.report .r-part {
+  display: contents;
 }
 .report .r-h2 .r-hint {
   font-weight: 400;
@@ -244,6 +251,12 @@
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
+/* Weekly counts with their total ("4 (1 600 mg)") stay on one line: the
+   rows keep one height, and the table stays well within the page width
+   (five medication columns at most). */
+.report .r-weekly td {
+  white-space: nowrap;
+}
 .report td .sm {
   display: block;
   color: var(--r-muted);
@@ -288,15 +301,14 @@
   background: var(--r-brand-soft);
   border-color: var(--r-brand-soft);
 }
-.report .r-card.wide,
-.report .r-wide {
-  grid-column: 1 / -1;
-}
-.report .r-wide > .r-h2 {
-  margin-top: 4px;
-}
 .report .r-card > .r-h2,
 .report .r-card > .r-h3 {
+  margin-top: 0;
+}
+.report .r-after-dash {
+  margin-top: 10px;
+}
+.report .r-body > .r-part:first-child > .r-after-dash {
   margin-top: 0;
 }
 .report .r-dash .r-chart {
@@ -495,6 +507,10 @@
     display: block;
   }
   .report-print .report-page {
+    /* Pagination keeps every sheet within A4 (pagination.ts); a fixed
+       height stops a sub-pixel rounding from spilling a blank sheet. */
+    height: 297mm;
+    overflow: hidden;
     break-after: page;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;

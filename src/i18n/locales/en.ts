@@ -342,8 +342,8 @@ const en: Translations = {
     back: 'Back',
     recipientTitle: 'Who is it for?',
     recipients: {
-      gp: { label: 'General practitioner', helper: '2 pages: the essentials in two minutes.' },
-      painClinic: { label: 'Pain clinic', helper: 'Up to 5 pages: detailed data, painkiller use, associated factors.' },
+      gp: { label: 'General practitioner', helper: 'About 2 pages: the essentials in two minutes.' },
+      painClinic: { label: 'Pain clinic', helper: 'About 5 pages: detailed data, painkiller use, associated factors.' },
     },
     consultationTitle: 'Date of your last appointment',
     consultationHelper: 'The report covers the time since that date, compared with the same length of time just before.',
@@ -379,6 +379,7 @@ const en: Translations = {
     subtitle: 'Daily log kept by the patient in the OUCH app',
     runningGp: 'GP summary',
     runningPainClinic: 'Pain clinic report',
+    continued: 'continued',
     patient: 'Patient',
     bornOn: 'born {{date}}',
     declaredIllness: 'Condition reported by the patient: {{list}}',
