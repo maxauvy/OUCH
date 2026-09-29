@@ -585,6 +585,18 @@ const en: Translations = {
     invalidFile: "This file doesn't look like an OUCH backup.",
     invalidBackup: 'Invalid backup.',
     fileTooLarge: 'This file is too large to be an OUCH backup.',
+    lastBackup: 'Last backup: {{date}}',
+    neverBackedUp: 'No backup yet.',
+  },
+
+  backupReminder: {
+    title: 'Remember to back up your journal',
+    never:
+      'Your journal already holds {{n}} {{n:day|days}}, but it has never been backed up. If this device is lost or reset, everything is gone.',
+    stale:
+      'Your last backup was {{n}} days ago, and your journal has changed since. An up-to-date backup protects you from a loss.',
+    backup: 'Back up',
+    later: 'Later',
   },
 
   storage: {

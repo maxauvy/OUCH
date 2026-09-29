@@ -513,6 +513,16 @@ export interface Translations {
     invalidFile: string
     invalidBackup: string
     fileTooLarge: string
+    lastBackup: string
+    neverBackedUp: string
+  }
+
+  backupReminder: {
+    title: string
+    never: string
+    stale: string
+    backup: string
+    later: string
   }
 
   storage: {

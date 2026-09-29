@@ -69,6 +69,12 @@ function AppShell() {
     if (settings.onboardingDone && hasEntry) void requestStorageProtection()
   }, [settings.onboardingDone, hasEntry])
 
+  // From the backup reminder: open the settings on the backup card.
+  function goToBackup() {
+    setTab('settings')
+    requestAnimationFrame(() => document.getElementById('backup')?.scrollIntoView({ block: 'start' }))
+  }
+
   // Wait for the stored settings, or the setup would flash on every launch.
   if (!settingsLoaded) return null
 
@@ -88,7 +94,7 @@ function AppShell() {
   return (
     <>
       <main className="flex-1">
-        {tab === 'today' && <TodayPage />}
+        {tab === 'today' && <TodayPage onGoToBackup={goToBackup} />}
         {tab === 'journal' && <JournalPage />}
         {tab === 'trends' && <TrendsPage />}
         {tab === 'kids' && <ChildViewPage />}

@@ -269,10 +269,12 @@ export function SettingsPage() {
         </div>
       </Card>
 
-      <Card>
-        <SectionTitle>{t.settings.backupTitle}</SectionTitle>
-        <BackupSection />
-      </Card>
+      <div id="backup" className="scroll-mt-4">
+        <Card>
+          <SectionTitle>{t.settings.backupTitle}</SectionTitle>
+          <BackupSection />
+        </Card>
+      </div>
 
       <Card>
         <SectionTitle>{t.setup.rerunTitle}</SectionTitle>
