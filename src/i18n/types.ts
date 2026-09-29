@@ -512,6 +512,15 @@ export interface Translations {
     importGenericError: string
     invalidFile: string
     invalidBackup: string
+    fileTooLarge: string
+  }
+
+  crash: {
+    title: string
+    body: string
+    reload: string
+    erase: string
+    eraseConfirm: string
   }
 
   shareSheet: {
