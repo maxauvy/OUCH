@@ -1,5 +1,5 @@
 import type { DailyEntry, PainWeather, PainWeatherLevel } from '../db/types'
-import { theme } from './theme'
+import { theme } from './theme.ts'
 
 // Display labels for each level live in the active translation
 // (`t.painWeatherLevels[level]`), not here.
