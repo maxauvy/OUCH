@@ -1,15 +1,15 @@
 // Synthesizes the 50 s ambient backing track of the promo videos (soft pad,
 // plucked arpeggio, then a light beat from 11 s), no samples or assets needed.
-//   node scripts/promo/synth.mjs [output.wav]   (needs ffmpeg for echo + fades)
+//   node scripts/promo/synth.mjs [output.wav] [duration-seconds=50]   (needs ffmpeg for echo + fades)
 import { writeFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 const OUT = process.argv[2] ?? 'ouch-promo-music.wav'
 const RAW = join(tmpdir(), 'ouch-promo-music.f32')
-const SR = 44100, DUR = 50, N = SR * DUR
+const SR = 44100, DUR = Number(process.argv[3] ?? 50), N = SR * DUR
 const L = new Float32Array(N), R = new Float32Array(N)
-const BPM = 115.2, beat = 60 / BPM, bar = beat * 4, eighth = beat / 2
+const BPM = Math.round(DUR / 2.0833) * 240 / DUR, beat = 60 / BPM, bar = beat * 4, eighth = beat / 2
 const mtof = (m) => 440 * 2 ** ((m - 69) / 12)
 const chords = [[60, 64, 67, 71], [55, 59, 62, 67], [57, 60, 64, 67], [53, 57, 60, 64]] // Cmaj7 G Am7 Fmaj7
 const roots = [36, 43, 45, 41]
@@ -29,8 +29,8 @@ for (let b = 0; b * bar < DUR; b++) {
     }, pan * 2, (1 - pan) * 2)
   }
 }
-const drums = (t) => t >= 11 && t < 45.6
-const music = (t) => t >= 3.5 && t < 46.5
+const drums = (t) => t >= 11 && t < DUR - 4.4
+const music = (t) => t >= 3.5 && t < DUR - 3.5
 for (let b = 0; b * bar < DUR; b++) {
   const ch = chords[b % 4], root = roots[b % 4]
   for (let e = 0; e < 8; e++) {
@@ -59,6 +59,6 @@ const g = 0.7 / peak
 for (let i = 0; i < N; i++) { out.writeFloatLE(L[i] * g, i * 8); out.writeFloatLE(R[i] * g, i * 8 + 4) }
 writeFileSync(RAW, out)
 execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'f32le', '-ar', String(SR), '-ac', '2', '-i', RAW,
-  '-af', 'aecho=0.8:0.55:300|450:0.28|0.2,lowpass=f=9000,afade=t=in:d=1,afade=t=out:st=46.5:d=3.5,loudnorm=I=-16:TP=-1.5',
+  '-af', `aecho=0.8:0.55:300|450:0.28|0.2,lowpass=f=9000,afade=t=in:d=1,afade=t=out:st=${DUR - 3.5}:d=3.5,loudnorm=I=-16:TP=-1.5`,
   '-t', String(DUR), OUT], { stdio: 'inherit' })
 console.log('wrote', OUT)

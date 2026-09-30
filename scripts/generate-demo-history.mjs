@@ -2,6 +2,7 @@
 // from Settings → Backup (password: see DEMO_PASSWORD).
 //
 //   node scripts/generate-demo-history.mjs [output.json] [end-date YYYY-MM-DD]
+//   DEMO_LANG=en node scripts/generate-demo-history.mjs …   (English tags, notes and medication names)
 //
 // Built to demo the app straight after import. Data is deterministic
 // (seeded PRNG) and tells one story every screen can show:
@@ -298,7 +299,37 @@ const settings = {
   cycleTrackingEnabled: true,
   enabledFactors: ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes'],
 }
-const bundle = { version: 2, exportedAt: new Date().toISOString(), entries, medications, settings }
+
+// DEMO_LANG=en: the tags, notes and medication names above are stored as plain
+// text, so an English UI would show them in French. Translate them in the bundle.
+const EN_STRINGS = {
+  'Méditation / respiration': 'Meditation / breathing', 'Marche courte': 'Short walk', 'Kiné / soins': 'Physiotherapy / care',
+  'Étirements doux': 'Gentle stretching', 'Bain chaud': 'Warm bath', 'Moment social agréable': 'Pleasant social time', 'Repos / sieste': 'Rest / nap',
+  'Bonne journée, balade au parc avec les enfants.': 'Good day, walk in the park with the kids.',
+  'Journée tranquille à la maison.': 'Quiet day at home.',
+  'Déjeuner avec une amie, bon moment.': 'Lunch with a friend, lovely time.',
+  'Yoga doux le matin, je me sens plus souple.': 'Gentle yoga in the morning, feeling more supple.',
+  'J’ai pu jardiner une petite heure sans douleur particulière.': 'Managed an hour of gardening without much pain.',
+  'Réveil difficile, raideur dans tout le corps.': 'Rough wake-up, stiff all over.',
+  'Grosse journée au travail, beaucoup de tension.': 'Big day at work, lots of tension.',
+  'Nuit hachée, très fatiguée.': 'Broken night, very tired.',
+  'Trop forcé hier au ménage, je le paie aujourd’hui.': 'Overdid the cleaning yesterday, paying for it today.',
+  'Crise, obligée d’annuler ma sortie.': 'Flare-up, had to cancel my outing.',
+  'Poussée : douleurs partout, je reste allongée.': 'Flare: pain everywhere, staying in bed.',
+  'Troisième jour de crise, le tramadol soulage un peu.': 'Third day of the flare, tramadol helps a little.',
+  'Séance de kiné, ça a fait du bien.': 'Physio session, it did me good.',
+  'Kiné : travail sur le dos, détendue après.': 'Physio: worked on my back, relaxed afterwards.',
+  'Orage dans la soirée, douleurs dès le matin.': 'Storm in the evening, pain since the morning.',
+  'Règles, ventre et bas du dos douloureux.': 'Period, painful belly and lower back.',
+  'Arrêt de la prégabaline avec l’accord du médecin : trop de somnolence.': 'Stopped pregabalin with the doctor’s agreement: too much drowsiness.',
+  'Consultation chez le médecin traitant : duloxétine passée de 30 à 60 mg.': 'GP appointment: duloxetine raised from 30 to 60 mg.',
+  'Duloxétine': 'Duloxetine', 'Prégabaline': 'Pregabalin', 'Paracétamol': 'Paracetamol', 'Ibuprofène': 'Ibuprofen',
+  'Douleurs diffuses': 'Widespread pain', 'Douleurs neuropathiques': 'Neuropathic pain', 'Douleur': 'Pain', 'Poussées': 'Flares', 'Douleurs de règles': 'Period pain',
+  'Nausées': 'Nausea', 'Somnolence': 'Drowsiness', 'Prise de poids': 'Weight gain', 'Vertiges': 'Dizziness',
+}
+const translate = (v) => (typeof v === 'string' ? (EN_STRINGS[v] ?? v) : Array.isArray(v) ? v.map(translate) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, translate(x)])) : v)
+const bundle0 = { version: 2, exportedAt: new Date().toISOString(), entries, medications, settings }
+const bundle = process.env.DEMO_LANG === 'en' ? translate(bundle0) : bundle0
 
 const toBase64 = (bytes) => Buffer.from(bytes).toString('base64')
 const salt = crypto.getRandomValues(new Uint8Array(16))

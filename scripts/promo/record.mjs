@@ -28,29 +28,37 @@ const EN = process.env.PROMO_LANG === 'en'
 const T = EN ? {
   locale: 'en-US', today: 'Today', journal: 'Journal', trends: 'Trends', kids: 'Kids',
   head: 'Head', upperBack: 'Upper back', bath: /Warm bath/, d90: /^90 d/, age: '8–12 years', report: 'Report for my doctor',
+  weekday: /on average better/, walk: 'Short walk', shareBtn: /Share today/, msg: 'A bit cloudy today, thanks for being there',
   c1: ['Today', 'Your day in *10 seconds*', 'Slide, tap, done.'],
   c2: ['Understand', 'What *drives* your pain', 'Sleep, stress, weather, treatments: it’s all connected.'],
   c3: ['Journal', 'A *weather* for every day', 'Your month at a glance, from sunshine to storms.'],
   c4: ['Trends', 'Finally see what *changes*', 'Pain curve, dose changes, associated factors.'],
-  c5: ['Family', 'Explain it *to your kids*', 'Gentle words, adapted to each age.'],
-  c6: ['Appointment', 'A report for your *doctor*', 'Ready to print or export as PDF.'],
+  c5: ['Action steps', 'Spot your *tough days*', 'Your pain changes with the days of the week.'],
+  c6: ['Action steps', 'Find what *helps you*', 'Walking, meditation, rest: see what really matters to you.'],
+  c7: ['Loved ones', 'Share your *weather* with them', 'One picture, a little note. Nothing is sent without you.'],
+  c8: ['Family', 'Explain it *to your kids*', 'Gentle words, adapted to each age.'],
+  c9: ['Appointment', 'A report for your *doctor*', 'Ready to print or export as PDF.'],
 } : {
   locale: 'fr-FR', today: 'Aujourd', journal: 'Journal', trends: 'Tendances', kids: 'Enfants',
   head: 'Tête', upperBack: 'Dos haut', bath: /Bain chaud/, d90: /^90 j/, age: '8–12 ans', report: 'Rapport pour mon médecin',
-  c1: ['Aujourd’hui', 'Ta journée en *10 secondes*', 'Glisse, touche, c’est noté.'],
+  weekday: /en moyenne meilleures/, walk: 'Marche courte', shareBtn: /Partager ma météo/, msg: 'Journée un peu voilée, merci d’être là',
+  c1: ['Aujourd’hui', 'Ta journée en *10 secondes*', 'Glisse, tape, c’est noté.'],
   c2: ['Comprendre', 'Ce qui *influence* ta douleur', 'Sommeil, stress, météo, traitements : tout est relié.'],
   c3: ['Journal', 'Chaque jour, *une météo*', 'Ton mois en un coup d’œil, du soleil à l’orage.'],
-  c4: ['Tendances', 'Vois enfin ce qui *change*', 'Courbe de douleur, changements de dose, facteurs associés.'],
-  c5: ['En famille', 'Explique-le *aux enfants*', 'Des mots doux, adaptés à chaque âge.'],
-  c6: ['Consultation', 'Un rapport pour ton *médecin*', 'Prêt à imprimer ou à exporter en PDF.'],
+  c4: ['Tendances', 'Vois enfin ce qui *a un impact*', 'Courbe de douleur, changements de dose, facteurs associés.'],
+  c5: ['Pistes d’action', 'Repère tes *jours difficiles*', 'Ta douleur varie selon les jours de la semaine.'],
+  c6: ['Pistes d’action', 'Trouve ce qui *t’aide*', 'Marche, méditation, repos : vois ce qui compte pour toi.'],
+  c7: ['Proches', 'Partage ta *météo* du jour', 'Une image, un petit mot. Rien n’est envoyé sans toi.'],
+  c8: ['En famille', 'Explique-le *à tes enfants*', 'Des mots doux, adaptés à chaque âge.'],
+  c9: ['Consultation', 'Un rapport pour ton *médecin*', 'Prêt à imprimer ou à exporter en PDF.'],
 }
-const DUR = 50
+const DUR = 60
 const work = mkdtempSync(join(tmpdir(), 'ouch-promo-'))
 const DEMO = join(work, 'demo.json')
 const here = (f) => fileURLToPath(new URL(f, import.meta.url))
 const MUSIC = join(work, 'music.wav')
-execFileSync('node', [here('../generate-demo-history.mjs'), DEMO], { stdio: 'ignore' })
-execFileSync('node', [here('./synth.mjs'), MUSIC], { stdio: 'ignore' })
+execFileSync('node', [here('../generate-demo-history.mjs'), DEMO], { stdio: 'ignore', env: { ...process.env, DEMO_LANG: EN ? 'en' : 'fr' } })
+execFileSync('node', [here('./synth.mjs'), MUSIC, String(DUR)], { stdio: 'ignore' })
 let STAGE = readFileSync(here('./stage.html'), 'utf8')
 if (EN) STAGE = STAGE.replace('lang="fr"', 'lang="en"')
   .replace('Ton journal de douleur, <em>simple</em> et <em>privé</em>', 'Your pain journal, <em>simple</em> and <em>private</em>')
@@ -98,6 +106,7 @@ await p.goto(APP + '/__stage.html')
 const frameEl = await p.waitForSelector('#app')
 const F = await frameEl.contentFrame()
 await F.waitForSelector('nav', { timeout: 15000 })
+await F.addStyleTag({ content: '.promo-hl{outline:3px solid #ffb703;outline-offset:5px;border-radius:12px;animation:hlp 1s ease-in-out infinite}@keyframes hlp{50%{outline-color:#ffe08a;outline-offset:8px}}' })
 await p.waitForTimeout(800)
 
 // screencast
@@ -113,7 +122,9 @@ await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 92, maxWidth: 
 const T0 = Date.now()
 const at = (t) => p.waitForTimeout(Math.max(0, T0 + t * 1000 - Date.now()))
 
-const cam = (o) => p.evaluate((o) => window.cam(o), o)
+let camBusyUntil = 0 // clicks are aimed with the current camera transform: wait for it to settle
+const cam = (o) => { camBusyUntil = Date.now() + (o.ms ?? 900) + 80; return p.evaluate((o) => window.cam(o), o) }
+const settle = () => p.waitForTimeout(Math.max(0, camBusyUntil - Date.now()))
 const caption = (k, t, s) => p.evaluate(([k, t, s]) => window.caption(k, t, s), [k, t, s])
 const layer = (id, on) => p.evaluate(([id, on]) => window.layer(id, on), [id, on])
 async function geom() {
@@ -125,6 +136,7 @@ async function pt(loc) {
   return { x: gx + (r.x + r.w / 2) * s, y: gy + (r.y + r.h / 2) * s, r, s, gx, gy }
 }
 async function tap(loc, hold = 130) {
+  await settle()
   const { x, y } = await pt(loc)
   await p.mouse.move(x, y, { steps: 10 }); await p.mouse.down(); await p.waitForTimeout(hold); await p.mouse.up()
 }
@@ -143,6 +155,8 @@ async function bring(loc, ms = 900) { // scroll so the element sits around 45% o
   const r = await rectOf(loc); await scroll(r.y + r.h / 2 - 380, ms)
 }
 const tab = (n) => tap(F.getByRole('button', { name: new RegExp(n) }))
+const hl = (h) => h.evaluate((e) => e.classList.add('promo-hl'))
+const unhl = () => F.evaluate(() => document.querySelectorAll('.promo-hl').forEach((e) => e.classList.remove('promo-hl')))
 const phoneY = async (loc) => { const r = await rectOf(loc); return r.y + r.h / 2 }
 
 // ── intro
@@ -150,61 +164,85 @@ await layer('intro', true)
 await at(3.1); await layer('intro', false)
 await cam({ z: 1, ms: 1000 })
 
-// ── 1. Aujourd'hui : saisie
+// ── 1. Today: quick entry
 await at(3.9); await caption(...T.c1)
 const range = F.locator('input[type=range]').first()
-await at(4.9); await cam({ fy: await phoneY(range), z: 1.6, ms: 900 })
-await at(5.9)
+await at(4.7); await cam({ fy: await phoneY(range), z: 1.6, ms: 900 })
+await at(5.6)
 { const { r, s, gx, gy } = await pt(range)
   const xAt = (v) => gx + (r.x + 12 + (r.w - 24) * v / 10) * s, y = gy + (r.y + r.h / 2) * s
   await drag(xAt(4), y, xAt(7), y, 1000) }
-await at(7.7); await cam({ z: 1, ms: 900 })
-await at(8.8); await tap(F.getByRole('button', { name: T.head }))
-await at(9.5); await tap(F.getByRole('button', { name: T.upperBack }))
-await at(10.2); await scroll(480, 1000)
+await at(7.3); await cam({ z: 1, ms: 900 })
+await at(8.3); await tap(F.getByRole('button', { name: T.head }))
+await at(9.0); await tap(F.getByRole('button', { name: T.upperBack }))
+await at(9.7); await scroll(480, 1000)
 
-// ── 2. Comprendre
-await at(11.2); await caption(...T.c2)
-await at(11.6); await scroll(560, 1900)
-await at(13.9); await scroll(600, 1800)
-await at(16.0); await scroll(-1700, 1500)
+// ── 2. Understand
+await at(11.0); await caption(...T.c2)
+await at(11.3); await scroll(560, 1600)
+await at(13.1); await scroll(600, 1500)
+await at(14.6); await scroll(-1700, 800)
 
 // ── 3. Journal
-await at(18.0); await caption(...T.c3)
-await at(18.4); await tab(T.journal)
-await at(19.7); await tap(F.locator('button', { hasText: '‹' }).first())
-await at(20.7); await tap(F.locator('button', { hasText: '›' }).first())
-await at(21.5); await cam({ fy: 270, z: 1.55, ms: 1100 })
-await at(23.5); await cam({ z: 1, ms: 800 })
+await at(15.5); await caption(...T.c3)
+await at(15.8); await tab(T.journal)
+await at(17.0); await tap(F.locator('button', { hasText: '‹' }).first())
+await at(17.9); await tap(F.locator('button', { hasText: '›' }).first())
+await at(18.5); await cam({ fy: 270, z: 1.5, ms: 1000 })
+await at(19.3); await cam({ z: 1, ms: 700 })
 
-// ── 4. Tendances
-await at(24.0); await caption(...T.c4)
-await at(24.3); await tab(T.trends)
-await at(25.5); await tap(F.getByRole('button', { name: T.d90 }))
-await at(26.4)
-{ const c = F.locator('.recharts-wrapper').first(); await cam({ fy: await phoneY(c), z: 1.6, ms: 1100 }) }
-await at(29.4); await cam({ z: 1, ms: 800 })
-await at(30.3); await scroll(720, 1800)
-await at(32.2); await scroll(700, 1500)
+// ── 4. Trends: the curve
+await at(19.5); await caption(...T.c4)
+await at(19.8); await tab(T.trends)
+await at(20.9); await tap(F.getByRole('button', { name: T.d90 }))
+await at(21.7)
+{ const c = F.locator('.recharts-wrapper').first(); await cam({ fy: await phoneY(c), z: 1.6, ms: 1000 }) }
+await at(24.8); await cam({ z: 1, ms: 700 })
 
-// ── 5. Enfants
-await at(33.9); await caption(...T.c5)
-await at(34.2); await tab(T.kids)
-await at(35.4); await tap(F.getByText(T.age))
-await at(36.6); await scroll(520, 1500)
-await at(38.4); await scroll(-520, 900)
+// ── 5. Action steps: the tough days of the week, then what helps
+await at(25.4); await caption(...T.c5)
+const weekday = F.getByText(T.weekday).first()
+await at(25.8); await bring(weekday, 1200)
+await at(27.1); await hl(weekday); await cam({ fy: await phoneY(weekday), z: 1.5, ms: 900 })
+await at(30.7); await unhl(); await cam({ z: 1, ms: 700 })
+await at(31.0); await caption(...T.c6)
+// the whole block (title, with/without bars, insight): climb until it is tall enough
+const walkCard = await F.getByText(T.walk, { exact: true }).last().evaluateHandle((e) => {
+  let n = e; while (n.parentElement && n.getBoundingClientRect().height < 120) n = n.parentElement; return n })
+await at(31.2); await bring(walkCard, 1400)
+await at(32.8); await hl(walkCard); await cam({ fy: await phoneY(walkCard), z: 1.45, ms: 900 })
+await at(36.6); await unhl(); await cam({ z: 1, ms: 700 })
 
-// ── 6. Rapport
-await at(39.4); await caption(...T.c6)
-await at(39.7); await tab(T.trends)
-await at(40.8); await F.evaluate(() => scrollTo(0, 0))
-await at(41.1); await tap(F.getByText(T.report))
-await at(42.4); await scroll(1500, 2600)
-await at(45.2); await cam({ z: 1.25, ms: 800 })
+// ── 6. Sharing the weather with loved ones
+await at(37.4); await caption(...T.c7)
+await at(37.6); await tab(T.today)
+await at(38.6); await F.evaluate(() => scrollTo(0, 0))
+const shareBtn = F.getByRole('button', { name: T.shareBtn })
+await at(38.8); await bring(shareBtn, 1400)
+await at(40.3); await tap(shareBtn)
+await at(41.6); await cam({ fy: 330, z: 1.35, ms: 900 })
+const msgBox = F.locator('dialog input, dialog textarea').first()
+await at(42.6); await cam({ fy: await phoneY(msgBox) - 120, z: 1.25, ms: 700 })
+await at(43.3); await tap(msgBox)
+await at(43.6); await p.keyboard.type(T.msg, { delay: 55 })
+await at(46.3); await cam({ fy: 330, z: 1.3, ms: 800 })
+await at(47.3); await cam({ z: 1, ms: 600 }); await p.keyboard.press('Escape')
 
-// ── outro
-await at(46.0); await cam({ z: 1, dy: 1000, ms: 900 }); await p.evaluate(() => window.clearCaption())
-await at(46.6); await layer('outro', true)
+// ── 7. Kids
+await at(47.8); await caption(...T.c8)
+await at(48.1); await tab(T.kids)
+await at(49.3); await tap(F.getByText(T.age))
+await at(50.3); await scroll(520, 1400)
+await at(52.0); await scroll(-520, 700)
+
+// ── 8. Doctor report
+await at(52.6); await caption(...T.c9)
+await at(52.9); await tab(T.trends)
+await at(53.9); await F.evaluate(() => scrollTo(0, 0))
+await at(54.2); await tap(F.getByText(T.report))
+await at(55.2); await scroll(1500, 2200)
+await at(57.6); await cam({ z: 1, dy: 1000, ms: 900 }); await p.evaluate(() => window.clearCaption())
+await at(58.2); await layer('outro', true)
 await at(DUR)
 
 await cdp.send('Page.stopScreencast'); await ctx.close(); await b.close()
