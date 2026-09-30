@@ -42,7 +42,7 @@ const T = EN ? {
   locale: 'fr-FR', today: 'Aujourd', journal: 'Journal', trends: 'Tendances', kids: 'Enfants',
   head: 'Tête', upperBack: 'Dos haut', bath: /Bain chaud/, d90: /^90 j/, age: '8–12 ans', report: 'Rapport pour mon médecin',
   weekday: /en moyenne meilleures/, walk: 'Marche courte', shareBtn: /Partager ma météo/, msg: 'Journée un peu voilée, merci d’être là',
-  c1: ['Aujourd’hui', 'Ta journée en *10 secondes*', 'Glisse, touche, c’est noté.'],
+  c1: ['Aujourd’hui', 'Ta journée en *10 secondes*', 'Glisse, tape, c’est noté.'],
   c2: ['Comprendre', 'Ce qui *influence* ta douleur', 'Sommeil, stress, météo, traitements : tout est relié.'],
   c3: ['Journal', 'Chaque jour, *une météo*', 'Ton mois en un coup d’œil, du soleil à l’orage.'],
   c4: ['Tendances', 'Vois enfin ce qui *a un impact*', 'Courbe de douleur, changements de dose, facteurs associés.'],
