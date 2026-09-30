@@ -9,6 +9,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ### Ajouté
 - Une politique de sécurité (`SECURITY.md`) : signalement privé des vulnérabilités, ce qui est concerné et ce qui ne l'est pas.
 - Une vidéo de présentation d'une minute dans le README, et les scripts pour la refaire (`scripts/promo/`).
+- Une version anglaise du README (`README.en.md`).
 
 ### Modifié
 - Le README est réécrit et mis à jour : traitements, pistes d'action, partage de la météo, onglet Enfants, données de démo, tests et déploiement.

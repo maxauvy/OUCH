@@ -2,7 +2,7 @@
 
 *Ouch, Understand, Chart, Heal*
 
-**[maxauvy.github.io/OUCH](https://maxauvy.github.io/OUCH/)** · Licence [CeCILL v2.1](#licence) · Français et anglais · [Changelog](CHANGELOG.md)
+**[maxauvy.github.io/OUCH](https://maxauvy.github.io/OUCH/)** · Licence [CeCILL v2.1](#licence) · Français et anglais · [Changelog](CHANGELOG.md) · [English version](README.en.md)
 
 https://github.com/user-attachments/assets/36824d23-e5ff-4257-9254-b0164c30e334
 
