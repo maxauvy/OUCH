@@ -201,6 +201,8 @@ export interface Translations {
     saved: string
     weatherOfDay: string
     painWeatherOfDay: string
+    /** Shown in the weather banner before any pain level is set. */
+    painWeatherEmpty: string
     pain: string
     painHelper: string
     painEndNone: string

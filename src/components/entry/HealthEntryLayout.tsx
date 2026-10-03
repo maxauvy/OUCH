@@ -9,6 +9,7 @@ import {
   IconBolt,
   IconBrain,
   IconClock,
+  IconCloud,
   IconDroplet,
   IconMoodSmile,
   IconMoon,
@@ -134,39 +135,46 @@ function PainBars({ values }: { values: (number | undefined)[] }) {
 }
 
 /** The day's pain weather, above the pain score: it follows the sliders, so
- * moving them visibly changes the sky. */
-function WeatherHero({ weather }: { weather: PainWeather }) {
+ * moving them visibly changes the sky. Always there, empty until a pain level
+ * is set, so logging the first value doesn't push the page down. */
+function WeatherHero({ weather }: { weather: PainWeather | null }) {
   const t = useTranslation()
+  const tint = weather?.color ?? 'var(--color-ink-muted)'
   return (
     <div
       className="rounded-[var(--radius-card)] px-4 py-3.5 flex items-center gap-3.5"
-      style={{ background: `color-mix(in srgb, ${weather.color} 16%, var(--color-surface))` }}
+      style={{ background: `color-mix(in srgb, ${tint} ${weather ? 16 : 8}%, var(--color-surface))` }}
     >
       <span
         className="w-16 h-16 shrink-0 rounded-full flex items-center justify-center"
-        style={{ background: 'var(--color-surface)', color: weather.text }}
+        style={{ background: 'var(--color-surface)', color: weather?.text ?? 'var(--color-ink-muted)' }}
         aria-hidden
       >
-        <WeatherIcon name={weather.icon as never} size={40} />
+        {weather ? <WeatherIcon name={weather.icon as never} size={40} /> : <IconCloud size={36} stroke={1.5} />}
       </span>
       <div className="flex-1 min-w-0">
         <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
           {t.entryForm.painWeatherOfDay}
         </p>
-        <p className="text-title font-bold leading-tight">{t.painWeatherLevels[weather.level]}</p>
+        <p
+          className="text-title font-bold leading-tight"
+          style={weather ? undefined : { color: 'var(--color-ink-muted)', fontWeight: 500 }}
+        >
+          {weather ? t.painWeatherLevels[weather.level] : t.entryForm.painWeatherEmpty}
+        </p>
         <div className="flex items-center gap-1 mt-2" aria-hidden>
           {[1, 2, 3, 4, 5].map((l) => (
             <span
               key={l}
               className="h-[7px] rounded-full"
               style={{
-                width: l === weather.level ? 20 : 7,
-                background: l === weather.level ? weather.color : `color-mix(in srgb, ${weather.color} 30%, transparent)`,
+                width: weather && l === weather.level ? 20 : 7,
+                background: weather && l === weather.level ? weather.color : `color-mix(in srgb, ${tint} 30%, transparent)`,
               }}
             />
           ))}
           <span className="text-caption ml-1.5" style={{ color: 'var(--color-ink-muted)' }}>
-            {format(t.weatherCard.levelOf, { n: weather.level })}
+            {weather ? format(t.weatherCard.levelOf, { n: weather.level }) : '\u00a0'}
           </span>
         </div>
       </div>
@@ -348,7 +356,7 @@ export function HealthEntryLayout({
         )}
       </div>
 
-      {local.painLevel !== undefined && <WeatherHero weather={weather} />}
+      <WeatherHero weather={local.painLevel === undefined ? null : weather} />
 
       <Card className="!p-4">
         <div className="flex items-center justify-between gap-2">
