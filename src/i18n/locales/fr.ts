@@ -222,6 +222,7 @@ const fr: Translations = {
     saved: 'Enregistré',
     weatherOfDay: 'Météo du jour',
     painWeatherOfDay: 'Météo douleur du jour',
+    painWeatherEmpty: 'Note ta douleur',
     pain: 'Douleur',
     painHelper: "Intensité globale de la douleur aujourd'hui",
     painEndNone: 'Aucune',

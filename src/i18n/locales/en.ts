@@ -219,6 +219,7 @@ const en: Translations = {
     saved: 'Saved',
     weatherOfDay: "Today's weather",
     painWeatherOfDay: "Today's pain weather",
+    painWeatherEmpty: 'Log your pain',
     pain: 'Pain',
     painHelper: "Overall pain intensity today",
     painEndNone: 'None',
