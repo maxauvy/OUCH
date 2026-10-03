@@ -10,7 +10,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - Une politique de sécurité (`SECURITY.md`) : signalement privé des vulnérabilités, ce qui est concerné et ce qui ne l'est pas.
 - Une vidéo de présentation d'une minute dans le README, et les scripts pour la refaire (`scripts/promo/`).
 - Une version anglaise du README (`README.en.md`).
-- Un bandeau sur la page du jour, au-dessus de la douleur : le temps du jour en grand, avec son niveau sur 5. Il suit les curseurs et apparaît dès qu'une douleur est saisie.
+- Un bandeau sur la page du jour, au-dessus de la douleur : le temps du jour en grand, avec son niveau sur 5. Il suit les curseurs et reste en place, vide (« Note ta douleur ») tant qu'aucune douleur n'est saisie, pour que la page ne bouge pas à la première saisie.
 
 ### Modifié
 - Le README est réécrit et mis à jour : traitements, pistes d'action, partage de la météo, onglet Enfants, données de démo, tests et déploiement.
