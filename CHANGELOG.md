@@ -6,11 +6,13 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.1.1] - 2026-10-03
+
 ### Ajouté
 - Une politique de sécurité (`SECURITY.md`) : signalement privé des vulnérabilités, ce qui est concerné et ce qui ne l'est pas.
 - Une vidéo de présentation d'une minute dans le README, et les scripts pour la refaire (`scripts/promo/`).
 - Une version anglaise du README (`README.en.md`).
-- Un bandeau sur la page du jour, au-dessus de la douleur : le temps du jour en grand, avec son niveau sur 5. Il suit les curseurs.
+- Un bandeau sur la page du jour, au-dessus de la douleur : le temps du jour en grand, avec son niveau sur 5. Il suit les curseurs et reste en place, vide (« Note ta douleur ») tant qu'aucune douleur n'est saisie.
 
 ### Modifié
 - Le README est réécrit et mis à jour : traitements, pistes d'action, partage de la météo, onglet Enfants, données de démo, tests et déploiement.
@@ -18,7 +20,6 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - La frise des cinq temps, sur la carte de partage et sur la page Enfants, devient une règle à cinq segments : celui du jour est plein et porte son icône, les autres s'effacent. Elle se lit « Peu de douleur » à « Beaucoup de douleur ».
 
 ### Corrigé
-- Sur la page du jour, le bandeau du temps est présent dès l'ouverture, vide (« Note ta douleur ») tant qu'aucune douleur n'est saisie : la page ne se décale plus à la première saisie.
 - Sur iPhone, le haut des pages n'est plus recouvert par le flou de la barre d'état. Pas encore vérifié sur un vrai téléphone.
 
 ## [0.1.0] - 2026-09-29
@@ -49,5 +50,6 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.1.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/maxauvy/OUCH/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/maxauvy/OUCH/releases/tag/v0.1.0
