@@ -200,6 +200,7 @@ export interface Translations {
     saving: string
     saved: string
     weatherOfDay: string
+    painWeatherOfDay: string
     pain: string
     painHelper: string
     painEndNone: string
@@ -572,6 +573,9 @@ export interface Translations {
     trendHigher: string
     weatherOfName: string
     weatherOfDay: string
+    /** Ends of the 5-step weather rule, worded as pain. */
+    scaleLow: string
+    scaleHigh: string
     painLabel: string
     painCaption: string
     outside: string
@@ -621,6 +625,8 @@ export interface Translations {
     ageToggleLabel: string
     /** Accessible name of the 5-step weather scale, e.g. "Sunny, level 1 of 5". */
     scaleLevel: string
+    scaleLow: string
+    scaleHigh: string
     ages: Record<ChildTone, string>
     howToHelp: string
     aboutIllness: string
