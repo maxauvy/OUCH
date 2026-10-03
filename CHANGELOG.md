@@ -10,7 +10,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - Une politique de sécurité (`SECURITY.md`) : signalement privé des vulnérabilités, ce qui est concerné et ce qui ne l'est pas.
 - Une vidéo de présentation d'une minute dans le README, et les scripts pour la refaire (`scripts/promo/`).
 - Une version anglaise du README (`README.en.md`).
-- Un bandeau sur la page du jour, au-dessus de la douleur : le temps du jour en grand, avec son niveau sur 5. Il suit les curseurs et reste en place, vide (« Note ta douleur ») tant qu'aucune douleur n'est saisie, pour que la page ne bouge pas à la première saisie.
+- Un bandeau sur la page du jour, au-dessus de la douleur : le temps du jour en grand, avec son niveau sur 5. Il suit les curseurs.
 
 ### Modifié
 - Le README est réécrit et mis à jour : traitements, pistes d'action, partage de la météo, onglet Enfants, données de démo, tests et déploiement.
@@ -18,6 +18,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - La frise des cinq temps, sur la carte de partage et sur la page Enfants, devient une règle à cinq segments : celui du jour est plein et porte son icône, les autres s'effacent. Elle se lit « Peu de douleur » à « Beaucoup de douleur ».
 
 ### Corrigé
+- Sur la page du jour, le bandeau du temps est présent dès l'ouverture, vide (« Note ta douleur ») tant qu'aucune douleur n'est saisie : la page ne se décale plus à la première saisie.
 - Sur iPhone, le haut des pages n'est plus recouvert par le flou de la barre d'état. Pas encore vérifié sur un vrai téléphone.
 
 ## [0.1.0] - 2026-09-29
