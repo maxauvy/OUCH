@@ -280,39 +280,48 @@ function CardSky({ weather }: { weather: PainWeather }) {
   )
 }
 
-/** The five weathers side by side with today's one highlighted, so someone
- * who doesn't know the app can place the day on the scale. */
+/** The five weathers as a rule with today's segment full and thicker, topped
+ * by a bubble with its icon, so someone who doesn't know the app can place the
+ * day. The ends are worded as pain. */
 function CardScale({ level, t }: { level: PainWeatherLevel; t: Translations }) {
+  const current = painWeatherByLevel(level)
   return (
     <div>
-      <div style={{ display: 'flex', gap: 5 }}>
+      <div style={{ display: 'flex', gap: 5, alignItems: 'flex-end' }}>
         {LEVELS.map((l) => {
           const w = painWeatherByLevel(l)
           const active = l === level
           return (
-            <span
-              key={l}
-              style={{
-                flex: active ? 1.5 : 1,
-                height: active ? 40 : 32,
-                alignSelf: 'center',
-                borderRadius: 8,
-                background: active ? w.color : w.soft,
-                // Dark icon on the light weathers (1–3), white on the dark ones.
-                color: active ? (l <= 3 ? healthTheme.ink : '#ffffff') : w.ink,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <WeatherIcon name={w.icon as never} size={active ? 26 : 20} />
-            </span>
+            <div key={l} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+              {active ? (
+                <span
+                  style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: 999,
+                    background: current.color,
+                    // Dark icon on the light weathers (1–3), white on the dark ones.
+                    color: l <= 3 ? healthTheme.ink : '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <WeatherIcon name={w.icon as never} size={24} />
+                </span>
+              ) : (
+                <span style={{ height: 38 }} />
+              )}
+              <span
+                style={{ width: '100%', height: active ? 14 : 8, borderRadius: 999, background: active ? w.color : `${w.color}4d` }}
+              />
+            </div>
           )
         })}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: CARD_MUTED, marginTop: 5 }}>
-        <span>{t.painWeatherLevels[1]}</span>
-        <span>{t.painWeatherLevels[5]}</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: CARD_MUTED, marginTop: 6 }}>
+        <span>{t.weatherCard.scaleLow}</span>
+        <span>{t.weatherCard.scaleHigh}</span>
       </div>
     </div>
   )

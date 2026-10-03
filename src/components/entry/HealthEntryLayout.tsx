@@ -15,7 +15,7 @@ import {
   IconWalk,
   type Icon,
 } from '@tabler/icons-react'
-import type { BodyZone, DailyEntry, Medication, Settings } from '../../db/types'
+import type { BodyZone, DailyEntry, Medication, PainWeather, Settings } from '../../db/types'
 import { BODY_ZONES } from '../../db/types'
 import { todayISO } from '../../db'
 import { computePainWeather } from '../../lib/painWeather'
@@ -129,6 +129,47 @@ function PainBars({ values }: { values: (number | undefined)[] }) {
           />
         )
       })}
+    </div>
+  )
+}
+
+/** The day's pain weather, above the pain score: it follows the sliders, so
+ * moving them visibly changes the sky. */
+function WeatherHero({ weather }: { weather: PainWeather }) {
+  const t = useTranslation()
+  return (
+    <div
+      className="rounded-[var(--radius-card)] px-4 py-3.5 flex items-center gap-3.5"
+      style={{ background: `color-mix(in srgb, ${weather.color} 16%, var(--color-surface))` }}
+    >
+      <span
+        className="w-16 h-16 shrink-0 rounded-full flex items-center justify-center"
+        style={{ background: 'var(--color-surface)', color: weather.text }}
+        aria-hidden
+      >
+        <WeatherIcon name={weather.icon as never} size={40} />
+      </span>
+      <div className="flex-1 min-w-0">
+        <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.entryForm.painWeatherOfDay}
+        </p>
+        <p className="text-title font-bold leading-tight">{t.painWeatherLevels[weather.level]}</p>
+        <div className="flex items-center gap-1 mt-2" aria-hidden>
+          {[1, 2, 3, 4, 5].map((l) => (
+            <span
+              key={l}
+              className="h-[7px] rounded-full"
+              style={{
+                width: l === weather.level ? 20 : 7,
+                background: l === weather.level ? weather.color : `color-mix(in srgb, ${weather.color} 30%, transparent)`,
+              }}
+            />
+          ))}
+          <span className="text-caption ml-1.5" style={{ color: 'var(--color-ink-muted)' }}>
+            {format(t.weatherCard.levelOf, { n: weather.level })}
+          </span>
+        </div>
+      </div>
     </div>
   )
 }
@@ -307,6 +348,8 @@ export function HealthEntryLayout({
         )}
       </div>
 
+      {local.painLevel !== undefined && <WeatherHero weather={weather} />}
+
       <Card className="!p-4">
         <div className="flex items-center justify-between gap-2">
           <span className="flex items-center gap-2">
@@ -364,16 +407,6 @@ export function HealthEntryLayout({
           />
         </div>
 
-        <div
-          className="flex items-center gap-2 mt-3 pt-3 text-caption"
-          style={{ borderTop: '1px solid var(--color-hairline)' }}
-        >
-          <span style={{ color: weather.color }} className="inline-flex" aria-hidden>
-            <WeatherIcon name={weather.icon as never} size={20} />
-          </span>
-          <span style={{ color: 'var(--color-ink-muted)' }}>{t.entryForm.weatherOfDay}</span>
-          <span className="font-semibold ml-auto">{t.painWeatherLevels[weather.level]}</span>
-        </div>
       </Card>
 
       {has('painLocations') && (
