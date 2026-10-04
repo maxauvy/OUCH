@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- L'image de partage s'intitule « Météo santé de <prénom> » (« Météo santé du jour » sans prénom) au lieu de « Météo douleur… », plus naturel pour les proches.
+
 ### Corrigé
 - Sur iPhone, dans l'app installée, la première ligne de chaque page ne tombe plus dans le flou de la barre d'état : un espace de 28 px est ajouté en haut. Réglé d'après une capture, à confirmer sur le téléphone.
 
