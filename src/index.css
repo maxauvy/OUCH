@@ -336,6 +336,17 @@ textarea {
   overflow-x: clip;
 }
 
+/* Installed on an iPhone (iOS 26), the status bar's blur reaches about 40px
+   below the bar, and env(safe-area-inset-top) can read 0 there (WebKit bug
+   301994). Without this the first line of every page sits in the blur. */
+@media (display-mode: standalone) {
+  @supports (-webkit-touch-callout: none) {
+    #root {
+      padding-top: calc(env(safe-area-inset-top) + 28px);
+    }
+  }
+}
+
 /* Date and time fields: iOS gives them a native minimum width that pushes
    them past their card on a narrow phone, centers the value, and collapses
    an empty one to a sliver. */
