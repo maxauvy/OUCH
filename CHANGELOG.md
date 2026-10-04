@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Corrigé
+- Sur iPhone, dans l'app installée, la première ligne de chaque page ne tombe plus dans le flou de la barre d'état : un espace de 28 px est ajouté en haut. Réglé d'après une capture, à confirmer sur le téléphone.
+
 ## [0.1.1] - 2026-10-03
 
 ### Ajouté
