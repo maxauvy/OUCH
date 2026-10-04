@@ -6,6 +6,8 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.1.2] - 2026-10-04
+
 ### Modifié
 - L'image de partage s'intitule « Météo santé de <prénom> » (« Météo santé du jour » sans prénom) au lieu de « Météo douleur… », plus naturel pour les proches.
 
@@ -56,6 +58,7 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.1.1...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/maxauvy/OUCH/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/maxauvy/OUCH/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/maxauvy/OUCH/releases/tag/v0.1.0
