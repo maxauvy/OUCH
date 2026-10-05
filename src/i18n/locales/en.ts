@@ -755,6 +755,28 @@ const en: Translations = {
     close: 'Close this message',
   },
 
+  deleteData: {
+    title: 'Delete my data',
+    helper:
+      'Erases your journal, treatments and settings from this device. There is no copy anywhere else: this cannot be undone.',
+    button: 'Delete all my data',
+    dialogTitle: 'Delete all your data?',
+    willLose:
+      'Erased from this device: {{days}} {{days:day|days}} of journal, {{meds}} {{meds:treatment|treatments}}, and your settings (first name, language, declared illness…).',
+    irreversible: 'OUCH has no server: once deleted, this data cannot be recovered.',
+    backupsKept:
+      'Backups you have already exported are not deleted. They stay wherever you saved them, and anyone with the file and its password can read them: delete them yourself if you no longer want them.',
+    backupFirst: 'Make a backup first',
+    typeLabel: 'To confirm, type {{word}}',
+    word: 'DELETE',
+    confirm: 'Delete everything',
+    deleting: 'Deleting…',
+    cancel: 'Cancel',
+    close: 'Close',
+    error: 'Deletion failed. Close any other OUCH tabs and try again.',
+    wiped: 'Your data has been deleted from this device.',
+  },
+
   storage: {
     title: 'Protection against erasure',
     protected: 'The browser has committed to not erasing your data on its own. It is still deleted if you clear the site data: keep backups.',

@@ -1,6 +1,6 @@
 import { getTranslations, type Language } from '../i18n'
 
-const LAST_SHOWN_KEY = 'ouch:lastReminderShownDate'
+export const LAST_SHOWN_KEY = 'ouch:lastReminderShownDate'
 
 export function canNotify(): boolean {
   return 'Notification' in window
