@@ -603,7 +603,7 @@ const fr: Translations = {
     methodCollect:
       'Recueil. Journal quotidien (rappel sur 24 h, qui limite le biais de mémoire des rappels plus longs⁶). La douleur est notée sur une échelle numérique de 0 à 10, mesure recommandée par IMMPACT¹ et la HAS³, et largement validée¹⁰. Les échelles de fatigue, sommeil, brouillard mental, humeur, stress et activité sont des échelles numériques simples, non validées.',
     methodCalc:
-      'Calculs. Moyenne glissante sur 7 jours calendaires (au moins 4 jours renseignés). Variation relative = (moyenne de la période − moyenne précédente) / moyenne précédente ; une baisse de 30 % est considérée comme modérément pertinente, de 50 % comme importante²˒⁴. Les jours non renseignés sont exclus, jamais imputés. Corrélations de Spearman calculées sur les deux périodes.',
+      'Calculs. Moyenne glissante sur 7 jours calendaires (au moins 4 jours renseignés). Variation relative = (moyenne de la période − moyenne précédente) / moyenne précédente ; une baisse de 30 % est considérée comme modérément pertinente, de 50 % comme importante²˒⁴˒⁸˒⁹. Les jours non renseignés sont exclus, jamais imputés. Corrélations de Spearman calculées sur les deux périodes.',
     methodLimits:
       'Limites. Les jours manquants ne sont pas forcément aléatoires (on remplit parfois moins les mauvais jours). Aucune donnée n’a été vérifiée par un soignant. Les corrélations ne sont corrigées ni pour l’autocorrélation ni pour les comparaisons multiples : ce sont des pistes à discuter, pas des liens de cause à effet.',
     references: 'Références',

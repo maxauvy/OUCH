@@ -597,7 +597,7 @@ const en: Translations = {
     methodCollect:
       'Collection. Daily diary (24-hour recall, which limits the recall bias of longer reporting periods⁶). Pain is rated on a 0–10 numeric rating scale, the measure recommended by IMMPACT¹ and the French HAS³, and widely validated¹⁰. The fatigue, sleep, brain fog, mood, stress and activity scales are simple numeric scales, not validated.',
     methodCalc:
-      'Calculations. 7-calendar-day rolling mean (at least 4 logged days). Relative change = (period mean − previous mean) / previous mean; a 30% decrease is considered moderately important, 50% substantial²˒⁴. Days not logged are left out, never imputed. Spearman correlations computed over both periods.',
+      'Calculations. 7-calendar-day rolling mean (at least 4 logged days). Relative change = (period mean − previous mean) / previous mean; a 30% decrease is considered moderately important, 50% substantial²˒⁴˒⁸˒⁹. Days not logged are left out, never imputed. Spearman correlations computed over both periods.',
     methodLimits:
       'Limitations. Missing days are not necessarily random (people sometimes log less on bad days). No data has been checked by a clinician. Correlations are corrected neither for autocorrelation nor for multiple comparisons: they are leads to discuss, not cause-and-effect links.',
     references: 'References',

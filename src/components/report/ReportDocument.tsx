@@ -177,7 +177,7 @@ function gpPages(d: ReportData): Block[][] {
           <p>{f.t.methodGp}</p>
         </div>
       </>,
-      <References count={3} title={f.t.references} />,
+      <References numbers={GP_REFERENCES} title={f.t.references} />,
     ],
   ]
 }
@@ -361,7 +361,7 @@ function painClinicPages(d: ReportData): Block[][] {
           })}
         </div>
       </>,
-      <References count={REFERENCES.length} title={f.t.references} />,
+      <References numbers={REFERENCES.map((_, i) => i + 1)} title={f.t.references} />,
     ],
   ]
 }
@@ -1144,13 +1144,19 @@ function Associations({ d }: { d: ReportData }) {
   )
 }
 
-function References({ count, title }: { count: number; title: string }) {
+/** Numbers (1-based) of the references the 2-page GP summary cites. Footnote
+ * numbers are positions in REFERENCES, so the list keeps them with `value`. */
+const GP_REFERENCES = [1, 2, 8, 9]
+
+function References({ numbers, title }: { numbers: number[]; title: string }) {
   return (
     <>
       <H level={3}>{title}</H>
       <ol className="r-refs">
-      {REFERENCES.slice(0, count).map((r) => (
-          <li key={r.citation}>{r.citation}</li>
+      {numbers.map((n) => (
+          <li key={n} value={n}>
+            {REFERENCES[n - 1].citation}
+          </li>
         ))}
       </ol>
     </>
