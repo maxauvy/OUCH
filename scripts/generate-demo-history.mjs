@@ -3,12 +3,19 @@
 //
 //   node scripts/generate-demo-history.mjs [output.json] [end-date YYYY-MM-DD]
 //   DEMO_LANG=en node scripts/generate-demo-history.mjs …   (English tags, notes and medication names)
+//   DEMO_TODAY=empty …        leave today without an entry, to open on an empty Today page
+//   DEMO_ILLNESSES=fibromyalgie,migraine …   several tracked illnesses (default: fibromyalgie only)
 //
 // Built to demo the app straight after import. Data is deterministic
 // (seeded PRNG) and tells one story every screen can show:
-// - a flare in late summer, a consultation where the duloxetine dose is
-//   raised (about four weeks before the end, so it shows in Trends' default
-//   30-day view), then pain easing over the following weeks;
+// - a flare in late summer, another that leads to a consultation where the
+//   duloxetine dose is raised (about four weeks before the end, so it shows
+//   in Trends' default 30-day view), pain easing over the following weeks,
+//   then a new flare that runs up to yesterday: the Today page opens on its
+//   soft "harder days" card (it looks at the days before today). Today's
+//   entry is an easier day, so the report counts that flare as over; with
+//   DEMO_TODAY=empty it reads "ongoing". Flares are found relative to the
+//   person's own usual pain;
 // - an earlier background treatment stopped for side effects, as-needed
 //   painkillers with relief ratings;
 // - pain following sleep, stress, pressure drops, storms and periods, and
@@ -23,6 +30,8 @@ import { writeFileSync } from 'node:fs'
 const DEMO_PASSWORD = 'demo'
 const DAYS = 90
 const output = process.argv[2] ?? 'ouch-demo-90j.json'
+const EMPTY_TODAY = process.env.DEMO_TODAY === 'empty'
+const ILLNESSES = (process.env.DEMO_ILLNESSES ?? 'fibromyalgie').split(',').map((s) => s.trim()).filter(Boolean)
 const endDate = process.argv[3] ?? new Date().toISOString().slice(0, 10)
 
 // Must match src/lib/crypto.ts
@@ -66,15 +75,18 @@ function addDays(iso, n) {
 }
 
 // Day offsets from the start. The second flare leads to the consultation;
-// the last, milder and shorter, comes once the new dose has settled.
+// the last one starts after three calmer weeks on the new dose, and runs up
+// to yesterday (day 88), so it is still going on when the demo opens. Its
+// level stays high until the end instead of peaking and easing.
 const FLARES = [
   { start: 22, length: 6, intensity: 3.5 },
   { start: 53, length: 7, intensity: 2.5 },
-  { start: 77, length: 4, intensity: 2.5 },
+  { start: 84, length: 5, intensity: 5.2, ongoing: true },
 ]
 function flareBoost(i) {
   for (const f of FLARES) {
     if (i >= f.start && i < f.start + f.length) {
+      if (f.ongoing) return f.intensity * Math.min(1, (i - f.start + 1) / 3)
       const mid = f.start + f.length / 2
       return f.intensity * (1 - Math.abs(i - mid) / (f.length / 2 + 1))
     }
@@ -199,6 +211,7 @@ for (let i = 0; i < DAYS; i++) {
 
   // Missed days (~6%), except key days and the last week so the demo looks active.
   if (i < DAYS - 7 && !KEY_DAYS.has(i) && chance(0.06)) continue
+  if (EMPTY_TODAY && i === DAYS - 1) continue
 
   const stress = clamp(isWeekend ? 3 + noise(2.5) : 5.5 + noise(3.5))
   const sleepHours = Math.round(clamp(7.2 - (stress - 4) * 0.3 + noise(1.6) - flareBoost(i) * 0.4, 4, 9.5) * 2) / 2
@@ -274,7 +287,8 @@ for (let i = 0; i < DAYS; i++) {
     moodLevel,
     activityLevel,
     weather: {
-      source: 'manual',
+      // The last two weeks come from the phone's position, the rest was typed.
+      source: i >= DAYS - 14 ? 'auto' : 'manual',
       condition,
       tempC,
       pressureHpa: Math.round(pressure),
@@ -294,9 +308,13 @@ for (let i = 0; i < DAYS; i++) {
 const settings = {
   onboardingDone: true,
   displayName: 'Camille',
-  illnesses: ['fibromyalgie'],
+  illnesses: ILLNESSES,
   parentGender: 'maman',
   cycleTrackingEnabled: true,
+  autoWeatherEnabled: true,
+  autoWeatherLat: 45.764,
+  autoWeatherLon: 4.8357,
+  autoWeatherLabel: 'Lyon',
   enabledFactors: ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes'],
 }
 
