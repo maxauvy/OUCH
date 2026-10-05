@@ -34,8 +34,7 @@ import { WeatherIcon } from '../ui/WeatherIcon'
 import { format, useTranslation } from '../../i18n'
 import { radioGroupProps, radioProps, splitLeadingEmoji } from '../../lib/a11y'
 
-// The help texts are shared with the classic design, where they open with an
-// emoji. The health design swaps that emoji for a line icon.
+// The help texts open with an emoji, which is swapped for a line icon here.
 const HELP_ICONS: Record<string, Icon> = {
   '🤗': IconHeartHandshake,
   '🤫': IconVolume3,

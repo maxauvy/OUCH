@@ -7,14 +7,12 @@ import { SettingsPage } from './pages/SettingsPage'
 import { ChildViewPage } from './pages/ChildViewPage'
 import { SetupWizard } from './components/setup/SetupWizard'
 import { useSettings, useSettingsLoaded } from './hooks/useSettings'
-import { DesignContext } from './hooks/useDesign'
 import { useTodayEntry } from './hooks/useEntries'
 import { updateSettings, todayISO } from './db'
 import { maybeShowReminder } from './lib/reminder'
 import { requestStorageProtection } from './lib/storage'
 import { getTranslations, I18nProvider } from './i18n'
 import type { Language } from './i18n'
-import type { DesignStyle } from './db/types'
 
 function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   useEffect(() => {
@@ -24,18 +22,6 @@ function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
       document.documentElement.dataset.theme = theme
     }
   }, [theme])
-}
-
-// index.html ships data-design="health" so the default design paints on the
-// first frame; this keeps the attribute (and the browser chrome color) in
-// sync with the setting afterwards.
-function useAppliedDesign(design: DesignStyle) {
-  useEffect(() => {
-    document.documentElement.dataset.design = design
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', design === 'health' ? '#f3f6f8' : '#6c5f9c')
-  }, [design])
 }
 
 function useAppliedLanguage(language: Language) {
@@ -108,13 +94,10 @@ function AppShell() {
 export default function App() {
   const settings = useSettings()
   useAppliedLanguage(settings.language)
-  useAppliedDesign(settings.design)
 
   return (
     <I18nProvider language={settings.language}>
-      <DesignContext.Provider value={settings.design}>
-        <AppShell />
-      </DesignContext.Provider>
+      <AppShell />
     </I18nProvider>
   )
 }

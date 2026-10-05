@@ -1,6 +1,6 @@
 import type { FactorAnalysis } from '../../lib/insights'
 import { colorForPainValue } from '../../lib/painWeather'
-import { usePalette } from '../../hooks/useDesign'
+import { usePalette } from '../../hooks/usePalette'
 import { format, useTranslation } from '../../i18n'
 
 export function FactorAnalysisCard({

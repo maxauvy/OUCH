@@ -5,7 +5,7 @@ import type { DailyEntry } from '../../db/types'
 import { themeFor } from '../../lib/theme'
 import { shiftISO } from '../../lib/medications'
 import { daysBetween, trailingMeans } from '../../lib/report'
-import { usePalette } from '../../hooks/useDesign'
+import { usePalette } from '../../hooks/usePalette'
 import { useLocale, useTranslation, type Translations } from '../../i18n'
 
 /** Same window as the doctor report's curve. */

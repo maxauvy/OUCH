@@ -5,7 +5,6 @@ import { fetchDailyWeather, getCurrentPosition, WeatherError } from '../../lib/w
 import { updateSettings } from '../../db'
 import type { Settings } from '../../db/types'
 import { useTranslation } from '../../i18n'
-import { useDesign } from '../../hooks/useDesign'
 import { IconMapPin } from '@tabler/icons-react'
 
 const CONDITIONS: ExternalWeatherCondition[] = ['ensoleille', 'variable', 'nuageux', 'pluvieux', 'orageux', 'neige']
@@ -22,7 +21,6 @@ export function WeatherField({
   settings: Settings
 }) {
   const t = useTranslation()
-  const health = useDesign() === 'health'
   const tempId = useId()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -64,7 +62,7 @@ export function WeatherField({
           className="text-caption font-semibold rounded-[var(--radius-control)] px-3 py-1.5 inline-flex items-center gap-1"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
         >
-          {!loading && (health ? <IconMapPin size={15} aria-hidden /> : <span aria-hidden>📍 </span>)}
+          {!loading && <IconMapPin size={15} aria-hidden />}
           {loading ? t.weatherField.fetching : t.weatherField.autoFill}
         </button>
       </div>

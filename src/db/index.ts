@@ -92,15 +92,26 @@ class OuchDB extends Dexie {
       .upgrade(async (tx) => {
         await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
       })
+    // v6 removed the classic design: the interface style setting is gone.
+    this.version(6)
+      .stores({
+        entries: '++id, &date, painLevel, createdAt',
+        settings: 'id',
+        medications: 'id, name',
+      })
+      .upgrade(async (tx) => {
+        await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
+      })
   }
 }
 
 /** In place, and safe to run on current settings: moves a pre-v4
- * `childIllness` into `illnesses`, and turns a pre-v5 'cycle' factor into
- * `cycleTrackingEnabled`. */
+ * `childIllness` into `illnesses`, turns a pre-v5 'cycle' factor into
+ * `cycleTrackingEnabled`, and drops the pre-v6 `design` choice. */
 export function upgradeLegacySettings(s: LegacySettings): asserts s is Partial<Settings> {
   if (s.childIllness && !s.illnesses) s.illnesses = [s.childIllness]
   delete s.childIllness
+  delete s.design
   if (s.enabledFactors?.includes('cycle')) {
     s.enabledFactors = s.enabledFactors.filter((k) => k !== 'cycle')
     s.cycleTrackingEnabled = true

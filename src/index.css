@@ -2,7 +2,7 @@
 @import '@fontsource-variable/public-sans';
 
 @theme {
-  --font-sans: 'Inter var', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   /* Type scale, in rem so text follows the size chosen in the browser or
      the phone's settings (see the root rules at the end of this file).
@@ -25,22 +25,21 @@
   --radius-2xl: 16px;
   --radius-3xl: 24px;
 
-  /* Warm, calm neutrals — never clinical white/grey. These are the LIGHT
-     values; dark-mode overrides for the same custom property names live
-     below, outside @theme, so every var(--color-x) reference (Tailwind
-     utilities and inline styles alike) picks up the right value. */
-  --color-paper: #faf7f2;
+  /* These are the LIGHT values; dark-mode overrides for the same custom
+     property names live below, outside @theme, so every var(--color-x)
+     reference (Tailwind utilities and inline styles alike) picks up the
+     right value. */
+  --color-paper: #f3f6f8;
   --color-surface: #ffffff;
-  --color-surface-raised: #fffdf9;
+  --color-surface-raised: #f8fafb;
 
-  --color-ink: #2b2733;
-  --color-ink-muted: #6f6a7c;
-  --color-hairline: #e7e1d8;
+  --color-ink: #14212b;
+  --color-ink-muted: #5b6b76;
+  --color-hairline: #e1e7eb;
 
-  /* Brand accent — soft lavender, calm not clinical. Dark enough for white
-     text (5.6:1) and for brand text on --color-brand-soft (4.7:1). */
-  --color-brand: #6c5f9c;
-  --color-brand-soft: #efeaf9;
+  /* Brand accent — clinical blue. */
+  --color-brand: #0d5c8c;
+  --color-brand-soft: #e3eef6;
 
   /* Pain-weather ordinal scale — light/warm (easy day) -> dark/cool (hard day)
      Lightness decreases monotonically so the scale reads even without color.
@@ -65,144 +64,30 @@
   --color-weather-4-text: #506989;
   --color-weather-5-text: #574a7a;
 
-  --radius-card: 20px;
-  /* Buttons, chips and inputs: pills in the classic design, softly squared
-     in the health design. */
-  --radius-control: 9999px;
-  --card-shadow: 0 1px 2px rgba(20, 15, 35, 0.04);
-
-  /* "Explain to my child" screen — a warmer, more playful palette than the
-     rest of the app (which stays deliberately calm/clinical-free but plain).
-     Kept separate from --color-* so the main app is untouched. */
-  --color-kid-bg: #fff6e9;
-  --color-kid-surface: #ffffff;
-  --color-kid-ink: #3a2e28;
-  --color-kid-ink-muted: #7a6558;
-  --color-kid-hairline: #ffe1c4;
-  --color-kid-accent: #ff8a5c;
-  --color-kid-accent-soft: #ffe4d3;
-  /* Text on --color-kid-accent (5.7:1), and accent-colored text or icons on
-     the kid surfaces (5:1 on --color-kid-accent-soft). */
-  --color-kid-on-accent: #3a2e28;
-  --color-kid-accent-text: #a8431c;
+  --radius-card: 12px;
+  /* Buttons, chips and inputs: softly squared. */
+  --radius-control: 10px;
+  --card-shadow: none;
 
   /* Off state of switches and the empty part of slider tracks: 3:1 against
      the surface so the control's shape reads (WCAG 1.4.11). */
-  --color-control-off: #8f8899;
-}
-
-/* Dark-mode token overrides: reassigning the same --color-* custom
-   properties (not new -dark-suffixed ones) so every consumer — Tailwind
-   utilities generated from @theme and plain var(--color-x) inline styles —
-   updates automatically. Both the OS-level media query and an explicit
-   data-theme stamp are covered, and the stamp always wins (the :not()
-   guard stops a light stamp from being beaten by OS dark; the media rule
-   is what "Auto" relies on). */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --color-paper: #17151c;
-    --color-surface: #211e29;
-    --color-surface-raised: #2a2633;
-    --color-ink: #f1eef7;
-    --color-ink-muted: #a79fbb;
-    --color-hairline: rgba(180, 170, 200, 0.16);
-    --color-brand: #a89bd6;
-    --color-brand-soft: #322c47;
-    --color-kid-bg: #2a1f2b;
-    --color-kid-surface: #372a39;
-    --color-kid-ink: #fbeee2;
-    --color-kid-ink-muted: #cbb6ab;
-    --color-kid-hairline: rgba(255, 190, 150, 0.18);
-    --color-kid-accent: #ffab78;
-    --color-kid-accent-soft: #4a3430;
-    --color-kid-on-accent: #2a1f2b;
-    --color-kid-accent-text: #ffab78;
-    --color-control-off: #7d7594;
-    --color-on-brand: #17151c;
-    --color-weather-1-text: #e3a73b;
-    --color-weather-2-text: #c7ab68;
-    --color-weather-3-text: #9b95a6;
-    --color-weather-4-text: #819ab7;
-    --color-weather-5-text: #9e96b2;
-  }
-}
-
-:root[data-theme='dark'] {
-  --color-paper: #17151c;
-  --color-surface: #211e29;
-  --color-surface-raised: #2a2633;
-  --color-ink: #f1eef7;
-  --color-ink-muted: #a79fbb;
-  --color-hairline: rgba(180, 170, 200, 0.16);
-  --color-brand: #a89bd6;
-  --color-brand-soft: #322c47;
-  --color-kid-bg: #2a1f2b;
-  --color-kid-surface: #372a39;
-  --color-kid-ink: #fbeee2;
-  --color-kid-ink-muted: #cbb6ab;
-  --color-kid-hairline: rgba(255, 190, 150, 0.18);
-  --color-kid-accent: #ffab78;
-  --color-kid-accent-soft: #4a3430;
-  --color-kid-on-accent: #2a1f2b;
-  --color-kid-accent-text: #ffab78;
-  --color-control-off: #7d7594;
-  --color-on-brand: #17151c;
-  --color-weather-1-text: #e3a73b;
-  --color-weather-2-text: #c7ab68;
-  --color-weather-3-text: #9b95a6;
-  --color-weather-4-text: #819ab7;
-  --color-weather-5-text: #9e96b2;
-}
-
-/* ---------------------------------------------------------------------
-   Health design (default). Overrides the same tokens as above when
-   <html data-design="health">. Selectors are one notch more specific than
-   the classic ones and come after them, so the health values win in every
-   light/dark combination.
-   --------------------------------------------------------------------- */
-:root[data-design='health'] {
-  --font-sans: 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --color-paper: #f3f6f8;
-  --color-surface: #ffffff;
-  --color-surface-raised: #f8fafb;
-  --color-ink: #14212b;
-  --color-ink-muted: #5b6b76;
-  --color-hairline: #e1e7eb;
-  --color-brand: #0d5c8c;
-  --color-brand-soft: #e3eef6;
   --color-control-off: #8a94a0;
-  --radius-card: 12px;
-  --radius-control: 10px;
-  --card-shadow: none;
 }
 
-/* Text on a brand-filled button. White in light mode; both dark palettes
-   use a light brand that needs dark text (the dark values are set with the
-   other dark tokens, and those selectors are more specific than :root). */
+/* Text on a brand-filled button. White in light mode; the dark brand is
+   light and needs dark text. */
 :root {
   --color-on-brand: #ffffff;
 }
-@media (prefers-color-scheme: dark) {
-  :root[data-design='health']:not([data-theme='light']) {
-    --color-on-brand: #0b1a24;
-  }
-}
-:root[data-design='health'][data-theme='dark'] {
-  --color-on-brand: #0b1a24;
-}
 
-/* Text fields: tinted in the classic design, outlined in the health one. */
+/* Text fields: outlined. */
 :root {
-  --color-input: var(--color-brand-soft);
-  --color-input-ring: transparent;
-}
-:root[data-design='health'] {
   --color-input: var(--color-surface-raised);
   --color-input-ring: var(--color-hairline);
 }
 
-/* Measure categories (health design): each measure gets its own hue, as in
-   health apps, so a tile is recognisable before its label is read. */
+/* Measure categories: each measure gets its own hue, as in health apps, so
+   a tile is recognisable before its label is read. */
 :root {
   --cat-pain: #b3261e;
   --cat-pain-soft: #fdeaea;
@@ -226,8 +111,15 @@
   --cat-cycle-soft: #fbe7f0;
 }
 
+/* Dark-mode token overrides: reassigning the same --color-* custom
+   properties (not new -dark-suffixed ones) so every consumer — Tailwind
+   utilities generated from @theme and plain var(--color-x) inline styles —
+   updates automatically. Both the OS-level media query and an explicit
+   data-theme stamp are covered, and the stamp always wins (the :not()
+   guard stops a light stamp from being beaten by OS dark; the media rule
+   is what "Auto" relies on). */
 @media (prefers-color-scheme: dark) {
-  :root[data-design='health']:not([data-theme='light']) {
+  :root:not([data-theme='light']) {
     --color-paper: #0e1418;
     --color-surface: #172026;
     --color-surface-raised: #1d2830;
@@ -237,6 +129,12 @@
     --color-brand: #62aee0;
     --color-brand-soft: #173247;
     --color-control-off: #5f6f7a;
+    --color-on-brand: #0b1a24;
+    --color-weather-1-text: #e3a73b;
+    --color-weather-2-text: #c7ab68;
+    --color-weather-3-text: #9b95a6;
+    --color-weather-4-text: #819ab7;
+    --color-weather-5-text: #9e96b2;
     --cat-pain: #f28b82;
     --cat-pain-soft: #3d1f1d;
     --cat-fatigue: #f2b75c;
@@ -260,7 +158,7 @@
   }
 }
 
-:root[data-design='health'][data-theme='dark'] {
+:root[data-theme='dark'] {
   --color-paper: #0e1418;
   --color-surface: #172026;
   --color-surface-raised: #1d2830;
@@ -270,6 +168,12 @@
   --color-brand: #62aee0;
   --color-brand-soft: #173247;
   --color-control-off: #5f6f7a;
+  --color-on-brand: #0b1a24;
+  --color-weather-1-text: #e3a73b;
+  --color-weather-2-text: #c7ab68;
+  --color-weather-3-text: #9b95a6;
+  --color-weather-4-text: #819ab7;
+  --color-weather-5-text: #9e96b2;
   --cat-pain: #f28b82;
   --cat-pain-soft: #3d1f1d;
   --cat-fatigue: #f2b75c;

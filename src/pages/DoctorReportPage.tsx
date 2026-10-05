@@ -198,7 +198,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
                 <span id={`${ids}-${v}-label`} className="block text-body font-semibold" style={{ color: selected ? 'var(--color-brand)' : 'var(--color-ink)' }}>
                   {t.doctorReport.recipients[v].label}
                 </span>
-                {/* Muted grey on the selected tint misses 4.5:1 in the classic design. */}
+                {/* Muted grey on the selected tint misses 4.5:1. */}
                 <span id={`${ids}-${v}-help`} className="block text-caption mt-0.5" style={{ color: selected ? 'var(--color-ink)' : 'var(--color-ink-muted)' }}>
                   {t.doctorReport.recipients[v].helper}
                 </span>

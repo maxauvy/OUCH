@@ -606,10 +606,6 @@ export interface Translations {
     themeAuto: string
     themeLight: string
     themeDark: string
-    designTitle: string
-    designHelper: string
-    designHealth: string
-    designClassic: string
     languageTitle: string
     languageHelper: string
     parentGenderTitle: string
