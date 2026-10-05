@@ -13,7 +13,7 @@ import {
 import type { DailyEntry, PainWeatherLevel } from '../../db/types'
 import { computePainWeather, painWeatherByLevel } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
-import { usePalette } from '../../hooks/useDesign'
+import { usePalette } from '../../hooks/usePalette'
 import { useLocale, useTranslation } from '../../i18n'
 
 export function CalendarHeatmap({

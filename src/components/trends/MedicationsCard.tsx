@@ -3,7 +3,7 @@ import { medicationReports, reportPeriods, type MedicationReport } from '../../l
 import { posologyChanges, type PosologyChange } from '../../lib/medicationTrends'
 import { periodOn } from '../../lib/medications'
 import { formatPosology } from '../../lib/medicationFormat'
-import { usePalette } from '../../hooks/useDesign'
+import { usePalette } from '../../hooks/usePalette'
 import { format, useLocale, useTranslation } from '../../i18n'
 import { Card, SectionTitle } from '../ui/Card'
 

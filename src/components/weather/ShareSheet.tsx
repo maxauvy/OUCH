@@ -5,14 +5,12 @@ import type { DailyEntry } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
 import { painTrend, painTrendText, painWordIndex } from '../../lib/painTrend'
 import { useAllEntries } from '../../hooks/useEntries'
-import { HealthWeatherCard, WeatherCard } from './WeatherCard'
-import { useDesign } from '../../hooks/useDesign'
+import { WeatherCard } from './WeatherCard'
 import { downloadBlob } from '../../lib/backup'
 import { format, useTranslation } from '../../i18n'
 
 export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry; displayName?: string; onClose: () => void }) {
   const t = useTranslation()
-  const Card = useDesign() === 'health' ? HealthWeatherCard : WeatherCard
   const messageId = useId()
   const titleId = useId()
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -172,7 +170,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry;
               <div
                 style={{ width: fit?.width, transform: fit ? `scale(${fit.scale})` : undefined, transformOrigin: 'top left' }}
               >
-                <Card ref={cardRef} entry={entry} displayName={displayName} message={message || undefined} />
+                <WeatherCard ref={cardRef} entry={entry} displayName={displayName} message={message || undefined} />
               </div>
             </div>
           </div>

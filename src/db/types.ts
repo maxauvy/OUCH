@@ -178,11 +178,6 @@ export interface MedicationIntake {
 
 export type ThemePref = 'system' | 'light' | 'dark'
 
-// Visual style of the whole app (except the Kids tab, which keeps its own
-// palette). 'health' is the default, data-first look; 'classic' is the
-// original lavender/cream design, kept as an option.
-export type DesignStyle = 'health' | 'classic'
-
 // How the app refers to the tracked parent on the child view (and, once
 // gender-agreement is involved, in its generated sentences — see
 // lib/childView.ts). Not exposed as a translation key: it drives grammar,
@@ -217,7 +212,6 @@ export interface Settings {
   id: 1
   enabledFactors: FactorKey[]
   theme: ThemePref
-  design: DesignStyle
   reminderEnabled: boolean
   reminderTime: string // 'HH:MM'
   cycleTrackingEnabled: boolean
@@ -234,12 +228,14 @@ export interface Settings {
   illnesses: Illness[]
 }
 
-/** Settings saved before schema v5. Before v4 they held a single illness
+/** Settings saved before schema v6. Before v4 they held a single illness
  * (then only used by the child view); before v5 the factor list could hold
- * 'cycle', a toggle that did nothing (cycle tracking is `cycleTrackingEnabled`).
+ * 'cycle', a toggle that did nothing (cycle tracking is `cycleTrackingEnabled`);
+ * before v6 they held a choice between two interface designs.
  * Only migration and backup import deal with them. */
 export interface LegacySettings extends Omit<Partial<Settings>, 'enabledFactors'> {
   childIllness?: Illness
+  design?: 'health' | 'classic'
   enabledFactors?: (FactorKey | 'cycle')[]
 }
 
@@ -247,7 +243,6 @@ export const DEFAULT_SETTINGS: Settings = {
   id: 1,
   enabledFactors: DEFAULT_ENABLED_FACTORS,
   theme: 'system',
-  design: 'health',
   reminderEnabled: false,
   reminderTime: '20:00',
   cycleTrackingEnabled: false,

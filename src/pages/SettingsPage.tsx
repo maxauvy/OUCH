@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
-import { ALL_FACTORS, type FactorKey, type DesignStyle, type ParentGender, type ThemePref } from '../db/types'
+import { ALL_FACTORS, type FactorKey, type ParentGender, type ThemePref } from '../db/types'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
@@ -28,11 +28,6 @@ export function SettingsPage() {
     { value: 'system', label: t.settings.themeAuto },
     { value: 'light', label: t.settings.themeLight },
     { value: 'dark', label: t.settings.themeDark },
-  ]
-
-  const DESIGN_OPTIONS: { value: DesignStyle; label: string }[] = [
-    { value: 'health', label: t.settings.designHealth },
-    { value: 'classic', label: t.settings.designClassic },
   ]
 
   function toggleFactor(key: FactorKey) {
@@ -231,26 +226,6 @@ export function SettingsPage() {
 
       <Card>
         <SectionTitle>{t.settings.appearanceTitle}</SectionTitle>
-        <p className="text-control font-medium">{t.settings.designTitle}</p>
-        <p className="text-caption mb-2" style={{ color: 'var(--color-ink-muted)' }}>
-          {t.settings.designHelper}
-        </p>
-        <div className="flex gap-2 mb-4" {...radioGroupProps(t.settings.designTitle)}>
-          {DESIGN_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              {...radioProps(settings.design === opt.value)}
-              onClick={() => updateSettings({ design: opt.value })}
-              className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
-              style={{
-                background: settings.design === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                color: settings.design === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
-              }}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
         <div className="flex gap-2" {...radioGroupProps(t.settings.themeTitle)}>
           {THEME_OPTIONS.map((opt) => (
             <button

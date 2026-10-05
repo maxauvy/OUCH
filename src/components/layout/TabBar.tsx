@@ -1,16 +1,7 @@
 import { IconCalendar, IconChartLine, IconHeartbeat, IconMoodKid, IconSettings, type Icon } from '@tabler/icons-react'
-import { useDesign } from '../../hooks/useDesign'
 import { useTranslation } from '../../i18n'
 
 export type Tab = 'today' | 'journal' | 'trends' | 'kids' | 'settings'
-
-const TAB_EMOJI: Record<Tab, string> = {
-  today: '☀️',
-  journal: '📅',
-  trends: '📈',
-  kids: '🧸',
-  settings: '⚙️',
-}
 
 const TAB_ICONS: Record<Tab, Icon> = {
   today: IconHeartbeat,
@@ -20,14 +11,8 @@ const TAB_ICONS: Record<Tab, Icon> = {
   settings: IconSettings,
 }
 
-// The classic bar is translucent: content scrolling under it can darken the
-// background enough to take plain muted ink under 4.5:1. A touch of ink keeps
-// inactive labels at 5.5:1 or more, still clearly lighter than the active one.
-const CLASSIC_INACTIVE = 'color-mix(in srgb, var(--color-ink-muted) 70%, var(--color-ink))'
-
 export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) => void }) {
   const t = useTranslation()
-  const health = useDesign() === 'health'
   const TABS: { id: Tab; label: string }[] = [
     { id: 'today', label: t.tabs.today },
     { id: 'journal', label: t.tabs.journal },
@@ -40,14 +25,12 @@ export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) =
       className="fixed bottom-0 inset-x-0 z-40"
       style={{
         borderTop: '1px solid var(--color-hairline)',
-        background: health ? 'var(--color-surface)' : 'color-mix(in srgb, var(--color-paper) 92%, transparent)',
-        backdropFilter: health ? undefined : 'blur(10px)',
+        background: 'var(--color-surface)',
       }}
     >
       <div className="max-w-[560px] mx-auto flex" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {TABS.map((tab) => {
           const isActive = active === tab.id
-          const activeColor = tab.id === 'kids' && !health ? 'var(--color-kid-accent-text)' : 'var(--color-brand)'
           const Icon = TAB_ICONS[tab.id]
           return (
             <button
@@ -55,21 +38,15 @@ export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) =
               onClick={() => onChange(tab.id)}
               aria-current={isActive ? 'page' : undefined}
               className="flex-1 flex flex-col items-center gap-0.5 py-2.5"
-              style={{ color: isActive ? activeColor : health ? 'var(--color-ink-muted)' : CLASSIC_INACTIVE }}
+              style={{ color: isActive ? 'var(--color-brand)' : 'var(--color-ink-muted)' }}
             >
-              {health ? (
-                <Icon size={22} stroke={isActive ? 2 : 1.6} aria-hidden />
-              ) : (
-                <span className="text-[19px]" style={{ opacity: isActive ? 1 : 0.55 }} aria-hidden>
-                  {TAB_EMOJI[tab.id]}
-                </span>
-              )}
+              <Icon size={22} stroke={isActive ? 2 : 1.6} aria-hidden />
               {/* Capped: five labels share the screen width, so they only grow
                   as far as the longest one ("Aujourd'hui") still fits — 13px on
                   a 360px phone, up to 16px on wider screens. iOS caps its own
                   tab bar labels the same way. */}
               <span
-                className={health && isActive ? 'font-semibold' : 'font-medium'}
+                className={isActive ? 'font-semibold' : 'font-medium'}
                 style={{ fontSize: 'min(var(--text-caption), max(13px, 3.5vw), 16px)' }}
               >
                 {tab.label}

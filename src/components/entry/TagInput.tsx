@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Chip } from '../ui/Chip'
-import { useDesign } from '../../hooks/useDesign'
 import { format, useTranslation } from '../../i18n'
 
 export function TagInput({
@@ -21,7 +20,6 @@ export function TagInput({
 }) {
   const t = useTranslation()
   const [draft, setDraft] = useState('')
-  const health = useDesign() === 'health'
 
   function commit(raw: string) {
     const v = raw.trim()
@@ -42,11 +40,7 @@ export function TagInput({
             onClick={() => onChange(values.filter((x) => x !== v))}
             aria-label={format(t.entryForm.removeTag, { tag: v })}
             className="rounded-[var(--radius-control)] pl-3.5 pr-2.5 py-2 text-control font-medium inline-flex items-center gap-1.5"
-            style={
-              health
-                ? { background: 'var(--color-brand-soft)', color: 'var(--color-brand)', boxShadow: 'inset 0 0 0 1px var(--color-brand)' }
-                : { background: 'var(--color-brand)', color: 'var(--color-on-brand)' }
-            }
+            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)', boxShadow: 'inset 0 0 0 1px var(--color-brand)' }}
           >
             {v}
             <span aria-hidden>×</span>

@@ -1,5 +1,4 @@
 import { useId } from 'react'
-import { useDesign } from '../../hooks/useDesign'
 
 interface SliderProps {
   label: string
@@ -33,9 +32,8 @@ export function Slider({
   format,
   bare = false,
 }: SliderProps) {
-  const health = useDesign() === 'health'
   const id = useId()
-  const trackHeight = health ? 6 : 10
+  const trackHeight = 6
   const displayValue = value ?? min
   const pct = ((displayValue - min) / (max - min)) * 100
 
@@ -46,31 +44,14 @@ export function Slider({
           <label htmlFor={id} className="font-medium text-body" style={{ color: 'var(--color-ink)' }}>
             {label}
           </label>
-          {health ? (
-            <span className="tabular-nums text-body font-bold" style={{ color: 'var(--color-ink)' }}>
-              {value === undefined ? '—' : format ? format(displayValue) : displayValue}
-              {value !== undefined && !format && (
-                <span className="text-caption font-medium" style={{ color: 'var(--color-ink-muted)' }}>
-                  {' '}/ {max}
-                </span>
-              )}
-            </span>
-          ) : (
-            <span
-              className="tabular-nums text-control font-semibold rounded-full px-2.5 py-0.5"
-              style={{
-                background: value === undefined ? 'transparent' : accent,
-                color:
-                  value === undefined
-                    ? 'var(--color-ink-muted)'
-                    : accent === 'var(--color-brand)'
-                      ? 'var(--color-on-brand)'
-                      : 'white',
-              }}
-            >
-              {value === undefined ? '—' : format ? format(displayValue) : displayValue}
-            </span>
-          )}
+          <span className="tabular-nums text-body font-bold" style={{ color: 'var(--color-ink)' }}>
+            {value === undefined ? '—' : format ? format(displayValue) : displayValue}
+            {value !== undefined && !format && (
+              <span className="text-caption font-medium" style={{ color: 'var(--color-ink-muted)' }}>
+                {' '}/ {max}
+              </span>
+            )}
+          </span>
         </div>
       )}
       {!bare && helper && (
@@ -83,7 +64,7 @@ export function Slider({
           className="rounded-full w-full"
           style={{
             height: trackHeight,
-            background: health ? 'var(--color-control-off)' : 'color-mix(in srgb, ' + accent + ' 18%, var(--color-hairline))',
+            background: 'var(--color-control-off)',
           }}
         >
           <div
@@ -91,7 +72,7 @@ export function Slider({
             style={{
               height: trackHeight,
               width: `${pct}%`,
-              background: value === undefined && health ? 'transparent' : accent,
+              background: value === undefined ? 'transparent' : accent,
               transition: 'width 120ms ease',
             }}
           />
@@ -118,7 +99,7 @@ export function Slider({
             left: `calc(${pct}% - 14px)`,
             transform: 'translateY(-50%)',
             background: 'var(--color-surface)',
-            border: `3px solid ${value === undefined && health ? 'var(--color-hairline)' : accent}`,
+            border: `3px solid ${value === undefined ? 'var(--color-hairline)' : accent}`,
             transition: 'left 120ms ease',
           }}
         />

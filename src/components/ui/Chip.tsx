@@ -1,5 +1,3 @@
-import { useDesign } from '../../hooks/useDesign'
-
 /** A toggle chip (aria-pressed). Pass `actionLabel` for a chip that performs
  * an action instead, like adding a suggestion: it is then announced as a
  * plain button with that name, not as a toggle that is "not pressed". */
@@ -14,18 +12,11 @@ export function Chip({
   onClick: () => void
   actionLabel?: string
 }) {
-  const design = useDesign()
-  const style =
-    design === 'health'
-      ? {
-          background: selected ? 'var(--color-brand-soft)' : 'var(--color-surface)',
-          color: selected ? 'var(--color-brand)' : 'var(--color-ink)',
-          boxShadow: `inset 0 0 0 1px ${selected ? 'var(--color-brand)' : 'var(--color-hairline)'}`,
-        }
-      : {
-          background: selected ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-          color: selected ? 'var(--color-on-brand)' : 'var(--color-brand)',
-        }
+  const style = {
+    background: selected ? 'var(--color-brand-soft)' : 'var(--color-surface)',
+    color: selected ? 'var(--color-brand)' : 'var(--color-ink)',
+    boxShadow: `inset 0 0 0 1px ${selected ? 'var(--color-brand)' : 'var(--color-hairline)'}`,
+  }
   return (
     <button
       type="button"
