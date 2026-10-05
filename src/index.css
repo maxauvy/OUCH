@@ -40,6 +40,9 @@
   /* Brand accent — clinical blue. */
   --color-brand: #0d5c8c;
   --color-brand-soft: #e3eef6;
+  /* Destructive actions: white on this is 6.6:1. */
+  --color-danger: #b3261e;
+  --color-on-danger: #ffffff;
 
   /* Pain-weather ordinal scale — light/warm (easy day) -> dark/cool (hard day)
      Lightness decreases monotonically so the scale reads even without color.
@@ -128,6 +131,8 @@
     --color-hairline: rgba(160, 185, 200, 0.16);
     --color-brand: #62aee0;
     --color-brand-soft: #173247;
+    --color-danger: #f28b82;
+    --color-on-danger: #2b0b09;
     --color-control-off: #5f6f7a;
     --color-on-brand: #0b1a24;
     --color-weather-1-text: #e3a73b;
@@ -167,6 +172,8 @@
   --color-hairline: rgba(160, 185, 200, 0.16);
   --color-brand: #62aee0;
   --color-brand-soft: #173247;
+  --color-danger: #f28b82;
+  --color-on-danger: #2b0b09;
   --color-control-off: #5f6f7a;
   --color-on-brand: #0b1a24;
   --color-weather-1-text: #e3a73b;

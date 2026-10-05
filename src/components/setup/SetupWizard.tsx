@@ -8,7 +8,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { canNotify, requestNotificationPermission } from '../../lib/reminder'
 import { radioGroupProps, radioProps } from '../../lib/a11y'
 import { formatIllnessList } from '../../lib/childView'
-import { format, LANGUAGES, useLanguage, useLocale, useTranslation } from '../../i18n'
+import { format, getTranslations, LANGUAGES, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { AboutCard } from '../about/AboutCard'
 import { Acronym } from '../about/Acronym'
 import { AppLogo } from '../ui/AppLogo'
@@ -29,7 +29,7 @@ type Step = 'welcome' | 'illness' | 'profile' | 'tracking' | 'medications' | 're
 
 const inputStyle = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 
-export function SetupWizard({ onDone }: { onDone: () => void }) {
+export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wiped?: boolean }) {
   const t = useTranslation()
   const settings = useSettings()
   const ids = useId()
@@ -103,6 +103,7 @@ export function SetupWizard({ onDone }: { onDone: () => void }) {
 
           {step === 'welcome' && (
             <>
+              {wiped && <WipedNotice />}
               <AppLogo size={72} className="self-center" />
               <div className="text-center">
                 {heading(t.welcome.title)}
@@ -241,6 +242,20 @@ function Hint({ children }: { children: ReactNode }) {
   return (
     <p className="text-caption px-1" style={{ color: 'var(--color-ink-muted)' }}>
       {children}
+    </p>
+  )
+}
+
+/** After the data was deleted. The language went with it, so the sentence is
+ * given in both until one is picked just above. */
+function WipedNotice() {
+  return (
+    <p role="status" className="rounded-[var(--radius-card)] px-4 py-3 text-body" style={{ background: 'var(--color-brand-soft)' }}>
+      {LANGUAGES.map((lang) => (
+        <span key={lang.code} lang={lang.code} className="block">
+          {getTranslations(lang.code).deleteData.wiped}
+        </span>
+      ))}
     </p>
   )
 }

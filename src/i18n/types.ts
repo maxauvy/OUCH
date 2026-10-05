@@ -571,6 +571,29 @@ export interface Translations {
     close: string
   }
 
+  deleteData: {
+    title: string
+    helper: string
+    button: string
+    dialogTitle: string
+    /** `{{days}}` days of journal, `{{meds}}` treatments */
+    willLose: string
+    irreversible: string
+    backupsKept: string
+    backupFirst: string
+    /** `{{word}}` is the word to type */
+    typeLabel: string
+    /** Typed to confirm; compared without regard to case */
+    word: string
+    confirm: string
+    deleting: string
+    cancel: string
+    close: string
+    error: string
+    /** Shown once at the next start, in both languages: the language is erased too */
+    wiped: string
+  }
+
   storage: {
     title: string
     protected: string

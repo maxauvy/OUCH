@@ -10,6 +10,7 @@ import { useSettings, useSettingsLoaded } from './hooks/useSettings'
 import { useTodayEntry } from './hooks/useEntries'
 import { updateSettings, todayISO } from './db'
 import { maybeShowReminder } from './lib/reminder'
+import { clearWipedNotice, wipedNotice } from './lib/wipe'
 import { requestStorageProtection } from './lib/storage'
 import { getTranslations, I18nProvider } from './i18n'
 import type { Language } from './i18n'
@@ -39,6 +40,11 @@ function AppShell() {
   const settingsLoaded = useSettingsLoaded()
   const todayEntry = useTodayEntry()
   useAppliedTheme(settings.theme)
+  // Set when the data was just deleted from Settings: said once at the start.
+  const [wiped] = useState(wipedNotice)
+  useEffect(() => {
+    if (wiped) clearWipedNotice()
+  }, [wiped])
 
   useEffect(() => {
     if (!settings.reminderEnabled) return
@@ -69,6 +75,7 @@ function AppShell() {
   if (!settings.onboardingDone) {
     return (
       <SetupWizard
+        wiped={wiped}
         onDone={() => {
           setTab('today')
           updateSettings({ onboardingDone: true })

@@ -761,6 +761,28 @@ const fr: Translations = {
     close: 'Fermer ce message',
   },
 
+  deleteData: {
+    title: 'Supprimer mes données',
+    helper:
+      'Efface de cet appareil ton journal, tes traitements et tes réglages. Il n’y a pas de copie ailleurs : c’est irréversible.',
+    button: 'Supprimer toutes mes données',
+    dialogTitle: 'Supprimer toutes tes données ?',
+    willLose:
+      'Seront effacés de cet appareil : {{days}} {{days:jour|jours}} de journal, {{meds}} {{meds:traitement|traitements}}, et tes réglages (prénom, langue, maladie déclarée…).',
+    irreversible: 'OUCH n’a pas de serveur : une fois supprimées, ces données ne peuvent pas être récupérées.',
+    backupsKept:
+      'Les sauvegardes que tu as déjà exportées ne sont pas supprimées. Elles restent là où tu les as enregistrées, et toute personne qui a le fichier et son mot de passe peut les lire : supprime-les toi-même si tu n’en veux plus.',
+    backupFirst: 'Faire d’abord une sauvegarde',
+    typeLabel: 'Pour confirmer, écris {{word}}',
+    word: 'SUPPRIMER',
+    confirm: 'Tout supprimer',
+    deleting: 'Suppression…',
+    cancel: 'Annuler',
+    close: 'Fermer',
+    error: 'La suppression a échoué. Ferme les autres onglets d’OUCH et réessaie.',
+    wiped: 'Tes données ont été supprimées de cet appareil.',
+  },
+
   storage: {
     title: 'Protection contre l’effacement',
     protected: 'Le navigateur s’est engagé à ne pas effacer tes données de lui-même. Elles sont tout de même supprimées si tu vides les données du site : garde des sauvegardes.',

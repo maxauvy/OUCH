@@ -8,6 +8,7 @@ import { Footer } from '../components/layout/Footer'
 import { AboutCard } from '../components/about/AboutCard'
 import { SourcesCard } from '../components/about/SourcesCard'
 import { BackupSection } from '../components/settings/BackupSection'
+import { DeleteDataCard } from '../components/settings/DeleteDataCard'
 import { MedicationsSection } from '../components/settings/MedicationsSection'
 import { IllnessPicker } from '../components/settings/IllnessPicker'
 import { canNotify, requestNotificationPermission } from '../lib/reminder'
@@ -287,6 +288,8 @@ export function SettingsPage() {
           {t.settings.privacyNote}
         </p>
       </Card>
+
+      <DeleteDataCard />
 
       <Footer />
     </div>
