@@ -22,19 +22,9 @@ import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimelin
 import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
 import { SYMPTOMS, type ReportData } from './reportData'
 import type { ReportFormat } from './reportFormat'
+import { REFERENCES } from '../../lib/references'
 import { buildSheets, findCut, rowsBlock, type Block, type Cut } from './pagination'
 
-// Cited by number in the method sections and key points. Kept in their
-// original language, as a bibliography would be.
-const REFERENCES = [
-  'Dworkin RH, Turk DC, Farrar JT, et al. Core outcome measures for chronic pain clinical trials: IMMPACT recommendations. Pain. 2005;113(1-2):9-19.',
-  'Farrar JT, Young JP Jr, LaMoreaux L, Werth JL, Poole RM. Clinical importance of changes in chronic pain intensity measured on an 11-point numerical pain rating scale. Pain. 2001;94(2):149-158.',
-  'Haute Autorité de santé. Douleur chronique : reconnaître le syndrome douloureux chronique, l’évaluer et orienter le patient. Recommandations professionnelles, décembre 2008.',
-  'Dworkin RH, Turk DC, Wyrwich KW, et al. Interpreting the clinical importance of treatment outcomes in chronic pain clinical trials: IMMPACT recommendations. J Pain. 2008;9(2):105-121.',
-  'Boonstra AM, Stewart RE, Köke AJA, et al. Cut-off points for mild, moderate, and severe pain on the numeric rating scale for pain in patients with chronic musculoskeletal pain. Front Psychol. 2016;7:1466.',
-  'Broderick JE, Schwartz JE, Vikingstad G, et al. The accuracy of pain and fatigue items across different reporting periods. Pain. 2008;139(1):146-157.',
-  'Dixon WG, Beukenhorst AL, Yimer BB, et al. How the weather affects the pain of citizen scientists using a smartphone app. NPJ Digit Med. 2019;2:105.',
-]
 
 /** The dashboard chart's viewBox width: its card's inner width in CSS pixels
  * (two thirds of the 182 mm text width, less the gap and padding), so the
@@ -1160,7 +1150,7 @@ function References({ count, title }: { count: number; title: string }) {
       <H level={3}>{title}</H>
       <ol className="r-refs">
       {REFERENCES.slice(0, count).map((r) => (
-          <li key={r}>{r}</li>
+          <li key={r.citation}>{r.citation}</li>
         ))}
       </ol>
     </>

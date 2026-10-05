@@ -71,6 +71,8 @@ export interface Translations {
     checkNoReminder: string
     reportTitle: string
     reportBody: string
+    sourcesTitle: string
+    sourcesBody: string
     backupTitle: string
     backupBody: string
     /** Settings: button that reopens the setup */
@@ -84,6 +86,17 @@ export interface Translations {
     intro: string
     points: Record<'track' | 'share' | 'kids' | 'private', { title: string; body: string }>
     note: string
+  }
+
+  sources: {
+    title: string
+    toggle: string
+    intro: string
+    inOuch: string
+    pubmed: string
+    note: string
+    /** One per entry of REFERENCES, in the same order. */
+    items: { summary: string; usage: string }[]
   }
 
   today: {
@@ -473,7 +486,7 @@ export interface Translations {
     colStrength: string
     strengths: [string, string, string, string]
     factorLabels: Record<'sleepQuality' | 'sleepHours' | 'stress' | 'activityPrev' | 'positiveActions' | 'pressure' | 'fatigue', string>
-    factorNotes: Record<'positiveActions' | 'pressure' | 'fatigue', string>
+    factorNotes: Record<'sleepQuality' | 'sleepHours' | 'activityPrev' | 'positiveActions' | 'pressure' | 'fatigue', string>
     contexts: string
     yes: string
     otherwise: string

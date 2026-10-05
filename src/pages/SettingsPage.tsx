@@ -6,6 +6,7 @@ import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
 import { AboutCard } from '../components/about/AboutCard'
+import { SourcesCard } from '../components/about/SourcesCard'
 import { BackupSection } from '../components/settings/BackupSection'
 import { MedicationsSection } from '../components/settings/MedicationsSection'
 import { IllnessPicker } from '../components/settings/IllnessPicker'
@@ -264,6 +265,8 @@ export function SettingsPage() {
           {t.setup.rerunButton}
         </button>
       </Card>
+
+      <SourcesCard />
 
       <Card>
         <p className="text-caption leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>

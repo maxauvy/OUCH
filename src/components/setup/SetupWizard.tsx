@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
-import { IconCheck } from '@tabler/icons-react'
+import { IconCheck, IconDeviceFloppy, IconFileText, IconMicroscope, type Icon } from '@tabler/icons-react'
 import { db, updateSettings } from '../../db'
 import { ALL_FACTORS, type ParentGender } from '../../db/types'
 import { useSettings } from '../../hooks/useSettings'
@@ -426,15 +426,35 @@ function DoneStep({ heading }: { heading: ReactNode }) {
         </ul>
       </Card>
       <Card>
-        <p className="text-control font-medium mb-1">{t.setup.reportTitle}</p>
-        <p className="text-caption leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
-          {t.setup.reportBody}
-        </p>
-        <p className="text-control font-medium mt-4 mb-1">{t.setup.backupTitle}</p>
-        <p className="text-caption leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
-          {t.setup.backupBody}
-        </p>
+        <div className="flex flex-col gap-4">
+          <InfoRow icon={IconFileText} title={t.setup.reportTitle} body={t.setup.reportBody} />
+          <InfoRow icon={IconDeviceFloppy} title={t.setup.backupTitle} body={t.setup.backupBody} />
+        </div>
+      </Card>
+      <Card>
+        <InfoRow icon={IconMicroscope} title={t.setup.sourcesTitle} body={t.setup.sourcesBody} />
       </Card>
     </>
+  )
+}
+
+/** A titled note with a small icon in a soft circle, as on the About card. */
+function InfoRow({ icon: IconComponent, title, body }: { icon: Icon; title: string; body: string }) {
+  return (
+    <div className="flex gap-3">
+      <span
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+        style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+        aria-hidden="true"
+      >
+        <IconComponent size={20} stroke={1.75} />
+      </span>
+      <div>
+        <p className="text-control font-medium mb-1">{title}</p>
+        <p className="text-caption leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
+          {body}
+        </p>
+      </div>
+    </div>
   )
 }

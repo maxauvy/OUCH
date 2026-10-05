@@ -63,6 +63,9 @@ const en: Translations = {
     checkNoMedications: 'No medication described yet',
     checkReminder: 'Reminder every day at {{time}}',
     checkNoReminder: 'No daily reminder',
+    sourcesTitle: 'For the curious',
+    sourcesBody:
+      'The report’s benchmarks rest on published studies. You can find them, with a summary of their conclusions, in Settings → Scientific sources.',
     reportTitle: 'The report for your doctor',
     reportBody:
       'As the days go by, you can create it from the Trends tab: it sums up the period since your last appointment. A few weeks of entries make it meaningful.',
@@ -97,6 +100,109 @@ const en: Translations = {
       },
     },
     note: "No pressure: on hard days, a single entry is enough (your pain). OUCH doesn't replace medical advice, and trends are leads to explore, not proof.",
+  },
+
+  sources: {
+    title: "Scientific sources",
+    toggle: "Show the {{n}} references",
+    intro:
+      "The benchmarks OUCH uses rest on this published work. Each summary gives the study's main conclusion, taken from its official abstract (PubMed). These studies look at groups of patients: they establish nothing certain about you.",
+    inOuch: "In OUCH:",
+    pubmed: "View on PubMed",
+    note:
+      "The numbers are those of the footnotes in the report for your doctor. OUCH does not replace medical advice.",
+    items: [
+      {
+        summary:
+          "Expert consensus (IMMPACT) on what to measure in chronic pain clinical trials: pain intensity on a 0 to 10 numeric rating scale is one of the core outcomes, alongside functioning, mood and the patient's overall impression of improvement.",
+        usage:
+          "Pain is rated daily from 0 to 10, as in clinical trials, so a clinician can read your numbers.",
+      },
+      {
+        summary:
+          "Across 2,724 patients in 10 clinical trials, a drop of about 2 points, or about 30%, on the 0-10 scale matches, on average, an improvement the patient considers important. A larger drop is needed when baseline pain is high.",
+        usage:
+          "The report states whether the change in your pain reaches this 30% threshold. It is a group average: it does not tell what matters to you.",
+      },
+      {
+        summary:
+          "French guideline defining chronic pain syndrome (persistent or recurrent pain with an impact on daily functioning) and how to recognise it, assess it and refer the patient.",
+        usage:
+          "French reference cited in the report for the assessment of chronic pain.",
+      },
+      {
+        summary:
+          "Consensus of 40 participants (universities, agencies, patients, industry) on interpreting trial results: at least two methods are advised, and provisional benchmarks are proposed (about a 30% drop: moderate; about 50%: substantial).",
+        usage:
+          "The report calls a 30% drop moderately important and a 50% drop substantial. These benchmarks are designed for groups of patients, not for one individual.",
+      },
+      {
+        summary:
+          "Across 2,854 patients with chronic pain, cut-offs depend on the impact on daily life: on average mild ≤ 5, moderate 6-7, severe ≥ 8; in those who catastrophize little, mild ≤ 3, moderate 4-6, severe ≥ 7.",
+        usage:
+          "OUCH uses mild ≤ 3, moderate 4–6, severe ≥ 7, conventional cut-offs that match this second case. They are guides, not a diagnosis.",
+      },
+      {
+        summary:
+          "In 83 patients followed with an electronic diary, recalled pain is inflated compared with ratings made during the day. Recall of the previous day stays accurate, but memory degrades beyond a few days.",
+        usage:
+          "OUCH asks you to rate the day just past, day by day, rather than summarise the week from memory.",
+      },
+      {
+        summary:
+          "“Cloudy with a Chance of Pain”: 2,658 patients rated their pain daily for 15 months. Links exist with humidity, air pressure and wind, but they are modest.",
+        usage:
+          "OUCH records the day's weather so you can see whether it matters for you, without presenting the link as established.",
+      },
+      {
+        summary:
+          "In 825 patients, a drop of one point (15%) is the smallest perceptible difference; a drop of 2 points (33%) matches “much better”. A larger drop is needed when baseline pain is high.",
+        usage:
+          "Confirms the 2-point or 30% benchmark used by the report.",
+      },
+      {
+        summary:
+          "Expert consensus for low back pain: a 2-point change on the 0-10 scale is a minimal important change, and a 30% improvement is a useful threshold whatever the scale.",
+        usage:
+          "Confirms, from another route, the 2-point or 30% benchmark.",
+      },
+      {
+        summary:
+          "Review of measurement tools for adult pain, including the numeric rating scale and the visual analogue scale, and of their measurement qualities.",
+        usage:
+          "One of the sources behind using the 0-10 numeric scale to rate pain.",
+      },
+      {
+        summary:
+          "Review of 43 studies: two in three find a link between weather and pain, but in varying directions, often in small groups followed for under a month. The authors call for larger, longer studies.",
+        usage:
+          "This is why the link with air pressure is labelled “conflicting literature” in the report.",
+      },
+      {
+        summary:
+          "Review of 9 studies in rheumatoid arthritis: on average the link between pain and temperature, humidity or pressure is close to zero, but fewer than one patient in four reacts individually.",
+        usage:
+          "Reaction to weather varies from person to person: OUCH looks at your own data rather than the average.",
+      },
+      {
+        summary:
+          "In 993 patients, temperature, humidity, pressure and rain do not raise the risk of acute low back pain. Strong wind raises it slightly, without clinical importance.",
+        usage:
+          "Another reason to present the weather-pain link only as something to discuss.",
+      },
+      {
+        summary:
+          "Review: sleep disturbance predicts the onset and worsening of chronic pain, and predicts pain more strongly than pain predicts sleep. The link nevertheless runs both ways.",
+        usage:
+          "The report relates pain to the previous night's sleep, noting that the link runs both ways.",
+      },
+      {
+        summary:
+          "Review of 41 studies: avoiding activity and pushing through to severe pain are both associated with more pain and disability. The direction of causation is not established.",
+        usage:
+          "The report compares your pain the day after a very active day, noting that both too much and too little activity are linked to more pain.",
+      },
+    ],
   },
 
   today: {
@@ -487,9 +593,9 @@ const en: Translations = {
     notesHintAll: 'all, over the period covered',
     method: 'Method',
     methodGp:
-      'Pain, fatigue, sleep and mood are rated daily on a 0–10 numeric rating scale. The numeric rating scale is the recommended measure of pain intensity¹. A change of about 2 points or 30% is usually considered clinically important¹˒². The other scales (fatigue, sleep, mood…) are not validated instruments.',
+      'Pain, fatigue, sleep and mood are rated daily on a 0–10 numeric rating scale. The numeric rating scale is the recommended measure of pain intensity¹. A change of about 2 points or 30% is usually considered clinically important¹˒². Similar thresholds are supported by work on chronic musculoskeletal and low back pain⁸˒⁹. The other scales (fatigue, sleep, mood…) are not validated instruments.',
     methodCollect:
-      'Collection. Daily diary (24-hour recall, which limits the recall bias of longer reporting periods⁶). Pain is rated on a 0–10 numeric rating scale, the measure recommended by IMMPACT¹ and the French HAS³. The fatigue, sleep, brain fog, mood, stress and activity scales are simple numeric scales, not validated.',
+      'Collection. Daily diary (24-hour recall, which limits the recall bias of longer reporting periods⁶). Pain is rated on a 0–10 numeric rating scale, the measure recommended by IMMPACT¹ and the French HAS³, and widely validated¹⁰. The fatigue, sleep, brain fog, mood, stress and activity scales are simple numeric scales, not validated.',
     methodCalc:
       'Calculations. 7-calendar-day rolling mean (at least 4 logged days). Relative change = (period mean − previous mean) / previous mean; a 30% decrease is considered moderately important, 50% substantial²˒⁴. Days not logged are left out, never imputed. Spearman correlations computed over both periods.',
     methodLimits:
@@ -505,7 +611,7 @@ const en: Translations = {
     colMinMax: 'Min–max',
     colFlares: 'Flares',
     categoriesNote:
-      'Mild ≤ 3, moderate 4–6, severe ≥ 7: conventional cut-offs, debated in the literature⁵. Flare: at least 2 consecutive days ≥ 7/10.',
+      'Mild ≤ 3, moderate 4–6, severe ≥ 7: conventional cut-offs, debated in the literature⁵ (they depend notably on functional interference and catastrophizing). Flare: at least 2 consecutive days ≥ 7/10, a definition chosen here, not a consensus one.',
     evolution: 'Over time',
     timelineScheduled: 'Ongoing treatment (white: missed dose)',
     timelineAsNeeded: 'As-needed intake (height: doses relative to the maximum)',
@@ -533,8 +639,11 @@ const en: Translations = {
       fatigue: 'Fatigue that day',
     },
     factorNotes: {
+      sleepQuality: 'the link goes both ways, more so sleep → pain¹⁴',
+      sleepHours: 'the link goes both ways, more so sleep → pain¹⁴',
+      activityPrev: 'both too much and too little activity are linked to more pain¹⁵',
       positiveActions: 'the link may go both ways',
-      pressure: 'conflicting literature⁷',
+      pressure: 'conflicting literature⁷˒¹¹˒¹²˒¹³',
       fatigue: 'co-symptom, not a factor',
     },
     contexts: 'Median pain by context',
