@@ -289,7 +289,7 @@ for (let i = 0; i < DAYS; i++) {
 }
 
 // A finished setup, so the demo opens on the app itself with the report and
-// the Kids tab filled in. Language, theme and design are left out: they stay
+// the Kids tab filled in. Language and theme are left out: they stay
 // whatever the device already uses.
 const settings = {
   onboardingDone: true,
