@@ -124,7 +124,7 @@ const fr: Translations = {
         summary:
           "Sur 2 724 patients de 10 essais cliniques, une baisse d’environ 2 points, ou d’environ 30 %, sur l’échelle 0-10 correspond en moyenne à une amélioration jugée importante par le patient. Il faut une baisse plus forte quand la douleur de départ est élevée.",
         usage:
-          "Le rapport indique si la variation de ta douleur atteint ce seuil de 30 %. C’est une moyenne de groupe : elle ne dit pas ce qui compte pour toi.",
+          "Le rapport indique si la variation de ta douleur atteint ce seuil de 30 %. Le même repère (2 points ou 30 %) sert à repérer les poussées, comme une hausse : c’est une extrapolation, établie pour des baisses. C’est une moyenne de groupe : elle ne dit pas ce qui compte pour toi.",
       },
       {
         summary:
@@ -514,9 +514,27 @@ const fr: Translations = {
     painOnly: 'Douleur moyenne {{mean}}/10 (médiane {{median}}). Aucune donnée sur la période précédente pour comparer.',
     severeDays: '{{n}} {{n:jour|jours}} à douleur sévère (≥ 7/10), soit {{share}} des jours renseignés (précédemment {{prev}}).',
     severeDaysNoPrev: '{{n}} {{n:jour|jours}} à douleur sévère (≥ 7/10), soit {{share}} des jours renseignés.',
-    flaresNone: 'Aucun épisode de poussée (au moins 2 jours consécutifs ≥ 7/10).',
-    flares: '{{n}} {{n:épisode|épisodes}} de poussée (au moins 2 jours consécutifs ≥ 7/10) : {{list}}.',
+    flaresNone: 'Aucune poussée repérée (au moins 3 jours nettement au-dessus du niveau habituel).',
+    flares: '{{n}} {{n:poussée|poussées}} sur la période, soit {{days}} {{days:jour|jours}} ({{share}} de la période){{prev}}.',
+    flaresPrev: ', contre {{n}} ({{days}} {{days:jour|jours}}) sur la période précédente',
+    flareLongest: 'La plus longue : {{range}}, pic à {{peak}}/10 pour un niveau habituel de {{base}}.',
+    flareOngoing: 'Une poussée est en cours à la date du rapport.',
     flareRange: 'du {{start}} au {{end}}',
+    flaresNotAssessable: 'Poussées : trop peu de jours renseignés pour établir le niveau habituel et les repérer.',
+    flaresTitle: 'Poussées',
+    flaresTableNote:
+      'Habituel : médiane des 28 jours précédents, hors poussées. Retour : jours entre le dernier jour de poussée et le premier jour revenu au niveau habituel. Prises de secours : jours avec au moins une prise au besoin, sur les jours renseignés de l’épisode.',
+    colFlareDates: 'Dates',
+    colFlareLength: 'Durée',
+    colFlarePeak: 'Pic',
+    colFlareUsual: 'Habituel',
+    colFlareBack: 'Retour',
+    colFlareRescue: 'Prises de secours',
+    flareDays: '{{n}} j',
+    flareBackOngoing: 'en cours',
+    flareBackUnknown: 'inconnu',
+    flareRescue: '{{n}} j sur {{total}}',
+    chartHintFlares: ' · bandes : poussées',
     doseChange: '{{name}} : {{from}} → {{to}} le {{date}}.',
     medStarted: '{{name}} commencé le {{date}}.',
     medStopped: '{{name}} arrêté le {{date}}{{reason}}.',
@@ -599,7 +617,7 @@ const fr: Translations = {
     notesHintAll: 'toutes, sur la période analysée',
     method: 'Méthode',
     methodGp:
-      'Douleur, fatigue, sommeil et humeur sont notés chaque jour sur une échelle numérique de 0 à 10. L’échelle numérique est la mesure de l’intensité douloureuse recommandée¹. Une variation d’environ 2 points ou de 30 % est habituellement considérée comme cliniquement pertinente¹˒². Ces seuils sont étayés aussi par des travaux sur la douleur chronique musculosquelettique et lombaire⁸˒⁹. Les autres échelles (fatigue, sommeil, humeur…) ne sont pas des instruments validés.',
+      'Douleur, fatigue, sommeil et humeur sont notés chaque jour sur une échelle numérique de 0 à 10. L’échelle numérique est la mesure de l’intensité douloureuse recommandée¹. Une variation d’environ 2 points ou de 30 % est habituellement considérée comme cliniquement pertinente¹˒². Ces seuils sont étayés aussi par des travaux sur la douleur chronique musculosquelettique et lombaire⁸˒⁹. Les autres échelles (fatigue, sommeil, humeur…) ne sont pas des instruments validés. Poussée : au moins 3 jours consécutifs où la douleur dépasse d’au moins 2 points ou 30 % son niveau habituel² (définition retenue ici, non consensuelle).',
     methodCollect:
       'Recueil. Journal quotidien (rappel sur 24 h, qui limite le biais de mémoire des rappels plus longs⁶). La douleur est notée sur une échelle numérique de 0 à 10, mesure recommandée par IMMPACT¹ et la HAS³, et largement validée¹⁰. Les échelles de fatigue, sommeil, brouillard mental, humeur, stress et activité sont des échelles numériques simples, non validées.',
     methodCalc:
@@ -610,9 +628,9 @@ const fr: Translations = {
     referenceUsesLabel: "Usage dans OUCH :",
     referenceUses: [
       "Échelle numérique 0-10 pour noter l’intensité de la douleur.",
-      "Variation d’environ 2 points ou 30 % retenue comme cliniquement pertinente.",
+      "Variation d’environ 2 points ou 30 % retenue comme cliniquement pertinente, et comme hausse définissant une poussée (extrapolation).",
       "Cadre de référence français pour l’évaluation de la douleur chronique.",
-      "Baisse de 30 % qualifiée de modérément pertinente, de 50 % d’importante.",
+      "Baisse de 30 % qualifiée de modérément pertinente, de 50 % d’importante ; repère aussi pour la hausse d’une poussée (extrapolation).",
       "Catégories légère ≤ 3, modérée 4–6, sévère ≥ 7 : seuils conventionnels, indicatifs, variables selon le retentissement fonctionnel.",
       "Journal quotidien avec rappel sur 24 h, pour limiter le biais de mémoire.",
       "Météo du jour enregistrée lorsqu’elle est renseignée ; son lien avec la douleur n’est présenté que comme une piste.",
@@ -635,7 +653,7 @@ const fr: Translations = {
     colMinMax: 'Min–max',
     colFlares: 'Poussées',
     categoriesNote:
-      'Catégories légère ≤ 3, modérée 4–6, sévère ≥ 7 : seuils conventionnels, discutés dans la littérature⁵ (ils dépendent notamment du retentissement fonctionnel et du catastrophisme). Poussée : au moins 2 jours consécutifs ≥ 7/10, définition retenue ici, non issue d’un consensus.',
+      'Catégories légère ≤ 3, modérée 4–6, sévère ≥ 7 : seuils conventionnels, discutés dans la littérature⁵ (ils dépendent notamment du retentissement fonctionnel et du catastrophisme). Poussée : au moins 3 jours consécutifs où la douleur dépasse le niveau habituel (médiane des 28 jours précédents, hors poussées) d’au moins 2 points ou 30 %, et atteint au moins 4/10 ; elle se termine après 2 jours de retour à ce niveau. Ces seuils reprennent les écarts cliniquement pertinents²˒⁴, établis pour l’amélioration sous traitement : les appliquer à une aggravation est une extrapolation, et il n’existe pas de définition consensuelle de la poussée.',
     evolution: 'Évolution',
     timelineScheduled: 'Traitement de fond (blanc : prise oubliée)',
     timelineAsNeeded: 'Prise au besoin (hauteur : nombre de prises rapporté au maximum)',

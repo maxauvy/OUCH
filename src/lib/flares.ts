@@ -167,6 +167,17 @@ export function detectFlares(entries: DailyEntry[], options: Partial<FlareOption
   return episodes
 }
 
+/** Whether the entries can show a flare at all: some day must have enough
+ * logged days before it to tell what is usual. Without this, "no flare" and
+ * "too few entries to say" would read the same. */
+export function canDetectFlares(entries: DailyEntry[], options: Partial<FlareOptions> = {}): boolean {
+  const o = { ...DEFAULT_FLARE_OPTIONS, ...options }
+  return entries.some((e) => {
+    const from = shiftISO(e.date, -o.baselineDays)
+    return entries.filter((x) => x.date >= from && x.date < e.date).length >= o.minBaselineDays
+  })
+}
+
 /** Calendar days of [from, to] (inclusive) that fall inside a flare. */
 export function flareDayCount(episodes: FlareEpisode[], from: string, to: string): number {
   return episodes.reduce((sum, ep) => {

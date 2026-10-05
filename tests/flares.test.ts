@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { DailyEntry } from '../src/db/types.ts'
-import { detectFlares, flareDayCount, flareThreshold } from '../src/lib/flares.ts'
+import { canDetectFlares, detectFlares, flareDayCount, flareThreshold } from '../src/lib/flares.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
@@ -120,4 +120,11 @@ test('flare days are counted inside a period, clipped at its edges', () => {
   assert.equal(flareDayCount(eps, day(0), day(30)), 6)
   assert.equal(flareDayCount(eps, day(15), day(19)), 2)
   assert.equal(flareDayCount(eps, day(0), day(10)), 0)
+})
+
+test('detection is possible once a day has enough logged days before it', () => {
+  assert.equal(canDetectFlares(series([])), true)
+  assert.equal(canDetectFlares(series([]).slice(0, 10)), false)
+  assert.equal(canDetectFlares(series([]).slice(0, 11)), true)
+  assert.equal(canDetectFlares([]), false)
 })

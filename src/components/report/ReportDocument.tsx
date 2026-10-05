@@ -7,7 +7,6 @@ import {
   association,
   compareContext,
   daysWithRescueMedication,
-  flares,
   meanOf,
   medicationReports,
   strengthIndex,
@@ -18,6 +17,7 @@ import {
   type PainStats,
   type WeekRow,
 } from '../../lib/report'
+import type { FlareEpisode } from '../../lib/flares'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
 import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
 import { SYMPTOMS, type ReportData } from './reportData'
@@ -132,8 +132,9 @@ function gpPages(d: ReportData): Block[][] {
           <H level={2}>{f.t.painChart}</H>
           <p className="r-small" style={{ marginTop: -4 }}>
             {f.t.chartHint}
+            {chartFlares(d).length > 0 && f.t.chartHintFlares}
           </p>
-          <PainChart entries={d.all} p={d.p} f={f} width={DASH_CHART_WIDTH} height={250} summary={painSummary(d)} />
+          <PainChart entries={d.all} p={d.p} f={f} width={DASH_CHART_WIDTH} height={250} summary={painSummary(d)} flares={chartFlares(d)} />
         </div>
         <GpFigures d={d} />
         <DayMix d={d} />
@@ -229,11 +230,26 @@ function painClinicPages(d: ReportData): Block[][] {
     [
       <>
         <H level={2}>
-          {f.t.evolution} <span className="r-hint">{f.t.chartHint}</span>
+          {f.t.evolution}{' '}
+          <span className="r-hint">
+            {f.t.chartHint}
+            {chartFlares(d).length > 0 && f.t.chartHintFlares}
+          </span>
         </H>
         <H level={3}>{f.t.painChart}</H>
-        <PainChart entries={d.all} p={p} f={f} height={170} summary={painSummary(d)} />
+        <PainChart entries={d.all} p={p} f={f} height={170} summary={painSummary(d)} flares={chartFlares(d)} />
       </>,
+      d.flares.current.length > 0 &&
+        rowsBlock(d.flares.current.length, (from, to, continued) => (
+          <>
+            <H level={3}>
+              {f.t.flaresTitle}
+              <Continued f={f} on={continued} />
+            </H>
+            <FlaresTable d={d} from={from} to={to} />
+            {to === d.flares.current.length && <p className="r-small">{f.t.flaresTableNote}</p>}
+          </>
+        )),
       d.meds.length > 0 ? (
         <>
           <H level={3}>{f.t.treatments}</H>
@@ -419,6 +435,25 @@ function Header({ d }: { d: ReportData }) {
   )
 }
 
+/** What the flare detection found in the reported period, in one or two sentences. */
+function flareSentence(d: ReportData): string {
+  const { f, p, flares } = d
+  if (!flares.detectable) return f.t.flaresNotAssessable
+  if (!flares.current.length) return f.t.flaresNone
+  const longest = flares.current.reduce((a, b) => (b.days > a.days ? b : a))
+  const prev = d.painPrev ? f.format(f.t.flaresPrev, { n: flares.previous.length, days: flares.previousDays }) : ''
+  const sentences = [
+    f.format(f.t.flares, { n: flares.current.length, days: flares.currentDays, share: f.pct(flares.currentDays / p.periodDays), prev }),
+    f.format(f.t.flareLongest, {
+      range: f.format(f.t.flareRange, { start: f.dayMonth(longest.start), end: f.dayMonth(longest.end) }),
+      peak: longest.peak,
+      base: f.nfx(longest.baseline),
+    }),
+  ]
+  if (flares.current.some((e) => e.ongoing)) sentences.push(f.t.flareOngoing)
+  return sentences.join(' ')
+}
+
 /** The key points, one sentence each. */
 function keyPointItems(d: ReportData): string[] {
   const { f, pain, painPrev, p } = d
@@ -440,14 +475,7 @@ function keyPointItems(d: ReportData): string[] {
   const severe = painPrev
     ? f.format(f.t.severeDays, { n: severeN, share: f.pct(pain.severe), prev: f.pct(painPrev.severe) })
     : f.format(f.t.severeDaysNoPrev, { n: severeN, share: f.pct(pain.severe) })
-  const flareList = flares(d.current)
-  const flareText = flareList.length
-    ? f.format(f.t.flares, {
-        n: flareList.length,
-        list: flareList.map((r) => f.format(f.t.flareRange, { start: f.dayMonth(r.start), end: f.dayMonth(r.end) })).join(', '),
-      })
-    : f.t.flaresNone
-  items.push(`${severe} ${flareText}`)
+  items.push(severe, flareSentence(d))
 
   // Treatment events inside the reported period, then what was reported about them.
   for (const m of d.meds) {
@@ -670,9 +698,9 @@ function DayMix({ d }: { d: ReportData }) {
 
 function PainStatsTable({ d }: { d: ReportData }) {
   const { f } = d
-  const rows: [string, PainStats | null, DailyEntry[]][] = [
-    [f.t.previousPeriod, d.painPrev, d.previous],
-    [f.format(f.t.sinceConsultation, { date: f.dayMonth(d.p.start) }), d.pain, d.current],
+  const rows: [string, PainStats | null, number | null][] = [
+    [f.t.previousPeriod, d.painPrev, d.flares.detectable ? d.flares.previous.length : null],
+    [f.format(f.t.sinceConsultation, { date: f.dayMonth(d.p.start) }), d.pain, d.flares.detectable ? d.flares.current.length : null],
   ]
   return (
     <table style={{ marginTop: 10 }}>
@@ -691,7 +719,7 @@ function PainStatsTable({ d }: { d: ReportData }) {
         </tr>
       </thead>
       <tbody>
-        {rows.map(([label, s, entries]) => (
+        {rows.map(([label, s, flareCount]) => (
           <tr key={label}>
             <td>{label}</td>
             {s ? (
@@ -708,7 +736,7 @@ function PainStatsTable({ d }: { d: ReportData }) {
                 <td className="r">{f.pct(s.mild)}</td>
                 <td className="r">{f.pct(s.moderate)}</td>
                 <td className="r">{f.pct(s.severe)}</td>
-                <td className="r">{flares(entries).length}</td>
+                <td className="r">{flareCount ?? '—'}</td>
               </>
             ) : (
               <td className="r" colSpan={7}>
@@ -855,6 +883,48 @@ function TreatmentsTable({ d, detailed, from, to }: { d: ReportData; detailed: b
         </div>
       )}
     </>
+  )
+}
+
+/** Episodes drawn on the pain chart, previous period included. */
+function chartFlares(d: ReportData): FlareEpisode[] {
+  return [...d.flares.previous, ...d.flares.current]
+}
+
+function FlaresTable({ d, from, to }: { d: ReportData; from: number; to: number }) {
+  const { f } = d
+  return (
+    <table className="r-flares">
+      <thead>
+        <tr>
+          <th>{f.t.colFlareDates}</th>
+          <th className="r">{f.t.colFlareLength}</th>
+          <th className="r">{f.t.colFlarePeak}</th>
+          <th className="r">{f.t.colFlareUsual}</th>
+          <th className="r">{f.t.colFlareBack}</th>
+          <th className="r">{f.t.colFlareRescue}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {d.flares.current.slice(from, to).map((e) => {
+          const logged = d.all.filter((x) => x.date >= e.start && x.date <= e.end)
+          return (
+            <tr key={e.start} data-row>
+              <td className="num">{f.format(f.t.flareRange, { start: f.dayMonth(e.start), end: f.dayMonth(e.end) })}</td>
+              <td className="r">{f.format(f.t.flareDays, { n: e.days })}</td>
+              <td className="r">{e.peak}/10</td>
+              <td className="r">{f.nfx(e.baseline)}</td>
+              <td className="r">
+                {e.ongoing ? f.t.flareBackOngoing : e.recoveryDays === null ? f.t.flareBackUnknown : f.format(f.t.flareDays, { n: e.recoveryDays })}
+              </td>
+              <td className="r">
+                {d.medications.length ? f.format(f.t.flareRescue, { n: daysWithRescueMedication(logged, d.medications), total: logged.length }) : '—'}
+              </td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
   )
 }
 

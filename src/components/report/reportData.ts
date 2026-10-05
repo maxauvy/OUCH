@@ -1,6 +1,8 @@
 import type { DailyEntry, Illness, Medication } from '../../db/types'
 import type { Language } from '../../i18n'
+import { canDetectFlares, detectFlares, flareDayCount, type FlareEpisode } from '../../lib/flares'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
+import { shiftISO } from '../../lib/medications'
 import { reportFormat, type ReportFormat } from './reportFormat'
 
 export type ReportVariant = 'gp' | 'painClinic'
@@ -44,11 +46,26 @@ export interface ReportData {
   painPrev: PainStats | null
   meds: MedicationReport[]
   medications: Medication[]
+  flares: FlareSummary
+}
+
+/** Flares found in the whole history, since the usual level before one
+ * needs entries from before the period it falls in. An episode belongs to
+ * the period it starts in; its days are counted where they fall. */
+export interface FlareSummary {
+  /** False when there are too few entries to tell what is usual */
+  detectable: boolean
+  current: FlareEpisode[]
+  previous: FlareEpisode[]
+  currentDays: number
+  previousDays: number
 }
 
 export function buildReportData(entries: DailyEntry[], medications: Medication[], options: ReportOptions): ReportData {
   const p = reportPeriods(options.consultation, options.end)
   const { current, previous } = splitEntries(entries, p)
+  const episodes = detectFlares(entries, { asOf: options.end })
+  const startingIn = (from: string, to: string) => episodes.filter((e) => e.start >= from && e.start <= to)
   return {
     options,
     f: reportFormat(options.language),
@@ -60,6 +77,13 @@ export function buildReportData(entries: DailyEntry[], medications: Medication[]
     painPrev: painStats(previous),
     meds: medicationReports(current, medications, p),
     medications,
+    flares: {
+      detectable: canDetectFlares(entries),
+      current: startingIn(p.start, p.end),
+      previous: startingIn(p.prevStart, shiftISO(p.start, -1)),
+      currentDays: flareDayCount(episodes, p.start, p.end),
+      previousDays: flareDayCount(episodes, p.prevStart, shiftISO(p.start, -1)),
+    },
   }
 }
 
