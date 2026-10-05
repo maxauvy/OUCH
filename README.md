@@ -36,7 +36,7 @@ Tendances affiche la courbe de douleur sur 7, 30 ou 90 jours, ou depuis le débu
 
 Depuis Tendances, on génère un rapport à imprimer ou à enregistrer en PDF. Il couvre la période depuis la dernière consultation et la compare à la même durée juste avant. Il existe en deux versions : une synthèse de 2 pages pour le médecin traitant, et un rapport détaillé de 5 pages pour un centre douleur (CETD), avec la consommation d'antalgiques et les facteurs associés. Il se lit en français ou en anglais et mentionne les maladies déclarées.
 
-Le rapport décrit les données sans les interpréter, et ses seuils citent leurs sources (IMMPACT, HAS). Il est fabriqué sur l'appareil ; le nom et la date de naissance qu'on y saisit ne sont pas enregistrés.
+Le rapport décrit les données sans les interpréter, et ses seuils citent leurs sources (IMMPACT, HAS, et d'autres travaux publiés), résumées dans Réglages → Sources scientifiques. Il est fabriqué sur l'appareil ; le nom et la date de naissance qu'on y saisit ne sont pas enregistrés.
 
 ### Expliquer à son enfant
 

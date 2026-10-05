@@ -65,6 +65,9 @@ const fr: Translations = {
     checkNoMedications: 'Aucun traitement décrit pour l’instant',
     checkReminder: 'Rappel chaque jour à {{time}}',
     checkNoReminder: 'Pas de rappel quotidien',
+    sourcesTitle: 'Pour les curieux et les curieuses',
+    sourcesBody:
+      'Les repères du rapport s’appuient sur des études publiées. Tu les retrouves, avec un résumé de leurs conclusions, dans Réglages → Sources scientifiques.',
     reportTitle: 'Le rapport pour ton médecin',
     reportBody:
       'Au fil des jours, tu pourras le créer depuis l’onglet Tendances : il résume la période depuis ta dernière consultation. Il vaut mieux quelques semaines de saisies pour qu’il ait du sens.',
@@ -99,6 +102,109 @@ const fr: Translations = {
       },
     },
     note: "Pas de pression : les jours difficiles, une seule info suffit (ta douleur). OUCH ne remplace pas un avis médical, et les tendances sont des pistes à explorer, pas des preuves.",
+  },
+
+  sources: {
+    title: "Sources scientifiques",
+    toggle: "Voir les {{n}} références",
+    intro:
+      "Les repères utilisés par OUCH s’appuient sur ces travaux publiés. Chaque résumé reprend la conclusion principale de l’étude, d’après son résumé officiel (PubMed). Ces études portent sur des groupes de patients : elles n’établissent rien de certain pour toi.",
+    inOuch: "Dans OUCH :",
+    pubmed: "Voir sur PubMed",
+    note:
+      "Les numéros sont ceux des notes du rapport pour le médecin. OUCH ne remplace pas un avis médical.",
+    items: [
+      {
+        summary:
+          "Consensus d’experts (IMMPACT) sur les mesures à retenir dans les essais cliniques sur la douleur chronique : l’intensité de la douleur, notée sur une échelle numérique de 0 à 10, en fait partie, avec le fonctionnement, l’humeur et l’impression globale d’amélioration.",
+        usage:
+          "La douleur est notée chaque jour de 0 à 10, comme dans les essais cliniques, ce qui rend tes chiffres lisibles par un soignant.",
+      },
+      {
+        summary:
+          "Sur 2 724 patients de 10 essais cliniques, une baisse d’environ 2 points, ou d’environ 30 %, sur l’échelle 0-10 correspond en moyenne à une amélioration jugée importante par le patient. Il faut une baisse plus forte quand la douleur de départ est élevée.",
+        usage:
+          "Le rapport indique si la variation de ta douleur atteint ce seuil de 30 %. C’est une moyenne de groupe : elle ne dit pas ce qui compte pour toi.",
+      },
+      {
+        summary:
+          "Recommandation française qui définit le syndrome douloureux chronique (douleur persistante ou récurrente, avec retentissement fonctionnel) et décrit comment le reconnaître, l’évaluer et orienter le patient.",
+        usage:
+          "Référence française citée dans le rapport pour l’évaluation de la douleur chronique.",
+      },
+      {
+        summary:
+          "Consensus de 40 participants (universités, agences, patients, industrie) sur l’interprétation des résultats : au moins deux méthodes sont conseillées, et des repères provisoires (environ 30 % de baisse : modérée ; environ 50 % : importante) sont proposés.",
+        usage:
+          "Le rapport qualifie une baisse de 30 % de modérément pertinente et de 50 % d’importante. Ces repères sont conçus pour des groupes de patients, pas pour un individu.",
+      },
+      {
+        summary:
+          "Sur 2 854 patients douloureux chroniques, les seuils dépendent du retentissement sur le quotidien : en moyenne, léger ≤ 5, modéré 6-7, sévère ≥ 8 ; chez ceux qui dramatisent peu, léger ≤ 3, modéré 4-6, sévère ≥ 7.",
+        usage:
+          "OUCH utilise léger ≤ 3, modéré 4–6, sévère ≥ 7, des seuils conventionnels qui correspondent à ce second cas. Ce sont des repères, pas un diagnostic.",
+      },
+      {
+        summary:
+          "Sur 83 patients suivis par journal électronique, la douleur rappelée est gonflée par rapport aux notes prises au fil de la journée. Le rappel de la veille reste fidèle, mais la mémoire se dégrade au-delà de quelques jours.",
+        usage:
+          "OUCH te fait noter la journée écoulée, jour par jour, plutôt que de résumer la semaine de mémoire.",
+      },
+      {
+        summary:
+          "« Cloudy with a Chance of Pain » : 2 658 patients ont noté leur douleur chaque jour pendant 15 mois. Des liens existent avec l’humidité, la pression atmosphérique et le vent, mais ils sont modestes.",
+        usage:
+          "OUCH enregistre la météo du jour pour que tu puisses voir si elle compte pour toi, sans présenter le lien comme établi.",
+      },
+      {
+        summary:
+          "Sur 825 patients, une baisse d’un point (15 %) est la plus petite différence perceptible ; une baisse de 2 points (33 %) correspond à « beaucoup mieux ». Il faut une baisse plus forte quand la douleur de départ est élevée.",
+        usage:
+          "Confirme le repère de 2 points ou 30 % utilisé par le rapport.",
+      },
+      {
+        summary:
+          "Consensus d’experts pour la lombalgie : une variation de 2 points sur l’échelle 0-10 est un changement minimal important, et une amélioration de 30 % est un seuil utile quelle que soit l’échelle.",
+        usage:
+          "Confirme, par un autre chemin, le repère de 2 points ou 30 %.",
+      },
+      {
+        summary:
+          "Revue des outils de mesure de la douleur de l’adulte, dont l’échelle numérique et l’échelle visuelle analogique, et de leurs qualités de mesure.",
+        usage:
+          "Fait partie des sources qui justifient l’échelle numérique 0-10 pour noter la douleur.",
+      },
+      {
+        summary:
+          "Revue de 43 études : deux sur trois trouvent un lien entre météo et douleur, mais dans des sens variables, souvent sur de petits groupes suivis moins d’un mois. Les auteurs demandent des études plus grandes et plus longues.",
+        usage:
+          "C’est pourquoi le lien avec la pression atmosphérique est présenté comme « littérature discordante » dans le rapport.",
+      },
+      {
+        summary:
+          "Revue de 9 études dans la polyarthrite rhumatoïde : en moyenne, le lien entre douleur et température, humidité ou pression est proche de zéro, mais moins d’un patient sur quatre y réagit individuellement.",
+        usage:
+          "La réaction à la météo varie d’une personne à l’autre : OUCH regarde tes propres données plutôt que la moyenne.",
+      },
+      {
+        summary:
+          "Sur 993 patients, la température, l’humidité, la pression et la pluie n’augmentent pas le risque de lombalgie aiguë. Le vent fort l’augmente légèrement, sans importance clinique.",
+        usage:
+          "Autre raison de ne présenter le lien météo-douleur que comme une piste à discuter.",
+      },
+      {
+        summary:
+          "Revue : les troubles du sommeil prédisent l’apparition et l’aggravation de la douleur chronique, et prédisent plus fortement la douleur que la douleur ne prédit le sommeil. Le lien va toutefois dans les deux sens.",
+        usage:
+          "Le rapport associe la douleur au sommeil de la nuit précédente, avec la mention d’un lien dans les deux sens.",
+      },
+      {
+        summary:
+          "Revue de 41 études : éviter l’activité et la pousser jusqu’à la douleur forte sont tous deux associés à plus de douleur et de handicap. Le sens de la causalité n’est pas établi.",
+        usage:
+          "Le rapport compare ta douleur le lendemain d’une journée très active, avec la mention que trop comme trop peu d’activité sont associés à plus de douleur.",
+      },
+    ],
   },
 
   today: {
@@ -493,9 +599,9 @@ const fr: Translations = {
     notesHintAll: 'toutes, sur la période analysée',
     method: 'Méthode',
     methodGp:
-      'Douleur, fatigue, sommeil et humeur sont notés chaque jour sur une échelle numérique de 0 à 10. L’échelle numérique est la mesure de l’intensité douloureuse recommandée¹. Une variation d’environ 2 points ou de 30 % est habituellement considérée comme cliniquement pertinente¹˒². Les autres échelles (fatigue, sommeil, humeur…) ne sont pas des instruments validés.',
+      'Douleur, fatigue, sommeil et humeur sont notés chaque jour sur une échelle numérique de 0 à 10. L’échelle numérique est la mesure de l’intensité douloureuse recommandée¹. Une variation d’environ 2 points ou de 30 % est habituellement considérée comme cliniquement pertinente¹˒². Ces seuils sont étayés aussi par des travaux sur la douleur chronique musculosquelettique et lombaire⁸˒⁹. Les autres échelles (fatigue, sommeil, humeur…) ne sont pas des instruments validés.',
     methodCollect:
-      'Recueil. Journal quotidien (rappel sur 24 h, qui limite le biais de mémoire des rappels plus longs⁶). La douleur est notée sur une échelle numérique de 0 à 10, mesure recommandée par IMMPACT¹ et la HAS³. Les échelles de fatigue, sommeil, brouillard mental, humeur, stress et activité sont des échelles numériques simples, non validées.',
+      'Recueil. Journal quotidien (rappel sur 24 h, qui limite le biais de mémoire des rappels plus longs⁶). La douleur est notée sur une échelle numérique de 0 à 10, mesure recommandée par IMMPACT¹ et la HAS³, et largement validée¹⁰. Les échelles de fatigue, sommeil, brouillard mental, humeur, stress et activité sont des échelles numériques simples, non validées.',
     methodCalc:
       'Calculs. Moyenne glissante sur 7 jours calendaires (au moins 4 jours renseignés). Variation relative = (moyenne de la période − moyenne précédente) / moyenne précédente ; une baisse de 30 % est considérée comme modérément pertinente, de 50 % comme importante²˒⁴. Les jours non renseignés sont exclus, jamais imputés. Corrélations de Spearman calculées sur les deux périodes.',
     methodLimits:
@@ -511,7 +617,7 @@ const fr: Translations = {
     colMinMax: 'Min–max',
     colFlares: 'Poussées',
     categoriesNote:
-      'Catégories légère ≤ 3, modérée 4–6, sévère ≥ 7 : seuils conventionnels, discutés dans la littérature⁵. Poussée : au moins 2 jours consécutifs ≥ 7/10.',
+      'Catégories légère ≤ 3, modérée 4–6, sévère ≥ 7 : seuils conventionnels, discutés dans la littérature⁵ (ils dépendent notamment du retentissement fonctionnel et du catastrophisme). Poussée : au moins 2 jours consécutifs ≥ 7/10, définition retenue ici, non issue d’un consensus.',
     evolution: 'Évolution',
     timelineScheduled: 'Traitement de fond (blanc : prise oubliée)',
     timelineAsNeeded: 'Prise au besoin (hauteur : nombre de prises rapporté au maximum)',
@@ -539,8 +645,11 @@ const fr: Translations = {
       fatigue: 'Fatigue du jour',
     },
     factorNotes: {
+      sleepQuality: 'lien dans les deux sens, plutôt sommeil → douleur¹⁴',
+      sleepHours: 'lien dans les deux sens, plutôt sommeil → douleur¹⁴',
+      activityPrev: 'trop comme trop peu d’activité sont associés à plus de douleur¹⁵',
       positiveActions: 'lien possible dans les deux sens',
-      pressure: 'littérature discordante⁷',
+      pressure: 'littérature discordante⁷˒¹¹˒¹²˒¹³',
       fatigue: 'co-symptôme, pas un facteur',
     },
     contexts: 'Douleur médiane selon le contexte',
