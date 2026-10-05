@@ -20,13 +20,13 @@ export function SourcesCard() {
         <summary className="cursor-pointer text-control font-semibold" style={{ color: 'var(--color-brand)' }}>
           {format(s.toggle, { n: REFERENCES.length })}
         </summary>
-        <ol className="flex flex-col gap-4 mt-3 list-none">
+        {/* role="list": Safari drops the list semantics of `list-none` lists */}
+        <ol role="list" className="flex flex-col gap-4 mt-3 list-none">
           {REFERENCES.map((r, i) => (
             <li key={r.citation} className="flex gap-3">
               <span
                 className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-caption font-semibold"
                 style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
-                aria-hidden="true"
               >
                 {i + 1}
               </span>
