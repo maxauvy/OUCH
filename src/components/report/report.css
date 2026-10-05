@@ -475,6 +475,10 @@
 .report .r-refs li {
   margin: 1px 0;
 }
+.report .r-ref-use {
+  display: block;
+  font-style: italic;
+}
 .report .r-method {
   font-size: 11px;
   color: var(--r-muted);

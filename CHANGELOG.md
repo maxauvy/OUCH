@@ -9,10 +9,14 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ### Ajouté
 - Une carte « Sources scientifiques » dans Réglages : les 15 références du rapport, chacune avec un résumé de sa conclusion, ce qu'OUCH en retient et un lien PubMed. Un encart du dernier écran de l'assistant de démarrage y renvoie.
 - 8 références au rapport (seuils de pertinence clinique, météo, sommeil, activité), vérifiées sur PubMed et citées dans les notes de méthode et le tableau des facteurs associés.
+- Dans le rapport « Centre douleur », chaque référence est suivie d'une phrase sur l'usage qu'OUCH en fait.
 
 ### Modifié
 - Le rapport précise que les catégories de douleur dépendent du retentissement fonctionnel, et que la définition d'une poussée (au moins 2 jours consécutifs ≥ 7/10) est un choix de l'app, sans consensus.
 - Sur le dernier écran de l'assistant, les notes sur le rapport, la sauvegarde et les sources ont une icône.
+
+### Corrigé
+- Dans le rapport « Médecin traitant », les notes ⁸ et ⁹ renvoyaient à des références absentes de la liste, qui n'affichait que les trois premières. La liste reprend maintenant exactement les références citées par chaque rapport.
 
 ## [0.1.2] - 2026-10-04
 

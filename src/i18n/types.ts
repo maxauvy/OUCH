@@ -458,6 +458,9 @@ export interface Translations {
     methodCalc: string
     methodLimits: string
     references: string
+    referenceUsesLabel: string
+    /** One per entry of REFERENCES, in the same order: how the report uses it. */
+    referenceUses: string[]
     completeness: string
     intensity: string
     distribution: string

@@ -14,5 +14,6 @@ test('every reference has a summary and a usage line in each language', () => {
       assert.ok(item.summary.trim(), `${name}: summary ${i + 1}`)
       assert.ok(item.usage.trim(), `${name}: usage ${i + 1}`)
     })
+    assert.equal(locale.report.referenceUses.length, REFERENCES.length, `${name}: report use per reference`)
   }
 })
