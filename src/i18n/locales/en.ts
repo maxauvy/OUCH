@@ -609,7 +609,7 @@ const en: Translations = {
       "A 30% drop is called moderately important, a 50% drop substantial.",
       "Categories mild ≤ 3, moderate 4–6, severe ≥ 7: conventional, indicative cut-offs that vary with functional interference.",
       "Daily diary with 24-hour recall, to limit recall bias.",
-      "The day's weather is recorded with each entry; its link with pain is presented only as a lead.",
+      "The day's weather is recorded when provided; its link with pain is presented only as a lead.",
       "Confirms the 2-point or 30% benchmark (“much better” improvement).",
       "Confirms the 2-point or 30% benchmark (low back pain).",
       "Supports the use of the 0-10 numeric rating scale.",

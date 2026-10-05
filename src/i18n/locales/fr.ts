@@ -615,7 +615,7 @@ const fr: Translations = {
       "Baisse de 30 % qualifiée de modérément pertinente, de 50 % d’importante.",
       "Catégories légère ≤ 3, modérée 4–6, sévère ≥ 7 : seuils conventionnels, indicatifs, variables selon le retentissement fonctionnel.",
       "Journal quotidien avec rappel sur 24 h, pour limiter le biais de mémoire.",
-      "Météo du jour enregistrée avec chaque saisie ; son lien avec la douleur n’est présenté que comme une piste.",
+      "Météo du jour enregistrée lorsqu’elle est renseignée ; son lien avec la douleur n’est présenté que comme une piste.",
       "Confirme le repère de 2 points ou 30 % (amélioration « beaucoup mieux »).",
       "Confirme le repère de 2 points ou 30 % (lombalgie).",
       "Justifie l’usage de l’échelle numérique 0-10.",
