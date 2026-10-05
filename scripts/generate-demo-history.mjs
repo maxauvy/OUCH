@@ -303,9 +303,13 @@ for (let i = 0; i < DAYS; i++) {
 }
 
 // A finished setup, so the demo opens on the app itself with the report and
-// the Kids tab filled in. Language and theme are left out: they stay
-// whatever the device already uses.
+// the Kids tab filled in. The theme is left out: it stays whatever the device
+// already uses. The language is set to the one of the data: tags, notes and
+// medication names are stored as plain text, so a device in the other
+// language would show them next to its own suggestions ("Marche courte"
+// beside "Short walk").
 const settings = {
+  language: process.env.DEMO_LANG === 'en' ? 'en' : 'fr',
   onboardingDone: true,
   displayName: 'Camille',
   illnesses: ILLNESSES,
