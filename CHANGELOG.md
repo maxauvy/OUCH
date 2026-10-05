@@ -7,6 +7,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Ajouté
+- Sur l'écran « Aujourd'hui », un mot bienveillant (« Ces derniers jours ont été plus durs ») quand une poussée est en cours. Il rappelle, surlignés, jusqu'à trois gestes que la personne avait elle-même notés comme utiles les jours de poussée précédents. Il s'affiche une seule fois par poussée, se ferme d'un geste, ne dépend pas de ce qui est saisi dans la journée, et se désactive dans Réglages (« Un mot les jours difficiles »).
 - Dans le rapport, la courbe de douleur ombre les poussées, la synthèse les résume (nombre, jours, la plus longue, comparaison à la période précédente) et le rapport « Centre douleur » les détaille dans un tableau : dates, durée, pic, niveau habituel, retour à l'habituel et jours de prise au besoin.
 - Une carte « Sources scientifiques » dans Réglages : les 15 références du rapport, chacune avec un résumé de sa conclusion, ce qu'OUCH en retient et un lien PubMed. Un encart du dernier écran de l'assistant de démarrage y renvoie.
 - 8 références au rapport (seuils de pertinence clinique, météo, sommeil, activité), vérifiées sur PubMed et citées dans les notes de méthode et le tableau des facteurs associés.

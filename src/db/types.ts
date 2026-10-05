@@ -2,6 +2,7 @@
 // (form, storage, charts, export) speaks this exact shape.
 
 import type { Language } from '../i18n/language'
+import type { HardDaysSeen } from '../lib/hardDays'
 
 export type FactorKey =
   | 'fatigue'
@@ -231,6 +232,11 @@ export interface Settings {
   lastBackupAt?: number
   /** The backup reminder stays quiet until then (ms). */
   backupReminderSnoozedUntil?: number
+  /** The soft message on the day's page when the last days were harder.
+   * Switchable, and a preference: restored from a backup. */
+  hardDaysCardEnabled: boolean
+  /** The flare it was last shown for. Per device, like the reminders above. */
+  hardDaysSeen?: HardDaysSeen
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness
@@ -257,6 +263,7 @@ export const DEFAULT_SETTINGS: Settings = {
   language: 'fr',
   parentGender: 'maman',
   illnesses: [],
+  hardDaysCardEnabled: true,
 }
 
 export type PainWeatherLevel = 1 | 2 | 3 | 4 | 5

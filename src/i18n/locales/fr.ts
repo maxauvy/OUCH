@@ -753,6 +753,14 @@ const fr: Translations = {
     later: 'Plus tard',
   },
 
+  hardDays: {
+    label: 'Un mot pour toi',
+    lead: 'Ces derniers jours ont été plus durs.',
+    body: 'Prends soin de toi : noter ta douleur suffit aujourd’hui.',
+    helped: 'Ce qui t’a déjà fait du bien : {{list}}.',
+    close: 'Fermer ce message',
+  },
+
   storage: {
     title: 'Protection contre l’effacement',
     protected: 'Le navigateur s’est engagé à ne pas effacer tes données de lui-même. Elles sont tout de même supprimées si tu vides les données du site : garde des sauvegardes.',
@@ -823,6 +831,8 @@ const fr: Translations = {
     reminderHelper: "Une notification si tu n'as pas encore rempli ta météo",
     reminderNote:
       "Ce rappel fonctionne quand l'app est ouverte ou récemment utilisée. Sans serveur (par choix, pour rester 100% local), il ne peut pas se déclencher app totalement fermée.",
+    hardDaysTitle: 'Un mot les jours difficiles',
+    hardDaysHelper: 'Un message bienveillant, une seule fois, quand les derniers jours ont été plus durs que d’habitude.',
     appearanceTitle: 'Apparence',
     themeTitle: 'Thème',
     themeAuto: 'Auto',

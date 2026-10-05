@@ -226,6 +226,20 @@ export function SettingsPage() {
       </Card>
 
       <Card>
+        <SectionTitle>{t.settings.hardDaysTitle}</SectionTitle>
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.settings.hardDaysHelper}
+          </p>
+          <Toggle
+            checked={settings.hardDaysCardEnabled}
+            onChange={(v) => updateSettings({ hardDaysCardEnabled: v })}
+            label={t.settings.hardDaysTitle}
+          />
+        </div>
+      </Card>
+
+      <Card>
         <SectionTitle>{t.settings.appearanceTitle}</SectionTitle>
         <div className="flex gap-2" {...radioGroupProps(t.settings.themeTitle)}>
           {THEME_OPTIONS.map((opt) => (
