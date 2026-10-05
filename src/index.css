@@ -231,10 +231,24 @@ textarea {
   flex-direction: column;
   max-width: 560px;
   margin: 0 auto;
+  /* viewport-fit=cover lets the page run under the status bar and the
+     Dynamic Island, where iOS blurs whatever is there. Start below them. */
+  padding-top: env(safe-area-inset-top);
   /* Anything wider than the screen would make the phone zoom the whole page
      out to fit it, fixed tab bar included. Clip, not hidden: sticky headers
      keep working. */
   overflow-x: clip;
+}
+
+/* Installed on an iPhone (iOS 26), the status bar's blur reaches about 40px
+   below the bar, and env(safe-area-inset-top) can read 0 there (WebKit bug
+   301994). Without this the first line of every page sits in the blur. */
+@media (display-mode: standalone) {
+  @supports (-webkit-touch-callout: none) {
+    #root {
+      padding-top: calc(env(safe-area-inset-top) + 28px);
+    }
+  }
 }
 
 /* Date and time fields: iOS gives them a native minimum width that pushes

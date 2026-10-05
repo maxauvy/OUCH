@@ -221,6 +221,8 @@ const fr: Translations = {
     saving: 'Enregistrement…',
     saved: 'Enregistré',
     weatherOfDay: 'Météo du jour',
+    painWeatherOfDay: 'Météo douleur du jour',
+    painWeatherEmpty: 'Note ta douleur',
     pain: 'Douleur',
     painHelper: "Intensité globale de la douleur aujourd'hui",
     painEndNone: 'Aucune',
@@ -572,11 +574,11 @@ const fr: Translations = {
   backup: {
     exportTitle: 'Exporter une sauvegarde',
     exportHelper:
-      'Un fichier chiffré avec un mot de passe que tu choisis. Garde-le où tu veux (cloud perso, e-mail à toi-même) pour retrouver tes données sur un autre appareil.',
+      'Un fichier chiffré avec un mot de passe que tu choisis. Garde-le où tu veux (cloud perso, e-mail à toi-même) pour retrouver tes données sur un autre appareil. Si tu perds le mot de passe, la sauvegarde est irrécupérable.',
     passwordPlaceholder: 'Mot de passe de la sauvegarde',
     exportButton: 'Télécharger la sauvegarde',
     exporting: 'Export…',
-    exportPasswordTooShort: 'Choisis un mot de passe d’au moins 6 caractères.',
+    exportPasswordTooShort: 'Choisis un mot de passe d’au moins 10 caractères.',
     exportSuccess:
       'Sauvegarde téléchargée. Garde le mot de passe en lieu sûr : sans lui, ce fichier est illisible.',
     exportError: 'Une erreur est survenue pendant l’export.',
@@ -590,6 +592,39 @@ const fr: Translations = {
     importGenericError: 'Import impossible.',
     invalidFile: 'Ce fichier ne ressemble pas à une sauvegarde OUCH.',
     invalidBackup: 'Sauvegarde invalide.',
+    fileTooLarge: 'Ce fichier est trop volumineux pour être une sauvegarde OUCH.',
+    lastBackup: 'Dernière sauvegarde : {{date}}',
+    neverBackedUp: 'Aucune sauvegarde pour l’instant.',
+  },
+
+  backupReminder: {
+    title: 'Pense à sauvegarder ton journal',
+    never:
+      'Ton journal compte déjà {{n}} {{n:jour|jours}}, mais il n’a jamais été sauvegardé. Si cet appareil est perdu ou réinitialisé, tout disparaît.',
+    stale:
+      'Ta dernière sauvegarde date d’il y a {{n}} jours, et ton journal a changé depuis. Une sauvegarde à jour te met à l’abri d’une perte.',
+    backup: 'Sauvegarder',
+    later: 'Plus tard',
+  },
+
+  storage: {
+    title: 'Protection contre l’effacement',
+    protected: 'Le navigateur s’est engagé à ne pas effacer tes données de lui-même. Elles sont tout de même supprimées si tu vides les données du site : garde des sauvegardes.',
+    notProtected:
+      'Le navigateur peut effacer tes données de lui-même, par exemple si l’appareil manque de place. Demande-lui de les garder, et fais des sauvegardes : ce sont elles qui te protègent vraiment.',
+    unsupported:
+      'Ce navigateur ne permet pas de protéger les données contre l’effacement automatique. Fais des sauvegardes régulières.',
+    refused:
+      'Le navigateur n’a pas accordé la protection. Installer l’app sur l’écran d’accueil et l’utiliser régulièrement aide souvent ; en attendant, exporte une sauvegarde.',
+    request: 'Demander la protection',
+  },
+
+  crash: {
+    title: 'Un problème est survenu',
+    body: "L'application n'a pas pu afficher cet écran. Tes données sont toujours sur cet appareil : recharger règle souvent le problème. Si l'erreur revient à chaque ouverture, une donnée est peut-être abîmée ; tu peux alors tout effacer de cet appareil (les sauvegardes déjà exportées ne sont pas touchées).",
+    reload: 'Recharger',
+    erase: 'Effacer les données de cet appareil',
+    eraseConfirm: 'Effacer toutes les données de cet appareil ? Cette action est définitive, sauf si tu as une sauvegarde.',
   },
 
   shareSheet: {
@@ -614,8 +649,10 @@ const fr: Translations = {
     trendLower: 'Moins que ces derniers jours',
     trendSame: 'Comme ces derniers jours',
     trendHigher: 'Plus que ces derniers jours',
-    weatherOfName: 'Météo de {{name}}',
-    weatherOfDay: 'Météo du jour',
+    weatherOfName: 'Météo santé de {{name}}',
+    weatherOfDay: 'Météo santé du jour',
+    scaleLow: 'Peu de douleur',
+    scaleHigh: 'Beaucoup de douleur',
     painLabel: 'Douleur :',
     painCaption: "Douleur ressentie aujourd'hui",
     outside: 'Dehors',
@@ -624,7 +661,7 @@ const fr: Translations = {
   settings: {
     title: 'Réglages',
     firstNameTitle: 'Ton prénom',
-    firstNameHelper: 'Utilisé sur la carte météo que tu partages ("Météo de {{name}}")',
+    firstNameHelper: 'Utilisé sur la carte météo que tu partages ("Météo santé de {{name}}")',
     firstNamePlaceholder: 'Ton prénom',
     factorsTitle: 'Facteurs suivis',
     factorsHelper: "Choisis ce qui apparaît dans ta saisie quotidienne. Tu peux changer d'avis à tout moment.",
@@ -662,6 +699,8 @@ const fr: Translations = {
     pageTitle: 'Expliquer à mon enfant',
     ageToggleLabel: "Âge de l'enfant",
     scaleLevel: '{{level}}, niveau {{n}} sur 5',
+    scaleLow: 'Peu de douleur',
+    scaleHigh: 'Beaucoup de douleur',
     ages: { young: '4–7 ans', older: '8–12 ans', teen: '13–17 ans' },
     howToHelp: 'Comment tu peux aider',
     aboutIllness: '{{illness}}, c’est quoi ?',
@@ -681,6 +720,8 @@ const fr: Translations = {
   footer: {
     credit: 'Créé par Maxime Auvy',
     sourceCode: 'Code source',
+    updateAvailable: 'Mise à jour disponible',
+    reload: 'Recharger',
   },
 }
 

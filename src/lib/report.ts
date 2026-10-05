@@ -4,7 +4,7 @@
 // than filled in (the report states how many days were logged).
 
 import type { DailyEntry, Medication, MedicationRegimen } from '../db/types'
-import { shiftISO } from './medications'
+import { shiftISO } from './medications.ts'
 
 export function daysBetween(from: string, to: string): number {
   return Math.round((Date.parse(`${to}T12:00:00Z`) - Date.parse(`${from}T12:00:00Z`)) / 86_400_000)

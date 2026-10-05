@@ -226,6 +226,11 @@ export interface Settings {
   /** The illnesses being tracked, in the order they were picked; empty
    * until the person says (nothing is assumed). */
   illnesses: Illness[]
+  /** When a backup was last exported from this device (ms). Not restored
+   * from a backup file: it says nothing about this device's next loss. */
+  lastBackupAt?: number
+  /** The backup reminder stays quiet until then (ms). */
+  backupReminderSnoozedUntil?: number
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness

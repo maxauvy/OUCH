@@ -218,6 +218,8 @@ const en: Translations = {
     saving: 'Saving…',
     saved: 'Saved',
     weatherOfDay: "Today's weather",
+    painWeatherOfDay: "Today's pain weather",
+    painWeatherEmpty: 'Log your pain',
     pain: 'Pain',
     painHelper: "Overall pain intensity today",
     painEndNone: 'None',
@@ -566,11 +568,11 @@ const en: Translations = {
   backup: {
     exportTitle: 'Export a backup',
     exportHelper:
-      'An encrypted file with a password you choose. Keep it wherever you like (personal cloud, an email to yourself) to get your data back on another device.',
+      'An encrypted file with a password you choose. Keep it wherever you like (personal cloud, an email to yourself) to get your data back on another device. If you lose the password, the backup cannot be recovered.',
     passwordPlaceholder: 'Backup password',
     exportButton: 'Download backup',
     exporting: 'Exporting…',
-    exportPasswordTooShort: 'Choose a password of at least 6 characters.',
+    exportPasswordTooShort: 'Choose a password of at least 10 characters.',
     exportSuccess:
       'Backup downloaded. Keep the password somewhere safe: without it, this file is unreadable.',
     exportError: 'Something went wrong during the export.',
@@ -584,6 +586,39 @@ const en: Translations = {
     importGenericError: 'Import failed.',
     invalidFile: "This file doesn't look like an OUCH backup.",
     invalidBackup: 'Invalid backup.',
+    fileTooLarge: 'This file is too large to be an OUCH backup.',
+    lastBackup: 'Last backup: {{date}}',
+    neverBackedUp: 'No backup yet.',
+  },
+
+  backupReminder: {
+    title: 'Remember to back up your journal',
+    never:
+      'Your journal already holds {{n}} {{n:day|days}}, but it has never been backed up. If this device is lost or reset, everything is gone.',
+    stale:
+      'Your last backup was {{n}} days ago, and your journal has changed since. An up-to-date backup protects you from a loss.',
+    backup: 'Back up',
+    later: 'Later',
+  },
+
+  storage: {
+    title: 'Protection against erasure',
+    protected: 'The browser has committed to not erasing your data on its own. It is still deleted if you clear the site data: keep backups.',
+    notProtected:
+      'The browser may erase your data on its own, for example when the device runs low on space. Ask it to keep it, and make backups: they are what really protects you.',
+    unsupported:
+      'This browser cannot protect the data against automatic erasure. Make regular backups.',
+    refused:
+      'The browser did not grant the protection. Installing the app on the home screen and using it regularly often helps; meanwhile, export a backup.',
+    request: 'Ask for protection',
+  },
+
+  crash: {
+    title: 'Something went wrong',
+    body: 'The app could not display this screen. Your data is still on this device: reloading often fixes it. If the error comes back every time, some data may be damaged; you can then erase everything from this device (backups you already exported are not affected).',
+    reload: 'Reload',
+    erase: 'Erase data from this device',
+    eraseConfirm: 'Erase all data from this device? This cannot be undone unless you have a backup.',
   },
 
   shareSheet: {
@@ -608,8 +643,10 @@ const en: Translations = {
     trendLower: 'Less than recent days',
     trendSame: 'Same as recent days',
     trendHigher: 'More than recent days',
-    weatherOfName: "{{name}}'s weather",
-    weatherOfDay: "Today's weather",
+    weatherOfName: "{{name}}'s health weather",
+    weatherOfDay: "Today's health weather",
+    scaleLow: 'Little pain',
+    scaleHigh: 'A lot of pain',
     painLabel: 'Pain:',
     painCaption: 'Pain felt today',
     outside: 'Outside',
@@ -618,7 +655,7 @@ const en: Translations = {
   settings: {
     title: 'Settings',
     firstNameTitle: 'Your first name',
-    firstNameHelper: 'Used on the weather card you share ("{{name}}\'s weather")',
+    firstNameHelper: 'Used on the weather card you share ("{{name}}\'s health weather")',
     firstNamePlaceholder: 'Your first name',
     factorsTitle: 'Tracked factors',
     factorsHelper: "Choose what appears in your daily entry. You can change your mind anytime.",
@@ -656,6 +693,8 @@ const en: Translations = {
     pageTitle: 'Explain to my child',
     ageToggleLabel: "Child's age",
     scaleLevel: '{{level}}, level {{n}} of 5',
+    scaleLow: 'Little pain',
+    scaleHigh: 'A lot of pain',
     ages: { young: '4–7 years', older: '8–12 years', teen: '13–17 years' },
     howToHelp: 'How you can help',
     aboutIllness: 'What is {{illness}}?',
@@ -675,6 +714,8 @@ const en: Translations = {
   footer: {
     credit: 'Made by Maxime Auvy',
     sourceCode: 'Source code',
+    updateAvailable: 'Update available',
+    reload: 'Reload',
   },
 }
 

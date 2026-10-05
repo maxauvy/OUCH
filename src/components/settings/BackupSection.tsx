@@ -1,9 +1,16 @@
 import { useRef, useState } from 'react'
 import { exportEncryptedBackup, downloadBlob, importEncryptedBackup } from '../../lib/backup'
-import { format, useTranslation } from '../../i18n'
+import { format, useLocale, useTranslation } from '../../i18n'
+import { useSettings } from '../../hooks/useSettings'
+import { updateSettings } from '../../db'
+import { StorageProtection } from './StorageProtection'
+
+const MIN_EXPORT_PASSWORD_LENGTH = 10
 
 export function BackupSection() {
   const t = useTranslation()
+  const { intlLocale } = useLocale()
+  const { lastBackupAt } = useSettings()
   const [exportPassword, setExportPassword] = useState('')
   const [exportBusy, setExportBusy] = useState(false)
   const [exportMsg, setExportMsg] = useState<string | null>(null)
@@ -15,7 +22,7 @@ export function BackupSection() {
   const fileRef = useRef<HTMLInputElement>(null)
 
   async function handleExport() {
-    if (exportPassword.length < 6) {
+    if (exportPassword.length < MIN_EXPORT_PASSWORD_LENGTH) {
       setExportMsg(t.backup.exportPasswordTooShort)
       return
     }
@@ -24,6 +31,7 @@ export function BackupSection() {
     try {
       const blob = await exportEncryptedBackup(exportPassword)
       downloadBlob(blob, `ouch-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`)
+      await updateSettings({ lastBackupAt: Date.now(), backupReminderSnoozedUntil: undefined })
       setExportMsg(t.backup.exportSuccess)
     } catch {
       setExportMsg(t.backup.exportError)
@@ -40,6 +48,7 @@ export function BackupSection() {
       const result = await importEncryptedBackup(importFile, importPassword, 'merge', {
         invalidFile: t.backup.invalidFile,
         invalidBackup: t.backup.invalidBackup,
+        fileTooLarge: t.backup.fileTooLarge,
       })
       setImportMsg({
         text: format(result.imported === 1 ? t.backup.importSuccessOne : t.backup.importSuccessOther, {
@@ -58,10 +67,19 @@ export function BackupSection() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
+      <StorageProtection />
+
+      <div style={{ borderTop: '1px solid var(--color-hairline)' }} className="pt-5">
         <p className="font-medium text-body mb-1">{t.backup.exportTitle}</p>
         <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.backup.exportHelper}
+        </p>
+        <p className="text-caption mb-3 font-medium" style={{ color: 'var(--color-ink)' }}>
+          {lastBackupAt === undefined
+            ? t.backup.neverBackedUp
+            : format(t.backup.lastBackup, {
+                date: new Date(lastBackupAt).toLocaleDateString(intlLocale, { day: 'numeric', month: 'long', year: 'numeric' }),
+              })}
         </p>
         <input
           type="password"

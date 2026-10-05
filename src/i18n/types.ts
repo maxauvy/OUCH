@@ -200,6 +200,9 @@ export interface Translations {
     saving: string
     saved: string
     weatherOfDay: string
+    painWeatherOfDay: string
+    /** Shown in the weather banner before any pain level is set. */
+    painWeatherEmpty: string
     pain: string
     painHelper: string
     painEndNone: string
@@ -512,6 +515,34 @@ export interface Translations {
     importGenericError: string
     invalidFile: string
     invalidBackup: string
+    fileTooLarge: string
+    lastBackup: string
+    neverBackedUp: string
+  }
+
+  backupReminder: {
+    title: string
+    never: string
+    stale: string
+    backup: string
+    later: string
+  }
+
+  storage: {
+    title: string
+    protected: string
+    notProtected: string
+    unsupported: string
+    refused: string
+    request: string
+  }
+
+  crash: {
+    title: string
+    body: string
+    reload: string
+    erase: string
+    eraseConfirm: string
   }
 
   shareSheet: {
@@ -544,6 +575,9 @@ export interface Translations {
     trendHigher: string
     weatherOfName: string
     weatherOfDay: string
+    /** Ends of the 5-step weather rule, worded as pain. */
+    scaleLow: string
+    scaleHigh: string
     painLabel: string
     painCaption: string
     outside: string
@@ -589,6 +623,8 @@ export interface Translations {
     ageToggleLabel: string
     /** Accessible name of the 5-step weather scale, e.g. "Sunny, level 1 of 5". */
     scaleLevel: string
+    scaleLow: string
+    scaleHigh: string
     ages: Record<ChildTone, string>
     howToHelp: string
     aboutIllness: string
@@ -608,5 +644,7 @@ export interface Translations {
   footer: {
     credit: string
     sourceCode: string
+    updateAvailable: string
+    reload: string
   }
 }

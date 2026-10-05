@@ -10,6 +10,7 @@ import { useSettings, useSettingsLoaded } from './hooks/useSettings'
 import { useTodayEntry } from './hooks/useEntries'
 import { updateSettings, todayISO } from './db'
 import { maybeShowReminder } from './lib/reminder'
+import { requestStorageProtection } from './lib/storage'
 import { getTranslations, I18nProvider } from './i18n'
 import type { Language } from './i18n'
 
@@ -47,6 +48,19 @@ function AppShell() {
     return () => clearInterval(id)
   }, [settings.reminderEnabled, settings.reminderTime, settings.language, todayEntry])
 
+  // Once there is a first entry to lose, ask the browser to keep the data
+  // (silent in most browsers; Firefox asks, which makes sense after a save).
+  const hasEntry = !!todayEntry
+  useEffect(() => {
+    if (settings.onboardingDone && hasEntry) void requestStorageProtection()
+  }, [settings.onboardingDone, hasEntry])
+
+  // From the backup reminder: open the settings on the backup card.
+  function goToBackup() {
+    setTab('settings')
+    requestAnimationFrame(() => document.getElementById('backup')?.scrollIntoView({ block: 'start' }))
+  }
+
   // Wait for the stored settings, or the setup would flash on every launch.
   if (!settingsLoaded) return null
 
@@ -66,7 +80,7 @@ function AppShell() {
   return (
     <>
       <main className="flex-1">
-        {tab === 'today' && <TodayPage />}
+        {tab === 'today' && <TodayPage onGoToBackup={goToBackup} />}
         {tab === 'journal' && <JournalPage />}
         {tab === 'trends' && <TrendsPage />}
         {tab === 'kids' && <ChildViewPage />}

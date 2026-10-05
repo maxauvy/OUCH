@@ -110,36 +110,44 @@ function Sky({ weather }: { weather: PainWeather }) {
   )
 }
 
-/** The five weathers side by side, today's one filled, so a child can place
- * the day on the scale ("cloudy is the middle one"). */
+/** The five weathers as a rule: today's segment is full and thicker, with a
+ * bubble holding its icon, the others fade. The ends are worded as pain so
+ * the sky reads as a pain scale, not a forecast. */
 function WeatherScale({ level }: { level: PainWeatherLevel }) {
   const t = useTranslation()
+  const current = painWeatherByLevel(level)
   return (
     <div role="img" aria-label={format(t.childView.scaleLevel, { level: t.painWeatherLevels[level], n: level })}>
-      <div className="flex items-center gap-1">
+      <div className="grid grid-cols-5 gap-1 items-end">
         {LEVELS.map((l) => {
           const w = painWeatherByLevel(l)
           const active = l === level
           return (
-            <span
-              key={l}
-              className="flex items-center justify-center rounded-[8px]"
-              style={{
-                flex: active ? 1.4 : 1,
-                height: active ? 44 : 34,
-                background: active ? w.color : `color-mix(in srgb, ${w.color} 16%, transparent)`,
-                // Dark icon on the light weathers (1–3), white on the dark ones.
-                color: active ? (l <= 3 ? '#14212b' : '#ffffff') : w.text,
-              }}
-            >
-              <WeatherIcon name={w.icon as never} size={active ? 26 : 20} />
-            </span>
+            <div key={l} className="flex flex-col items-center gap-1.5">
+              {active ? (
+                <span
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ background: current.color, color: l <= 3 ? '#14212b' : '#ffffff' }}
+                >
+                  <WeatherIcon name={w.icon as never} size={24} />
+                </span>
+              ) : (
+                <span className="h-10" />
+              )}
+              <span
+                className="w-full rounded-full"
+                style={{
+                  height: active ? 14 : 8,
+                  background: active ? w.color : `color-mix(in srgb, ${w.color} 30%, transparent)`,
+                }}
+              />
+            </div>
           )
         })}
       </div>
-      <div className="flex justify-between text-caption mt-1.5" style={{ color: 'var(--color-ink-muted)' }}>
-        <span>{t.painWeatherLevels[1]}</span>
-        <span>{t.painWeatherLevels[5]}</span>
+      <div className="flex justify-between text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+        <span>{t.childView.scaleLow}</span>
+        <span>{t.childView.scaleHigh}</span>
       </div>
     </div>
   )

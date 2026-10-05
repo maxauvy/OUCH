@@ -1,0 +1,77 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>stage</title>
+<style>
+@font-face{font-family:PS;src:url('/node_modules/@fontsource-variable/public-sans/files/public-sans-latin-wght-normal.woff2') format('woff2');font-weight:100 900}
+@font-face{font-family:PS;src:url('/node_modules/@fontsource-variable/public-sans/files/public-sans-latin-ext-wght-normal.woff2') format('woff2');font-weight:100 900;unicode-range:U+0100-02BA,U+1E00-1EFF}
+*{box-sizing:border-box;margin:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a3350;font-family:PS,system-ui,sans-serif;color:#fff}
+.bg{position:fixed;inset:0;background:linear-gradient(160deg,#0a3350 0%,#0f5a8c 60%,#1b6fa3 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55}
+.b1{width:60vmax;height:60vmax;left:-20vmax;top:-15vmax;background:#e3a73b;animation:d1 14s ease-in-out infinite alternate}
+.b2{width:55vmax;height:55vmax;right:-20vmax;bottom:-20vmax;background:#7c6fa8;animation:d2 16s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(12vmax,10vmax)}} @keyframes d2{to{transform:translate(-10vmax,-8vmax)}}
+#win{position:absolute;overflow:hidden;z-index:2}
+#phone{position:absolute;left:0;top:0;width:390px;height:844px;transform-origin:0 0;border-radius:46px;background:#fff;
+  box-shadow:0 0 0 9px #0b1a28,0 0 0 11px #2b4257,0 40px 90px rgba(0,0,0,.45);will-change:transform}
+#phone iframe{width:390px;height:844px;border:0;border-radius:46px;display:block;background:#f3f6f8}
+.cap{position:absolute;z-index:5;pointer-events:none}
+.k{display:inline-block;font-weight:800;letter-spacing:.16em;font-size:.72rem;text-transform:uppercase;color:#ffd27a;background:rgba(255,210,122,.14);border:1px solid rgba(255,210,122,.4);padding:.35em .8em;border-radius:99px;margin-bottom:.9em}
+h1{font-weight:800;letter-spacing:-.02em;line-height:1.04;text-wrap:balance}
+h1 .w{display:inline-block;opacity:0;transform:translateY(.7em) scale(.96);animation:pop .55s cubic-bezier(.2,1.3,.4,1) forwards}
+h1 .a{color:#ffd27a}
+.sub{margin-top:.8em;font-weight:500;opacity:0;animation:fade .6s .5s forwards;color:#dcebf5}
+.k{opacity:0;animation:fade .4s forwards}
+@keyframes pop{to{opacity:1;transform:none}} @keyframes fade{to{opacity:1}}
+.cap.out{transition:opacity .25s,transform .25s;opacity:0;transform:translateY(-14px)}
+.layer{position:absolute;inset:0;z-index:6;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 8%;
+  opacity:0;pointer-events:none;transition:opacity .5s}
+.layer.on{opacity:1}
+.layer img{width:var(--logo);height:var(--logo);border-radius:22%;box-shadow:0 20px 60px rgba(0,0,0,.35);transform:scale(.6);opacity:0;transition:transform .8s cubic-bezier(.2,1.4,.4,1),opacity .4s}
+.layer.on img{transform:none;opacity:1}
+.layer .brand{font-weight:900;letter-spacing:.14em;font-size:var(--brand);margin-top:.35em;text-indent:.14em}
+.layer .bk{margin-top:.5em;font-weight:600;font-size:var(--bk);color:#dcebf5;letter-spacing:.02em}
+.layer .bk b{color:#ffd27a;font-weight:900}
+.layer .tag{margin-top:1.1em;font-weight:700;font-size:var(--tag);line-height:1.2;text-wrap:balance;max-width:16em}
+.layer .tag em{font-style:normal;color:#ffd27a}
+.layer .small{margin-top:1em;font-weight:500;font-size:calc(var(--tag)*.6);color:#c5dcec}
+body.p{--logo:120px;--brand:46px;--bk:14px;--tag:25px}
+body.l{--logo:130px;--brand:56px;--bk:17px;--tag:30px}
+body.p .cap{left:30px;right:30px;top:34px;text-align:center}
+body.p h1{font-size:36px} body.p .sub{font-size:16px}
+body.l .cap{left:64px;width:520px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+body.l h1{font-size:46px} body.l .sub{font-size:18px} body.l .k{font-size:.8rem}
+</style></head><body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div></div>
+<div id="win"><div id="phone"><iframe id="app" src="/" title="app"></iframe></div></div>
+<div class="cap" id="cap"></div>
+<div class="layer" id="intro"><img src="/favicon.svg" alt=""><div class="brand">OUCH</div>
+ <div class="bk"><b>O</b>uch · <b>U</b>nderstand · <b>C</b>hart · <b>H</b>eal</div>
+ <div class="tag">Ton journal de douleur, <em>simple</em> et <em>privé</em></div></div>
+<div class="layer" id="outro"><img src="/favicon.svg" alt=""><div class="brand">OUCH</div>
+ <div class="tag">Note. Comprends. <em>Partage.</em></div>
+ <div class="small">100 % local · tes données restent sur ton appareil</div>
+ <div class="bk" style="margin-top:1.2em">maxauvy.github.io/OUCH</div></div>
+<script>
+const W=innerWidth,H=innerHeight,land=W>H
+document.body.className=land?'l':'p'
+const win=document.getElementById('win')
+const cfg=land?(()=>{const wl=590,ww=W-wl;win.style.cssText=`left:${wl}px;top:0;width:${ww}px;height:${H}px`;const b=H*.9/844;return{b,tx:ww/2,ty:H/2}})()
+  :(()=>{const wt=200;win.style.cssText=`left:0;top:${wt}px;width:${W}px;height:${H-wt}px`;const b=.85,h=844*b;return{b,tx:W/2,ty:(H-wt)-24-h/2}})()
+const ph=document.getElementById('phone')
+window.cam=({fx=195,fy=422,z=1,dy=0,ms=900}={})=>{
+  const S=cfg.b*z,X=cfg.tx-S*fx,Y=cfg.ty-S*fy+dy
+  ph.style.transition=ms?`transform ${ms}ms cubic-bezier(.65,0,.35,1)`:'none'
+  ph.style.transform=`translate(${X}px,${Y}px) scale(${S})`
+}
+cam({dy:H*1.2,ms:0})
+window.caption=(k,title,sub)=>{
+  const old=document.querySelector('.cap.cur'); if(old){old.classList.remove('cur');old.classList.add('out');setTimeout(()=>old.remove(),300)}
+  const c=document.createElement('div');c.className='cap cur'
+  let acc=false
+  const words=title.split(' ').map((w,i)=>{if(w.startsWith('*')){acc=true;w=w.slice(1)};let end=false;if(w.endsWith('*')){end=true;w=w.slice(0,-1)};const h=`<span class="w ${acc?'a':''}" style="animation-delay:${.12+i*.07}s">${w}</span>`;if(end)acc=false;return h}).join(' ')
+  c.innerHTML=`<span class="k">${k}</span><h1>${words}</h1><p class="sub">${sub}</p>`
+  document.body.appendChild(c)
+}
+window.clearCaption=()=>{const old=document.querySelector('.cap.cur');if(old){old.classList.remove('cur');old.classList.add('out');setTimeout(()=>old.remove(),300)}}
+window.layer=(id,on)=>document.getElementById(id).classList.toggle('on',on)
+</script></body></html>
