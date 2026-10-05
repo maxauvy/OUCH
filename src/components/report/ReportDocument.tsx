@@ -361,7 +361,7 @@ function painClinicPages(d: ReportData): Block[][] {
           })}
         </div>
       </>,
-      <References numbers={REFERENCES.map((_, i) => i + 1)} title={f.t.references} />,
+      <References numbers={REFERENCES.map((_, i) => i + 1)} title={f.t.references} uses={f.t} />,
     ],
   ]
 }
@@ -1148,7 +1148,16 @@ function Associations({ d }: { d: ReportData }) {
  * numbers are positions in REFERENCES, so the list keeps them with `value`. */
 const GP_REFERENCES = [1, 2, 8, 9]
 
-function References({ numbers, title }: { numbers: number[]; title: string }) {
+function References({
+  numbers,
+  title,
+  uses,
+}: {
+  numbers: number[]
+  title: string
+  /** When given, each reference is followed by how OUCH uses it. */
+  uses?: Pick<ReportData['f']['t'], 'referenceUses' | 'referenceUsesLabel'>
+}) {
   return (
     <>
       <H level={3}>{title}</H>
@@ -1156,6 +1165,11 @@ function References({ numbers, title }: { numbers: number[]; title: string }) {
       {numbers.map((n) => (
           <li key={n} value={n}>
             {REFERENCES[n - 1].citation}
+            {uses && (
+              <span className="r-ref-use">
+                {uses.referenceUsesLabel} {uses.referenceUses[n - 1]}
+              </span>
+            )}
           </li>
         ))}
       </ol>
