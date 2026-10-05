@@ -562,6 +562,15 @@ export interface Translations {
     later: string
   }
 
+  hardDays: {
+    label: string
+    lead: string
+    body: string
+    /** `{{list}}` is replaced by the ideas, each highlighted */
+    helped: string
+    close: string
+  }
+
   storage: {
     title: string
     protected: string
@@ -634,6 +643,8 @@ export interface Translations {
     reminderTitle: string
     reminderHelper: string
     reminderNote: string
+    hardDaysTitle: string
+    hardDaysHelper: string
     appearanceTitle: string
     /** Accessible name of the light/dark choice (no visible title). */
     themeTitle: string

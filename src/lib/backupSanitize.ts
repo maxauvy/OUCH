@@ -199,6 +199,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     onboardingDone: bool(raw.onboardingDone),
     language: oneOf(raw.language, ['fr', 'en'] as const),
     parentGender: oneOf(raw.parentGender, ['maman', 'papa'] as const),
+    hardDaysCardEnabled: bool(raw.hardDaysCardEnabled),
     illnesses: strings(raw.illnesses)?.filter((i) => (ILLNESSES as string[]).includes(i)) as LegacySettings['illnesses'],
     childIllness: oneOf(raw.childIllness, ILLNESSES),
   })

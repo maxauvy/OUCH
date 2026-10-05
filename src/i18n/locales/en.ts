@@ -747,6 +747,14 @@ const en: Translations = {
     later: 'Later',
   },
 
+  hardDays: {
+    label: 'A note for you',
+    lead: 'The last few days have been harder.',
+    body: 'Take care of yourself: logging your pain is enough today.',
+    helped: 'What has helped you before: {{list}}.',
+    close: 'Close this message',
+  },
+
   storage: {
     title: 'Protection against erasure',
     protected: 'The browser has committed to not erasing your data on its own. It is still deleted if you clear the site data: keep backups.',
@@ -817,6 +825,8 @@ const en: Translations = {
     reminderHelper: "A notification if you haven't filled in your weather yet",
     reminderNote:
       "This reminder works while the app is open or recently used. Without a server (by choice, to stay 100% local), it can't trigger while the app is fully closed.",
+    hardDaysTitle: 'A note on hard days',
+    hardDaysHelper: 'A kind message, shown once, when the last few days were harder than usual.',
     appearanceTitle: 'Appearance',
     themeTitle: 'Theme',
     themeAuto: 'Auto',

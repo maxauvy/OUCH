@@ -124,6 +124,12 @@ test('settings keep only valid values and never invent any', () => {
   assert.equal(sanitizeSettings({ reminderTime: '07:30' })?.reminderTime, '07:30')
 })
 
+test('the hard-days switch is restored from a backup, which flare it was shown for is not', () => {
+  const out = sanitizeSettings({ hardDaysCardEnabled: false, hardDaysSeen: { start: '2026-10-01', date: '2026-10-05', dismissed: true } })
+  assert.deepEqual(out, { hardDaysCardEnabled: false })
+  assert.deepEqual(sanitizeSettings({ hardDaysCardEnabled: 'no' }), {})
+})
+
 test('a whole backup: bad items are counted, good ones survive', () => {
   const out = sanitizeBackup({
     entries: [entry, { ...entry, date: 'nope' }, 3],

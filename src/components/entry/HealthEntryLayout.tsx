@@ -27,6 +27,7 @@ import { Toggle } from '../ui/Toggle'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { TagInput } from './TagInput'
 import { MedicationsField } from './MedicationsField'
+import { HardDaysCard } from './HardDaysCard'
 import { WeatherField } from './WeatherField'
 import { format, useLocale, useTranslation } from '../../i18n'
 
@@ -355,6 +356,8 @@ export function HealthEntryLayout({
           </span>
         )}
       </div>
+
+      {isToday && <HardDaysCard date={date} entries={allEntries} />}
 
       <WeatherHero weather={local.painLevel === undefined ? null : weather} />
 
