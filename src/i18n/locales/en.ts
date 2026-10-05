@@ -529,6 +529,7 @@ const en: Translations = {
     flareBackUnknown: 'unknown',
     flareRescue: '{{n}} d of {{total}}',
     chartHintFlares: ' · bands: flares',
+    chartSummaryFlares: '; {{n}} {{n:flare|flares}} shaded',
     doseChange: '{{name}}: {{from}} → {{to}} on {{date}}.',
     medStarted: '{{name}} started on {{date}}.',
     medStopped: '{{name}} stopped on {{date}}{{reason}}.',

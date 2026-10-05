@@ -897,12 +897,12 @@ function FlaresTable({ d, from, to }: { d: ReportData; from: number; to: number 
     <table className="r-flares">
       <thead>
         <tr>
-          <th>{f.t.colFlareDates}</th>
-          <th className="r">{f.t.colFlareLength}</th>
-          <th className="r">{f.t.colFlarePeak}</th>
-          <th className="r">{f.t.colFlareUsual}</th>
-          <th className="r">{f.t.colFlareBack}</th>
-          <th className="r">{f.t.colFlareRescue}</th>
+          <th scope="col">{f.t.colFlareDates}</th>
+          <th scope="col" className="r">{f.t.colFlareLength}</th>
+          <th scope="col" className="r">{f.t.colFlarePeak}</th>
+          <th scope="col" className="r">{f.t.colFlareUsual}</th>
+          <th scope="col" className="r">{f.t.colFlareBack}</th>
+          <th scope="col" className="r">{f.t.colFlareRescue}</th>
         </tr>
       </thead>
       <tbody>
@@ -910,7 +910,7 @@ function FlaresTable({ d, from, to }: { d: ReportData; from: number; to: number 
           const logged = d.all.filter((x) => x.date >= e.start && x.date <= e.end)
           return (
             <tr key={e.start} data-row>
-              <td className="num">{f.format(f.t.flareRange, { start: f.dayMonth(e.start), end: f.dayMonth(e.end) })}</td>
+              <th scope="row" className="num">{f.format(f.t.flareRange, { start: f.dayMonth(e.start), end: f.dayMonth(e.end) })}</th>
               <td className="r">{f.format(f.t.flareDays, { n: e.days })}</td>
               <td className="r">{e.peak}/10</td>
               <td className="r">{f.nfx(e.baseline)}</td>

@@ -535,6 +535,7 @@ const fr: Translations = {
     flareBackUnknown: 'inconnu',
     flareRescue: '{{n}} j sur {{total}}',
     chartHintFlares: ' · bandes : poussées',
+    chartSummaryFlares: ' ; {{n}} {{n:poussée|poussées}} en bandes',
     doseChange: '{{name}} : {{from}} → {{to}} le {{date}}.',
     medStarted: '{{name}} commencé le {{date}}.',
     medStopped: '{{name}} arrêté le {{date}}{{reason}}.',

@@ -397,6 +397,7 @@ export interface Translations {
     flareBackUnknown: string
     flareRescue: string
     chartHintFlares: string
+    chartSummaryFlares: string
     doseChange: string
     medStarted: string
     medStopped: string

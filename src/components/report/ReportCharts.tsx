@@ -105,7 +105,7 @@ export function PainChart({
   const bottom = height - 22
   const y = (v: number) => top + ((10 - v) * (bottom - top)) / 10
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${f.t.painChart} : ${summary}`}>
+    <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${f.t.painChart} : ${summary}${flares.length ? f.format(f.t.chartSummaryFlares, { n: flares.length }) : ''}`}>
       <PeriodBand p={p} top={top} bottom={bottom} labels f={f} w={width} />
       {/* Tint plus a solid rule on top, so a flare still shows in greyscale. */}
       {flares.map((e) => {
