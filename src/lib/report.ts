@@ -140,29 +140,6 @@ export function painStats(entries: DailyEntry[]): PainStats | null {
   }
 }
 
-export interface Flare {
-  start: string
-  end: string
-}
-
-/** Runs of consecutive logged days at or above `threshold`, at least
- * `minDays` long. A day without an entry neither breaks nor extends a run. */
-export function flares(entries: DailyEntry[], threshold = 7, minDays = 2): Flare[] {
-  const out: Flare[] = []
-  let run: { start: string; end: string; days: number } | null = null
-  for (const e of [...entries].sort((a, b) => a.date.localeCompare(b.date))) {
-    // More than one missing day in a row ends the run: too little to say.
-    const broken = run !== null && daysBetween(run.end, e.date) > 2
-    if (run && (broken || e.painLevel < threshold)) {
-      if (run.days >= minDays) out.push({ start: run.start, end: run.end })
-      run = null
-    }
-    if (e.painLevel >= threshold) run = run ? { start: run.start, end: e.date, days: run.days + 1 } : { start: e.date, end: e.date, days: 1 }
-  }
-  if (run && run.days >= minDays) out.push({ start: run.start, end: run.end })
-  return out
-}
-
 /** Mean of the values over the last `window` calendar days, for each day of
  * the chart, once at least `minValues` of them are known. */
 export function rollingMean(

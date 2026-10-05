@@ -380,6 +380,24 @@ export interface Translations {
     flaresNone: string
     flares: string
     flareRange: string
+    flaresNotAssessable: string
+    flaresPrev: string
+    flareLongest: string
+    flareOngoing: string
+    flaresTitle: string
+    flaresTableNote: string
+    colFlareDates: string
+    colFlareLength: string
+    colFlarePeak: string
+    colFlareUsual: string
+    colFlareBack: string
+    colFlareRescue: string
+    flareDays: string
+    flareBackOngoing: string
+    flareBackUnknown: string
+    flareRescue: string
+    chartHintFlares: string
+    chartSummaryFlares: string
     doseChange: string
     medStarted: string
     medStopped: string

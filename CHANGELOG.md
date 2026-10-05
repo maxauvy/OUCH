@@ -7,12 +7,14 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Ajouté
+- Dans le rapport, la courbe de douleur ombre les poussées, la synthèse les résume (nombre, jours, la plus longue, comparaison à la période précédente) et le rapport « Centre douleur » les détaille dans un tableau : dates, durée, pic, niveau habituel, retour à l'habituel et jours de prise au besoin.
 - Une carte « Sources scientifiques » dans Réglages : les 15 références du rapport, chacune avec un résumé de sa conclusion, ce qu'OUCH en retient et un lien PubMed. Un encart du dernier écran de l'assistant de démarrage y renvoie.
 - 8 références au rapport (seuils de pertinence clinique, météo, sommeil, activité), vérifiées sur PubMed et citées dans les notes de méthode et le tableau des facteurs associés.
 - Dans le rapport « Centre douleur », chaque référence est suivie d'une phrase sur l'usage qu'OUCH en fait.
 
 ### Modifié
-- Le rapport précise que les catégories de douleur dépendent du retentissement fonctionnel, et que la définition d'une poussée (au moins 2 jours consécutifs ≥ 7/10) est un choix de l'app, sans consensus.
+- Le rapport précise que les catégories de douleur dépendent du retentissement fonctionnel.
+- Dans le rapport, une poussée se repère par rapport au niveau habituel de la personne (médiane des 28 jours précédents, hors poussées) et non plus à un seuil fixe de 7/10 : au moins 3 jours consécutifs au-dessus de ce niveau d'au moins 2 points ou 30 %, et d'au moins 4/10. Les seuils reprennent les écarts cliniquement pertinents, établis pour l'amélioration : leur usage pour une aggravation est une extrapolation, et le rapport le dit.
 - Sur le dernier écran de l'assistant, les notes sur le rapport, la sauvegarde et les sources ont une icône.
 
 ### Corrigé

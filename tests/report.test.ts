@@ -7,7 +7,6 @@ import {
   compareContext,
   daysBetween,
   daysWithRescueMedication,
-  flares,
   mean,
   meanOf,
   median,
@@ -149,30 +148,6 @@ test('the three severity bands split at 3/4 and 6/7 and add up to everything', (
 
 test('without any entry there are no stats', () => {
   assert.equal(painStats([]), null)
-})
-
-test('a flare is a run of at least two days at 7 or more', () => {
-  const entries = [entry(day(0), 8), entry(day(1), 7), entry(day(2), 3), entry(day(3), 9), entry(day(4), 2)]
-  assert.deepEqual(flares(entries), [{ start: day(0), end: day(1) }])
-})
-
-test('a flare at the very end of the period is kept', () => {
-  assert.deepEqual(flares([entry(day(0), 2), entry(day(1), 8), entry(day(2), 9)]), [{ start: day(1), end: day(2) }])
-})
-
-test('one day without an entry does not break a flare, two in a row do', () => {
-  assert.deepEqual(flares([entry(day(0), 8), entry(day(2), 8)]), [{ start: day(0), end: day(2) }])
-  assert.deepEqual(flares([entry(day(0), 8), entry(day(3), 8)]), [])
-})
-
-test('entries given out of order still make one flare', () => {
-  assert.deepEqual(flares([entry(day(1), 9), entry(day(0), 7)]), [{ start: day(0), end: day(1) }])
-})
-
-test('the flare threshold and length can be changed', () => {
-  const entries = [entry(day(0), 5), entry(day(1), 6), entry(day(2), 5)]
-  assert.deepEqual(flares(entries), [])
-  assert.deepEqual(flares(entries, 5, 3), [{ start: day(0), end: day(2) }])
 })
 
 test('a trailing mean needs enough known days in its window', () => {

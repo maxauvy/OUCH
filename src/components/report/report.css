@@ -246,6 +246,16 @@
   padding: 5px 6px;
   vertical-align: top;
 }
+.report tbody th[scope='row'] {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--r-ink);
+  text-transform: none;
+  letter-spacing: 0;
+  border-bottom: 1px solid var(--r-hair);
+  padding: 5px 6px;
+  vertical-align: top;
+}
 .report td.r,
 .report th.r {
   text-align: right;

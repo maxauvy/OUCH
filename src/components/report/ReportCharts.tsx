@@ -1,4 +1,5 @@
 import type { DailyEntry } from '../../db/types'
+import type { FlareEpisode } from '../../lib/flares'
 import { shiftISO } from '../../lib/medications'
 import { rollingMean, type ReportPeriods } from '../../lib/report'
 import type { MedicationReport } from '../../lib/report'
@@ -86,6 +87,7 @@ export function PainChart({
   height = 190,
   width = W,
   summary,
+  flares = [],
 }: {
   entries: DailyEntry[]
   p: ReportPeriods
@@ -95,14 +97,27 @@ export function PainChart({
   width?: number
   /** Read by screen readers instead of the plot, e.g. the means per period */
   summary: string
+  /** Episodes to shade behind the data */
+  flares?: FlareEpisode[]
 }) {
   const { x } = frame(p, width)
   const top = 20
   const bottom = height - 22
   const y = (v: number) => top + ((10 - v) * (bottom - top)) / 10
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${f.t.painChart} : ${summary}`}>
+    <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${f.t.painChart} : ${summary}${flares.length ? f.format(f.t.chartSummaryFlares, { n: flares.length }) : ''}`}>
       <PeriodBand p={p} top={top} bottom={bottom} labels f={f} w={width} />
+      {/* Tint plus a solid rule on top, so a flare still shows in greyscale. */}
+      {flares.map((e) => {
+        const x0 = x(p.dayIndex(e.start) - 0.5)
+        const x1 = x(p.dayIndex(e.end) + 0.5)
+        return (
+          <g key={e.start}>
+            <rect x={x0} y={top} width={x1 - x0} height={bottom - top} fill={R.orange} opacity={0.14} />
+            <line x1={x0} x2={x1} y1={top} y2={top} stroke={R.orange} strokeWidth={2.5} />
+          </g>
+        )
+      })}
       {[0, 2, 4, 6, 8, 10].map((v) => (
         <g key={v}>
           <line x1={LEFT} x2={width - RIGHT} y1={y(v)} y2={y(v)} stroke={R.hair} />

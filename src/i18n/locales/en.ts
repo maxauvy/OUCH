@@ -122,7 +122,7 @@ const en: Translations = {
         summary:
           "Across 2,724 patients in 10 clinical trials, a drop of about 2 points, or about 30%, on the 0-10 scale matches, on average, an improvement the patient considers important. A larger drop is needed when baseline pain is high.",
         usage:
-          "The report states whether the change in your pain reaches this 30% threshold. It is a group average: it does not tell what matters to you.",
+          "The report states whether the change in your pain reaches this 30% threshold. The same benchmark (2 points or 30%) is used to spot flares, as a rise: an extrapolation, established for drops. It is a group average: it does not tell what matters to you.",
       },
       {
         summary:
@@ -508,9 +508,28 @@ const en: Translations = {
     painOnly: 'Mean pain {{mean}}/10 (median {{median}}). No data over the previous period to compare with.',
     severeDays: '{{n}} {{n:day|days}} with severe pain (≥ 7/10), {{share}} of logged days (previously {{prev}}).',
     severeDaysNoPrev: '{{n}} {{n:day|days}} with severe pain (≥ 7/10), {{share}} of logged days.',
-    flaresNone: 'No flare (at least 2 consecutive days ≥ 7/10).',
-    flares: '{{n}} {{n:flare|flares}} (at least 2 consecutive days ≥ 7/10): {{list}}.',
+    flaresNone: 'No flare found (at least 3 days clearly above the usual level).',
+    flares: '{{n}} {{n:flare|flares}} over the period, {{days}} {{days:day|days}} ({{share}} of the period){{prev}}.',
+    flaresPrev: ', against {{n}} ({{days}} {{days:day|days}}) over the previous period',
+    flareLongest: 'The longest: {{range}}, peak {{peak}}/10 for a usual level of {{base}}.',
+    flareOngoing: 'A flare is ongoing at the report date.',
     flareRange: '{{start}} to {{end}}',
+    flaresNotAssessable: 'Flares: too few logged days to establish the usual level and spot them.',
+    flaresTitle: 'Flares',
+    flaresTableNote:
+      'Usual: median of the previous 28 days, flares left out. Back: days from the last flare day to the first day back at the usual level. Rescue medication: days with at least one as-needed intake, out of the episode’s logged days.',
+    colFlareDates: 'Dates',
+    colFlareLength: 'Length',
+    colFlarePeak: 'Peak',
+    colFlareUsual: 'Usual',
+    colFlareBack: 'Back',
+    colFlareRescue: 'Rescue medication',
+    flareDays: '{{n}} d',
+    flareBackOngoing: 'ongoing',
+    flareBackUnknown: 'unknown',
+    flareRescue: '{{n}} d of {{total}}',
+    chartHintFlares: ' · bands: flares',
+    chartSummaryFlares: '; {{n}} {{n:flare|flares}} shaded',
     doseChange: '{{name}}: {{from}} → {{to}} on {{date}}.',
     medStarted: '{{name}} started on {{date}}.',
     medStopped: '{{name}} stopped on {{date}}{{reason}}.',
@@ -593,7 +612,7 @@ const en: Translations = {
     notesHintAll: 'all, over the period covered',
     method: 'Method',
     methodGp:
-      'Pain, fatigue, sleep and mood are rated daily on a 0–10 numeric rating scale. The numeric rating scale is the recommended measure of pain intensity¹. A change of about 2 points or 30% is usually considered clinically important¹˒². Similar thresholds are supported by work on chronic musculoskeletal and low back pain⁸˒⁹. The other scales (fatigue, sleep, mood…) are not validated instruments.',
+      'Pain, fatigue, sleep and mood are rated daily on a 0–10 numeric rating scale. The numeric rating scale is the recommended measure of pain intensity¹. A change of about 2 points or 30% is usually considered clinically important¹˒². Similar thresholds are supported by work on chronic musculoskeletal and low back pain⁸˒⁹. The other scales (fatigue, sleep, mood…) are not validated instruments. Flare: at least 3 consecutive days with pain above the usual level by at least 2 points or 30%² (a definition chosen here, not a consensus one).',
     methodCollect:
       'Collection. Daily diary (24-hour recall, which limits the recall bias of longer reporting periods⁶). Pain is rated on a 0–10 numeric rating scale, the measure recommended by IMMPACT¹ and the French HAS³, and widely validated¹⁰. The fatigue, sleep, brain fog, mood, stress and activity scales are simple numeric scales, not validated.',
     methodCalc:
@@ -604,9 +623,9 @@ const en: Translations = {
     referenceUsesLabel: "Use in OUCH:",
     referenceUses: [
       "0-10 numeric rating scale to rate pain intensity.",
-      "A change of about 2 points or 30% is taken as clinically important.",
+      "A change of about 2 points or 30% is taken as clinically important, and as the rise that defines a flare (extrapolation).",
       "French reference framework for the assessment of chronic pain.",
-      "A 30% drop is called moderately important, a 50% drop substantial.",
+      "A 30% drop is called moderately important, a 50% drop substantial; also the benchmark for the rise of a flare (extrapolation).",
       "Categories mild ≤ 3, moderate 4–6, severe ≥ 7: conventional, indicative cut-offs that vary with functional interference.",
       "Daily diary with 24-hour recall, to limit recall bias.",
       "The day's weather is recorded when provided; its link with pain is presented only as a lead.",
@@ -629,7 +648,7 @@ const en: Translations = {
     colMinMax: 'Min–max',
     colFlares: 'Flares',
     categoriesNote:
-      'Mild ≤ 3, moderate 4–6, severe ≥ 7: conventional cut-offs, debated in the literature⁵ (they depend notably on functional interference and catastrophizing). Flare: at least 2 consecutive days ≥ 7/10, a definition chosen here, not a consensus one.',
+      'Mild ≤ 3, moderate 4–6, severe ≥ 7: conventional cut-offs, debated in the literature⁵ (they depend notably on functional interference and catastrophizing). Flare: at least 3 consecutive days with pain above the usual level (median of the previous 28 days, flares left out) by at least 2 points or 30%, and at least 4/10; it ends after 2 days back at that level. These thresholds borrow the clinically important differences²˒⁴, established for improvement under treatment: applying them to a worsening is an extrapolation, and there is no consensus definition of a flare.',
     evolution: 'Over time',
     timelineScheduled: 'Ongoing treatment (white: missed dose)',
     timelineAsNeeded: 'As-needed intake (height: doses relative to the maximum)',
