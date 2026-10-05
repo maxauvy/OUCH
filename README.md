@@ -57,7 +57,7 @@ Pour voir l'app remplie sans saisir 90 jours à la main :
 node scripts/generate-demo-history.mjs
 ```
 
-Le script crée `ouch-demo-90j.json`, un historique fictif de 90 jours (une poussée, un changement de traitement, puis une amélioration). Il s'importe depuis les réglages, dans la partie sauvegarde, avec le mot de passe `demo`. Avec `DEMO_LANG=en` devant la commande, les étiquettes, les notes et les médicaments sont en anglais.
+Le script crée `ouch-demo-90j.json`, un historique fictif de 90 jours : deux poussées, un changement de traitement, une amélioration, puis une nouvelle poussée qui s'achève la veille, de quoi voir le mot de l'écran « Aujourd'hui », les poussées dans le rapport et les traitements avec leurs effets indésirables. Il s'importe depuis les réglages, dans la partie sauvegarde, avec le mot de passe `demo`. Trois variables permettent de l'adapter : `DEMO_LANG=en` met les étiquettes, les notes et les médicaments en anglais, `DEMO_TODAY=empty` laisse la journée du jour sans saisie, et `DEMO_ILLNESSES=fibromyalgie,migraine` suit plusieurs maladies.
 
 Les vidéos de démonstration se génèrent aussi par script : `scripts/record-demo-video.mjs` pour un parcours simple, `scripts/promo/record.mjs` pour une vidéo de présentation d'une minute, en français ou en anglais, au format vertical ou horizontal. Les installations nécessaires (Playwright, ffmpeg) sont décrites en tête de chaque fichier.
 
