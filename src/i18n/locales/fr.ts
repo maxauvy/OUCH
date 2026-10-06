@@ -885,7 +885,7 @@ const fr: Translations = {
     summaryReminderOn: 'Rappel à {{time}}',
     summaryReminderOff: 'Pas de rappel',
     privacyNote:
-      "OUCH garde toutes tes données sur cet appareil, dans son stockage local. Rien n'est envoyé à un serveur — le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
+      "OUCH garde toutes tes données sur cet appareil, dans son stockage local : aucune donnée de santé n'en sort. Seule la météo automatique contacte des services extérieurs, avec ta position et jamais ton journal. Le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
   },
 
   childView: {

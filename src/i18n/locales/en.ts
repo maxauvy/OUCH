@@ -879,7 +879,7 @@ const en: Translations = {
     summaryReminderOn: 'Reminder at {{time}}',
     summaryReminderOff: 'No reminder',
     privacyNote:
-      "OUCH keeps all your data on this device, in local storage. Nothing is sent to a server — sharing your weather and making backups is always something you choose to do.",
+      "OUCH keeps all your data on this device, in local storage: no health data ever leaves it. Only automatic weather contacts outside services, with your position and never your journal. Sharing your weather and making backups is always something you choose to do.",
   },
 
   childView: {
