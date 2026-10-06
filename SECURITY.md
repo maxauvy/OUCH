@@ -21,7 +21,7 @@ Les versions déployées sur <https://maxauvy.github.io/OUCH/> : seule la derni�
 - **Sauvegardes chiffrées** : faiblesse du chiffrement (AES-256-GCM, clé dérivée du mot de passe par PBKDF2), de la dérivation de clé ou du format de fichier.
 - **Import d'une sauvegarde** : un fichier fabriqué qui plante l'app, écrit des données inattendues ou exécute du code.
 - **Injection de script (XSS)** et contournement de la politique de sécurité de contenu (CSP) du build de production.
-- **Fuite de données** : tout appel réseau qui enverrait des données du journal, alors que la météo (Open-Meteo, coordonnées seulement) est censée être le seul.
+- **Fuite de données** : tout appel réseau qui enverrait des données du journal, alors que la météo (Open-Meteo, coordonnées) et le nom de la ville (Nominatim, position arrondie à ~1 km) sont censés être les seuls.
 - **Chaîne de déploiement** : GitHub Actions et dépendances.
 
 ## Ce qui n'est pas une faille

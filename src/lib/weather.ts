@@ -93,17 +93,35 @@ export async function fetchDailyWeather(lat: number, lon: number, date: string):
   }
 }
 
-/** Reverse-geocode to a short place label, purely cosmetic (shown in settings). */
+/** Coordinates rounded to two decimals (about 1 km): enough to name a town, and
+ * far less precise than the exact position that is kept on the device. */
+function coarse(n: number): string {
+  return n.toFixed(2)
+}
+
+/** Short "45.76, 4.84" form, for when no place name could be found. */
+export function formatCoordinates(lat: number, lon: number): string {
+  return `${coarse(lat)}, ${coarse(lon)}`
+}
+
+/** Reverse-geocode to a town name, purely cosmetic (shown in settings and in the
+ * entry form). Uses Nominatim (OpenStreetMap): Open-Meteo has no reverse endpoint.
+ * Only ~1 km precision leaves the device, and only when the person asks for
+ * their position to be set. The browser sends the site's origin as Referer, which
+ * is what Nominatim's usage policy asks apps to identify themselves with. */
 export async function reverseGeocode(lat: number, lon: number, language = 'fr'): Promise<string | undefined> {
   try {
-    const url = new URL('https://geocoding-api.open-meteo.com/v1/reverse')
-    url.searchParams.set('latitude', String(lat))
-    url.searchParams.set('longitude', String(lon))
-    url.searchParams.set('language', language)
+    const url = new URL('https://nominatim.openstreetmap.org/reverse')
+    url.searchParams.set('format', 'jsonv2')
+    url.searchParams.set('lat', coarse(lat))
+    url.searchParams.set('lon', coarse(lon))
+    url.searchParams.set('zoom', '10')
+    url.searchParams.set('addressdetails', '1')
+    url.searchParams.set('accept-language', language)
     const res = await fetch(url.toString())
     if (!res.ok) return undefined
-    const data = await res.json()
-    return data?.results?.[0]?.name
+    const a = (await res.json())?.address
+    return a?.city ?? a?.town ?? a?.village ?? a?.municipality ?? a?.county ?? undefined
   } catch {
     return undefined
   }

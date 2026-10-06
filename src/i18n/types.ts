@@ -661,6 +661,7 @@ export interface Translations {
     weatherLocationTitle: string
     weatherLocationSet: string
     weatherLocationUnset: string
+    weatherLocationCredit: string
     locating: string
     updateLocation: string
     reminderTitle: string

@@ -841,6 +841,8 @@ const en: Translations = {
     weatherLocationSet: 'Saved location: {{label}}. Used to fill in the weather automatically.',
     weatherLocationUnset:
       'No location saved yet — you can always set it from the button in the daily entry.',
+    weatherLocationCredit:
+      'The place name comes from Nominatim (© OpenStreetMap contributors), which only receives your position rounded to about 1 km, at the moment you update it.',
     locating: 'Locating…',
     updateLocation: 'Update my location',
     reminderTitle: 'Daily reminder',

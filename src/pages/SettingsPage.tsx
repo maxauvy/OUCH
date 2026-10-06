@@ -12,7 +12,8 @@ import { DeleteDataCard } from '../components/settings/DeleteDataCard'
 import { MedicationsSection } from '../components/settings/MedicationsSection'
 import { IllnessPicker } from '../components/settings/IllnessPicker'
 import { canNotify, requestNotificationPermission } from '../lib/reminder'
-import { reverseGeocode, getCurrentPosition } from '../lib/weather'
+import { formatCoordinates } from '../lib/weather'
+import { saveCurrentLocation } from '../lib/weatherLocation'
 import { format, LANGUAGES, useTranslation } from '../i18n'
 import { radioGroupProps, radioProps } from '../lib/a11y'
 
@@ -53,9 +54,7 @@ export function SettingsPage() {
   async function handleSetLocation() {
     setLocating(true)
     try {
-      const { lat, lon } = await getCurrentPosition()
-      const label = await reverseGeocode(lat, lon, settings.language)
-      await updateSettings({ autoWeatherEnabled: true, autoWeatherLat: lat, autoWeatherLon: lon, autoWeatherLabel: label })
+      await saveCurrentLocation(settings.language)
     } catch {
       // silently ignore — the entry form's own button will surface the error when actually needed
     } finally {
@@ -188,9 +187,11 @@ export function SettingsPage() {
         <Card>
           <SectionTitle>{t.settings.weatherLocationTitle}</SectionTitle>
           <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
-            {settings.autoWeatherLabel
-              ? format(t.settings.weatherLocationSet, { label: settings.autoWeatherLabel })
-              : t.settings.weatherLocationUnset}
+            {settings.autoWeatherLat === undefined || settings.autoWeatherLon === undefined
+              ? t.settings.weatherLocationUnset
+              : format(t.settings.weatherLocationSet, {
+                  label: settings.autoWeatherLabel ?? formatCoordinates(settings.autoWeatherLat, settings.autoWeatherLon),
+                })}
           </p>
           <button
             onClick={handleSetLocation}
@@ -200,6 +201,9 @@ export function SettingsPage() {
           >
             {locating ? t.settings.locating : t.settings.updateLocation}
           </button>
+          <p className="text-caption mt-3" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.settings.weatherLocationCredit}
+          </p>
         </Card>
       )}
 

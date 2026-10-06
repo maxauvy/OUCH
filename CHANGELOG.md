@@ -15,6 +15,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - Dans le rapport « Centre douleur », chaque référence est suivie d'une phrase sur l'usage qu'OUCH en fait.
 
 ### Modifié
+- Le nom du lieu s'affiche enfin dans Réglages et sous le bouton de météo de la saisie du jour. Il venait d'un service d'Open-Meteo qui n'existe pas, d'où le « pas de position enregistrée » alors que la météo fonctionnait. Il vient maintenant de Nominatim (OpenStreetMap), qui ne reçoit qu'une position arrondie à environ 1 km, et seulement quand la position est mise à jour. Sans nom trouvé, les coordonnées arrondies s'affichent.
 - Le rapport précise que les catégories de douleur dépendent du retentissement fonctionnel.
 - Dans le rapport, une poussée se repère par rapport au niveau habituel de la personne (médiane des 28 jours précédents, hors poussées) et non plus à un seuil fixe de 7/10 : au moins 3 jours consécutifs au-dessus de ce niveau d'au moins 2 points ou 30 %, et d'au moins 4/10. Les seuils reprennent les écarts cliniquement pertinents, établis pour l'amélioration : leur usage pour une aggravation est une extrapolation, et le rapport le dit.
 - Sur le dernier écran de l'assistant, les notes sur le rapport, la sauvegarde et les sources ont une icône.

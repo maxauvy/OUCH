@@ -847,6 +847,8 @@ const fr: Translations = {
     weatherLocationSet: 'Position enregistrée : {{label}}. Utilisée pour remplir la météo automatiquement.',
     weatherLocationUnset:
       "Pas encore de position enregistrée — tu peux toujours la définir depuis le bouton dans la saisie du jour.",
+    weatherLocationCredit:
+      'Le nom du lieu vient de Nominatim (© les contributeurs d’OpenStreetMap), qui ne reçoit que ta position arrondie à environ 1 km, au moment où tu la mets à jour.',
     locating: 'Localisation…',
     updateLocation: 'Mettre à jour ma position',
     reminderTitle: 'Rappel quotidien',
