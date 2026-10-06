@@ -731,6 +731,8 @@ const fr: Translations = {
     importTitle: 'Importer une sauvegarde',
     importHelper:
       "Les jours importés s'ajoutent à ceux déjà présents (en cas de doublon, la sauvegarde l'emporte).",
+    chooseFile: 'Choisir un fichier',
+    removeFile: 'Retirer le fichier',
     importButton: 'Importer',
     importing: 'Import…',
     importSuccessOne: '{{n}} jour importé.',

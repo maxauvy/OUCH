@@ -542,6 +542,8 @@ export interface Translations {
     exportError: string
     importTitle: string
     importHelper: string
+    chooseFile: string
+    removeFile: string
     importButton: string
     importing: string
     importSuccessOne: string

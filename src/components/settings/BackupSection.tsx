@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { IconFileCheck, IconFileImport, IconX } from '@tabler/icons-react'
 import { exportEncryptedBackup, downloadBlob, importEncryptedBackup } from '../../lib/backup'
 import { format, useLocale, useTranslation } from '../../i18n'
 import { useSettings } from '../../hooks/useSettings'
@@ -20,6 +21,12 @@ export function BackupSection() {
   const [importBusy, setImportBusy] = useState(false)
   const [importMsg, setImportMsg] = useState<{ text: string; error?: boolean } | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+
+  function clearFile() {
+    setImportFile(null)
+    setImportMsg(null)
+    if (fileRef.current) fileRef.current.value = ''
+  }
 
   async function handleExport() {
     if (exportPassword.length < MIN_EXPORT_PASSWORD_LENGTH) {
@@ -109,18 +116,49 @@ export function BackupSection() {
         <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.backup.importHelper}
         </p>
+        {/* The native input is hidden: browsers draw it as a faint "no file chosen" line. */}
         <input
           ref={fileRef}
           type="file"
           accept="application/json"
-          aria-label={t.backup.importTitle}
+          tabIndex={-1}
+          aria-hidden
           onChange={(e) => {
             setImportFile(e.target.files?.[0] ?? null)
             setImportMsg(null)
           }}
           disabled={importBusy}
-          className="w-full text-control mb-2"
+          className="hidden"
         />
+        {importFile ? (
+          <div
+            className="flex items-center gap-2 rounded-[var(--radius-control)] px-3 py-2.5 mb-2"
+            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+          >
+            <IconFileCheck size={20} aria-hidden className="shrink-0" />
+            <span className="flex-1 min-w-0 truncate text-control font-medium">{importFile.name}</span>
+            <button
+              type="button"
+              onClick={clearFile}
+              disabled={importBusy}
+              aria-label={t.backup.removeFile}
+              className="shrink-0 rounded-full p-1"
+            >
+              <IconX size={18} aria-hidden />
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            disabled={importBusy}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] py-3 text-body font-semibold mb-2"
+            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+          >
+            <IconFileImport size={20} aria-hidden />
+            {t.backup.chooseFile}
+          </button>
+        )}
         <input
           type="password"
           value={importPassword}

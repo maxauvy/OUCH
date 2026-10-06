@@ -725,6 +725,8 @@ const en: Translations = {
     importTitle: 'Import a backup',
     importHelper:
       'Imported days are added to those already present (in case of a conflict, the backup wins).',
+    chooseFile: 'Choose a file',
+    removeFile: 'Remove the file',
     importButton: 'Import',
     importing: 'Importing…',
     importSuccessOne: '{{n}} day imported.',
