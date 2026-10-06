@@ -36,7 +36,7 @@ Trends shows your pain curve over 7, 30 or 90 days, or since the beginning, with
 
 From Trends, you can generate a report to print or save as a PDF. It covers the time since your last appointment and compares it with the same length of time just before. It comes in two versions: a 2-page summary for your GP, and a detailed 5-page report for a pain clinic (a CETD in France), with painkiller use and associated factors. It can be read in French or English and lists the conditions you declared.
 
-The report describes the data without interpreting it, and its thresholds cite their sources (IMMPACT, the French health authority HAS, and other published work), summarised in Settings → Scientific sources. It is built on your device; the name and date of birth you type into it are not saved.
+The report describes the data without interpreting it, and its thresholds cite their sources (IMMPACT, the French health authority HAS, and other published work), summarised in Settings → About → Scientific sources. It is built on your device; the name and date of birth you type into it are not saved.
 
 ### Explain it to your child
 
@@ -102,7 +102,7 @@ tests/           tests for backups, trends, the report and the pain weather
 - Nothing leaves the device without an explicit action: an export, or sharing your weather of the day.
 - Journal data is stored **unencrypted** in the browser. Anyone with access to the unlocked device, or to the browser profile, can read it. Only exported backup files are encrypted (AES-GCM 256, key derived from the password with PBKDF2). Without the password, a backup is lost.
 - A browser can erase a site's data on its own when the device runs low on space, and Safari also does it after a week without use for a site that isn't installed. So OUCH asks the browser to keep the data as soon as the first day is logged, and the settings show whether it agreed. The browser is free to refuse: only an exported backup truly keeps your data safe.
-- Automatic weather calls [Open-Meteo](https://open-meteo.com/) straight from the browser, with no key or account. Each time, Open-Meteo receives the device's **coordinates** (latitude and longitude) and inevitably sees its IP address. It is the only network call the app makes on its own, and only if that feature is on. A Content Security Policy (CSP) also restricts the production build's outgoing requests to that service.
+- Automatic weather calls [Open-Meteo](https://open-meteo.com/) straight from the browser, with no key or account. Each time, Open-Meteo receives the device's **coordinates** (latitude and longitude) and inevitably sees its IP address. To show the town name, the app also queries [Nominatim](https://nominatim.openstreetmap.org/) (OpenStreetMap), only when you update your position: it receives a position **rounded to about 1 km** and also sees the IP address, and the place data is © OpenStreetMap contributors. These are the only network calls the app makes on its own, and only if automatic weather is on. A Content Security Policy (CSP) also restricts the production build's outgoing requests to these two services.
 - The daily reminder uses the browser's Notification API. There is deliberately no push server: the reminder shows up when the app is open or has been used recently, not when it is fully closed.
 
 To report a security vulnerability, see [`SECURITY.md`](SECURITY.md) (it has an English summary).

@@ -725,6 +725,8 @@ const en: Translations = {
     importTitle: 'Import a backup',
     importHelper:
       'Imported days are added to those already present (in case of a conflict, the backup wins).',
+    chooseFile: 'Choose a file',
+    removeFile: 'Remove the file',
     importButton: 'Import',
     importing: 'Importing…',
     importSuccessOne: '{{n}} day imported.',
@@ -841,6 +843,8 @@ const en: Translations = {
     weatherLocationSet: 'Saved location: {{label}}. Used to fill in the weather automatically.',
     weatherLocationUnset:
       'No location saved yet — you can always set it from the button in the daily entry.',
+    weatherLocationCredit:
+      'The place name comes from Nominatim (© OpenStreetMap contributors), which only receives your position rounded to about 1 km, at the moment you update it.',
     locating: 'Locating…',
     updateLocation: 'Update my location',
     reminderTitle: 'Daily reminder',
@@ -863,8 +867,19 @@ const en: Translations = {
     illnessesTitle: 'Your illnesses',
     illnessesHelper: 'What you track with OUCH; you can pick several. It appears on the report for your doctor and is explained on the "Explain to my child" page (Kids tab).',
     backupTitle: 'Backup & sync',
+    groups: {
+      profile: 'My profile',
+      tracking: 'My tracking',
+      display: 'Reminder and display',
+      data: 'My data',
+      about: 'About',
+    },
+    factorsCountOne: '{{n}} factor tracked',
+    factorsCountOther: '{{n}} factors tracked',
+    summaryReminderOn: 'Reminder at {{time}}',
+    summaryReminderOff: 'No reminder',
     privacyNote:
-      "OUCH keeps all your data on this device, in local storage. Nothing is sent to a server — sharing your weather and making backups is always something you choose to do.",
+      "OUCH keeps all your data on this device, in local storage: no health data ever leaves it. Only automatic weather contacts outside services, with your position and never your journal. Sharing your weather and making backups is always something you choose to do.",
   },
 
   childView: {

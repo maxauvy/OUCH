@@ -1,8 +1,8 @@
 import { useId, useState } from 'react'
 import type { ExternalWeatherCondition, WeatherInfo } from '../../db/types'
 import { Chip } from '../ui/Chip'
-import { fetchDailyWeather, getCurrentPosition, WeatherError } from '../../lib/weather'
-import { updateSettings } from '../../db'
+import { fetchDailyWeather, formatCoordinates, WeatherError } from '../../lib/weather'
+import { saveCurrentLocation } from '../../lib/weatherLocation'
 import type { Settings } from '../../db/types'
 import { useTranslation } from '../../i18n'
 import { IconMapPin } from '@tabler/icons-react'
@@ -37,10 +37,7 @@ export function WeatherField({
       let lat = settings.autoWeatherLat
       let lon = settings.autoWeatherLon
       if (lat === undefined || lon === undefined) {
-        const pos = await getCurrentPosition()
-        lat = pos.lat
-        lon = pos.lon
-        await updateSettings({ autoWeatherLat: lat, autoWeatherLon: lon, autoWeatherEnabled: true })
+        ;({ lat, lon } = await saveCurrentLocation(settings.language))
       }
       const w = await fetchDailyWeather(lat, lon, date)
       onChange({ source: 'auto', condition: w.condition, tempC: w.tempC, pressureHpa: w.pressureHpa })
@@ -66,6 +63,11 @@ export function WeatherField({
           {loading ? t.weatherField.fetching : t.weatherField.autoFill}
         </button>
       </div>
+      {settings.autoWeatherLat !== undefined && settings.autoWeatherLon !== undefined && (
+        <p className="text-caption mb-2" style={{ color: 'var(--color-ink-muted)' }}>
+          {settings.autoWeatherLabel ?? formatCoordinates(settings.autoWeatherLat, settings.autoWeatherLon)}
+        </p>
+      )}
       {error && (
         <p className="text-caption mb-2" style={{ color: 'var(--color-weather-5-text)' }}>
           {error}

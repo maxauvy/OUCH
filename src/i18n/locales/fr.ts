@@ -731,6 +731,8 @@ const fr: Translations = {
     importTitle: 'Importer une sauvegarde',
     importHelper:
       "Les jours importés s'ajoutent à ceux déjà présents (en cas de doublon, la sauvegarde l'emporte).",
+    chooseFile: 'Choisir un fichier',
+    removeFile: 'Retirer le fichier',
     importButton: 'Importer',
     importing: 'Import…',
     importSuccessOne: '{{n}} jour importé.',
@@ -847,6 +849,8 @@ const fr: Translations = {
     weatherLocationSet: 'Position enregistrée : {{label}}. Utilisée pour remplir la météo automatiquement.',
     weatherLocationUnset:
       "Pas encore de position enregistrée — tu peux toujours la définir depuis le bouton dans la saisie du jour.",
+    weatherLocationCredit:
+      'Le nom du lieu vient de Nominatim (© les contributeurs d’OpenStreetMap), qui ne reçoit que ta position arrondie à environ 1 km, au moment où tu la mets à jour.',
     locating: 'Localisation…',
     updateLocation: 'Mettre à jour ma position',
     reminderTitle: 'Rappel quotidien',
@@ -869,8 +873,19 @@ const fr: Translations = {
     illnessesTitle: 'Tes maladies',
     illnessesHelper: 'Ce que tu suis avec OUCH, plusieurs choix possibles. C’est indiqué sur le rapport pour ton médecin et expliqué sur la page « Expliquer à mon enfant » (onglet Enfants).',
     backupTitle: 'Sauvegarde & synchro',
+    groups: {
+      profile: 'Mon profil',
+      tracking: 'Mon suivi',
+      display: 'Rappel et affichage',
+      data: 'Mes données',
+      about: 'À propos',
+    },
+    factorsCountOne: '{{n}} facteur suivi',
+    factorsCountOther: '{{n}} facteurs suivis',
+    summaryReminderOn: 'Rappel à {{time}}',
+    summaryReminderOff: 'Pas de rappel',
     privacyNote:
-      "OUCH garde toutes tes données sur cet appareil, dans son stockage local. Rien n'est envoyé à un serveur — le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
+      "OUCH garde toutes tes données sur cet appareil, dans son stockage local : aucune donnée de santé n'en sort. Seule la météo automatique contacte des services extérieurs, avec ta position et jamais ton journal. Le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
   },
 
   childView: {
