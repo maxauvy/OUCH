@@ -18,6 +18,7 @@ import {
   type WeekRow,
 } from '../../lib/report'
 import type { FlareEpisode } from '../../lib/flares'
+import { CONTEXT_KEYS, type ContextKey, type TreatmentEvent } from '../../lib/flareContext'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
 import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
 import { SYMPTOMS, type ReportData } from './reportData'
@@ -248,6 +249,17 @@ function painClinicPages(d: ReportData): Block[][] {
             </H>
             <FlaresTable d={d} from={from} to={to} />
             {to === d.flares.current.length && <p className="r-small">{f.t.flaresTableNote}</p>}
+          </>
+        )),
+      hasFlareContext(d) &&
+        rowsBlock(d.flares.current.length, (from, to, continued) => (
+          <>
+            <H level={3}>
+              {f.t.flareContextTitle}
+              <Continued f={f} on={continued} />
+            </H>
+            <FlareContextTable d={d} from={from} to={to} />
+            {to === d.flares.current.length && <p className="r-small">{f.t.flareContextNote}</p>}
           </>
         )),
       d.meds.length > 0 ? (
@@ -919,6 +931,74 @@ function FlaresTable({ d, from, to }: { d: ReportData; from: number; to: number 
               </td>
               <td className="r">
                 {d.medications.length ? f.format(f.t.flareRescue, { n: daysWithRescueMedication(logged, d.medications), total: logged.length }) : '—'}
+              </td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+  )
+}
+
+/** Measures with at least one figure before some flare: one that is not
+ * tracked would be a column of dashes. */
+function contextKeys(d: ReportData): ContextKey[] {
+  return CONTEXT_KEYS.filter((k) => d.flares.context.some((c) => c.values[k].window !== null || c.values[k].usual !== null))
+}
+
+/** Nothing to describe: no flare, or none with a figure or a treatment change. */
+function hasFlareContext(d: ReportData): boolean {
+  return d.flares.context.some((c) => c.events.length > 0) || (d.flares.current.length > 0 && contextKeys(d).length > 0)
+}
+
+function eventText(d: ReportData, ev: TreatmentEvent): string {
+  const { f } = d
+  const name = ev.med.name
+  const date = f.dayMonth(ev.date)
+  if (ev.kind === 'started') return f.format(f.t.medStarted, { name, date })
+  if (ev.kind === 'doseChanged') {
+    return f.format(f.t.doseChange, {
+      name,
+      from: f.posology(ev.med.regimen, ev.previous) || '?',
+      to: f.posology(ev.med.regimen, ev.period) || '?',
+      date,
+    })
+  }
+  const reason = ev.period.stopReason ? ` (${f.all.medications.stopReasons[ev.period.stopReason].toLocaleLowerCase()})` : ''
+  return f.format(f.t.medStopped, { name, date, reason })
+}
+
+function FlareContextTable({ d, from, to }: { d: ReportData; from: number; to: number }) {
+  const { f } = d
+  const keys = contextKeys(d)
+  const figure = (v: number | null) => (v === null ? '—' : f.nf(v))
+  return (
+    <table className="r-flare-context">
+      <thead>
+        <tr>
+          <th scope="col">{f.t.colFlareStart}</th>
+          {keys.map((k) => (
+            <th key={k} scope="col" className="r">
+              {f.t.symptomLabels[k][0]}
+            </th>
+          ))}
+          <th scope="col">{f.t.colFlareTreatment}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {d.flares.current.slice(from, to).map((e, i) => {
+          const c = d.flares.context[from + i]!
+          return (
+            <tr key={e.start} data-row>
+              <th scope="row" className="num">{f.dayMonth(e.start)}</th>
+              {keys.map((k) => (
+                <td key={k} className="r">
+                  {figure(c.values[k].window)}
+                  <span className="sm">{f.format(f.t.flareContextUsual, { v: figure(c.values[k].usual) })}</span>
+                </td>
+              ))}
+              <td>
+                {c.events.length === 0 ? '—' : c.events.map((ev) => <span key={`${ev.med.id}-${ev.kind}-${ev.date}`} className="sm-line">{eventText(d, ev)}</span>)}
               </td>
             </tr>
           )

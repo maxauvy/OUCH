@@ -1,6 +1,7 @@
 import type { DailyEntry, Illness, Medication } from '../../db/types'
 import type { Language } from '../../i18n'
-import { canDetectFlares, detectFlares, flareDayCount, type FlareEpisode } from '../../lib/flares'
+import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, type FlareEpisode } from '../../lib/flares'
+import { flareContext, type FlareContext } from '../../lib/flareContext'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
 import { shiftISO } from '../../lib/medications'
 import { reportFormat, type ReportFormat } from './reportFormat'
@@ -56,6 +57,8 @@ export interface FlareSummary {
   /** False when there are too few entries to tell what is usual */
   detectable: boolean
   current: FlareEpisode[]
+  /** What came before each of `current`, in the same order */
+  context: FlareContext[]
   previous: FlareEpisode[]
   currentDays: number
   previousDays: number
@@ -66,6 +69,8 @@ export function buildReportData(entries: DailyEntry[], medications: Medication[]
   const { current, previous } = splitEntries(entries, p)
   const episodes = detectFlares(entries, { asOf: options.end })
   const startingIn = (from: string, to: string) => episodes.filter((e) => e.start >= from && e.start <= to)
+  const flareDays = flareDaySet(episodes)
+  const currentFlares = startingIn(p.start, p.end)
   return {
     options,
     f: reportFormat(options.language),
@@ -79,7 +84,8 @@ export function buildReportData(entries: DailyEntry[], medications: Medication[]
     medications,
     flares: {
       detectable: canDetectFlares(entries),
-      current: startingIn(p.start, p.end),
+      current: currentFlares,
+      context: currentFlares.map((e) => flareContext(e, entries, medications, flareDays)),
       previous: startingIn(p.prevStart, shiftISO(p.start, -1)),
       currentDays: flareDayCount(episodes, p.start, p.end),
       previousDays: flareDayCount(episodes, p.prevStart, shiftISO(p.start, -1)),
