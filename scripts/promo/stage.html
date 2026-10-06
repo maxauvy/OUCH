@@ -34,6 +34,9 @@ h1 .a{color:#ffd27a}
 .layer .tag{margin-top:1.1em;font-weight:700;font-size:var(--tag);line-height:1.2;text-wrap:balance;max-width:16em}
 .layer .tag em{font-style:normal;color:#ffd27a}
 .layer .small{margin-top:1em;font-weight:500;font-size:calc(var(--tag)*.6);color:#c5dcec}
+ul.pills{list-style:none;padding:0;margin-top:1.2em;display:flex;flex-direction:column;gap:.7em;align-items:center}
+.pills li{opacity:0;background:rgba(255,255,255,.12);border:1px solid rgba(255,210,122,.45);border-radius:99px;padding:.55em 1.2em;font-weight:700;font-size:calc(var(--tag)*.68)}
+.layer.on .pills li{animation:pop .5s cubic-bezier(.2,1.3,.4,1) forwards;animation-delay:calc(.25s + var(--i)*.4s)}
 body.p{--logo:120px;--brand:46px;--bk:14px;--tag:25px}
 body.l{--logo:130px;--brand:56px;--bk:17px;--tag:30px}
 body.p .cap{left:30px;right:30px;top:34px;text-align:center}
@@ -51,6 +54,7 @@ body.l h1{font-size:46px} body.l .sub{font-size:18px} body.l .k{font-size:.8rem}
  <div class="tag">Note. Comprends. <em>Partage.</em></div>
  <div class="small">100 % local · tes données restent sur ton appareil</div>
  <div class="bk" style="margin-top:1.2em">maxauvy.github.io/OUCH</div></div>
+<div class="layer" id="more"><div class="k" style="animation:none;opacity:1">✦ Nouveau</div><div class="tag" style="margin-top:.4em">Et aussi…</div><ul class="pills"><!--PILLS--></ul></div>
 <script>
 const W=innerWidth,H=innerHeight,land=W>H
 document.body.className=land?'l':'p'
