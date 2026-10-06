@@ -6,6 +6,9 @@ import { Card, SectionTitle } from '../components/ui/Card'
 import { Footer } from '../components/layout/Footer'
 import { PainTrendChart, type ChartMarker } from '../components/trends/PainTrendChart'
 import { MedicationsCard } from '../components/trends/MedicationsCard'
+import { FlaresCard } from '../components/trends/FlaresCard'
+import { useFlares } from '../hooks/useFlares'
+import { flareDayCount, flaresOverlapping } from '../lib/flares'
 import { useMedications } from '../hooks/useMedications'
 import { todayISO } from '../db'
 import { formatPosology } from '../lib/medicationFormat'
@@ -48,6 +51,7 @@ export function TrendsPage() {
   const t = usePalette()
   const [rangeIdx, setRangeIdx] = useState(1)
   const medications = useMedications()
+  const flares = useFlares()
   const { intlLocale } = useLocale()
   const [reporting, setReporting] = useState(false)
   const reportIds = useId()
@@ -204,8 +208,22 @@ export function TrendsPage() {
 
           <Card>
             <SectionTitle>{i18n.trends.painEvolution}</SectionTitle>
-            <PainTrendChart entries={entries ?? []} from={rangeFrom} to={today} markers={doseMarkers} showMean={rangeDays !== 7} />
+            <PainTrendChart
+              entries={entries ?? []}
+              from={rangeFrom}
+              to={today}
+              markers={doseMarkers}
+              flares={flares?.episodes}
+              showMean={rangeDays !== 7}
+            />
           </Card>
+
+          {flares?.detectable && (
+            <FlaresCard
+              episodes={flaresOverlapping(flares.episodes, rangeFrom, today)}
+              days={flareDayCount(flares.episodes, rangeFrom, today)}
+            />
+          )}
 
           {medicationsTracked && medications && (
             <MedicationsCard entries={filtered} allEntries={entries} medications={medications} from={rangeFrom} to={today} />

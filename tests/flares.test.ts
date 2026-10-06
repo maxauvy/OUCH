@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { DailyEntry } from '../src/db/types.ts'
-import { canDetectFlares, detectFlares, flareDayCount, flareThreshold } from '../src/lib/flares.ts'
+import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresOverlapping, flareThreshold } from '../src/lib/flares.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
@@ -127,4 +127,18 @@ test('detection is possible once a day has enough logged days before it', () => 
   assert.equal(canDetectFlares(series([]).slice(0, 10)), false)
   assert.equal(canDetectFlares(series([]).slice(0, 11)), true)
   assert.equal(canDetectFlares([]), false)
+})
+
+test('episodes touching a range are found, even when they start before it', () => {
+  const eps = detectFlares(series([7, 8, 7, 4, 4, 4, 7, 8, 8, 4, 4]))
+  assert.equal(flaresOverlapping(eps, day(0), day(30)).length, 2)
+  assert.equal(flaresOverlapping(eps, day(16), day(18)).length, 1)
+  assert.equal(flaresOverlapping(eps, day(17), day(19)).length, 0)
+  assert.equal(flaresOverlapping(eps, day(21), day(40)).length, 1)
+})
+
+test('every day of a flare is in the set, logged or not', () => {
+  const eps = detectFlares(series([7, null, 7, 7, 4, 4]))
+  assert.deepEqual([...flareDaySet(eps)].sort(), [day(14), day(15), day(16), day(17)])
+  assert.equal(flareDaySet([]).size, 0)
 })

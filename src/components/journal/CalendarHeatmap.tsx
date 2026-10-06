@@ -20,10 +20,13 @@ export function CalendarHeatmap({
   entries,
   onSelectDate,
   selectedDate,
+  flareDays,
 }: {
   entries: DailyEntry[]
   onSelectDate: (date: string) => void
   selectedDate?: string
+  /** Days inside a flare, marked by a short bar under the number */
+  flareDays?: Set<string>
 }) {
   const [cursor, setCursor] = useState(new Date())
   const t = usePalette()
@@ -86,12 +89,16 @@ export function CalendarHeatmap({
           const selected = key === selectedDate
           const today = isToday(day)
           const dayLabel = format(day, 'd MMMM yyyy', { locale: dateFnsLocale })
+          const inFlare = !!flareDays?.has(key)
+          const label = [dayLabel, weather ? i18n.painWeatherLevels[weather.level] : null, inFlare ? i18n.calendar.flareDay : null]
+            .filter(Boolean)
+            .join(', ')
 
           return (
             <button
               key={key}
               onClick={() => onSelectDate(key)}
-              aria-label={weather ? `${dayLabel}, ${i18n.painWeatherLevels[weather.level]}` : dayLabel}
+              aria-label={label}
               aria-current={today ? 'date' : undefined}
               aria-pressed={selected}
               className={`aspect-square rounded-xl flex flex-col items-center justify-center relative text-caption ${inMonth ? 'font-medium' : 'font-normal'}`}
@@ -115,20 +122,27 @@ export function CalendarHeatmap({
                   aria-hidden
                 />
               )}
+              {inFlare && <FlareBar color={tinted ? tinted.ink : 'var(--color-ink-muted)'} className="absolute bottom-1.5" />}
             </button>
           )
         })}
       </div>
 
-      <WeatherLegend />
+      <WeatherLegend withFlare={!!flareDays?.size} />
     </div>
   )
+}
+
+/** A flare day's mark: shape and position, not colour, carry it; it takes the
+ * day's own ink, which already contrasts with the tint. */
+function FlareBar({ color, className = '' }: { color: string; className?: string }) {
+  return <span className={`block w-4 h-[2.5px] rounded-full ${className}`} style={{ background: color }} aria-hidden />
 }
 
 const LEVELS: PainWeatherLevel[] = [1, 2, 3, 4, 5]
 
 /** The five weathers, easiest day first, so the calendar's colors can be read. */
-function WeatherLegend() {
+function WeatherLegend({ withFlare }: { withFlare: boolean }) {
   const i18n = useTranslation()
   const id = useId()
   return (
@@ -156,6 +170,20 @@ function WeatherLegend() {
             </li>
           )
         })}
+        {withFlare && (
+          <li className="flex items-center gap-1.5">
+            <span
+              className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center"
+              style={{ background: 'var(--color-brand-soft)' }}
+              aria-hidden
+            >
+              <FlareBar color="var(--color-ink-muted)" />
+            </span>
+            <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              {i18n.calendar.flareDay.charAt(0).toLocaleUpperCase() + i18n.calendar.flareDay.slice(1)}
+            </span>
+          </li>
+        )}
       </ul>
     </div>
   )
