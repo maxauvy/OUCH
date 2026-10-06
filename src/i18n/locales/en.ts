@@ -867,6 +867,17 @@ const en: Translations = {
     illnessesTitle: 'Your illnesses',
     illnessesHelper: 'What you track with OUCH; you can pick several. It appears on the report for your doctor and is explained on the "Explain to my child" page (Kids tab).',
     backupTitle: 'Backup & sync',
+    groups: {
+      profile: 'My profile',
+      tracking: 'My tracking',
+      display: 'Reminder and display',
+      data: 'My data',
+      about: 'About',
+    },
+    factorsCountOne: '{{n}} factor tracked',
+    factorsCountOther: '{{n}} factors tracked',
+    summaryReminderOn: 'Reminder at {{time}}',
+    summaryReminderOff: 'No reminder',
     privacyNote:
       "OUCH keeps all your data on this device, in local storage. Nothing is sent to a server — sharing your weather and making backups is always something you choose to do.",
   },

@@ -687,6 +687,13 @@ export interface Translations {
     illnessesHelper: string
     backupTitle: string
     privacyNote: string
+    /** Titles of the collapsible groups of the settings page. */
+    groups: { profile: string; tracking: string; display: string; data: string; about: string }
+    /** One-line summaries shown on a group's header while it is folded. */
+    factorsCountOne: string
+    factorsCountOther: string
+    summaryReminderOn: string
+    summaryReminderOff: string
   }
 
   childView: {

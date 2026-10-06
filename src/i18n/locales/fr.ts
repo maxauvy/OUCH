@@ -873,6 +873,17 @@ const fr: Translations = {
     illnessesTitle: 'Tes maladies',
     illnessesHelper: 'Ce que tu suis avec OUCH, plusieurs choix possibles. C’est indiqué sur le rapport pour ton médecin et expliqué sur la page « Expliquer à mon enfant » (onglet Enfants).',
     backupTitle: 'Sauvegarde & synchro',
+    groups: {
+      profile: 'Mon profil',
+      tracking: 'Mon suivi',
+      display: 'Rappel et affichage',
+      data: 'Mes données',
+      about: 'À propos',
+    },
+    factorsCountOne: '{{n}} facteur suivi',
+    factorsCountOther: '{{n}} facteurs suivis',
+    summaryReminderOn: 'Rappel à {{time}}',
+    summaryReminderOff: 'Pas de rappel',
     privacyNote:
       "OUCH garde toutes tes données sur cet appareil, dans son stockage local. Rien n'est envoyé à un serveur — le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
   },

@@ -36,7 +36,7 @@ Trends shows your pain curve over 7, 30 or 90 days, or since the beginning, with
 
 From Trends, you can generate a report to print or save as a PDF. It covers the time since your last appointment and compares it with the same length of time just before. It comes in two versions: a 2-page summary for your GP, and a detailed 5-page report for a pain clinic (a CETD in France), with painkiller use and associated factors. It can be read in French or English and lists the conditions you declared.
 
-The report describes the data without interpreting it, and its thresholds cite their sources (IMMPACT, the French health authority HAS, and other published work), summarised in Settings → Scientific sources. It is built on your device; the name and date of birth you type into it are not saved.
+The report describes the data without interpreting it, and its thresholds cite their sources (IMMPACT, the French health authority HAS, and other published work), summarised in Settings → About → Scientific sources. It is built on your device; the name and date of birth you type into it are not saved.
 
 ### Explain it to your child
 

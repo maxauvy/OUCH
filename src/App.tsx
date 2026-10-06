@@ -62,7 +62,9 @@ function AppShell() {
   }, [settings.onboardingDone, hasEntry])
 
   // From the backup reminder: open the settings on the backup card.
+  const [backupRequested, setBackupRequested] = useState(false)
   function goToBackup() {
+    setBackupRequested(true)
     setTab('settings')
     requestAnimationFrame(() => document.getElementById('backup')?.scrollIntoView({ block: 'start' }))
   }
@@ -91,9 +93,15 @@ function AppShell() {
         {tab === 'journal' && <JournalPage />}
         {tab === 'trends' && <TrendsPage />}
         {tab === 'kids' && <ChildViewPage />}
-        {tab === 'settings' && <SettingsPage />}
+        {tab === 'settings' && <SettingsPage openBackup={backupRequested} />}
       </main>
-      <TabBar active={tab} onChange={setTab} />
+      <TabBar
+        active={tab}
+        onChange={(next) => {
+          setBackupRequested(false)
+          setTab(next)
+        }}
+      />
     </>
   )
 }
