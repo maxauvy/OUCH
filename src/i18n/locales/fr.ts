@@ -761,6 +761,12 @@ const fr: Translations = {
     body: 'Prends soin de toi : noter ta douleur suffit aujourd’hui.',
     helped: 'Ce qui t’a déjà fait du bien : {{list}}.',
     close: 'Fermer ce message',
+    lightNotice: 'Écran allégé pendant ces jours plus durs.',
+    fullForm: 'Afficher le formulaire complet',
+    lightNoted: 'C’est noté. Si tu veux, tu peux ajouter :',
+    lightZones: 'Où ça fait mal',
+    lightMeds: 'Mes médicaments',
+    lightNote: 'Une note',
   },
 
   deleteData: {
@@ -857,6 +863,9 @@ const fr: Translations = {
     reminderHelper: "Une notification si tu n'as pas encore rempli ta météo",
     reminderNote:
       "Ce rappel fonctionne quand l'app est ouverte ou récemment utilisée. Sans serveur (par choix, pour rester 100% local), il ne peut pas se déclencher app totalement fermée.",
+    lightFormTitle: 'Écran allégé les jours difficiles',
+    lightFormHelper:
+      'Pendant une poussée, l’écran du jour demande d’abord la douleur, puis propose le reste. Tu peux toujours afficher le formulaire complet.',
     hardDaysTitle: 'Un mot les jours difficiles',
     hardDaysHelper: 'Un message bienveillant, une seule fois, quand les derniers jours ont été plus durs que d’habitude.',
     appearanceTitle: 'Apparence',

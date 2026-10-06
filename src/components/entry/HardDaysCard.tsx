@@ -1,9 +1,7 @@
 import { useEffect } from 'react'
 import { IconHeart, IconX } from '@tabler/icons-react'
-import { updateSettings } from '../../db'
-import type { DailyEntry } from '../../db/types'
-import { useStoredSettings } from '../../hooks/useSettings'
-import { hardDaysCard } from '../../lib/hardDays'
+import { db, updateSettings } from '../../db'
+import type { HardDaysCard as Card } from '../../lib/hardDays'
 import { useLanguage, useTranslation } from '../../i18n'
 
 // What the person wrote down as helping reads in their own words ("Bain
@@ -13,24 +11,26 @@ const lowerFirst = (s: string) => (s.length > 1 && s[1] === s[1]!.toLocaleUpperC
 
 /** A soft word at the top of the day's page, once, when a flare is under way.
  * The ideas are highlighted in the text rather than set as buttons: they
- * lead nowhere, they are only there to be remembered. */
-export function HardDaysCard({ date, entries }: { date: string; entries: DailyEntry[] }) {
+ * lead nowhere, they are only there to be remembered.
+ *
+ * `card` comes from `useHardDays`, which reads the settings in one go: with
+ * the defaults standing in for them, "not seen yet" would be written back
+ * over what is stored about this flare (a dismissal, for one). `light` says
+ * the day's form is the lighter one, so the way back to the full form is
+ * offered here, the one day this card is shown. */
+export function HardDaysCard({ date, card, light }: { date: string; card: Card | null; light: boolean }) {
   const t = useTranslation().hardDays
   const language = useLanguage()
-  // Until the settings are read there is nothing to go on: the defaults
-  // would pass for "not seen yet", and writing that back would overwrite
-  // what is stored about this flare (a dismissal, for one).
-  const settings = useStoredSettings()
-  const seen = settings?.hardDaysSeen
-  const card = settings ? hardDaysCard({ entries, today: date, seen, enabled: settings.hardDaysCardEnabled }) : null
   const start = card?.episode.start
 
   // Remember that it was shown, so it does not come back on the next days.
   useEffect(() => {
-    if (start && (seen?.start !== start || seen.date !== date)) {
-      void updateSettings({ hardDaysSeen: { start, date, dismissed: false } })
-    }
-  }, [start, seen?.start, seen?.date, date])
+    if (!start) return
+    void (async () => {
+      const seen = (await db.settings.get(1))?.hardDaysSeen
+      if (seen?.start !== start || seen.date !== date) await updateSettings({ hardDaysSeen: { start, date, dismissed: false } })
+    })()
+  }, [start, date])
 
   if (!card || !start) return null
 
@@ -67,6 +67,16 @@ export function HardDaysCard({ date, entries }: { date: string; entries: DailyEn
             )}
             {after}
           </p>
+        )}
+        {light && (
+          <button
+            type="button"
+            onClick={() => void updateSettings({ fullFormDay: date })}
+            className="mt-3 text-control font-semibold underline underline-offset-2 text-left"
+            style={{ color: 'var(--color-brand)' }}
+          >
+            {t.fullForm}
+          </button>
         )}
       </div>
       <button

@@ -28,6 +28,31 @@ export interface HardDaysCard {
 
 export const MAX_HELPED = 3
 
+/** The flare under way as of yesterday, if any: what both the card and the
+ * lighter form on the day's page are based on. Days before today only, so
+ * what is logged today neither summons nor removes them mid-session. */
+function ongoingFlare(entries: DailyEntry[], today: string) {
+  const before = entries.filter((e) => e.date < today)
+  const episodes = detectFlares(before, { asOf: shiftISO(today, -1) })
+  return { before, episodes, episode: episodes.find((e) => e.ongoing) ?? null }
+}
+
+/** Whether the day's page asks for the pain only, then offers the rest.
+ * It lasts as long as the flare does, unlike the card, which shows once. The
+ * person can open the full form, and that holds for the rest of that day. */
+export function lightFormActive(input: {
+  entries: DailyEntry[]
+  today: string
+  /** The person can switch it off in the settings */
+  enabled?: boolean
+  /** The day the person asked for the full form */
+  fullFormDay?: string
+}): boolean {
+  const { entries, today, enabled = true, fullFormDay } = input
+  if (!enabled || fullFormDay === today) return false
+  return ongoingFlare(entries, today).episode !== null
+}
+
 export function hardDaysCard(input: {
   entries: DailyEntry[]
   /** ISO date of today */
@@ -39,9 +64,7 @@ export function hardDaysCard(input: {
   const { entries, today, seen, enabled = true } = input
   if (!enabled) return null
 
-  const before = entries.filter((e) => e.date < today)
-  const episodes = detectFlares(before, { asOf: shiftISO(today, -1) })
-  const episode = episodes.find((e) => e.ongoing)
+  const { before, episodes, episode } = ongoingFlare(entries, today)
   if (!episode) return null
 
   // Once per flare: the day it first showed, unless it was dismissed.

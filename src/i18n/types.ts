@@ -571,6 +571,13 @@ export interface Translations {
     /** `{{list}}` is replaced by the ideas, each highlighted */
     helped: string
     close: string
+    /** The lighter form: the line under the title, then what follows the pain */
+    lightNotice: string
+    fullForm: string
+    lightNoted: string
+    lightZones: string
+    lightMeds: string
+    lightNote: string
   }
 
   deleteData: {
@@ -671,6 +678,8 @@ export interface Translations {
     reminderNote: string
     hardDaysTitle: string
     hardDaysHelper: string
+    lightFormTitle: string
+    lightFormHelper: string
     appearanceTitle: string
     /** Accessible name of the light/dark choice (no visible title). */
     themeTitle: string

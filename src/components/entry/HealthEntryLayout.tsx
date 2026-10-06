@@ -11,6 +11,9 @@ import {
   IconClock,
   IconCloud,
   IconDroplet,
+  IconMapPin,
+  IconPencil,
+  IconPill,
   IconMoodSmile,
   IconMoon,
   IconWalk,
@@ -28,6 +31,9 @@ import { WeatherIcon } from '../ui/WeatherIcon'
 import { TagInput } from './TagInput'
 import { MedicationsField } from './MedicationsField'
 import { HardDaysCard } from './HardDaysCard'
+import { LightExtras, type LightItem } from './LightExtras'
+import { useHardDays } from '../../hooks/useHardDays'
+import { updateSettings } from '../../db'
 import { WeatherField } from './WeatherField'
 import { format, useLocale, useTranslation } from '../../i18n'
 
@@ -199,6 +205,7 @@ export function HealthEntryLayout({
   settings,
   saveState,
   allEntries,
+  entriesLoaded,
   medications,
   knownPositiveActions,
 }: {
@@ -208,6 +215,8 @@ export function HealthEntryLayout({
   settings: Settings
   saveState: 'idle' | 'saving' | 'saved'
   allEntries: DailyEntry[]
+  /** False until the journal is read: `allEntries` is empty meanwhile */
+  entriesLoaded: boolean
   medications: Medication[]
   knownPositiveActions: string[]
 }) {
@@ -215,6 +224,9 @@ export function HealthEntryLayout({
   const { intlLocale } = useLocale()
   const has = (key: string) => settings.enabledFactors.includes(key as never)
   const isToday = date === todayISO()
+  const { ready, card, light } = useHardDays(date, allEntries, entriesLoaded)
+  // Only today's page: another day is edited in full.
+  const lightToday = isToday && light
 
   const d = new Date(date + 'T00:00:00')
   const longDate = d.toLocaleDateString(intlLocale, { weekday: 'long', day: 'numeric', month: 'long' })
@@ -335,8 +347,68 @@ export function HealthEntryLayout({
       />
     )
 
-  return (
-    <div className="flex flex-col gap-3">
+  const zonesBlock = has('painLocations') ? (
+      <>
+        <GroupCaption>{t.entryForm.whereHurts}</GroupCaption>
+        <Card className="!p-4">
+          <div className="flex flex-wrap gap-2">
+            {BODY_ZONES.map((z) => (
+              <Chip key={z} label={t.bodyZones[z]} selected={zones.includes(z)} onClick={() => toggleZone(z)} />
+            ))}
+          </div>
+        </Card>
+      </>
+  ) : null
+  const medicationsBlock = has('medications') ? (
+      <>
+        <GroupCaption>{t.entryForm.medicationsTaken}</GroupCaption>
+        <Card className="!p-4">
+          <MedicationsField
+            date={date}
+            medications={medications}
+            intakes={local.intakes ?? []}
+            onChange={(v) => setField('intakes', v)}
+            placeholder={t.entryForm.addMedicationPlaceholder}
+          />
+        </Card>
+      </>
+  ) : null
+  const notesBlock = has('notes') ? (
+      <>
+        <GroupCaption>{t.entryForm.notes}</GroupCaption>
+        <Card className="!p-4">
+          <textarea
+            value={local.notes ?? ''}
+            onChange={(e) => setField('notes', e.target.value)}
+            placeholder={t.entryForm.notesPlaceholder}
+            rows={3}
+            className="w-full rounded-xl px-3.5 py-2.5 text-body outline-none resize-none"
+            style={{
+              background: 'var(--color-input)',
+              color: 'var(--color-ink)',
+              boxShadow: 'inset 0 0 0 1px var(--color-input-ring)',
+            }}
+          />
+        </Card>
+      </>
+  ) : null
+
+  // The lighter form: what follows the pain, offered one part at a time.
+  const lightItems: LightItem[] = []
+  if (zonesBlock) lightItems.push({ key: 'zones', label: t.hardDays.lightZones, icon: IconMapPin, filled: zones.length > 0, content: zonesBlock })
+  if (medicationsBlock)
+    lightItems.push({
+      key: 'meds',
+      label: t.hardDays.lightMeds,
+      icon: IconPill,
+      // Never open on its own: a new day starts with the ongoing treatments
+      // ticked, which says nothing about what the person chose to add.
+      filled: false,
+      content: medicationsBlock,
+    })
+  if (notesBlock) lightItems.push({ key: 'note', label: t.hardDays.lightNote, icon: IconPencil, filled: !!local.notes, content: notesBlock })
+
+  const header = (
       <div className="flex items-center justify-between px-1">
         <div>
           {isToday && (
@@ -356,10 +428,36 @@ export function HealthEntryLayout({
           </span>
         )}
       </div>
+  )
 
-      {isToday && <HardDaysCard date={date} entries={allEntries} />}
+  // Until the settings and the journal are read, today's page cannot tell
+  // which form it is: show the title only, rather than a full form that then
+  // folds up.
+  if (isToday && !ready) return <div className="flex flex-col gap-3">{header}</div>
 
-      <WeatherHero weather={local.painLevel === undefined ? null : weather} />
+  return (
+    <div className="flex flex-col gap-3">
+      {header}
+
+      {isToday && card && <HardDaysCard date={date} card={card} light={lightToday} />}
+
+      {/* After the first day the card is gone, and this says why the form is
+          short and how to get the rest. */}
+      {lightToday && !card && (
+        <p className="text-control px-1" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.hardDays.lightNotice}{' '}
+          <button
+            type="button"
+            onClick={() => void updateSettings({ fullFormDay: date })}
+            className="font-semibold underline underline-offset-2"
+            style={{ color: 'var(--color-brand)' }}
+          >
+            {t.hardDays.fullForm}
+          </button>
+        </p>
+      )}
+
+      {!lightToday && <WeatherHero weather={local.painLevel === undefined ? null : weather} />}
 
       <Card className="!p-4">
         <div className="flex items-center justify-between gap-2">
@@ -420,20 +518,11 @@ export function HealthEntryLayout({
 
       </Card>
 
-      {has('painLocations') && (
-        <>
-          <GroupCaption>{t.entryForm.whereHurts}</GroupCaption>
-          <Card className="!p-4">
-            <div className="flex flex-wrap gap-2">
-              {BODY_ZONES.map((z) => (
-                <Chip key={z} label={t.bodyZones[z]} selected={zones.includes(z)} onClick={() => toggleZone(z)} />
-              ))}
-            </div>
-          </Card>
-        </>
-      )}
+      {lightToday && <LightExtras noted={local.painLevel !== undefined} items={lightItems} />}
 
-      {metricRows.length > 0 && (
+      {!lightToday && zonesBlock}
+
+      {!lightToday && metricRows.length > 0 && (
         <>
           <GroupCaption>{t.entryForm.measuresTitle}</GroupCaption>
           {/* The first row's top border would double the card's own edge. */}
@@ -441,28 +530,15 @@ export function HealthEntryLayout({
         </>
       )}
 
-      {has('weather') && (
+      {!lightToday && has('weather') && (
         <Card className="!p-4">
           <WeatherField date={date} value={local.weather} onChange={(w) => setField('weather', w)} settings={settings} />
         </Card>
       )}
 
-      {has('medications') && (
-        <>
-          <GroupCaption>{t.entryForm.medicationsTaken}</GroupCaption>
-          <Card className="!p-4">
-            <MedicationsField
-              date={date}
-              medications={medications}
-              intakes={local.intakes ?? []}
-              onChange={(v) => setField('intakes', v)}
-              placeholder={t.entryForm.addMedicationPlaceholder}
-            />
-          </Card>
-        </>
-      )}
+      {!lightToday && medicationsBlock}
 
-      {has('positiveActions') && (
+      {!lightToday && has('positiveActions') && (
         <>
           <GroupCaption>{t.entryForm.positiveActionsTitle}</GroupCaption>
           <Card className="!p-4">
@@ -477,7 +553,7 @@ export function HealthEntryLayout({
         </>
       )}
 
-      {settings.cycleTrackingEnabled && (
+      {!lightToday && settings.cycleTrackingEnabled && (
         <Card className="!p-4 flex items-center gap-3">
           <CategoryIcon icon={IconDroplet} cat="cycle" />
           <div className="flex-1">
@@ -490,25 +566,7 @@ export function HealthEntryLayout({
         </Card>
       )}
 
-      {has('notes') && (
-        <>
-          <GroupCaption>{t.entryForm.notes}</GroupCaption>
-          <Card className="!p-4">
-            <textarea
-              value={local.notes ?? ''}
-              onChange={(e) => setField('notes', e.target.value)}
-              placeholder={t.entryForm.notesPlaceholder}
-              rows={3}
-              className="w-full rounded-xl px-3.5 py-2.5 text-body outline-none resize-none"
-              style={{
-                background: 'var(--color-input)',
-                color: 'var(--color-ink)',
-                boxShadow: 'inset 0 0 0 1px var(--color-input-ring)',
-              }}
-            />
-          </Card>
-        </>
-      )}
+      {!lightToday && notesBlock}
     </div>
   )
 }
