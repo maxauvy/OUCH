@@ -528,6 +528,12 @@ const en: Translations = {
     flaresTitle: 'Flares',
     flaresTableNote:
       'Usual: median of the previous 28 days, flares left out. Back: days from the last flare day to the first day back at the usual level. Rescue medication: days with at least one as-needed intake, out of the episode’s logged days.',
+    flareContextTitle: 'The 3 days before each flare',
+    flareContextNote:
+      'Mean of the 3 days before each flare began, with the usual mean of the 28 days before that (flares left out) underneath. This is a description: these measures also vary before days without a flare, and the table establishes no cause. “—”: too few logged days. Treatment: changes recorded in the registry during the 14 days before.',
+    colFlareStart: 'Start',
+    colFlareTreatment: 'Treatment, 14 d before',
+    flareContextUsual: 'usual {{v}}',
     colFlareDates: 'Dates',
     colFlareLength: 'Length',
     colFlarePeak: 'Peak',

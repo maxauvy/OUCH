@@ -272,6 +272,21 @@
   color: var(--r-muted);
   font-size: 10.5px;
 }
+/* Before a flare: figures stay on one line, the treatment cell wraps. */
+.report .r-flare-context td,
+.report .r-flare-context th[scope='row'] {
+  white-space: nowrap;
+}
+.report .r-flare-context td:last-child {
+  white-space: normal;
+  line-height: 1.35;
+}
+.report .sm-line {
+  display: block;
+}
+.report .sm-line + .sm-line {
+  margin-top: 2px;
+}
 .report .r-pill {
   display: inline-block;
   font-size: 10px;

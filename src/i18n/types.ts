@@ -398,6 +398,12 @@ export interface Translations {
     flareOngoing: string
     flaresTitle: string
     flaresTableNote: string
+    flareContextTitle: string
+    flareContextNote: string
+    colFlareStart: string
+    colFlareTreatment: string
+    /** `{{v}}`: the usual figure, under the one before the flare */
+    flareContextUsual: string
     colFlareDates: string
     colFlareLength: string
     colFlarePeak: string

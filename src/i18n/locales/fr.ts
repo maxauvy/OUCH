@@ -534,6 +534,12 @@ const fr: Translations = {
     flaresTitle: 'Poussées',
     flaresTableNote:
       'Habituel : médiane des 28 jours précédents, hors poussées. Retour : jours entre le dernier jour de poussée et le premier jour revenu au niveau habituel. Prises de secours : jours avec au moins une prise au besoin, sur les jours renseignés de l’épisode.',
+    flareContextTitle: 'Les 3 jours avant chaque poussée',
+    flareContextNote:
+      'Moyenne des 3 jours précédant le début de chaque poussée, avec dessous la moyenne habituelle des 28 jours d’avant (hors poussées). C’est une description : ces mesures varient aussi avant des jours sans poussée, et ce tableau n’établit aucun lien de cause. « — » : trop peu de jours renseignés. Traitement : changements notés dans le registre pendant les 14 jours précédents.',
+    colFlareStart: 'Début',
+    colFlareTreatment: 'Traitement, 14 j avant',
+    flareContextUsual: 'hab. {{v}}',
     colFlareDates: 'Dates',
     colFlareLength: 'Durée',
     colFlarePeak: 'Pic',
