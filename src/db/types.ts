@@ -235,6 +235,10 @@ export interface Settings {
   /** The soft message on the day's page when the last days were harder.
    * Switchable, and a preference: restored from a backup. */
   hardDaysCardEnabled: boolean
+  /** Pain first, the rest on request, while a flare is under way. Switchable, restored from a backup. */
+  lightFormEnabled: boolean
+  /** The day the person asked for the full form: it holds for that day only. Per device. */
+  fullFormDay?: string
   /** The flare it was last shown for. Per device, like the reminders above. */
   hardDaysSeen?: HardDaysSeen
 }
@@ -264,6 +268,7 @@ export const DEFAULT_SETTINGS: Settings = {
   parentGender: 'maman',
   illnesses: [],
   hardDaysCardEnabled: true,
+  lightFormEnabled: true,
 }
 
 export type PainWeatherLevel = 1 | 2 | 3 | 4 | 5

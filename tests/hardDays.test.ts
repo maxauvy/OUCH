@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { DailyEntry } from '../src/db/types.ts'
-import { hardDaysCard, helpedDuring } from '../src/lib/hardDays.ts'
+import { hardDaysCard, helpedDuring, lightFormActive } from '../src/lib/hardDays.ts'
 import { detectFlares } from '../src/lib/flares.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
@@ -82,4 +82,30 @@ test('at most three ideas, ties keeping the order they first appeared in', () =>
 test('the card carries what helped in earlier days of the flare', () => {
   const entries = series(HARD, { 14: ['Chaleur'], 16: ['Chaleur', 'Repos'] })
   assert.deepEqual(hardDaysCard({ entries, today: day(17) })?.helped, ['Chaleur', 'Repos'])
+})
+
+test('the lighter form lasts as long as the flare, day after day', () => {
+  const entries = series([7, 8, 7, 8, 8])
+  assert.equal(lightFormActive({ entries, today: day(17) }), true)
+  assert.equal(lightFormActive({ entries, today: day(19) }), true)
+  // The flare is over once a day is back to usual: the full form returns.
+  const over = series([7, 8, 7, 8, 4, 4])
+  assert.equal(lightFormActive({ entries: over, today: day(20) }), false)
+})
+
+test('no lighter form before a flare is one, or when it is switched off', () => {
+  assert.equal(lightFormActive({ entries: series([7, 8]), today: day(16) }), false)
+  assert.equal(lightFormActive({ entries: series(HARD), today: day(17), enabled: false }), false)
+})
+
+test('asking for the full form holds for that day only', () => {
+  const entries = series([7, 8, 7, 8, 8])
+  assert.equal(lightFormActive({ entries, today: day(19), fullFormDay: day(19) }), false)
+  assert.equal(lightFormActive({ entries, today: day(19), fullFormDay: day(18) }), true)
+})
+
+test('what is logged today does not turn it on or off', () => {
+  const entries = series(HARD)
+  assert.equal(lightFormActive({ entries: [...entries, entry(day(17), 2)], today: day(17) }), true)
+  assert.equal(lightFormActive({ entries: [...entries, entry(day(17), 10)], today: day(17) }), true)
 })

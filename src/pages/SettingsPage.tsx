@@ -232,6 +232,20 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
             />
           </div>
         </Card>
+
+        <Card>
+          <SectionTitle>{t.settings.lightFormTitle}</SectionTitle>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.settings.lightFormHelper}
+            </p>
+            <Toggle
+              checked={settings.lightFormEnabled}
+              onChange={(v) => updateSettings({ lightFormEnabled: v })}
+              label={t.settings.lightFormTitle}
+            />
+          </div>
+        </Card>
       </SettingsGroup>
 
       <SettingsGroup icon={IconBell} title={t.settings.groups.display} summary={displaySummary}>

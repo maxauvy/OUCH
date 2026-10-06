@@ -130,6 +130,11 @@ test('the hard-days switch is restored from a backup, which flare it was shown f
   assert.deepEqual(sanitizeSettings({ hardDaysCardEnabled: 'no' }), {})
 })
 
+test('the lighter-form switch is restored from a backup, the day the full form was asked for is not', () => {
+  assert.deepEqual(sanitizeSettings({ lightFormEnabled: false, fullFormDay: '2026-10-06' }), { lightFormEnabled: false })
+  assert.deepEqual(sanitizeSettings({ lightFormEnabled: 'no' }), {})
+})
+
 test('a whole backup: bad items are counted, good ones survive', () => {
   const out = sanitizeBackup({
     entries: [entry, { ...entry, date: 'nope' }, 3],

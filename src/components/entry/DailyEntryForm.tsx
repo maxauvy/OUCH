@@ -85,6 +85,7 @@ export function DailyEntryForm({ date }: { date: string }) {
       settings={settings}
       saveState={saveState}
       allEntries={allEntries ?? []}
+      entriesLoaded={allEntries !== undefined}
       medications={medications ?? []}
       knownPositiveActions={knownPositiveActions}
     />

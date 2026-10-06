@@ -755,6 +755,12 @@ const en: Translations = {
     body: 'Take care of yourself: logging your pain is enough today.',
     helped: 'What has helped you before: {{list}}.',
     close: 'Close this message',
+    lightNotice: 'Lighter screen during these harder days.',
+    fullForm: 'Show the full form',
+    lightNoted: 'Noted. If you like, you can add:',
+    lightZones: 'Where it hurts',
+    lightMeds: 'My medications',
+    lightNote: 'A note',
   },
 
   deleteData: {
@@ -851,6 +857,9 @@ const en: Translations = {
     reminderHelper: "A notification if you haven't filled in your weather yet",
     reminderNote:
       "This reminder works while the app is open or recently used. Without a server (by choice, to stay 100% local), it can't trigger while the app is fully closed.",
+    lightFormTitle: 'Lighter screen on hard days',
+    lightFormHelper:
+      'During a flare, the day’s screen asks for your pain first, then offers the rest. You can always show the full form.',
     hardDaysTitle: 'A note on hard days',
     hardDaysHelper: 'A kind message, shown once, when the last few days were harder than usual.',
     appearanceTitle: 'Appearance',
