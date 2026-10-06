@@ -178,6 +178,18 @@ export function canDetectFlares(entries: DailyEntry[], options: Partial<FlareOpt
   })
 }
 
+/** The episodes that touch [from, to] (inclusive), even if they start before. */
+export function flaresOverlapping(episodes: FlareEpisode[], from: string, to: string): FlareEpisode[] {
+  return episodes.filter((e) => e.end >= from && e.start <= to)
+}
+
+/** Every calendar day inside a flare, unlogged ones included, as ISO dates. */
+export function flareDaySet(episodes: FlareEpisode[]): Set<string> {
+  const days = new Set<string>()
+  for (const e of episodes) for (let d = e.start; d <= e.end; d = shiftISO(d, 1)) days.add(d)
+  return days
+}
+
 /** Calendar days of [from, to] (inclusive) that fall inside a flare. */
 export function flareDayCount(episodes: FlareEpisode[], from: string, to: string): number {
   return episodes.reduce((sum, ep) => {

@@ -1,9 +1,10 @@
-import { CartesianGrid, ComposedChart, Line, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { CartesianGrid, ComposedChart, Line, ReferenceArea, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { format } from 'date-fns'
 import type { Locale } from 'date-fns'
 import type { DailyEntry } from '../../db/types'
 import { themeFor } from '../../lib/theme'
 import { shiftISO } from '../../lib/medications'
+import { flareDaySet, type FlareEpisode } from '../../lib/flares'
 import { daysBetween, trailingMeans } from '../../lib/report'
 import { usePalette } from '../../hooks/usePalette'
 import { useLocale, useTranslation, type Translations } from '../../i18n'
@@ -18,6 +19,7 @@ interface Point {
   date: string
   pain: number | null
   mean: number | null
+  flare: boolean
 }
 
 const nf = (v: number) => v.toFixed(1)
@@ -59,6 +61,7 @@ function CustomTooltip({
           {i18n.trends.weeklyMean} {nf(p.mean)}
         </div>
       )}
+      {p.flare && <div style={{ color: t.inkMuted }}>{i18n.trends.flareBand}</div>}
     </div>
   )
 }
@@ -73,6 +76,7 @@ export function PainTrendChart({
   from,
   to,
   markers = [],
+  flares = [],
   showMean,
 }: {
   /** Every entry: the mean of the range's first days reaches back before it. */
@@ -81,6 +85,8 @@ export function PainTrendChart({
   from: string
   to: string
   markers?: ChartMarker[]
+  /** Shaded behind the data; an episode partly outside the range is clipped */
+  flares?: FlareEpisode[]
   /** Off for a one-week range, where a 7-day mean would say nothing more. */
   showMean: boolean
 }) {
@@ -93,12 +99,15 @@ export function PainTrendChart({
   // Starts WINDOW - 1 days early so the range's first day already has its mean.
   const values = Array.from({ length: total + WINDOW - 1 }, (_, i) => byDate.get(shiftISO(from, i - WINDOW + 1)))
   const means = trailingMeans(values, WINDOW)
+  const flareDays = flareDaySet(flares)
   const data: Point[] = Array.from({ length: total }, (_, day) => ({
     day,
     date: shiftISO(from, day),
     pain: values[day + WINDOW - 1] ?? null,
     mean: showMean ? (means[day + WINDOW - 1] ?? null) : null,
+    flare: flareDays.has(shiftISO(from, day)),
   }))
+  const shown = flares.filter((e) => e.end >= from && e.start <= to)
   const logged = data.filter((d) => d.pain !== null).length
   const dateOf = (day: number) => format(new Date(shiftISO(from, day) + 'T00:00:00'), 'd MMM', { locale: dateFnsLocale })
 
@@ -138,6 +147,19 @@ export function PainTrendChart({
               content={<CustomTooltip t={t} i18n={i18n} dateFnsLocale={dateFnsLocale} />}
               cursor={{ stroke: t.brand, strokeWidth: 1, strokeDasharray: '3 3' }}
             />
+            {/* A tint behind everything, not a colour of its own: the curve
+                keeps the brand blue and the flare is a stretch of days. */}
+            {shown.map((e) => (
+              <ReferenceArea
+                key={e.start}
+                x1={daysBetween(from, e.start) - 0.5}
+                x2={daysBetween(from, e.end) + 0.5}
+                fill={t.brand}
+                fillOpacity={0.14}
+                stroke="none"
+                ifOverflow="hidden"
+              />
+            ))}
             {markers
               .filter((m) => m.date >= from && m.date <= to)
               .map((m) => {
@@ -192,6 +214,12 @@ export function PainTrendChart({
           <li className="flex items-center gap-1.5">
             <span className="w-4 h-[2.5px] rounded-full" style={{ background: t.brand }} aria-hidden />
             {i18n.trends.weeklyMeanLegend}
+          </li>
+        )}
+        {shown.length > 0 && (
+          <li className="flex items-center gap-1.5">
+            <span className="w-4 h-3 rounded-[3px]" style={{ background: t.brand, opacity: 0.14 }} aria-hidden />
+            {i18n.trends.flareBand}
           </li>
         )}
       </ul>

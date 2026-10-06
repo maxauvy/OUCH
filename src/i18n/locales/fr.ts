@@ -234,6 +234,16 @@ const fr: Translations = {
     dailyRating: 'Note du jour',
     weeklyMean: 'Moyenne sur 7 jours :',
     weeklyMeanLegend: 'Moyenne des 7 derniers jours (dès 4 jours notés)',
+    flaresTitle: 'Poussées',
+    flaresSummary: '{{n}} {{n:poussée|poussées}} sur cette période, {{days}} {{days:jour|jours}} en tout.',
+    flaresNone: 'Aucune poussée repérée sur cette période.',
+    flaresHelper:
+      'Repérées dans tes propres notes : au moins 3 jours nettement au-dessus de ton niveau habituel (la médiane des 28 jours d’avant). Ce n’est pas un diagnostic.',
+    flareRange: 'du {{start}} au {{end}}',
+    flareDetails: '{{days}} {{days:jour|jours}} · pic {{peak}}/10 · habituel {{usual}}',
+    flareBack: 'retour à l’habituel en {{n}} {{n:jour|jours}}',
+    flareOngoing: 'en cours',
+    flareBand: 'Poussée',
     notLogged: 'Non renseigné',
     weekdayInsight:
       '🙂 Tes journées sont en moyenne meilleures le {{best}}, et plus difficiles le {{worst}}.',
@@ -714,6 +724,7 @@ const fr: Translations = {
     prevMonth: 'Mois précédent',
     nextMonth: 'Mois suivant',
     legend: 'Légende des couleurs',
+    flareDay: 'poussée',
     weekdaysShort: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
   },
 

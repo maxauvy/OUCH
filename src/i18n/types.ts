@@ -126,6 +126,18 @@ export interface Translations {
     dailyRating: string
     weeklyMean: string
     weeklyMeanLegend: string
+    flaresTitle: string
+    /** `{{n}}` flares, `{{days}}` days in total */
+    flaresSummary: string
+    flaresNone: string
+    flaresHelper: string
+    flareRange: string
+    /** `{{days}}`, `{{peak}}` out of 10, `{{usual}}` level */
+    flareDetails: string
+    flareBack: string
+    flareOngoing: string
+    /** In the chart's legend and tooltip */
+    flareBand: string
     notLogged: string
     weekdayInsight: string
     whatAffectsPain: string
@@ -528,6 +540,8 @@ export interface Translations {
     prevMonth: string
     nextMonth: string
     legend: string
+    /** Added to a day's name for a screen reader, and the legend's entry */
+    flareDay: string
     weekdaysShort: Week<string>
   }
 

@@ -231,6 +231,16 @@ const en: Translations = {
     painEvolution: 'Pain over time',
     dailyRating: 'Daily rating',
     weeklyMean: '7-day mean:',
+    flaresTitle: 'Flares',
+    flaresSummary: '{{n}} {{n:flare|flares}} over this period, {{days}} {{days:day|days}} in all.',
+    flaresNone: 'No flare found over this period.',
+    flaresHelper:
+      'Found in your own notes: at least 3 days clearly above your usual level (the median of the 28 days before). It is not a diagnosis.',
+    flareRange: '{{start}} to {{end}}',
+    flareDetails: '{{days}} {{days:day|days}} · peak {{peak}}/10 · usual {{usual}}',
+    flareBack: 'back to usual in {{n}} {{n:day|days}}',
+    flareOngoing: 'ongoing',
+    flareBand: 'Flare',
     weeklyMeanLegend: 'Mean of the last 7 days (from 4 rated days)',
     notLogged: 'Not logged',
     weekdayInsight: '🙂 Your days are on average better on {{best}}, and tougher on {{worst}}.',
@@ -705,6 +715,7 @@ const en: Translations = {
   },
 
   calendar: {
+    flareDay: 'flare',
     prevMonth: 'Previous month',
     nextMonth: 'Next month',
     legend: 'Color key',

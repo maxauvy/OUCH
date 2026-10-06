@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { CalendarHeatmap } from '../components/journal/CalendarHeatmap'
 import { Card } from '../components/ui/Card'
 import { DailyEntryForm } from '../components/entry/DailyEntryForm'
@@ -6,6 +6,8 @@ import { Footer } from '../components/layout/Footer'
 import { ShareSheet } from '../components/weather/ShareSheet'
 import { useAllEntries, useEntry, deleteEntry } from '../hooks/useEntries'
 import { useSettings } from '../hooks/useSettings'
+import { useFlares } from '../hooks/useFlares'
+import { flareDaySet } from '../lib/flares'
 import { todayISO } from '../db'
 import { useTranslation } from '../i18n'
 
@@ -16,13 +18,15 @@ export function JournalPage() {
   const [selected, setSelected] = useState<string | null>(null)
   const [sharing, setSharing] = useState(false)
   const selectedEntry = useEntry(selected ?? '__none__')
+  const flares = useFlares()
+  const flareDays = useMemo(() => flareDaySet(flares?.episodes ?? []), [flares])
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       <h1 className="text-title font-semibold px-1">{t.journal.title}</h1>
 
       <Card>
-        <CalendarHeatmap entries={entries ?? []} onSelectDate={setSelected} selectedDate={selected ?? undefined} />
+        <CalendarHeatmap entries={entries ?? []} onSelectDate={setSelected} selectedDate={selected ?? undefined} flareDays={flareDays} />
       </Card>
 
       {entries && entries.length === 0 && (
