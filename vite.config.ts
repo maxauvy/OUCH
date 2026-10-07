@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig, type Plugin } from 'vite'
 import { execSync } from 'node:child_process'
+import { readFileSync } from 'node:fs'
 
 // Short commit of the build, so the footer tells which release a browser runs.
 function commitSha(): string {
@@ -14,6 +15,20 @@ function commitSha(): string {
       .trim()
   } catch {
     return 'unknown'
+  }
+}
+
+// True when the build is exactly the commit tagged for the package version
+// (v0.2.0 for 0.2.0): the footer then shows the plain version, otherwise
+// version + commit, since main can move on between two releases.
+function isTaggedRelease(version: string): boolean {
+  try {
+    return execSync('git tag --points-at HEAD', { stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString()
+      .split('\n')
+      .includes(`v${version}`)
+  } catch {
+    return false
   }
 }
 
@@ -58,12 +73,16 @@ export default defineConfig(({ command }) => {
 
   const commit = command === 'build' ? commitSha() : 'dev'
   const date = new Date().toISOString().slice(0, 10)
+  const { version } = JSON.parse(readFileSync('./package.json', 'utf8')) as { version: string }
+  const tagged = command === 'build' && isTaggedRelease(version)
 
   return {
     base,
     define: {
       __APP_COMMIT__: JSON.stringify(commit),
       __APP_BUILD_DATE__: JSON.stringify(date),
+      __APP_VERSION__: JSON.stringify(version),
+      __APP_IS_TAGGED_RELEASE__: JSON.stringify(tagged),
     },
     plugins: [
       versionFile(commit, date),

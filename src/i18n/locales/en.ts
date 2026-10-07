@@ -931,7 +931,7 @@ const en: Translations = {
   },
 
   footer: {
-    credit: 'Made by Maxime Auvy',
+    credit: 'Made with care by Maxime Auvy',
     sourceCode: 'Source code',
     updateAvailable: 'Update available',
     reload: 'Reload',
