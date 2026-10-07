@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    # A release tag redeploys, so the footer can show the plain version (the
+    # push to main that carried the release ran before the tag existed).
+    tags: ['v*']
   workflow_dispatch:
 
 env:
