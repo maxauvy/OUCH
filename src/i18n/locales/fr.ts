@@ -937,7 +937,7 @@ const fr: Translations = {
   },
 
   footer: {
-    credit: 'Créé par Maxime Auvy',
+    credit: 'Créé avec soin par Maxime Auvy',
     sourceCode: 'Code source',
     updateAvailable: 'Mise à jour disponible',
     reload: 'Recharger',

@@ -19,12 +19,23 @@ export function Footer() {
         {' · '}
         {isRelease ? (
           <a
-            href={`${REPO_URL}/commit/${__APP_COMMIT__}`}
+            href={
+              __APP_IS_TAGGED_RELEASE__
+                ? `${REPO_URL}/releases/tag/v${__APP_VERSION__}`
+                : `${REPO_URL}/commit/${__APP_COMMIT__}`
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="underline"
           >
-            <span className="font-mono">{__APP_COMMIT__}</span> · {__APP_BUILD_DATE__}
+            {__APP_IS_TAGGED_RELEASE__ ? (
+              <>v{__APP_VERSION__}</>
+            ) : (
+              <>
+                {__APP_VERSION__}+<span className="font-mono">{__APP_COMMIT__}</span>
+              </>
+            )}{' '}
+            · {__APP_BUILD_DATE__}
           </a>
         ) : (
           <span className="font-mono">{__APP_COMMIT__}</span>
