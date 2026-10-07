@@ -100,7 +100,7 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       <h1 className="text-title font-semibold px-1">{t.settings.title}</h1>
 
-      <SettingsGroup icon={IconUser} title={t.settings.groups.profile} summary={profileSummary} defaultOpen={!openBackup}>
+      <SettingsGroup icon={IconUser} title={t.settings.groups.profile} summary={profileSummary}>
         <Card>
           <SectionTitle>{t.settings.firstNameTitle}</SectionTitle>
           <p className="text-caption mb-2" style={{ color: 'var(--color-ink-muted)' }}>
