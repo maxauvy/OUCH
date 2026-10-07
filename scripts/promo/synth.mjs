@@ -1,6 +1,7 @@
 // Synthesizes the 50 s ambient backing track of the promo videos (soft pad,
 // plucked arpeggio, then a light beat from 11 s), no samples or assets needed.
-//   node scripts/promo/synth.mjs [output.wav] [duration-seconds=50]   (needs ffmpeg for echo + fades)
+//   node scripts/promo/synth.mjs [output.wav] [duration-seconds=50] [bright]   (needs ffmpeg for echo + fades)
+// "bright": a major key a tone higher, faster, with the beat from 3.5 s and a hat on every eighth.
 import { writeFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { tmpdir } from 'node:os'
@@ -9,10 +10,12 @@ const OUT = process.argv[2] ?? 'ouch-promo-music.wav'
 const RAW = join(tmpdir(), 'ouch-promo-music.f32')
 const SR = 44100, DUR = Number(process.argv[3] ?? 50), N = SR * DUR
 const L = new Float32Array(N), R = new Float32Array(N)
-const BPM = Math.round(DUR / 2.0833) * 240 / DUR, beat = 60 / BPM, bar = beat * 4, eighth = beat / 2
+const BRIGHT = process.argv[4] === 'bright'
+const BPM = BRIGHT ? 124 : Math.round(DUR / 2.0833) * 240 / DUR, beat = 60 / BPM, bar = beat * 4, eighth = beat / 2
 const mtof = (m) => 440 * 2 ** ((m - 69) / 12)
-const chords = [[60, 64, 67, 71], [55, 59, 62, 67], [57, 60, 64, 67], [53, 57, 60, 64]] // Cmaj7 G Am7 Fmaj7
-const roots = [36, 43, 45, 41]
+const TR = BRIGHT ? 2 : 0
+const chords = [[60, 64, 67, 71], [55, 59, 62, 67], [57, 60, 64, 67], [53, 57, 60, 64]].map((c) => c.map((m) => m + TR)) // Cmaj7 G Am7 Fmaj7 (D when bright)
+const roots = [36, 43, 45, 41].map((m) => m + TR)
 function add(t0, dur, fn, gl, gr) {
   const i0 = Math.max(0, Math.floor(t0 * SR)), i1 = Math.min(N, Math.floor((t0 + dur) * SR))
   for (let i = i0; i < i1; i++) { const t = i / SR - t0; const v = fn(t); L[i] += v * gl; R[i] += v * gr }
@@ -29,7 +32,7 @@ for (let b = 0; b * bar < DUR; b++) {
     }, pan * 2, (1 - pan) * 2)
   }
 }
-const drums = (t) => t >= 11 && t < DUR - 4.4
+const drums = (t) => t >= (BRIGHT ? 3.5 : 11) && t < DUR - 4.4
 const music = (t) => t >= 3.5 && t < DUR - 3.5
 for (let b = 0; b * bar < DUR; b++) {
   const ch = chords[b % 4], root = roots[b % 4]
@@ -38,7 +41,7 @@ for (let b = 0; b * bar < DUR; b++) {
     if (music(t)) {
       // arpeggio pluck, ping-pong
       const m = ch[[0, 1, 2, 3, 2, 1, 2, 3][e]] + 24, f = mtof(m), g = e % 2 ? [0.5, 1.1] : [1.1, 0.5]
-      const vol = t < 11 ? 0.10 : 0.15
+      const vol = t < 11 && !BRIGHT ? 0.10 : 0.15
       add(t, 0.9, (x) => Math.exp(-x * 6) * vol * (Math.sin(2 * Math.PI * f * x) + 0.3 * Math.sin(2 * Math.PI * f * 2 * x) * Math.exp(-x * 12)), g[0], g[1])
     }
     if (music(t) && (e === 0 || e === 3 || e === 4)) {
@@ -47,7 +50,7 @@ for (let b = 0; b * bar < DUR; b++) {
     }
     if (drums(t)) {
       if (e === 0 || e === 4) add(t, 0.3, (x) => Math.exp(-x * 14) * 0.42 * Math.sin(2 * Math.PI * (45 * x + 14 * (1 - Math.exp(-x * 30)) / 30 * 30 * 0 + 90 * (1 - Math.exp(-x * 25)) / 25)), 1, 1)
-      if (e % 2 === 1) { let prev = 0; add(t, 0.06, (x) => { const n = Math.random() * 2 - 1; const hp = n - prev; prev = n; return hp * Math.exp(-x * 70) * 0.05 }, 0.8, 1.1) }
+      if (e % 2 === 1 || BRIGHT) { let prev = 0; add(t, 0.06, (x) => { const n = Math.random() * 2 - 1; const hp = n - prev; prev = n; return hp * Math.exp(-x * 70) * 0.05 }, 0.8, 1.1) }
       if (e === 2 || e === 6) { let s = 0; add(t, 0.14, (x) => { const n = Math.random() * 2 - 1; s += 0.35 * (n - s); return s * Math.exp(-x * 26) * 0.10 }, 1, 1) }
     }
   }
