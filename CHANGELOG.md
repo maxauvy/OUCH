@@ -2,9 +2,16 @@
 
 Les changements notables d'OUCH sont notés ici. Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), et les versions numérotées suivent le [versionnage sémantique](https://semver.org/lang/fr/) : tant que le projet est en `0.x`, des changements peuvent casser des habitudes d'une version à l'autre.
 
-Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/releases), et le site déployé affiche en pied de page le commit qu'il exécute.
+Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/releases), et le site déployé affiche en pied de page la version qu'il exécute (avec le commit entre deux versions).
 
 ## [Non publié]
+
+## [0.2.1] - 2026-10-07
+
+### Modifié
+- Dans Réglages, tous les groupes sont repliés au départ (Mon profil était ouvert), pour une page plus claire. Le rappel de sauvegarde ouvre toujours Mes données.
+- Dans Tendances, la légende du nombre de jours ne répète plus le chiffre : « 22 », puis « jours suivis ».
+- Le pied de page affiche la version (v0.2.1) au lieu du seul numéro de commit, avec un lien vers la release ; entre deux versions, il affiche 0.2.1 suivi du commit.
 
 ## [0.2.0] - 2026-10-06
 
