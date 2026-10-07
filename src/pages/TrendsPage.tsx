@@ -191,9 +191,7 @@ export function TrendsPage() {
                 {filtered.length}
               </span>
               <span className="text-caption" style={{ color: t.inkMuted }}>
-                {format(filtered.length === 1 ? i18n.trends.daysTrackedOne : i18n.trends.daysTrackedOther, {
-                  n: filtered.length,
-                })}
+                {filtered.length === 1 ? i18n.trends.daysTrackedOne : i18n.trends.daysTrackedOther}
               </span>
             </Card>
             <Card className="flex flex-col items-center py-4">
