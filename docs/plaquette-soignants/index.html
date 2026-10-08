@@ -57,19 +57,20 @@ ol.steps{margin:0 0 2mm;padding-left:5mm}ol.steps li{margin-bottom:1.2mm}
 sup{font-size:6.6pt;line-height:0}
 .nb{break-inside:avoid}
 .page{position:relative;width:210mm;height:296.5mm;padding:12mm 14mm 0;overflow:hidden;break-after:page;page-break-after:always}.page:last-of-type{break-after:auto;page-break-after:auto}.in{height:262mm;overflow:visible}@media screen{body{background:#888}.page{background:#fff;margin:0 auto 4mm}}.fx{display:flex;gap:5mm;align-items:center;background:#f8fafb;border:1px solid var(--hair);border-left:1.2mm solid var(--lav);border-radius:2mm;padding:2mm 3.5mm;margin:2mm 0;break-inside:avoid;font-size:8.3pt;line-height:1.38}.fx .fxt{flex:1}.fx figure{margin:0;flex:none}.fx svg{width:100%;height:auto;display:block}
-.phones{display:grid;grid-template-columns:repeat(4,31mm);gap:6mm;justify-content:space-between;margin:0}
-.phone{margin:0;text-align:center}
-.phone .scr{width:31mm;aspect-ratio:780/1400;border-radius:4mm;overflow:hidden;box-shadow:0 0 0 1.2px #cfd8de,0 1.2mm 3mm rgba(20,33,43,.18);background:#fff}
+.pt{display:grid;grid-template-columns:92mm 1fr;gap:6mm;align-items:start}
+.phones{display:grid;grid-template-columns:repeat(2,44mm);gap:5mm 4mm}
+.phone{margin:0}
+.phone .scr{width:44mm;aspect-ratio:780/1180;border-radius:2.5mm;overflow:hidden;border:1px solid #cfd8de;background:#fff}
 .phone .scr img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
-.phone figcaption{font-size:7.8pt;line-height:1.3;margin-top:2mm;color:var(--muted)}
+.phone figcaption{font-size:7.8pt;line-height:1.3;margin-top:1.5mm;color:var(--muted)}
 .phone figcaption b{color:var(--ink);display:block;font-size:8.2pt}
 .sheets{display:flex;gap:4mm;flex:none}
-.sheet{margin:0;width:55mm}
-.sheet .scr{width:55mm;aspect-ratio:1056/1494;overflow:hidden;border-radius:1.5mm;box-shadow:0 0 0 1.2px #cfd8de,0 1.2mm 3mm rgba(20,33,43,.18)}
+.sheet{margin:0;width:88mm}
+.sheet .scr{width:88mm;aspect-ratio:1054/740;overflow:hidden;border:1px solid #cfd8de}
 .sheet img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 .sheet figcaption{font-size:7.6pt;line-height:1.3;margin-top:1.8mm;color:var(--muted);text-align:center}
-.rep{display:flex;gap:6mm;align-items:flex-start}
-.rep .tx{flex:1;font-size:8.8pt}
+.rep{display:block}.sheets{margin-bottom:3mm;justify-content:space-between}
+.rep .tx{display:grid;grid-template-columns:1fr 1fr;gap:7mm;font-size:8.8pt}
 .rep ul{margin:0 0 2mm;padding-left:4.5mm}.rep li{margin-bottom:1.2mm}
 .small2{font-size:7.4pt;line-height:1.35;color:var(--muted)}
 td.why{color:#2f3d47}
@@ -86,38 +87,40 @@ td.why{color:#2f3d47}
 <div><h2>Ce que cela change en consultation</h2><p>Des chiffres pris au jour le jour, plutôt qu’un récit de mémoire. Une comparaison à la période précédente, les poussées repérées, les traitements pris et leurs effets, et la question que le patient veut poser. Un appui pour l’anamnèse, pas une aide à la décision.</p></div>
 </div>
 <h2>Ce que le patient saisit, en moins d’une minute</h2>
+<div class="pt">
 <div class="phones">
-<figure class="phone"><div class="scr"><img src="img/a-flare.png" alt="Écran Aujourd’hui allégé un jour de poussée : douleur en onze cases"></div><figcaption><b>Jours difficiles</b>La douleur seule, en onze cases.</figcaption></figure>
-<figure class="phone"><div class="scr"><img src="img/b-today-1.png" alt="Zones douloureuses et mesures du jour"></div><figcaption><b>Où, et comment</b>Zones, fatigue, sommeil, stress, humeur.</figcaption></figure>
-<figure class="phone"><div class="scr"><img src="img/b-today-3.png" alt="Médicaments pris"></div><figcaption><b>Traitements</b>Prises, effets indésirables.</figcaption></figure>
-<figure class="phone"><div class="scr"><img src="img/d-trends-0.png" alt="Courbe de douleur sur 90 jours"></div><figcaption><b>La courbe</b>Poussées ombrées.</figcaption></figure>
+<figure class="phone"><div class="scr"><img src="img/a-flare.png" alt="Écran Aujourd’hui allégé un jour de poussée : douleur en onze cases"></div><figcaption><b>Jours difficiles</b>La douleur seule, en onze cases à toucher.</figcaption></figure>
+<figure class="phone"><div class="scr"><img src="img/b-zones.png" alt="Zones douloureuses et mesures du jour"></div><figcaption><b>Où, et comment</b>Zones, fatigue, sommeil, stress, humeur.</figcaption></figure>
+<figure class="phone"><div class="scr"><img src="img/b-meds.png" alt="Médicaments pris"></div><figcaption><b>Traitements</b>Prises, prises au besoin, effets indésirables.</figcaption></figure>
+<figure class="phone"><div class="scr"><img src="img/d-trends.png" alt="Courbe de douleur sur 90 jours"></div><figcaption><b>La courbe</b>Moyenne sur 7 jours, poussées ombrées.</figcaption></figure>
 </div>
-<h2>Pourquoi c’est utile</h2>
+<div>
 <table>
-<tr><th style="width:24%">Le patient note</th><th style="width:19%">Comment</th><th>Pour vous</th></tr>
-<tr><td>Douleur du jour</td><td>0 à 10, seule saisie obligatoire</td><td class="why">Échelle numérique recommandée pour l’intensité<sup>[1][3]</sup>. Notée au jour le jour : le rappel d’une seule journée est plus fidèle que celui de la semaine<sup>[6]</sup>.</td></tr>
-<tr><td>Où ça fait mal</td><td>13 zones</td><td class="why">Localisation et extension, jour par jour. Déclaratif, pas un critère de classification.</td></tr>
-<tr><td>Fatigue, sommeil, brouillard mental, humeur, stress, activité</td><td>Curseurs 0 à 10</td><td class="why">Suivis à côté de la douleur. Échelles simples, non validées. Sommeil et douleur sont liés dans les deux sens<sup>[14]</sup>.</td></tr>
-<tr><td>Traitements</td><td>De fond ou au besoin</td><td class="why">Posologie réellement prise, jours oubliés, prises au besoin, soulagement, effets indésirables datés, changements de dose.</td></tr>
-<tr><td>Ce qui a aidé</td><td>En un geste</td><td class="why">Les approches non médicamenteuses que le patient repère lui-même.</td></tr>
-<tr><td>Météo, cycle, note</td><td>Facultatifs</td><td class="why">Des pistes que le patient veut tester ; le lien météo et douleur reste discordant<sup>[7][11–13]</sup>.</td></tr>
+<tr><th>Le patient note</th></tr>
+<tr><td style="font-weight:400"><b>Douleur du jour</b>, de 0 à 10 : la seule saisie obligatoire.<span class="m" style="display:block;color:#2f3d47">Échelle numérique recommandée pour l’intensité<sup>[1][3]</sup>. Notée au jour le jour : le rappel d’une seule journée est plus fidèle que celui de la semaine<sup>[6]</sup>.</span></td></tr>
+<tr><td style="font-weight:400"><b>Où ça fait mal</b>, sur 13 zones.<span class="m" style="display:block;color:#2f3d47">Localisation et extension, jour par jour. Déclaratif, pas un critère de classification.</span></td></tr>
+<tr><td style="font-weight:400"><b>Fatigue, sommeil, brouillard mental, humeur, stress, activité</b>, de 0 à 10.<span class="m" style="display:block;color:#2f3d47">Suivis à côté de la douleur. Échelles simples, non validées. Sommeil et douleur sont liés dans les deux sens<sup>[14]</sup>.</span></td></tr>
+<tr><td style="font-weight:400"><b>Traitements</b>, de fond ou au besoin.<span class="m" style="display:block;color:#2f3d47">Posologie réellement prise, jours oubliés, prises au besoin, soulagement, effets indésirables datés, changements de dose.</span></td></tr>
+<tr><td style="font-weight:400"><b>Ce qui a aidé</b>, en un geste.<span class="m" style="display:block;color:#2f3d47">Les approches non médicamenteuses que le patient repère lui-même.</span></td></tr>
+<tr><td style="font-weight:400"><b>Météo, cycle, note</b>, facultatifs.<span class="m" style="display:block;color:#2f3d47">Des pistes que le patient veut tester ; le lien météo et douleur reste discordant<sup>[7][11–13]</sup>.</span></td></tr>
 </table>
-<p class="small2" style="margin-top:2mm">Références numérotées comme dans la note méthodologique : [1] IMMPACT · [3] HAS · [6] Broderick · [7][11–13] météo · [14] Finan.</p>
+<div class="card l" style="margin-top:4mm"><b class="t">Les jours difficiles, une seule saisie</b><p>Seule la douleur est obligatoire. Pendant une poussée, l’écran se réduit à la douleur ; le reste est proposé ensuite, sans insister.</p></div>
+</div>
+</div>
+<p class="small2" style="margin-top:2.5mm">Références numérotées comme dans la note méthodologique : [1] IMMPACT · [3] HAS · [6] Broderick · [7][11–13] météo · [14] Finan.</p>
 </div><div class="foot"><span>Captures d’écran de démonstration, données fictives. OUCH n’est ni un dispositif médical ni un avis médical ; les données sont auto-déclarées par le patient et non vérifiées.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div></div>
 <div class="page"><div class="bar"></div><div class="in"><h2 style="margin-top:6mm">Ce que vous recevez</h2>
 <div class="rep">
 <div class="sheets">
-<figure class="sheet"><div class="scr"><img src="img/gp-0.png" alt="Rapport médecin traitant, page 1"></div><figcaption>Médecin traitant, page 1</figcaption></figure>
-<figure class="sheet"><div class="scr"><img src="img/cetd-1.png" alt="Rapport centre douleur, poussées"></div><figcaption>Centre douleur, poussées</figcaption></figure>
+<figure class="sheet"><div class="scr"><img src="img/gp-top.png" alt="Rapport médecin traitant, haut de la page 1"></div><figcaption>Médecin traitant : courbe, moyennes, répartition des jours</figcaption></figure>
+<figure class="sheet"><div class="scr"><img style="object-fit:contain" src="img/cetd-top.png" alt="Rapport centre douleur, courbe et tableau des poussées"></div><figcaption>Centre douleur : courbe et tableau des poussées</figcaption></figure>
 </div>
 <div class="tx">
-<p>Le patient choisit une version (français ou anglais) et sa date de dernière consultation : le rapport couvre depuis cette date et la compare à la même durée juste avant.</p>
-<ul>
-<li><b>Médecin traitant</b>, 2 pages : courbe, répartition des jours légers, modérés et sévères, points clés, traitements, ce que le patient veut aborder.</li>
-<li><b>Centre douleur (CETD)</b>, environ 5 pages : s’y ajoutent statistiques détaillées, poussées et 3 jours qui les précèdent, chaque symptôme, antalgiques semaine par semaine, facteurs associés.</li>
-<li><b>Dans les deux</b> : le bilan avant et après chaque changement de traitement de fond, la méthode et les références.</li>
-</ul>
-<p>Les jours non renseignés ne sont jamais comblés. Le PDF est fabriqué sur le téléphone ; nom et date de naissance ne sont pas enregistrés.</p>
+<div><p>Le patient choisit une version (français ou anglais) et sa date de dernière consultation : le rapport couvre depuis cette date et la compare à la même durée juste avant.</p>
+<ul><li><b>Médecin traitant</b>, 2 pages : courbe, répartition des jours légers, modérés et sévères, points clés, traitements, ce que le patient veut aborder.</li></ul></div>
+<div><ul><li><b>Centre douleur (CETD)</b>, environ 5 pages : s’y ajoutent statistiques détaillées, poussées et 3 jours qui les précèdent, chaque symptôme, antalgiques semaine par semaine, facteurs associés.</li>
+<li><b>Dans les deux</b> : le bilan avant et après chaque changement de traitement de fond, la méthode et les références.</li></ul>
+<p>Les jours non renseignés ne sont jamais comblés. Le PDF est fabriqué sur le téléphone ; nom et date de naissance ne sont pas enregistrés.</p></div>
 </div></div>
 <div class="two">
 <div><h2>Ce que fait OUCH</h2><ul class="ic">
