@@ -337,3 +337,8 @@ export function compareContext(
   if (yes.length < minN || no.length < minN) return null
   return { key, withMedian: median(yes), withN: yes.length, withoutMedian: median(no), withoutN: no.length }
 }
+
+/** A template ending in "." after an abbreviated month ("sept.") would print "sept.." */
+export function collapseDoublePeriod(text: string): string {
+  return text.replace(/\.\.(?=\s|$)/g, '.')
+}
