@@ -346,8 +346,6 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
       <SettingsGroup icon={IconInfoCircle} title={t.settings.groups.about}>
         <AboutCard withHeader />
 
-        <SupportCard />
-
         <SourcesCard />
 
         <Card>
@@ -356,6 +354,8 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
           </p>
         </Card>
       </SettingsGroup>
+
+      <SupportCard />
 
       <Footer />
     </div>

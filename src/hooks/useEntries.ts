@@ -6,6 +6,11 @@ export function useAllEntries(): DailyEntry[] | undefined {
   return useLiveQuery(() => db.entries.orderBy('date').reverse().toArray(), [])
 }
 
+/** How many days have an entry; undefined until counted. */
+export function useEntryCount(): number | undefined {
+  return useLiveQuery(() => db.entries.count(), [])
+}
+
 export function useEntry(date: string): DailyEntry | undefined {
   return useLiveQuery(() => db.entries.where('date').equals(date).first(), [date])
 }
