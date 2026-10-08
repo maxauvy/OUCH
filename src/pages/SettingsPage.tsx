@@ -10,6 +10,7 @@ import { AboutCard } from '../components/about/AboutCard'
 import { SourcesCard } from '../components/about/SourcesCard'
 import { BackupSection } from '../components/settings/BackupSection'
 import { DeleteDataCard } from '../components/settings/DeleteDataCard'
+import { InstallCard } from '../components/install/InstallCard'
 import { MedicationsSection } from '../components/settings/MedicationsSection'
 import { IllnessPicker } from '../components/settings/IllnessPicker'
 import { SettingsGroup } from '../components/settings/SettingsGroup'
@@ -338,6 +339,8 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
 
         <DeleteDataCard />
       </SettingsGroup>
+
+      <InstallCard />
 
       <SettingsGroup icon={IconInfoCircle} title={t.settings.groups.about}>
         <AboutCard withHeader />

@@ -65,6 +65,7 @@ const fr: Translations = {
     checkNoMedications: 'Aucun traitement décrit pour l’instant',
     checkReminder: 'Rappel chaque jour à {{time}}',
     checkNoReminder: 'Pas de rappel quotidien',
+    checkNotInstalled: 'OUCH n’est pas encore installée',
     sourcesTitle: 'Pour les curieux et les curieuses',
     sourcesBody:
       'Les repères du rapport s’appuient sur des études publiées. Tu les retrouves, avec un résumé de leurs conclusions, dans Réglages → Sources scientifiques.',
@@ -860,6 +861,24 @@ const fr: Translations = {
     close: 'Fermer',
     error: 'La suppression a échoué. Ferme les autres onglets d’OUCH et réessaie.',
     wiped: 'Tes données ont été supprimées de cet appareil.',
+  },
+
+  install: {
+    title: 'Installer OUCH sur l’écran d’accueil',
+    teaser: 'Pour mieux protéger ton journal',
+    reasonSafari: 'Safari risque moins d’effacer ton journal si l’app est installée, et elle s’ouvre sans la barre du navigateur.',
+    reason: 'Installée, OUCH s’ouvre comme une app, sans la barre du navigateur, et ton navigateur risque moins d’effacer ton journal.',
+    button: 'Installer',
+    steps: {
+      menu: 'Touche le menu de la page : le symbole à gauche de l’adresse, ou les trois points selon ta version d’iOS.',
+      share: 'Touche « Partager ».',
+      more: 'Si besoin, touche « En voir plus ».',
+      home: 'Choisis « Sur l’écran d’accueil ».',
+      add: 'Laisse « Ouvrir comme app web » activé, puis touche « Ajouter » en haut à droite.',
+    },
+    pictures: { address: 'ouch…', share: 'Partager', more: 'En voir plus', home: 'Sur l’écran d’accueil', add: 'Ajouter' },
+    iosOther: 'Pour installer OUCH, ouvre cette page dans Safari, puis touche « Partager » et « Sur l’écran d’accueil ».',
+    other: 'Dans le menu de ton navigateur, cherche « Installer l’application » ou « Ajouter à l’écran d’accueil ».',
   },
 
   storage: {

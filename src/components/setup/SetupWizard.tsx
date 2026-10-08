@@ -17,6 +17,8 @@ import { Chip } from '../ui/Chip'
 import { Toggle } from '../ui/Toggle'
 import { MedicationsSection } from '../settings/MedicationsSection'
 import { IllnessPicker } from '../settings/IllnessPicker'
+import { InstallFold } from '../install/InstallCard'
+import { useInstallKind } from '../../hooks/useInstall'
 
 // First-run setup. Every step is optional and saved as soon as it is changed
 // (same as Settings), so leaving halfway keeps what was chosen. The steps
@@ -395,6 +397,7 @@ function DoneStep({ heading }: { heading: ReactNode }) {
   const described = medications?.filter((m) => m.regimen !== 'unspecified').length ?? 0
 
   const language = useLanguage()
+  const installKind = useInstallKind()
   const items: { done: boolean; text: string }[] = [
     {
       done: settings.illnesses.length > 0,
@@ -414,6 +417,7 @@ function DoneStep({ heading }: { heading: ReactNode }) {
       ? [{ done: described > 0, text: described > 0 ? format(t.setup.checkMedications, { n: described }) : t.setup.checkNoMedications }]
       : []),
     { done: settings.reminderEnabled, text: settings.reminderEnabled ? format(t.setup.checkReminder, { time: settings.reminderTime }) : t.setup.checkNoReminder },
+    ...(installKind === 'installed' ? [] : [{ done: false, text: t.setup.checkNotInstalled }]),
   ]
 
   return (
@@ -440,6 +444,7 @@ function DoneStep({ heading }: { heading: ReactNode }) {
           ))}
         </ul>
       </Card>
+      <InstallFold />
       <Card>
         <div className="flex flex-col gap-4">
           <InfoRow icon={IconFileText} title={t.setup.reportTitle} body={t.setup.reportBody} />

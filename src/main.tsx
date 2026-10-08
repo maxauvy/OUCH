@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
+// Imported here so the browser's one-time install prompt is not missed
+// before a screen that offers it is on show.
+import './hooks/useInstall'
 
 // A new release installs in the background and takes over straight away
 // (skipWaiting + clientsClaim in vite.config.ts), but the page is not
