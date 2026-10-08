@@ -71,6 +71,20 @@ export interface ChartMarker {
   label: string
 }
 
+/** A stretch of days with its mean drawn across it, dashed. */
+export interface ChartMean {
+  from: string
+  to: string
+  value: number
+}
+
+/** Days shown as set apart (not counted in whatever is compared). */
+export interface ChartSpan {
+  from: string
+  to: string
+  label: string
+}
+
 export function PainTrendChart({
   entries,
   from,
@@ -78,6 +92,9 @@ export function PainTrendChart({
   markers = [],
   flares = [],
   showMean,
+  periodMeans = [],
+  periodMeansLabel,
+  setApart,
 }: {
   /** Every entry: the mean of the range's first days reaches back before it. */
   entries: DailyEntry[]
@@ -89,6 +106,11 @@ export function PainTrendChart({
   flares?: FlareEpisode[]
   /** Off for a one-week range, where a 7-day mean would say nothing more. */
   showMean: boolean
+  /** Mean of a stretch of days, drawn across it */
+  periodMeans?: ChartMean[]
+  /** Legend entry for the dashed means */
+  periodMeansLabel?: string
+  setApart?: ChartSpan
 }) {
   const t = usePalette()
   const i18n = useTranslation()
@@ -160,6 +182,29 @@ export function PainTrendChart({
                 ifOverflow="hidden"
               />
             ))}
+            {setApart && (
+              <ReferenceArea
+                x1={daysBetween(from, setApart.from) - 0.5}
+                x2={daysBetween(from, setApart.to) + 0.5}
+                fill={t.inkMuted}
+                fillOpacity={0.14}
+                stroke="none"
+                ifOverflow="hidden"
+              />
+            )}
+            {periodMeans.map((m) => (
+              <ReferenceLine
+                key={m.from}
+                segment={[
+                  { x: daysBetween(from, m.from) - 0.5, y: m.value },
+                  { x: daysBetween(from, m.to) + 0.5, y: m.value },
+                ]}
+                stroke={t.ink}
+                strokeWidth={1.5}
+                strokeDasharray="5 4"
+                ifOverflow="hidden"
+              />
+            ))}
             {markers
               .filter((m) => m.date >= from && m.date <= to)
               .map((m) => {
@@ -220,6 +265,18 @@ export function PainTrendChart({
           <li className="flex items-center gap-1.5">
             <span className="w-4 h-3 rounded-[3px]" style={{ background: t.brand, opacity: 0.14 }} aria-hidden />
             {i18n.trends.flareBand}
+          </li>
+        )}
+        {periodMeans.length > 0 && periodMeansLabel && (
+          <li className="flex items-center gap-1.5">
+            <span className="w-4 border-t-[1.5px] border-dashed" style={{ borderColor: t.ink }} aria-hidden />
+            {periodMeansLabel}
+          </li>
+        )}
+        {setApart && (
+          <li className="flex items-center gap-1.5">
+            <span className="w-4 h-3 rounded-[3px]" style={{ background: t.inkMuted, opacity: 0.14 }} aria-hidden />
+            {setApart.label}
           </li>
         )}
       </ul>

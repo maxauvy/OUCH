@@ -6,10 +6,13 @@
 // reader would take each flag for a cause. Showing every measure, the
 // contrary cases included, leaves nothing to fish for.
 
-import type { DailyEntry, Medication, MedicationPeriod } from '../db/types'
+import type { DailyEntry, Medication } from '../db/types'
 import type { FlareEpisode } from './flares.ts'
 import { shiftISO } from './medications.ts'
 import { mean } from './report.ts'
+import { treatmentEvents, type TreatmentEvent } from './treatmentEvents.ts'
+
+export type { TreatmentEvent }
 
 /** Measures on the person's own scales, in the order they are shown. Not the
  * day before's activity (too much and too little are both tied to pain, so
@@ -36,15 +39,6 @@ export interface ContextValue {
   window: number | null
   /** Mean of the 28 days before that, flare days left out; null likewise */
   usual: number | null
-}
-
-export interface TreatmentEvent {
-  med: Medication
-  kind: 'started' | 'doseChanged' | 'stopped'
-  date: string
-  period: MedicationPeriod
-  /** The posology it replaced, for a change */
-  previous?: MedicationPeriod
 }
 
 export interface FlareContext {
@@ -76,20 +70,6 @@ export function flareContext(
   ) as Record<ContextKey, ContextValue>
 
   const from = shiftISO(episode.start, -o.eventDays)
-  const before = (date: string) => date >= from && date < episode.start
-  const events: TreatmentEvent[] = []
-  for (const med of medications) {
-    med.periods.forEach((period, i) => {
-      if (before(period.start)) {
-        events.push(
-          i > 0
-            ? { med, kind: 'doseChanged', date: period.start, period, previous: med.periods[i - 1] }
-            : { med, kind: 'started', date: period.start, period }
-        )
-      }
-      if (i === med.periods.length - 1 && period.end && before(period.end)) events.push({ med, kind: 'stopped', date: period.end, period })
-    })
-  }
-  events.sort((a, b) => a.date.localeCompare(b.date))
+  const events = treatmentEvents(medications).filter((e) => e.date >= from && e.date < episode.start)
   return { values, events }
 }

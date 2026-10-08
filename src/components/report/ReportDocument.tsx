@@ -18,6 +18,7 @@ import {
   type WeekRow,
 } from '../../lib/report'
 import type { FlareEpisode } from '../../lib/flares'
+import type { TreatmentReview } from '../../lib/treatmentReview'
 import { CONTEXT_KEYS, type ContextKey, type TreatmentEvent } from '../../lib/flareContext'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
 import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
@@ -162,6 +163,7 @@ function gpPages(d: ReportData): Block[][] {
             <TreatmentsTable d={d} detailed={false} from={from} to={to} />
           </>
         )),
+      d.reviews.length > 0 && reviewBlock(d),
       <div className="r-grid2 wide-left">
         <div>
           <H level={2}>{f.t.symptoms}</H>
@@ -283,6 +285,7 @@ function painClinicPages(d: ReportData): Block[][] {
           <p className="r-small">{f.t.noTreatments}</p>
         </>
       ),
+      d.reviews.length > 0 && reviewBlock(d),
       symptoms.length > 0 &&
         rowsBlock(symptoms.length, (from, to, continued) => (
           <>
@@ -951,18 +954,86 @@ function hasFlareContext(d: ReportData): boolean {
   return d.flares.context.some((c) => c.events.length > 0) || (d.flares.current.length > 0 && contextKeys(d).length > 0)
 }
 
+/** The table of changes of background treatment, split between sheets by rows. */
+function reviewBlock(d: ReportData) {
+  const { f } = d
+  return rowsBlock(d.reviews.length, (from, to, continued) => (
+    <>
+      <H level={3}>
+        {f.t.reviewTitle}
+        <Continued f={f} on={continued} />
+      </H>
+      <ReviewTable d={d} from={from} to={to} />
+      {to === d.reviews.length && <p className="r-small">{f.t.reviewNote}</p>}
+      {to === d.reviews.length && <ReviewUsual d={d} />}
+    </>
+  ))
+}
+
+/** How much two periods in a row usually differ for this patient, so that a
+ * difference in the table can be read against it. Taken from the latest
+ * review that has it. */
+function ReviewUsual({ d }: { d: ReportData }) {
+  const { f } = d
+  const gap = [...d.reviews].reverse().find((r) => r.measures.pain.usualGap !== null)?.measures.pain.usualGap
+  if (gap == null) return null
+  return <p className="r-small">{f.format(f.t.reviewUsual, { gap: f.nf(gap), n: gap })}</p>
+}
+
+function ReviewTable({ d, from, to }: { d: ReportData; from: number; to: number }) {
+  const { f } = d
+  const pair = (c: { before: number | null; after: number | null }, show: (v: number) => string) =>
+    c.before === null || c.after === null ? '—' : `${show(c.before)} → ${show(c.after)}`
+  const perDay = (v: number) => f.format(f.t.reviewPerDay, { v: f.nf(v) })
+  const asList = (events: TreatmentEvent[]) => events.map((e) => eventText(d, e).replace(/\.$/, '')).join(' ; ')
+  const effects = (r: TreatmentReview) =>
+    r.sideEffects.after.map((e) => f.format(f.t.reviewSideEffect, { effect: e.effect, n: e.days })).join(', ')
+  return (
+    <table className="r-reviews">
+      <thead>
+        <tr>
+          <th scope="col">{f.t.colReviewChange}</th>
+          <th scope="col" className="r">{f.t.colReviewPain}</th>
+          <th scope="col" className="r">{f.t.colReviewFlares}</th>
+          <th scope="col" className="r">{f.t.colReviewRescue}</th>
+          <th scope="col" className="r">{f.t.colReviewDays}</th>
+          <th scope="col">{f.t.colReviewNotes}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {d.reviews.slice(from, to).map((r) => {
+          const m = r.measures
+          const notes = [
+            r.status === 'tooFewDays' ? f.format(f.t.reviewTooFew, { before: r.nBefore, after: r.nAfter }) : null,
+            r.status === 'inProgress' ? f.format(f.t.reviewInProgress, { n: r.daysAfter }) : null,
+            r.alsoChanged.length ? f.format(f.t.reviewAlsoChanged, { list: asList(r.alsoChanged) }) : null,
+            r.duringFlare ? f.t.reviewDuringFlare : null,
+            r.comparable && r.sideEffects.after.length ? f.format(f.t.reviewSideEffects, { list: effects(r) }) : null,
+          ].filter((x): x is string => x !== null)
+          return (
+            <tr key={`${r.event.med.id}-${r.event.kind}-${r.date}`} data-row>
+              <th scope="row">{asList([r.event])}</th>
+              <td className="r num">{pair(m.pain, f.nf)}</td>
+              <td className="r num">{pair(m.flareDays, (v) => String(v))}</td>
+              <td className="r num">{pair(m.rescue, perDay)}</td>
+              <td className="r num">{`${r.nBefore} · ${r.nAfter}`}</td>
+              <td>{notes.length ? notes.map((n) => <span key={n} className="sm-line">{n}</span>) : '—'}</td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+  )
+}
+
 function eventText(d: ReportData, ev: TreatmentEvent): string {
   const { f } = d
   const name = ev.med.name
   const date = f.dayMonth(ev.date)
   if (ev.kind === 'started') return f.format(f.t.medStarted, { name, date })
   if (ev.kind === 'doseChanged') {
-    return f.format(f.t.doseChange, {
-      name,
-      from: f.posology(ev.med.regimen, ev.previous) || '?',
-      to: f.posology(ev.med.regimen, ev.period) || '?',
-      date,
-    })
+    const [from, to] = f.posologyChange(ev.med.regimen, ev.previous, ev.period)
+    return f.format(f.t.doseChange, { name, from, to, date })
   }
   const reason = ev.period.stopReason ? ` (${f.all.medications.stopReasons[ev.period.stopReason].toLocaleLowerCase()})` : ''
   return f.format(f.t.medStopped, { name, date, reason })

@@ -1,6 +1,5 @@
 import type { DailyEntry, Medication } from '../../db/types'
 import { medicationReports, reportPeriods, type MedicationReport } from '../../lib/report'
-import { posologyChanges, type PosologyChange } from '../../lib/medicationTrends'
 import { periodOn } from '../../lib/medications'
 import { formatPosology } from '../../lib/medicationFormat'
 import { usePalette } from '../../hooks/usePalette'
@@ -9,22 +8,19 @@ import { Card, SectionTitle } from '../ui/Card'
 
 /**
  * How each treatment was used over the chosen range: adherence for ongoing
- * ones, days and doses for as-needed ones, reported relief and side effects,
- * and pain around dosage changes. On purpose there is no "pain with vs
- * without" for as-needed medications: they're taken on bad days, so the
- * comparison would always read as if they made pain worse.
+ * ones, days and doses for as-needed ones, reported relief and side effects.
+ * On purpose there is no "pain with vs without" for as-needed medications:
+ * they're taken on bad days, so the comparison would always read as if they
+ * made pain worse. Changes of a background treatment have their own card.
  */
 export function MedicationsCard({
   entries,
-  allEntries,
   medications,
   from,
   to,
 }: {
   /** Entries in the chosen range */
   entries: DailyEntry[]
-  /** Every entry: the 2 weeks before a change may start before the range */
-  allEntries: DailyEntry[]
   medications: Medication[]
   from: string
   to: string
@@ -35,10 +31,8 @@ export function MedicationsCard({
   const reports = medicationReports(entries, medications, reportPeriods(from, to)).filter(
     (m) => m.daysTaken > 0 || m.daysMissed > 0
   )
-  const changes = posologyChanges(allEntries, medications, from, to)
   if (!reports.length) return null
 
-  const nf = (v: number) => new Intl.NumberFormat(intlLocale, { maximumFractionDigits: 1, minimumFractionDigits: 1 }).format(v)
   const pct = (v: number) => new Intl.NumberFormat(intlLocale, { style: 'percent', maximumFractionDigits: 0 }).format(v)
 
   return (
@@ -53,10 +47,8 @@ export function MedicationsCard({
             key={m.med.id}
             report={m}
             logged={entries.length}
-            changes={changes.filter((c) => c.med.id === m.med.id)}
             first={i === 0}
             posology={formatPosology(i18n, m.regimen, periodOn(m.med, to) ?? m.med.periods[m.med.periods.length - 1], intlLocale)}
-            nf={nf}
             pct={pct}
           />
         ))}
@@ -72,23 +64,18 @@ function count(n: number, one: string, other: string) {
 function MedicationRow({
   report: m,
   logged,
-  changes,
   first,
   posology,
-  nf,
   pct,
 }: {
   report: MedicationReport
   logged: number
-  changes: PosologyChange[]
   first: boolean
   posology: string
-  nf: (v: number) => string
   pct: (v: number) => string
 }) {
   const t = usePalette()
   const i18n = useTranslation()
-  const { intlLocale } = useLocale()
   const tr = i18n.trends
   const days = (n: number) => count(n, tr.daysOne, tr.daysOther)
 
@@ -132,17 +119,6 @@ function MedicationRow({
           {format(tr.sideEffects, { list: sideEffects })}
         </p>
       )}
-      {changes.map((c) => (
-        <p key={c.period.start} className="text-caption mt-2 leading-snug" style={{ color: t.ink }}>
-          <span aria-hidden>💡 </span>
-          {format(tr.posologyChange, {
-            dose: formatPosology(i18n, m.regimen, c.period, intlLocale),
-            date: new Date(`${c.period.start}T00:00:00`).toLocaleDateString(intlLocale, { day: 'numeric', month: 'long' }),
-            after: nf(c.after),
-            before: nf(c.before),
-          })}
-        </p>
-      ))}
     </div>
   )
 }

@@ -281,6 +281,16 @@
   white-space: normal;
   line-height: 1.35;
 }
+/* Changes of treatment: figures on one line, the change and the notes wrap. */
+.report .r-reviews td.num {
+  white-space: nowrap;
+}
+.report .r-reviews td:last-child {
+  line-height: 1.35;
+}
+.report .r-reviews tbody th[scope='row'] {
+  line-height: 1.35;
+}
 .report .sm-line {
   display: block;
 }

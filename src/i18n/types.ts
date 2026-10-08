@@ -166,8 +166,51 @@ export interface Translations {
     takenAsNeededWithDoses: string
     reliefShare: string
     sideEffects: string
-    posologyChange: string
     posologyChangeMarker: string
+    reviewTitle: string
+    reviewCaption: string
+    reviewPickerLabel: string
+    /** `{{name}}`, `{{date}}` */
+    reviewStarted: string
+    reviewStopped: string
+    /** `{{name}}`, `{{from}}`, `{{to}}`, `{{date}}` */
+    reviewDoseChanged: string
+    reviewPick: string
+    reviewBefore: string
+    reviewAfter: string
+    reviewPain: string
+    reviewFlareDays: string
+    reviewRescue: string
+    reviewSleep: string
+    reviewSideEffects: string
+    reviewPerDay: string
+    /** `{{h}}`, `{{m}}` */
+    reviewHours: string
+    reviewMinutes: string
+    reviewNoSideEffects: string
+    /** `{{effect}}`, `{{n}}` days */
+    reviewSideEffect: string
+    /** `{{before}}`, `{{after}}`: logged days */
+    reviewLogged: string
+    reviewNotCause: string
+    reviewAlsoChanged: string
+    reviewDuringFlare: string
+    /** `{{done}}` days passed of 28, `{{n}}` logged */
+    reviewInProgress: string
+    /** `{{n}}` logged so far */
+    reviewNeedDays: string
+    reviewSeeCurve: string
+    reviewHideCurve: string
+    reviewSettle: string
+    reviewMeanLegend: string
+    reviewUsualTitle: string
+    reviewUsualHelper: string
+    /** `{{gap}}` */
+    reviewBeyond: string
+    reviewWithin: string
+    reviewUsualNote: string
+    reviewLess: string
+    reviewMore: string
   }
 
   /** Sunday-first, matching Date#getDay(). */
@@ -400,6 +443,27 @@ export interface Translations {
     flaresTableNote: string
     flareContextTitle: string
     flareContextNote: string
+    reviewTitle: string
+    reviewNote: string
+    /** `{{gap}}` as shown, `{{n}}` as a number for the plural */
+    reviewUsual: string
+    colReviewChange: string
+    colReviewPain: string
+    colReviewFlares: string
+    colReviewRescue: string
+    colReviewDays: string
+    colReviewNotes: string
+    /** `{{n}}` days passed of 28 */
+    reviewInProgress: string
+    /** `{{before}}`, `{{after}}` logged days */
+    reviewTooFew: string
+    /** `{{list}}` */
+    reviewAlsoChanged: string
+    reviewDuringFlare: string
+    /** `{{list}}` */
+    reviewSideEffects: string
+    reviewSideEffect: string
+    reviewPerDay: string
     colFlareStart: string
     colFlareTreatment: string
     /** `{{v}}`: the usual figure, under the one before the flare */

@@ -7,6 +7,7 @@ import { Footer } from '../components/layout/Footer'
 import { PainTrendChart, type ChartMarker } from '../components/trends/PainTrendChart'
 import { MedicationsCard } from '../components/trends/MedicationsCard'
 import { FlaresCard } from '../components/trends/FlaresCard'
+import { TreatmentReviewCard } from '../components/trends/TreatmentReviewCard'
 import { useFlares } from '../hooks/useFlares'
 import { flareDayCount, flaresOverlapping } from '../lib/flares'
 import { useMedications } from '../hooks/useMedications'
@@ -224,7 +225,10 @@ export function TrendsPage() {
           )}
 
           {medicationsTracked && medications && (
-            <MedicationsCard entries={filtered} allEntries={entries} medications={medications} from={rangeFrom} to={today} />
+            <>
+              <MedicationsCard entries={filtered} medications={medications} from={rangeFrom} to={today} />
+              <TreatmentReviewCard entries={entries} medications={medications} episodes={flares?.detectable ? flares.episodes : null} today={today} />
+            </>
           )}
 
           {weekdayInsight && (
