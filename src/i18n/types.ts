@@ -288,6 +288,11 @@ export interface Translations {
     painHelper: string
     painEndNone: string
     painEndExtreme: string
+    /** Lighter form: under the empty counter */
+    painTouch: string
+    painOutOf: string
+    painLess: string
+    painMore: string
     whereHurts: string
     generalFeeling: string
     fatigueEndFine: string

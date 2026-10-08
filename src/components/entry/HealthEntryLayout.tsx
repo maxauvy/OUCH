@@ -26,6 +26,7 @@ import { computePainWeather } from '../../lib/painWeather'
 import { Card, GroupCaption } from '../ui/Card'
 import { Chip } from '../ui/Chip'
 import { Slider } from '../ui/Slider'
+import { FlarePainScale } from './FlarePainScale'
 import { Toggle } from '../ui/Toggle'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { TagInput } from './TagInput'
@@ -470,51 +471,57 @@ export function HealthEntryLayout({
           </span>
         </div>
 
-        <div className="flex items-end justify-between mt-3">
-          <div>
-            <p className="tabular-nums text-hero font-bold leading-none">
-              {local.painLevel ?? <span style={{ color: 'var(--color-ink-muted)' }}>—</span>}
-              <span className="text-body font-medium" style={{ color: 'var(--color-ink-muted)' }}>
-                {' '}/ 10
-              </span>
-            </p>
-            {delta !== null && (
-              <p
-                className="text-caption mt-1.5 flex items-center gap-1"
-                style={{
-                  color:
-                    Math.abs(delta) < 0.25 ? 'var(--color-ink-muted)' : delta < 0 ? 'var(--cat-mood)' : 'var(--cat-pain)',
-                }}
-              >
-                {Math.abs(delta) < 0.25 ? (
-                  <>
-                    <IconArrowRight size={14} aria-hidden /> {t.entryForm.vsAverageSame}
-                  </>
-                ) : delta < 0 ? (
-                  <>
-                    <IconArrowDownRight size={14} aria-hidden /> {format(t.entryForm.vsAverageBelow, { delta: deltaText })}
-                  </>
-                ) : (
-                  <>
-                    <IconArrowUpRight size={14} aria-hidden /> {format(t.entryForm.vsAverageAbove, { delta: deltaText })}
-                  </>
+        {lightToday ? (
+          <FlarePainScale value={local.painLevel} onChange={(v) => setField('painLevel', v)} />
+        ) : (
+          <>
+            <div className="flex items-end justify-between mt-3">
+              <div>
+                <p className="tabular-nums text-hero font-bold leading-none">
+                  {local.painLevel ?? <span style={{ color: 'var(--color-ink-muted)' }}>—</span>}
+                  <span className="text-body font-medium" style={{ color: 'var(--color-ink-muted)' }}>
+                    {' '}/ 10
+                  </span>
+                </p>
+                {delta !== null && (
+                  <p
+                    className="text-caption mt-1.5 flex items-center gap-1"
+                    style={{
+                      color:
+                        Math.abs(delta) < 0.25 ? 'var(--color-ink-muted)' : delta < 0 ? 'var(--cat-mood)' : 'var(--cat-pain)',
+                    }}
+                  >
+                    {Math.abs(delta) < 0.25 ? (
+                      <>
+                        <IconArrowRight size={14} aria-hidden /> {t.entryForm.vsAverageSame}
+                      </>
+                    ) : delta < 0 ? (
+                      <>
+                        <IconArrowDownRight size={14} aria-hidden /> {format(t.entryForm.vsAverageBelow, { delta: deltaText })}
+                      </>
+                    ) : (
+                      <>
+                        <IconArrowUpRight size={14} aria-hidden /> {format(t.entryForm.vsAverageAbove, { delta: deltaText })}
+                      </>
+                    )}
+                  </p>
                 )}
-              </p>
-            )}
-          </div>
-          <PainBars values={bars} />
-        </div>
+              </div>
+              <PainBars values={bars} />
+            </div>
 
-        <div className="mt-2">
-          <Slider
-            bare
-            label={t.entryForm.pain}
-            value={local.painLevel}
-            onChange={(v) => setField('painLevel', v)}
-            endLabels={[t.entryForm.painEndNone, t.entryForm.painEndExtreme]}
-            accent="var(--cat-pain)"
-          />
-        </div>
+            <div className="mt-2">
+              <Slider
+                bare
+                label={t.entryForm.pain}
+                value={local.painLevel}
+                onChange={(v) => setField('painLevel', v)}
+                endLabels={[t.entryForm.painEndNone, t.entryForm.painEndExtreme]}
+                accent="var(--cat-pain)"
+              />
+            </div>
+          </>
+        )}
 
       </Card>
 
