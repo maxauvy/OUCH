@@ -8,6 +8,7 @@ import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
 import { AboutCard } from '../components/about/AboutCard'
 import { SourcesCard } from '../components/about/SourcesCard'
+import { SupportCard } from '../components/about/SupportCard'
 import { BackupSection } from '../components/settings/BackupSection'
 import { DeleteDataCard } from '../components/settings/DeleteDataCard'
 import { InstallCard } from '../components/install/InstallCard'
@@ -344,6 +345,8 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
 
       <SettingsGroup icon={IconInfoCircle} title={t.settings.groups.about}>
         <AboutCard withHeader />
+
+        <SupportCard />
 
         <SourcesCard />
 

@@ -89,6 +89,18 @@ export interface Translations {
     note: string
   }
 
+  support: {
+    title: string
+    /** The sentence is cut around its link */
+    before: string
+    link: string
+    after: string
+    /** Read out after the link; `{{service}}` */
+    opens: string
+    /** `{{service}}` */
+    note: string
+  }
+
   sources: {
     title: string
     toggle: string
