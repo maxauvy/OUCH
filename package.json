@@ -2,7 +2,7 @@
   "name": "ouch",
   "description": "Journal de douleur simple et privé — suivi de symptômes, tendances, météo du jour partageable.",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.3.0",
   "type": "module",
   "license": "CECILL-2.1",
   "scripts": {

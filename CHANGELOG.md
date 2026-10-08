@@ -6,16 +6,21 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.3.0] - 2026-10-08
+
 ### Ajouté
-- Pendant une poussée, l'écran « Aujourd'hui » allégé note la douleur avec onze grosses cases à toucher (0 à 10) à la place du curseur, et deux gros boutons « un point de moins / de plus » pour corriger. Rien n'est présélectionné, pour ne pas ancrer la réponse sur une valeur de départ ; la barre se remplit d'un seul bleu qui s'intensifie, sans vert ni rouge, et la case choisie est aussi cerclée. C'est la même échelle 0-10 qu'avant : les entrées et le rapport ne changent pas. Le formulaire complet garde son curseur.
-- Tout en bas de Réglages, une carte « Soutenir OUCH » avec une tasse de café : une phrase et un lien « m'offrir un café » vers la page de dons du développeur. C'est un simple lien sortant : aucun script ni widget tiers, rien d'envoyé, rien de débloqué en échange. Elle n'apparaît qu'à partir de 15 jours de journal, pour ne rien demander à quelqu'un qui découvre l'app.
-- Une invitation à installer OUCH sur l'écran d'accueil, tant que l'app tourne dans un navigateur : Safari risque moins d'effacer le journal d'une app installée, qui s'ouvre aussi sans la barre du navigateur. Dans la dernière étape de l'assistant, une ligne discrète (« Installer OUCH sur l'écran d'accueil ») se déplie sur les étapes, chacune avec un petit dessin de ce qu'on voit à l'écran ; dans Réglages, la même carte, dépliée, tant que l'app n'est pas installée. Sur iPhone et iPad (Safari), les étapes couvrent le menu de la page, Partager, « En voir plus » et « Sur l'écran d'accueil » ; dans les navigateurs qui le proposent (Chrome, Edge), un bouton « Installer » ouvre l'invite du navigateur ; ailleurs, une phrase renvoie au menu du navigateur. Rien n'est mémorisé ni envoyé, et la carte disparaît d'elle-même une fois l'app installée.
 - Dans Tendances, une carte « Bilan d'un changement » pour chaque début, changement de dose ou arrêt d'un traitement de fond : la douleur moyenne, les jours de poussée, les prises au besoin, le sommeil et les effets signalés avec ce traitement, sur les 28 jours d'avant puis les 28 jours qui suivent sa première semaine (qu'on ne compte pas : un traitement de fond n'agit pas tout de suite), avec le nombre de jours notés de chaque côté. Il faut 14 jours notés de chaque côté ; tant que les 28 jours ne sont pas écoulés, le bilan est « en cours ». Avec assez d'historique (6 écarts entre deux périodes de 28 jours qui se suivent, hors celles du changement lui-même), chaque mesure est aussi placée à côté de l'écart que la personne a eu, 8 fois sur 10, entre deux mois qui se suivent (« Dans / Au-delà de tes écarts habituels »). La courbe, avec les moyennes avant et après, s'ouvre à la demande. C'est une description : elle ne dit pas si le traitement « marche », et le dit. Un autre changement au même moment, ou un changement fait pendant une poussée, est signalé.
 - Dans les deux rapports (médecin traitant et Centre douleur), un tableau « Changements de traitement de fond » : pour chaque changement de la période ou des 5 semaines d'avant, la douleur, les jours de poussée et les prises au besoin avant → après, les jours renseignés de chaque côté, et ce qu'il faut savoir (bilan en cours, autre changement au même moment, effets signalés), avec l'écart habituel du patient quand le journal est assez long.
+- Pendant une poussée, l'écran « Aujourd'hui » allégé note la douleur avec onze grosses cases à toucher (0 à 10) à la place du curseur, et deux gros boutons « un point de moins / de plus » pour corriger. Rien n'est présélectionné, pour ne pas ancrer la réponse sur une valeur de départ ; la barre se remplit d'un seul bleu qui s'intensifie, sans vert ni rouge, et la case choisie est aussi cerclée. C'est la même échelle 0-10 qu'avant : les entrées et le rapport ne changent pas. Le formulaire complet garde son curseur.
+- Une invitation à installer OUCH sur l'écran d'accueil, tant que l'app tourne dans un navigateur : Safari risque moins d'effacer le journal d'une app installée, qui s'ouvre aussi sans la barre du navigateur. Dans la dernière étape de l'assistant, une ligne discrète (« Installer OUCH sur l'écran d'accueil ») se déplie sur les étapes, chacune avec un petit dessin de ce qu'on voit à l'écran ; dans Réglages, la même carte, dépliée, tant que l'app n'est pas installée. Sur iPhone et iPad (Safari), les étapes couvrent le menu de la page, Partager, « En voir plus » et « Sur l'écran d'accueil » ; dans les navigateurs qui le proposent (Chrome, Edge), un bouton « Installer » ouvre l'invite du navigateur ; ailleurs, une phrase renvoie au menu du navigateur. Rien n'est mémorisé ni envoyé, et la carte disparaît d'elle-même une fois l'app installée.
+- Tout en bas de Réglages, une carte « Soutenir OUCH » avec une tasse de café : une phrase et un lien « m'offrir un café » vers la page de dons du développeur. C'est un simple lien sortant : aucun script ni widget tiers, rien d'envoyé, rien de débloqué en échange. Elle n'apparaît qu'à partir de 15 jours de journal, pour ne rien demander à quelqu'un qui découvre l'app.
+- Une note méthodologique pour les soignants (`docs/note-methodologique`, 7 pages A4, en français) : comment OUCH calcule ses chiffres, avec ses seuils et ses références.
+- Un fichier `FUNDING.yml` : le dépôt GitHub affiche un bouton « Sponsor » vers la page de dons.
 
 ### Modifié
 - Le bilan sur deux semaines de la carte « Tes traitements » (« Dans les 2 semaines après le passage à… ») est remplacé par ce bilan sur 28 jours, qui compte plus de jours et dit combien étaient notés.
 - Un changement de dose s'écrit « 30 mg → 60 mg » (et non « 30 mg · 1/j → 60 mg · 1/j ») quand c'est la dose qui change, dans l'app comme dans le rapport.
+- Dépendances mises à jour : vite 8.3.2, oxlint 1.86, sharp 0.35.5 et @types/node 26.6.4.
 
 ## [0.2.1] - 2026-10-07
 
@@ -101,7 +106,9 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.2.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/maxauvy/OUCH/compare/v0.2.1...v0.3.0
+[0.2.1]: https://github.com/maxauvy/OUCH/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/maxauvy/OUCH/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/maxauvy/OUCH/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/maxauvy/OUCH/compare/v0.1.0...v0.1.1
