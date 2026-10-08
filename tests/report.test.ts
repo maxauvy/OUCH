@@ -22,6 +22,7 @@ import {
   tagShares,
   trailingMeans,
   weeklyRows,
+  collapseDoublePeriod,
 } from '../src/lib/report.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
@@ -356,4 +357,10 @@ test('a context is compared by the median pain with and without it', () => {
 test('no comparison when one side has fewer than three days', () => {
   const entries = [entry(day(0), 6, { periodDay: true }), ...[1, 2, 3].map((i) => entry(day(i), 3, { periodDay: false }))]
   assert.equal(compareContext(entries, 'period', (e) => e.periodDay), null)
+})
+
+test('collapseDoublePeriod: an abbreviated month before a closing period prints one dot', () => {
+  assert.equal(collapseDoublePeriod('Dose changée le 11 sept..'), 'Dose changée le 11 sept.')
+  assert.equal(collapseDoublePeriod('Début le 3 oct.. (efficace)'), 'Début le 3 oct. (efficace)')
+  assert.equal(collapseDoublePeriod('Arrêt le 5 mai.'), 'Arrêt le 5 mai.')
 })

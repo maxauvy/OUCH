@@ -5,6 +5,7 @@ import { periodOn } from '../../lib/medications'
 import { formatIllnessList } from '../../lib/childView'
 import {
   association,
+  collapseDoublePeriod,
   compareContext,
   daysWithRescueMedication,
   meanOf,
@@ -496,12 +497,13 @@ function keyPointItems(d: ReportData): string[] {
   for (const m of d.meds) {
     m.med.periods.forEach((per, i) => {
       if (per.start >= p.start && per.start <= p.end) {
+        const [from, to] = f.posologyChange(m.regimen, m.med.periods[i - 1], per)
         items.push(
           i > 0
             ? f.format(f.t.doseChange, {
                 name: m.med.name,
-                from: f.posology(m.regimen, m.med.periods[i - 1]) || '?',
-                to: f.posology(m.regimen, per) || '?',
+                from,
+                to,
                 date: f.dayMonth(per.start),
               })
             : f.format(f.t.medStarted, { name: m.med.name, date: f.dayMonth(per.start) })
@@ -541,7 +543,7 @@ function keyPointItems(d: ReportData): string[] {
   }
 
   // An abbreviated month ends a sentence: "23 sept.." → "23 sept."
-  return items.map((text) => text.replace(/\.\.(?=\s|$)/g, '.'))
+  return items.map(collapseDoublePeriod)
 }
 
 function KeyPointList({ items, from, to }: { items: string[]; from: number; to: number }) {
@@ -1069,7 +1071,7 @@ function FlareContextTable({ d, from, to }: { d: ReportData; from: number; to: n
                 </td>
               ))}
               <td>
-                {c.events.length === 0 ? '—' : c.events.map((ev) => <span key={`${ev.med.id}-${ev.kind}-${ev.date}`} className="sm-line">{eventText(d, ev)}</span>)}
+                {c.events.length === 0 ? '—' : c.events.map((ev) => <span key={`${ev.med.id}-${ev.kind}-${ev.date}`} className="sm-line">{collapseDoublePeriod(eventText(d, ev))}</span>)}
               </td>
             </tr>
           )
