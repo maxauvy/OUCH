@@ -1,4 +1,4 @@
-// Records a ~42 s "what's new in 0.3.0" video, in the spirit of record-0.2.mjs
+// Records a ~52 s "what's new in 0.3.0" video, in the spirit of record-0.2.mjs
 // (same stage, brighter backing track, a "Nouveau" kicker on every scene), but
 // shorter: the review of a treatment change, the eleven-box pain scale, the
 // report table, the install card, then a quick "And also…".
@@ -26,33 +26,37 @@ const EN = process.env.PROMO_LANG === 'en'
 const NEW = EN ? '✦ New' : '✦ Nouveau'
 const T = EN ? {
   locale: 'en-US', settings: /Settings/, today: 'Today', trends: 'Trends',
-  review: 'Review of a change', prega: /Pregabalin/, scale: 'Pain', report: 'Report for my doctor',
+  review: 'Review of a change', prega: /Pregabalin.*(Jul 29|29 Jul)/, amitrip: /Amitriptyline.*(May 4|4 May)/, curve: /See on the curve/, scale: 'Pain', report: 'Report for my doctor',
   rtitle: 'Changes in background treatment', install: 'Install OUCH on your home screen',
   intro: 'Version <em>0.3.0</em> is here', outro: 'Clearer. Gentler. <em>Always private.</em>',
   local: '100% local · your data stays on your device', more: 'And also…',
   c1: [NEW, 'The review of *a change*', 'Before, after a treatment change: described, nothing promised.'],
+  c1b: [NEW, 'Within *your usual gaps* or beyond', 'Compared with your own months, not with a norm.'],
+  c1c: [NEW, 'And what *else* changed', 'Another change at the same time, or during a flare: said plainly.'],
   c2: [NEW, 'Rate your pain *in one tap*', 'Eleven big boxes on flare days, nothing preselected.'],
   c3: [NEW, 'The review, *in the report*', 'For each treatment change: before → after.'],
   c4: [NEW, 'OUCH on *your home screen*', 'Step by step, with a small drawing for each one.'],
   pills: ['☕ A coffee to support OUCH, if you like', '📄 A methodology note for clinicians', '💊 Readable doses: 30 mg → 60 mg'],
 } : {
   locale: 'fr-FR', settings: /Réglages/, today: 'Aujourd', trends: 'Tendances',
-  review: 'Bilan d’un changement', prega: /Prégabaline/, scale: 'Douleur', report: 'Rapport pour mon médecin',
+  review: 'Bilan d’un changement', prega: /Prégabaline.*29 juil/, amitrip: /Amitriptyline.*4 mai/, curve: /Voir sur la courbe/, scale: 'Douleur', report: 'Rapport pour mon médecin',
   rtitle: 'Changements de traitement de fond', install: 'Installer OUCH sur l’écran d’accueil',
   intro: 'La version <em>0.3.0</em> est là', outro: 'Plus clair. Plus doux. <em>Toujours privé.</em>',
   local: '100 % local · tes données restent sur ton appareil', more: 'Et aussi…',
   c1: [NEW, 'Le bilan *d’un changement*', 'Avant, après un changement de traitement : décrit, sans rien promettre.'],
+  c1b: [NEW, 'Dans *tes écarts habituels* ou au-delà', 'Comparé à tes propres mois, pas à une norme.'],
+  c1c: [NEW, 'Et ce qui a *aussi* changé', 'Un autre changement au même moment, ou pendant une poussée : dit sans détour.'],
   c2: [NEW, 'Note ta douleur *en un geste*', 'Onze grosses cases les jours de poussée, rien de présélectionné.'],
   c3: [NEW, 'Le bilan *dans le rapport*', 'Pour chaque changement de traitement : avant → après.'],
   c4: [NEW, 'OUCH sur *ton écran d’accueil*', 'Pas à pas, avec un petit dessin à chaque étape.'],
   pills: ['☕ Un café pour soutenir OUCH, si tu veux', '📄 Une note méthodologique pour les soignants', '💊 Des doses lisibles : 30 mg → 60 mg'],
 }
-const DUR = 42
+const DUR = 52
 const work = mkdtempSync(join(tmpdir(), 'ouch-promo-'))
 const DEMO = join(work, 'demo.json')
 const MUSIC = join(work, 'music.wav')
 const here = (f) => fileURLToPath(new URL(f, import.meta.url))
-execFileSync('node', [here('../generate-demo-history.mjs'), DEMO], { stdio: 'ignore', env: { ...process.env, DEMO_TODAY: 'empty', DEMO_LANG: EN ? 'en' : 'fr' } })
+execFileSync('node', [here('../generate-demo-history.mjs'), DEMO], { stdio: 'ignore', env: { ...process.env, DEMO_TODAY: 'empty', DEMO_DAYS: '330', DEMO_LANG: EN ? 'en' : 'fr' } })
 execFileSync('node', [here('./synth.mjs'), MUSIC, String(DUR), 'bright'], { stdio: 'ignore' })
 let STAGE = readFileSync(here('./stage.html'), 'utf8')
   .replace('Ton journal de douleur, <em>simple</em> et <em>privé</em>', T.intro)
@@ -165,56 +169,71 @@ await layer('intro', true)
 await at(2.3); await layer('intro', false)
 await cam({ z: 1, ms: 900 })
 
-// ── 1. Trends: the review of a change (ongoing, then a finished one)
+// ── 1. Trends: the review of a change, in all its displays
 await at(2.8); await caption(...T.c1)
 await at(3.0); await tab(T.trends)
 const review = F.getByText(T.review, { exact: true }).first()
-await at(4.0); await bring(review, 900, 250)
+await at(4.0); await bring(review, 900, 150)
 const reviewCard = await cardOf(review, 380)
-await at(5.2); await hl(reviewCard); await cam({ fy: await phoneY(reviewCard), z: 1.35, ms: 800 })
-await at(8.0); await tap(F.getByRole('button', { name: T.prega }).first())
-await at(11.7); await unhl(); await cam({ z: 1, ms: 500 })
+// an ongoing review, made during a flare
+await at(5.0); await hl(reviewCard); await cam({ fy: 400, z: 1.12, ms: 800 })
+// its curve: the settling-in week, the mean of each period
+const curveBtn = F.getByText(T.curve).first()
+await at(7.6); await bring(curveBtn, 700, 320)
+await at(8.5); await tap(curveBtn)
+await at(9.4); await scroll(300, 1000)
+await at(12.0); await caption(...T.c1b)
+await bring(review, 800, 150)
+// a finished one, set beside the person's usual gaps
+await at(13.0); await tap(F.getByRole('button', { name: T.prega }).first())
+await at(14.0); await scroll(330, 2200)
+await at(17.0); await bring(review, 700, 150)
+await at(17.4); await caption(...T.c1c)
+// a start made during a flare, with other changes around it
+await at(17.8); await tap(F.getByRole('button', { name: T.amitrip }).first())
+await at(18.8); await scroll(300, 2000)
+await at(21.2); await unhl(); await cam({ z: 1, ms: 500 })
 
 // ── 2. Today: eleven big boxes
-await at(12.3); await caption(...T.c2)
-await at(12.5); await tab(T.today)
-await at(13.4); await F.evaluate(() => scrollTo(0, 0))
+await at(21.8); await caption(...T.c2)
+await at(22.0); await tab(T.today)
+await at(22.9); await F.evaluate(() => scrollTo(0, 0))
 const scale = F.getByRole('radiogroup').first()
-await at(13.6); await bring(scale, 900, 330)
-await at(14.6); await cam({ fy: await phoneY(scale), z: 1.6, ms: 800 })
-await at(16.0); await tap(scale.getByRole('radio').nth(7))
-await at(18.8); await cam({ z: 1, ms: 500 })
+await at(23.1); await bring(scale, 900, 330)
+await at(24.1); await cam({ fy: await phoneY(scale), z: 1.6, ms: 800 })
+await at(25.5); await tap(scale.getByRole('radio').nth(7))
+await at(28.3); await cam({ z: 1, ms: 500 })
 
 // ── 3. Report: changes in background treatment
-await at(19.3); await caption(...T.c3)
-await at(19.5); await tab(T.trends)
-await at(20.3); await F.evaluate(() => scrollTo(0, 0))
-await at(20.5); await tap(F.getByText(T.report))
+await at(28.8); await caption(...T.c3)
+await at(29.0); await tab(T.trends)
+await at(29.8); await F.evaluate(() => scrollTo(0, 0))
+await at(30.0); await tap(F.getByText(T.report))
 const rtitle = F.getByText(T.rtitle).first()
-await at(21.8); await rtitle.waitFor({ timeout: 8000 })
+await at(31.3); await rtitle.waitFor({ timeout: 8000 })
 await bring(rtitle, 1000, 260)
 const ry = await phoneY(rtitle) + 70
-await at(23.2); await cam({ fx: 100, fy: ry, z: 2.4, ms: 800 })
-await at(24.0); await cam({ fx: 290, fy: ry, z: 2.4, ms: 2800 })
-await at(27.2); await cam({ z: 1, ms: 500 })
+await at(32.7); await cam({ fx: 100, fy: ry, z: 2.4, ms: 800 })
+await at(33.5); await cam({ fx: 290, fy: ry, z: 2.4, ms: 2800 })
+await at(36.7); await cam({ z: 1, ms: 500 })
 
 // ── 4. Settings: install card
-await at(27.7); await caption(...T.c4)
-await at(27.9); await tab(T.settings)
-await at(28.8); await F.evaluate(() => scrollTo(0, 0))
+await at(37.2); await caption(...T.c4)
+await at(37.4); await tab(T.settings)
+await at(38.3); await F.evaluate(() => scrollTo(0, 0))
 const inst = F.getByText(T.install, { exact: true }).first()
-await at(29.0); await bring(inst, 1200, 300)
+await at(38.5); await bring(inst, 1200, 300)
 const instCard = await cardOf(inst, 200)
-await at(30.5); await hl(instCard); await cam({ fy: await phoneY(instCard), z: 1.4, ms: 800 })
-await at(33.0); await unhl(); await cam({ z: 1, ms: 500 })
+await at(40.0); await hl(instCard); await cam({ fy: await phoneY(instCard), z: 1.4, ms: 800 })
+await at(42.5); await unhl(); await cam({ z: 1, ms: 500 })
 
 // ── 5. And also…
-await at(33.4); await p.evaluate(() => window.clearCaption()); await cam({ z: 1, dy: 1500, ms: 500 })
-await at(33.8); await layer('more', true)
-await at(37.8); await layer('more', false)
+await at(42.9); await p.evaluate(() => window.clearCaption()); await cam({ z: 1, dy: 1500, ms: 500 })
+await at(43.3); await layer('more', true)
+await at(47.3); await layer('more', false)
 
 // ── outro
-await at(38.2); await layer('outro', true)
+await at(47.7); await layer('outro', true)
 await at(DUR)
 
 await cdp.send('Page.stopScreencast'); await ctx.close(); await b.close()

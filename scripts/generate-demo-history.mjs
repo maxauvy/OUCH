@@ -5,6 +5,10 @@
 //   DEMO_LANG=en node scripts/generate-demo-history.mjs …   (English tags, notes and medication names)
 //   DEMO_TODAY=empty …        leave today without an entry, to open on an empty Today page
 //   DEMO_ILLNESSES=fibromyalgie,migraine …   several tracked illnesses (default: fibromyalgie only)
+//   DEMO_DAYS=330 …           a longer history (default 90): the story below ends the same way, and
+//                             calmer months come before it, with one more background treatment (the
+//                             review of a change in Trends needs about eight months to set a change
+//                             beside the person's usual month-to-month gaps)
 //
 // Built to demo the app straight after import. Data is deterministic
 // (seeded PRNG) and tells one story every screen can show:
@@ -28,7 +32,9 @@ import { webcrypto as crypto } from 'node:crypto'
 import { writeFileSync } from 'node:fs'
 
 const DEMO_PASSWORD = 'demo'
-const DAYS = 90
+const STORY_DAYS = 90 // the story below always spans these last days
+const DAYS = Math.max(STORY_DAYS, Number(process.env.DEMO_DAYS ?? STORY_DAYS))
+const LEAD = DAYS - STORY_DAYS // days of history before the story
 const output = process.argv[2] ?? 'ouch-demo-90j.json'
 const EMPTY_TODAY = process.env.DEMO_TODAY === 'empty'
 const ILLNESSES = (process.env.DEMO_ILLNESSES ?? 'fibromyalgie').split(',').map((s) => s.trim()).filter(Boolean)
@@ -79,6 +85,7 @@ function addDays(iso, n) {
 // to yesterday (day 88), so it is still going on when the demo opens. Its
 // level stays high until the end instead of peaking and easing.
 const FLARES = [
+  ...(LEAD > 0 ? [{ start: -70, length: 7, intensity: 4 }] : []),
   { start: 22, length: 6, intensity: 3.5 },
   { start: 53, length: 7, intensity: 2.5 },
   { start: 84, length: 5, intensity: 5.2, ongoing: true },
@@ -102,6 +109,11 @@ const isPeriodDay = (i) => (i + 9) % 28 < 5
 // to show. Pregabalin, taken twice a day, was stopped early because of
 // drowsiness — it also clouds the mind while it lasts.
 const DOSE_CHANGE_DAY = 62
+// Amitriptyline (long histories only): started in the middle of an earlier flare,
+// its dose raised a few weeks later, so that its reviews carry the "during a flare"
+// and "another change at the same time" notes. Eases pain once settled in.
+const AMITRIPTYLINE_START_DAY = -68
+const AMITRIPTYLINE_DOSE_DAY = -45
 const PREGABALIN_STOP_DAY = 18
 const KEY_DAYS = new Set([PREGABALIN_STOP_DAY, DOSE_CHANGE_DAY])
 
@@ -141,10 +153,11 @@ const KEY_NOTES = {
 }
 
 const entries = []
-const startDate = addDays(endDate, -(DAYS - 1))
+const startDate = addDays(endDate, -(STORY_DAYS - 1)) // first day of the story
+const firstDate = addDays(endDate, -(DAYS - 1))
 const doseChangeDate = addDays(startDate, DOSE_CHANGE_DAY)
 const now = Date.parse(`${endDate}T20:00:00Z`)
-const MED = { prega: 'demo-pregabaline', dulox: 'demo-duloxetine', para: 'demo-paracetamol', trama: 'demo-tramadol', ibu: 'demo-ibuprofene' }
+const MED = { amitrip: 'demo-amitriptyline', prega: 'demo-pregabaline', dulox: 'demo-duloxetine', para: 'demo-paracetamol', trama: 'demo-tramadol', ibu: 'demo-ibuprofene' }
 const medications = [
   {
     id: MED.dulox, name: 'Duloxétine', regimen: 'scheduled', reason: 'Douleurs diffuses',
@@ -157,6 +170,15 @@ const medications = [
     id: MED.prega, name: 'Prégabaline', regimen: 'scheduled', reason: 'Douleurs neuropathiques',
     periods: [{ start: addDays(startDate, -35), end: addDays(startDate, PREGABALIN_STOP_DAY), dose: { amount: 75, unit: 'mg' }, perDay: 2, stopReason: 'sideEffects' }],
   },
+  ...(LEAD > 0
+    ? [{
+        id: MED.amitrip, name: 'Amitriptyline', regimen: 'scheduled', reason: 'Douleurs et sommeil',
+        periods: [
+          { start: addDays(startDate, AMITRIPTYLINE_START_DAY), end: addDays(startDate, AMITRIPTYLINE_DOSE_DAY - 1), dose: { amount: 10, unit: 'mg' }, perDay: 1 },
+          { start: addDays(startDate, AMITRIPTYLINE_DOSE_DAY), dose: { amount: 20, unit: 'mg' }, perDay: 1 },
+        ],
+      }]
+    : []),
   { id: MED.para, name: 'Paracétamol', regimen: 'asNeeded', reason: 'Douleur', periods: [{ start: addDays(startDate, -400), dose: { amount: 1, unit: 'g' }, perDay: 3 }] },
   { id: MED.trama, name: 'Tramadol', regimen: 'asNeeded', reason: 'Poussées', periods: [{ start: addDays(startDate, -120), dose: { amount: 50, unit: 'mg' }, perDay: 2 }] },
   { id: MED.ibu, name: 'Ibuprofène', regimen: 'asNeeded', reason: 'Douleurs de règles', periods: [{ start: addDays(startDate, -900), dose: { amount: 400, unit: 'mg' }, perDay: 3 }] },
@@ -174,6 +196,10 @@ function intakesFor(names, painLevel, i) {
       const effects = [rand2() < 0.6 && 'Somnolence', rand2() < 0.2 && 'Prise de poids'].filter(Boolean)
       return { medicationId: MED.prega, doses, ...(effects.length && { sideEffects: effects }) }
     }
+    if (name === 'Amitriptyline') {
+      const drowsy = rand2() < 0.15
+      return { medicationId: MED.amitrip, doses: 1, ...(drowsy && { sideEffects: ['Somnolence'] }) }
+    }
     if (name === 'Paracétamol') {
       const doses = Math.max(1, (painLevel >= 7 ? 3 : painLevel >= 6 ? 2 : 1) - (rand2() < 0.25 ? 1 : 0))
       return { medicationId: MED.para, doses, relief: weighted([0.15, 0.5, 0.3, 0.05]) }
@@ -190,7 +216,8 @@ let prevPressure = null
 let prevActivity = 5
 
 for (let i = 0; i < DAYS; i++) {
-  const date = addDays(startDate, i)
+  const s = i - LEAD // day of the story (negative before it)
+  const date = addDays(firstDate, i)
   const weekday = new Date(`${date}T12:00:00Z`).getUTCDay()
   const isWeekend = weekday === 0 || weekday === 6
 
@@ -206,19 +233,20 @@ for (let i = 0; i < DAYS; i++) {
     pressure < 1008 ? pick(['pluvieux', 'nuageux']) :
     pressure < 1016 ? pick(['nuageux', 'variable']) :
     pick(['ensoleille', 'ensoleille', 'variable'])
-  const seasonalTemp = 27 - (i / DAYS) * 9
+  const seasonalTemp = 27 - (s / STORY_DAYS) * 9
   const tempC = Math.round(seasonalTemp + noise(3) - (condition === 'pluvieux' || condition === 'orageux' ? 4 : 0))
 
   // Missed days (~6%), except key days and the last week so the demo looks active.
-  if (i < DAYS - 7 && !KEY_DAYS.has(i) && chance(0.06)) continue
+  if (i < DAYS - 7 && !KEY_DAYS.has(s) && chance(0.06)) continue
   if (EMPTY_TODAY && i === DAYS - 1) continue
 
   const stress = clamp(isWeekend ? 3 + noise(2.5) : 5.5 + noise(3.5))
-  const sleepHours = Math.round(clamp(7.2 - (stress - 4) * 0.3 + noise(1.6) - flareBoost(i) * 0.4, 4, 9.5) * 2) / 2
-  const sleepQuality = clamp((sleepHours - 4.5) * 2 + noise(1.8) - flareBoost(i) * 0.6)
+  const sleepHours = Math.round(clamp(7.2 - (stress - 4) * 0.3 + noise(1.6) - flareBoost(s) * 0.4, 4, 9.5) * 2) / 2
+  const sleepQuality = clamp((sleepHours - 4.5) * 2 + noise(1.8) - flareBoost(s) * 0.6)
 
-  const doseEffect = i < DOSE_CHANGE_DAY ? 0 : Math.min(1, (i - DOSE_CHANGE_DAY) / 21) * 0.9
-  const onPregabalin = i <= PREGABALIN_STOP_DAY
+  const doseEffect = s < DOSE_CHANGE_DAY ? 0 : Math.min(1, (s - DOSE_CHANGE_DAY) / 21) * 0.9
+  const amitripEffect = LEAD > 0 && s >= AMITRIPTYLINE_START_DAY ? Math.min(1, (s - AMITRIPTYLINE_START_DAY) / 21) * 0.8 : 0
+  const onPregabalin = s >= -35 && s <= PREGABALIN_STOP_DAY
   const isStorm = condition === 'orageux'
 
   const pressureDrop = pressureDelta !== undefined && pressureDelta < -3 ? Math.min(2, -pressureDelta / 5) : 0
@@ -229,10 +257,11 @@ for (let i = 0; i < DAYS; i++) {
     (stress - 4) * 0.3 +
     pressureDrop +
     (isStorm ? 0.8 : 0) +
-    flareBoost(i) +
+    flareBoost(s) +
     (isPeriodDay(i) ? 1 : 0) +
     (prevActivity >= 8 ? 1 : 0) - // overdid it yesterday
-    doseEffect +
+    doseEffect -
+    amitripEffect +
     noise(0.9)
   // Today opens the demo: an ordinary middling day, not a random extreme.
   const isToday = i === DAYS - 1
@@ -250,6 +279,7 @@ for (let i = 0; i < DAYS; i++) {
   const moodLevel = round(7.5 - pain * 0.5 - (stress - 4) * 0.25 + positiveActions.length * 0.4 + noise(1.8))
 
   const medications = onPregabalin ? ['Prégabaline', 'Duloxétine'] : ['Duloxétine']
+  if (amitripEffect > 0 || (LEAD > 0 && s >= AMITRIPTYLINE_START_DAY)) medications.push('Amitriptyline')
   if (painLevel >= 5) medications.push('Paracétamol')
   if (painLevel >= 7 && chance(0.7)) medications.push('Tramadol')
   if (isPeriodDay(i) && painLevel >= 4 && chance(0.6)) medications.push('Ibuprofène')
@@ -264,7 +294,7 @@ for (let i = 0; i < DAYS; i++) {
   // Notes follow what happened, most specific first.
   const noteRoll = rand()
   const notes =
-    KEY_NOTES[i] ??
+    KEY_NOTES[s] ??
     (flareBoost(i) > 1.5 && noteRoll < 0.7 ? pick(NOTE_FLARE) :
     isStorm && painLevel >= 5 && noteRoll < 0.6 ? NOTE_STORM :
     positiveActions.includes('Kiné / soins') && noteRoll < 0.5 ? pick(NOTE_KINE) :
@@ -294,7 +324,7 @@ for (let i = 0; i < DAYS; i++) {
       pressureHpa: Math.round(pressure),
       ...(pressureDelta !== undefined && { pressureDeltaFromPrevious: pressureDelta }),
     },
-    intakes: intakesFor(medications, painLevel, i),
+    intakes: intakesFor(medications, painLevel, s),
     positiveActions,
     painLocations: [...zones],
     periodDay: isPeriodDay(i),
@@ -346,7 +376,7 @@ const EN_STRINGS = {
   'Arrêt de la prégabaline avec l’accord du médecin : trop de somnolence.': 'Stopped pregabalin with the doctor’s agreement: too much drowsiness.',
   'Consultation chez le médecin traitant : duloxétine passée de 30 à 60 mg.': 'GP appointment: duloxetine raised from 30 to 60 mg.',
   'Duloxétine': 'Duloxetine', 'Prégabaline': 'Pregabalin', 'Paracétamol': 'Paracetamol', 'Ibuprofène': 'Ibuprofen',
-  'Douleurs diffuses': 'Widespread pain', 'Douleurs neuropathiques': 'Neuropathic pain', 'Douleur': 'Pain', 'Poussées': 'Flares', 'Douleurs de règles': 'Period pain',
+  'Douleurs diffuses': 'Widespread pain', 'Douleurs neuropathiques': 'Neuropathic pain', 'Douleur': 'Pain', 'Poussées': 'Flares', 'Douleurs de règles': 'Period pain', 'Douleurs et sommeil': 'Pain and sleep',
   'Nausées': 'Nausea', 'Somnolence': 'Drowsiness', 'Prise de poids': 'Weight gain', 'Vertiges': 'Dizziness',
 }
 const translate = (v) => (typeof v === 'string' ? (EN_STRINGS[v] ?? v) : Array.isArray(v) ? v.map(translate) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, translate(x)])) : v)
