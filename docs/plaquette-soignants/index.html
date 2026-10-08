@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>OUCH, plaquette pour les professionnels de santé</title>
+<style>
+@font-face{font-family:"Public Sans";src:url(../../node_modules/@fontsource-variable/public-sans/files/public-sans-latin-ext-wght-normal.woff2) format("woff2");font-weight:100 900;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Public Sans";src:url(../../node_modules/@fontsource-variable/public-sans/files/public-sans-latin-wght-normal.woff2) format("woff2");font-weight:100 900;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{--ink:#14212b;--muted:#5b6b76;--hair:#e1e7eb;--brand:#0d5c8c;--soft:#e3eef6;--gold:#e3a73b;--lav:#a894c9;--ind:#574a7a;--navy:#14507a}
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:"Public Sans",sans-serif;font-size:9.6pt;line-height:1.45;color:var(--ink)}
+.bar{position:absolute;top:0;left:0;width:210mm;height:5mm;background:linear-gradient(90deg,var(--gold),var(--lav) 55%,var(--ind))}
+.foot{position:absolute;bottom:8mm;left:14mm;right:14mm;border-top:1px solid var(--hair);padding-top:2.5mm;display:flex;justify-content:space-between;gap:10mm;font-size:7.4pt;line-height:1.4;color:var(--muted)}
+.foot .r{text-align:right;white-space:nowrap}
+header{display:flex;gap:5mm;align-items:flex-start;margin:4mm 0 4mm}
+.logo{width:17mm;height:17mm;flex:none;margin-top:4mm}
+.hd{flex:1}
+.eyebrow,h2{font-size:7.8pt;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);margin:0}
+h1{font-size:22pt;line-height:1.12;margin:1mm 0 1.5mm;font-weight:800;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:10.5pt;margin:0}
+.meta{text-align:right;font-size:8.6pt;color:var(--muted);line-height:1.5;flex:none}
+.meta b{color:var(--ink)}
+h2{margin:5mm 0 2.5mm;break-after:avoid}
+h3{font-size:9.6pt;margin:3.5mm 0 1mm;break-after:avoid}
+p{margin:0 0 2mm}
+.box{background:var(--soft);border-radius:4.5mm;padding:5mm 6mm;display:grid;grid-template-columns:1fr 1fr;gap:8mm;break-inside:avoid}
+.box h2{margin:0 0 2mm}.box p{margin:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8mm}
+.two h2{margin-top:6mm}
+ul.ic{list-style:none;margin:0;padding:0}
+ul.ic li{position:relative;padding-left:7mm;margin-bottom:1.8mm;break-inside:avoid}
+ul.ic li:before{content:"✓";position:absolute;left:0;top:.5mm;width:4.6mm;height:4.6mm;border-radius:50%;background:#e1f1e7;color:#1f7a45;font-size:7pt;font-weight:800;text-align:center;line-height:4.6mm}
+ul.ic.no li:before{content:"×";background:#e7e2f0;color:var(--ind);font-size:9pt}
+table{width:100%;border-collapse:collapse;font-size:8.7pt;line-height:1.38}
+th{font-size:7.2pt;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;padding:0 2.5mm 2mm 0;border-bottom:1.5px solid var(--ink);vertical-align:bottom}
+td{padding:1.8mm 2.5mm 1.8mm 0;border-bottom:1px solid var(--hair);vertical-align:top}
+tr{break-inside:avoid}
+td:first-child{font-weight:700}
+.m{color:var(--muted);font-weight:400}
+.f{font-family:"Public Sans",sans-serif;background:#f3f6f8;border-radius:1.5mm;padding:.4mm 1.4mm;white-space:nowrap;font-weight:500}
+.pill{display:inline-block;padding:.2mm 2mm;border-radius:3mm;font-size:7.6pt;font-weight:700;margin-right:1mm}
+.pg{background:#e1f1e7;color:#1f7a45}.po{background:#fbf0dc;color:#8b662f}.pp{background:#e7e2f0;color:var(--ind)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+.card{border:1px solid var(--hair);border-top:2mm solid var(--gold);border-radius:3.5mm;padding:3.5mm 4mm;break-inside:avoid;font-size:8.8pt}
+.card.l{border-top-color:var(--lav)}.card.i{border-top-color:var(--ind)}
+.card b.t{display:block;font-size:10pt;margin-bottom:1mm}
+.card p{color:var(--muted);margin:0 0 1.2mm}
+ol.q{list-style:none;counter-reset:q;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:3mm 8mm}
+ol.q li{counter-increment:q;position:relative;padding-left:8mm;break-inside:avoid}
+ol.q li:before{content:counter(q);position:absolute;left:0;top:0;width:5.6mm;height:5.6mm;border-radius:50%;background:var(--navy);color:#fff;font-size:8pt;font-weight:700;text-align:center;line-height:5.6mm}
+ol.steps{margin:0 0 2mm;padding-left:5mm}ol.steps li{margin-bottom:1.2mm}
+.ex{background:#f8fafb;border:1px solid var(--hair);border-left:1.2mm solid var(--lav);border-radius:2mm;padding:3mm 4mm;margin:2.5mm 0;break-inside:avoid;font-size:8.8pt}
+.ex b:first-child{color:var(--ind)}
+.refs{font-size:8pt;line-height:1.38;color:#2f3d47;margin:0;padding-left:5mm}.refs .u{color:var(--muted);margin-top:.6mm}.refs .u b{color:var(--ink)}
+.refs li{break-inside:avoid;margin-bottom:2mm}
+.small{font-size:8pt;color:var(--muted)}
+sup{font-size:6.6pt;line-height:0}
+.nb{break-inside:avoid}
+.page{position:relative;width:210mm;height:296.5mm;padding:12mm 14mm 0;overflow:hidden;break-after:page;page-break-after:always}.page:last-of-type{break-after:auto;page-break-after:auto}.in{height:262mm;overflow:visible}@media screen{body{background:#888}.page{background:#fff;margin:0 auto 4mm}}.fx{display:flex;gap:5mm;align-items:center;background:#f8fafb;border:1px solid var(--hair);border-left:1.2mm solid var(--lav);border-radius:2mm;padding:2mm 3.5mm;margin:2mm 0;break-inside:avoid;font-size:8.3pt;line-height:1.38}.fx .fxt{flex:1}.fx figure{margin:0;flex:none}.fx svg{width:100%;height:auto;display:block}
+.phones{display:grid;grid-template-columns:repeat(4,31mm);gap:6mm;justify-content:space-between;margin:0}
+.phone{margin:0;text-align:center}
+.phone .scr{width:31mm;aspect-ratio:780/1400;border-radius:4mm;overflow:hidden;box-shadow:0 0 0 1.2px #cfd8de,0 1.2mm 3mm rgba(20,33,43,.18);background:#fff}
+.phone .scr img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.phone figcaption{font-size:7.8pt;line-height:1.3;margin-top:2mm;color:var(--muted)}
+.phone figcaption b{color:var(--ink);display:block;font-size:8.2pt}
+.sheets{display:flex;gap:4mm;flex:none}
+.sheet{margin:0;width:55mm}
+.sheet .scr{width:55mm;aspect-ratio:1056/1494;overflow:hidden;border-radius:1.5mm;box-shadow:0 0 0 1.2px #cfd8de,0 1.2mm 3mm rgba(20,33,43,.18)}
+.sheet img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.sheet figcaption{font-size:7.6pt;line-height:1.3;margin-top:1.8mm;color:var(--muted);text-align:center}
+.rep{display:flex;gap:6mm;align-items:flex-start}
+.rep .tx{flex:1;font-size:8.8pt}
+.rep ul{margin:0 0 2mm;padding-left:4.5mm}.rep li{margin-bottom:1.2mm}
+.small2{font-size:7.4pt;line-height:1.35;color:var(--muted)}
+td.why{color:#2f3d47}
+</style></head><body>
+<div class="page"><div class="bar"></div><div class="in"><header>
+<svg class="logo" viewBox="0 0 512 512"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3a73b"/><stop offset=".55" stop-color="#a894c9"/><stop offset="1" stop-color="#7c6fa8"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#bg)"/><g transform="translate(281 300) scale(1.12)"><g transform="translate(-78 -72)"><circle r="66" fill="#ffd27a"/><g stroke="#ffd27a" stroke-width="14" stroke-linecap="round"><line x1="-90" y1="0" x2="-110" y2="0"/><line x1="-63.6" y1="-63.6" x2="-77.8" y2="-77.8"/><line x1="0" y1="-90" x2="0" y2="-110"/><line x1="63.6" y1="-63.6" x2="77.8" y2="-77.8"/><line x1="-63.6" y1="63.6" x2="-77.8" y2="77.8"/></g></g><g fill="#fff"><rect x="-140" y="0" width="280" height="110" rx="55"/><circle cx="20" cy="-5" r="74"/><circle cx="-65" cy="20" r="52"/></g><path d="M-116 50H-60L-38 8-8 92 22 12 40 50H116" fill="none" stroke="#7c6fa8" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+<div class="hd"><p class="eyebrow">Pour les professionnels de santé</p>
+<h1>Le carnet de douleur de vos patients</h1>
+<p class="sub">Une minute par jour pour le patient, deux minutes de lecture pour vous.</p></div>
+<div class="meta"><b>OUCH v0.3.0</b><br>Plaquette<br>8 octobre 2026</div>
+</header>
+<div class="box">
+<div><h2>OUCH en bref</h2><p>Carnet de douleur libre et gratuit, pour la fibromyalgie et les autres douleurs chroniques. Le patient note sa journée en moins d’une minute sur son téléphone, sans compte ; ses données restent sur l’appareil. Il en tire un rapport pour la consultation, qui décrit les données sans les interpréter.</p></div>
+<div><h2>Ce que cela change en consultation</h2><p>Des chiffres pris au jour le jour, plutôt qu’un récit de mémoire. Une comparaison à la période précédente, les poussées repérées, les traitements pris et leurs effets, et la question que le patient veut poser. Un appui pour l’anamnèse, pas une aide à la décision.</p></div>
+</div>
+<h2>Ce que le patient saisit, en moins d’une minute</h2>
+<div class="phones">
+<figure class="phone"><div class="scr"><img src="img/a-flare.png" alt="Écran Aujourd’hui allégé un jour de poussée : douleur en onze cases"></div><figcaption><b>Jours difficiles</b>La douleur seule, en onze cases.</figcaption></figure>
+<figure class="phone"><div class="scr"><img src="img/b-today-1.png" alt="Zones douloureuses et mesures du jour"></div><figcaption><b>Où, et comment</b>Zones, fatigue, sommeil, stress, humeur.</figcaption></figure>
+<figure class="phone"><div class="scr"><img src="img/b-today-3.png" alt="Médicaments pris"></div><figcaption><b>Traitements</b>Prises, effets indésirables.</figcaption></figure>
+<figure class="phone"><div class="scr"><img src="img/d-trends-0.png" alt="Courbe de douleur sur 90 jours"></div><figcaption><b>La courbe</b>Poussées ombrées.</figcaption></figure>
+</div>
+<h2>Pourquoi c’est utile</h2>
+<table>
+<tr><th style="width:24%">Le patient note</th><th style="width:19%">Comment</th><th>Pour vous</th></tr>
+<tr><td>Douleur du jour</td><td>0 à 10, seule saisie obligatoire</td><td class="why">Échelle numérique recommandée pour l’intensité<sup>[1][3]</sup>. Notée au jour le jour : le rappel d’une seule journée est plus fidèle que celui de la semaine<sup>[6]</sup>.</td></tr>
+<tr><td>Où ça fait mal</td><td>13 zones</td><td class="why">Localisation et extension, jour par jour. Déclaratif, pas un critère de classification.</td></tr>
+<tr><td>Fatigue, sommeil, brouillard mental, humeur, stress, activité</td><td>Curseurs 0 à 10</td><td class="why">Suivis à côté de la douleur. Échelles simples, non validées. Sommeil et douleur sont liés dans les deux sens<sup>[14]</sup>.</td></tr>
+<tr><td>Traitements</td><td>De fond ou au besoin</td><td class="why">Posologie réellement prise, jours oubliés, prises au besoin, soulagement, effets indésirables datés, changements de dose.</td></tr>
+<tr><td>Ce qui a aidé</td><td>En un geste</td><td class="why">Les approches non médicamenteuses que le patient repère lui-même.</td></tr>
+<tr><td>Météo, cycle, note</td><td>Facultatifs</td><td class="why">Des pistes que le patient veut tester ; le lien météo et douleur reste discordant<sup>[7][11–13]</sup>.</td></tr>
+</table>
+<p class="small2" style="margin-top:2mm">Références numérotées comme dans la note méthodologique : [1] IMMPACT · [3] HAS · [6] Broderick · [7][11–13] météo · [14] Finan.</p>
+</div><div class="foot"><span>Captures d’écran de démonstration, données fictives. OUCH n’est ni un dispositif médical ni un avis médical ; les données sont auto-déclarées par le patient et non vérifiées.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div></div>
+<div class="page"><div class="bar"></div><div class="in"><h2 style="margin-top:6mm">Ce que vous recevez</h2>
+<div class="rep">
+<div class="sheets">
+<figure class="sheet"><div class="scr"><img src="img/gp-0.png" alt="Rapport médecin traitant, page 1"></div><figcaption>Médecin traitant, page 1</figcaption></figure>
+<figure class="sheet"><div class="scr"><img src="img/cetd-1.png" alt="Rapport centre douleur, poussées"></div><figcaption>Centre douleur, poussées</figcaption></figure>
+</div>
+<div class="tx">
+<p>Le patient choisit une version (français ou anglais) et sa date de dernière consultation : le rapport couvre depuis cette date et la compare à la même durée juste avant.</p>
+<ul>
+<li><b>Médecin traitant</b>, 2 pages : courbe, répartition des jours légers, modérés et sévères, points clés, traitements, ce que le patient veut aborder.</li>
+<li><b>Centre douleur (CETD)</b>, environ 5 pages : s’y ajoutent statistiques détaillées, poussées et 3 jours qui les précèdent, chaque symptôme, antalgiques semaine par semaine, facteurs associés.</li>
+<li><b>Dans les deux</b> : le bilan avant et après chaque changement de traitement de fond, la méthode et les références.</li>
+</ul>
+<p>Les jours non renseignés ne sont jamais comblés. Le PDF est fabriqué sur le téléphone ; nom et date de naissance ne sont pas enregistrés.</p>
+</div></div>
+<div class="two">
+<div><h2>Ce que fait OUCH</h2><ul class="ic">
+<li>Décrire : moyennes, médianes, répartition, évolution.</li>
+<li>Repérer les poussées par rapport au niveau habituel du patient.</li>
+<li>Citer la source de chaque seuil, et dire quand il est extrapolé.</li></ul></div>
+<div><h2>Ce qu’OUCH ne fait pas</h2><ul class="ic no">
+<li>Poser un diagnostic ou conseiller un traitement.</li>
+<li>Remplacer un questionnaire validé ou votre examen.</li>
+<li>Présenter une association comme une cause.</li></ul></div>
+</div>
+<h2>Confiance et limites</h2>
+<div class="cards">
+<div class="card"><b class="t">Chez le patient</b><p>Les données restent dans son navigateur : pas de compte, rien envoyé, hors la météo facultative. La sauvegarde est chiffrée par un mot de passe qu’il choisit.</p></div>
+<div class="card l"><b class="t">Libre et testé</b><p>Logiciel libre (CeCILL v2.1), code public. 147 tests automatiques vérifient les calculs et l’application.</p></div>
+<div class="card i"><b class="t">Franc sur ses limites</b><p>Données auto-déclarées. Échelles de fatigue, sommeil et humeur non validées. La définition des poussées est propre à OUCH, sans consensus.</p></div>
+</div>
+<h2>En consultation, en trois temps</h2>
+<ol class="q" style="grid-template-columns:1fr 1fr 1fr;gap:6mm">
+<li>Le patient tient son carnet : une minute par jour, la douleur seule les jours difficiles.</li>
+<li>Avant la consultation, il génère le rapport : version, date de la dernière consultation, ce qu’il veut aborder.</li>
+<li>Vous le lisez en deux minutes. La note méthodologique détaille chaque formule, seuil et source.</li>
+</ol>
+</div><div class="foot"><span>Captures d’écran de démonstration, données fictives. OUCH n’est ni un dispositif médical ni un avis médical ; les données sont auto-déclarées par le patient et non vérifiées.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div></div>
+</body></html>
