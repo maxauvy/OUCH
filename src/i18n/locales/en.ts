@@ -103,6 +103,15 @@ const en: Translations = {
     note: "No pressure: on hard days, a single entry is enough (your pain). OUCH doesn't replace medical advice, and trends are leads to explore, not proof.",
   },
 
+  support: {
+    title: 'Support OUCH',
+    before: 'OUCH is free and will stay so. If you would like to support its development, you can ',
+    link: 'buy me a coffee',
+    after: '.',
+    opens: '(opens {{service}} in a new tab)',
+    note: 'Nothing is unlocked in return, and nothing from your diary is sent: the link opens the {{service}} site.',
+  },
+
   sources: {
     title: "Scientific sources",
     toggle: "Show the {{n}} references",

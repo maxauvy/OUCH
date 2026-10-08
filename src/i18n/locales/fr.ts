@@ -105,6 +105,15 @@ const fr: Translations = {
     note: "Pas de pression : les jours difficiles, une seule info suffit (ta douleur). OUCH ne remplace pas un avis médical, et les tendances sont des pistes à explorer, pas des preuves.",
   },
 
+  support: {
+    title: 'Soutenir OUCH',
+    before: 'OUCH est gratuit et le restera. Si tu veux soutenir son développement, tu peux ',
+    link: 'm’offrir un café',
+    after: '.',
+    opens: '(ouvre {{service}} dans un nouvel onglet)',
+    note: 'Rien n’est débloqué en échange, et rien de ton journal n’est envoyé : le lien ouvre le site {{service}}.',
+  },
+
   sources: {
     title: "Sources scientifiques",
     toggle: "Voir les {{n}} références",
