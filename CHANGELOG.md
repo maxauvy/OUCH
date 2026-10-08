@@ -6,6 +6,14 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- Dans Tendances, une carte « Bilan d'un changement » pour chaque début, changement de dose ou arrêt d'un traitement de fond : la douleur moyenne, les jours de poussée, les prises au besoin, le sommeil et les effets signalés avec ce traitement, sur les 28 jours d'avant puis les 28 jours qui suivent sa première semaine (qu'on ne compte pas : un traitement de fond n'agit pas tout de suite), avec le nombre de jours notés de chaque côté. Il faut 14 jours notés de chaque côté ; tant que les 28 jours ne sont pas écoulés, le bilan est « en cours ». Avec assez d'historique (6 écarts entre deux périodes de 28 jours qui se suivent, hors celles du changement lui-même), chaque mesure est aussi placée à côté de l'écart que la personne a eu, 8 fois sur 10, entre deux mois qui se suivent (« Dans / Au-delà de tes écarts habituels »). La courbe, avec les moyennes avant et après, s'ouvre à la demande. C'est une description : elle ne dit pas si le traitement « marche », et le dit. Un autre changement au même moment, ou un changement fait pendant une poussée, est signalé.
+- Dans les deux rapports (médecin traitant et Centre douleur), un tableau « Changements de traitement de fond » : pour chaque changement de la période ou des 5 semaines d'avant, la douleur, les jours de poussée et les prises au besoin avant → après, les jours renseignés de chaque côté, et ce qu'il faut savoir (bilan en cours, autre changement au même moment, effets signalés), avec l'écart habituel du patient quand le journal est assez long.
+
+### Modifié
+- Le bilan sur deux semaines de la carte « Tes traitements » (« Dans les 2 semaines après le passage à… ») est remplacé par ce bilan sur 28 jours, qui compte plus de jours et dit combien étaient notés.
+- Un changement de dose s'écrit « 30 mg → 60 mg » (et non « 30 mg · 1/j → 60 mg · 1/j ») quand c'est la dose qui change, dans l'app comme dans le rapport.
+
 ## [0.2.1] - 2026-10-07
 
 ### Modifié

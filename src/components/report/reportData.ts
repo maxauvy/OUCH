@@ -4,6 +4,7 @@ import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, type FlareEp
 import { flareContext, type FlareContext } from '../../lib/flareContext'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
 import { shiftISO } from '../../lib/medications'
+import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '../../lib/treatmentReview'
 import { reportFormat, type ReportFormat } from './reportFormat'
 
 export type ReportVariant = 'gp' | 'painClinic'
@@ -48,6 +49,9 @@ export interface ReportData {
   meds: MedicationReport[]
   medications: Medication[]
   flares: FlareSummary
+  /** Changes of background treatment in the period, or in the 5 weeks before
+   * it (their second half is inside it), with what the diary shows around each */
+  reviews: TreatmentReview[]
 }
 
 /** Flares found in the whole history, since the usual level before one
@@ -71,6 +75,9 @@ export function buildReportData(entries: DailyEntry[], medications: Medication[]
   const startingIn = (from: string, to: string) => episodes.filter((e) => e.start >= from && e.start <= to)
   const flareDays = flareDaySet(episodes)
   const currentFlares = startingIn(p.start, p.end)
+  const detectable = canDetectFlares(entries)
+  const { settleDays, windowDays } = DEFAULT_REVIEW_OPTIONS
+  const reviewFrom = shiftISO(p.start, -(settleDays + windowDays))
   return {
     options,
     f: reportFormat(options.language),
@@ -83,13 +90,18 @@ export function buildReportData(entries: DailyEntry[], medications: Medication[]
     meds: medicationReports(current, medications, p),
     medications,
     flares: {
-      detectable: canDetectFlares(entries),
+      detectable,
       current: currentFlares,
       context: currentFlares.map((e) => flareContext(e, entries, medications, flareDays)),
       previous: startingIn(p.prevStart, shiftISO(p.start, -1)),
       currentDays: flareDayCount(episodes, p.start, p.end),
       previousDays: flareDayCount(episodes, p.prevStart, shiftISO(p.start, -1)),
     },
+    reviews: treatmentReviews(entries, medications, detectable ? flareDays : null, options.end).filter(
+      // A change with no logged day on either side has nothing to describe
+      // (typically a treatment that predates the diary).
+      (r) => r.date >= reviewFrom && r.date <= p.end && r.nBefore + r.nAfter > 0
+    ),
   }
 }
 
