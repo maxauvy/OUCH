@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>Note méthodologique OUCH</title>
+<style>
+@font-face{font-family:"Public Sans";src:url(../../node_modules/@fontsource-variable/public-sans/files/public-sans-latin-ext-wght-normal.woff2) format("woff2");font-weight:100 900;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Public Sans";src:url(../../node_modules/@fontsource-variable/public-sans/files/public-sans-latin-wght-normal.woff2) format("woff2");font-weight:100 900;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{--ink:#14212b;--muted:#5b6b76;--hair:#e1e7eb;--brand:#0d5c8c;--soft:#e3eef6;--gold:#e3a73b;--lav:#a894c9;--ind:#574a7a;--navy:#14507a}
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:"Public Sans",sans-serif;font-size:9.6pt;line-height:1.45;color:var(--ink)}
+.bar{position:absolute;top:0;left:0;width:210mm;height:5mm;background:linear-gradient(90deg,var(--gold),var(--lav) 55%,var(--ind))}
+.foot{position:absolute;bottom:11mm;left:14mm;right:14mm;border-top:1px solid var(--hair);padding-top:2.5mm;display:flex;justify-content:space-between;gap:10mm;font-size:7.4pt;line-height:1.4;color:var(--muted)}
+.foot .r{text-align:right;white-space:nowrap}
+header{display:flex;gap:5mm;align-items:flex-start;margin:4mm 0 4mm}
+.logo{width:17mm;height:17mm;flex:none;margin-top:4mm}
+.hd{flex:1}
+.eyebrow,h2{font-size:7.8pt;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);margin:0}
+h1{font-size:22pt;line-height:1.12;margin:1mm 0 1.5mm;font-weight:800;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:10.5pt;margin:0}
+.meta{text-align:right;font-size:8.6pt;color:var(--muted);line-height:1.5;flex:none}
+.meta b{color:var(--ink)}
+h2{margin:6mm 0 2.5mm;break-after:avoid}
+h3{font-size:9.6pt;margin:3.5mm 0 1mm;break-after:avoid}
+p{margin:0 0 2mm}
+.box{background:var(--soft);border-radius:4.5mm;padding:5mm 6mm;display:grid;grid-template-columns:1fr 1fr;gap:8mm;break-inside:avoid}
+.box h2{margin:0 0 2mm}.box p{margin:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8mm}
+.two h2{margin-top:6mm}
+ul.ic{list-style:none;margin:0;padding:0}
+ul.ic li{position:relative;padding-left:7mm;margin-bottom:1.8mm;break-inside:avoid}
+ul.ic li:before{content:"✓";position:absolute;left:0;top:.5mm;width:4.6mm;height:4.6mm;border-radius:50%;background:#e1f1e7;color:#1f7a45;font-size:7pt;font-weight:800;text-align:center;line-height:4.6mm}
+ul.ic.no li:before{content:"×";background:#e7e2f0;color:var(--ind);font-size:9pt}
+table{width:100%;border-collapse:collapse;font-size:8.7pt;line-height:1.38}
+th{font-size:7.2pt;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;padding:0 2.5mm 2mm 0;border-bottom:1.5px solid var(--ink);vertical-align:bottom}
+td{padding:1.8mm 2.5mm 1.8mm 0;border-bottom:1px solid var(--hair);vertical-align:top}
+tr{break-inside:avoid}
+td:first-child{font-weight:700}
+.m{color:var(--muted);font-weight:400}
+.f{font-family:"Public Sans",sans-serif;background:#f3f6f8;border-radius:1.5mm;padding:.4mm 1.4mm;white-space:nowrap;font-weight:500}
+.pill{display:inline-block;padding:.2mm 2mm;border-radius:3mm;font-size:7.6pt;font-weight:700;margin-right:1mm}
+.pg{background:#e1f1e7;color:#1f7a45}.po{background:#fbf0dc;color:#8b662f}.pp{background:#e7e2f0;color:var(--ind)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+.card{border:1px solid var(--hair);border-top:2mm solid var(--gold);border-radius:3.5mm;padding:3.5mm 4mm;break-inside:avoid;font-size:8.8pt}
+.card.l{border-top-color:var(--lav)}.card.i{border-top-color:var(--ind)}
+.card b.t{display:block;font-size:10pt;margin-bottom:1mm}
+.card p{color:var(--muted);margin:0 0 1.2mm}
+ol.q{list-style:none;counter-reset:q;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:3mm 8mm}
+ol.q li{counter-increment:q;position:relative;padding-left:8mm;break-inside:avoid}
+ol.q li:before{content:counter(q);position:absolute;left:0;top:0;width:5.6mm;height:5.6mm;border-radius:50%;background:var(--navy);color:#fff;font-size:8pt;font-weight:700;text-align:center;line-height:5.6mm}
+ol.steps{margin:0 0 2mm;padding-left:5mm}ol.steps li{margin-bottom:1.2mm}
+.ex{background:#f8fafb;border:1px solid var(--hair);border-left:1.2mm solid var(--lav);border-radius:2mm;padding:3mm 4mm;margin:2.5mm 0;break-inside:avoid;font-size:8.8pt}
+.ex b:first-child{color:var(--ind)}
+.refs{font-size:8pt;line-height:1.38;color:#2f3d47;margin:0;padding-left:5mm}.refs .u{color:var(--muted);margin-top:.6mm}.refs .u b{color:var(--ink)}
+.refs li{break-inside:avoid;margin-bottom:2mm}
+.small{font-size:8pt;color:var(--muted)}
+sup{font-size:6.6pt;line-height:0}
+.nb{break-inside:avoid}
+.page{position:relative;width:210mm;height:296.5mm;padding:12mm 14mm 0;overflow:hidden;break-after:page;page-break-after:always}.page:last-of-type{break-after:auto;page-break-after:auto}.in{height:262mm;overflow:visible}@media screen{body{background:#888}.page{background:#fff;margin:0 auto 4mm}}</style></head><body>
+<div class="page"><div class="bar"></div><div class="in">
+
+<header>
+<svg class="logo" viewBox="0 0 512 512"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3a73b"/><stop offset=".55" stop-color="#a894c9"/><stop offset="1" stop-color="#7c6fa8"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#bg)"/><g transform="translate(281 300) scale(1.12)"><g transform="translate(-78 -72)"><circle r="66" fill="#ffd27a"/><g stroke="#ffd27a" stroke-width="14" stroke-linecap="round"><line x1="-90" y1="0" x2="-110" y2="0"/><line x1="-63.6" y1="-63.6" x2="-77.8" y2="-77.8"/><line x1="0" y1="-90" x2="0" y2="-110"/><line x1="63.6" y1="-63.6" x2="77.8" y2="-77.8"/><line x1="-63.6" y1="63.6" x2="-77.8" y2="77.8"/></g></g><g fill="#fff"><rect x="-140" y="0" width="280" height="110" rx="55"/><circle cx="20" cy="-5" r="74"/><circle cx="-65" cy="20" r="52"/></g><path d="M-116 50H-60L-38 8-8 92 22 12 40 50H116" fill="none" stroke="#7c6fa8" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+<div class="hd"><p class="eyebrow">Note méthodologique pour échange avec des soignants</p>
+<h1>Comment OUCH calcule ses chiffres</h1>
+<p class="sub">Formules, seuils, sources et limites de chaque indicateur du rapport, pour que vous puissiez les vérifier et les contester.</p></div>
+<div class="meta"><b>Document de référence</b><br>8 octobre 2026<br>OUCH v0.2.1</div>
+</header>
+
+<div class="box">
+<div><h2>Ce que décrit cette note</h2><p>OUCH est un carnet de douleur que la personne remplit elle-même, en moins d’une minute par jour. Son rapport résume ce carnet par quelques calculs : moyennes, répartition des jours, comparaison à la période précédente, poussées, traitements, corrélations. Cette note donne, pour chacun, la formule, le seuil, sa source et sa limite.</p></div>
+<div><h2>Comment la lire</h2><p>Les données sont auto-déclarées et rien n’est interprété : ni diagnostic, ni conseil de traitement. Les références, numérotées entre crochets comme dans le rapport, sont listées en fin de note. Quand un choix est propre à OUCH et non consensuel, comme la définition des poussées, la note le dit.</p></div>
+</div>
+
+<div class="two">
+<div><h2>Principes valables pour tous les calculs</h2><ul class="ic">
+<li>N’utiliser que les jours renseignés. Un jour manquant est exclu, jamais estimé ni complété.</li>
+<li>Écrire, avec chaque chiffre, le nombre de jours sur lequel il repose.</li>
+<li>Citer la source de chaque seuil et dire quand il est extrapolé.</li></ul></div>
+<div><h2>Ce que le rapport ne fait pas</h2><ul class="ic no">
+<li>Poser un diagnostic ou conseiller un traitement.</li>
+<li>Corriger les corrélations pour l’autocorrélation ou les comparaisons multiples, ni calculer de valeur p.</li>
+<li>Présenter une association comme une cause.</li>
+<li>Envoyer les données ailleurs : tout est calculé sur l’appareil de la personne.</li></ul></div>
+</div>
+
+<h2>1 · Données recueillies</h2>
+<table>
+<tr><th style="width:30%">Donnée</th><th style="width:22%">Échelle</th><th>Remarque</th></tr>
+<tr><td>Douleur du jour</td><td>entier de 0 à 10</td><td>Seule mesure obligatoire. Échelle numérique, mesure d’intensité recommandée<sup>[1][3]</sup> et largement validée<sup>[10]</sup>. Notée pour la journée écoulée : un rappel sur 24 h limite le biais de mémoire<sup>[6]</sup>.</td></tr>
+<tr><td>Fatigue, brouillard mental, stress</td><td>0 à 10, ↑ = plus de gêne</td><td>Échelles numériques simples <b>non validées</b>.</td></tr>
+<tr><td>Qualité du sommeil, humeur, activité</td><td>0 à 10, ↑ = mieux</td><td>Échelles simples <b>non validées</b>. La qualité du sommeil saisie un jour décrit la nuit précédente. La durée du sommeil, en heures, est déclarée.</td></tr>
+<tr><td>Zones douloureuses</td><td>13 zones déclaratives</td><td>Non superposables aux 19 régions de l’index de douleur diffuse (WPI) : pas un critère de classification.</td></tr>
+<tr><td>Traitements</td><td>registre + prises du jour</td><td>Nom, type (de fond, au besoin, non précisé), dose et dates de chaque posologie. Chaque jour : nombre de prises, soulagement (aucun, léger, modéré, important) et effets indésirables, pour les traitements au besoin.</td></tr>
+<tr><td>Météo, actions « qui ont aidé »</td><td>mesures ; étiquettes libres</td><td>Météo facultative, relevée via Open-Meteo pour la position de la personne (pression moyenne de la journée au niveau de la mer). Actions : marche, bain chaud… comptées, non classées.</td></tr>
+</table>
+
+</div><div class="foot"><span>Établi le 8 octobre 2026 à partir du code publié d’OUCH v0.2.1 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div>
+<div class="page"><div class="bar"></div><div class="in"><h2>2 · Périodes et complétude</h2>
+<table>
+<tr><th style="width:30%">Notion</th><th>Définition</th></tr>
+<tr><td>Période analysée</td><td>De la date de dernière consultation (saisie au moment de l’export) à la date du rapport, bornes incluses : <span class="f">N = (date du rapport − consultation) + 1</span> jours.</td></tr>
+<tr><td>Période précédente</td><td>Les <b>N</b> jours qui précèdent la consultation, donc de même durée. Toutes les comparaisons du rapport se font à ce repère.</td></tr>
+<tr><td>Jours renseignés</td><td>Nombre de jours avec une entrée, affiché « x / N » avec son pourcentage, pour les deux périodes. Un jour sans entrée n’est pas compté comme « douleur nulle ».</td></tr>
+<tr><td>Complétude par dimension</td><td>Pour chaque dimension (fatigue, sommeil, zones, traitements…), part des jours renseignés où elle est saisie. Les dimensions jamais saisies ne sont pas listées.</td></tr>
+</table>
+
+<h2>3 · Statistiques sur la douleur</h2>
+<table>
+<tr><th style="width:24%">Indicateur</th><th style="width:44%">Calcul</th><th>Précisions</th></tr>
+<tr><td>Moyenne et écart-type</td><td>Moyenne arithmétique des jours renseignés ; écart-type d’échantillon, <span class="f">√(Σ(x − moy)² / (n − 1))</span>.</td><td>Écart-type fixé à 0 s’il y a moins de 2 jours.</td></tr>
+<tr><td>Médiane et quartiles [Q1–Q3]</td><td>Interpolation linéaire entre les valeurs triées : position <span class="f">(n − 1) × p</span>, comme le type 7 par défaut de R.</td><td>La médiane d’entiers peut valoir x,5.</td></tr>
+<tr><td>Minimum, maximum</td><td>Extrêmes des jours renseignés.</td><td></td></tr>
+<tr><td>Jours légers, modérés, sévères</td><td>Part des jours ≤ 3, de 4 à 6, ≥ 7. Le nombre de jours sévères est cette part × n, arrondi.</td><td>Seuils conventionnels. L’étude de Boonstra<sup>[5]</sup> (2 854 patients) montre qu’ils varient avec le retentissement : léger ≤ 5, modéré 6–7, sévère ≥ 8 en moyenne, mais ≤ 3, 4–6, ≥ 7 chez ceux qui dramatisent peu, cas retenu ici. Repères, pas diagnostic.</td></tr>
+<tr><td>Répartition 0–10</td><td>Part des jours à chaque niveau, pour les deux périodes (histogramme).</td><td></td></tr>
+<tr><td>Variation relative</td><td><span class="f">(moy. période − moy. précédente) / moy. précédente</span>, calculée si une période précédente existe et si sa moyenne est supérieure à 0.</td><td>Le rapport écrit que la variation « atteint » le seuil de 30 % si sa valeur absolue est ≥ 30 %, « reste en deçà » sinon. Repère issu d’études sur l’amélioration sous traitement, de groupe<sup>[2][4][8][9]</sup> : il n’indique ni un effet, ni ce qui compte pour la personne. Seul le critère relatif est testé, pas celui de 2 points.</td></tr>
+<tr><td>Moyenne glissante sur 7 jours</td><td>Pour chaque jour du graphique, moyenne des valeurs du jour et des 6 jours calendaires précédents, affichée si au moins 4 de ces jours sont renseignés.</td><td>Lisse les effets de jour de semaine. Les points du graphique restent les valeurs brutes.</td></tr>
+<tr><td>Tableau par semaine</td><td>Blocs de 7 jours depuis le début de la période (le dernier est raccourci) : jours renseignés, douleur moyenne et prises.</td><td>Version détaillée seulement.</td></tr>
+</table>
+
+</div><div class="foot"><span>Établi le 8 octobre 2026 à partir du code publié d’OUCH v0.2.1 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div>
+<div class="page"><div class="bar"></div><div class="in"><h2>4 · Repérage des poussées</h2>
+<p>Une poussée est une série de jours nettement au-dessus de ce qui est <b>habituel pour la personne</b>, et non au-dessus d’une valeur fixe : 7/10 est une journée ordinaire pour l’un et une urgence pour l’autre. <b>Il n’existe pas de définition consensuelle de la poussée</b> ; celle-ci est propre à OUCH. Elle reprend l’écart minimal cliniquement important<sup>[2][4]</sup>, établi pour une amélioration et ici appliqué à une aggravation, ce qui est une extrapolation. Elle est calculée sur tout l’historique, car le niveau habituel d’un jour demande des entrées antérieures à la période du rapport. Un épisode est rattaché à la période où il commence ; ses jours sont comptés là où ils tombent.</p>
+<table>
+<tr><th style="width:26%">Paramètre</th><th style="width:30%">Valeur</th><th>Rôle</th></tr>
+<tr><td>Niveau habituel</td><td>Médiane de la douleur des 28 jours précédents, hors jours déjà dans une poussée</td><td>La médiane est peu sensible aux jours extrêmes. Il faut au moins 10 jours renseignés dans cette fenêtre ; sinon rien n’est détecté et le rapport écrit « trop peu de jours renseignés ».</td></tr>
+<tr><td>Seuil de poussée</td><td><span class="f">habituel + max(2 points ; 30 % × habituel)</span></td><td>Au-dessus d’un niveau habituel d’environ 7,7/10, le seuil dépasse 10 : la personne ne peut pas être détectée ainsi, ce qui vaut mieux qu’un seuil inventé.</td></tr>
+<tr><td>Plancher</td><td>4/10</td><td>Pour ouvrir un épisode, la douleur doit aussi atteindre 4.</td></tr>
+<tr><td>Durée minimale</td><td>3 jours consécutifs au-dessus du seuil</td><td>Un jour non renseigné entre deux jours hauts ne rompt pas la série. Un épisode plus court est écarté.</td></tr>
+<tr><td>Retour à l’habituel</td><td>douleur ≤ habituel + 1</td><td>Un jour entre les deux repart à zéro le compte des jours de retour.</td></tr>
+<tr><td>Fin d’un épisode</td><td>2 jours renseignés de retour à l’habituel</td><td>Plus de 3 jours d’écart entre deux saisies clôt l’épisode avec une fin « inconnue ». Le dernier jour d’un épisode est son dernier jour au-dessus du seuil.</td></tr>
+<tr><td>Épisode en cours</td><td>dernier jour haut au plus 1 jour avant la date du rapport, sans retour</td><td>Signalé comme tel dans le rapport.</td></tr>
+</table>
+<div class="ex"><b>Exemple chiffré. </b>Quatorze jours de douleur entre 3 et 4 : le niveau habituel est la médiane, 3, et le seuil <span class="f">3 + max(2 ; 0,9) = 5</span>. Les cinq jours suivants valent 6, 7, 5, 8 et 6, tous ≥ 5 : un épisode de 5 jours, pic à 8/10. Vient un 4 (≤ 3 + 1 : retour à l’habituel) puis un 3 : deux jours de retour, l’épisode est clos, avec un retour en 1 jour. Ce cas est dans les tests automatiques du logiciel.</div>
+<h3>Ce que précède une poussée (version détaillée)</h3>
+<p>Pour chaque poussée, le rapport donne la <b>moyenne des 3 jours précédents</b> de six mesures (durée et qualité du sommeil, stress, fatigue, brouillard mental, humeur, d’au moins 2 jours renseignés), et dessous la <b>moyenne habituelle des 28 jours d’avant</b>, hors poussées (au moins 10 jours). S’y ajoutent les changements de traitement notés dans les 14 jours précédents. Rien n’est mis en évidence : un essai où l’on signalait ce qui sortait de plus d’un écart-type signalait quelque chose avant 37 % des fenêtres de 3 jours qui ne précèdent aucune poussée, et le lecteur y verrait une cause.</p>
+
+</div><div class="foot"><span>Établi le 8 octobre 2026 à partir du code publié d’OUCH v0.2.1 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div>
+<div class="page"><div class="bar"></div><div class="in"><h2>5 · Traitements</h2>
+<table>
+<tr><th style="width:26%">Indicateur</th><th>Calcul</th></tr>
+<tr><td>Types</td><td><b>De fond</b> : pris chaque jour, coché d’office, la personne décoche une prise oubliée. <b>Au besoin</b> : nombre de prises noté, avec un maximum par jour prescrit. <b>Non précisé</b> : traitement ajouté sans description. Chaque changement de dose ferme une période de posologie et en ouvre une autre.</td></tr>
+<tr><td>Jours pris</td><td>Jours avec au moins une prise (nombre de prises absent ou > 0).</td></tr>
+<tr><td>Observance déclarée (fond)</td><td><span class="f">jours pris / (jours pris + jours explicitement marqués oubliés)</span>. Les jours sans entrée sont hors du calcul.</td></tr>
+<tr><td>Prises (au besoin)</td><td>Somme des prises ; maximum en un jour, signalé s’il dépasse le maximum prescrit. Effets indésirables : chaque effet signalé, avec nombre de jours et dates extrêmes.</td></tr>
+<tr><td>Soulagement (au besoin)</td><td>Décompte des prises par niveau ; en version courte, part des prises notées jugées « modérées ou importantes » : <span class="f">(modéré + important) / prises notées</span>. Non demandé pour les traitements de fond.</td></tr>
+<tr><td>Jours de médicament de secours</td><td>Jours avec au moins une prise d’un traitement « au besoin » ou « non précisé », sur les jours renseignés. Même calcul au sein de chaque poussée.</td></tr>
+</table>
+<p class="small" style="margin-top:2mm">Limite propre à ces calculs : comme un traitement de fond est coché d’office, une prise oubliée mais non décochée compte comme prise, et l’observance déclarée peut donc être surestimée.</p>
+
+<h2>6 · Facteurs associés à la douleur (version détaillée)</h2>
+<p><b>Corrélation de Spearman</b> (ρ) entre un facteur et la douleur du <b>même jour</b>, sur les deux périodes réunies : c’est la corrélation de Pearson calculée sur les rangs, les ex æquo recevant leur rang moyen. Elle ne suppose ni droite ni loi normale et convient aux échelles 0–10. Un facteur n’est affiché qu’à partir de <b>14 paires</b> de valeurs, et pas si l’un des deux est constant.</p>
+<div class="ex"><b>Exemple. </b>Sommeil (qualité) 4, 6, 6, 7, 8, 5, 3, 7 et douleur 7, 5, 6, 4, 3, 5, 8, 5 sur huit jours. Rangs du sommeil : 2, 4,5, 4,5, 6,5, 8, 3, 1, 6,5 ; rangs de la douleur : 7, 4, 6, 2, 1, 4, 8, 4. La corrélation de ces deux listes de rangs donne <b>ρ = −0,89</b> : les nuits meilleures vont avec une douleur plus basse, sur ces huit jours.</div>
+<table>
+<tr><th style="width:30%">Facteur</th><th>Valeur associée à la douleur du jour</th></tr>
+<tr><td>Sommeil (qualité, durée)</td><td>Valeur saisie ce jour-là, qui décrit la nuit précédente. Le lien est dans les deux sens, plutôt sommeil → douleur<sup>[14]</sup>.</td></tr>
+<tr><td>Stress, fatigue</td><td>Valeur du jour. La fatigue est un co-symptôme, pas un facteur.</td></tr>
+<tr><td>Activité de la veille</td><td>Activité du jour calendaire précédent (il faut une entrée ce jour-là). Trop comme trop peu d’activité sont associés à plus de douleur<sup>[15]</sup> : une corrélation monotone peut donc la manquer.</td></tr>
+<tr><td>Actions positives</td><td>Nombre d’actions notées ce jour-là. Lien possible dans les deux sens.</td></tr>
+<tr><td>Pression atmosphérique</td><td>Variation en hPa depuis le dernier jour renseigné. Littérature discordante<sup>[7][11][12][13]</sup>.</td></tr>
+</table>
+<p style="margin-top:2mm"><b>Force.</b> |ρ| &lt; 0,1 : négligeable ; &lt; 0,3 : faible ; &lt; 0,5 : modérée ; au-delà : forte. Ce sont des libellés conventionnels, sans test d’hypothèse, ni valeur p, ni intervalle de confiance. <b>Comparaisons de médianes</b> (au moins 3 jours dans chaque groupe) : lendemain d’une journée très active (activité de la veille ≥ 8) contre les autres ; jours avec au moins 2 actions positives contre aucune (un seul : exclu) ; jours de règles contre les autres, si la personne a choisi de les inclure.</p>
+
+</div><div class="foot"><span>Établi le 8 octobre 2026 à partir du code publié d’OUCH v0.2.1 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div>
+<div class="page"><div class="bar"></div><div class="in"><h2>7 · Ce que l’application montre à la personne, hors rapport</h2>
+<table>
+<tr><th style="width:26%">Écran</th><th style="width:44%">Calcul</th><th>Statut</th></tr>
+<tr><td>Tendances : facteurs</td><td>Jours répartis en trois groupes selon le facteur (0–3, 4–6, 7–10 ; pour la température, tiers inférieur, médian et supérieur des valeurs de la personne). Douleur moyenne de chaque groupe ; une phrase n’apparaît que si les deux extrêmes ont ≥ 3 jours et diffèrent d’au moins 1,2 point. Même principe pour « avec / sans » une action.</td><td>Seuil de 1,2 point choisi pour la lisibilité, non sourcé. Moyennes observées, annoncées comme « une association, pas une preuve ».</td></tr>
+<tr><td>Tendances : jour de la semaine</td><td>Meilleur et pire jours en moyenne, à partir de 7 jours renseignés et 2 observations par jour de semaine.</td><td>Descriptif.</td></tr>
+<tr><td>Tendances : changement de dose</td><td>Douleur moyenne des 14 jours avant et des 14 jours depuis le changement (jour inclus), si 5 jours renseignés de chaque côté.</td><td>Observation, pas un effet : le changement est souvent décidé pendant une mauvaise période.</td></tr>
+<tr><td>Météo du jour (carte à partager)</td><td>Score <span class="f">0,60 × douleur + 0,25 × fatigue + 0,15 × brouillard mental</span>, renormalisé si une des deux dernières manque. Cinq niveaux, de « dégagé » à « orage » : &lt; 1,5, &lt; 3,5, &lt; 5,5, &lt; 7,5, ≥ 7,5.</td><td><b>Pondérations choisies par le concepteur, non validées.</b> Image à partager avec les proches, absente du rapport.</td></tr>
+<tr><td>Carte « ces derniers jours ont été plus durs »</td><td>Affichée une fois par poussée en cours à la veille, avec ce que la personne a noté comme aidant lors de ses poussées précédentes. Pendant la poussée, la saisie se réduit à la douleur, le reste sur demande.</td><td>Aucune suggestion extérieure ; les deux sont désactivables.</td></tr>
+</table>
+
+<h2>8 · Où la méthode est solide, où elle l’est moins</h2>
+<div class="cards">
+<div class="card"><b class="t">1. Solide</b><p>Statistiques usuelles, formules publiées ici et testées : 124 tests automatiques passent sur le code de cette version, dont ceux des statistiques, périodes, traitements, corrélations et poussées.</p><p>Échelle numérique 0–10 validée, rappel sur 24 h, jours manquants jamais imputés.</p></div>
+<div class="card l"><b class="t">2. Plus fragile</b><p>La définition des poussées, extrapolée et non consensuelle. Les catégories légère, modérée, sévère, conventionnelles. Les échelles de fatigue, sommeil, humeur, non validées.</p><p>Sept corrélations lues sans correction des comparaisons multiples, sur des jours successifs non indépendants : elles surestiment la certitude.</p></div>
+<div class="card i"><b class="t">3. Absent</b><p>Aucune validation clinique d’OUCH lui-même : pas de comparaison avec un instrument validé (BPI, par exemple), ni de poussées confirmées par des patients ou des soignants.</p><p>Les jours manquants ne sont pas forcément aléatoires : on remplit parfois moins les mauvais jours. Rien n’est vérifié par un soignant.</p></div>
+</div>
+
+<h2>Six questions pour vous</h2>
+<ol class="q">
+<li>La définition des poussées (au moins 3 jours à plus de 2 points ou 30 % au-dessus de la médiane des 28 jours) a-t-elle un sens pour vous ? Quel critère préféreriez-vous ?</li>
+<li>Les catégories ≤ 3, 4–6, ≥ 7 vous servent-elles, ou lisez-vous l’évolution de la personne par rapport à elle-même ?</li>
+<li>Une moyenne sur 7 jours et une période comparée à la précédente suffisent-elles, ou faut-il d’autres résumés ?</li>
+<li>Les corrélations sont-elles utiles en consultation, ou risquent-elles d’être sur-interprétées ? Faut-il les retirer de la version pour le médecin traitant ?</li>
+<li>Quels indicateurs utilisez-vous vraiment, et lesquels feriez-vous disparaître du rapport ?</li>
+<li>Quelles données vous manquent aujourd’hui pour décider, qu’un carnet pourrait apporter ?</li>
+</ol>
+
+</div><div class="foot"><span>Établi le 8 octobre 2026 à partir du code publié d’OUCH v0.2.1 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div>
+<div class="page"><div class="bar"></div><div class="in"><h2>Références, et ce que chacune apporte</h2>
+<p class="small" style="margin-bottom:2.5mm">Chaque résumé reprend la conclusion principale de l’étude, d’après son résumé officiel (PubMed) ; c’est le même texte que dans la section « Sources scientifiques » de l’application. Ces études portent sur des groupes de patients : elles n’établissent rien de certain pour une personne donnée.</p>
+<ol class="refs"><li>Dworkin RH, Turk DC, Farrar JT, et al. Core outcome measures for chronic pain clinical trials: IMMPACT recommendations. <i>Pain</i>. 2005;113(1-2):9-19. PMID 15621359.<div class="u"><b>Ce que dit l’étude.</b> Consensus d’experts (IMMPACT) sur les mesures à retenir dans les essais cliniques sur la douleur chronique : l’intensité de la douleur, notée sur une échelle numérique de 0 à 10, en fait partie, avec le fonctionnement, l’humeur et l’impression globale d’amélioration. <b>Dans OUCH.</b> La douleur est notée chaque jour de 0 à 10, comme dans les essais cliniques, ce qui rend les chiffres lisibles par un soignant.</div></li>
+<li>Farrar JT, Young JP Jr, LaMoreaux L, Werth JL, Poole MR. Clinical importance of changes in chronic pain intensity measured on an 11-point numerical pain rating scale. <i>Pain</i>. 2001;94(2):149-158. PMID 11690728.<div class="u"><b>Ce que dit l’étude.</b> Sur 2 724 patients de 10 essais cliniques, une baisse d’environ 2 points, ou d’environ 30 %, sur l’échelle 0-10 correspond en moyenne à une amélioration jugée importante par le patient. Il faut une baisse plus forte quand la douleur de départ est élevée. <b>Dans OUCH.</b> Le rapport indique si la variation de la douleur atteint ce seuil de 30 %. Le même repère (2 points ou 30 %) sert à repérer les poussées, comme une hausse : c’est une extrapolation, établie pour des baisses. C’est une moyenne de groupe : elle ne dit pas ce qui compte pour la personne.</div></li>
+<li>Haute Autorité de santé. Douleur chronique : reconnaître le syndrome douloureux chronique, l’évaluer et orienter le patient. Recommandations professionnelles, décembre 2008.<div class="u"><b>Ce que dit l’étude.</b> Recommandation française qui définit le syndrome douloureux chronique (douleur persistante ou récurrente, avec retentissement fonctionnel) et décrit comment le reconnaître, l’évaluer et orienter le patient. <b>Dans OUCH.</b> Référence française citée dans le rapport pour l’évaluation de la douleur chronique.</div></li>
+<li>Dworkin RH, Turk DC, Wyrwich KW, et al. Interpreting the clinical importance of treatment outcomes in chronic pain clinical trials: IMMPACT recommendations. <i>J Pain</i>. 2008;9(2):105-121. PMID 18055266.<div class="u"><b>Ce que dit l’étude.</b> Consensus de 40 participants (universités, agences, patients, industrie) sur l’interprétation des résultats : au moins deux méthodes sont conseillées, et des repères provisoires (environ 30 % de baisse : modérée ; environ 50 % : importante) sont proposés. <b>Dans OUCH.</b> Le rapport qualifie une baisse de 30 % de modérément pertinente et de 50 % d’importante. Ces repères sont conçus pour des groupes de patients, pas pour un individu.</div></li>
+<li>Boonstra AM, Stewart RE, Köke AJA, et al. Cut-off points for mild, moderate, and severe pain on the numeric rating scale for pain in patients with chronic musculoskeletal pain. <i>Front Psychol</i>. 2016;7:1466. PMID 27746750.<div class="u"><b>Ce que dit l’étude.</b> Sur 2 854 patients douloureux chroniques, les seuils dépendent du retentissement sur le quotidien : en moyenne, léger ≤ 5, modéré 6-7, sévère ≥ 8 ; chez ceux qui dramatisent peu, léger ≤ 3, modéré 4-6, sévère ≥ 7. <b>Dans OUCH.</b> OUCH utilise léger ≤ 3, modéré 4–6, sévère ≥ 7, des seuils conventionnels qui correspondent à ce second cas. Ce sont des repères, pas un diagnostic.</div></li>
+<li>Broderick JE, Schwartz JE, Vikingstad G, et al. The accuracy of pain and fatigue items across different reporting periods. <i>Pain</i>. 2008;139(1):146-157. PMID 18455312.<div class="u"><b>Ce que dit l’étude.</b> Sur 83 patients suivis par journal électronique, la douleur rappelée est gonflée par rapport aux notes prises au fil de la journée. Le rappel de la veille reste fidèle, mais la mémoire se dégrade au-delà de quelques jours. <b>Dans OUCH.</b> OUCH fait noter la journée écoulée, jour par jour, plutôt que de résumer la semaine de mémoire.</div></li>
+<li>Dixon WG, Beukenhorst AL, Yimer BB, et al. How the weather affects the pain of citizen scientists using a smartphone app. <i>NPJ Digit Med</i>. 2019;2:105. PMID 31667359.<div class="u"><b>Ce que dit l’étude.</b> « Cloudy with a Chance of Pain » : 2 658 patients ont noté leur douleur chaque jour pendant 15 mois. Des liens existent avec l’humidité, la pression atmosphérique et le vent, mais ils sont modestes. <b>Dans OUCH.</b> OUCH enregistre la météo du jour pour que la personne puisse voir si elle compte pour elle, sans présenter le lien comme établi.</div></li>
+<li>Salaffi F, Stancati A, Silvestri CA, Ciapetti A, Grassi W. Minimal clinically important changes in chronic musculoskeletal pain intensity measured on a numerical rating scale. <i>Eur J Pain</i>. 2004;8(4):283-291. PMID 15207508.<div class="u"><b>Ce que dit l’étude.</b> Sur 825 patients, une baisse d’un point (15 %) est la plus petite différence perceptible ; une baisse de 2 points (33 %) correspond à « beaucoup mieux ». Il faut une baisse plus forte quand la douleur de départ est élevée. <b>Dans OUCH.</b> Confirme le repère de 2 points ou 30 % utilisé par le rapport.</div></li>
+</ol>
+</div><div class="foot"><span>Établi le 8 octobre 2026 à partir du code publié d’OUCH v0.2.1 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div>
+<div class="page"><div class="bar"></div><div class="in"><h2>Suite des références</h2>
+<ol class="refs" start="9"><li>Ostelo RWJG, Deyo RA, Stratford P, et al. Interpreting change scores for pain and functional status in low back pain: towards international consensus regarding minimal important change. <i>Spine</i>. 2008;33(1):90-94. PMID 18165753.<div class="u"><b>Ce que dit l’étude.</b> Consensus d’experts pour la lombalgie : une variation de 2 points sur l’échelle 0-10 est un changement minimal important, et une amélioration de 30 % est un seuil utile quelle que soit l’échelle. <b>Dans OUCH.</b> Confirme, par un autre chemin, le repère de 2 points ou 30 %.</div></li>
+<li>Hawker GA, Mian S, Kendzerska T, French M. Measures of adult pain. <i>Arthritis Care Res</i>. 2011;63(S11):S240-S252. PMID 22588748.<div class="u"><b>Ce que dit l’étude.</b> Revue des outils de mesure de la douleur de l’adulte, dont l’échelle numérique et l’échelle visuelle analogique, et de leurs qualités de mesure. <b>Dans OUCH.</b> Fait partie des sources qui justifient l’échelle numérique 0-10 pour noter la douleur.</div></li>
+<li>Beukenhorst AL, Schultz DM, McBeth J, Sergeant JC, Dixon WG. Are weather conditions associated with chronic musculoskeletal pain? Review of results and methodologies. <i>Pain</i>. 2020;161(4):668-683. PMID 32195783.<div class="u"><b>Ce que dit l’étude.</b> Revue de 43 études : deux sur trois trouvent un lien entre météo et douleur, mais dans des sens variables, souvent sur de petits groupes suivis moins d’un mois. Les auteurs demandent des études plus grandes et plus longues. <b>Dans OUCH.</b> C’est pourquoi le lien avec la pression atmosphérique est présenté comme « littérature discordante » dans le rapport.</div></li>
+<li>Smedslund G, Hagen KB. Does rain really cause pain? A systematic review of the associations between weather factors and severity of pain in people with rheumatoid arthritis. <i>Eur J Pain</i>. 2011;15(1):5-10. PMID 20570193.<div class="u"><b>Ce que dit l’étude.</b> Revue de 9 études dans la polyarthrite rhumatoïde : en moyenne, le lien entre douleur et température, humidité ou pression est proche de zéro, mais moins d’un patient sur quatre y réagit individuellement. <b>Dans OUCH.</b> La réaction à la météo varie d’une personne à l’autre : OUCH regarde les données propres à la personne plutôt que la moyenne.</div></li>
+<li>Steffens D, Maher CG, Li Q, et al. Effect of weather on back pain: results from a case-crossover study. <i>Arthritis Care Res</i>. 2014;66(12):1867-1872. PMID 25044376.<div class="u"><b>Ce que dit l’étude.</b> Sur 993 patients, la température, l’humidité, la pression et la pluie n’augmentent pas le risque de lombalgie aiguë. Le vent fort l’augmente légèrement, sans importance clinique. <b>Dans OUCH.</b> Autre raison de ne présenter le lien météo-douleur que comme une piste à discuter.</div></li>
+<li>Finan PH, Goodin BR, Smith MT. The association of sleep and pain: an update and a path forward. <i>J Pain</i>. 2013;14(12):1539-1552. PMID 24290442.<div class="u"><b>Ce que dit l’étude.</b> Revue : les troubles du sommeil prédisent l’apparition et l’aggravation de la douleur chronique, et prédisent plus fortement la douleur que la douleur ne prédit le sommeil. Le lien va toutefois dans les deux sens. <b>Dans OUCH.</b> Le rapport associe la douleur au sommeil de la nuit précédente, avec la mention d’un lien dans les deux sens.</div></li>
+<li>Andrews NE, Strong J, Meredith PJ. Activity pacing, avoidance, endurance, and associations with patient functioning in chronic pain: a systematic review and meta-analysis. <i>Arch Phys Med Rehabil</i>. 2012;93(11):2109-2121. PMID 22728699.<div class="u"><b>Ce que dit l’étude.</b> Revue de 41 études : éviter l’activité et la pousser jusqu’à la douleur forte sont tous deux associés à plus de douleur et de handicap. Le sens de la causalité n’est pas établi. <b>Dans OUCH.</b> Le rapport compare la douleur du lendemain d’une journée très active, avec la mention que trop comme trop peu d’activité sont associés à plus de douleur.</div></li>
+</ol>
+</div><div class="foot"><span>Établi le 8 octobre 2026 à partir du code publié d’OUCH v0.2.1 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div>
+</body></html>
