@@ -8,3 +8,12 @@ export const SUPPORT_URL = 'https://ko-fi.com/maxauvy'
 
 /** Its name, as the card says it. */
 export const SUPPORT_SERVICE = 'Ko-fi'
+
+/** Days with an entry before the card is shown: someone who has just
+ * arrived does not yet know whether OUCH is of use, and is not asked. */
+export const SUPPORT_MIN_DAYS = 15
+
+/** `loggedDays` is undefined until the entries have been counted. */
+export function showSupport(url: string, loggedDays: number | undefined): boolean {
+  return url !== '' && loggedDays !== undefined && loggedDays >= SUPPORT_MIN_DAYS
+}
