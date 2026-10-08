@@ -69,6 +69,7 @@ export interface Translations {
     checkNoMedications: string
     checkReminder: string
     checkNoReminder: string
+    checkNotInstalled: string
     reportTitle: string
     reportBody: string
     sourcesTitle: string
@@ -685,6 +686,21 @@ export interface Translations {
     error: string
     /** Shown once at the next start, in both languages: the language is erased too */
     wiped: string
+  }
+
+  install: {
+    title: string
+    /** Under the title when folded */
+    teaser: string
+    /** Safari on iPhone, where the data clean-up is the reason */
+    reasonSafari: string
+    reason: string
+    button: string
+    steps: { menu: string; share: string; more: string; home: string; add: string }
+    /** What is written on the small drawings of each step */
+    pictures: { address: string; share: string; more: string; home: string; add: string }
+    iosOther: string
+    other: string
   }
 
   storage: {

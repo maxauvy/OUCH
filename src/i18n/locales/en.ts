@@ -63,6 +63,7 @@ const en: Translations = {
     checkNoMedications: 'No medication described yet',
     checkReminder: 'Reminder every day at {{time}}',
     checkNoReminder: 'No daily reminder',
+    checkNotInstalled: 'OUCH is not installed yet',
     sourcesTitle: 'For the curious',
     sourcesBody:
       'The report’s benchmarks rest on published studies. You can find them, with a summary of their conclusions, in Settings → Scientific sources.',
@@ -854,6 +855,24 @@ const en: Translations = {
     close: 'Close',
     error: 'Deletion failed. Close any other OUCH tabs and try again.',
     wiped: 'Your data has been deleted from this device.',
+  },
+
+  install: {
+    title: 'Install OUCH on your home screen',
+    teaser: 'To better protect your diary',
+    reasonSafari: 'Safari is less likely to clear your diary if the app is installed, and it opens without the browser bar.',
+    reason: 'Installed, OUCH opens like an app, without the browser bar, and your browser is less likely to clear your diary.',
+    button: 'Install',
+    steps: {
+      menu: 'Tap the page menu: the symbol to the left of the address, or the three dots, depending on your iOS version.',
+      share: 'Tap “Share”.',
+      more: 'If needed, tap “View More”.',
+      home: 'Choose “Add to Home Screen”.',
+      add: 'Leave “Open as Web App” on, then tap “Add” at the top right.',
+    },
+    pictures: { address: 'ouch…', share: 'Share', more: 'View More', home: 'Add to Home Screen', add: 'Add' },
+    iosOther: 'To install OUCH, open this page in Safari, then tap “Share” and “Add to Home Screen”.',
+    other: 'In your browser’s menu, look for “Install app” or “Add to Home screen”.',
   },
 
   storage: {
