@@ -306,6 +306,24 @@ export function association(
   return Number.isFinite(rho) ? { key, rho, n: x.length } : null
 }
 
+/**
+ * Getter for the "pressure change" factor: hPa change since the previous LOGGED
+ * day (gap days allowed), as `WeatherInfo.pressureDeltaFromPrevious` documents.
+ * Nothing in the app stores that field (only old backups and the demo carry it),
+ * so it is derived from consecutive `weather.pressureHpa`; a stored value wins
+ * when present. Undefined for the first day or when either day has no pressure.
+ */
+export function pressureChange(entries: DailyEntry[]): (e: DailyEntry) => number | undefined {
+  const deltas = new Map<string, number>()
+  const sorted = [...entries].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
+  for (let i = 1; i < sorted.length; i++) {
+    const now = sorted[i].weather?.pressureHpa
+    const before = sorted[i - 1].weather?.pressureHpa
+    if (typeof now === 'number' && typeof before === 'number') deltas.set(sorted[i].date, now - before)
+  }
+  return (e) => e.weather?.pressureDeltaFromPrevious ?? deltas.get(e.date)
+}
+
 /** Conventional labels for |ρ|: < 0.1, < 0.3, < 0.5, above. */
 export function strengthIndex(rho: number): 0 | 1 | 2 | 3 {
   const a = Math.abs(rho)

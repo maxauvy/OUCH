@@ -5,6 +5,7 @@ import { periodOn } from '../../lib/medications'
 import { formatIllnessList } from '../../lib/childView'
 import {
   association,
+  pressureChange,
   collapseDoublePeriod,
   compareContext,
   daysWithRescueMedication,
@@ -1281,7 +1282,7 @@ function Associations({ d }: { d: ReportData }) {
     association(all, 'stress', (e) => e.stressLevel),
     association(all, 'activityPrev', (_, prev) => prev?.activityLevel),
     association(all, 'positiveActions', (e) => e.positiveActions?.length),
-    association(all, 'pressure', (e) => e.weather?.pressureDeltaFromPrevious),
+    association(all, 'pressure', pressureChange(all)),
     association(all, 'fatigue', (e) => e.fatigueLevel),
   ].filter((a): a is Association => a !== null)
 
