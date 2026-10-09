@@ -10,7 +10,8 @@
 //   PROMO_LANG=en node scripts/promo/record-0.3.mjs landscape
 //
 // The demo history is generated with DEMO_TODAY=empty so that Today opens during
-// a flare. Its pregabalin stop gives a finished review, its duloxetine dose
+// a flare (the demo dates are relative to today, so the review buttons are
+// found by medication name, not by date). Its pregabalin stop gives a finished review, its duloxetine dose
 // change an ongoing one. PROMO_LANG=en for the English version (default: fr).
 import { chromium } from 'playwright'
 import { rmSync, mkdirSync, writeFileSync, readFileSync, mkdtempSync } from 'node:fs'
@@ -26,7 +27,7 @@ const EN = process.env.PROMO_LANG === 'en'
 const NEW = EN ? '✦ New' : '✦ Nouveau'
 const T = EN ? {
   locale: 'en-US', settings: /Settings/, today: 'Today', trends: 'Trends',
-  review: 'Before and after a change', prega: /Pregabalin.*(Jul 29|29 Jul)/, amitrip: /Amitriptyline.*(May 4|4 May)/, curve: /See on the curve/, scale: 'Pain', report: 'Report for my doctor',
+  review: 'Before and after a change', prega: /^Pregabalin · /, amitrip: /^Amitriptyline · /, curve: /See on the curve/, scale: 'Pain', report: 'Report for my doctor',
   rtitle: 'Changes in background treatment', install: 'Install OUCH on your home screen',
   intro: 'Version <em>0.3.0</em> is here', outro: 'Clearer. Gentler. <em>Always private.</em>',
   local: '100% local · your data stays on your device', more: 'And also…',
@@ -36,10 +37,10 @@ const T = EN ? {
   c2: [NEW, 'Rate your pain *in one tap*', 'Eleven big boxes on flare days, nothing preselected.'],
   c3: [NEW, 'Before and after, *in the report*', 'For each treatment change: before → after.'],
   c4: [NEW, 'OUCH on *your home screen*', 'Step by step, with a small drawing for each one.'],
-  pills: ['☕ A coffee to support OUCH, if you like', '📄 A methodology note for clinicians', '💊 Readable doses: 30 mg → 60 mg'],
+  pills: ['☕ A coffee to support OUCH, if you like', '📄 For clinicians: a brochure and a methodology note', '💊 Readable doses: 30 mg → 60 mg'],
 } : {
   locale: 'fr-FR', settings: /Réglages/, today: 'Aujourd', trends: 'Tendances',
-  review: 'Avant et après un changement', prega: /Prégabaline.*29 juil/, amitrip: /Amitriptyline.*4 mai/, curve: /Voir sur la courbe/, scale: 'Douleur', report: 'Rapport pour mon médecin',
+  review: 'Avant et après un changement', prega: /^Prégabaline · /, amitrip: /^Amitriptyline · /, curve: /Voir sur la courbe/, scale: 'Douleur', report: 'Rapport pour mon médecin',
   rtitle: 'Changements de traitement de fond', install: 'Installer OUCH sur l’écran d’accueil',
   intro: 'La version <em>0.3.0</em> est là', outro: 'Plus clair. Plus doux. <em>Toujours privé.</em>',
   local: '100 % local · tes données restent sur ton appareil', more: 'Et aussi…',
@@ -49,7 +50,7 @@ const T = EN ? {
   c2: [NEW, 'Note ta douleur *en un geste*', 'Onze grosses cases les jours de poussée, rien de présélectionné.'],
   c3: [NEW, 'Avant et après *dans le rapport*', 'Pour chaque changement de traitement : avant → après.'],
   c4: [NEW, 'OUCH sur *ton écran d’accueil*', 'Pas à pas, avec un petit dessin à chaque étape.'],
-  pills: ['☕ Un café pour soutenir OUCH, si tu veux', '📄 Une note méthodologique pour les soignants', '💊 Des doses lisibles : 30 mg → 60 mg'],
+  pills: ['☕ Un café pour soutenir OUCH, si tu veux', '📄 Pour les soignants : une plaquette et une note méthodologique', '💊 Des doses lisibles : 30 mg → 60 mg'],
 }
 const DUR = 52
 const work = mkdtempSync(join(tmpdir(), 'ouch-promo-'))
