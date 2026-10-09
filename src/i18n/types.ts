@@ -630,6 +630,8 @@ export interface Translations {
     legend: string
     /** Added to a day's name for a screen reader, and the legend's entry */
     flareDay: string
+    /** A day with something noted but no pain level; a screen reader's label and the legend's entry */
+    noPain: string
     weekdaysShort: Week<string>
   }
 

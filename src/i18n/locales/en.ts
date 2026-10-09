@@ -790,6 +790,7 @@ const en: Translations = {
 
   calendar: {
     flareDay: 'flare',
+    noPain: 'noted, no pain level',
     prevMonth: 'Previous month',
     nextMonth: 'Next month',
     legend: 'Color key',
