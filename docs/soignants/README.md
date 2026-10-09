@@ -12,6 +12,7 @@ Cette page rassemble ce qu'un soignant peut vouloir lire, essayer, ou discuter.
 | Note méthodologique (8 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et sept questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.3.0/OUCH-note-methodologique-v0.3.0.pdf) · [source](../note-methodologique/) |
 | Vie privée | Savoir ce qui est enregistré, où, et ce qui quitte l'appareil | [`PRIVACY.md`](../../PRIVACY.md) |
 | Sécurité | Chiffrement des sauvegardes, signalement d'une faille | [`SECURITY.md`](../../SECURITY.md) |
+| Protocole de test | Participer à un pilote avec des soignants : phases, ce qui est recueilli, garde-fous | [`protocole-de-test.md`](protocole-de-test.md) |
 | Sources scientifiques | Les 15 références du rapport, avec leur résumé et l'usage qu'OUCH en fait | Dans l'application : Réglages, puis À propos |
 | Journal des versions | Ce qui change d'une version à l'autre | [`CHANGELOG.md`](../../CHANGELOG.md) |
 
@@ -37,7 +38,7 @@ Le projet a surtout besoin de regards de terrain. Dans l'ordre où cela coûte l
 
 1. **Lire la note méthodologique** et répondre, même brièvement, aux sept questions de ses dernières pages : la définition d'une poussée, les catégories de douleur, ce que vous ne voulez pas voir dans un rapport.
 2. **Donner un retour précis** : un libellé qui prête à confusion, une donnée qui manque, un seuil que vous contestez. Le plus simple est le [formulaire « Retour clinique »](https://github.com/maxauvy/OUCH/issues/new?template=retour-clinique.yml) ; il ne demande pas de savoir utiliser GitHub.
-3. **Essayer avec quelques patients** qui le souhaitent, et dire ce que le rapport a changé, ou non, en consultation.
+3. **Essayer avec quelques patients** qui le souhaitent, et dire ce que le rapport a changé, ou non, en consultation. Le [protocole de test](protocole-de-test.md) décrit comment, et ce qui est (ou n'est pas) recueilli.
 4. **Relire les références** : une étude manquante ou mal résumée se signale de la même façon.
 
 Ne mettez jamais de donnée de patient identifiable dans un retour : l'historique de démonstration suffit pour illustrer.
