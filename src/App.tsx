@@ -7,6 +7,7 @@ import { SettingsPage } from './pages/SettingsPage'
 import { ChildViewPage } from './pages/ChildViewPage'
 import { SetupWizard } from './components/setup/SetupWizard'
 import { useSettings, useSettingsLoaded } from './hooks/useSettings'
+import { hasPain } from './lib/loggedEntries'
 import { useTodayEntry } from './hooks/useEntries'
 import { updateSettings, todayISO } from './db'
 import { maybeShowReminder } from './lib/reminder'
@@ -48,7 +49,7 @@ function AppShell() {
 
   useEffect(() => {
     if (!settings.reminderEnabled) return
-    const check = () => maybeShowReminder(settings.reminderTime, !!todayEntry, todayISO(), settings.language)
+    const check = () => maybeShowReminder(settings.reminderTime, !!todayEntry && hasPain(todayEntry), todayISO(), settings.language)
     check()
     const id = setInterval(check, 60_000)
     return () => clearInterval(id)

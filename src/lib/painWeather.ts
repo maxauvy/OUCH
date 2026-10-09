@@ -1,4 +1,4 @@
-import type { DailyEntry, PainWeather, PainWeatherLevel } from '../db/types'
+import type { LoggedEntry, PainWeather, PainWeatherLevel } from '../db/types'
 import { theme } from './theme.ts'
 
 // Display labels for each level live in the active translation
@@ -47,7 +47,7 @@ const LEVELS: Record<PainWeatherLevel, Omit<PainWeather, 'level'>> = {
  * can feel heavier than the pain score alone suggests. Falls back to pain
  * alone when the other two weren't logged.
  */
-export function computePainWeather(entry: Pick<DailyEntry, 'painLevel' | 'fatigueLevel' | 'brainFog'>): PainWeather {
+export function computePainWeather(entry: Pick<LoggedEntry, 'painLevel' | 'fatigueLevel' | 'brainFog'>): PainWeather {
   const parts: { value: number; weight: number }[] = [{ value: entry.painLevel, weight: 0.6 }]
   if (typeof entry.fatigueLevel === 'number') parts.push({ value: entry.fatigueLevel, weight: 0.25 })
   if (typeof entry.brainFog === 'number') parts.push({ value: entry.brainFog, weight: 0.15 })

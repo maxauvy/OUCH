@@ -10,6 +10,7 @@ import {
   startOfMonth,
   startOfWeek,
 } from 'date-fns'
+import { hasPain } from '../../lib/loggedEntries'
 import type { DailyEntry, PainWeatherLevel } from '../../db/types'
 import { computePainWeather, painWeatherByLevel } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
@@ -82,7 +83,7 @@ export function CalendarHeatmap({
           const key = format(day, 'yyyy-MM-dd')
           const entry = byDate.get(key)
           const inMonth = isSameMonth(day, cursor)
-          const weather = entry ? computePainWeather(entry) : null
+          const weather = entry && hasPain(entry) ? computePainWeather(entry) : null
           // Days of the neighbouring months keep only the dot: no tint, and a
           // muted number that still reads (fading the whole cell didn't).
           const tinted = weather && inMonth ? weather : null

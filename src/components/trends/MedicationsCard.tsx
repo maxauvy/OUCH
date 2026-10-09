@@ -1,4 +1,4 @@
-import type { DailyEntry, Medication } from '../../db/types'
+import type { LoggedEntry, Medication } from '../../db/types'
 import { medicationReports, reportPeriods, type MedicationReport } from '../../lib/report'
 import { periodOn } from '../../lib/medications'
 import { formatPosology } from '../../lib/medicationFormat'
@@ -20,7 +20,7 @@ export function MedicationsCard({
   to,
 }: {
   /** Entries in the chosen range */
-  entries: DailyEntry[]
+  entries: LoggedEntry[]
   medications: Medication[]
   from: string
   to: string

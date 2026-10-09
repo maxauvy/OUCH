@@ -1,6 +1,6 @@
 import { createContext, createElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
 import './report.css'
-import type { DailyEntry } from '../../db/types'
+import type { LoggedEntry } from '../../db/types'
 import { periodOn } from '../../lib/medications'
 import { formatIllnessList } from '../../lib/childView'
 import {
@@ -771,7 +771,7 @@ function PainStatsTable({ d }: { d: ReportData }) {
 function Completeness({ d }: { d: ReportData }) {
   const { f, current } = d
   if (!current.length) return null
-  const fields: [string, (e: DailyEntry) => unknown][] = [
+  const fields: [string, (e: LoggedEntry) => unknown][] = [
     [f.t.symptomLabels.fatigueLevel[0], (e) => e.fatigueLevel],
     [f.t.symptomLabels.sleepQuality[0], (e) => e.sleepQuality],
     [f.t.symptomLabels.brainFog[0], (e) => e.brainFog],
@@ -1246,13 +1246,13 @@ function Agenda({ d }: { d: ReportData }) {
 }
 
 /** Notes on the report: all of them, or the GP's last three on hard days. */
-function noteItems(d: ReportData, all: boolean): DailyEntry[] {
+function noteItems(d: ReportData, all: boolean): LoggedEntry[] {
   const withNotes = d.current.filter((e) => e.notes?.trim())
   const hard = withNotes.filter((e) => e.painLevel >= 6)
   return all ? withNotes : (hard.length ? hard : withNotes).slice(-3)
 }
 
-function Notes({ d, all, list, from, to, continued }: { d: ReportData; all: boolean; list: DailyEntry[]; from: number; to: number; continued: boolean }) {
+function Notes({ d, all, list, from, to, continued }: { d: ReportData; all: boolean; list: LoggedEntry[]; from: number; to: number; continued: boolean }) {
   const { f } = d
   return (
     <>

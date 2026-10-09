@@ -1,6 +1,6 @@
 import { useId, useMemo, useState } from 'react'
 import { format as formatDate } from 'date-fns'
-import type { DailyEntry, Medication } from '../../db/types'
+import type { LoggedEntry, Medication } from '../../db/types'
 import { flareDaySet, type FlareEpisode } from '../../lib/flares'
 import { posologyChange } from '../../lib/medicationFormat'
 import { shiftISO } from '../../lib/medications'
@@ -32,7 +32,7 @@ export function TreatmentReviewCard({
   today,
 }: {
   /** Every entry */
-  entries: DailyEntry[]
+  entries: LoggedEntry[]
   medications: Medication[]
   /** Flares found, or null while they cannot be told yet */
   episodes: FlareEpisode[] | null
@@ -64,7 +64,7 @@ function ReviewBody({
   review: TreatmentReview
   reviews: TreatmentReview[]
   onPick: (key: string) => void
-  entries: DailyEntry[]
+  entries: LoggedEntry[]
   episodes: FlareEpisode[] | null
   today: string
 }) {

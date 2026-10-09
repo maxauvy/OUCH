@@ -107,11 +107,14 @@ function intakes(v: unknown): MedicationIntake[] | undefined {
   return out
 }
 
-/** Null when the entry cannot be used (no valid day or pain level). */
+/** Null when the entry cannot be used (no valid day, or a pain level that is
+ * not a number from 0 to 10). */
 export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry | null {
   if (!isRecord(raw) || !isISODate(raw.date)) return null
+  // A day saved without a pain level (a zone tapped, a note typed) is valid;
+  // a pain level that is present but unusable is not.
   const painLevel = num(raw.painLevel, 0, 10)
-  if (painLevel === undefined) return null
+  if (painLevel === undefined && raw.painLevel != null) return null
   return defined({
     date: raw.date,
     createdAt: timestamp(raw.createdAt, now),

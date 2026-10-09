@@ -1,15 +1,15 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import type { DailyEntry } from '../src/db/types.ts'
+import type { LoggedEntry } from '../src/db/types.ts'
 import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresOverlapping, flareThreshold } from '../src/lib/flares.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
-const entry = (date: string, painLevel: number): DailyEntry => ({ date, painLevel, createdAt: 0, updatedAt: 0 })
+const entry = (date: string, painLevel: number): LoggedEntry => ({ date, painLevel, createdAt: 0, updatedAt: 0 })
 
 /** `usual` pain on days 0–13, then `values` from day 14 (null = not logged). */
-function series(values: (number | null)[], usual = 4): DailyEntry[] {
+function series(values: (number | null)[], usual = 4): LoggedEntry[] {
   const out = Array.from({ length: 14 }, (_, i) => entry(day(i), usual))
   values.forEach((v, i) => v !== null && out.push(entry(day(14 + i), v)))
   return out

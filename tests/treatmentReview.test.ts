@@ -1,13 +1,13 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import type { DailyEntry, Medication } from '../src/db/types.ts'
+import type { LoggedEntry, Medication } from '../src/db/types.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 import { changeDate, reviewWindows, treatmentReviews } from '../src/lib/treatmentReview.ts'
 
 const START = '2026-01-01'
 const day = (n: number) => shiftISO(START, n)
-const entry = (n: number, painLevel: number, extra: Partial<DailyEntry> = {}): DailyEntry => ({
+const entry = (n: number, painLevel: number, extra: Partial<LoggedEntry> = {}): LoggedEntry => ({
   date: day(n),
   painLevel,
   createdAt: 0,
@@ -25,12 +25,12 @@ const med = (id: string, periods: Medication['periods'], regimen: Medication['re
 
 /** Dose raised on day 100. Pain: 6 before, 9 during the 7 settling days, 4 after. */
 const raised = med('duloxetine', [{ start: day(0), end: day(99) }, { start: day(100) }])
-function raisedHistory(extra: (n: number) => Partial<DailyEntry> = () => ({})): DailyEntry[] {
-  const out: DailyEntry[] = []
+function raisedHistory(extra: (n: number) => Partial<LoggedEntry> = () => ({})): LoggedEntry[] {
+  const out: LoggedEntry[] = []
   for (let n = 72; n < 136; n++) out.push(entry(n, n < 100 ? 6 : n < 107 ? 9 : 4, extra(n)))
   return out
 }
-const review = (entries: DailyEntry[], meds: Medication[], asOf: string, flareDays: Set<string> | null = new Set()) =>
+const review = (entries: LoggedEntry[], meds: Medication[], asOf: string, flareDays: Set<string> | null = new Set()) =>
   treatmentReviews(entries, meds, flareDays, asOf).filter((r) => r.event.med.id === 'duloxetine' && r.event.kind === 'doseChanged')[0]!
 
 test('windows: 28 days before, 7 not counted, 28 after', () => {
@@ -139,8 +139,8 @@ test('side effects reported with the treatment, most frequent first', () => {
 })
 
 /** A long diary where pain alternates 5 / 6 month by month, then the change. */
-function longHistory(): { entries: DailyEntry[]; meds: Medication[] } {
-  const entries: DailyEntry[] = []
+function longHistory(): { entries: LoggedEntry[]; meds: Medication[] } {
+  const entries: LoggedEntry[] = []
   for (let n = 0; n < 420; n++) entries.push(entry(n, n < 336 ? (Math.floor(n / 28) % 2 ? 6 : 5) : n < 343 ? 5 : 3))
   return { entries, meds: [med('duloxetine', [{ start: day(0), end: day(335) }, { start: day(336) }])] }
 }

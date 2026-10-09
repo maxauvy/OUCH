@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useAllEntries, useTodayEntry } from '../hooks/useEntries'
+import { useLoggedEntries, useTodayEntry } from '../hooks/useEntries'
+import { hasPain } from '../lib/loggedEntries'
 import { useSettings } from '../hooks/useSettings'
 import { computePainWeather } from '../lib/painWeather'
 import { getChildViewClosing, getChildViewCopy, getIllnessExplanation, getIllnessTitle, type ChildTone } from '../lib/childView'
@@ -11,8 +12,8 @@ export function ChildViewPage() {
   const language = useLanguage()
   const settings = useSettings()
   const todayEntry = useTodayEntry()
-  const allEntries = useAllEntries()
-  const entry = todayEntry ?? allEntries?.[0]
+  const allEntries = useLoggedEntries()
+  const entry = todayEntry && hasPain(todayEntry) ? todayEntry : allEntries?.[0]
 
   const [tone, setTone] = useState<ChildTone>('young')
 

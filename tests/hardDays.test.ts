@@ -1,13 +1,13 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import type { DailyEntry } from '../src/db/types.ts'
+import type { LoggedEntry } from '../src/db/types.ts'
 import { hardDaysCard, helpedDuring, lightFormActive } from '../src/lib/hardDays.ts'
 import { detectFlares } from '../src/lib/flares.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
-const entry = (date: string, painLevel: number, positiveActions?: string[]): DailyEntry => ({
+const entry = (date: string, painLevel: number, positiveActions?: string[]): LoggedEntry => ({
   date,
   painLevel,
   positiveActions,
@@ -16,7 +16,7 @@ const entry = (date: string, painLevel: number, positiveActions?: string[]): Dai
 })
 
 /** Usual pain (4) on days 0–13, then `values` from day 14 (null = not logged). */
-function series(values: (number | null)[], actions: Record<number, string[]> = {}): DailyEntry[] {
+function series(values: (number | null)[], actions: Record<number, string[]> = {}): LoggedEntry[] {
   const out = Array.from({ length: 14 }, (_, i) => entry(day(i), 4))
   values.forEach((v, i) => v !== null && out.push(entry(day(14 + i), v, actions[14 + i])))
   return out
