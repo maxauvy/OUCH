@@ -799,6 +799,7 @@ const fr: Translations = {
     nextMonth: 'Mois suivant',
     legend: 'Légende des couleurs',
     flareDay: 'poussée',
+    noPain: 'noté, sans niveau de douleur',
     weekdaysShort: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
   },
 
