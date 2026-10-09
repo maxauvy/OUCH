@@ -36,7 +36,7 @@ Le **développeur n'a accès à aucune donnée de journal** : elles n'arrivent j
 
 ## Sauvegardes
 
-L'export produit un fichier chiffré dans le navigateur (WebCrypto) : AES-256-GCM, clé dérivée du mot de passe de la personne par PBKDF2-SHA-256 (600 000 itérations, sel aléatoire de 16 octets). Le mot de passe n'est enregistré nulle part : **perdu, il rend la sauvegarde irrécupérable**, par conception. Le fichier ne contient que des données d'OUCH, et l'import vérifie sa forme avant de déchiffrer.
+L'export produit un fichier chiffré dans le navigateur (WebCrypto) : AES-256-GCM, clé dérivée du mot de passe de la personne par PBKDF2-SHA-256 (600 000 itérations, sel aléatoire de 16 octets). Le mot de passe n'est enregistré nulle part : **perdu, il rend la sauvegarde irrécupérable**, par conception. Le fichier contient tout le journal, les traitements et les réglages, donc aussi la position exacte si elle a été enregistrée. Il ne contient que des données d'OUCH, et l'import vérifie sa forme avant de déchiffrer. Le détail des champs est dans le [dictionnaire des données](docs/soignants/dictionnaire-des-donnees.md).
 
 ## Rapport pour le médecin, image de la météo
 
