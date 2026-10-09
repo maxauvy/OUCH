@@ -44,6 +44,6 @@ Ne mettez jamais de donnée de patient identifiable dans un retour : l'historiqu
 
 ## Contact
 
-*[À compléter : adresse de contact pour les échanges qui ne passent pas par GitHub.]*
+Pour un échange qui ne passe pas par GitHub : [maxime@open-freax.fr](mailto:maxime@open-freax.fr). N'y joignez aucune donnée de patient identifiable.
 
 Pour une faille de sécurité, utiliser le signalement privé décrit dans [`SECURITY.md`](../../SECURITY.md), pas une issue publique.
