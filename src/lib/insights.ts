@@ -1,4 +1,4 @@
-import type { DailyEntry } from '../db/types'
+import type { LoggedEntry } from '../db/types'
 
 export interface Bucket {
   label: string
@@ -39,8 +39,8 @@ function tercileBucketTests(values: number[]): BucketTest[] {
  * person can sanity-check, not a black box. `bucketLabels` (low/mid/high)
  * come from the active translation. */
 export function analyzeFactor(
-  entries: DailyEntry[],
-  getValue: (entry: DailyEntry) => number | null | undefined,
+  entries: LoggedEntry[],
+  getValue: (entry: LoggedEntry) => number | null | undefined,
   key: string,
   label: string,
   bucketLabels: [string, string, string],
@@ -48,7 +48,7 @@ export function analyzeFactor(
 ): FactorAnalysis {
   const withValues = entries
     .map((e) => ({ entry: e, value: getValue(e) }))
-    .filter((x): x is { entry: DailyEntry; value: number } => typeof x.value === 'number' && typeof x.entry.painLevel === 'number')
+    .filter((x): x is { entry: LoggedEntry; value: number } => typeof x.value === 'number' && typeof x.entry.painLevel === 'number')
 
   const bucketTests =
     options?.bucketing === 'terciles' ? tercileBucketTests(withValues.map((x) => x.value)) : FIXED_BUCKET_TESTS
@@ -80,8 +80,8 @@ export function analyzeFactor(
  * only — a good day also makes someone more likely to go for a walk, not
  * just the other way around. */
 export function analyzeTagPresence(
-  entries: DailyEntry[],
-  getTags: (entry: DailyEntry) => string[] | undefined,
+  entries: LoggedEntry[],
+  getTags: (entry: LoggedEntry) => string[] | undefined,
   bucketLabels: [string, string]
 ): FactorAnalysis[] {
   const withPain = entries.filter((e) => typeof e.painLevel === 'number')
@@ -121,7 +121,7 @@ export function analyzeTagPresence(
 /** Returns the Sunday-first weekday indices (matching Date#getDay()) with
  * the lowest / highest average pain — the caller maps these to localized
  * weekday names via the active translation. */
-export function bestAndWorstWeekday(entries: DailyEntry[]): { bestIdx: number; worstIdx: number } | null {
+export function bestAndWorstWeekday(entries: LoggedEntry[]): { bestIdx: number; worstIdx: number } | null {
   const withDates = entries.filter((e) => typeof e.painLevel === 'number')
   if (withDates.length < 7) return null
   const sums = Array(7).fill(0)

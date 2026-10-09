@@ -7,7 +7,7 @@
 // The ideas it recalls are the ones the person wrote down themselves on
 // days of an earlier flare; nothing is suggested from outside.
 
-import type { DailyEntry } from '../db/types'
+import type { LoggedEntry } from '../db/types'
 import { detectFlares, type FlareEpisode } from './flares.ts'
 import { shiftISO } from './medications.ts'
 
@@ -31,7 +31,7 @@ export const MAX_HELPED = 3
 /** The flare under way as of yesterday, if any: what both the card and the
  * lighter form on the day's page are based on. Days before today only, so
  * what is logged today neither summons nor removes them mid-session. */
-function ongoingFlare(entries: DailyEntry[], today: string) {
+function ongoingFlare(entries: LoggedEntry[], today: string) {
   const before = entries.filter((e) => e.date < today)
   const episodes = detectFlares(before, { asOf: shiftISO(today, -1) })
   return { before, episodes, episode: episodes.find((e) => e.ongoing) ?? null }
@@ -41,7 +41,7 @@ function ongoingFlare(entries: DailyEntry[], today: string) {
  * It lasts as long as the flare does, unlike the card, which shows once. The
  * person can open the full form, and that holds for the rest of that day. */
 export function lightFormActive(input: {
-  entries: DailyEntry[]
+  entries: LoggedEntry[]
   today: string
   /** The person can switch it off in the settings */
   enabled?: boolean
@@ -54,7 +54,7 @@ export function lightFormActive(input: {
 }
 
 export function hardDaysCard(input: {
-  entries: DailyEntry[]
+  entries: LoggedEntry[]
   /** ISO date of today */
   today: string
   seen?: HardDaysSeen
@@ -75,7 +75,7 @@ export function hardDaysCard(input: {
 
 /** What the person noted as helping on days inside a flare. Free text, so
  * "Bain chaud" and "bain chaud " count as one; the first spelling is kept. */
-export function helpedDuring(entries: DailyEntry[], episodes: FlareEpisode[]): string[] {
+export function helpedDuring(entries: LoggedEntry[], episodes: FlareEpisode[]): string[] {
   const counts = new Map<string, { label: string; n: number }>()
   for (const e of [...entries].sort((a, b) => a.date.localeCompare(b.date))) {
     if (!episodes.some((ep) => e.date >= ep.start && e.date <= ep.end)) continue

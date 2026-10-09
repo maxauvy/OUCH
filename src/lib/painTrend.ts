@@ -1,5 +1,5 @@
 import { format as formatDate, subDays } from 'date-fns'
-import type { DailyEntry } from '../db/types'
+import type { LoggedEntry } from '../db/types'
 import type { Translations } from '../i18n'
 
 export type PainTrend = 'lower' | 'same' | 'higher'
@@ -8,7 +8,7 @@ export type PainTrend = 'lower' | 'same' | 'higher'
  * the shared card. Null when fewer than 3 of those days were logged, since a
  * "usual" level from one or two days would mislead. Differences under half a
  * point count as the same. */
-export function painTrend(entry: DailyEntry, entries: DailyEntry[]): PainTrend | null {
+export function painTrend(entry: LoggedEntry, entries: LoggedEntry[]): PainTrend | null {
   const end = new Date(entry.date + 'T00:00:00')
   const window = new Set(Array.from({ length: 6 }, (_, i) => formatDate(subDays(end, i + 1), 'yyyy-MM-dd')))
   const previous = entries.filter((e) => window.has(e.date)).map((e) => e.painLevel)

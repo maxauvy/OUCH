@@ -6,7 +6,7 @@
 // reader would take each flag for a cause. Showing every measure, the
 // contrary cases included, leaves nothing to fish for.
 
-import type { DailyEntry, Medication } from '../db/types'
+import type { LoggedEntry, Medication } from '../db/types'
 import type { FlareEpisode } from './flares.ts'
 import { shiftISO } from './medications.ts'
 import { mean } from './report.ts'
@@ -49,7 +49,7 @@ export interface FlareContext {
 
 export function flareContext(
   episode: FlareEpisode,
-  entries: DailyEntry[],
+  entries: LoggedEntry[],
   medications: Medication[],
   /** Every day inside a flare (`flareDaySet`), kept out of the usual level */
   flareDays: Set<string>,

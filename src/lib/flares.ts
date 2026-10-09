@@ -10,7 +10,7 @@
 // an extrapolation, and there is no consensus definition of a flare to
 // check against. Descriptive only: nothing here says why a flare happened.
 
-import type { DailyEntry } from '../db/types'
+import type { LoggedEntry } from '../db/types'
 import { daysBetween, median } from './report.ts'
 import { shiftISO } from './medications.ts'
 
@@ -89,13 +89,13 @@ interface Open {
   firstCalm: string | null
 }
 
-export function detectFlares(entries: DailyEntry[], options: Partial<FlareOptions> = {}): FlareEpisode[] {
+export function detectFlares(entries: LoggedEntry[], options: Partial<FlareOptions> = {}): FlareEpisode[] {
   const o = { ...DEFAULT_FLARE_OPTIONS, ...options }
   const sorted = [...entries].sort((a, b) => a.date.localeCompare(b.date))
   const asOf = o.asOf ?? sorted.at(-1)?.date
   const episodes: FlareEpisode[] = []
   let open: Open | null = null
-  let prev: DailyEntry | null = null
+  let prev: LoggedEntry | null = null
 
   const finish = (ep: Open, how: { endUnknown?: boolean; ongoing?: boolean }) => {
     if (ep.bestRun >= o.minDays) {
@@ -170,7 +170,7 @@ export function detectFlares(entries: DailyEntry[], options: Partial<FlareOption
 /** Whether the entries can show a flare at all: some day must have enough
  * logged days before it to tell what is usual. Without this, "no flare" and
  * "too few entries to say" would read the same. */
-export function canDetectFlares(entries: DailyEntry[], options: Partial<FlareOptions> = {}): boolean {
+export function canDetectFlares(entries: LoggedEntry[], options: Partial<FlareOptions> = {}): boolean {
   const o = { ...DEFAULT_FLARE_OPTIONS, ...options }
   return entries.some((e) => {
     const from = shiftISO(e.date, -o.baselineDays)

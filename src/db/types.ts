@@ -110,6 +110,11 @@ export interface DailyEntry {
   notes?: string
 }
 
+/** A day on which a pain level was actually given. The analyses (report,
+ * flares, trends, reviews) take these only: a day without pain is not a day
+ * of no pain, it is a day not logged. */
+export type LoggedEntry = DailyEntry & { painLevel: number }
+
 /** Shape of entries saved before schema v3, which stored medication names
  * as free text. Only migration and backup import deal with it. */
 export interface LegacyDailyEntry extends DailyEntry {
