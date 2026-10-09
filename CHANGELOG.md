@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Corrigé
+- Toucher une zone du corps (ou noter autre chose) avant de régler la douleur n'enregistre plus une douleur à 0 : la journée est gardée sans niveau de douleur, comme « pas encore notée », et ne compte plus dans les moyennes, les poussées, le rapport ni la météo. Dans le Journal, ces jours portent un petit rond creux sous leur numéro. Les jours déjà enregistrés avec un 0 restent tels quels (on ne peut pas les distinguer d'un vrai 0). Restaurée dans une version antérieure à celle-ci, une sauvegarde exportée après ce changement perd ses jours sans niveau de douleur (les autres jours sont restaurés).
+
 ## [0.3.0] - 2026-10-08
 
 ### Ajouté
