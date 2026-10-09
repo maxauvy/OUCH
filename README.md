@@ -8,13 +8,13 @@ https://github.com/user-attachments/assets/36824d23-e5ff-4257-9254-b0164c30e334
 
 OUCH est un carnet de douleur pour la fibromyalgie et les autres douleurs chroniques. On y note sa journée en moins d'une minute, tout reste sur son téléphone, et c'est toujours soi qui décide de ce qu'on partage, et avec qui.
 
-Les carnets de suivi existants (Pain Diary, MyPainDiary…) sont fermés, ou pénibles à utiliser les jours où l'on n'en peut plus. OUCH fait le choix inverse : de gros boutons, presque rien d'obligatoire, et aucune donnée qui quitte l'appareil sans que la personne l'ait décidé.
+Les carnets de suivi existants (Pain Diary, MyPainDiary…) sont fermés, ou pénibles à utiliser les jours où l'on n'en peut plus. OUCH fait le choix inverse : de gros boutons, presque rien à remplir, et aucune donnée qui quitte l'appareil sans que la personne l'ait décidé.
 
 ## Ce qu'on peut faire
 
 ### Noter sa journée
 
-Seule la douleur est obligatoire, de 0 à 10. On peut y ajouter la fatigue, le sommeil, le stress, le brouillard mental, l'humeur, l'activité, les zones douloureuses, la météo du jour (par géolocalisation ou à la main) et, si on le souhaite, le cycle. On note aussi ce qui a aidé : une marche courte, un bain chaud, de la méditation… Tout ce dont on ne se sert pas peut être désactivé dans les réglages.
+Seule la douleur, de 0 à 10, suffit pour qu'une journée compte. On peut y ajouter la fatigue, le sommeil, le stress, le brouillard mental, l'humeur, l'activité, les zones douloureuses, la météo du jour (par géolocalisation ou à la main) et, si on le souhaite, le cycle. On note aussi ce qui a aidé : une marche courte, un bain chaud, de la méditation… Tout ce dont on ne se sert pas peut être désactivé dans les réglages.
 
 À la première ouverture, un assistant propose de préparer le suivi : maladies suivies, prénom, traitements, rappel quotidien. Tout est facultatif, on peut passer à tout moment et le relancer depuis les réglages.
 

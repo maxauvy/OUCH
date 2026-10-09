@@ -87,7 +87,7 @@ sup{font-size:6.6pt;line-height:0}
 <h2>1 · Données recueillies</h2>
 <table>
 <tr><th style="width:30%">Donnée</th><th style="width:22%">Échelle</th><th>Remarque</th></tr>
-<tr><td>Douleur du jour</td><td>entier de 0 à 10</td><td>Seule mesure obligatoire. Échelle numérique, mesure d’intensité recommandée<sup>[1][3]</sup> et largement validée<sup>[10]</sup>. Journée écoulée : rappel sur 24 h, qui limite le biais de mémoire<sup>[6]</sup>. Curseur, ou onze cases les jours de poussée : même échelle.</td></tr>
+<tr><td>Douleur du jour</td><td>entier de 0 à 10</td><td>Seule mesure nécessaire pour qu’un jour compte. Échelle numérique, mesure d’intensité recommandée<sup>[1][3]</sup> et largement validée<sup>[10]</sup>. Journée écoulée : rappel sur 24 h, qui limite le biais de mémoire<sup>[6]</sup>. Curseur, ou onze cases les jours de poussée : même échelle.</td></tr>
 <tr><td>Fatigue, brouillard mental, stress</td><td>0 à 10, ↑ = plus de gêne</td><td>Échelles numériques simples <b>non validées</b>.</td></tr>
 <tr><td>Qualité du sommeil, humeur, activité</td><td>0 à 10, ↑ = mieux</td><td>Échelles simples <b>non validées</b>. La qualité du sommeil saisie un jour décrit la nuit précédente. La durée du sommeil, en heures, est déclarée.</td></tr>
 <tr><td>Zones douloureuses</td><td>13 zones déclaratives</td><td>Non superposables aux 19 régions du WPI : pas un critère de classification.</td></tr>
@@ -102,7 +102,7 @@ sup{font-size:6.6pt;line-height:0}
 <tr><th style="width:30%">Notion</th><th>Définition</th></tr>
 <tr><td>Période analysée</td><td>De la date de dernière consultation (saisie au moment de l’export) à la date du rapport, bornes incluses : <span class="f">N = (date du rapport − consultation) + 1</span> jours.</td></tr>
 <tr><td>Période précédente</td><td>Les <b>N</b> jours qui précèdent la consultation, donc de même durée. Toutes les comparaisons du rapport se font à ce repère.</td></tr>
-<tr><td>Jours renseignés</td><td>Nombre de jours avec une entrée, affiché « x / N » avec son pourcentage, pour les deux périodes. Un jour sans entrée n’est pas compté comme « douleur nulle ».</td></tr>
+<tr><td>Jours renseignés</td><td>Nombre de jours avec un niveau de douleur, affiché « x / N » avec son pourcentage, pour les deux périodes. Un jour où seule une zone, une note ou un traitement est saisi est enregistré mais n’est pas compté ; un jour sans entrée n’est jamais compté comme « douleur nulle ».</td></tr>
 <tr><td>Complétude par dimension</td><td>Pour chaque dimension (fatigue, sommeil, zones, traitements…), part des jours renseignés où elle est saisie. Les dimensions jamais saisies ne sont pas listées.</td></tr>
 </table>
 
