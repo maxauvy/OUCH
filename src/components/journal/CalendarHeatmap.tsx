@@ -45,6 +45,11 @@ export function CalendarHeatmap({
   const gridStart = startOfWeek(monthStart, { weekStartsOn: 1 })
   const gridEnd = endOfWeek(monthEnd, { weekStartsOn: 1 })
   const days = eachDayOfInterval({ start: gridStart, end: gridEnd })
+  const withNoPain = (day: Date) => {
+    const e = byDate.get(format(day, 'yyyy-MM-dd'))
+    return !!e && !hasPain(e)
+  }
+  const anyNoPain = days.some((d) => isSameMonth(d, cursor) && withNoPain(d))
 
   return (
     <div>
@@ -91,7 +96,8 @@ export function CalendarHeatmap({
           const today = isToday(day)
           const dayLabel = format(day, 'd MMMM yyyy', { locale: dateFnsLocale })
           const inFlare = !!flareDays?.has(key)
-          const label = [dayLabel, weather ? i18n.painWeatherLevels[weather.level] : null, inFlare ? i18n.calendar.flareDay : null]
+          const noPain = !weather && withNoPain(day)
+          const label = [dayLabel, weather ? i18n.painWeatherLevels[weather.level] : null, noPain ? i18n.calendar.noPain : null, inFlare ? i18n.calendar.flareDay : null]
             .filter(Boolean)
             .join(', ')
 
@@ -123,13 +129,14 @@ export function CalendarHeatmap({
                   aria-hidden
                 />
               )}
+              {noPain && <NoPainRing color={inMonth ? 'var(--color-ink-muted)' : 'var(--color-hairline)'} className="mt-0.5" />}
               {inFlare && <FlareBar color={tinted ? tinted.ink : 'var(--color-ink-muted)'} className="absolute bottom-1.5" />}
             </button>
           )
         })}
       </div>
 
-      <WeatherLegend withFlare={!!flareDays?.size} />
+      <WeatherLegend withFlare={!!flareDays?.size} withNoPain={anyNoPain} />
     </div>
   )
 }
@@ -140,10 +147,16 @@ function FlareBar({ color, className = '' }: { color: string; className?: string
   return <span className={`block w-4 h-[2.5px] rounded-full ${className}`} style={{ background: color }} aria-hidden />
 }
 
+/** A day with something noted but no pain level: the weather's dot, left
+ * hollow. Shape carries it, so it needs no colour of its own. */
+function NoPainRing({ color, className = '' }: { color: string; className?: string }) {
+  return <span className={`block w-1.5 h-1.5 rounded-full box-border ${className}`} style={{ border: `1.5px solid ${color}` }} aria-hidden />
+}
+
 const LEVELS: PainWeatherLevel[] = [1, 2, 3, 4, 5]
 
 /** The five weathers, easiest day first, so the calendar's colors can be read. */
-function WeatherLegend({ withFlare }: { withFlare: boolean }) {
+function WeatherLegend({ withFlare, withNoPain }: { withFlare: boolean; withNoPain: boolean }) {
   const i18n = useTranslation()
   const id = useId()
   return (
@@ -171,6 +184,16 @@ function WeatherLegend({ withFlare }: { withFlare: boolean }) {
             </li>
           )
         })}
+        {withNoPain && (
+          <li className="flex items-center gap-1.5">
+            <span className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center" aria-hidden>
+              <NoPainRing color="var(--color-ink-muted)" />
+            </span>
+            <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              {i18n.calendar.noPain.charAt(0).toLocaleUpperCase() + i18n.calendar.noPain.slice(1)}
+            </span>
+          </li>
+        )}
         {withFlare && (
           <li className="flex items-center gap-1.5">
             <span
