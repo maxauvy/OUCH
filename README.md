@@ -106,7 +106,15 @@ tests/           tests des sauvegardes, des tendances, du rapport et de la mét�
 - La météo automatique appelle [Open-Meteo](https://open-meteo.com/) directement depuis le navigateur, sans clé ni compte. À chaque récupération, Open-Meteo reçoit les **coordonnées** de l'appareil (latitude et longitude) et voit forcément son adresse IP. Pour afficher le nom de la ville, l'app interroge aussi [Nominatim](https://nominatim.openstreetmap.org/) (OpenStreetMap), uniquement quand tu mets à jour ta position : il ne reçoit qu'une position **arrondie à environ 1 km** et voit lui aussi l'adresse IP, et les données de lieux sont © les contributeurs d'OpenStreetMap. Ce sont les seuls appels réseau que l'app fait d'elle-même, et seulement si la météo automatique est activée. Une politique de sécurité de contenu (CSP) limite d'ailleurs les appels sortants de la version de production à ces deux services.
 - Le rappel quotidien utilise l'API de notification du navigateur. Il n'y a volontairement pas de serveur d'envoi : le rappel arrive quand l'app est ouverte ou a servi récemment, pas quand elle est totalement fermée.
 
-Pour signaler une faille de sécurité, voir [`SECURITY.md`](SECURITY.md).
+La version détaillée, avec ce que chaque service extérieur reçoit, est dans [`PRIVACY.md`](PRIVACY.md). Pour signaler une faille de sécurité, voir [`SECURITY.md`](SECURITY.md).
+
+## Pour les professionnels de santé
+
+Une plaquette de deux pages, une note méthodologique qui détaille chaque calcul, seuil et source, et un formulaire de retour clinique sont rassemblés dans [`docs/soignants/`](docs/soignants/README.md).
+
+## Contribuer
+
+Les contributions sont bienvenues, de soignants et de patients comme de développeurs : voir [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Idées pour la suite
 

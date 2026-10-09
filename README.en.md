@@ -106,7 +106,15 @@ tests/           tests for backups, trends, the report and the pain weather
 - Automatic weather calls [Open-Meteo](https://open-meteo.com/) straight from the browser, with no key or account. Each time, Open-Meteo receives the device's **coordinates** (latitude and longitude) and inevitably sees its IP address. To show the town name, the app also queries [Nominatim](https://nominatim.openstreetmap.org/) (OpenStreetMap), only when you update your position: it receives a position **rounded to about 1 km** and also sees the IP address, and the place data is © OpenStreetMap contributors. These are the only network calls the app makes on its own, and only if automatic weather is on. A Content Security Policy (CSP) also restricts the production build's outgoing requests to these two services.
 - The daily reminder uses the browser's Notification API. There is deliberately no push server: the reminder shows up when the app is open or has been used recently, not when it is fully closed.
 
-To report a security vulnerability, see [`SECURITY.md`](SECURITY.md) (it has an English summary).
+The detailed version, with what each outside service receives, is in [`PRIVACY.md`](PRIVACY.md) (French, with an English summary). To report a security vulnerability, see [`SECURITY.md`](SECURITY.md) (it has an English summary).
+
+## For health professionals
+
+A two-page brochure, a methodology note detailing every calculation, threshold and source, and a clinical feedback form are gathered in [`docs/soignants/`](docs/soignants/README.md) (in French).
+
+## Contributing
+
+Contributions are welcome from clinicians and patients as much as from developers: see [`CONTRIBUTING.md`](CONTRIBUTING.md) (in French).
 
 ## Ideas for what's next
 
