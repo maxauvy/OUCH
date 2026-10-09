@@ -12,6 +12,7 @@ import {
   median,
   medicationReports,
   painStats,
+  pressureChange,
   quantile,
   reportPeriods,
   rollingMean,
@@ -337,6 +338,31 @@ test('the day before is available, and a day without it is left out', () => {
 test('the day before must be the calendar day before, not the previous entry', () => {
   const entries = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28].map((n, i) => entry(day(n), i, { sleepHours: i }))
   assert.equal(association(entries, 'x', (_e, prev) => prev?.sleepHours, 1), null)
+})
+
+test('pressure change is measured from the previous logged day, gaps included', () => {
+  const w = (hpa?: number) => (hpa === undefined ? {} : { weather: { source: 'auto' as const, pressureHpa: hpa } })
+  const entries = [entry(day(0), 1, w(1010)), entry(day(1), 1, w(1005)), entry(day(4), 1, w(1012)), entry(day(5), 1, w()), entry(day(6), 1, w(1000))]
+  const get = pressureChange(entries)
+  assert.equal(get(entries[0]), undefined)
+  assert.equal(get(entries[1]), -5)
+  assert.equal(get(entries[2]), 7)
+  assert.equal(get(entries[3]), undefined)
+  assert.equal(get(entries[4]), undefined)
+})
+
+test('pressure change does not depend on the order of the entries, and a stored delta wins', () => {
+  const a = entry(day(0), 1, { weather: { source: 'auto', pressureHpa: 1000 } })
+  const b = entry(day(1), 1, { weather: { source: 'auto', pressureHpa: 1004 } })
+  const c = entry(day(2), 1, { weather: { source: 'auto', pressureHpa: 1004, pressureDeltaFromPrevious: -3 } })
+  const get = pressureChange([c, a, b])
+  assert.equal(get(b), 4)
+  assert.equal(get(c), -3)
+})
+
+test('real-data pressure feeds the association once there are 14 days with a previous value', () => {
+  const entries = daily(15, (i) => ({ painLevel: i % 10, weather: { source: 'auto', pressureHpa: 1000 + (i % 10) * (i % 10) } }))
+  assert.equal(association(entries, 'pressure', pressureChange(entries))?.n, 14)
 })
 
 test('a context is compared by the median pain with and without it', () => {
