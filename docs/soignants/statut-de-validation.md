@@ -8,7 +8,7 @@ Ce document dit, sans l'enjoliver, **ce qui a été vérifié dans OUCH et ce qu
 
 1. **La mesure** : l'échelle que le patient remplit mesure-t-elle ce qu'elle prétend ?
 2. **Le logiciel** : calcule-t-il ce qu'il annonce, sans erreur ?
-3. **Les algorithmes propres à OUCH** (poussées, bilans) : repèrent-ils ce qu'un patient ou un soignant appelle une poussée, ou un effet ?
+3. **Les algorithmes propres à OUCH** (poussées, comparaisons avant et après un changement) : repèrent-ils ce qu'un patient ou un soignant appelle une poussée, ou un effet ?
 4. **L'utilité clinique** : le rapport aide-t-il vraiment une consultation, et à quoi ?
 
 OUCH est en bonne position sur le niveau 2, partiellement sur le 1, et **n'a pas été évalué** sur les niveaux 3 et 4.
@@ -24,7 +24,7 @@ OUCH est en bonne position sur le niveau 2, partiellement sur le 1, et **n'a pas
 | **Variation relative, repère de 30 %** | Repère issu d'études d'amélioration sous traitement (2, 4, 8, 9), cité comme tel | Établi pour des groupes de patients et des baisses ; non validé pour un individu ni pour une hausse |
 | **Poussées** | Définition écrite, paramétrée, testée sur des cas construits (19 tests) | **Voir ci-dessous** : définition propre à OUCH, calibrée sur des données fictives, jamais comparée à des poussées identifiées par des patients ou des soignants |
 | **Contexte des 3 jours avant une poussée** | Description seule, sans signal | Aucun lien établi ; abandon volontaire d'un repérage des mesures « inhabituelles » (voir ci-dessous) |
-| **Bilan d'un changement de traitement** et « écart habituel » | Fenêtres et seuils fixés, testés sur des séries construites ; l'écart habituel donne un repère de hasard pour ne pas lire une différence comme un effet | Les durées (28, 7, 28 jours ; 14 jours renseignés ; 6 paires ; 80e centile) sont des choix de conception sans base empirique citée. Aucun test statistique. Retour vers la moyenne non corrigé |
+| **Avant et après un changement de traitement** et « écart habituel » | Fenêtres et seuils fixés, testés sur des séries construites ; l'écart habituel donne un repère de hasard pour ne pas lire une différence comme un effet | Les durées (28, 7, 28 jours ; 14 jours renseignés ; 6 paires ; 80e centile) sont des choix de conception sans base empirique citée. Aucun test statistique. Retour vers la moyenne non corrigé |
 | **Corrélations** (Spearman) et comparaisons de médianes | Méthode standard, libellés de force conventionnels | Pas de correction des comparaisons multiples ni de l'autocorrélation ; pas de valeur p ni d'intervalle de confiance |
 | **Score de la « météo du jour »** (carte à partager) | Pondérations 0,60 / 0,25 / 0,15 | **Aucune validation** : choisies par le concepteur ; hors du rapport médical |
 | **Références du rapport** | Les 15 références ont été vérifiées à la source (PubMed ou texte officiel) | Le choix des références n'a pas fait l'objet d'une revue systématique |
@@ -66,7 +66,7 @@ Pistes, dans l'ordre où elles coûtent le moins ; chacune demande un cadre éth
 | « OUCH reprend l'échelle numérique de 0 à 10 » | « OUCH est validé » |
 | « Le rapport décrit les données déclarées par le patient » | « OUCH mesure l'évolution de la maladie » |
 | « Les poussées sont repérées par rapport au niveau habituel du patient, selon une définition propre à OUCH » | « OUCH détecte les crises » |
-| « Un bilan avant et après un changement de traitement, sans conclusion sur son effet » | « OUCH mesure l'efficacité d'un traitement » |
+| « Une comparaison avant et après un changement de traitement, sans conclusion sur son effet » | « OUCH mesure l'efficacité d'un traitement » |
 | « 147 tests automatiques vérifient les calculs » | « Les calculs sont cliniquement validés » |
 
 ## Mise à jour

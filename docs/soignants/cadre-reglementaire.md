@@ -24,7 +24,7 @@ OUCH se présente comme un **carnet** que le patient tient, et un **résumé des
 OUCH ne se contente pas de stocker : il **calcule**. Quatre fonctions peuvent se lire comme du suivi de maladie ou une aide à la décision, ce qui est le critère à discuter :
 
 1. **Le repérage des poussées** : un algorithme qualifie des périodes comme « poussée » à partir des notes du patient.
-2. **Le bilan avant et après un changement de traitement**, présenté au soignant : même descriptif et accompagné de réserves, il porte sur l'effet apparent d'un traitement.
+2. **La comparaison avant et après un changement de traitement**, présenté au soignant : même descriptif et accompagné de réserves, il porte sur l'effet apparent d'un traitement.
 3. **Le rapport destiné au médecin**, lu pour informer une prise en charge, par un tiers qui n'est pas l'utilisateur.
 4. **Le mot des jours difficiles et l'écran allégé**, qui se déclenchent quand l'algorithme repère une poussée en cours : l'application adapte son comportement à l'état supposé du patient, même sans lui donner de conseil.
 
