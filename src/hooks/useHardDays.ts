@@ -1,5 +1,6 @@
 import { hardDaysCard, lightFormActive, type HardDaysCard } from '../lib/hardDays'
 import type { DailyEntry } from '../db/types'
+import { loggedEntries } from '../lib/loggedEntries'
 import { useStoredSettings } from './useSettings'
 
 /** What the day's page does while a flare is under way: the soft card (once
@@ -13,9 +14,10 @@ export function useHardDays(
 ): { ready: boolean; card: HardDaysCard | null; light: boolean } {
   const settings = useStoredSettings()
   if (!settings || !entriesLoaded) return { ready: false, card: null, light: false }
+  const logged = loggedEntries(entries)
   return {
     ready: true,
-    card: hardDaysCard({ entries, today: date, seen: settings.hardDaysSeen, enabled: settings.hardDaysCardEnabled }),
-    light: lightFormActive({ entries, today: date, enabled: settings.lightFormEnabled, fullFormDay: settings.fullFormDay }),
+    card: hardDaysCard({ entries: logged, today: date, seen: settings.hardDaysSeen, enabled: settings.hardDaysCardEnabled }),
+    light: lightFormActive({ entries: logged, today: date, enabled: settings.lightFormEnabled, fullFormDay: settings.fullFormDay }),
   }
 }

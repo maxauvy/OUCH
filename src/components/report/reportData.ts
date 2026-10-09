@@ -1,8 +1,9 @@
-import type { DailyEntry, Illness, Medication } from '../../db/types'
+import type { DailyEntry, LoggedEntry, Illness, Medication } from '../../db/types'
 import type { Language } from '../../i18n'
 import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, type FlareEpisode } from '../../lib/flares'
 import { flareContext, type FlareContext } from '../../lib/flareContext'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
+import { loggedEntries } from '../../lib/loggedEntries'
 import { shiftISO } from '../../lib/medications'
 import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '../../lib/treatmentReview'
 import { reportFormat, type ReportFormat } from './reportFormat'
@@ -41,9 +42,9 @@ export interface ReportData {
   f: ReportFormat
   p: ReportPeriods
   /** Both periods together, for charts and associations */
-  all: DailyEntry[]
-  current: DailyEntry[]
-  previous: DailyEntry[]
+  all: LoggedEntry[]
+  current: LoggedEntry[]
+  previous: LoggedEntry[]
   pain: PainStats | null
   painPrev: PainStats | null
   meds: MedicationReport[]
@@ -68,7 +69,9 @@ export interface FlareSummary {
   previousDays: number
 }
 
-export function buildReportData(entries: DailyEntry[], medications: Medication[], options: ReportOptions): ReportData {
+export function buildReportData(allEntries: DailyEntry[], medications: Medication[], options: ReportOptions): ReportData {
+  // A day without a pain level is not a day of no pain: left out of the report.
+  const entries = loggedEntries(allEntries)
   const p = reportPeriods(options.consultation, options.end)
   const { current, previous } = splitEntries(entries, p)
   const episodes = detectFlares(entries, { asOf: options.end })

@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { IconChevronRight, IconFileText } from '@tabler/icons-react'
-import { useAllEntries } from '../hooks/useEntries'
+import { useLoggedEntries } from '../hooks/useEntries'
 import { useSettings } from '../hooks/useSettings'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Footer } from '../components/layout/Footer'
@@ -46,7 +46,7 @@ const FACTOR_DEFS: {
 ]
 
 export function TrendsPage() {
-  const entries = useAllEntries()
+  const entries = useLoggedEntries()
   const settings = useSettings()
   const i18n = useTranslation()
   const t = usePalette()

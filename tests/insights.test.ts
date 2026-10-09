@@ -1,12 +1,12 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import type { DailyEntry } from '../src/db/types.ts'
+import type { LoggedEntry } from '../src/db/types.ts'
 import { analyzeFactor, analyzeTagPresence, bestAndWorstWeekday } from '../src/lib/insights.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
 const day = (n: number) => shiftISO('2026-09-14', n) // 2026-09-14 is a Monday
-const entry = (n: number, painLevel: number, extra: Partial<DailyEntry> = {}): DailyEntry => ({
+const entry = (n: number, painLevel: number, extra: Partial<LoggedEntry> = {}): LoggedEntry => ({
   date: day(n),
   painLevel,
   createdAt: 0,
@@ -16,7 +16,7 @@ const entry = (n: number, painLevel: number, extra: Partial<DailyEntry> = {}): D
 const near = (a: number | null, b: number) => assert.ok(a !== null && Math.abs(a - b) < 1e-9, `${a} ≈ ${b}`)
 
 const LABELS: [string, string, string] = ['low', 'mid', 'high']
-const sleep = (entries: DailyEntry[], options?: { bucketing?: 'fixed' | 'terciles' }) =>
+const sleep = (entries: LoggedEntry[], options?: { bucketing?: 'fixed' | 'terciles' }) =>
   analyzeFactor(entries, (e) => e.sleepQuality, 'sleep', 'Sleep', LABELS, options)
 
 test('better sleep with less pain is reported as pain lower when the factor is high', () => {

@@ -1,13 +1,13 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import type { DailyEntry, Medication } from '../src/db/types.ts'
+import type { LoggedEntry, Medication } from '../src/db/types.ts'
 import { detectFlares, flareDaySet } from '../src/lib/flares.ts'
 import { flareContext } from '../src/lib/flareContext.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
-const entry = (n: number, painLevel: number, extra: Partial<DailyEntry> = {}): DailyEntry => ({
+const entry = (n: number, painLevel: number, extra: Partial<LoggedEntry> = {}): LoggedEntry => ({
   date: day(n),
   painLevel,
   createdAt: 0,
@@ -17,8 +17,8 @@ const entry = (n: number, painLevel: number, extra: Partial<DailyEntry> = {}): D
 
 /** 40 usual days (pain 4, sleep 7 h, stress 4), then a flare on days 40–42
  * (pain 8), with `before` overriding the 3 days before it. */
-function history(before: Partial<DailyEntry> = {}, skip: number[] = []): DailyEntry[] {
-  const out: DailyEntry[] = []
+function history(before: Partial<LoggedEntry> = {}, skip: number[] = []): LoggedEntry[] {
+  const out: LoggedEntry[] = []
   for (let i = 0; i < 40; i++) {
     const extra = i >= 37 ? { sleepHours: 7, stressLevel: 4, ...before } : { sleepHours: 7, stressLevel: 4 }
     if (!skip.includes(i)) out.push(entry(i, 4, extra))
@@ -26,8 +26,8 @@ function history(before: Partial<DailyEntry> = {}, skip: number[] = []): DailyEn
   for (let i = 40; i < 43; i++) out.push(entry(i, 8, { sleepHours: 5, stressLevel: 8 }))
   return out
 }
-const flareOf = (entries: DailyEntry[]) => detectFlares(entries)[0]!
-const context = (entries: DailyEntry[], meds: Medication[] = []) => {
+const flareOf = (entries: LoggedEntry[]) => detectFlares(entries)[0]!
+const context = (entries: LoggedEntry[], meds: Medication[] = []) => {
   const episodes = detectFlares(entries)
   return flareContext(episodes[0]!, entries, meds, flareDaySet(episodes))
 }

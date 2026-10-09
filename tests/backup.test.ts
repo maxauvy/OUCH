@@ -20,7 +20,14 @@ test('a well-formed entry is kept as it is', () => {
   assert.deepEqual(sanitizeEntry(full), full)
 })
 
-test('entries without a usable day or pain level are skipped', () => {
+test('a day without a pain level is kept without one: it is not a day of 0', () => {
+  const out = sanitizeEntry({ date: '2026-05-04', painLocations: ['neck'], createdAt: 1, updatedAt: 2 })
+  assert.deepEqual(out, { date: '2026-05-04', painLocations: ['neck'], createdAt: 1, updatedAt: 2 })
+  assert.equal(sanitizeEntry({ ...entry, painLevel: null })?.painLevel, undefined)
+  assert.equal(sanitizeEntry({ ...entry, painLevel: 0 })?.painLevel, 0)
+})
+
+test('entries without a usable day, or with an unusable pain level, are skipped', () => {
   for (const bad of [
     null,
     'x',
@@ -33,7 +40,7 @@ test('entries without a usable day or pain level are skipped', () => {
     { ...entry, painLevel: 11 },
     { ...entry, painLevel: NaN },
     { ...entry, painLevel: Infinity },
-    { date: entry.date },
+    { ...entry, painLevel: true },
   ]) {
     assert.equal(sanitizeEntry(bad), null, JSON.stringify(bad))
   }

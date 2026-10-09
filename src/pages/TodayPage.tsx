@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { DailyEntryForm } from '../components/entry/DailyEntryForm'
 import { Footer } from '../components/layout/Footer'
 import { ShareSheet } from '../components/weather/ShareSheet'
+import { hasPain } from '../lib/loggedEntries'
 import { useTodayEntry } from '../hooks/useEntries'
 import { useSettings } from '../hooks/useSettings'
 import { todayISO } from '../db'
@@ -20,7 +21,7 @@ export function TodayPage({ onGoToBackup }: { onGoToBackup: () => void }) {
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       <BackupReminderCard onBackup={onGoToBackup} />
       <DailyEntryForm date={date} />
-      {entry && (
+      {entry && hasPain(entry) && (
         <button
           onClick={() => setSharing(true)}
           className="rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)] flex items-center justify-center gap-2"
@@ -30,7 +31,7 @@ export function TodayPage({ onGoToBackup }: { onGoToBackup: () => void }) {
           {t.today.share}
         </button>
       )}
-      {sharing && entry && (
+      {sharing && entry && hasPain(entry) && (
         <ShareSheet entry={entry} displayName={settings.displayName || undefined} onClose={() => setSharing(false)} />
       )}
       <Footer />

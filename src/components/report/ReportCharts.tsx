@@ -1,4 +1,4 @@
-import type { DailyEntry } from '../../db/types'
+import type { LoggedEntry } from '../../db/types'
 import type { FlareEpisode } from '../../lib/flares'
 import { shiftISO } from '../../lib/medications'
 import { rollingMean, type ReportPeriods } from '../../lib/report'
@@ -89,7 +89,7 @@ export function PainChart({
   summary,
   flares = [],
 }: {
-  entries: DailyEntry[]
+  entries: LoggedEntry[]
   p: ReportPeriods
   f: ReportFormat
   height?: number
@@ -155,8 +155,8 @@ export function SmallMultiple({
   p,
   f,
 }: {
-  entries: DailyEntry[]
-  get: (e: DailyEntry) => number | undefined
+  entries: LoggedEntry[]
+  get: (e: LoggedEntry) => number | undefined
   label: string
   hint: string
   max?: number
@@ -202,7 +202,7 @@ export function SmallMultiple({
   )
 }
 
-export function TreatmentTimeline({ entries, meds, p, f }: { entries: DailyEntry[]; meds: MedicationReport[]; p: ReportPeriods; f: ReportFormat }) {
+export function TreatmentTimeline({ entries, meds, p, f }: { entries: LoggedEntry[]; meds: MedicationReport[]; p: ReportPeriods; f: ReportFormat }) {
   const { x } = frame(p)
   const rowH = 30
   const top = 6
@@ -322,7 +322,7 @@ export function PainHistogram({ prev, cur, f }: { prev: number[] | null; cur: nu
   )
 }
 
-export function PainCalendar({ entries, p, f }: { entries: DailyEntry[]; p: ReportPeriods; f: ReportFormat }) {
+export function PainCalendar({ entries, p, f }: { entries: LoggedEntry[]; p: ReportPeriods; f: ReportFormat }) {
   const byDate = new Map(entries.map((e) => [e.date, e]))
   const first = new Date(`${p.prevStart}T12:00:00Z`)
   const offset = (first.getUTCDay() + 6) % 7 // Monday first
@@ -335,7 +335,7 @@ export function PainCalendar({ entries, p, f }: { entries: DailyEntry[]; p: Repo
   const width = left + weeks * (cell + gap)
   const height = top + 7 * (cell + gap) + 4
   const months: { x: number; label: string }[] = []
-  const cells: { date: string; cx: number; cy: number; entry: DailyEntry | undefined }[] = []
+  const cells: { date: string; cx: number; cy: number; entry: LoggedEntry | undefined }[] = []
   for (let i = 0; i < p.totalDays; i++) {
     const date = shiftISO(p.prevStart, i)
     const k = i + offset
