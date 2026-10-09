@@ -3,7 +3,7 @@
 // entries. Nothing is interpreted, and missing days are left out rather
 // than filled in (the report states how many days were logged).
 
-import type { DailyEntry, Medication, MedicationRegimen } from '../db/types'
+import type { LoggedEntry, Medication, MedicationRegimen } from '../db/types'
 import { shiftISO } from './medications.ts'
 
 export function daysBetween(from: string, to: string): number {
@@ -92,7 +92,7 @@ export function reportPeriods(consultation: string, end: string): ReportPeriods 
   }
 }
 
-export function splitEntries(entries: DailyEntry[], p: ReportPeriods) {
+export function splitEntries(entries: LoggedEntry[], p: ReportPeriods) {
   const sorted = [...entries].sort((a, b) => a.date.localeCompare(b.date))
   return {
     current: sorted.filter((e) => e.date >= p.start && e.date <= p.end),
@@ -120,7 +120,7 @@ export interface PainStats {
   distribution: number[]
 }
 
-export function painStats(entries: DailyEntry[]): PainStats | null {
+export function painStats(entries: LoggedEntry[]): PainStats | null {
   if (!entries.length) return null
   const p = entries.map((e) => e.painLevel)
   const share = (test: (v: number) => boolean) => p.filter(test).length / p.length
@@ -143,8 +143,8 @@ export function painStats(entries: DailyEntry[]): PainStats | null {
 /** Mean of the values over the last `window` calendar days, for each day of
  * the chart, once at least `minValues` of them are known. */
 export function rollingMean(
-  entries: DailyEntry[],
-  get: (e: DailyEntry) => number | undefined,
+  entries: LoggedEntry[],
+  get: (e: LoggedEntry) => number | undefined,
   p: ReportPeriods,
   window = 7,
   minValues = 4
@@ -169,13 +169,13 @@ export function trailingMeans(values: (number | undefined)[], window = 7, minVal
 
 export type SymptomKey = 'fatigueLevel' | 'sleepQuality' | 'sleepHours' | 'brainFog' | 'moodLevel' | 'stressLevel' | 'activityLevel'
 
-export function meanOf(entries: DailyEntry[], key: SymptomKey): { mean: number; n: number } | null {
+export function meanOf(entries: LoggedEntry[], key: SymptomKey): { mean: number; n: number } | null {
   const v = entries.map((e) => e[key]).filter((x): x is number => typeof x === 'number')
   return v.length ? { mean: mean(v), n: v.length } : null
 }
 
 /** Share of logged days on which each tag appears, most frequent first. */
-export function tagShares(entries: DailyEntry[], get: (e: DailyEntry) => string[] | undefined): [string, number][] {
+export function tagShares(entries: LoggedEntry[], get: (e: LoggedEntry) => string[] | undefined): [string, number][] {
   const counts = new Map<string, number>()
   for (const e of entries) for (const tag of new Set(get(e) ?? [])) counts.set(tag, (counts.get(tag) ?? 0) + 1)
   return [...counts].map(([tag, n]) => [tag, n / entries.length] as [string, number]).sort((a, b) => b[1] - a[1])
@@ -204,7 +204,7 @@ export interface MedicationReport {
   changes: Medication['periods']
 }
 
-export function medicationReports(entries: DailyEntry[], medications: Medication[], p: ReportPeriods): MedicationReport[] {
+export function medicationReports(entries: LoggedEntry[], medications: Medication[], p: ReportPeriods): MedicationReport[] {
   const out: MedicationReport[] = []
   for (const med of medications) {
     const intakes = entries.flatMap((e) =>
@@ -237,7 +237,7 @@ export function medicationReports(entries: DailyEntry[], medications: Medication
 }
 
 /** Days on which at least one as-needed (or undescribed) medication was taken. */
-export function daysWithRescueMedication(entries: DailyEntry[], medications: Medication[]): number {
+export function daysWithRescueMedication(entries: LoggedEntry[], medications: Medication[]): number {
   const rescue = new Set(medications.filter((m) => m.regimen !== 'scheduled').map((m) => m.id))
   return entries.filter((e) => e.intakes?.some((i) => rescue.has(i.medicationId) && (i.doses === undefined || i.doses > 0))).length
 }
@@ -252,7 +252,7 @@ export interface WeekRow {
   byMedication: Map<string, number>
 }
 
-export function weeklyRows(entries: DailyEntry[], p: ReportPeriods): WeekRow[] {
+export function weeklyRows(entries: LoggedEntry[], p: ReportPeriods): WeekRow[] {
   const rows: WeekRow[] = []
   for (let start = p.start; start <= p.end; start = shiftISO(start, 7)) {
     const endCandidate = shiftISO(start, 6)
@@ -286,9 +286,9 @@ export interface Association {
 }
 
 export function association(
-  entries: DailyEntry[],
+  entries: LoggedEntry[],
   key: string,
-  get: (e: DailyEntry, previous: DailyEntry | undefined) => number | undefined,
+  get: (e: LoggedEntry, previous: LoggedEntry | undefined) => number | undefined,
   minN = 14
 ): Association | null {
   const byDate = new Map(entries.map((e) => [e.date, e]))
@@ -313,7 +313,7 @@ export function association(
  * so it is derived from consecutive `weather.pressureHpa`; a stored value wins
  * when present. Undefined for the first day or when either day has no pressure.
  */
-export function pressureChange(entries: DailyEntry[]): (e: DailyEntry) => number | undefined {
+export function pressureChange(entries: LoggedEntry[]): (e: LoggedEntry) => number | undefined {
   const deltas = new Map<string, number>()
   const sorted = [...entries].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
   for (let i = 1; i < sorted.length; i++) {
@@ -339,9 +339,9 @@ export interface ContextComparison {
 }
 
 export function compareContext(
-  entries: DailyEntry[],
+  entries: LoggedEntry[],
   key: string,
-  test: (e: DailyEntry, previous: DailyEntry | undefined) => boolean | undefined,
+  test: (e: LoggedEntry, previous: LoggedEntry | undefined) => boolean | undefined,
   minN = 3
 ): ContextComparison | null {
   const byDate = new Map(entries.map((e) => [e.date, e]))

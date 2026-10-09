@@ -7,7 +7,7 @@
 // usually differ for them (the same lesson as the flares: a figure without
 // its chance rate reads as a finding).
 
-import type { DailyEntry, Medication } from '../db/types'
+import type { LoggedEntry, Medication } from '../db/types'
 import { shiftISO } from './medications.ts'
 import { daysBetween, mean, quantile } from './report.ts'
 import { treatmentEvents, type TreatmentEvent } from './treatmentEvents.ts'
@@ -99,11 +99,11 @@ export function reviewWindows(date: string, o: ReviewOptions = DEFAULT_REVIEW_OP
   }
 }
 
-type Reading = (entries: DailyEntry[], from: string, to: string) => number | null
+type Reading = (entries: LoggedEntry[], from: string, to: string) => number | null
 
-const within = (entries: DailyEntry[], from: string, to: string) => entries.filter((e) => e.date >= from && e.date <= to)
+const within = (entries: LoggedEntry[], from: string, to: string) => entries.filter((e) => e.date >= from && e.date <= to)
 
-function meanReading(get: (e: DailyEntry) => number | undefined, min: number): Reading {
+function meanReading(get: (e: LoggedEntry) => number | undefined, min: number): Reading {
   return (entries, from, to) => {
     const values = within(entries, from, to).map(get).filter((v): v is number => typeof v === 'number')
     return values.length >= min ? mean(values) : null
@@ -125,7 +125,7 @@ function rescuePerDay(medications: Medication[], min: number): Reading {
   }
 }
 
-function sideEffects(entries: DailyEntry[], medId: string, from: string, to: string): SideEffectCount[] {
+function sideEffects(entries: LoggedEntry[], medId: string, from: string, to: string): SideEffectCount[] {
   const days = new Map<string, Set<string>>()
   for (const e of within(entries, from, to)) {
     for (const i of e.intakes ?? []) {
@@ -144,7 +144,7 @@ function sideEffects(entries: DailyEntry[], medId: string, from: string, to: str
  * `minDays` logged days; one that overlaps `skip` (the review's own span) is
  * left out so the change being looked at does not widen its own yardstick. */
 function usualGap(
-  entries: DailyEntry[],
+  entries: LoggedEntry[],
   read: Reading,
   skip: { from: string; to: string },
   asOf: string,
@@ -175,7 +175,7 @@ function usualGap(
  * what they do is a measure here, not a subject.
  */
 export function treatmentReviews(
-  entries: DailyEntry[],
+  entries: LoggedEntry[],
   medications: Medication[],
   flareDays: Set<string> | null,
   asOf: string,
