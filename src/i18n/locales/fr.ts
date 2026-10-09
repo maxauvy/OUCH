@@ -87,7 +87,7 @@ const fr: Translations = {
     points: {
       track: {
         title: 'Mieux comprendre',
-        body: "Note tes symptômes en quelques secondes par jour. Avec le temps, tu repères ce qui les influence (sommeil, stress, météo…) pour anticiper et mieux traverser les crises.",
+        body: "Note tes symptômes en quelques secondes par jour. Avec le temps, tu vois ce qui accompagne tes bons et tes mauvais jours (sommeil, stress, météo…), pour mieux en parler.",
       },
       share: {
         title: 'Dire sa forme du jour',
@@ -257,7 +257,7 @@ const fr: Translations = {
     notLogged: 'Non renseigné',
     weekdayInsight:
       '🙂 Tes journées sont en moyenne meilleures le {{best}}, et plus difficiles le {{worst}}.',
-    whatAffectsPain: 'Ce qui semble jouer sur ta douleur',
+    whatAffectsPain: 'Ce qui accompagne ta douleur',
     averagesObserved: 'Moyennes observées sur la période — une association, pas une preuve.',
     bucketLow: 'Faible',
     bucketMid: 'Moyen',
@@ -284,7 +284,7 @@ const fr: Translations = {
     reliefShare: 'Soulagement modéré à important : {{share}} des prises notées',
     sideEffects: 'Effets indésirables signalés : {{list}}',
     posologyChangeMarker: '{{name}} {{dose}}',
-    reviewTitle: 'Bilan d’un changement',
+    reviewTitle: 'Avant et après un changement',
     reviewCaption:
       'Les 28 jours avant le changement, comparés aux 28 jours qui suivent sa première semaine, qu’on ne compte pas : un traitement de fond n’agit pas tout de suite.',
     reviewPickerLabel: 'Changement à regarder',
@@ -306,11 +306,11 @@ const fr: Translations = {
     reviewSideEffect: '{{effect}} · {{n}} {{n:jour|jours}}',
     reviewLogged: '{{before}} {{before:jour noté|jours notés}} avant, {{after}} après.',
     reviewNotCause:
-      'Ce bilan décrit ; il ne dit pas si le traitement « marche » : le sommeil, la météo, la saison ou un autre changement ont pu jouer.',
+      'Cette comparaison décrit ; elle ne dit pas si le traitement « marche » : le sommeil, la météo, la saison ou un autre changement ont pu jouer.',
     reviewAlsoChanged: 'Au même moment : {{list}}.',
     reviewDuringFlare: 'Le changement a eu lieu pendant une poussée : une amélioration peut aussi venir d’elle-même.',
-    reviewInProgress: 'Bilan en cours : {{done}} jours sur 28 depuis la fin de la première semaine. Il se précisera avec les jours à venir.',
-    reviewNeedDays: 'Bilan en cours : il faudra au moins 14 jours notés après la première semaine ({{n}} pour l’instant).',
+    reviewInProgress: 'Comparaison en cours : {{done}} jours sur 28 depuis la fin de la première semaine. Elle se précisera avec les jours à venir.',
+    reviewNeedDays: 'Comparaison en cours : il faudra au moins 14 jours notés après la première semaine ({{n}} pour l’instant).',
     reviewSeeCurve: 'Voir sur la courbe',
     reviewHideCurve: 'Masquer la courbe',
     reviewSettle: 'Première semaine, non comptée',
@@ -596,7 +596,7 @@ const fr: Translations = {
     colReviewRescue: 'Prises au besoin',
     colReviewDays: 'Jours renseignés',
     colReviewNotes: 'À savoir',
-    reviewInProgress: 'Bilan en cours : {{n}} jours sur 28.',
+    reviewInProgress: 'Comparaison en cours : {{n}} jours sur 28.',
     reviewTooFew: 'Trop peu de jours renseignés ({{before}} avant, {{after}} après).',
     reviewAlsoChanged: 'Aussi : {{list}}',
     reviewDuringFlare: 'Changement fait pendant une poussée.',

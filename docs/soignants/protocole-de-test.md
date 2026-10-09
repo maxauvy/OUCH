@@ -11,7 +11,7 @@ Ce document décrit comment tester OUCH avec des professionnels de santé : ce q
 **Questions secondaires.**
 1. Quelles données saisies par le patient sont utiles en consultation, lesquelles sont superflues, lesquelles manquent ?
 2. La définition d'une poussée (au moins 3 jours à plus de 2 points ou 30 % au-dessus de la médiane des 28 jours précédents) a-t-elle un sens clinique ? Que faudrait-il à la place ?
-3. Les catégories de douleur (≤ 3, 4–6, ≥ 7), le bilan avant et après un changement de traitement et les corrélations aident-ils ou risquent-ils d'être sur-interprétés ?
+3. Les catégories de douleur (≤ 3, 4–6, ≥ 7), la comparaison avant et après un changement de traitement et les corrélations aident-ils ou risquent-ils d'être sur-interprétés ?
 4. La différence entre la version « Médecin traitant » (2 pages) et « Centre douleur » (environ 5 pages) est-elle la bonne ?
 5. Quel effort le journal demande-t-il aux patients, en particulier les jours difficiles ?
 
@@ -120,7 +120,7 @@ Les sept questions de la [note méthodologique](../note-methodologique/) :
 4. Les corrélations sont-elles utiles en consultation, ou risquent-elles d'être sur-interprétées ? Faut-il les retirer de la version « Médecin traitant » ?
 5. Quels indicateurs utilisez-vous vraiment, lesquels feriez-vous disparaître ?
 6. Quelles données vous manquent pour décider, qu'un carnet pourrait apporter ?
-7. Le bilan avant et après un changement de traitement est-il un format utile ? Quelle durée choisiriez-vous ?
+7. La comparaison avant et après un changement de traitement est-elle un format utile ? Quelle durée choisiriez-vous ?
 
 Puis, ouvertes : ce qui vous a surpris ; ce que vous craignez que l'on fasse dire au rapport ; ce qui vous ferait le recommander, ou non ; si vous continueriez à l'utiliser. Facultatif : une échelle d'utilisabilité de 10 items (type SUS) appliquée au rapport.
 

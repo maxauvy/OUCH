@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- Des libellés moins promettants, pour que l'app décrive sans laisser croire qu'elle prédit ou conclut. La carte « Bilan d'un changement » de Tendances s'appelle « Avant et après un changement », et son état « bilan en cours » devient « comparaison en cours » (dans l'app et dans le rapport). L'écran d'accueil ne promet plus d'« anticiper et mieux traverser les crises » : l'app aide à voir ce qui accompagne les bons et les mauvais jours, pour mieux en parler. Dans Tendances, « Ce qui semble jouer sur ta douleur » devient « Ce qui accompagne ta douleur », car l'app observe des associations, sans dire ce qui agit sur quoi. Le mot « poussée » reste : c'est celui des patients, et chaque écran dit comment il est défini.
+
 ### Corrigé
 - Toucher une zone du corps (ou noter autre chose) avant de régler la douleur n'enregistre plus une douleur à 0 : la journée est gardée sans niveau de douleur, comme « pas encore notée », et ne compte plus dans les moyennes, les poussées, le rapport ni la météo. Dans le Journal, ces jours portent un petit rond creux sous leur numéro. Les jours déjà enregistrés avec un 0 restent tels quels (on ne peut pas les distinguer d'un vrai 0). Restaurée dans une version antérieure à celle-ci, une sauvegarde exportée après ce changement perd ses jours sans niveau de douleur (les autres jours sont restaurés).
 

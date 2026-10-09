@@ -88,7 +88,7 @@ Nom et date de naissance saisis pour un rapport ne sont **pas** des réglages : 
 
 ## Ce qui est calculé, et non enregistré
 
-Ces valeurs sont recalculées à chaque affichage à partir des données ci-dessus : moyennes et statistiques, moyenne glissante sur 7 jours, poussées, contexte des 3 jours avant une poussée, bilan d'un changement de traitement, corrélations, score de la « météo du jour ». Leurs formules, seuils et limites sont dans la [note méthodologique](../note-methodologique/).
+Ces valeurs sont recalculées à chaque affichage à partir des données ci-dessus : moyennes et statistiques, moyenne glissante sur 7 jours, poussées, contexte des 3 jours avant une poussée, comparaison avant et après un changement de traitement, corrélations, score de la « météo du jour ». Leurs formules, seuils et limites sont dans la [note méthodologique](../note-methodologique/).
 
 ## Sauvegarde et migration
 

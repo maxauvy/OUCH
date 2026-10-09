@@ -85,7 +85,7 @@ const en: Translations = {
     points: {
       track: {
         title: 'Understand more',
-        body: "Log your symptoms in a few seconds a day. Over time, you spot what influences them (sleep, stress, weather…) so you can anticipate and get through flare-ups more gently.",
+        body: "Log your symptoms in a few seconds a day. Over time, you see what goes along with your good and hard days (sleep, stress, weather…), so it is easier to talk about.",
       },
       share: {
         title: 'Share how you feel today',
@@ -254,7 +254,7 @@ const en: Translations = {
     weeklyMeanLegend: 'Mean of the last 7 days (from 4 rated days)',
     notLogged: 'Not logged',
     weekdayInsight: '🙂 Your days are on average better on {{best}}, and tougher on {{worst}}.',
-    whatAffectsPain: 'What seems to affect your pain',
+    whatAffectsPain: 'What goes along with your pain',
     averagesObserved: 'Averages observed over the period — an association, not a proof.',
     bucketLow: 'Low',
     bucketMid: 'Medium',
@@ -281,7 +281,7 @@ const en: Translations = {
     reliefShare: 'Moderate to strong relief: {{share}} of rated doses',
     sideEffects: 'Reported side effects: {{list}}',
     posologyChangeMarker: '{{name}} {{dose}}',
-    reviewTitle: 'Review of a change',
+    reviewTitle: 'Before and after a change',
     reviewCaption:
       'The 28 days before the change, against the 28 days after its first week, which is not counted: a background treatment rarely acts at once.',
     reviewPickerLabel: 'Change to look at',
@@ -306,8 +306,8 @@ const en: Translations = {
       'This describes; it does not say whether the treatment “works”: sleep, weather, the season or another change may have played a part.',
     reviewAlsoChanged: 'Around the same time: {{list}}.',
     reviewDuringFlare: 'The change was made during a flare: an improvement can also come on its own.',
-    reviewInProgress: 'Review in progress: {{done}} of 28 days since the first week ended. It will firm up with the days to come.',
-    reviewNeedDays: 'Review in progress: it needs at least 14 logged days after the first week ({{n}} so far).',
+    reviewInProgress: 'Comparison in progress: {{done}} of 28 days since the first week ended. It will firm up with the days to come.',
+    reviewNeedDays: 'Comparison in progress: it needs at least 14 logged days after the first week ({{n}} so far).',
     reviewSeeCurve: 'See on the curve',
     reviewHideCurve: 'Hide the curve',
     reviewSettle: 'First week, not counted',
@@ -590,7 +590,7 @@ const en: Translations = {
     colReviewRescue: 'As-needed doses',
     colReviewDays: 'Logged days',
     colReviewNotes: 'Worth knowing',
-    reviewInProgress: 'Review in progress: {{n}} of 28 days.',
+    reviewInProgress: 'Comparison in progress: {{n}} of 28 days.',
     reviewTooFew: 'Too few logged days ({{before}} before, {{after}} after).',
     reviewAlsoChanged: 'Also: {{list}}',
     reviewDuringFlare: 'Change made during a flare.',
