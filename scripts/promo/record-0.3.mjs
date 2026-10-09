@@ -9,7 +9,16 @@
 //   node scripts/promo/record-0.3.mjs [portrait|landscape] [output.mp4] [app-url]
 //   PROMO_LANG=en node scripts/promo/record-0.3.mjs landscape
 //
-// The demo history is generated with DEMO_TODAY=empty so that Today opens during
+// Two scenes use files from scripts/promo/assets/ rather than the app on screen:
+//  - ios-install-{fr,en}.webm: the install card as Safari on an iPhone shows it,
+//    recorded in the iOS Simulator (iPhone 17) on the app served by `npm run dev`,
+//    Réglages scrolled card by card:
+//      xcrun simctl io <udid> recordVideo --codec=h264 --force clip.mov   (Ctrl-C to stop)
+//      ffmpeg -i clip.mov -ss <start> -t 7.6 -vf scale=780:1696,fps=30 -c:v libvpx-vp9 -crf 34 -b:v 0 -an ios-install-fr.webm
+//    (the English clip: same, after switching the language in Réglages › Rappel et affichage).
+//  - docs-*-p1.png: first page of the brochure and of the methodology note, from the
+//    PDFs of the latest release (130 dpi). Regenerate them when those documents change.
+// // The demo history is generated with DEMO_TODAY=empty so that Today opens during
 // a flare (the demo dates are relative to today, so the review buttons are
 // found by medication name, not by date). Its pregabalin stop gives a finished review, its duloxetine dose
 // change an ongoing one. PROMO_LANG=en for the English version (default: fr).
@@ -31,28 +40,31 @@ const T = EN ? {
   rtitle: 'Changes in background treatment', install: 'Install OUCH on your home screen',
   intro: 'Version <em>0.3.0</em> is here', outro: 'Clearer. Gentler. <em>Always private.</em>',
   local: '100% local · your data stays on your device', more: 'And also…',
-  c1: [NEW, 'Before and after *a change*', 'Before, after a treatment change: described, nothing promised.'],
-  c1b: [NEW, 'Within *your usual gaps* or beyond', 'Compared with your own months, not with a norm.'],
-  c1c: [NEW, 'And what *else* changed', 'Another change at the same time, or during a flare: said plainly.'],
-  c2: [NEW, 'Rate your pain *in one tap*', 'Eleven big boxes on flare days, nothing preselected.'],
-  c3: [NEW, 'Before and after, *in the report*', 'For each treatment change: before → after.'],
+  c1: [NEW, 'A treatment *changed*?', 'Compare the 28 days before with the 28 days after.'],
+  c1b: [NEW, 'Is it *normal for you*?', 'Compared with your own months, not an average.'],
+  c1c: [NEW, 'And if *something else* changed', 'Another treatment, or a flare, at the same time: it is shown.'],
+  c2: [NEW, 'Rate your pain *in one tap*', 'Eleven big boxes, on hard days.'],
+  c3: [NEW, 'For your doctor: *before and after*', 'Each treatment change, in the report.'],
   c4: [NEW, 'OUCH on *your home screen*', 'Step by step, with a small drawing for each one.'],
-  pills: ['☕ A coffee to support OUCH, if you like', '📄 For clinicians: a brochure and a methodology note', '💊 Readable doses: 30 mg → 60 mg'],
+  pills: ['☕ A coffee to support OUCH, if you like', '💊 Readable doses: 30 mg → 60 mg'],
+  docsTitle: 'For <em>clinicians</em>', docsLines: 'A 2-page brochure<br>A note that explains every calculation<small>On GitHub: maxauvy/OUCH, folder docs/soignants (in French)</small>',
 } : {
   locale: 'fr-FR', settings: /Réglages/, today: 'Aujourd', trends: 'Tendances',
   review: 'Avant et après un changement', prega: /^Prégabaline · /, amitrip: /^Amitriptyline · /, curve: /Voir sur la courbe/, scale: 'Douleur', report: 'Rapport pour mon médecin',
   rtitle: 'Changements de traitement de fond', install: 'Installer OUCH sur l’écran d’accueil',
   intro: 'La version <em>0.3.0</em> est là', outro: 'Plus clair. Plus doux. <em>Toujours privé.</em>',
   local: '100 % local · tes données restent sur ton appareil', more: 'Et aussi…',
-  c1: [NEW, 'Avant et après *un changement*', 'Avant, après un changement de traitement : décrit, sans rien promettre.'],
-  c1b: [NEW, 'Dans *tes écarts habituels* ou au-delà', 'Comparé à tes propres mois, pas à une norme.'],
-  c1c: [NEW, 'Et ce qui a *aussi* changé', 'Un autre changement au même moment, ou pendant une poussée : dit sans détour.'],
-  c2: [NEW, 'Note ta douleur *en un geste*', 'Onze grosses cases les jours de poussée, rien de présélectionné.'],
-  c3: [NEW, 'Avant et après *dans le rapport*', 'Pour chaque changement de traitement : avant → après.'],
+  c1: [NEW, 'Un traitement a *changé* ?', 'Compare tes 28 jours d’avant et tes 28 jours d’après.'],
+  c1b: [NEW, 'Est-ce *normal pour toi* ?', 'On compare à tes propres mois, pas à une moyenne.'],
+  c1c: [NEW, 'Et si *autre chose* a changé', 'Un autre traitement, ou une poussée, au même moment : c’est indiqué.'],
+  c2: [NEW, 'Note ta douleur *en un geste*', 'Onze grosses cases, les jours difficiles.'],
+  c3: [NEW, 'Pour ton médecin : *avant et après*', 'Chaque changement de traitement, dans le rapport.'],
   c4: [NEW, 'OUCH sur *ton écran d’accueil*', 'Pas à pas, avec un petit dessin à chaque étape.'],
-  pills: ['☕ Un café pour soutenir OUCH, si tu veux', '📄 Pour les soignants : une plaquette et une note méthodologique', '💊 Des doses lisibles : 30 mg → 60 mg'],
+  pills: ['☕ Un café pour soutenir OUCH, si tu veux', '💊 Des doses lisibles : 30 mg → 60 mg'],
+  docsTitle: 'Pour les <em>soignants</em>', docsLines: 'Une plaquette de 2 pages<br>Une note qui explique chaque calcul<small>Sur GitHub : maxauvy/OUCH, dossier docs/soignants</small>',
 }
-const DUR = 52
+const DUR = 59.5
+const ASSETS = (f) => readFileSync(here('./assets/' + f))
 const work = mkdtempSync(join(tmpdir(), 'ouch-promo-'))
 const DEMO = join(work, 'demo.json')
 const MUSIC = join(work, 'music.wav')
@@ -64,6 +76,7 @@ let STAGE = readFileSync(here('./stage.html'), 'utf8')
   .replace('Note. Comprends. <em>Partage.</em>', T.outro)
   .replace('100 % local · tes données restent sur ton appareil', T.local)
   .replace('✦ Nouveau', NEW).replace('Et aussi…', T.more)
+  .replace('<!--DOCS_TITLE-->', T.docsTitle).replace('<!--DOCS_LINES-->', T.docsLines)
   .replace('<!--PILLS-->', T.pills.map((t, i) => `<li style="--i:${i}">${t}</li>`).join(''))
 if (EN) STAGE = STAGE.replace('lang="fr"', 'lang="en"')
 
@@ -105,6 +118,9 @@ await ctx.addInitScript(() => {
 })
 const p = await ctx.newPage()
 await p.route('**/__stage.html', (r) => r.fulfill({ contentType: 'text/html', body: STAGE }))
+await p.route('**/__ios.webm', (r) => r.fulfill({ contentType: 'video/webm', body: ASSETS(`ios-install-${EN ? 'en' : 'fr'}.webm`) }))
+await p.route('**/__docs-brochure.png', (r) => r.fulfill({ contentType: 'image/png', body: ASSETS('docs-brochure-p1.png') }))
+await p.route('**/__docs-note.png', (r) => r.fulfill({ contentType: 'image/png', body: ASSETS('docs-note-p1.png') }))
 await p.goto(APP + '/__stage.html')
 const frameEl = await p.waitForSelector('#app')
 const F = await frameEl.contentFrame()
@@ -218,23 +234,22 @@ await at(32.7); await cam({ fx: 100, fy: ry, z: 2.4, ms: 800 })
 await at(33.5); await cam({ fx: 290, fy: ry, z: 2.4, ms: 2800 })
 await at(36.7); await cam({ z: 1, ms: 500 })
 
-// ── 4. Settings: install card
+// ── 4. Install: the real card, recorded in Safari on an iPhone (iOS Simulator)
 await at(37.2); await caption(...T.c4)
-await at(37.4); await tab(T.settings)
-await at(38.3); await F.evaluate(() => scrollTo(0, 0))
-const inst = F.getByText(T.install, { exact: true }).first()
-await at(38.5); await bring(inst, 1200, 300)
-const instCard = await cardOf(inst, 200)
-await at(40.0); await hl(instCard); await cam({ fy: await phoneY(instCard), z: 1.4, ms: 800 })
-await at(42.5); await unhl(); await cam({ z: 1, ms: 500 })
+await at(37.6); await p.evaluate(() => window.ios(true))
+await at(45.4); await p.evaluate(() => window.ios(false))
 
-// ── 5. And also…
-await at(42.9); await p.evaluate(() => window.clearCaption()); await cam({ z: 1, dy: 1500, ms: 500 })
-await at(43.3); await layer('more', true)
-await at(47.3); await layer('more', false)
+// ── 5. For clinicians: the brochure and the methodology note
+await at(46.0); await p.evaluate(() => window.clearCaption()); await cam({ z: 1, dy: 1500, ms: 500 })
+await at(46.4); await layer('docs', true)
+await at(52.0); await layer('docs', false)
+
+// ── 6. And also…
+await at(52.4); await layer('more', true)
+await at(55.4); await layer('more', false)
 
 // ── outro
-await at(47.7); await layer('outro', true)
+await at(55.8); await layer('outro', true)
 await at(DUR)
 
 await cdp.send('Page.stopScreencast'); await ctx.close(); await b.close()
