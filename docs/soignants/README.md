@@ -8,14 +8,14 @@ Cette page rassemble ce qu'un soignant peut vouloir lire, essayer, ou discuter.
 
 | Document | Pour quoi faire | Où |
 |---|---|---|
-| Plaquette (2 pages) | Voir en un coup d'œil ce que le patient saisit, pourquoi c'est pertinent, et ce que contient le rapport | [`docs/plaquette-soignants/`](../plaquette-soignants/) |
-| Note méthodologique (8 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et sept questions qui vous sont posées | [`docs/note-methodologique/`](../note-methodologique/) |
+| Plaquette (2 pages) | Voir en un coup d'œil ce que le patient saisit, pourquoi c'est pertinent, et ce que contient le rapport | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.3.0/OUCH-plaquette-soignants-v0.3.0.pdf) · [source](../plaquette-soignants/) |
+| Note méthodologique (8 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et sept questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.3.0/OUCH-note-methodologique-v0.3.0.pdf) · [source](../note-methodologique/) |
 | Vie privée | Savoir ce qui est enregistré, où, et ce qui quitte l'appareil | [`PRIVACY.md`](../../PRIVACY.md) |
 | Sécurité | Chiffrement des sauvegardes, signalement d'une faille | [`SECURITY.md`](../../SECURITY.md) |
 | Sources scientifiques | Les 15 références du rapport, avec leur résumé et l'usage qu'OUCH en fait | Dans l'application : Réglages, puis À propos |
 | Journal des versions | Ce qui change d'une version à l'autre | [`CHANGELOG.md`](../../CHANGELOG.md) |
 
-Les deux documents de la plaquette et de la note sont des pages HTML conçues pour s'imprimer en PDF ; chaque dossier donne la commande pour les produire.
+Les PDF sont joints à la [release v0.3.0](https://github.com/maxauvy/OUCH/releases/tag/v0.3.0) et correspondent à cette version du code ; les sources sont des pages HTML conçues pour s'imprimer en PDF, et chaque dossier donne la commande pour les produire.
 
 ## Essayer en deux minutes
 
