@@ -12,6 +12,7 @@ Cette page rassemble ce qu'un soignant peut vouloir lire, essayer, ou discuter.
 | Note méthodologique (8 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et sept questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.3.0/OUCH-note-methodologique-v0.3.0.pdf) · [source](../note-methodologique/) |
 | Vie privée | Savoir ce qui est enregistré, où, et ce qui quitte l'appareil | [`PRIVACY.md`](../../PRIVACY.md) |
 | Sécurité | Chiffrement des sauvegardes, signalement d'une faille | [`SECURITY.md`](../../SECURITY.md) |
+| Dictionnaire des données | Savoir précisément ce que chaque champ saisi veut dire, comment il est enregistré, et les pièges de lecture | [`dictionnaire-des-donnees.md`](dictionnaire-des-donnees.md) |
 | Protocole de test | Participer à un pilote avec des soignants : phases, ce qui est recueilli, garde-fous | [`protocole-de-test.md`](protocole-de-test.md) |
 | Sources scientifiques | Les 15 références du rapport, avec leur résumé et l'usage qu'OUCH en fait | Dans l'application : Réglages, puis À propos |
 | Journal des versions | Ce qui change d'une version à l'autre | [`CHANGELOG.md`](../../CHANGELOG.md) |
