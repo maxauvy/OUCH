@@ -1,11 +1,11 @@
 import { forwardRef, type CSSProperties } from 'react'
-import type { DailyEntry, PainWeather, PainWeatherLevel } from '../../db/types'
+import type { LoggedEntry, PainWeather, PainWeatherLevel } from '../../db/types'
 import { computePainWeather, painWeatherByLevel } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { IconArrowDownRight, IconArrowRight, IconArrowUpRight } from '@tabler/icons-react'
 import { theme } from '../../lib/theme'
 import { painTrend, painTrendText, painWordIndex, type PainTrend } from '../../lib/painTrend'
-import { useAllEntries } from '../../hooks/useEntries'
+import { useLoggedEntries } from '../../hooks/useEntries'
 import { format, useLocale, useTranslation, type Translations } from '../../i18n'
 
 function capitalizeFirst(s: string): string {
@@ -146,14 +146,14 @@ function CardScale({ level, t }: { level: PainWeatherLevel; t: Translations }) {
  * messaging apps show the image scaled down. */
 export const WeatherCard = forwardRef<
   HTMLDivElement,
-  { entry: DailyEntry; displayName?: string; message?: string }
+  { entry: LoggedEntry; displayName?: string; message?: string }
 >(function WeatherCard({ entry, displayName, message }, ref) {
   const t = useTranslation()
   const { intlLocale } = useLocale()
   const weather = computePainWeather(entry)
   const c = theme
 
-  const trend = painTrend(entry, useAllEntries() ?? [])
+  const trend = painTrend(entry, useLoggedEntries() ?? [])
 
   // Scores are told in words with a gauge rather than as "6/10", which means
   // little to someone who doesn't use the app.

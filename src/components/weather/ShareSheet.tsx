@@ -1,22 +1,22 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { toPng } from 'html-to-image'
 import { IconX } from '@tabler/icons-react'
-import type { DailyEntry } from '../../db/types'
+import type { LoggedEntry } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
 import { painTrend, painTrendText, painWordIndex } from '../../lib/painTrend'
-import { useAllEntries } from '../../hooks/useEntries'
+import { useLoggedEntries } from '../../hooks/useEntries'
 import { WeatherCard } from './WeatherCard'
 import { downloadBlob } from '../../lib/backup'
 import { format, useTranslation } from '../../i18n'
 
-export function ShareSheet({ entry, displayName, onClose }: { entry: DailyEntry; displayName?: string; onClose: () => void }) {
+export function ShareSheet({ entry, displayName, onClose }: { entry: LoggedEntry; displayName?: string; onClose: () => void }) {
   const t = useTranslation()
   const messageId = useId()
   const titleId = useId()
   const dialogRef = useRef<HTMLDialogElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const weather = computePainWeather(entry)
-  const trend = painTrend(entry, useAllEntries() ?? [])
+  const trend = painTrend(entry, useLoggedEntries() ?? [])
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)

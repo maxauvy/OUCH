@@ -1,7 +1,7 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import type { DailyEntry, Medication, MedicationIntake } from '../src/db/types.ts'
+import type { LoggedEntry, Medication, MedicationIntake } from '../src/db/types.ts'
 import {
   association,
   compareContext,
@@ -28,7 +28,7 @@ import {
 import { shiftISO } from '../src/lib/medications.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
-const entry = (date: string, painLevel: number, extra: Partial<DailyEntry> = {}): DailyEntry => ({
+const entry = (date: string, painLevel: number, extra: Partial<LoggedEntry> = {}): LoggedEntry => ({
   date,
   painLevel,
   createdAt: 0,
@@ -307,7 +307,7 @@ test('weekly doses add up, a dose without a count being one', () => {
 // ---------------------------------------------------------------------------
 // Associations
 
-const daily = (n: number, make: (i: number) => Partial<DailyEntry> & { painLevel: number }) =>
+const daily = (n: number, make: (i: number) => Partial<LoggedEntry> & { painLevel: number }) =>
   Array.from({ length: n }, (_, i) => entry(day(i), 0, make(i)))
 
 test('a factor that rises with pain has a correlation of 1', () => {

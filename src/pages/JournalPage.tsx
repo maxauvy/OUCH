@@ -5,6 +5,7 @@ import { DailyEntryForm } from '../components/entry/DailyEntryForm'
 import { Footer } from '../components/layout/Footer'
 import { ShareSheet } from '../components/weather/ShareSheet'
 import { useAllEntries, useEntry, deleteEntry } from '../hooks/useEntries'
+import { hasPain } from '../lib/loggedEntries'
 import { useSettings } from '../hooks/useSettings'
 import { useFlares } from '../hooks/useFlares'
 import { flareDaySet } from '../lib/flares'
@@ -39,7 +40,7 @@ export function JournalPage() {
         <div className="flex flex-col gap-3">
           <DailyEntryForm date={selected} />
           <div className="flex gap-3">
-            {selectedEntry && (
+            {selectedEntry && hasPain(selectedEntry) && (
               <button
                 onClick={() => setSharing(true)}
                 className="flex-1 rounded-[var(--radius-control)] py-3 text-body font-semibold"
@@ -66,7 +67,7 @@ export function JournalPage() {
         </div>
       )}
 
-      {sharing && selectedEntry && (
+      {sharing && selectedEntry && hasPain(selectedEntry) && (
         <ShareSheet entry={selectedEntry} displayName={settings.displayName || undefined} onClose={() => setSharing(false)} />
       )}
       <Footer />

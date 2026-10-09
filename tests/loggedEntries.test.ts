@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { hasPain, loggedEntries } from '../src/lib/loggedEntries.ts'
+import { painStats } from '../src/lib/report.ts'
 import type { DailyEntry } from '../src/db/types.ts'
 
 const day = (date: string, painLevel?: number): DailyEntry =>
@@ -19,4 +20,11 @@ test('loggedEntries keeps the days with pain, in order', () => {
     loggedEntries(all).map((e) => e.date),
     ['2026-01-01', '2026-01-03']
   )
+})
+
+test('statistics over loggedEntries do not count a day without pain as 0', () => {
+  const all = [day('2026-09-01', 4), day('2026-09-02'), day('2026-09-03', 6)]
+  const stats = painStats(loggedEntries(all))
+  assert.equal(stats?.n, 2)
+  assert.equal(stats?.mean, 5)
 })

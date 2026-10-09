@@ -1,14 +1,22 @@
+import { useMemo } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, todayISO } from '../db'
-import type { DailyEntry } from '../db/types'
+import type { DailyEntry, LoggedEntry } from '../db/types'
+import { hasPain, loggedEntries } from '../lib/loggedEntries'
 
 export function useAllEntries(): DailyEntry[] | undefined {
   return useLiveQuery(() => db.entries.orderBy('date').reverse().toArray(), [])
 }
 
-/** How many days have an entry; undefined until counted. */
+/** The days with a pain level, for statistics; undefined until read. */
+export function useLoggedEntries(): LoggedEntry[] | undefined {
+  const all = useAllEntries()
+  return useMemo(() => (all ? loggedEntries(all) : undefined), [all])
+}
+
+/** How many days have a pain level; undefined until counted. */
 export function useEntryCount(): number | undefined {
-  return useLiveQuery(() => db.entries.count(), [])
+  return useLiveQuery(() => db.entries.filter(hasPain).count(), [])
 }
 
 export function useEntry(date: string): DailyEntry | undefined {
@@ -27,7 +35,6 @@ export async function upsertEntry(date: string, patch: Partial<DailyEntry>): Pro
   } else {
     await db.entries.add({
       date,
-      painLevel: 0,
       createdAt: now,
       updatedAt: now,
       ...patch,

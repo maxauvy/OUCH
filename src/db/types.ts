@@ -90,8 +90,8 @@ export interface DailyEntry {
   createdAt: number
   updatedAt: number
 
-  /** 0–10, the only truly required measure */
-  painLevel: number
+  /** 0–10; missing = the day was not rated, which is not "no pain" */
+  painLevel?: number
 
   fatigueLevel?: number
   sleepQuality?: number
