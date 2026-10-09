@@ -8,13 +8,13 @@ https://github.com/user-attachments/assets/04b8f85d-a8e9-4876-8865-e094f8330791
 
 OUCH is a pain diary for fibromyalgia and other chronic pain. You log your day in under a minute, everything stays on your phone, and you always decide what to share, and with whom.
 
-Existing pain trackers (Pain Diary, MyPainDiary…) are either closed or a chore to use on the days when you have nothing left. OUCH takes the opposite approach: big buttons, almost nothing mandatory, and no data leaving your device unless you decide it should.
+Existing pain trackers (Pain Diary, MyPainDiary…) are either closed or a chore to use on the days when you have nothing left. OUCH takes the opposite approach: big buttons, almost nothing to fill in, and no data leaving your device unless you decide it should.
 
 ## What you can do
 
 ### Log your day
 
-Only pain is required, on a scale from 0 to 10. You can add fatigue, sleep, stress, brain fog, mood, activity, where it hurts, the day's weather (from your location or entered by hand) and, if you want, your cycle. You can also note what helped: a short walk, a hot bath, some meditation… Anything you don't use can be switched off in the settings.
+Pain alone, on a scale from 0 to 10, is enough for a day to count. You can add fatigue, sleep, stress, brain fog, mood, activity, where it hurts, the day's weather (from your location or entered by hand) and, if you want, your cycle. You can also note what helped: a short walk, a hot bath, some meditation… Anything you don't use can be switched off in the settings.
 
 The first time you open the app, a setup guide offers to get things ready: the conditions you track, your first name, your treatments, a daily reminder. Everything is optional, you can skip it at any point and run it again from the settings.
 
