@@ -1,0 +1,59 @@
+name: Retour clinique
+description: Vous êtes soignant (ou patient) : un libellé, un seuil, une donnée qui manque, un rapport à améliorer
+title: "[Retour clinique] "
+labels: ["retour clinique"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre ce temps. **N'écrivez aucune donnée de patient identifiable**, ni la vôtre : décrivez la situation en général, ou utilisez l'historique de démonstration.
+        Pour une faille de sécurité, ne pas utiliser ce formulaire : voir [SECURITY.md](https://github.com/maxauvy/OUCH/blob/main/SECURITY.md).
+  - type: dropdown
+    id: role
+    attributes:
+      label: Votre rôle
+      options:
+        - Médecin généraliste
+        - Rhumatologue
+        - Médecin de la douleur (algologue)
+        - Infirmier ou infirmière
+        - Kinésithérapeute
+        - Psychologue
+        - Pharmacien ou pharmacienne
+        - Autre professionnel de santé
+        - Patient ou proche
+        - Autre
+    validations:
+      required: true
+  - type: dropdown
+    id: sujet
+    attributes:
+      label: De quoi s'agit-il ?
+      options:
+        - Un seuil ou une définition (poussée, catégories de douleur…)
+        - Un libellé ou une formulation
+        - Une donnée qui manque
+        - Le contenu ou la mise en page du rapport
+        - Une référence scientifique
+        - Autre
+    validations:
+      required: true
+  - type: textarea
+    id: retour
+    attributes:
+      label: Votre retour
+      description: Ce qui vous gêne ou vous manque, et ce que vous feriez à la place. Le plus concret possible (quelle page, quelle phrase, quel chiffre).
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Une source, si vous en avez une (facultatif)
+      description: Un article, une recommandation, une pratique de votre service.
+  - type: checkboxes
+    id: confidentialite
+    attributes:
+      label: Confidentialité
+      options:
+        - label: Je n'ai mis aucune donnée de patient identifiable dans ce message.
+          required: true
