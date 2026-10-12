@@ -1,9 +1,21 @@
+import type { CSSProperties } from 'react'
+
 type IconName = 'sun' | 'cloud-sun' | 'cloud' | 'cloud-rain' | 'cloud-lightning'
 
 /** Simple, consistent weather icon set. Shape carries meaning on its own,
  * so the app reads fine even for colorblind users or in grayscale print. */
-export function WeatherIcon({ name, size = 40, className }: { name: IconName; size?: number; className?: string }) {
-  const common = { width: size, height: size, viewBox: '0 0 48 48', fill: 'none', className }
+export function WeatherIcon({
+  name,
+  size = 40,
+  className,
+  style,
+}: {
+  name: IconName
+  size?: number
+  className?: string
+  style?: CSSProperties
+}) {
+  const common = { width: size, height: size, viewBox: '0 0 48 48', fill: 'none', className, style, 'aria-hidden': true as const }
 
   switch (name) {
     case 'sun':

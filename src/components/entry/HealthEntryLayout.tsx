@@ -33,6 +33,7 @@ import { TagInput } from './TagInput'
 import { MedicationsField } from './MedicationsField'
 import { HardDaysCard } from './HardDaysCard'
 import { LightExtras, type LightItem } from './LightExtras'
+import { LastBackupLine } from '../backup/LastBackupLine'
 import { useHardDays } from '../../hooks/useHardDays'
 import { updateSettings } from '../../db'
 import { WeatherField } from './WeatherField'
@@ -209,6 +210,7 @@ export function HealthEntryLayout({
   entriesLoaded,
   medications,
   knownPositiveActions,
+  onGoToBackup,
 }: {
   date: string
   local: Partial<DailyEntry>
@@ -220,6 +222,8 @@ export function HealthEntryLayout({
   entriesLoaded: boolean
   medications: Medication[]
   knownPositiveActions: string[]
+  /** Opens the backup section; the last-backup line under the title uses it */
+  onGoToBackup?: () => void
 }) {
   const t = useTranslation()
   const { intlLocale } = useLocale()
@@ -418,6 +422,7 @@ export function HealthEntryLayout({
             </p>
           )}
           <h1 className="text-title font-bold leading-tight">{isToday ? t.tabs.today : longDateCap}</h1>
+          {isToday && onGoToBackup && <LastBackupLine onClick={onGoToBackup} />}
         </div>
         {isToday && settings.displayName && (
           <span
