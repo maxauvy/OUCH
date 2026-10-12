@@ -160,7 +160,17 @@ export interface Translations {
     /** In the chart's legend and tooltip */
     flareBand: string
     notLogged: string
-    weekdayInsight: string
+    weekdayTitle: string
+    weekdayBest: string
+    weekdayWorst: string
+    /** `{{v}}` the day's mean */
+    weekdayValue: string
+    /** `{{n}}` days, `{{days}}` the weekday in the plural: "sur 12 samedis" */
+    weekdayBasis: string
+    /** `{{gap}}` shown, `{{n}}` the same as a number for the plural, `{{mean}}` */
+    weekdayNote: string
+    /** `{{n}}` days with a pain level */
+    weekdayCalm: string
     whatAffectsPain: string
     averagesObserved: string
     bucketLow: string
@@ -473,6 +483,14 @@ export interface Translations {
     reviewNote: string
     /** `{{gap}}` as shown, `{{n}}` as a number for the plural */
     reviewUsual: string
+    weekdaysTitle: string
+    weekdaysColDay: string
+    weekdaysColMean: string
+    weekdaysColGap: string
+    weekdaysColDays: string
+    /** `{{overall}}`, `{{min}}` days of the least represented weekday, `{{band}}` */
+    weekdaysNote: string
+    weekdaysLegend: string
     colReviewChange: string
     colReviewPain: string
     colReviewFlares: string

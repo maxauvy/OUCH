@@ -261,8 +261,15 @@ const fr: Translations = {
     flareOngoing: 'en cours',
     flareBand: 'Poussée',
     notLogged: 'Non renseigné',
-    weekdayInsight:
-      '🙂 Tes journées sont en moyenne meilleures le {{best}}, et plus difficiles le {{worst}}.',
+    weekdayTitle: 'Tes jours de la semaine',
+    weekdayBest: 'Ton jour le plus doux',
+    weekdayWorst: 'Ton jour le plus exigeant',
+    weekdayValue: '{{v}} / 10',
+    weekdayBasis: 'sur {{n}} {{days}}',
+    weekdayNote:
+      'Un écart de {{gap}} {{n:point|points}} entre les deux, pour une moyenne de {{mean}}. Ça varie d’une semaine à l’autre : lis-le comme une piste, pas comme une règle.',
+    weekdayCalm:
+      'Pour l’instant, tes jours de la semaine se ressemblent : rien ne se détache au-delà de ce que le hasard suffit à produire. Calculé sur {{n}} jours notés.',
     whatAffectsPain: 'Ce qui accompagne ta douleur',
     averagesObserved: 'Moyennes observées sur la période — une association, pas une preuve.',
     bucketLow: 'Faible',
@@ -596,6 +603,14 @@ const fr: Translations = {
     reviewNote:
       'Mêmes durées autour de chaque changement : 28 jours avant, 7 jours de mise en place non comptés, 28 jours après. Moyennes sur les jours renseignés (dont le nombre figure en dernière colonne, avant · après) ; jours de poussée comptés sur 28 jours. C’est une description de périodes, sans lien de cause établi : une amélioration peut suivre un début de traitement pris au creux d’une période douloureuse (retour vers la moyenne), la météo, la saison ou un autre changement. « — » : trop peu de jours renseignés (14 requis de chaque côté). Dates telles que saisies dans le registre des traitements.',
     reviewUsual: 'Pour ce patient, 8 écarts sur 10 entre deux périodes de 28 jours consécutives sont inférieurs à {{gap}} {{n:point|points}} de douleur.',
+    weekdaysTitle: 'Douleur selon le jour de la semaine',
+    weekdaysColDay: 'Jour',
+    weekdaysColMean: 'Douleur moy.',
+    weekdaysColGap: 'Écart à la moyenne',
+    weekdaysColDays: 'Jours',
+    weekdaysNote:
+      'Douleur moyenne de chaque jour de la semaine et écart à la moyenne de la période ({{overall}}/10). Bande grise : écart que le hasard suffit à produire pour le plus grand des sept écarts, au seuil de 5 % (erreur-type, correction de Bonferroni), calculée sur le jour de la semaine le moins représenté ({{min}} jours) : ±{{band}}. Les journées ne sont pas indépendantes (une poussée dure plusieurs jours) : la bande est indicative. Description, sans lien de cause.',
+    weekdaysLegend: 'Barre pleine : écart au-delà de la bande ; barre pâle : dans la bande.',
     colReviewChange: 'Changement',
     colReviewPain: 'Douleur moy.',
     colReviewFlares: 'Jours de poussée',

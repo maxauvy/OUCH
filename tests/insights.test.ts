@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry } from '../src/db/types.ts'
-import { analyzeFactor, analyzeTagPresence, bestAndWorstWeekday } from '../src/lib/insights.ts'
+import { analyzeFactor, analyzeTagPresence } from '../src/lib/insights.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
 const day = (n: number) => shiftISO('2026-09-14', n) // 2026-09-14 is a Monday
@@ -118,13 +118,3 @@ test('a tag seen on fewer than three days is not analysed', () => {
   assert.ok(!keys.includes('rare'))
 })
 
-test('the best and worst weekdays are indices from Sunday (0) to Saturday (6)', () => {
-  // Two weeks from Monday 14 September: Mondays at 9, Sundays at 1, others 5.
-  const entries = Array.from({ length: 14 }, (_, i) => entry(i, i % 7 === 0 ? 9 : i % 7 === 6 ? 1 : 5))
-  assert.deepEqual(bestAndWorstWeekday(entries), { bestIdx: 0, worstIdx: 1 })
-})
-
-test('weekdays are not ranked with less than a week of data, or when all are alike', () => {
-  assert.equal(bestAndWorstWeekday(Array.from({ length: 6 }, (_, i) => entry(i, i))), null)
-  assert.equal(bestAndWorstWeekday(Array.from({ length: 14 }, (_, i) => entry(i, 5))), null)
-})
