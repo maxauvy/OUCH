@@ -11,15 +11,16 @@ const TAB_ICONS: Record<Tab, Icon> = {
   settings: IconSettings,
 }
 
-export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) => void }) {
+export function TabBar({ active, onChange, hidden = [] }: { active: Tab; onChange: (t: Tab) => void; hidden?: Tab[] }) {
   const t = useTranslation()
-  const TABS: { id: Tab; label: string }[] = [
+  const ALL: { id: Tab; label: string }[] = [
     { id: 'today', label: t.tabs.today },
     { id: 'journal', label: t.tabs.journal },
     { id: 'trends', label: t.tabs.trends },
     { id: 'kids', label: t.tabs.kids },
     { id: 'settings', label: t.tabs.settings },
   ]
+  const TABS = ALL.filter((tab) => !hidden.includes(tab.id))
   return (
     <nav
       className="fixed bottom-0 inset-x-0 z-40"

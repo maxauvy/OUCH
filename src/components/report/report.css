@@ -264,7 +264,8 @@
 /* Weekly counts with their total ("4 (1 600 mg)") stay on one line: the
    rows keep one height, and the table stays well within the page width
    (five medication columns at most). */
-.report .r-weekly td {
+.report .r-weekly td,
+.report .r-weekly tbody th[scope='row'] {
   white-space: nowrap;
 }
 .report td .sm {

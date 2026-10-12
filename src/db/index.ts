@@ -2,6 +2,9 @@ import Dexie, { type EntityTable } from 'dexie'
 import type { BodyZone, DailyEntry, LegacyDailyEntry, LegacySettings, Medication, Settings } from './types'
 import { DEFAULT_SETTINGS } from './types'
 import { createLegacyConverter } from '../lib/medications'
+import { upgradeLegacySettings } from './settingsUpgrade'
+
+export { upgradeLegacySettings }
 
 // v1 stored body zones as their French display label directly (e.g. 'Tête').
 // v2 introduced stable slugs (e.g. 'head') so labels can be translated —
@@ -102,19 +105,17 @@ class OuchDB extends Dexie {
       .upgrade(async (tx) => {
         await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
       })
-  }
-}
-
-/** In place, and safe to run on current settings: moves a pre-v4
- * `childIllness` into `illnesses`, turns a pre-v5 'cycle' factor into
- * `cycleTrackingEnabled`, and drops the pre-v6 `design` choice. */
-export function upgradeLegacySettings(s: LegacySettings): asserts s is Partial<Settings> {
-  if (s.childIllness && !s.illnesses) s.illnesses = [s.childIllness]
-  delete s.childIllness
-  delete s.design
-  if (s.enabledFactors?.includes('cycle')) {
-    s.enabledFactors = s.enabledFactors.filter((k) => k !== 'cycle')
-    s.cycleTrackingEnabled = true
+    // v7 made the Kids tab optional, off unless asked for. Everyone who was
+    // already using the app had it, so they keep it.
+    this.version(7)
+      .stores({
+        entries: '++id, &date, painLevel, createdAt',
+        settings: 'id',
+        medications: 'id, name',
+      })
+      .upgrade(async (tx) => {
+        await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
+      })
   }
 }
 

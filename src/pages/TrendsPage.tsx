@@ -15,7 +15,7 @@ import { todayISO } from '../db'
 import { formatPosology } from '../lib/medicationFormat'
 import { FactorAnalysisCard } from '../components/trends/FactorAnalysisCard'
 import { DoctorReportPage } from './DoctorReportPage'
-import { analyzeFactor, analyzeTagPresence, bestAndWorstWeekday } from '../lib/insights'
+import { PATTERN_MIN_DAYS, analyzeFactor, analyzeTagPresence, bestAndWorstWeekday } from '../lib/insights'
 import { usePalette } from '../hooks/usePalette'
 import { subDays } from 'date-fns'
 import { format, useLocale, useTranslation, type Translations } from '../i18n'
@@ -53,7 +53,7 @@ export function TrendsPage() {
   const [rangeIdx, setRangeIdx] = useState(1)
   const medications = useMedications()
   const flares = useFlares()
-  const { intlLocale } = useLocale()
+  const { intlLocale, language } = useLocale()
   const [reporting, setReporting] = useState(false)
   const reportIds = useId()
   const reportButtonRef = useRef<HTMLButtonElement>(null)
@@ -181,7 +181,7 @@ export function TrendsPage() {
       {filtered.length === 0 ? (
         <Card>
           <p className="text-control text-center py-4" style={{ color: t.inkMuted }}>
-            {i18n.trends.noData}
+            {entries.length === 0 ? i18n.trends.emptyNone : i18n.trends.noData}
           </p>
         </Card>
       ) : (
@@ -204,6 +204,14 @@ export function TrendsPage() {
               </span>
             </Card>
           </div>
+
+          {entries.length < PATTERN_MIN_DAYS && (
+            <Card>
+              <p className="text-control" style={{ color: t.inkMuted }}>
+                {format(i18n.trends.emptyEarly, { n: entries.length }, language)}
+              </p>
+            </Card>
+          )}
 
           <Card>
             <SectionTitle>{i18n.trends.painEvolution}</SectionTitle>

@@ -724,22 +724,22 @@ function PainStatsTable({ d }: { d: ReportData }) {
     <table style={{ marginTop: 10 }}>
       <thead>
         <tr>
-          <th>
+          <th scope="col">
             <span className="sr-only">{f.t.period}</span>
           </th>
-          <th className="r">{f.t.colMeanSd}</th>
-          <th className="r">{f.t.colMedianIqr}</th>
-          <th className="r">{f.t.colMinMax}</th>
-          <th className="r">≤ 3</th>
-          <th className="r">4–6</th>
-          <th className="r">≥ 7</th>
-          <th className="r">{f.t.colFlares}</th>
+          <th scope="col" className="r">{f.t.colMeanSd}</th>
+          <th scope="col" className="r">{f.t.colMedianIqr}</th>
+          <th scope="col" className="r">{f.t.colMinMax}</th>
+          <th scope="col" className="r">≤ 3</th>
+          <th scope="col" className="r">4–6</th>
+          <th scope="col" className="r">≥ 7</th>
+          <th scope="col" className="r">{f.t.colFlares}</th>
         </tr>
       </thead>
       <tbody>
         {rows.map(([label, s, flareCount]) => (
           <tr key={label}>
-            <td>{label}</td>
+            <th scope="row">{label}</th>
             {s ? (
               <>
                 <td className="r">
@@ -796,11 +796,11 @@ function TreatmentsTable({ d, detailed, from, to }: { d: ReportData; detailed: b
       <table>
         <thead>
           <tr>
-            <th>{f.t.colTreatment}</th>
-            <th>{f.t.colPosology}</th>
-            <th>{f.t.colUse}</th>
-            <th>{f.t.colRelief}</th>
-            <th>{f.t.colSideEffects}</th>
+            <th scope="col">{f.t.colTreatment}</th>
+            <th scope="col">{f.t.colPosology}</th>
+            <th scope="col">{f.t.colUse}</th>
+            <th scope="col">{f.t.colRelief}</th>
+            <th scope="col">{f.t.colSideEffects}</th>
           </tr>
         </thead>
         <tbody>
@@ -812,11 +812,11 @@ function TreatmentsTable({ d, detailed, from, to }: { d: ReportData; detailed: b
             const explicitDays = m.daysTaken + m.daysMissed
             return (
               <tr key={m.med.id} data-row>
-                <td>
+                <th scope="row">
                   <b>{m.med.name}</b>
                   <span className={`r-pill ${m.regimen}`}>{f.t.regimens[m.regimen]}</span>
                   {detailed && m.med.reason && <span className="sm">{m.med.reason}</span>}
-                </td>
+                </th>
                 <td>
                   {m.regimen === 'unspecified' ? (
                     <span className="r-faint">{f.t.notDescribed}</span>
@@ -1090,11 +1090,11 @@ function WeeklyTable({ d, weeks, from, to }: { d: ReportData; weeks: WeekRow[]; 
     <table className="r-weekly">
       <thead>
         <tr>
-          <th>{f.t.colWeek}</th>
-          <th className="r">{f.t.colDays}</th>
-          <th className="r">{f.t.colMeanPain}</th>
+          <th scope="col">{f.t.colWeek}</th>
+          <th scope="col" className="r">{f.t.colDays}</th>
+          <th scope="col" className="r">{f.t.colMeanPain}</th>
           {columns.map((m) => (
-            <th key={m.med.id} className="r">
+            <th scope="col" key={m.med.id} className="r">
               {m.med.name}
             </th>
           ))}
@@ -1103,9 +1103,9 @@ function WeeklyTable({ d, weeks, from, to }: { d: ReportData; weeks: WeekRow[]; 
       <tbody>
         {weeks.slice(from, to).map((w) => (
           <tr key={w.start} data-row>
-            <td className="num">
+            <th scope="row" className="num">
               {f.dayMonth(w.start)} – {f.dayMonth(w.end)}
-            </td>
+            </th>
             <td className="r">
               {w.logged}/{w.days}
             </td>
@@ -1137,11 +1137,11 @@ function SymptomsTable({ d }: { d: ReportData }) {
       <table>
         <thead>
           <tr>
-            <th>{f.t.colSymptom}</th>
-            <th className="r">{f.t.colBefore}</th>
-            <th className="r">{f.t.colPeriod}</th>
-            <th className="r">{f.t.colDiff}</th>
-            <th>{f.t.colTrend}</th>
+            <th scope="col">{f.t.colSymptom}</th>
+            <th scope="col" className="r">{f.t.colBefore}</th>
+            <th scope="col" className="r">{f.t.colPeriod}</th>
+            <th scope="col" className="r">{f.t.colDiff}</th>
+            <th scope="col">{f.t.colTrend}</th>
           </tr>
         </thead>
         <tbody>
@@ -1154,10 +1154,10 @@ function SymptomsTable({ d }: { d: ReportData }) {
               diff === null ? '—' : Math.abs(diff) < 0.5 ? f.t.trendStable : diff * s.better > 0 ? f.t.trendBetter : f.t.trendWorse
             return (
               <tr key={s.key}>
-                <td>
+                <th scope="row">
                   {label}
                   <span className="sm">{hint}</span>
-                </td>
+                </th>
                 <td className="r">{prev ? f.nf(prev.mean) : '—'}</td>
                 <td className="r">
                   <b>{f.nf(cur.mean)}</b>
@@ -1308,14 +1308,14 @@ function Associations({ d }: { d: ReportData }) {
         <table>
           <thead>
             <tr>
-              <th>{t.colFactor}</th>
+              <th scope="col">{t.colFactor}</th>
               {/* Not uppercased like other headers: a capital rho reads as a P. */}
-              <th className="r" style={{ textTransform: 'none' }}>
+              <th scope="col" className="r" style={{ textTransform: 'none' }}>
                 ρ
               </th>
-              <th aria-hidden>−1 · 0 · +1</th>
-              <th>{t.colStrength}</th>
-              <th className="r">n</th>
+              <th scope="col" aria-hidden>−1 · 0 · +1</th>
+              <th scope="col">{t.colStrength}</th>
+              <th scope="col" className="r">n</th>
             </tr>
           </thead>
           <tbody>
@@ -1324,10 +1324,10 @@ function Associations({ d }: { d: ReportData }) {
               const note = t.factorNotes[key as keyof typeof t.factorNotes]
               return (
                 <tr key={a.key}>
-                  <td>
+                  <th scope="row">
                     {t.factorLabels[key]}
                     {note && <span className="sm">{note}</span>}
-                  </td>
+                  </th>
                   <td className="r">{f.signed(a.rho, 2)}</td>
                   <td aria-hidden>
                     <svg viewBox="0 0 100 10" style={{ width: 100 }}>
@@ -1347,15 +1347,15 @@ function Associations({ d }: { d: ReportData }) {
         <table style={{ marginTop: 10 }}>
           <thead>
             <tr>
-              <th>{t.contexts}</th>
-              <th className="r">{t.yes}</th>
-              <th className="r">{t.otherwise}</th>
+              <th scope="col">{t.contexts}</th>
+              <th scope="col" className="r">{t.yes}</th>
+              <th scope="col" className="r">{t.otherwise}</th>
             </tr>
           </thead>
           <tbody>
             {contexts.map((c) => (
               <tr key={c.key}>
-                <td>{t.contextLabels[c.key as keyof typeof t.contextLabels]}</td>
+                <th scope="row">{t.contextLabels[c.key as keyof typeof t.contextLabels]}</th>
                 <td className="r">{median(c.withMedian, c.withN)}</td>
                 <td className="r">{median(c.withoutMedian, c.withoutN)}</td>
               </tr>

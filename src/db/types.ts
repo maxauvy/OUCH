@@ -248,6 +248,8 @@ export interface Settings {
   hardDaysCardEnabled: boolean
   /** Pain first, the rest on request, while a flare is under way. Switchable, restored from a backup. */
   lightFormEnabled: boolean
+  /** The Kids tab in the tab bar: a page to explain the illness to a child, which not everyone needs. Off until the person says yes (the setup asks), so no answer is a no. A preference, restored from a backup. */
+  kidsTabEnabled: boolean
   /** The day the person asked for the full form: it holds for that day only. Per device. */
   fullFormDay?: string
   /** The flare it was last shown for. Per device, like the reminders above. */
@@ -280,6 +282,7 @@ export const DEFAULT_SETTINGS: Settings = {
   illnesses: [],
   hardDaysCardEnabled: true,
   lightFormEnabled: true,
+  kidsTabEnabled: false,
 }
 
 export type PainWeatherLevel = 1 | 2 | 3 | 4 | 5

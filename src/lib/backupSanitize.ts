@@ -204,6 +204,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     parentGender: oneOf(raw.parentGender, ['maman', 'papa'] as const),
     hardDaysCardEnabled: bool(raw.hardDaysCardEnabled),
     lightFormEnabled: bool(raw.lightFormEnabled),
+    kidsTabEnabled: bool(raw.kidsTabEnabled),
     illnesses: strings(raw.illnesses)?.filter((i) => (ILLNESSES as string[]).includes(i)) as LegacySettings['illnesses'],
     childIllness: oneOf(raw.childIllness, ILLNESSES),
   })
