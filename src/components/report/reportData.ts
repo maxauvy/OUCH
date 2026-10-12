@@ -6,6 +6,7 @@ import { medicationReports, painStats, reportPeriods, splitEntries, type Medicat
 import { loggedEntries } from '../../lib/loggedEntries'
 import { shiftISO } from '../../lib/medications'
 import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '../../lib/treatmentReview'
+import { weekdayProfile, type WeekdayProfile } from '../../lib/weekdays'
 import { reportFormat, type ReportFormat } from './reportFormat'
 
 export type ReportVariant = 'gp' | 'painClinic'
@@ -55,6 +56,8 @@ export interface ReportData {
   /** Changes of background treatment in the period, or in the 5 weeks before
    * it (their second half is inside it), with what the diary shows around each */
   reviews: TreatmentReview[]
+  /** Pain by weekday over the period; null until every weekday has four logged days */
+  weekdays: WeekdayProfile | null
 }
 
 /** Flares found in the whole history, since the usual level before one
@@ -102,6 +105,7 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
       currentDays: flareDayCount(episodes, p.start, p.end),
       previousDays: flareDayCount(episodes, p.prevStart, shiftISO(p.start, -1)),
     },
+    weekdays: weekdayProfile(current),
     reviews: treatmentReviews(entries, medications, detectable ? flareDays : null, options.end).filter(
       // A change with no logged day on either side has nothing to describe
       // (typically a treatment that predates the diary).

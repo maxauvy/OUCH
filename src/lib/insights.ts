@@ -121,28 +121,3 @@ export function analyzeTagPresence(
     return (b.insight?.diffAbs ?? 0) - (a.insight?.diffAbs ?? 0)
   })
 }
-
-/** Returns the Sunday-first weekday indices (matching Date#getDay()) with
- * the lowest / highest average pain — the caller maps these to localized
- * weekday names via the active translation. */
-export function bestAndWorstWeekday(entries: LoggedEntry[]): { bestIdx: number; worstIdx: number } | null {
-  const withDates = entries.filter((e) => typeof e.painLevel === 'number')
-  if (withDates.length < 7) return null
-  const sums = Array(7).fill(0)
-  const counts = Array(7).fill(0)
-  for (const e of withDates) {
-    const day = new Date(e.date + 'T00:00:00').getDay()
-    sums[day] += e.painLevel
-    counts[day]++
-  }
-  const avgs = sums.map((s, i) => (counts[i] ? s / counts[i] : null))
-  let bestIdx = -1
-  let worstIdx = -1
-  avgs.forEach((v, i) => {
-    if (v == null || counts[i] < 2) return
-    if (bestIdx === -1 || v < avgs[bestIdx]!) bestIdx = i
-    if (worstIdx === -1 || v > avgs[worstIdx]!) worstIdx = i
-  })
-  if (bestIdx === -1 || worstIdx === -1 || bestIdx === worstIdx) return null
-  return { bestIdx, worstIdx }
-}

@@ -176,6 +176,7 @@ function gpPages(d: ReportData): Block[][] {
           <ZoneBars d={d} limit={6} />
         </div>
       </div>,
+      d.weekdays && <WeekdaysBlock d={d} />,
       d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all={false} list={notes} from={from} to={to} continued={continued} />),
       <>
         <H level={2}>{f.t.method}</H>
@@ -375,6 +376,7 @@ function painClinicPages(d: ReportData): Block[][] {
         <ZoneBars d={d} limit={13} columns={2} />
         <p className="r-small">{f.t.zonesWpi}</p>
       </>,
+      d.weekdays && <WeekdaysBlock d={d} />,
       <Associations d={d} />,
     ],
     [
@@ -955,6 +957,64 @@ function contextKeys(d: ReportData): ContextKey[] {
 /** Nothing to describe: no flare, or none with a figure or a treatment change. */
 function hasFlareContext(d: ReportData): boolean {
   return d.flares.context.some((c) => c.events.length > 0) || (d.flares.current.length > 0 && contextKeys(d).length > 0)
+}
+
+/** Pain by day of the week: each weekday's mean and its gap to the mean of the
+ * period, against the band chance alone can fill (see `lib/weekdays.ts`). The
+ * bars repeat the figures, which are all written out. */
+function WeekdaysBlock({ d }: { d: ReportData }) {
+  const { f, weekdays: w } = d
+  if (!w) return null
+  const W = 130
+  const mid = W / 2
+  const reach = Math.max(w.band * 1.25, ...w.days.map((s) => Math.abs(s.gap))) * 1.1 || 1
+  const px = (points: number) => (points / reach) * (mid - 4)
+  return (
+    <>
+      <H level={3}>{f.t.weekdaysTitle}</H>
+      <table className="r-weekdays">
+        <thead>
+          <tr>
+            <th scope="col">{f.t.weekdaysColDay}</th>
+            <th scope="col" className="r">{f.t.weekdaysColMean}</th>
+            <th scope="col" className="r">{f.t.weekdaysColGap}</th>
+            <th scope="col" aria-hidden />
+            <th scope="col" className="r">{f.t.weekdaysColDays}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {w.days.map((s) => {
+            const outside = Math.abs(s.gap) > w.band
+            return (
+              <tr key={s.index} data-row>
+                <th scope="row">{f.all.weekdaysFull[s.jsDay as 0 | 1 | 2 | 3 | 4 | 5 | 6]}</th>
+                <td className="r num">{f.nf(s.mean)}</td>
+                <td className="r num">{f.signed(s.gap, 1)}</td>
+                <td aria-hidden>
+                  <svg viewBox={`0 0 ${W} 14`} style={{ width: W, display: 'block' }}>
+                    <rect x={mid - px(w.band)} y={0} width={2 * px(w.band)} height={14} rx={3} fill={R.hair} opacity={0.7} />
+                    <line x1={mid} x2={mid} y1={0} y2={14} stroke={R.axis} />
+                    <rect
+                      x={s.gap < 0 ? mid + px(s.gap) : mid}
+                      y={3}
+                      width={Math.abs(px(s.gap))}
+                      height={8}
+                      rx={2}
+                      fill={R.blue550}
+                      opacity={outside ? 1 : 0.4}
+                    />
+                  </svg>
+                </td>
+                <td className="r num">{s.n}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+      <p className="r-small">{f.t.weekdaysLegend}</p>
+      <p className="r-small">{f.format(f.t.weekdaysNote, { overall: f.nf(w.overall), min: w.minDays, band: f.nf(w.band) })}</p>
+    </>
+  )
 }
 
 /** The table of changes of background treatment, split between sheets by rows. */

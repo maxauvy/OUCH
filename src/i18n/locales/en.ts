@@ -259,7 +259,15 @@ const en: Translations = {
     flareBand: 'Flare',
     weeklyMeanLegend: 'Mean of the last 7 days (from 4 rated days)',
     notLogged: 'Not logged',
-    weekdayInsight: '🙂 Your days are on average better on {{best}}, and tougher on {{worst}}.',
+    weekdayTitle: 'Your days of the week',
+    weekdayBest: 'Your gentlest day',
+    weekdayWorst: 'Your most demanding day',
+    weekdayValue: '{{v}} / 10',
+    weekdayBasis: 'over {{n}} {{days}}',
+    weekdayNote:
+      'A gap of {{gap}} {{n:point|points}} between the two, for an average of {{mean}}. It changes from one week to the next: read it as a lead, not a rule.',
+    weekdayCalm:
+      'For now your days of the week look alike: nothing stands out beyond what chance can produce. Based on {{n}} logged days.',
     whatAffectsPain: 'What goes along with your pain',
     averagesObserved: 'Averages observed over the period — an association, not a proof.',
     bucketLow: 'Low',
@@ -590,6 +598,14 @@ const en: Translations = {
     reviewNote:
       'Same lengths around every change: 28 days before, 7 settling-in days not counted, 28 days after. Means over the logged days (their number is in the last column, before · after); flare days are counted over 28 days. This describes periods and establishes no cause: an improvement can follow a treatment started in the trough of a painful period (regression to the mean), the weather, the season or another change. “—”: too few logged days (14 needed on each side). Dates as entered in the treatments list.',
     reviewUsual: 'For this patient, 8 gaps out of 10 between two consecutive 28-day periods are under {{gap}} {{n:point|points}} of pain.',
+    weekdaysTitle: 'Pain by day of the week',
+    weekdaysColDay: 'Day',
+    weekdaysColMean: 'Mean pain',
+    weekdaysColGap: 'Gap to the mean',
+    weekdaysColDays: 'Days',
+    weekdaysNote:
+      'Mean pain of each weekday and its gap to the mean of the period ({{overall}}/10). Grey band: the gap chance alone can produce for the largest of the seven gaps, at the 5 % level (standard error, Bonferroni correction), computed on the least represented weekday ({{min}} days): ±{{band}}. Days are not independent (a flare lasts several days), so the band is indicative. Description, no causal link.',
+    weekdaysLegend: 'Solid bar: gap beyond the band; pale bar: within the band.',
     colReviewChange: 'Change',
     colReviewPain: 'Mean pain',
     colReviewFlares: 'Flare days',

@@ -282,6 +282,10 @@
   white-space: normal;
   line-height: 1.35;
 }
+/* Pain by weekday: figures on one line, the bar column as wide as its chart. */
+.report .r-weekdays td {
+  white-space: nowrap;
+}
 /* Changes of treatment: figures on one line, the change and the notes wrap. */
 .report .r-reviews td.num {
   white-space: nowrap;

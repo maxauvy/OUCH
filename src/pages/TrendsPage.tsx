@@ -15,7 +15,9 @@ import { todayISO } from '../db'
 import { formatPosology } from '../lib/medicationFormat'
 import { FactorAnalysisCard } from '../components/trends/FactorAnalysisCard'
 import { DoctorReportPage } from './DoctorReportPage'
-import { PATTERN_MIN_DAYS, analyzeFactor, analyzeTagPresence, bestAndWorstWeekday } from '../lib/insights'
+import { PATTERN_MIN_DAYS, analyzeFactor, analyzeTagPresence } from '../lib/insights'
+import { weekdayProfile } from '../lib/weekdays'
+import { WeekdayCard } from '../components/trends/WeekdayCard'
 import { usePalette } from '../hooks/usePalette'
 import { subDays } from 'date-fns'
 import { format, useLocale, useTranslation, type Translations } from '../i18n'
@@ -82,10 +84,7 @@ export function TrendsPage() {
   }, [entries, rangeIdx]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const avgPain = filtered.length ? filtered.reduce((s, e) => s + e.painLevel, 0) / filtered.length : null
-  const weekdayIndices = bestAndWorstWeekday(filtered)
-  const weekdayInsight = weekdayIndices
-    ? { best: i18n.weekdaysFull[weekdayIndices.bestIdx], worst: i18n.weekdaysFull[weekdayIndices.worstIdx] }
-    : null
+  const weekdays = weekdayProfile(filtered)
 
   const bucketLabels: [string, string, string] = [i18n.trends.bucketLow, i18n.trends.bucketMid, i18n.trends.bucketHigh]
   const analyses = FACTOR_DEFS.filter((f) => f.isEnabled(settings)).map((f) =>
@@ -239,16 +238,7 @@ export function TrendsPage() {
             </>
           )}
 
-          {weekdayInsight && (
-            <Card>
-              <p className="text-control leading-snug">
-                {format(i18n.trends.weekdayInsight, {
-                  best: weekdayInsight.best,
-                  worst: weekdayInsight.worst,
-                })}
-              </p>
-            </Card>
-          )}
+          {weekdays && <WeekdayCard profile={weekdays} />}
 
           {analyses.some((a) => a.buckets.some((b) => b.count > 0)) && (
             <Card>
