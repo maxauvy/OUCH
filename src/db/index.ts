@@ -2,6 +2,8 @@ import Dexie, { type EntityTable } from 'dexie'
 import type { BodyZone, DailyEntry, LegacyDailyEntry, LegacySettings, Medication, Settings } from './types'
 import { DEFAULT_SETTINGS } from './types'
 import { createLegacyConverter } from '../lib/medications'
+import { buildDemoHistory } from '../lib/demoData'
+import { DEMO_DB_NAME, DEMO_LANGUAGE, type DemoLanguage } from '../lib/demoMode'
 import { upgradeLegacySettings } from './settingsUpgrade'
 
 export { upgradeLegacySettings }
@@ -29,8 +31,18 @@ class OuchDB extends Dexie {
   entries!: EntityTable<DailyEntry, 'id'>
   settings!: EntityTable<Settings, 'id'>
   medications!: EntityTable<Medication, 'id'>
-  constructor() {
-    super('ouch')
+  constructor(name = 'ouch', demoLanguage: DemoLanguage | null = null) {
+    super(name)
+    // The demo sandbox is filled when it is first created: ninety fictional
+    // days counted back from today, in the demo's language.
+    if (demoLanguage) {
+      this.on('populate', (tx) => {
+        const history = buildDemoHistory({ endDate: todayISO(), language: demoLanguage, autoWeather: false })
+        tx.table('entries').bulkAdd(history.entries)
+        tx.table('medications').bulkAdd(history.medications)
+        tx.table('settings').add({ ...DEFAULT_SETTINGS, ...history.settings, id: 1 })
+      })
+    }
     this.version(1).stores({
       entries: '++id, &date, painLevel, createdAt',
       settings: 'id',
@@ -119,7 +131,8 @@ class OuchDB extends Dexie {
   }
 }
 
-export const db = new OuchDB()
+/** The person's journal, or the demo sandbox when this page load is the demo. */
+export const db = new OuchDB(DEMO_LANGUAGE ? DEMO_DB_NAME : 'ouch', DEMO_LANGUAGE)
 
 export async function getSettings(): Promise<Settings> {
   const s = await db.settings.get(1)

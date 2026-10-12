@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
+import { DemoPill } from './components/demo/DemoPill'
+import { DemoTour } from './components/demo/DemoTour'
+import { IS_DEMO } from './lib/demoMode'
+import { finishTour, tourPending } from './lib/demoSession'
 import { TodayPage } from './pages/TodayPage'
 import { JournalPage } from './pages/JournalPage'
 import { TrendsPage } from './pages/TrendsPage'
@@ -37,6 +41,7 @@ function useAppliedLanguage(language: Language) {
 
 function AppShell() {
   const [tab, setTab] = useState<Tab>('today')
+  const [tourOpen, setTourOpen] = useState(() => IS_DEMO && tourPending())
   const settings = useSettings()
   const settingsLoaded = useSettingsLoaded()
   const todayEntry = useTodayEntry()
@@ -94,7 +99,7 @@ function AppShell() {
         {tab === 'journal' && <JournalPage />}
         {tab === 'trends' && <TrendsPage />}
         {tab === 'kids' && settings.kidsTabEnabled && <ChildViewPage />}
-        {tab === 'settings' && <SettingsPage openBackup={backupRequested} />}
+        {tab === 'settings' && <SettingsPage openBackup={backupRequested} onReplayTour={() => setTourOpen(true)} />}
       </main>
       <TabBar
         active={tab}
@@ -104,6 +109,18 @@ function AppShell() {
           setTab(next)
         }}
       />
+      {IS_DEMO &&
+        (tourOpen ? (
+          <DemoTour
+            setTab={setTab}
+            onClose={() => {
+              finishTour()
+              setTourOpen(false)
+            }}
+          />
+        ) : (
+          <DemoPill />
+        ))}
     </>
   )
 }

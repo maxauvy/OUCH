@@ -483,6 +483,8 @@ export interface Translations {
     reviewNote: string
     /** `{{gap}}` as shown, `{{n}}` as a number for the plural */
     reviewUsual: string
+    /** Band on every page of a report made in the demo */
+    demoBand: string
     weekdaysTitle: string
     weekdaysColDay: string
     weekdaysColMean: string
@@ -708,6 +710,27 @@ export interface Translations {
     lightZones: string
     lightMeds: string
     lightNote: string
+  }
+
+  demo: {
+    /** The floating pill */
+    pill: string
+    exit: string
+    /** Link under the setup's main button */
+    startLink: string
+    cardTitle: string
+    cardText: string
+    cardButton: string
+    /** In Settings while in the demo, in place of backups and deletion */
+    settingsTitle: string
+    settingsText: string
+    tourStep: string
+    tourSkip: string
+    tourNext: string
+    tourDone: string
+    tourExit: string
+    tourReplay: string
+    tourSteps: { title: string; text: string }[]
   }
 
   sensitive: {

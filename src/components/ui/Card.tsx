@@ -1,8 +1,10 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 
-export function Card({ children, className = '' }: PropsWithChildren<{ className?: string }>) {
+/** `tour` marks the card for the demo tour, which outlines it. */
+export function Card({ children, className = '', tour }: PropsWithChildren<{ className?: string; tour?: string }>) {
   return (
     <div
+      data-tour={tour}
       className={`rounded-[var(--radius-card)] p-5 ${className}`}
       style={{
         background: 'var(--color-surface)',

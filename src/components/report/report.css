@@ -563,3 +563,14 @@
     break-after: auto;
   }
 }
+
+/* A report made in the demo: the band on every page says the data is made up. */
+.report .r-demo {
+  background: #f3ecd9;
+  color: #5e4f33;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 10px;
+  padding: 4px 0;
+}

@@ -10,6 +10,8 @@ import { AboutCard } from '../components/about/AboutCard'
 import { SourcesCard } from '../components/about/SourcesCard'
 import { SupportCard } from '../components/about/SupportCard'
 import { BackupSection } from '../components/settings/BackupSection'
+import { IS_DEMO } from '../lib/demoMode'
+import { exitDemo, startDemo } from '../lib/demoSession'
 import { SensitiveZoneCard } from '../components/settings/SensitiveZoneCard'
 import { InstallCard } from '../components/install/InstallCard'
 import { MedicationsSection } from '../components/settings/MedicationsSection'
@@ -21,8 +23,9 @@ import { saveCurrentLocation } from '../lib/weatherLocation'
 import { format, LANGUAGES, useLocale, useTranslation } from '../i18n'
 import { radioGroupProps, radioProps } from '../lib/a11y'
 
-/** `openBackup`: arrive from the backup reminder, with the data group already open. */
-export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
+/** `openBackup`: arrive from the backup reminder, with the data group already open.
+ * `onReplayTour`: in the demo, opens the guided tour again. */
+export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?: boolean; onReplayTour?: () => void }) {
   const settings = useSettings()
   const t = useTranslation()
   const { intlLocale } = useLocale()
@@ -334,7 +337,34 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
         </Card>
       </SettingsGroup>
 
-      <SettingsGroup id="backup" icon={IconShieldLock} title={t.settings.groups.data} summary={dataSummary} defaultOpen={openBackup}>
+      <SettingsGroup id="backup" icon={IconShieldLock} title={t.settings.groups.data} summary={IS_DEMO ? t.demo.settingsTitle : dataSummary} defaultOpen={openBackup}>
+        {IS_DEMO ? (
+          <Card>
+            <SectionTitle>{t.demo.settingsTitle}</SectionTitle>
+            <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.demo.settingsText}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={onReplayTour}
+                className="min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
+                style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+              >
+                {t.demo.tourReplay}
+              </button>
+              <button
+                type="button"
+                onClick={() => void exitDemo()}
+                className="min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
+                style={{ background: 'var(--color-brand)', color: 'var(--color-on-brand)' }}
+              >
+                {t.demo.tourExit}
+              </button>
+            </div>
+          </Card>
+        ) : (
+          <>
         <Card>
           <SectionTitle>{t.settings.backupTitle}</SectionTitle>
           <BackupSection />
@@ -355,12 +385,31 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
         </Card>
 
         <SensitiveZoneCard />
+          </>
+        )}
       </SettingsGroup>
 
-      <InstallCard />
+      {!IS_DEMO && <InstallCard />}
 
       <SettingsGroup icon={IconInfoCircle} title={t.settings.groups.about}>
         <AboutCard withHeader />
+
+        {!IS_DEMO && (
+          <Card>
+            <SectionTitle>{t.demo.cardTitle}</SectionTitle>
+            <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.demo.cardText}
+            </p>
+            <button
+              type="button"
+              onClick={() => startDemo(settings.language)}
+              className="min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
+              style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+            >
+              {t.demo.cardButton}
+            </button>
+          </Card>
+        )}
 
         <SourcesCard />
 
@@ -374,7 +423,7 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
         </Card>
       </SettingsGroup>
 
-      <SupportCard />
+      {!IS_DEMO && <SupportCard />}
 
       <Footer />
     </div>

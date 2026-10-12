@@ -465,7 +465,7 @@ export function HealthEntryLayout({
 
       {!lightToday && <WeatherHero weather={local.painLevel === undefined ? null : weather} />}
 
-      <Card className="!p-4">
+      <Card className="!p-4" tour="pain">
         <div className="flex items-center justify-between gap-2">
           <span className="flex items-center gap-2">
             <CategoryIcon icon={IconActivityHeartbeat} cat="pain" />

@@ -24,7 +24,7 @@ Les PDF sont joints à la [release v0.3.0](https://github.com/maxauvy/OUCH/relea
 ## Essayer en deux minutes
 
 1. Ouvrir <https://maxauvy.github.io/OUCH/> sur un téléphone ou un ordinateur, et passer l'assistant de démarrage.
-2. Pour voir l'application remplie plutôt que vide, importer un historique fictif de 90 jours : la marche à suivre est dans le [README](../../README.md#essayer-avec-des-données-de-démo) (fichier généré par `node scripts/generate-demo-history.mjs`, mot de passe `demo`).
+2. Pour voir l'application remplie plutôt que vide, ouvrir <https://maxauvy.github.io/OUCH/?demo> (le mode démo, 90 jours fictifs, avec une visite guidée), ou importer le même historique : la marche à suivre est dans le [README](../../README.md#essayer-avec-des-données-de-démo) (fichier généré par `node scripts/generate-demo-history.mjs`, mot de passe `demo`).
 3. Dans l'onglet Tendances, ouvrir « Rapport pour mon médecin », choisir *Médecin traitant* (2 pages) ou *Centre douleur* (environ 5 pages), et regarder le résultat.
 
 Rien de ce qui est saisi ne quitte l'appareil. Les données de démonstration sont fictives.

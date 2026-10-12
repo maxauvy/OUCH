@@ -51,6 +51,8 @@ L'onglet Enfants est fait pour être montré à un enfant. Il raconte la météo
 
 ## Essayer avec des données de démo
 
+Le plus simple : le mode démo de l'app. Ouvre-la avec `?demo` à la fin de l'adresse, ou choisis « Découvrir avec un exemple » dans l'assistant ou dans Réglages. Un historique fictif de 90 jours s'installe dans une base séparée de ton journal, avec une visite guidée ; « Quitter » dans la pastille l'efface. Le script ci-dessous sert à importer le même historique comme une vraie sauvegarde.
+
 Pour voir l'app remplie sans saisir 90 jours à la main :
 
 ```bash

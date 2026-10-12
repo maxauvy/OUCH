@@ -10,6 +10,7 @@ import { shiftISO } from '../lib/medications'
 import { formatISODate } from '../lib/medicationFormat'
 import { buildImagePdf, type PdfImage } from '../lib/pdf'
 import { downloadBlob } from '../lib/backup'
+import { IS_DEMO } from '../lib/demoMode'
 import { radioGroupProps, radioProps } from '../lib/a11y'
 import { format, LANGUAGES, useLanguage, useLocale, useTranslation, type Language } from '../i18n'
 import { Card, SectionTitle } from '../components/ui/Card'
@@ -95,6 +96,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             agenda: agenda.split('\n'),
             includeNotes,
             includeCycle,
+            demo: IS_DEMO,
           })
         : null,
     [entries, medications, variant, language, consultation, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, agenda, includeNotes, includeCycle]

@@ -598,6 +598,7 @@ const en: Translations = {
     reviewNote:
       'Same lengths around every change: 28 days before, 7 settling-in days not counted, 28 days after. Means over the logged days (their number is in the last column, before · after); flare days are counted over 28 days. This describes periods and establishes no cause: an improvement can follow a treatment started in the trough of a painful period (regression to the mean), the weather, the season or another change. “—”: too few logged days (14 needed on each side). Dates as entered in the treatments list.',
     reviewUsual: 'For this patient, 8 gaps out of 10 between two consecutive 28-day periods are under {{gap}} {{n:point|points}} of pain.',
+    demoBand: 'MADE-UP DATA — DEMONSTRATION',
     weekdaysTitle: 'Pain by day of the week',
     weekdaysColDay: 'Day',
     weekdaysColMean: 'Mean pain',
@@ -869,6 +870,30 @@ const en: Translations = {
     lightZones: 'Where it hurts',
     lightMeds: 'My medications',
     lightNote: 'A note',
+  },
+
+  demo: {
+    pill: 'Demo mode · made-up data',
+    exit: 'Leave',
+    startLink: 'Try it first with sample data',
+    cardTitle: 'Discover with an example',
+    cardText:
+      '90 made-up days to see everything: Today, Trends, the report. It is a space of its own: your journal is not touched, and you leave the demo whenever you like.',
+    cardButton: 'Try the demo',
+    settingsTitle: 'Demo mode',
+    settingsText:
+      'This data is made up and kept in a space of its own. Backups, export and deletion are turned off here: leave the demo to go back to your journal, which was not touched.',
+    tourStep: 'Demo tour · {{n}} of {{total}}',
+    tourSkip: 'Skip the tour',
+    tourNext: 'Next',
+    tourDone: 'Finish',
+    tourExit: 'Leave the demo',
+    tourReplay: 'Replay the tour',
+    tourSteps: [
+      { title: 'A day, in a few seconds', text: 'Touch a box to log your pain. The rest is optional.' },
+      { title: 'What your journal shows', text: 'The curve, the flares, the review of a change of treatment: everything is computed on your device.' },
+      { title: 'A report for your doctor', text: 'It sums up your period. Here, “made-up data” is written on every page.' },
+    ],
   },
 
   sensitive: {

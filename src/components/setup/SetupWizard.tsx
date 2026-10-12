@@ -17,6 +17,7 @@ import { Chip } from '../ui/Chip'
 import { Toggle } from '../ui/Toggle'
 import { MedicationsSection } from '../settings/MedicationsSection'
 import { IllnessPicker } from '../settings/IllnessPicker'
+import { startDemo } from '../../lib/demoSession'
 import { InstallFold } from '../install/InstallCard'
 import { useInstallKind } from '../../hooks/useInstall'
 
@@ -204,7 +205,8 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
           {step === 'done' && <DoneStep heading={heading(t.setup.doneTitle)} />}
 
           {/* Sticky so the buttons stay reachable when a step is taller than the screen */}
-          <div className="sticky bottom-0 -mx-1 px-1 pt-2 pb-5 mt-auto flex gap-2" style={{ background: 'var(--color-paper)' }}>
+          <div className="sticky bottom-0 -mx-1 px-1 pt-2 pb-5 mt-auto flex flex-col gap-2" style={{ background: 'var(--color-paper)' }}>
+            <div className="flex gap-2">
             {index > 0 && (
               <button
                 type="button"
@@ -223,6 +225,18 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
             >
               {step === 'welcome' ? t.setup.begin : isLast ? (hasEntries ? t.setup.finishRerun : t.setup.finish) : t.setup.next}
             </button>
+            </div>
+            {/* Discovering first, with fictional data in a space of its own: nothing is saved of the person. */}
+            {step === 'welcome' && (
+              <button
+                type="button"
+                onClick={() => startDemo(settings.language)}
+                className="min-h-11 text-control font-semibold underline underline-offset-4"
+                style={{ color: 'var(--color-brand)' }}
+              >
+                {t.demo.startLink}
+              </button>
+            )}
           </div>
         </div>
       </div>

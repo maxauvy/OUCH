@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { IS_DEMO } from '../lib/demoMode'
 import { DailyEntryForm } from '../components/entry/DailyEntryForm'
 import { Footer } from '../components/layout/Footer'
 import { ShareSheet } from '../components/weather/ShareSheet'
@@ -19,8 +20,8 @@ export function TodayPage({ onGoToBackup }: { onGoToBackup: () => void }) {
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
-      <BackupReminderCard onBackup={onGoToBackup} />
-      <DailyEntryForm date={date} onGoToBackup={onGoToBackup} />
+      {!IS_DEMO && <BackupReminderCard onBackup={onGoToBackup} />}
+      <DailyEntryForm date={date} onGoToBackup={IS_DEMO ? undefined : onGoToBackup} />
       {entry && hasPain(entry) && (
         <button
           onClick={() => setSharing(true)}
