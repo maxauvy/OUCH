@@ -141,9 +141,7 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
                   {t.setup.profileHelper}
                 </p>
               </Card>
-              <Card>
-                <ParentPicker />
-              </Card>
+              <KidsQuestion />
             </>
           )}
 
@@ -288,6 +286,56 @@ function LanguagePicker() {
 
 /** Same choice as in Settings: the Kids tab's sentences are written for
  * "maman" or "papa", with the matching French agreement. */
+/** Whether to have the Kids tab at all. Nothing is preselected, and no answer
+ * is a no: the tab stays off until "yes". The choice of maman or papa only
+ * appears once it is. */
+function KidsQuestion() {
+  const t = useTranslation()
+  const settings = useSettings()
+  const ids = useId()
+  // Whether the question was answered here; a stored "off" is not an answer.
+  const [answer, setAnswer] = useState<'yes' | 'no' | undefined>(settings.kidsTabEnabled ? 'yes' : undefined)
+  const options: { value: 'yes' | 'no'; label: string }[] = [
+    { value: 'yes', label: t.setup.kidsYes },
+    { value: 'no', label: t.setup.kidsNo },
+  ]
+  return (
+    <>
+      <Card>
+        <p className="text-control font-medium mb-1">{t.setup.kidsTitle}</p>
+        <p id={`${ids}-kids-help`} className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.setup.kidsHelper}
+        </p>
+        <div className="flex gap-2" {...radioGroupProps(t.setup.kidsTitle)} aria-describedby={`${ids}-kids-help`}>
+          {options.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              {...radioProps(answer === opt.value)}
+              onClick={() => {
+                setAnswer(opt.value)
+                void updateSettings({ kidsTabEnabled: opt.value === 'yes' })
+              }}
+              className="flex flex-1 min-h-11 items-center justify-center rounded-[var(--radius-control)] px-2 py-2 text-center text-control font-semibold"
+              style={{
+                background: answer === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
+                color: answer === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
+              }}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </Card>
+      {answer === 'yes' && (
+        <Card>
+          <ParentPicker />
+        </Card>
+      )}
+    </>
+  )
+}
+
 function ParentPicker() {
   const t = useTranslation()
   const settings = useSettings()

@@ -39,6 +39,10 @@ const fr: Translations = {
     checkIllness: 'Suivi : {{illness}}',
     checkNoIllness: 'Maladie pas encore précisée',
     profileTitle: 'Comment t’appeler ?',
+    kidsTitle: 'Une page pour expliquer ta maladie à un enfant ?',
+    kidsHelper: 'L’onglet Enfants met des mots simples sur ce que tu vis. Tu pourras le changer dans Réglages.',
+    kidsYes: 'Oui',
+    kidsNo: 'Non, pas pour moi',
     profileIntro: 'Ton prénom apparaît sur la météo du jour que tu partages, et pré-remplit le rapport pour ton médecin.',
     profileHelper: 'Facultatif. Il reste sur cet appareil.',
     trackingTitle: 'Ce que tu veux suivre',
@@ -102,7 +106,7 @@ const fr: Translations = {
         body: "Tout reste sur ton appareil. Rien n'est envoyé sans que tu le décides.",
       },
     },
-    note: "Pas de pression : les jours difficiles, une seule info suffit (ta douleur). OUCH ne remplace pas un avis médical, et les tendances sont des pistes à explorer, pas des preuves.",
+    note: "Pas de pression : les jours difficiles, une seule info suffit (ta douleur). OUCH n’est pas un dispositif médical et ne remplace pas un avis médical ; les tendances sont des pistes à explorer, pas des preuves.",
   },
 
   support: {
@@ -236,6 +240,8 @@ const fr: Translations = {
     range90: '90 j',
     rangeAll: 'Tout',
     noData: 'Pas encore de données sur cette période.',
+    emptyNone: 'Rien à montrer pour l’instant. Note ta douleur chaque jour : les premiers motifs apparaissent après environ 2 semaines de suivi.',
+    emptyEarly: 'Les premiers motifs apparaissent après environ 2 semaines de suivi. Tu en es à {{n}} {{n:jour|jours}} : continue à ton rythme, sans te forcer.',
     notEnoughData: 'Encore quelques jours de suivi et ta courbe apparaîtra ici.',
     daysTrackedOne: 'jour suivi',
     daysTrackedOther: 'jours suivis',
@@ -565,7 +571,7 @@ const fr: Translations = {
     logged: 'Jours renseignés',
     loggedPrev: 'période précédente : {{n}} / {{days}}',
     caveat:
-      'Données auto-déclarées, saisies chaque jour sur des échelles numériques de 0 à 10. Ce rapport décrit ces données : il ne formule ni diagnostic ni recommandation thérapeutique.',
+      'Données auto-déclarées, saisies chaque jour sur des échelles numériques de 0 à 10. Ce rapport décrit ces données : il ne formule ni diagnostic ni recommandation thérapeutique. OUCH n’est pas un dispositif médical.',
     footer: 'Généré le {{date}} sur l’appareil du patient · données auto-déclarées, non vérifiées par un soignant',
     page: '{{n}} / {{total}}',
     keyPoints: 'À retenir',
@@ -967,6 +973,8 @@ const fr: Translations = {
     reminderHelper: "Une notification si tu n'as pas encore rempli ta météo",
     reminderNote:
       "Ce rappel fonctionne quand l'app est ouverte ou récemment utilisée. Sans serveur (par choix, pour rester 100% local), il ne peut pas se déclencher app totalement fermée.",
+    kidsTabTitle: 'Onglet Enfants',
+    kidsTabHelper: 'Une page pour expliquer ta maladie à un enfant avec des mots simples. Tu peux la masquer si elle ne te concerne pas : rien n’est perdu, tu peux la réafficher ici.',
     lightFormTitle: 'Écran allégé les jours difficiles',
     lightFormHelper:
       'Pendant une poussée, l’écran du jour demande d’abord la douleur, puis propose le reste. Tu peux toujours afficher le formulaire complet.',
@@ -999,6 +1007,8 @@ const fr: Translations = {
     summaryReminderOff: 'Pas de rappel',
     privacyNote:
       "OUCH garde toutes tes données sur cet appareil, dans son stockage local : aucune donnée de santé n'en sort. Seule la météo automatique contacte des services extérieurs, avec ta position et jamais ton journal. Le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
+    notMedicalDevice:
+      'OUCH n’est pas un dispositif médical : il ne pose aucun diagnostic, ne recommande aucun traitement et ne remplace pas un avis médical. Les tendances sont des pistes à explorer, pas des preuves.',
   },
 
   childView: {

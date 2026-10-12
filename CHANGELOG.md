@@ -7,6 +7,14 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Ajouté
+- L'onglet Enfants devient optionnel. L'assistant pose la question (« Une page pour expliquer ta maladie à un enfant ? », Oui ou Non, rien de présélectionné) et le choix Maman / Papa n'apparaît qu'après « Oui » ; sans réponse, l'onglet reste masqué. Un interrupteur « Onglet Enfants » dans Réglages (Rappel et affichage) permet de le changer, et le choix est restauré avec une sauvegarde. Celles et ceux qui utilisaient déjà OUCH gardent l'onglet.
+- Dans Tendances, un message sur ce qui s'affiche quand il y a peu de données : « Rien à montrer pour l'instant » quand le journal est vide, et, avant 14 jours de journal, « Les premiers motifs apparaissent après environ 2 semaines de suivi » avec le nombre de jours déjà notés.
+
+### Modifié
+- « OUCH n'est pas un dispositif médical » est dit explicitement : dans la note du premier écran de l'assistant, en bas de Réglages (À propos), dans l'encadré de prudence des deux rapports et dans les README (qui disaient déjà que OUCH ne remplace pas un avis médical, et le rapport qu'il ne pose ni diagnostic ni recommandation).
+- Accessibilité du rapport : tous les tableaux déclarent maintenant leurs en-têtes de colonnes et de lignes (`scope`), pas seulement ceux des poussées et du bilan de traitement.
+
+### Ajouté
 - « Douleur myofasciale » dans la liste des maladies suivies (assistant, Réglages, rapport et onglet Enfants, avec une explication prudente pour chaque âge : on y dit que les médecins l'expliquent encore de façons différentes et qu'aucun examen ne la prouve). Ces textes d'explication sont à faire relire par un professionnel de santé avant d'être tenus pour définitifs.
 
 ### Modifié

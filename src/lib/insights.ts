@@ -23,6 +23,10 @@ type BucketTest = (v: number) => boolean
 
 const FIXED_BUCKET_TESTS: BucketTest[] = [(v) => v <= 3, (v) => v > 3 && v <= 6, (v) => v > 6]
 
+/** Days with an entry before the Trends page has patterns worth looking at:
+ * about two weeks. Below it, the page says so rather than showing little. */
+export const PATTERN_MIN_DAYS = 14
+
 /** Splits values into three roughly equal-sized groups (lowest/mid/highest
  * third of THIS dataset) rather than fixed thresholds. Needed for factors
  * with no natural 0–10 scale (e.g. temperature), where a fixed cutoff would

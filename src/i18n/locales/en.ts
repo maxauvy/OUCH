@@ -37,6 +37,10 @@ const en: Translations = {
     checkIllness: 'Tracking: {{illness}}',
     checkNoIllness: 'Illness not specified yet',
     profileTitle: 'What should we call you?',
+    kidsTitle: 'A page to explain your illness to a child?',
+    kidsHelper: 'The Kids tab puts simple words on what you live with. You can change this in Settings.',
+    kidsYes: 'Yes',
+    kidsNo: 'No, not for me',
     profileIntro: 'Your first name appears on the daily weather you share, and prefills the report for your doctor.',
     profileHelper: 'Optional. It stays on this device.',
     trackingTitle: 'What you want to track',
@@ -100,7 +104,7 @@ const en: Translations = {
         body: "Everything stays on your device. Nothing is sent unless you decide to.",
       },
     },
-    note: "No pressure: on hard days, a single entry is enough (your pain). OUCH doesn't replace medical advice, and trends are leads to explore, not proof.",
+    note: "No pressure: on hard days, a single entry is enough (your pain). OUCH is not a medical device and doesn't replace medical advice; trends are leads to explore, not proof.",
   },
 
   support: {
@@ -234,6 +238,8 @@ const en: Translations = {
     range90: '90 d',
     rangeAll: 'All',
     noData: 'No data yet for this period.',
+    emptyNone: 'Nothing to show yet. Log your pain each day: the first patterns appear after about 2 weeks of tracking.',
+    emptyEarly: 'The first patterns appear after about 2 weeks of tracking. You are at {{n}} {{n:day|days}}: keep going at your own pace, no pressure.',
     notEnoughData: 'A few more days of tracking and your curve will appear here.',
     daysTrackedOne: 'day tracked',
     daysTrackedOther: 'days tracked',
@@ -559,7 +565,7 @@ const en: Translations = {
     logged: 'Days logged',
     loggedPrev: 'previous period: {{n}} / {{days}}',
     caveat:
-      'Self-reported data, logged daily on 0–10 numeric rating scales. This report describes that data: it makes no diagnosis and no treatment recommendation.',
+      'Self-reported data, logged daily on 0–10 numeric rating scales. This report describes that data: it makes no diagnosis and no treatment recommendation. OUCH is not a medical device.',
     footer: 'Generated on {{date}} on the patient’s device · self-reported data, not verified by a clinician',
     page: '{{n}} / {{total}}',
     keyPoints: 'Key points',
@@ -961,6 +967,8 @@ const en: Translations = {
     reminderHelper: "A notification if you haven't filled in your weather yet",
     reminderNote:
       "This reminder works while the app is open or recently used. Without a server (by choice, to stay 100% local), it can't trigger while the app is fully closed.",
+    kidsTabTitle: 'Kids tab',
+    kidsTabHelper: 'A page that explains your illness to a child in simple words. You can hide it if it does not concern you: nothing is lost, and you can bring it back here.',
     lightFormTitle: 'Lighter screen on hard days',
     lightFormHelper:
       'During a flare, the day’s screen asks for your pain first, then offers the rest. You can always show the full form.',
@@ -993,6 +1001,8 @@ const en: Translations = {
     summaryReminderOff: 'No reminder',
     privacyNote:
       "OUCH keeps all your data on this device, in local storage: no health data ever leaves it. Only automatic weather contacts outside services, with your position and never your journal. Sharing your weather and making backups is always something you choose to do.",
+    notMedicalDevice:
+      'OUCH is not a medical device: it makes no diagnosis, recommends no treatment and does not replace medical advice. Trends are leads to explore, not proof.',
   },
 
   childView: {

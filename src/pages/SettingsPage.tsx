@@ -41,7 +41,7 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
 
   // One line per group, so the values can be read without opening it.
   const parentLabel = PARENT_OPTIONS.find((o) => o.value === settings.parentGender)?.label
-  const profileSummary = [settings.displayName, parentLabel].filter(Boolean).join(' · ')
+  const profileSummary = [settings.displayName, settings.kidsTabEnabled ? parentLabel : undefined].filter(Boolean).join(' · ')
 
   const factorCount = settings.enabledFactors.length
   const hasLocation = settings.autoWeatherLat !== undefined && settings.autoWeatherLon !== undefined
@@ -119,28 +119,30 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
           />
         </Card>
 
-        <Card>
-          <SectionTitle>{t.settings.parentGenderTitle}</SectionTitle>
-          <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.settings.parentGenderHelper}
-          </p>
-          <div className="flex gap-2" {...radioGroupProps(t.settings.parentGenderTitle)}>
-            {PARENT_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                {...radioProps(settings.parentGender === opt.value)}
-                onClick={() => updateSettings({ parentGender: opt.value })}
-                className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
-                style={{
-                  background: settings.parentGender === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                  color: settings.parentGender === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
-                }}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </Card>
+        {settings.kidsTabEnabled && (
+          <Card>
+            <SectionTitle>{t.settings.parentGenderTitle}</SectionTitle>
+            <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.settings.parentGenderHelper}
+            </p>
+            <div className="flex gap-2" {...radioGroupProps(t.settings.parentGenderTitle)}>
+              {PARENT_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  {...radioProps(settings.parentGender === opt.value)}
+                  onClick={() => updateSettings({ parentGender: opt.value })}
+                  className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
+                  style={{
+                    background: settings.parentGender === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
+                    color: settings.parentGender === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </Card>
+        )}
 
         <Card>
           <SectionTitle>{t.settings.illnessesTitle}</SectionTitle>
@@ -275,6 +277,20 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
         </Card>
 
         <Card>
+          <SectionTitle>{t.settings.kidsTabTitle}</SectionTitle>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.settings.kidsTabHelper}
+            </p>
+            <Toggle
+              checked={settings.kidsTabEnabled}
+              onChange={(v) => updateSettings({ kidsTabEnabled: v })}
+              label={t.settings.kidsTabTitle}
+            />
+          </div>
+        </Card>
+
+        <Card>
           <SectionTitle>{t.settings.languageTitle}</SectionTitle>
           <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
             {t.settings.languageHelper}
@@ -351,6 +367,9 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
         <Card>
           <p className="text-caption leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
             {t.settings.privacyNote}
+          </p>
+          <p className="text-caption leading-relaxed mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.settings.notMedicalDevice}
           </p>
         </Card>
       </SettingsGroup>

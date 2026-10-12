@@ -93,11 +93,12 @@ function AppShell() {
         {tab === 'today' && <TodayPage onGoToBackup={goToBackup} />}
         {tab === 'journal' && <JournalPage />}
         {tab === 'trends' && <TrendsPage />}
-        {tab === 'kids' && <ChildViewPage />}
+        {tab === 'kids' && settings.kidsTabEnabled && <ChildViewPage />}
         {tab === 'settings' && <SettingsPage openBackup={backupRequested} />}
       </main>
       <TabBar
         active={tab}
+        hidden={settings.kidsTabEnabled ? [] : ['kids']}
         onChange={(next) => {
           setBackupRequested(false)
           setTab(next)
