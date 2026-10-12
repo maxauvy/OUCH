@@ -96,9 +96,16 @@ Ces valeurs sont recalculées à chaque affichage à partir des données ci-dess
 
 ## Sauvegarde et migration
 
-- Une sauvegarde est un fichier JSON chiffré contenant la version du format, la date d'export, **toutes les entrées, tous les traitements et les réglages** ci-dessus (voir [`PRIVACY.md`](../../PRIVACY.md) pour le chiffrement). Il n'y a pas encore d'export en clair ni de CSV.
+- Une sauvegarde est un fichier JSON chiffré contenant la version du format, la date d'export, **toutes les entrées, tous les traitements et les réglages** ci-dessus (voir [`PRIVACY.md`](../../PRIVACY.md) pour le chiffrement). Elle seule permet de restaurer OUCH.
 - À l'import, chaque champ est revérifié : une entrée sans date valide est ignorée, ainsi qu'une entrée dont la douleur est présente mais n'est pas un nombre de 0 à 10 ; une entrée sans niveau de douleur est conservée ; toute autre valeur hors plage est écartée, jamais corrigée. Une sauvegarde faite après la correction contient des jours sans niveau de douleur : importée dans une version antérieure, ces jours sont ignorés. Les entrées sont fusionnées par date, et celles de la sauvegarde l'emportent en cas de doublon.
 - Les anciennes versions sont migrées sans rien deviner : zones enregistrées avec leur libellé français (version 1) remplacées par leur identifiant stable ; traitements saisis en texte libre (version 3) convertis en traitements « non précisés » que le patient peut décrire ensuite.
+
+## Export CSV
+
+Réglages, zone sensible, « Exporter en CSV, en clair » : deux fichiers en clair (non chiffrés), qui ne servent pas à restaurer OUCH et ne comptent pas comme une sauvegarde. UTF-8, séparateur virgule, point décimal, fins de ligne CRLF (RFC 4180) ; les noms de colonnes sont en anglais, quelle que soit la langue de l'app ; une cellule vide veut dire « non noté » (un jour sans niveau de douleur n'est pas un jour de douleur 0). Plusieurs valeurs dans une cellule sont séparées par `|`. Un texte qui commence par `=`, `+`, `-` ou `@` reçoit une apostrophe en tête, pour qu'un tableur l'affiche au lieu de le calculer.
+
+- **`ouch-journal-AAAA-MM-JJ.csv`**, une ligne par jour avec une entrée, du plus ancien au plus récent : `date`, `pain`, `fatigue`, `sleep_quality`, `sleep_hours`, `stress`, `brain_fog`, `mood`, `activity` (échelles de 0 à 10 sauf `sleep_hours`), `period_day` (1 / 0), `weather_source` (`auto` / `manual`), `weather_condition` (identifiant), `temperature_c`, `pressure_hpa`, `pain_locations` et `positive_actions` (valeurs séparées par `|`), `notes` (colonne absente si la personne a décoché « Inclure mes notes »).
+- **`ouch-prises-AAAA-MM-JJ.csv`**, une ligne par prise d'un traitement : `date`, `medication` (vide si le traitement n'existe plus), `medication_id`, `regimen` (`scheduled` / `asNeeded` / `unspecified`), `dose_amount` et `dose_unit` (la posologie en vigueur ce jour-là, vides pour un traitement non précisé), `doses` (le nombre noté : vide = pris sans nombre, 0 = prise oubliée), `taken` (0 seulement pour un 0 noté), `relief` (0 à 3), `side_effects` (séparés par `|`).
 
 ## Pièges à connaître en lisant les données
 

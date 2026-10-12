@@ -710,6 +710,13 @@ export interface Translations {
     lightNote: string
   }
 
+  sensitive: {
+    title: string
+    exportLine: string
+    exportEmpty: string
+    deleteLine: string
+  }
+
   deleteData: {
     title: string
     helper: string
@@ -840,6 +847,16 @@ export interface Translations {
     parentGenderMaman: string
     parentGenderPapa: string
     illnessesTitle: string
+    csvTitle: string
+    csvDialogTitle: string
+    csvHelper: string
+    /** Said before the export button: the files are plain text */
+    csvWarning: string
+    csvNotes: string
+    csvExport: string
+    /** `{{files}}`: the two file names */
+    csvDone: string
+    csvError: string
     illnessesHelper: string
     illnessStatusTitle: string
     illnessStatusHelper: string

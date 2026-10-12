@@ -876,6 +876,13 @@ const fr: Translations = {
     lightNote: 'Une note',
   },
 
+  sensitive: {
+    title: 'Zone sensible',
+    exportLine: 'Fichiers non chiffrés : à manier avec soin',
+    exportEmpty: 'Rien à exporter pour l’instant',
+    deleteLine: 'Irréversible, sans copie ailleurs',
+  },
+
   deleteData: {
     title: 'Supprimer mes données',
     helper:
@@ -1007,6 +1014,16 @@ const fr: Translations = {
     parentGenderMaman: 'Maman',
     parentGenderPapa: 'Papa',
     illnessesTitle: 'Tes maladies',
+    csvTitle: 'Exporter en CSV, en clair',
+    csvDialogTitle: 'Exporter en clair ?',
+    csvHelper:
+      'Deux fichiers pour un tableur ou un logiciel d’analyse : ton journal (un jour par ligne) et tes prises de médicaments (une prise par ligne).',
+    csvWarning:
+      'Ces fichiers ne sont pas chiffrés : quiconque les ouvre lit tout ton journal, notes comprises. Ne les envoie qu’à une personne de confiance. Ils ne servent pas à restaurer OUCH : pour cela, fais une sauvegarde.',
+    csvNotes: 'Inclure mes notes',
+    csvExport: 'Exporter quand même',
+    csvDone: 'Fichiers prêts : {{files}}.',
+    csvError: 'L’export a échoué. Réessaie, ou fais une sauvegarde chiffrée à la place.',
     illnessStatusTitle: 'Précise pour chacune',
     illnessStatusHelper:
       'Facultatif. Sans réponse, le rapport ne dit rien du statut. Une maladie seulement suspectée est expliquée en termes généraux à tes enfants.',
