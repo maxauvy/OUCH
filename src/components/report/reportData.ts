@@ -27,6 +27,8 @@ export interface ReportOptions {
   agenda: string[]
   includeNotes: boolean
   includeCycle: boolean
+  /** Made in the demo: every page says the data is made up */
+  demo?: boolean
 }
 
 // Symptom scales shown next to pain: which way is "better", and the top of the scale.

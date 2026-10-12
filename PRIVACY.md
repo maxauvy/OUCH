@@ -40,6 +40,10 @@ L'export produit un fichier chiffré dans le navigateur (WebCrypto) : AES-256-GC
 
 L'export CSV (Réglages, zone sensible) est différent : il produit deux fichiers **en clair**, non chiffrés, qui ne servent pas à restaurer OUCH. Il n'est produit que sur demande et dans le navigateur ; les notes libres peuvent en être exclues. Ce qui est fait du fichier ensuite, par exemple le partager par e-mail, relève de la personne.
 
+## Mode démo
+
+Le mode démo remplit une base séparée avec un historique fictif, calculé sur l'appareil. Il ne lit ni ne modifie le vrai journal, ne fait aucun appel réseau (la météo automatique y est coupée) et « Quitter » efface la base d'exemple.
+
 ## Rapport pour le médecin, image de la météo
 
 Le rapport est fabriqué sur l'appareil. Une fois imprimé ou envoyé, il relève de la personne : OUCH ne sait pas à qui elle le donne. Il porte la mention « données auto-déclarées, non vérifiées par un soignant ». Même chose pour l'image de la météo du jour : rien n'est envoyé automatiquement.

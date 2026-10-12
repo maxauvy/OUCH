@@ -95,6 +95,7 @@ export function ReportDocument({
               {f.fullDate(p.start)} → {f.fullDate(p.end)}
             </span>
           </div>
+          {options.demo && <div className="r-demo">{f.t.demoBand}</div>}
           <div className="r-body">
             {sheet.parts.map((part) => (
               <div className="r-part" data-part key={`${part.page}-${part.block}-${part.from}`}>

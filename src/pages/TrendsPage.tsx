@@ -135,6 +135,7 @@ export function TrendsPage() {
       {entries.length > 0 && (
         <button
           ref={reportButtonRef}
+          data-tour="report"
           type="button"
           onClick={() => setReporting(true)}
           aria-labelledby={`${reportIds}-title`}
@@ -212,7 +213,7 @@ export function TrendsPage() {
             </Card>
           )}
 
-          <Card>
+          <Card tour="trends-chart">
             <SectionTitle>{i18n.trends.painEvolution}</SectionTitle>
             <PainTrendChart
               entries={entries ?? []}

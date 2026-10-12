@@ -603,6 +603,7 @@ const fr: Translations = {
     reviewNote:
       'Mêmes durées autour de chaque changement : 28 jours avant, 7 jours de mise en place non comptés, 28 jours après. Moyennes sur les jours renseignés (dont le nombre figure en dernière colonne, avant · après) ; jours de poussée comptés sur 28 jours. C’est une description de périodes, sans lien de cause établi : une amélioration peut suivre un début de traitement pris au creux d’une période douloureuse (retour vers la moyenne), la météo, la saison ou un autre changement. « — » : trop peu de jours renseignés (14 requis de chaque côté). Dates telles que saisies dans le registre des traitements.',
     reviewUsual: 'Pour ce patient, 8 écarts sur 10 entre deux périodes de 28 jours consécutives sont inférieurs à {{gap}} {{n:point|points}} de douleur.',
+    demoBand: 'DONNÉES FICTIVES — DÉMONSTRATION',
     weekdaysTitle: 'Douleur selon le jour de la semaine',
     weekdaysColDay: 'Jour',
     weekdaysColMean: 'Douleur moy.',
@@ -874,6 +875,29 @@ const fr: Translations = {
     lightZones: 'Où ça fait mal',
     lightMeds: 'Mes médicaments',
     lightNote: 'Une note',
+  },
+
+  demo: {
+    pill: 'Mode démo · données fictives',
+    exit: 'Quitter',
+    startLink: 'Essayer d’abord avec des données d’exemple',
+    cardTitle: 'Découvrir avec un exemple',
+    cardText:
+      '90 jours fictifs pour tout voir : Aujourd’hui, Tendances, le rapport. C’est un espace à part : ton journal n’est pas touché, et tu quittes la démo quand tu veux.',
+    cardButton: 'Essayer la démo',
+    settingsTitle: 'Mode démo',
+    settingsText:
+      'Ces données sont fictives et restent dans un espace à part. Les sauvegardes, l’export et la suppression sont désactivés ici : quitte la démo pour revenir à ton journal, qui n’a pas été touché.',
+    tourStep: 'Visite de la démo · {{n}} sur {{total}}',
+    tourSkip: 'Passer la visite',
+    tourNext: 'Suivant',
+    tourDone: 'Terminer',
+    tourExit: 'Quitter la démo',
+    tourSteps: [
+      { title: 'Une journée, en quelques secondes', text: 'Touche une case pour noter ta douleur. Le reste est facultatif.' },
+      { title: 'Ce que montre ton journal', text: 'La courbe, les poussées, le bilan d’un changement de traitement : tout est calculé sur ton appareil.' },
+      { title: 'Un rapport pour ton médecin', text: 'Il résume ta période. Ici, la mention « données fictives » figure sur chaque page.' },
+    ],
   },
 
   sensitive: {

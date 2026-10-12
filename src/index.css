@@ -321,3 +321,11 @@ input::-webkit-date-and-time-value {
     font-size: max(16px, var(--text-body));
   }
 }
+
+/* The demo tour outlines what a step speaks of. */
+.tour-glow {
+  outline: 3px solid color-mix(in srgb, var(--color-brand) 60%, transparent);
+  outline-offset: 3px;
+  border-radius: var(--radius-card);
+  scroll-margin-top: 16px;
+}
