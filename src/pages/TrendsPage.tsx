@@ -17,7 +17,7 @@ import { FactorAnalysisCard } from '../components/trends/FactorAnalysisCard'
 import { DoctorReportPage } from './DoctorReportPage'
 import { PATTERN_MIN_DAYS, analyzeFactor, analyzeTagPresence } from '../lib/insights'
 import { weekdayProfile } from '../lib/weekdays'
-import { WeekdayCard } from '../components/trends/WeekdayCard'
+import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
 import { usePalette } from '../hooks/usePalette'
 import { subDays } from 'date-fns'
 import { format, useLocale, useTranslation, type Translations } from '../i18n'
@@ -239,7 +239,12 @@ export function TrendsPage() {
             </>
           )}
 
-          {weekdays && <WeekdayCard profile={weekdays} />}
+          {weekdays ? (
+            <WeekdayCard profile={weekdays} />
+          ) : (
+            // Under PATTERN_MIN_DAYS the card above already says that patterns need time.
+            entries.length >= PATTERN_MIN_DAYS && <WeekdayWaiting />
+          )}
 
           {analyses.some((a) => a.buckets.some((b) => b.count > 0)) && (
             <Card>

@@ -268,6 +268,8 @@ const en: Translations = {
       'A gap of {{gap}} {{n:point|points}} between the two, for an average of {{mean}}. It changes from one week to the next: read it as a lead, not a rule.',
     weekdayCalm:
       'For now your days of the week look alike: nothing stands out beyond what chance can produce. Based on {{n}} logged days.',
+    weekdayWaiting:
+      'This card appears after about 4 weeks of tracking: it needs 4 logged days for each day of the week, over the chosen period.',
     whatAffectsPain: 'What goes along with your pain',
     averagesObserved: 'Averages observed over the period — an association, not a proof.',
     bucketLow: 'Low',

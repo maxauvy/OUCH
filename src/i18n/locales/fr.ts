@@ -270,6 +270,8 @@ const fr: Translations = {
       'Un écart de {{gap}} {{n:point|points}} entre les deux, pour une moyenne de {{mean}}. Ça varie d’une semaine à l’autre : lis-le comme une piste, pas comme une règle.',
     weekdayCalm:
       'Pour l’instant, tes jours de la semaine se ressemblent : rien ne se détache au-delà de ce que le hasard suffit à produire. Calculé sur {{n}} jours notés.',
+    weekdayWaiting:
+      'Cette carte apparaît après environ 4 semaines de suivi : il faut 4 jours notés pour chaque jour de la semaine, sur la période choisie.',
     whatAffectsPain: 'Ce qui accompagne ta douleur',
     averagesObserved: 'Moyennes observées sur la période — une association, pas une preuve.',
     bucketLow: 'Faible',
