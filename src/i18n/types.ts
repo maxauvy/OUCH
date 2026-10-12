@@ -171,6 +171,8 @@ export interface Translations {
     weekdayNote: string
     /** `{{n}}` days with a pain level */
     weekdayCalm: string
+    /** Before every weekday has enough days: when the card will appear */
+    weekdayWaiting: string
     whatAffectsPain: string
     averagesObserved: string
     bucketLow: string

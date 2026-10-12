@@ -6,6 +6,8 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.4.0] - 2026-10-12
+
 ### Ajouté
 - Un mode démo dans l'app, pour la découvrir sans rien saisir : 90 jours fictifs (une personne, deux poussées, un changement de traitement), dans la langue de l'app. On y entre par un lien « Découvrir avec un exemple » sous le bouton de l'assistant, par une carte de Réglages (À propos) ou par le lien `?demo` ajouté à l'adresse (la langue du navigateur décide alors). La démo vit dans une base séparée : ton vrai journal n'est jamais touché ni lu. Une pastille « Mode démo » reste affichée avec un bouton « Quitter », qui efface l'exemple sans demander de confirmation ; les rapports portent une bande « Données fictives — démonstration ». Une visite guidée en 3 étapes (la douleur du jour, Tendances, le rapport) s'ouvre au premier lancement et se passe d'un geste ; « Revoir la visite » dans Réglages la relance. Dans la démo, pas de météo automatique (aucun appel réseau), pas de sauvegarde, d'export CSV ni de suppression, pas de rappel ni de cartes d'installation ou de soutien.
 - Un export CSV du journal, dans une « Zone sensible » rouge de Réglages (Mes données) qui réunit désormais l'export et « Supprimer toutes mes données » (deux lignes, chacune avec son icône ; chacune ouvre une fenêtre qui dit ce qui est en jeu avant d'agir). « Exporter en CSV, en clair » produit deux fichiers pour un tableur ou un logiciel d'analyse, `ouch-journal-…csv` (une ligne par jour) et `ouch-prises-…csv` (une ligne par prise de traitement, avec la posologie en vigueur ce jour-là). Standard international : UTF-8, virgule, point décimal, noms de colonnes en anglais. Une cellule vide veut dire « non noté ». Les notes libres peuvent être exclues (« Inclure mes notes »). Sur téléphone, la feuille de partage ; sur ordinateur, deux téléchargements. La fenêtre de l'export dit avant le bouton (« Exporter quand même ») que ces fichiers ne sont pas chiffrés : quiconque les ouvre lit tout le journal, notes comprises. Ils ne servent pas à restaurer OUCH et ne comptent pas comme une sauvegarde (la date de dernière sauvegarde et le rappel ne bougent pas). Un texte qui commence par `=`, `+`, `-` ou `@` reçoit une apostrophe en tête, pour qu'un tableur l'affiche au lieu de le calculer.
@@ -13,8 +15,12 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - Dans les deux rapports (médecin traitant et Centre douleur), un tableau « Douleur selon le jour de la semaine » : la douleur moyenne de chaque jour, son écart à la moyenne de la période, le nombre de jours, et une bande grise qui montre l'écart que le hasard suffit à produire (le plus grand des sept écarts, au seuil de 5 %, erreur-type avec correction de Bonferroni, sur le jour le moins représenté). Une barre pleine sort de la bande, une barre pâle reste dedans. Il n'apparaît qu'à partir de 4 jours notés pour chaque jour de la semaine. La note de lecture rappelle que les journées ne sont pas indépendantes (une poussée dure plusieurs jours) et que c'est une description, sans lien de cause.
 
 ### Modifié
+- La carte « Tes jours de la semaine » de Tendances ne disparaît plus tant qu'elle n'a pas assez de jours : une carte à sa place dit qu'elle apparaît après environ 4 semaines de suivi (4 jours notés pour chaque jour de la semaine, sur la période choisie). Elle reste absente avant 14 jours de journal, où le message sur les premiers motifs suffit.
 - L'onglet Enfants n'explique plus en détail une maladie seulement suspectée : son texte dit « maman a une… », ce qui annoncerait à l'enfant un diagnostic qui n'existe pas encore. Elle reçoit le texte général (« Cette maladie »), une seule fois même s'il y en a plusieurs.
 - La carte « Tes journées sont en moyenne meilleures le samedi… » de Tendances devient « Tes jours de la semaine » : deux grandes tuiles, « Ton jour le plus doux » et « Ton jour le plus exigeant », avec leur douleur moyenne et le nombre de jours derrière chacune (« sur 12 samedis »). Elle n'apparaît plus qu'à partir de 4 jours notés pour chaque jour de la semaine (au lieu de 7 jours en tout, soit environ un jour par jour de la semaine, donc surtout du hasard), et seulement avec les deux tuiles quand l'un des deux jours sort de ce que le hasard suffit à produire ; sinon elle dit que les jours se ressemblent pour l'instant.
+
+### Corrigé
+- Juste après une release, un navigateur qui avait chargé la version publiée par le push sur `main` continuait d'afficher « 0.4.0+abc1234 » au lieu de « v0.4.0 » : le push et l'étiquette de release portent le même commit, bâti deux fois, et seul le second sait qu'il est la release, alors que la comparaison ne regardait que le commit. `version.json` dit maintenant aussi si la version est étiquetée, et l'app propose « Recharger » quand ce n'est pas la même que la sienne.
 
 ## [0.3.1] - 2026-10-12
 
@@ -136,7 +142,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.3.1...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/maxauvy/OUCH/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/maxauvy/OUCH/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/maxauvy/OUCH/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/maxauvy/OUCH/compare/v0.2.0...v0.2.1

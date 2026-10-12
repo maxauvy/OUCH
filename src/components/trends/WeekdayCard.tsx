@@ -47,6 +47,20 @@ export function WeekdayCard({ profile }: { profile: WeekdayProfile }) {
   )
 }
 
+/** Where the card will be, while it is not there yet: says when it appears, so
+ * its absence is not read as something missing or broken. */
+export function WeekdayWaiting() {
+  const t = useTranslation().trends
+  return (
+    <Card>
+      <SectionTitle>{t.weekdayTitle}</SectionTitle>
+      <p className="text-control leading-snug" style={{ color: 'var(--color-ink-muted)' }}>
+        {t.weekdayWaiting}
+      </p>
+    </Card>
+  )
+}
+
 function Tile({
   stat,
   label,

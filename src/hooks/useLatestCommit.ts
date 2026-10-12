@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
+import { buildId } from '../lib/buildId'
 
-/** Commit of the release currently deployed, read from version.json, or
+/** Build currently deployed (see `buildId`), read from version.json, or
  * null while unknown (dev server, offline, file missing). Checked at launch
  * and each time the page comes back to the foreground, which is when an
  * installed PWA is most likely to be a release behind. */
@@ -17,8 +18,8 @@ export function useLatestCommit(): string | null {
         const res = await fetch(`${import.meta.env.BASE_URL}version.json`, { cache: 'no-store' })
         if (!res.ok) return
         const data: unknown = await res.json()
-        const commit = (data as { commit?: unknown }).commit
-        if (!cancelled && typeof commit === 'string') setLatest(commit)
+        const { commit, tagged } = data as { commit?: unknown; tagged?: unknown }
+        if (!cancelled && typeof commit === 'string') setLatest(buildId(commit, tagged === true))
       } catch {
         // Offline or blocked: say nothing rather than a false alarm.
       }
