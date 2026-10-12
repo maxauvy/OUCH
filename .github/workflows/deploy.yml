@@ -3,8 +3,11 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-    # A release tag redeploys, so the footer can show the plain version (the
-    # push to main that carried the release ran before the tag existed).
+    # A release is deployed by its tag, not by the push to main that carried it:
+    # Pages names a deployment after the commit, and the tag is the same commit,
+    # so a second deployment of it is accepted and then ignored. Deploying the
+    # tag only (see the gate below) is what lets the footer read "v0.x.y" rather
+    # than "0.x.y+commit".
     tags: ['v*']
   workflow_dispatch:
 
@@ -23,24 +26,42 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.gate.outputs.skip }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Tags, so the build can tell whether it is exactly a tagged release.
           fetch-tags: true
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      # A push to main whose package version has no tag yet is the release
+      # commit: leave it to the tag push that follows. Manual runs and tag
+      # pushes always deploy.
+      - id: gate
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "$GITHUB_EVENT_NAME" = push ] && [ "$GITHUB_REF_TYPE" = branch ] && [ -z "$(git tag --list "v$version")" ]; then
+            echo "v$version is not tagged yet: waiting for its tag to deploy."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.gate.outputs.skip != 'true'
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
-      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+      - if: steps.gate.outputs.skip != 'true'
+        run: npm ci
+      - if: steps.gate.outputs.skip != 'true'
+        run: npm test
+      - if: steps.gate.outputs.skip != 'true'
+        run: npm run build
+      - if: steps.gate.outputs.skip != 'true'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: dist
 
   deploy:
     needs: build
+    if: needs.build.outputs.skip != 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
