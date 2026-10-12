@@ -840,9 +840,9 @@ const fr: Translations = {
   backupReminder: {
     title: 'Pense à sauvegarder ton journal',
     never:
-      'Ton journal compte déjà {{n}} {{n:jour|jours}}, mais il n’a jamais été sauvegardé. Si cet appareil est perdu ou réinitialisé, tout disparaît.',
+      'Ton journal compte déjà {{n}} {{n:jour|jours}} et il reste sur cet appareil. Une sauvegarde le garde à l’abri si tu en changes ou si tu le réinitialises.',
     stale:
-      'Ta dernière sauvegarde date d’il y a {{n}} jours, et ton journal a changé depuis. Une sauvegarde à jour te met à l’abri d’une perte.',
+      'Ta dernière sauvegarde date d’il y a {{n}} jours, et ton journal a changé depuis. Une sauvegarde à jour garde tes derniers jours à l’abri.',
     backup: 'Sauvegarder',
     later: 'Plus tard',
   },

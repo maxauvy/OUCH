@@ -6,6 +6,8 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.3.1] - 2026-10-12
+
 ### Ajouté
 - La date de la dernière sauvegarde sur l'écran « Aujourd'hui », sous le titre : « Dernière sauvegarde : 3 oct. » (« Aucune sauvegarde pour l'instant. » quand il y a déjà des jours notés et aucune sauvegarde). La ligne ouvre la section de sauvegarde. La carte de rappel garde sa règle : elle ne s'affiche toujours qu'au bout de 7 jours notés sans sauvegarde, ou 30 jours et plus avec des changements.
 - L'onglet Enfants devient optionnel. L'assistant pose la question (« Une page pour expliquer ta maladie à un enfant ? », Oui ou Non, rien de présélectionné) et le choix Maman / Papa n'apparaît qu'après « Oui » ; sans réponse, l'onglet reste masqué. Un interrupteur « Onglet Enfants » dans Réglages (Rappel et affichage) permet de le changer, et le choix est restauré avec une sauvegarde. Celles et ceux qui utilisaient déjà OUCH gardent l'onglet.
@@ -22,6 +24,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - Toucher une zone du corps (ou noter autre chose) avant de régler la douleur n'enregistre plus une douleur à 0 : la journée est gardée sans niveau de douleur, comme « pas encore notée », et ne compte plus dans les moyennes, les poussées, le rapport ni la météo. Dans le Journal, ces jours portent un petit rond creux sous leur numéro. Les jours déjà enregistrés avec un 0 restent tels quels (on ne peut pas les distinguer d'un vrai 0). Restaurée dans une version antérieure à celle-ci, une sauvegarde exportée après ce changement perd ses jours sans niveau de douleur (les autres jours sont restaurés).
 - Rapport : la variation de pression atmosphérique est calculée à partir de la pression de deux jours notés qui se suivent. Rien dans l'app n'écrivait cette variation, donc la ligne « Variation de pression atmosphérique » du tableau des associations n'atteignait jamais les 14 valeurs nécessaires et n'apparaissait pas. Une variation déjà enregistrée (ancienne sauvegarde, démo) garde la priorité.
 - Rapport : un changement de dose se lit « 30 mg → 60 mg » dans les points clés, comme dans les tableaux, et le tableau « Les 3 jours avant chaque poussée » n'écrit plus deux points après un mois abrégé (« le 11 sept.. »).
+- Le rappel de sauvegarde sur « Aujourd'hui » parle d'abri plutôt que de perte : il ne dit plus « tout disparaît » mais qu'une sauvegarde garde le journal à l'abri si l'on change ou réinitialise son appareil. Les règles d'affichage ne changent pas.
 
 ## [0.3.0] - 2026-10-08
 
@@ -123,7 +126,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.3.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/maxauvy/OUCH/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/maxauvy/OUCH/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/maxauvy/OUCH/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/maxauvy/OUCH/compare/v0.1.2...v0.2.0
