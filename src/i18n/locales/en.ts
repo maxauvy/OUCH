@@ -986,6 +986,18 @@ const en: Translations = {
     parentGenderMaman: 'Mom',
     parentGenderPapa: 'Dad',
     illnessesTitle: 'Your illnesses',
+    illnessStatusTitle: 'Say more about each one',
+    illnessStatusHelper:
+      'Optional. With no answer, the report says nothing about the status. An illness that is only suspected is explained in general terms to your children.',
+    illnessStatusDiagnosed: 'Diagnosed',
+    illnessStatusSuspected: 'Suspected',
+    illnessStatusFor: 'Status: {{illness}}',
+    illnessYearLabel: 'Year of diagnosis',
+    illnessYearPlaceholder: 'For example: 2019',
+    illnessYearError: 'A four-digit year, between 1900 and {{year}}.',
+    otherNameLabel: 'Name of the illness',
+    otherNamePlaceholder: 'For example: psoriatic arthritis',
+    otherNameHelper: 'Used as typed on the report for your doctor, never on the Kids page.',
     illnessesHelper: 'What you track with OUCH; you can pick several. It appears on the report for your doctor and is explained on the "Explain to my child" page (Kids tab).',
     backupTitle: 'Backup & sync',
     groups: {

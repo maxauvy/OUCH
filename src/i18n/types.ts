@@ -823,6 +823,19 @@ export interface Translations {
     parentGenderPapa: string
     illnessesTitle: string
     illnessesHelper: string
+    illnessStatusTitle: string
+    illnessStatusHelper: string
+    illnessStatusDiagnosed: string
+    illnessStatusSuspected: string
+    /** Names a group of two buttons; `{{illness}}` */
+    illnessStatusFor: string
+    illnessYearLabel: string
+    illnessYearPlaceholder: string
+    /** `{{year}}` is this year */
+    illnessYearError: string
+    otherNameLabel: string
+    otherNamePlaceholder: string
+    otherNameHelper: string
     backupTitle: string
     privacyNote: string
     notMedicalDevice: string

@@ -220,6 +220,21 @@ export const ILLNESSES: Illness[] = [
   'autre',
 ]
 
+/** What the person says of an illness they track: a health professional has
+ * confirmed it, or it is only suspected (a diagnosis still being looked for). */
+export type IllnessStatus = 'diagnosed' | 'suspected'
+export const ILLNESS_STATUSES: IllnessStatus[] = ['diagnosed', 'suspected']
+
+/** The statuses and the typed name that go with the tracked illnesses. */
+export interface IllnessDetails {
+  /** Per illness, as declared. Nothing is assumed: an illness with no entry is listed with no status. */
+  status?: Partial<Record<Illness, IllnessStatus>>
+  /** What was typed for "autre", e.g. "Rhumatisme psoriasique". Shown as typed on the report, never on the Kids tab. */
+  otherName?: string
+  /** The year of the diagnosis, only for an illness declared diagnosed: the date doctors ask for. */
+  year?: Partial<Record<Illness, number>>
+}
+
 export interface Settings {
   id: 1
   enabledFactors: FactorKey[]
@@ -238,6 +253,12 @@ export interface Settings {
   /** The illnesses being tracked, in the order they were picked; empty
    * until the person says (nothing is assumed). */
   illnesses: Illness[]
+  /** Statuses by illness, dropped when the illness is unticked. Optional, and a declaration like the list itself: restored from a backup. */
+  illnessStatus?: IllnessDetails['status']
+  /** The name typed for "autre", at most `OTHER_ILLNESS_NAME_MAX` characters. */
+  otherIllnessName?: string
+  /** The year each diagnosed illness was diagnosed, when given. Dropped with the status. */
+  illnessYear?: IllnessDetails['year']
   /** When a backup was last exported from this device (ms). Not restored
    * from a backup file: it says nothing about this device's next loss. */
   lastBackupAt?: number
