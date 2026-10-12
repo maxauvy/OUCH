@@ -99,7 +99,7 @@ function AppShell() {
         {tab === 'journal' && <JournalPage />}
         {tab === 'trends' && <TrendsPage />}
         {tab === 'kids' && settings.kidsTabEnabled && <ChildViewPage />}
-        {tab === 'settings' && <SettingsPage openBackup={backupRequested} />}
+        {tab === 'settings' && <SettingsPage openBackup={backupRequested} onReplayTour={() => setTourOpen(true)} />}
       </main>
       <TabBar
         active={tab}

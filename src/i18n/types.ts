@@ -729,6 +729,7 @@ export interface Translations {
     tourNext: string
     tourDone: string
     tourExit: string
+    tourReplay: string
     tourSteps: { title: string; text: string }[]
   }
 

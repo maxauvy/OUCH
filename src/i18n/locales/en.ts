@@ -888,6 +888,7 @@ const en: Translations = {
     tourNext: 'Next',
     tourDone: 'Finish',
     tourExit: 'Leave the demo',
+    tourReplay: 'Replay the tour',
     tourSteps: [
       { title: 'A day, in a few seconds', text: 'Touch a box to log your pain. The rest is optional.' },
       { title: 'What your journal shows', text: 'The curve, the flares, the review of a change of treatment: everything is computed on your device.' },

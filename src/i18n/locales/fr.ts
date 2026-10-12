@@ -893,6 +893,7 @@ const fr: Translations = {
     tourNext: 'Suivant',
     tourDone: 'Terminer',
     tourExit: 'Quitter la démo',
+    tourReplay: 'Revoir la visite',
     tourSteps: [
       { title: 'Une journée, en quelques secondes', text: 'Touche une case pour noter ta douleur. Le reste est facultatif.' },
       { title: 'Ce que montre ton journal', text: 'La courbe, les poussées, le bilan d’un changement de traitement : tout est calculé sur ton appareil.' },

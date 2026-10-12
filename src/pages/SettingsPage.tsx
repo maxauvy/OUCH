@@ -23,8 +23,9 @@ import { saveCurrentLocation } from '../lib/weatherLocation'
 import { format, LANGUAGES, useLocale, useTranslation } from '../i18n'
 import { radioGroupProps, radioProps } from '../lib/a11y'
 
-/** `openBackup`: arrive from the backup reminder, with the data group already open. */
-export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
+/** `openBackup`: arrive from the backup reminder, with the data group already open.
+ * `onReplayTour`: in the demo, opens the guided tour again. */
+export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?: boolean; onReplayTour?: () => void }) {
   const settings = useSettings()
   const t = useTranslation()
   const { intlLocale } = useLocale()
@@ -343,14 +344,24 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
             <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
               {t.demo.settingsText}
             </p>
-            <button
-              type="button"
-              onClick={() => void exitDemo()}
-              className="min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
-              style={{ background: 'var(--color-brand)', color: 'var(--color-on-brand)' }}
-            >
-              {t.demo.tourExit}
-            </button>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={onReplayTour}
+                className="min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
+                style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+              >
+                {t.demo.tourReplay}
+              </button>
+              <button
+                type="button"
+                onClick={() => void exitDemo()}
+                className="min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
+                style={{ background: 'var(--color-brand)', color: 'var(--color-on-brand)' }}
+              >
+                {t.demo.tourExit}
+              </button>
+            </div>
           </Card>
         ) : (
           <>
