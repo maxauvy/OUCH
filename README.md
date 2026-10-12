@@ -40,7 +40,7 @@ Le rapport décrit les données sans les interpréter, et ses seuils citent leur
 
 ### Expliquer à son enfant
 
-L'onglet Enfants est fait pour être montré à un enfant. Il raconte la météo du jour avec des mots simples (« aujourd'hui, le ciel de maman est un peu voilé »), propose des idées pour aider, et explique la maladie (fibromyalgie, arthrite, spondylarthrite, endométriose, migraine, lombalgie, sclérose en plaques) pour trois âges : 4–7, 8–12 et 13–17 ans. On choisit maman ou papa.
+L'onglet Enfants est fait pour être montré à un enfant. Il raconte la météo du jour avec des mots simples (« aujourd'hui, le ciel de maman est un peu voilé »), propose des idées pour aider, et explique la maladie (fibromyalgie, polyarthrite rhumatoïde, spondyloarthrite, endométriose, migraine, lombalgie, sclérose en plaques, douleur myofasciale) pour trois âges : 4–7, 8–12 et 13–17 ans. On choisit maman ou papa.
 
 ### Et aussi
 
