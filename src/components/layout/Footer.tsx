@@ -1,5 +1,6 @@
 import { useTranslation } from '../../i18n'
 import { reloadToLatest, useLatestCommit } from '../../hooks/useLatestCommit'
+import { buildId } from '../../lib/buildId'
 
 const REPO_URL = 'https://github.com/maxauvy/OUCH'
 
@@ -7,7 +8,7 @@ export function Footer() {
   const t = useTranslation()
   const latest = useLatestCommit()
   const isRelease = __APP_COMMIT__ !== 'dev' && __APP_COMMIT__ !== 'unknown'
-  const outdated = isRelease && latest !== null && latest !== __APP_COMMIT__
+  const outdated = isRelease && latest !== null && latest !== buildId(__APP_COMMIT__, __APP_IS_TAGGED_RELEASE__)
   return (
     // Muted ink without extra opacity: that is what keeps it at 4.5:1 or more.
     <div className="text-center text-caption mt-2 pt-3" style={{ color: 'var(--color-ink-muted)' }}>

@@ -35,7 +35,7 @@ function isTaggedRelease(version: string): boolean {
 // Tiny file next to the app that says which release is deployed. The running
 // page compares it with its own commit (see useLatestCommit). Not precached
 // (globPatterns has no json), so the service worker never serves a stale copy.
-function versionFile(commit: string, date: string): Plugin {
+function versionFile(commit: string, date: string, tagged: boolean): Plugin {
   return {
     name: 'version-file',
     apply: 'build',
@@ -43,7 +43,7 @@ function versionFile(commit: string, date: string): Plugin {
       this.emitFile({
         type: 'asset',
         fileName: 'version.json',
-        source: JSON.stringify({ commit, date }),
+        source: JSON.stringify({ commit, date, tagged }),
       })
     },
   }
@@ -85,7 +85,7 @@ export default defineConfig(({ command }) => {
       __APP_IS_TAGGED_RELEASE__: JSON.stringify(tagged),
     },
     plugins: [
-      versionFile(commit, date),
+      versionFile(commit, date, tagged),
       // Build only: the dev server injects inline scripts for hot reload.
       {
         name: 'content-security-policy',
