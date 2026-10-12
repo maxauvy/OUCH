@@ -75,7 +75,11 @@ Un changement de dose ferme la période en cours la veille et en ouvre une nouve
 | Champ | Valeurs | Sauvegardé ? |
 |---|---|---|
 | `displayName` | texte | Oui (prénom, affiché dans l'app ; pas le nom du rapport) |
-| `illnesses` | fibromyalgie, arthrite, spondylarthrite, endométriose, migraine, lombalgie, sclérose en plaques, autre | Oui. Déclaré par le patient, repris en en-tête du rapport sous cette mention |
+| `illnesses` | fibromyalgie, polyarthrite rhumatoïde (identifiant `arthrite`), spondyloarthrite (identifiant `spondylarthrite`), endométriose, migraine, lombalgie, sclérose en plaques, douleur myofasciale, autre | Oui. Déclaré par le patient, repris en en-tête du rapport sous cette mention |
+| `illnessStatus` | par maladie : `diagnosed` (diagnostiquée) ou `suspected` (suspectée), facultatif | Oui. Déclaré par le patient et non vérifié ; sans réponse, le rapport n'indique aucun statut. Effacé quand la maladie est décochée. Une maladie seulement suspectée est expliquée en termes généraux dans l'onglet Enfants |
+| `illnessYear` | par maladie : année du diagnostic (entier de 1900 à l'année en cours), facultatif | Oui. Seulement pour une maladie déclarée « diagnostiquée » ; effacée si le statut change ou si la maladie est décochée. Reprise dans le rapport : « fibromyalgie (diagnostiquée en 2019) » |
+| `otherIllnessName` | texte libre, 60 caractères au plus | Oui. Le nom saisi pour « autre », repris tel quel dans l'en-tête du rapport, jamais dans l'onglet Enfants |
+| `kidsTabEnabled` | vrai / faux | Oui. L'onglet Enfants est masqué tant que la personne n'a pas répondu oui à la question de l'assistant (ou activé l'interrupteur de Réglages) |
 | `enabledFactors` | parmi : fatigue, sommeil, stress, brouillard mental, humeur, activité, météo, médicaments, actions positives, zones douloureuses, notes | Oui |
 | `cycleTrackingEnabled` | vrai / faux | Oui |
 | `autoWeatherEnabled`, `autoWeatherLat`, `autoWeatherLon`, `autoWeatherLabel` | booléen, **latitude et longitude exactes**, nom de la ville | Oui : une sauvegarde contient donc la position exacte, si elle a été enregistrée |

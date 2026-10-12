@@ -427,7 +427,7 @@ function Header({ d }: { d: ReportData }) {
           {options.illnesses.length > 0 && (
             <div className="r-note">
               {f.format(options.illnesses.length === 1 ? f.t.declaredIllness : f.t.declaredIllnesses, {
-                list: formatIllnessList(options.language, options.illnesses),
+                list: formatIllnessList(options.language, options.illnesses, options.illnessDetails),
               })}
             </div>
           )}

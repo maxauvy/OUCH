@@ -4,6 +4,7 @@ import { hasPain } from '../lib/loggedEntries'
 import { useSettings } from '../hooks/useSettings'
 import { computePainWeather } from '../lib/painWeather'
 import { getChildViewClosing, getChildViewCopy, getIllnessExplanation, getIllnessTitle, type ChildTone } from '../lib/childView'
+import { kidsIllnesses } from '../lib/illnessStatus'
 import { HealthChildView } from '../components/kids/HealthChildView'
 import { format, useLanguage, useTranslation } from '../i18n'
 
@@ -20,7 +21,9 @@ export function ChildViewPage() {
   const weather = entry ? computePainWeather(entry) : null
   const copy = weather ? getChildViewCopy(language, weather.level, tone, settings.parentGender) : null
   // Nothing picked yet: explain a chronic illness in general rather than guess one.
-  const illnesses = (settings.illnesses.length ? settings.illnesses : (['autre'] as const)).map((illness) => ({
+  // The same for an illness only suspected: the texts say "has", which would
+  // announce a diagnosis that does not exist yet.
+  const illnesses = (settings.illnesses.length ? kidsIllnesses(settings.illnesses, settings.illnessStatus) : (['autre'] as const)).map((illness) => ({
     id: illness,
     question: format(t.childView.aboutIllness, { illness: getIllnessTitle(language, illness) }),
     text: getIllnessExplanation(language, illness, tone, settings.parentGender),

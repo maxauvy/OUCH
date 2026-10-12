@@ -450,7 +450,7 @@ function DoneStep({ heading }: { heading: ReactNode }) {
     {
       done: settings.illnesses.length > 0,
       text: settings.illnesses.length
-        ? format(t.setup.checkIllness, { illness: formatIllnessList(language, settings.illnesses) })
+        ? format(t.setup.checkIllness, { illness: formatIllnessList(language, settings.illnesses, { status: settings.illnessStatus, otherName: settings.otherIllnessName, year: settings.illnessYear }) })
         : t.setup.checkNoIllness,
     },
     { done: !!settings.displayName, text: settings.displayName ? format(t.setup.checkName, { name: settings.displayName }) : t.setup.checkNoName },

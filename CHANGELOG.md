@@ -6,6 +6,12 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- Pour chaque maladie suivie, on peut dire si elle est « diagnostiquée » ou « suspectée » (assistant et Réglages : sous les puces, « Précise pour chacune »). C'est facultatif et rien n'est coché d'avance : sans réponse, la maladie est listée comme avant. Pour une maladie diagnostiquée, un champ facultatif demande l'année du diagnostic (quatre chiffres, de 1900 à cette année), que les médecins demandent souvent. Le rapport reprend le statut dans la mention « Maladies déclarées par le patient : fibromyalgie (diagnostiquée en 2019), polyarthrite rhumatoïde (suspectée) ». Choisir « Autre » permet de taper le nom de la maladie, repris tel quel sur le rapport (jamais sur la page Enfants). Les statuts, les années et ce nom sont restaurés avec une sauvegarde ; décocher une maladie, ou passer à « suspectée », efface ce qui s'y rapporte.
+
+### Modifié
+- L'onglet Enfants n'explique plus en détail une maladie seulement suspectée : son texte dit « maman a une… », ce qui annoncerait à l'enfant un diagnostic qui n'existe pas encore. Elle reçoit le texte général (« Cette maladie »), une seule fois même s'il y en a plusieurs.
+
 ## [0.3.1] - 2026-10-12
 
 ### Ajouté

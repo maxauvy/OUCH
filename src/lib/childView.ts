@@ -1,5 +1,5 @@
 import type { Language } from '../i18n/language'
-import type { Illness, ParentGender, PainWeatherLevel } from '../db/types'
+import type { Illness, IllnessDetails, ParentGender, PainWeatherLevel } from '../db/types'
 
 export type ChildTone = 'young' | 'older' | 'teen'
 
@@ -419,12 +419,26 @@ export function getIllnessLabel(language: Language, illness: Illness): string {
 /** "Other" means nothing inside a sentence; this is what lists say instead. */
 const OTHER_IN_LIST: Record<Language, string> = { fr: 'autre maladie chronique', en: 'other chronic illness' }
 
-/** "Fibromyalgie, endométriose et migraine": one sentence-case list, in the
- * given language (the report's may differ from the app's). */
-export function formatIllnessList(language: Language, illnesses: Illness[]): string {
+const STATUS_WORDS: Record<Language, Record<'diagnosed' | 'suspected', string>> = {
+  fr: { diagnosed: 'diagnostiquée', suspected: 'suspectée' },
+  en: { diagnosed: 'diagnosed', suspected: 'suspected' },
+}
+const IN_YEAR: Record<Language, string> = { fr: 'en', en: 'in' }
+
+/** "Fibromyalgie (diagnostiquée), endométriose et migraine": one
+ * sentence-case list, in the given language (the report's may differ from the
+ * app's). With `details`, a declared status follows each illness (with the
+ * year of the diagnosis, when given) and the name typed for "autre" replaces
+ * its generic wording, as typed (it can be an
+ * acronym or a proper noun, so it is never lowercased). */
+export function formatIllnessList(language: Language, illnesses: Illness[], details: IllnessDetails = {}): string {
   const names = illnesses.map((illness, i) => {
-    const label = illness === 'autre' ? OTHER_IN_LIST[language] : getIllnessLabel(language, illness)
-    return i === 0 ? label.charAt(0).toUpperCase() + label.slice(1) : label.toLocaleLowerCase(language)
+    const typed = illness === 'autre' ? details.otherName?.trim() : undefined
+    const label = typed || (illness === 'autre' ? OTHER_IN_LIST[language] : getIllnessLabel(language, illness))
+    const cased = typed ? label : i === 0 ? label.charAt(0).toUpperCase() + label.slice(1) : label.toLocaleLowerCase(language)
+    const status = details.status?.[illness]
+    const year = status === 'diagnosed' ? details.year?.[illness] : undefined
+    return status ? `${cased} (${STATUS_WORDS[language][status]}${year ? ` ${IN_YEAR[language]} ${year}` : ''})` : cased
   })
   return new Intl.ListFormat(language, { type: 'conjunction' }).format(names)
 }

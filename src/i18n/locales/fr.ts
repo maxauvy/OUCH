@@ -992,6 +992,18 @@ const fr: Translations = {
     parentGenderMaman: 'Maman',
     parentGenderPapa: 'Papa',
     illnessesTitle: 'Tes maladies',
+    illnessStatusTitle: 'Précise pour chacune',
+    illnessStatusHelper:
+      'Facultatif. Sans réponse, le rapport ne dit rien du statut. Une maladie seulement suspectée est expliquée en termes généraux à tes enfants.',
+    illnessStatusDiagnosed: 'Diagnostiquée',
+    illnessStatusSuspected: 'Suspectée',
+    illnessStatusFor: 'Statut : {{illness}}',
+    illnessYearLabel: 'Année du diagnostic',
+    illnessYearPlaceholder: 'Par exemple : 2019',
+    illnessYearError: 'Une année à quatre chiffres, entre 1900 et {{year}}.',
+    otherNameLabel: 'Nom de la maladie',
+    otherNamePlaceholder: 'Par exemple : rhumatisme psoriasique',
+    otherNameHelper: 'Repris tel quel sur le rapport pour ton médecin, jamais sur la page Enfants.',
     illnessesHelper: 'Ce que tu suis avec OUCH, plusieurs choix possibles. C’est indiqué sur le rapport pour ton médecin et expliqué sur la page « Expliquer à mon enfant » (onglet Enfants).',
     backupTitle: 'Sauvegarde & synchro',
     groups: {

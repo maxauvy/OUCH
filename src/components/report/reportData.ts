@@ -1,4 +1,4 @@
-import type { DailyEntry, LoggedEntry, Illness, Medication } from '../../db/types'
+import type { DailyEntry, LoggedEntry, Illness, IllnessDetails, Medication } from '../../db/types'
 import type { Language } from '../../i18n'
 import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, type FlareEpisode } from '../../lib/flares'
 import { flareContext, type FlareContext } from '../../lib/flareContext'
@@ -21,6 +21,8 @@ export interface ReportOptions {
   birthDate?: string
   /** As declared in the app's settings; not a diagnosis made by the report */
   illnesses: Illness[]
+  /** The statuses and the name typed for "autre", as declared */
+  illnessDetails?: IllnessDetails
   agenda: string[]
   includeNotes: boolean
   includeCycle: boolean

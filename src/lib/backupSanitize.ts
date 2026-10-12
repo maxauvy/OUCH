@@ -13,6 +13,7 @@ import {
   BODY_ZONES,
   DOSE_UNITS,
   ILLNESSES,
+  ILLNESS_STATUSES,
   MEDICATION_REGIMENS,
   MEDICATION_STOP_REASONS,
 } from '../db/types.ts'
@@ -25,8 +26,10 @@ import type {
   MedicationIntake,
   MedicationPeriod,
   ReliefLevel,
+  Settings,
   WeatherInfo,
 } from '../db/types.ts'
+import { cleanOtherName, FIRST_DIAGNOSIS_YEAR } from './illnessStatus.ts'
 
 /** Far above any real journal (a hundred years is ~36 500 days). */
 export const MAX_ENTRIES = 40_000
@@ -63,6 +66,30 @@ export function isISODate(v: unknown): v is string {
   if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return false
   const d = new Date(`${v}T12:00:00Z`)
   return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v
+}
+
+/** Statuses by known illness, each one of the two allowed words. */
+function illnessStatus(v: unknown): Settings['illnessStatus'] {
+  if (!isRecord(v)) return undefined
+  const out: NonNullable<Settings['illnessStatus']> = {}
+  for (const illness of ILLNESSES) {
+    const status = oneOf(v[illness], ILLNESS_STATUSES)
+    if (status) out[illness] = status
+  }
+  return out
+}
+
+/** Diagnosis years by known illness, kept only for an illness declared
+ * diagnosed, as a whole year from 1900 to this year. */
+function illnessYear(v: unknown, status: unknown): Settings['illnessYear'] {
+  if (!isRecord(v) || !isRecord(status)) return undefined
+  const thisYear = new Date().getFullYear()
+  const out: NonNullable<Settings['illnessYear']> = {}
+  for (const illness of ILLNESSES) {
+    const year = v[illness]
+    if (status[illness] === 'diagnosed' && typeof year === 'number' && Number.isInteger(year) && year >= FIRST_DIAGNOSIS_YEAR && year <= thisYear) out[illness] = year
+  }
+  return out
 }
 
 /** Drops the keys whose value is undefined, so a merge never overwrites
@@ -206,6 +233,9 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     lightFormEnabled: bool(raw.lightFormEnabled),
     kidsTabEnabled: bool(raw.kidsTabEnabled),
     illnesses: strings(raw.illnesses)?.filter((i) => (ILLNESSES as string[]).includes(i)) as LegacySettings['illnesses'],
+    illnessStatus: illnessStatus(raw.illnessStatus),
+    otherIllnessName: typeof raw.otherIllnessName === 'string' ? cleanOtherName(raw.otherIllnessName) : undefined,
+    illnessYear: illnessYear(raw.illnessYear, raw.illnessStatus),
     childIllness: oneOf(raw.childIllness, ILLNESSES),
   })
 }
