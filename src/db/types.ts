@@ -193,6 +193,10 @@ export type ParentGender = 'maman' | 'papa'
 // Stable identifiers for the illnesses the person tracks (asked by the
 // setup, shown on the doctor report and explained on the child view).
 // Labels and per-age copy live in lib/childView.ts, keyed by language.
+// The identifiers are stored in settings and in backups, so they never
+// change; the wording does: 'arthrite' stands for rheumatoid arthritis
+// (polyarthrite rhumatoïde) and 'spondylarthrite' for spondyloarthritis
+// (spondyloarthrite, the current medical spelling).
 export type Illness =
   | 'fibromyalgie'
   | 'arthrite'
@@ -201,6 +205,7 @@ export type Illness =
   | 'migraine'
   | 'lombalgie'
   | 'sep'
+  | 'myofasciale'
   | 'autre'
 
 export const ILLNESSES: Illness[] = [
@@ -211,6 +216,7 @@ export const ILLNESSES: Illness[] = [
   'migraine',
   'lombalgie',
   'sep',
+  'myofasciale',
   'autre',
 ]
 

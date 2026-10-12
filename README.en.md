@@ -40,7 +40,7 @@ The report describes the data without interpreting it, and its thresholds cite t
 
 ### Explain it to your child
 
-The Kids tab is made to be shown to a child. It tells the day's weather in simple words ("today, Mom's sky is a bit cloudy"), suggests ways to help, and explains the condition (fibromyalgia, arthritis, spondyloarthritis, endometriosis, migraine, low back pain, multiple sclerosis) for three age groups: 4–7, 8–12 and 13–17. You choose mom or dad.
+The Kids tab is made to be shown to a child. It tells the day's weather in simple words ("today, Mom's sky is a bit cloudy"), suggests ways to help, and explains the condition (fibromyalgia, rheumatoid arthritis, spondyloarthritis, endometriosis, migraine, low back pain, multiple sclerosis, myofascial pain) for three age groups: 4–7, 8–12 and 13–17. You choose mom or dad.
 
 ### And also
 
