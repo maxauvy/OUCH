@@ -10,7 +10,7 @@ import { AboutCard } from '../components/about/AboutCard'
 import { SourcesCard } from '../components/about/SourcesCard'
 import { SupportCard } from '../components/about/SupportCard'
 import { BackupSection } from '../components/settings/BackupSection'
-import { DeleteDataCard } from '../components/settings/DeleteDataCard'
+import { SensitiveZoneCard } from '../components/settings/SensitiveZoneCard'
 import { InstallCard } from '../components/install/InstallCard'
 import { MedicationsSection } from '../components/settings/MedicationsSection'
 import { IllnessPicker } from '../components/settings/IllnessPicker'
@@ -354,7 +354,7 @@ export function SettingsPage({ openBackup = false }: { openBackup?: boolean }) {
           </button>
         </Card>
 
-        <DeleteDataCard />
+        <SensitiveZoneCard />
       </SettingsGroup>
 
       <InstallCard />

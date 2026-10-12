@@ -871,6 +871,13 @@ const en: Translations = {
     lightNote: 'A note',
   },
 
+  sensitive: {
+    title: 'Sensitive zone',
+    exportLine: 'Unencrypted files: handle with care',
+    exportEmpty: 'Nothing to export yet',
+    deleteLine: 'Irreversible, no copy elsewhere',
+  },
+
   deleteData: {
     title: 'Delete my data',
     helper:
@@ -1002,6 +1009,16 @@ const en: Translations = {
     parentGenderMaman: 'Mom',
     parentGenderPapa: 'Dad',
     illnessesTitle: 'Your illnesses',
+    csvTitle: 'Export as CSV, in plain text',
+    csvDialogTitle: 'Export in plain text?',
+    csvHelper:
+      'Two files for a spreadsheet or an analysis tool: your journal (one day per row) and your medication intakes (one intake per row).',
+    csvWarning:
+      'These files are not encrypted: anyone who opens them reads your whole journal, notes included. Only send them to someone you trust. They cannot restore OUCH: for that, make a backup.',
+    csvNotes: 'Include my notes',
+    csvExport: 'Export anyway',
+    csvDone: 'Files ready: {{files}}.',
+    csvError: 'The export failed. Try again, or make an encrypted backup instead.',
     illnessStatusTitle: 'Say more about each one',
     illnessStatusHelper:
       'Optional. With no answer, the report says nothing about the status. An illness that is only suspected is explained in general terms to your children.',

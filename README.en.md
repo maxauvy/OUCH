@@ -47,7 +47,7 @@ The Kids tab is made to be shown to a child. It tells the day's weather in simpl
 - French and English, chosen when you first open the app and changeable at any time.
 - Two designs (Health, the default, and Classic), and a dark mode.
 - The app installs on your home screen (phone or computer) and works offline after the first visit. Text follows the font size set on your phone.
-- Your data stays in the browser (IndexedDB). To back up or switch devices, you export a file encrypted with a password of your choice (AES-256-GCM, in the browser) and import it back later. The app reminds you to back up when there is something to lose, and asks the browser not to erase your data.
+- Your data stays in the browser (IndexedDB). To back up or switch devices, you export a file encrypted with a password of your choice (AES-256-GCM, in the browser) and import it back later; a CSV export (two plain files: the journal and the intakes) is for analysis, not for restoring. The app reminds you to back up when there is something to lose, and asks the browser not to erase your data.
 
 ## Try it with demo data
 

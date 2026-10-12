@@ -28,15 +28,17 @@ Le nom et la date de naissance saisis pour générer un rapport ne sont **pas** 
 | Nom de la ville | [Nominatim](https://nominatim.openstreetmap.org/) (OpenStreetMap) | Seulement quand la personne met à jour sa position | Une position **arrondie à environ 1 km**, la langue, et l'adresse IP |
 | Pages et fichiers de l'app | GitHub Pages (l'hébergeur) | À chaque ouverture ou mise à jour de l'app | Ce que reçoit tout hébergeur web : adresse IP, navigateur, page demandée. Aucun contenu du journal |
 | Page de dons | Ko-fi | Seulement si la personne touche le lien « m'offrir un café » | Ce qu'un clic sur un lien envoie ; rien n'est chargé avant |
-| Sauvegarde, PDF du rapport, image de la météo du jour | Où la personne les envoie | Quand elle exporte, imprime ou partage | Ce que la personne choisit d'envoyer, par le canal de son choix |
+| Sauvegarde, export CSV, PDF du rapport, image de la météo du jour | Où la personne les envoie | Quand elle exporte, imprime ou partage | Ce que la personne choisit d'envoyer, par le canal de son choix |
 
 Rien d'autre : pas de compte, pas de serveur d'OUCH, pas d'outil de mesure d'audience, pas de cookie de suivi, pas de publicité, pas de service tiers chargé dans la page. Les polices sont servies par le site lui-même.
 
 Le **développeur n'a accès à aucune donnée de journal** : elles n'arrivent jamais chez lui, puisqu'il n'y a pas de serveur pour les recevoir.
 
-## Sauvegardes
+## Sauvegardes et export CSV
 
 L'export produit un fichier chiffré dans le navigateur (WebCrypto) : AES-256-GCM, clé dérivée du mot de passe de la personne par PBKDF2-SHA-256 (600 000 itérations, sel aléatoire de 16 octets). Le mot de passe n'est enregistré nulle part : **perdu, il rend la sauvegarde irrécupérable**, par conception. Le fichier contient tout le journal, les traitements et les réglages, donc aussi la position exacte si elle a été enregistrée. Il ne contient que des données d'OUCH, et l'import vérifie sa forme avant de déchiffrer. Le détail des champs est dans le [dictionnaire des données](docs/soignants/dictionnaire-des-donnees.md).
+
+L'export CSV (Réglages, zone sensible) est différent : il produit deux fichiers **en clair**, non chiffrés, qui ne servent pas à restaurer OUCH. Il n'est produit que sur demande et dans le navigateur ; les notes libres peuvent en être exclues. Ce qui est fait du fichier ensuite, par exemple le partager par e-mail, relève de la personne.
 
 ## Rapport pour le médecin, image de la météo
 
@@ -62,4 +64,4 @@ Pour une faille de sécurité, voir [`SECURITY.md`](SECURITY.md). Pour une erreu
 
 OUCH keeps a pain diary, so health data. The diary, treatments and settings live in the browser on the person's own device, unencrypted, with no account and no server. Only two optional features contact a third party: automatic weather ([Open-Meteo](https://open-meteo.com/) receives the device's coordinates and IP) and the town name ([Nominatim](https://nominatim.openstreetmap.org/) receives a position rounded to about 1 km). The site itself is hosted on GitHub Pages, which sees what any web host sees. The donation link is a plain link, loaded only if tapped. There are no analytics, no tracking cookies and no third-party scripts, and a content security policy blocks any other outgoing call.
 
-Backups are encrypted in the browser (AES-256-GCM, key from the password with PBKDF2-SHA-256, 600,000 iterations); a lost password means a lost backup. The name and birth date typed to produce a report are never stored. Settings has a button to delete all local data. The developer has no access to any diary data. For institutional use, consult your data protection officer.
+Backups are encrypted in the browser (AES-256-GCM, key from the password with PBKDF2-SHA-256, 600,000 iterations); a lost password means a lost backup. The name and birth date typed to produce a report are never stored. Settings has a button to delete all local data. The developer has no access to any diary data. For institutional use, consult your data protection officer. The CSV export (Settings) is different: two plain, unencrypted files that cannot restore OUCH, made only on request in the browser, with the free-text notes optional.
