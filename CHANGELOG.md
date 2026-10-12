@@ -6,11 +6,14 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.3.1] - 2026-10-12
+
 ### Ajouté
 - La date de la dernière sauvegarde sur l'écran « Aujourd'hui », sous le titre : « Dernière sauvegarde : 3 oct. » (« Aucune sauvegarde pour l'instant. » quand il y a déjà des jours notés et aucune sauvegarde). La ligne ouvre la section de sauvegarde. La carte de rappel garde sa règle : elle ne s'affiche toujours qu'au bout de 7 jours notés sans sauvegarde, ou 30 jours et plus avec des changements.
 - L'onglet Enfants devient optionnel. L'assistant pose la question (« Une page pour expliquer ta maladie à un enfant ? », Oui ou Non, rien de présélectionné) et le choix Maman / Papa n'apparaît qu'après « Oui » ; sans réponse, l'onglet reste masqué. Un interrupteur « Onglet Enfants » dans Réglages (Rappel et affichage) permet de le changer, et le choix est restauré avec une sauvegarde. Celles et ceux qui utilisaient déjà OUCH gardent l'onglet.
 - Dans Tendances, un message sur ce qui s'affiche quand il y a peu de données : « Rien à montrer pour l'instant » quand le journal est vide, et, avant 14 jours de journal, « Les premiers motifs apparaissent après environ 2 semaines de suivi » avec le nombre de jours déjà notés.
 - « Douleur myofasciale » dans la liste des maladies suivies (assistant, Réglages, rapport et onglet Enfants, avec une explication prudente pour chaque âge : on y dit que les médecins l'expliquent encore de façons différentes et qu'aucun examen ne la prouve). Ces textes d'explication sont à faire relire par un professionnel de santé avant d'être tenus pour définitifs.
+- Des documents pour les professionnels de santé, hors de l'app (dossier `docs/soignants` et à la racine) : une plaquette de deux pages, une page d'entrée pour les soignants, un dictionnaire des données (chaque champ, ses échelles, ce qui est calculé plutôt que stocké), un protocole de test en consultation, un statut de validation et un cadrage réglementaire (ces deux derniers en brouillon, à relire), une politique de confidentialité (`PRIVACY.md`), des règles de contribution (`CONTRIBUTING.md`) et un modèle de retour clinique pour GitHub.
 
 ### Modifié
 - Dans le calendrier du Journal, chaque jour porte l'icône de sa météo (soleil, nuages, pluie, orage…) à la place du petit point de couleur. Le contrôle de contraste montrait que la couleur seule ne distinguait pas les niveaux : les fonds de deux météos voisines ne différaient que de 1,00 à 1,04 contre 1 et le point était sous 3 contre 1 sur sa teinte pour les trois premiers niveaux. L'icône, dans l'encre du niveau, est à 4,6 contre 1 ou plus. La barre des jours de poussée passe sous l'icône. Un test garde le contraste de l'encre sur sa teinte et la distinction des cinq icônes.
@@ -19,6 +22,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - « Arthrite » devient « Polyarthrite rhumatoïde », le nom de ce que l'onglet Enfants expliquait déjà, et « spondylarthrite » devient « spondyloarthrite », l'orthographe médicale actuelle. Les profils et les sauvegardes existants n'ont rien à migrer : seuls les mots changent.
 - Des libellés moins promettants, pour que l'app décrive sans laisser croire qu'elle prédit ou conclut. La carte « Bilan d'un changement » de Tendances s'appelle « Avant et après un changement », et son état « bilan en cours » devient « comparaison en cours » (dans l'app et dans le rapport). L'écran d'accueil ne promet plus d'« anticiper et mieux traverser les crises » : l'app aide à voir ce qui accompagne les bons et les mauvais jours, pour mieux en parler. Dans Tendances, « Ce qui semble jouer sur ta douleur » devient « Ce qui accompagne ta douleur », car l'app observe des associations, sans dire ce qui agit sur quoi. Le mot « poussée » reste : c'est celui des patients, et chaque écran dit comment il est défini.
 - Toucher une zone du corps (ou noter autre chose) avant de régler la douleur n'enregistre plus une douleur à 0 : la journée est gardée sans niveau de douleur, comme « pas encore notée », et ne compte plus dans les moyennes, les poussées, le rapport ni la météo. Dans le Journal, ces jours portent un petit rond creux sous leur numéro. Les jours déjà enregistrés avec un 0 restent tels quels (on ne peut pas les distinguer d'un vrai 0). Restaurée dans une version antérieure à celle-ci, une sauvegarde exportée après ce changement perd ses jours sans niveau de douleur (les autres jours sont restaurés).
+- Rapport : la variation de pression atmosphérique est calculée à partir de la pression de deux jours notés qui se suivent. Rien dans l'app n'écrivait cette variation, donc la ligne « Variation de pression atmosphérique » du tableau des associations n'atteignait jamais les 14 valeurs nécessaires et n'apparaissait pas. Une variation déjà enregistrée (ancienne sauvegarde, démo) garde la priorité.
+- Rapport : un changement de dose se lit « 30 mg → 60 mg » dans les points clés, comme dans les tableaux, et le tableau « Les 3 jours avant chaque poussée » n'écrit plus deux points après un mois abrégé (« le 11 sept.. »).
+- Le rappel de sauvegarde sur « Aujourd'hui » parle d'abri plutôt que de perte : il ne dit plus « tout disparaît » mais qu'une sauvegarde garde le journal à l'abri si l'on change ou réinitialise son appareil. Les règles d'affichage ne changent pas.
 
 ## [0.3.0] - 2026-10-08
 
@@ -120,7 +126,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.3.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/maxauvy/OUCH/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/maxauvy/OUCH/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/maxauvy/OUCH/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/maxauvy/OUCH/compare/v0.1.2...v0.2.0
