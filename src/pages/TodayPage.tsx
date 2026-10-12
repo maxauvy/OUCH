@@ -20,7 +20,7 @@ export function TodayPage({ onGoToBackup }: { onGoToBackup: () => void }) {
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       <BackupReminderCard onBackup={onGoToBackup} />
-      <DailyEntryForm date={date} />
+      <DailyEntryForm date={date} onGoToBackup={onGoToBackup} />
       {entry && hasPain(entry) && (
         <button
           onClick={() => setSharing(true)}

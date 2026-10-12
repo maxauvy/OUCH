@@ -108,7 +108,9 @@ export function CalendarHeatmap({
               aria-label={label}
               aria-current={today ? 'date' : undefined}
               aria-pressed={selected}
-              className={`aspect-square rounded-xl flex flex-col items-center justify-center relative text-caption ${inMonth ? 'font-medium' : 'font-normal'}`}
+              // With an icon, the number and the icon sit at the top of the cell,
+              // so the flare bar under them crosses neither.
+              className={`aspect-square rounded-xl flex flex-col items-center relative text-caption leading-none ${weather ? 'justify-start pt-[3px]' : 'justify-center'} ${inMonth ? 'font-medium' : 'font-normal'}`}
               style={{
                 background: tinted ? tinted.soft : 'transparent',
                 // The weather color stays on the background and the dot; the
@@ -122,15 +124,21 @@ export function CalendarHeatmap({
               }}
             >
               {format(day, 'd')}
+              {/* The weather's shape, in the day's own ink: the tints of two
+                  neighbouring weathers are almost the same (1.00 to 1.04:1)
+                  and a dot of the weather colour is under 3:1 on its tint, so
+                  colour alone could not tell the five apart. Days of the
+                  neighbouring months keep the muted ink of their number. */}
               {weather && (
-                <span
-                  className="w-1.5 h-1.5 rounded-full mt-0.5"
-                  style={{ background: weather.color }}
-                  aria-hidden
+                <WeatherIcon
+                  name={weather.icon as never}
+                  size={14}
+                  className="mt-[2px]"
+                  style={{ color: tinted ? tinted.ink : 'var(--color-ink-muted)' }}
                 />
               )}
               {noPain && <NoPainRing color={inMonth ? 'var(--color-ink-muted)' : 'var(--color-hairline)'} className="mt-0.5" />}
-              {inFlare && <FlareBar color={tinted ? tinted.ink : 'var(--color-ink-muted)'} className="absolute bottom-1.5" />}
+              {inFlare && <FlareBar color={tinted ? tinted.ink : 'var(--color-ink-muted)'} className={`absolute ${weather ? 'bottom-[2px]' : 'bottom-1.5'}`} />}
             </button>
           )
         })}
