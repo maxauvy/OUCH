@@ -235,6 +235,18 @@ export interface IllnessDetails {
   year?: Partial<Record<Illness, number>>
 }
 
+/** Automatic backup on this device: where copies go and how the last one went.
+ * Per device, like `lastBackupAt`: not restored from a backup file. */
+export interface AutoBackupState {
+  provider: 'dropbox' | 'drive' | 'webdav' | 'memory'
+  /** The last copy sent, read back and checked. */
+  lastCopy?: { name: string; bytes: number; sha256: string; at: number }
+  /** The last try, whether or not it worked (ms). */
+  lastAttemptAt?: number
+  /** Why the last try failed; absent when it worked. */
+  lastFailure?: 'auth' | 'network' | 'quota' | 'other' | 'mismatch' | 'unreadable'
+}
+
 export interface Settings {
   id: 1
   enabledFactors: FactorKey[]
@@ -264,6 +276,8 @@ export interface Settings {
   lastBackupAt?: number
   /** The backup reminder stays quiet until then (ms). */
   backupReminderSnoozedUntil?: number
+  /** Set once the person has linked a place to keep copies. Per device. */
+  autoBackup?: AutoBackupState
   /** The soft message on the day's page when the last days were harder.
    * Switchable, and a preference: restored from a backup. */
   hardDaysCardEnabled: boolean

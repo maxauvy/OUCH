@@ -1,3 +1,4 @@
+import { useAutoBackup } from './hooks/useAutoBackup'
 import { useEffect, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
 import { DemoPill } from './components/demo/DemoPill'
@@ -46,6 +47,7 @@ function AppShell() {
   const settingsLoaded = useSettingsLoaded()
   const todayEntry = useTodayEntry()
   useAppliedTheme(settings.theme)
+  useAutoBackup()
   // Set when the data was just deleted from Settings: said once at the start.
   const [wiped] = useState(wipedNotice)
   useEffect(() => {

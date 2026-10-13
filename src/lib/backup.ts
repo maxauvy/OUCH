@@ -21,7 +21,9 @@ async function buildBackupBundle(): Promise<BackupBundle> {
     db.medications.toArray(),
     getSettings(),
   ])
-  return { version: 2, exportedAt: new Date().toISOString(), entries, medications, settings }
+  // Where copies go on this device is not part of what a copy holds.
+  const { autoBackup: _device, ...portable } = settings
+  return { version: 2, exportedAt: new Date().toISOString(), entries, medications, settings: portable }
 }
 
 export async function exportEncryptedBackup(password: string): Promise<Blob> {
