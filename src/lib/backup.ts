@@ -1,6 +1,6 @@
 import { db, getSettings, updateSettings, upgradeLegacySettings } from '../db'
 import type { DailyEntry, LegacyDailyEntry, LegacySettings, Medication } from '../db/types'
-import { decryptJSON, encryptJSON, isEncryptedPayload } from './crypto'
+import { decryptJSON, encryptJSON, encryptJSONWithKey, isEncryptedPayload, sha256Hex, type BackupKey } from './crypto'
 import { sanitizeBackup } from './backupSanitize'
 import { createLegacyConverter, sameName } from './medications'
 
@@ -15,15 +15,28 @@ interface BackupBundle {
   settings?: LegacySettings
 }
 
-export async function exportEncryptedBackup(password: string): Promise<Blob> {
+async function buildBackupBundle(): Promise<BackupBundle> {
   const [entries, medications, settings] = await Promise.all([
     db.entries.toArray(),
     db.medications.toArray(),
     getSettings(),
   ])
-  const bundle: BackupBundle = { version: 2, exportedAt: new Date().toISOString(), entries, medications, settings }
-  const payload = await encryptJSON(bundle, password)
+  return { version: 2, exportedAt: new Date().toISOString(), entries, medications, settings }
+}
+
+export async function exportEncryptedBackup(password: string): Promise<Blob> {
+  const payload = await encryptJSON(await buildBackupBundle(), password)
   return new Blob([JSON.stringify(payload)], { type: 'application/json' })
+}
+
+/** A copy for automatic backups: same file as `exportEncryptedBackup`, made
+ * with the key the device keeps. `sha256` is of `text`, the exact bytes to
+ * send, so that what comes back can be compared with it. */
+export async function exportBackupWithKey(
+  backupKey: BackupKey
+): Promise<{ text: string; bytes: number; sha256: string }> {
+  const text = JSON.stringify(await encryptJSONWithKey(await buildBackupBundle(), backupKey))
+  return { text, bytes: new TextEncoder().encode(text).length, sha256: await sha256Hex(text) }
 }
 
 export function downloadBlob(blob: Blob, filename: string) {
