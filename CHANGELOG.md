@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- Une sauvegarde automatique chiffrée vers Dropbox, en **accès anticipé** : elle n'apparaît que sur un appareil où l'on ajoute `?autobackup` à l'adresse (`?autobackup=0` la retire), le temps de l'essayer sur téléphone. Dans Réglages (Mes données), une carte « Sauvegarde automatique » : un assistant en trois temps (où ranger, mot de passe, première copie envoyée sur place), puis une carte qui dit quand la dernière copie est partie, sa taille et qu'elle a été vérifiée. Une copie part 30 secondes après une modification du journal, au plus toutes les 15 minutes, et quand l'app revient au premier plan (une web-app n'a rien qui tourne en arrière-plan, donc elle ne part que quand l'app est ouverte). C'est le même fichier chiffré que la sauvegarde exportée, fabriqué sur l'appareil ; Dropbox ne voit que ce fichier, dans un dossier réservé à OUCH, et on garde les trois dernières copies. Après chaque envoi, OUCH relit la copie, compare son empreinte SHA-256 et vérifie qu'elle s'ouvre : une copie qui ne passe pas est retirée. Une copie réussie compte comme une sauvegarde (la date sur « Aujourd'hui » et le rappel la suivent). « Restaurer » liste les copies, permet d'en vérifier une (sans mot de passe) ou de la restaurer (avec le mot de passe, par le même import que la sauvegarde exportée). En cas d'échec, la carte le dit sans reproche et affiche ce que Dropbox a répondu. « Arrêter » efface la clé et les jetons de l'appareil et révoque le lien chez Dropbox. Ni la clé ni les jetons ne sont dans une sauvegarde. Voir `PRIVACY.md`.
+
 ## [0.4.0] - 2026-10-12
 
 ### Ajouté
