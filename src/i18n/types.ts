@@ -709,6 +709,8 @@ export interface Translations {
     /** `{{provider}}` in `auth` and `quota` */
     failure: { auth: string; network: string; quota: string; other: string; mismatch: string; unreadable: string }
     reconnect: string
+    /** `{{detail}}` */
+    failureDetail: string
     /** `{{date}}` */
     lastGood: string
     /** `{{n}}` */
@@ -737,6 +739,14 @@ export interface Translations {
       /** `{{provider}}` */
       done: string
       sendFailed: string
+      /** `{{provider}}` */
+      toProvider: string
+      /** `{{provider}}` */
+      redirectNote: string
+      /** `{{provider}}` */
+      denied: string
+      /** `{{provider}}` */
+      linkFailed: string
     }
     restorePanel: {
       title: string

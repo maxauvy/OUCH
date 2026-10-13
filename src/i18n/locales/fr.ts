@@ -878,6 +878,7 @@ const fr: Translations = {
       unreadable: 'La copie envoyée ne s’ouvrait pas, on l’a retirée. On réessaiera.',
     },
     reconnect: 'Refaire le lien',
+    failureDetail: 'Détail technique : {{detail}}',
     lastGood: 'Dernière copie réussie : {{date}}.',
     kb: '{{n}} Ko',
     providers: { dropbox: 'Dropbox', drive: 'Google Drive', webdav: 'Mon serveur (WebDAV, Nextcloud…)', memory: 'Dossier d’essai (en mémoire)' },
@@ -902,6 +903,10 @@ const fr: Translations = {
       sending: 'Envoi de ta première copie…',
       done: 'Une première copie vient de partir sur {{provider}}. Les suivantes partiront seules.',
       sendFailed: 'Le lien est fait, mais la première copie n’a pas pu partir. On réessaiera à ta prochaine ouverture.',
+      toProvider: 'Continuer vers {{provider}}',
+      redirectNote: 'Tu vas passer sur {{provider}} pour accepter, puis tu reviens ici.',
+      denied: '{{provider}} n’a pas reçu ton accord : rien n’a été relié, et rien n’est parti.',
+      linkFailed: 'Le lien avec {{provider}} n’a pas pu se faire. Tu peux réessayer quand tu veux.',
     },
     restorePanel: {
       title: 'Tes dernières copies',

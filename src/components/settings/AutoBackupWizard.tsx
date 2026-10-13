@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { IconBrandDropbox, IconBrandGoogleDrive, IconChevronRight, IconCircleCheck, IconFolder, IconServer } from '@tabler/icons-react'
-import { AVAILABLE_PROVIDERS, setUpAutoBackup } from '../../lib/autoBackupRuntime'
+import { AVAILABLE_PROVIDERS, beginRedirectLink, REDIRECT_PROVIDERS, setUpAutoBackup, type ReturnNotice } from '../../lib/autoBackupRuntime'
 import type { AutoBackupState } from '../../db/types'
 import { format, useLanguage, useTranslation } from '../../i18n'
 import { ModalSheet } from '../ui/ModalSheet'
@@ -24,17 +24,19 @@ const FIELD = { background: 'var(--color-input)', color: 'var(--color-ink)', box
  * first copy sent on the spot, so that "set up" means "it works". The step
  * with the password is where it is said that without it the copy stays closed.
  */
-export function AutoBackupWizard({ onClose }: { onClose: () => void }) {
+export function AutoBackupWizard({ onClose, returned }: { onClose: () => void; returned?: ReturnNotice | null }) {
   const t = useTranslation().autoBackup
   const w = t.wizard
   const language = useLanguage()
-  const [step, setStep] = useState<1 | 2 | 3>(1)
-  const [provider, setProvider] = useState<ProviderId | null>(null)
+  // Back from the provider's page: the wizard picks up at its last step with how it went.
+  const [step, setStep] = useState<1 | 2 | 3>(returned ? 3 : 1)
+  const [provider, setProvider] = useState<ProviderId | null>(returned ? 'dropbox' : null)
   const [password, setPassword] = useState('')
   const [again, setAgain] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
-  const [sent, setSent] = useState<boolean | null>(null)
+  const [sent, setSent] = useState<boolean | null>(returned ? returned === 'sent' : null)
+  const redirects = provider !== null && REDIRECT_PROVIDERS.includes(provider)
 
   // The trial provider only shows in development, the three real ones always (not yet usable).
   const rows = ROWS.filter((r) => r.id !== 'memory' || AVAILABLE_PROVIDERS.includes('memory'))
@@ -45,6 +47,15 @@ export function AutoBackupWizard({ onClose }: { onClose: () => void }) {
     if (!provider) return
     setError(null)
     setBusy(true)
+    if (redirects) {
+      try {
+        await beginRedirectLink(provider, password)
+      } catch {
+        setError(format(w.linkFailed, { provider: t.providers[provider] }, language))
+        setBusy(false)
+      }
+      return
+    }
     setStep(3)
     try {
       const outcome = await setUpAutoBackup(provider, password)
@@ -133,6 +144,11 @@ export function AutoBackupWizard({ onClose }: { onClose: () => void }) {
             className="w-full rounded-xl px-3.5 py-2.5 text-body outline-none"
             style={FIELD}
           />
+          {redirects && (
+            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              {format(w.redirectNote, { provider: t.providers[provider] }, language)}
+            </p>
+          )}
           {error && (
             <p role="alert" className="text-caption font-medium" style={{ color: 'var(--color-ink)' }}>
               {error}
@@ -156,7 +172,7 @@ export function AutoBackupWizard({ onClose }: { onClose: () => void }) {
               className="flex-1 min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
               style={{ background: 'var(--color-brand)', color: 'var(--color-on-brand)' }}
             >
-              {w.next}
+              {redirects ? format(w.toProvider, { provider: t.providers[provider] }, language) : w.next}
             </button>
           </div>
         </>
@@ -169,7 +185,15 @@ export function AutoBackupWizard({ onClose }: { onClose: () => void }) {
             {w.doneTitle}
           </h3>
           <p role="status" className="text-body">
-            {sent === null ? w.sending : sent ? format(w.done, { provider: t.providers[provider] }, language) : w.sendFailed}
+            {sent === null
+              ? w.sending
+              : sent
+                ? format(w.done, { provider: t.providers[provider] }, language)
+                : returned === 'denied'
+                  ? format(w.denied, { provider: t.providers[provider] }, language)
+                  : returned === 'failed'
+                    ? format(w.linkFailed, { provider: t.providers[provider] }, language)
+                    : w.sendFailed}
           </p>
           {sent && <TrustLines provider={t.providers[provider]} />}
           {!busy && (

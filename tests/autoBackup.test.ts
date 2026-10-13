@@ -104,7 +104,7 @@ test('a failure is reported in terms the person can act on, and nothing is half-
       throw new Error('boom')
     },
   })
-  assert.deepEqual(out, { ok: false, reason: 'other' })
+  assert.deepEqual(out, { ok: false, reason: 'other', detail: 'boom' })
 })
 
 test('copies are listed newest first, and one can be taken as a file for the existing restore', async () => {

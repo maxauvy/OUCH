@@ -873,6 +873,7 @@ const en: Translations = {
       unreadable: 'The copy that was sent would not open, so it was removed. We will try again.',
     },
     reconnect: 'Link again',
+    failureDetail: 'Technical detail: {{detail}}',
     lastGood: 'Last successful copy: {{date}}.',
     kb: '{{n}} KB',
     providers: { dropbox: 'Dropbox', drive: 'Google Drive', webdav: 'My server (WebDAV, Nextcloud…)', memory: 'Trial folder (in memory)' },
@@ -897,6 +898,10 @@ const en: Translations = {
       sending: 'Sending your first copy…',
       done: 'A first copy just went to {{provider}}. The next ones will go out by themselves.',
       sendFailed: 'The link is made, but the first copy could not go out. We will try again next time you open the app.',
+      toProvider: 'Continue to {{provider}}',
+      redirectNote: 'You will go to {{provider}} to agree, then come back here.',
+      denied: '{{provider}} did not get your agreement: nothing was linked and nothing was sent.',
+      linkFailed: 'The link with {{provider}} could not be made. You can try again any time.',
     },
     restorePanel: {
       title: 'Your latest copies',

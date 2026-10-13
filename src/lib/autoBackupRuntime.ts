@@ -10,21 +10,47 @@ import { createBackupKey } from './crypto'
 import { clearBackupKey, loadBackupKey, saveBackupKey } from './backupKeyStore'
 import { memoryProvider } from './cloud/memoryProvider'
 import type { BackupProvider } from './cloud/provider'
+import { dropboxProvider } from './cloud/dropboxProvider'
+import { cleanReturnAddress, finishDropboxLink, forgetPendingDropboxLink, getDropboxToken, readDropboxReturn, startDropboxLink, unlinkDropbox } from './cloud/dropboxLink'
 
-/** Until a real provider is linked, only the trial one (in memory, lost at
- * reload) exists, and only in development: the card stays out of the release. */
-export const AUTO_BACKUP_AVAILABLE = import.meta.env.DEV
+const FLAG = 'ouch:autobackup'
+
+/** Early access: the card is shown in development, and on a device where it
+ * was asked for with `?autobackup` at the end of the address (`?autobackup=0`
+ * takes it back). Until it has been tried on phones, it is not for everyone. */
+function readFlag(): boolean {
+  try {
+    const params = new URLSearchParams(location.search)
+    if (params.has('autobackup')) {
+      if (params.get('autobackup') === '0') localStorage.removeItem(FLAG)
+      else localStorage.setItem(FLAG, '1')
+      params.delete('autobackup')
+      const rest = params.toString()
+      history.replaceState(null, '', `${location.pathname}${rest ? `?${rest}` : ''}${location.hash}`)
+    }
+    return import.meta.env.DEV || localStorage.getItem(FLAG) === '1'
+  } catch {
+    return import.meta.env.DEV
+  }
+}
+
+export const AUTO_BACKUP_AVAILABLE = readFlag()
 
 type ProviderId = AutoBackupState['provider']
 
-/** Providers that can be chosen today, in the order they are listed. */
-export const AVAILABLE_PROVIDERS: ProviderId[] = import.meta.env.DEV ? ['memory'] : []
+/** Providers that can be chosen today, in the order they are listed. The
+ * trial one (in memory, lost at reload) only exists in development. */
+export const AVAILABLE_PROVIDERS: ProviderId[] = import.meta.env.DEV ? ['dropbox', 'memory'] : ['dropbox']
+
+/** Providers that send the person away to agree, and bring them back to the app. */
+export const REDIRECT_PROVIDERS: ProviderId[] = ['dropbox']
 
 let trial: BackupProvider | null = null
 
 /** The place copies go for `id`, or null while that provider is not built. */
 export function providerFor(id: ProviderId): BackupProvider | null {
   if (id === 'memory') return (trial ??= memoryProvider())
+  if (id === 'dropbox') return dropboxProvider(getDropboxToken)
   return null
 }
 
@@ -53,7 +79,10 @@ export async function backupNow(): Promise<BackupOutcome | null> {
         backupReminderSnoozedUntil: undefined,
       })
     } else {
-      await updateSettings({ autoBackup: { ...state, lastAttemptAt: attemptAt, lastFailure: outcome.reason } })
+      if (import.meta.env.DEV) console.warn('[autobackup]', outcome.reason, outcome.detail)
+      await updateSettings({
+        autoBackup: { ...state, lastAttemptAt: attemptAt, lastFailure: outcome.reason, lastFailureDetail: outcome.detail },
+      })
     }
     return outcome
   } finally {
@@ -68,8 +97,66 @@ export async function setUpAutoBackup(provider: ProviderId, password: string): P
   return backupNow()
 }
 
+/** For a provider the person has to agree with elsewhere: keeps the key made from
+ * `password` (it must survive the trip), then sends the person away. The link
+ * is finished by `handleProviderReturn` when they come back. */
+export async function beginRedirectLink(provider: ProviderId, password: string): Promise<void> {
+  await saveBackupKey(await createBackupKey(password))
+  if (provider === 'dropbox') await startDropboxLink()
+}
+
+/** How a trip to a provider ended, said once when the person is back. */
+export type ReturnNotice = 'sent' | 'unsent' | 'denied' | 'failed'
+const NOTICE_KEY = 'ouch:autobackup-notice'
+
+/** Called at start: if the address says the person is back from Dropbox, finishes
+ * the link, sends a first copy, and remembers how it went for the card to say. */
+export async function handleProviderReturn(): Promise<ReturnNotice | null> {
+  const back = readDropboxReturn(location.search)
+  if (!back) return null
+  cleanReturnAddress()
+  let notice: ReturnNotice
+  if ('denied' in back) {
+    forgetPendingDropboxLink()
+    notice = 'denied'
+  } else if (!(await finishDropboxLink(back.code, back.state))) {
+    notice = 'failed'
+  } else {
+    await updateSettings({ autoBackup: { provider: 'dropbox' } })
+    notice = (await backupNow())?.ok ? 'sent' : 'unsent'
+  }
+  if (notice === 'denied' || notice === 'failed') await clearBackupKey().catch(() => undefined)
+  try {
+    sessionStorage.setItem(NOTICE_KEY, notice)
+  } catch {
+    // The card will not say it; the settings show the result anyway.
+  }
+  return notice
+}
+
+/** The notice left by `handleProviderReturn`. Read without removing it (a
+ * render can happen twice); `clearReturnNotice` removes it once it was said. */
+export function peekReturnNotice(): ReturnNotice | null {
+  try {
+    const v = sessionStorage.getItem(NOTICE_KEY)
+    return v === 'sent' || v === 'unsent' || v === 'denied' || v === 'failed' ? v : null
+  } catch {
+    return null
+  }
+}
+
+export function clearReturnNotice(): void {
+  try {
+    sessionStorage.removeItem(NOTICE_KEY)
+  } catch {
+    // Nothing to remove.
+  }
+}
+
 /** Stops sending copies. The ones already there stay where they are. */
 export async function stopAutoBackup(): Promise<void> {
+  const state = (await getSettings()).autoBackup
+  if (state?.provider === 'dropbox') await unlinkDropbox()
   await clearBackupKey()
   await updateSettings({ autoBackup: undefined })
 }

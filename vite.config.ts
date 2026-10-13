@@ -50,8 +50,8 @@ function versionFile(commit: string, date: string, tagged: boolean): Plugin {
 }
 
 // Content-Security-Policy, as a <meta> because GitHub Pages sets no headers.
-// Everything is same-origin except the Open-Meteo calls and the Nominatim
-// (OpenStreetMap) place-name lookup. `data:` and `blob:`
+// Everything is same-origin except the Open-Meteo calls, the Nominatim
+// (OpenStreetMap) place-name lookup and, for the optional encrypted backup, Dropbox. `data:` and `blob:`
 // are for the weather card and report images (html-to-image), which are
 // built in the page and re-read with fetch(). Inline styles are React
 // `style` attributes. `frame-ancestors` cannot be set from a <meta>.
@@ -61,7 +61,7 @@ const CONTENT_SECURITY_POLICY = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
-  "connect-src 'self' data: blob: https://api.open-meteo.com https://archive-api.open-meteo.com https://nominatim.openstreetmap.org",
+  "connect-src 'self' data: blob: https://api.open-meteo.com https://archive-api.open-meteo.com https://nominatim.openstreetmap.org https://api.dropboxapi.com https://content.dropboxapi.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'none'",

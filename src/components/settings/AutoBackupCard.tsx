@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { IconCloudCheck, IconCloudOff, IconCloudUpload, IconHistory, IconRefresh } from '@tabler/icons-react'
 import type { AutoBackupState } from '../../db/types'
 import { useSettings } from '../../hooks/useSettings'
-import { backupNow, stopAutoBackup } from '../../lib/autoBackupRuntime'
+import { backupNow, clearReturnNotice, peekReturnNotice, stopAutoBackup } from '../../lib/autoBackupRuntime'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { Card } from '../ui/Card'
 import { AutoBackupRestore } from './AutoBackupRestore'
@@ -20,11 +20,23 @@ const SOFT_BUTTON = { background: 'var(--color-brand-soft)', color: 'var(--color
  */
 export function AutoBackupCard() {
   const { autoBackup } = useSettings()
-  const [wizardOpen, setWizardOpen] = useState(false)
+  // Back from the provider's page: the wizard opens again to say how it went.
+  const [returned, setReturned] = useState(peekReturnNotice)
+  const [wizardOpen, setWizardOpen] = useState(returned !== null)
   return (
     <>
       {autoBackup ? <CardOn state={autoBackup} /> : <CardOff onChoose={() => setWizardOpen(true)} />}
-      {wizardOpen && <AutoBackupWizard onClose={() => setWizardOpen(false)} />}
+      {wizardOpen && (
+        <AutoBackupWizard
+          returned={returned}
+          onClose={() => {
+            clearReturnNotice()
+            // Said once: opening the wizard again later starts from the first step.
+            setReturned(null)
+            setWizardOpen(false)
+          }}
+        />
+      )}
     </>
   )
 }
@@ -95,6 +107,11 @@ function CardOn({ state }: { state: AutoBackupState }) {
           {copy && (
             <p className="text-caption mt-1" style={{ color: 'var(--color-ink-muted)' }}>
               {format(t.lastGood, { date: when(copy.at) }, language)}
+            </p>
+          )}
+          {state.lastFailureDetail && (
+            <p className="text-caption mt-1 break-words select-text" style={{ color: 'var(--color-ink-muted)' }}>
+              {format(t.failureDetail, { detail: state.lastFailureDetail }, language)}
             </p>
           )}
         </div>

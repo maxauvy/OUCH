@@ -245,6 +245,8 @@ export interface AutoBackupState {
   lastAttemptAt?: number
   /** Why the last try failed; absent when it worked. */
   lastFailure?: 'auth' | 'network' | 'quota' | 'other' | 'mismatch' | 'unreadable'
+  /** What the provider answered, kept to find out what went wrong. Never the person's data. */
+  lastFailureDetail?: string
 }
 
 export interface Settings {

@@ -64,7 +64,7 @@ export type BackupOutcome =
   /** `mismatch`: what came back was not what was sent. `unreadable`: it came
    * back identical but does not open with the key. In both cases the bad file
    * is removed and the older copies are left alone. */
-  | { ok: false; reason: ProviderFailure | 'mismatch' | 'unreadable' }
+  | { ok: false; reason: ProviderFailure | 'mismatch' | 'unreadable'; /** What the provider said, for finding out what went wrong. */ detail?: string }
 
 /**
  * Makes a copy, sends it, reads it back and checks it, then drops the copies
@@ -101,7 +101,10 @@ export async function runBackup(args: {
     await prune(provider, name, keep)
     return { ok: true, copy: { name, bytes: copy.bytes, sha256: copy.sha256, at: at.getTime() } }
   } catch (error) {
-    return { ok: false, reason: failureOf(error) }
+    const reason = failureOf(error)
+    // A message that only repeats the kind says nothing more.
+    const detail = error instanceof Error && error.message !== reason ? error.message : undefined
+    return detail ? { ok: false, reason, detail } : { ok: false, reason }
   }
 }
 
