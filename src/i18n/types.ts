@@ -690,6 +690,81 @@ export interface Translations {
     neverBackedUp: string
   }
 
+  autoBackup: {
+    title: string
+    intro: string
+    choose: string
+    active: string
+    /** `{{date}}`, `{{size}}` */
+    lastCopy: string
+    noCopyYet: string
+    backupNow: string
+    backingUp: string
+    restore: string
+    stop: string
+    /** `{{provider}}` */
+    stopNote: string
+    /** `{{provider}}` in the third line */
+    trust: [string, string, string]
+    /** `{{provider}}` in `auth` and `quota` */
+    failure: { auth: string; network: string; quota: string; other: string; mismatch: string; unreadable: string }
+    reconnect: string
+    /** `{{detail}}` */
+    failureDetail: string
+    /** `{{date}}` */
+    lastGood: string
+    /** `{{n}}` */
+    kb: string
+    providers: { dropbox: string; drive: string; webdav: string; memory: string }
+    wizard: {
+      /** `{{n}}`, `{{total}}` */
+      step: string
+      cancel: string
+      back: string
+      next: string
+      finish: string
+      whereTitle: string
+      whereText: string
+      /** Stands for the provider in the trust lines, before one is chosen */
+      anyProvider: string
+      soon: string
+      passwordTitle: string
+      passwordText: string
+      passwordLabel: string
+      confirmLabel: string
+      tooShort: string
+      different: string
+      doneTitle: string
+      sending: string
+      /** `{{provider}}` */
+      done: string
+      sendFailed: string
+      /** `{{provider}}` */
+      toProvider: string
+      /** `{{provider}}` */
+      redirectNote: string
+      /** `{{provider}}` */
+      denied: string
+      /** `{{provider}}` */
+      linkFailed: string
+    }
+    restorePanel: {
+      title: string
+      hint: string
+      empty: string
+      verify: string
+      /** `{{n}}` */
+      verifyOk: string
+      verifyBad: string
+      restoreThis: string
+      passwordLabel: string
+      /** `{{n}}` */
+      restored: string
+      close: string
+      loadError: string
+    }
+  }
+
   backupReminder: {
     title: string
     never: string

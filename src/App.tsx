@@ -1,3 +1,5 @@
+import { handleProviderReturn } from './lib/autoBackupRuntime'
+import { useAutoBackup } from './hooks/useAutoBackup'
 import { useEffect, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
 import { DemoPill } from './components/demo/DemoPill'
@@ -46,6 +48,7 @@ function AppShell() {
   const settingsLoaded = useSettingsLoaded()
   const todayEntry = useTodayEntry()
   useAppliedTheme(settings.theme)
+  useAutoBackup()
   // Set when the data was just deleted from Settings: said once at the start.
   const [wiped] = useState(wipedNotice)
   useEffect(() => {
@@ -69,6 +72,15 @@ function AppShell() {
 
   // From the backup reminder: open the settings on the backup card.
   const [backupRequested, setBackupRequested] = useState(false)
+  // Back from a provider's page (Dropbox): finish the link, then show the Settings, which say how it went.
+  useEffect(() => {
+    void handleProviderReturn().then((notice) => {
+      if (notice) {
+        setTab('settings')
+        setBackupRequested(true)
+      }
+    })
+  }, [])
   function goToBackup() {
     setBackupRequested(true)
     setTab('settings')

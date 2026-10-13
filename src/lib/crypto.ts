@@ -105,3 +105,70 @@ export async function decryptJSON<T = unknown>(payload: EncryptedPayload, passwo
     throw new Error('Mot de passe incorrect, ou fichier corrompu.')
   }
 }
+
+/** A key derived once from the backup password, so that a copy can be made
+ * without asking for the password again. It is what the device keeps for
+ * automatic backups; the password itself is never stored. `salt` and
+ * `iterations` go into every file written with it, so the same password
+ * re-derives the same key at restore time and a copy opens exactly like a
+ * manual backup (`decryptJSON`). */
+export interface BackupKey {
+  key: CryptoKey
+  /** base64 */
+  salt: string
+  iterations: number
+}
+
+/** Derives the key for `password` with a fresh salt, at the current iteration
+ * count. The key is not extractable: it can encrypt and decrypt, not be read. */
+export async function createBackupKey(password: string): Promise<BackupKey> {
+  const salt = crypto.getRandomValues(new Uint8Array(SALT_BYTES))
+  const key = await deriveKey(password, salt, PBKDF2_ITERATIONS)
+  return { key, salt: toBase64(salt), iterations: PBKDF2_ITERATIONS }
+}
+
+/** Same file format as `encryptJSON`, with the kept key and a fresh IV each time. */
+export async function encryptJSONWithKey(data: unknown, backupKey: BackupKey): Promise<EncryptedPayload> {
+  const iv = crypto.getRandomValues(new Uint8Array(IV_BYTES))
+  const plaintext = new TextEncoder().encode(JSON.stringify(data))
+  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv as BufferSource }, backupKey.key, plaintext)
+  return {
+    magic: MAGIC,
+    salt: backupKey.salt,
+    iv: toBase64(iv),
+    ciphertext: toBase64(new Uint8Array(ciphertext)),
+    createdAt: new Date().toISOString(),
+    iterations: backupKey.iterations,
+  }
+}
+
+export type OpenWithKeyFailure = 'format' | 'otherKey' | 'corrupt'
+
+/** Opens a file with the kept key, without the password. `otherKey` when the
+ * file was written with another salt (another password, or another setup):
+ * only the password can tell if that one opens. `corrupt` when the key is the
+ * right one but the content does not authenticate (AES-GCM): the file was
+ * altered or damaged. */
+export async function decryptJSONWithKey<T = unknown>(
+  payload: unknown,
+  backupKey: BackupKey
+): Promise<{ ok: true; data: T } | { ok: false; reason: OpenWithKeyFailure }> {
+  if (!isEncryptedPayload(payload)) return { ok: false, reason: 'format' }
+  if (payload.salt !== backupKey.salt) return { ok: false, reason: 'otherKey' }
+  try {
+    const plaintext = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: fromBase64(payload.iv) as BufferSource },
+      backupKey.key,
+      fromBase64(payload.ciphertext) as BufferSource
+    )
+    return { ok: true, data: JSON.parse(new TextDecoder().decode(plaintext)) as T }
+  } catch {
+    return { ok: false, reason: 'corrupt' }
+  }
+}
+
+/** SHA-256 of a text, as lowercase hex. */
+export async function sha256Hex(text: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text) as BufferSource)
+  return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, '0')).join('')
+}

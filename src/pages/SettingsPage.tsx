@@ -12,6 +12,8 @@ import { SupportCard } from '../components/about/SupportCard'
 import { BackupSection } from '../components/settings/BackupSection'
 import { IS_DEMO } from '../lib/demoMode'
 import { exitDemo, startDemo } from '../lib/demoSession'
+import { AUTO_BACKUP_AVAILABLE } from '../lib/autoBackupRuntime'
+import { AutoBackupCard } from '../components/settings/AutoBackupCard'
 import { SensitiveZoneCard } from '../components/settings/SensitiveZoneCard'
 import { InstallCard } from '../components/install/InstallCard'
 import { MedicationsSection } from '../components/settings/MedicationsSection'
@@ -365,6 +367,8 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           </Card>
         ) : (
           <>
+        {AUTO_BACKUP_AVAILABLE && <AutoBackupCard />}
+
         <Card>
           <SectionTitle>{t.settings.backupTitle}</SectionTitle>
           <BackupSection />
