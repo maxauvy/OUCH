@@ -21,6 +21,8 @@ import {
   type PinLock,
 } from './pinLock.ts'
 import { clearLock, loadLock, saveLock } from './pinLockStore.ts'
+import { isEarlyAccess } from './earlyAccess.ts'
+import { installTrace, recordTrace } from './lockTrace.ts'
 import type { Language } from '../i18n/language.ts'
 
 export interface LockSnapshot {
@@ -199,18 +201,55 @@ export function setLockDelay(delayMinutes: LockDelayMin): void {
 // picture of the app at that moment, for the app switcher), and the moment is
 // kept; when it comes back, the delay decides. Done on the DOM directly, not
 // through React, so that the cover is up before the picture is taken.
+//
+// On iOS the picture can be taken before `visibilitychange` arrives, so the
+// cover also goes up on the earlier signals a page can get: the window losing
+// focus, the page being hidden or frozen. Losing focus only covers (it says
+// nothing certain about the app being left), and only on a touch device: on a
+// computer, clicking in another window loses focus without leaving the app, and
+// the journal would go blank beside it. Only hiding the page writes the time the
+// delay counts from.
 const COVERED = 'covered'
+/** A cover that came from losing focus lifts itself after this long, if the page is still visible (ms). */
+const BLUR_COVER_MS = 3000
+
+function cover(): void {
+  if (!lock) return
+  if (document.documentElement.dataset[COVERED] === undefined) recordTrace('cover', isEarlyAccess())
+  document.documentElement.dataset[COVERED] = '1'
+}
+
+function uncover(): void {
+  blurCover = false
+  clearTimeout(blurTimer)
+  if (document.documentElement.dataset[COVERED] !== undefined) recordTrace('uncover', isEarlyAccess())
+  delete document.documentElement.dataset[COVERED]
+}
+
+let blurCover = false
+let blurTimer: ReturnType<typeof setTimeout> | undefined
+
+/** Losing focus covers on a touch device, for a few seconds at most while the page stays visible. */
+function coverOnBlur(): void {
+  if (!window.matchMedia('(pointer: coarse)').matches) return
+  cover()
+  blurCover = true
+  clearTimeout(blurTimer)
+  blurTimer = setTimeout(() => {
+    if (document.visibilityState === 'visible') uncover()
+  }, BLUR_COVER_MS)
+}
 
 function onHidden(): void {
   if (!lock) return
-  document.documentElement.dataset[COVERED] = '1'
+  cover()
   // Only an unlocked app leaves a time: a locked one going away (or reloading)
   // must not restart the delay, or a reload would open it.
   if (!locked) keep(withHiddenAt(lock, Date.now()))
 }
 
 function onVisible(): void {
-  delete document.documentElement.dataset[COVERED]
+  uncover()
   if (lock && !locked && shouldLock(lock, Date.now())) {
     locked = true
     keep(withLocked(lock, true))
@@ -219,8 +258,26 @@ function onVisible(): void {
 }
 
 if (typeof document !== 'undefined') {
+  // First, so that its entries come before the app's own in the trace.
+  installTrace(isEarlyAccess)
   document.addEventListener('visibilitychange', () => (document.visibilityState === 'hidden' ? onHidden() : onVisible()))
+  document.addEventListener('freeze', cover)
   window.addEventListener('pagehide', onHidden)
+  window.addEventListener('blur', coverOnBlur)
+  // A cover that came from losing focus must never strand the person on a blank
+  // screen if the focus event does not come back: a touch lifts it, and it lifts
+  // itself after a few seconds while the page is still visible.
+  document.addEventListener(
+    'pointerdown',
+    () => {
+      if (blurCover && document.visibilityState === 'visible') uncover()
+    },
+    true
+  )
+  // Focus coming back lifts the cover only if the page is visible (it is not, while switching apps).
+  window.addEventListener('focus', () => {
+    if (document.visibilityState === 'visible') uncover()
+  })
   // `pageshow` also fires at every load, where the start-up rule (`lockAtStart`) has already decided: only a page brought back from the back/forward cache is a return.
   window.addEventListener('pageshow', (e) => {
     if (e.persisted) onVisible()

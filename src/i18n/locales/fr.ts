@@ -908,6 +908,15 @@ const fr: Translations = {
     changed: 'Le code est changé.',
     removed: 'Le code est retiré.',
     saveFailed: 'Le code n’a pas pu être enregistré sur cet appareil.',
+    trace: {
+      title: 'Diagnostic de l’aperçu (essai)',
+      hint: 'Pour comprendre ce que fait l’iPhone quand l’app part en arrière-plan. Fais le geste (retour à l’accueil, ouvre le sélecteur d’apps, puis reviens dans OUCH), actualise ici et copie le journal.',
+      empty: 'Rien d’enregistré pour l’instant.',
+      refresh: 'Actualiser',
+      copy: 'Copier',
+      copied: 'Copié',
+      clear: 'Vider',
+    },
   },
 
   autoBackup: {

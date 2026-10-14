@@ -335,3 +335,11 @@ input::-webkit-date-and-time-value {
 html[data-covered] #root {
   visibility: hidden;
 }
+/* A solid layer as well, so that nothing drawn outside #root (a fixed bar, a sheet) shows through. */
+html[data-covered]::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: var(--color-paper);
+}
