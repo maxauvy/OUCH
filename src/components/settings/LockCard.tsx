@@ -7,8 +7,6 @@ import { radioGroupProps, radioProps } from '../../lib/a11y'
 import { Card, SectionTitle } from '../ui/Card'
 import { Toggle } from '../ui/Toggle'
 import { LockSheet, type LockSheetMode } from './LockSheet'
-import { LockTrace } from './LockTrace'
-import { useEarlyAccess } from '../../lib/earlyAccess'
 
 /**
  * The code lock, in the same form as the other settings: a sentence and a
@@ -21,7 +19,6 @@ export function LockCard({ lastBackupAt, onBackupFirst }: { lastBackupAt?: numbe
   const t = useTranslation().lockSettings
   const { enabled, delayMinutes } = useLockState()
   const [sheet, setSheet] = useState<LockSheetMode | null>(null)
-  const earlyAccess = useEarlyAccess()
   const soft = { background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }
 
   return (
@@ -33,6 +30,9 @@ export function LockCard({ lastBackupAt, onBackupFirst }: { lastBackupAt?: numbe
         </p>
         <Toggle checked={enabled} onChange={(on) => setSheet(on ? 'activate' : 'remove')} label={t.title} />
       </div>
+      <p className="text-caption mt-3" style={{ color: 'var(--color-ink-muted)' }}>
+        {t.previewNote}
+      </p>
 
       {enabled && (
         <div className="mt-4 flex flex-col gap-3">
@@ -77,8 +77,6 @@ export function LockCard({ lastBackupAt, onBackupFirst }: { lastBackupAt?: numbe
           </div>
         </div>
       )}
-
-      {earlyAccess && <LockTrace />}
 
       {sheet && <LockSheet mode={sheet} lastBackupAt={lastBackupAt} onBackupFirst={onBackupFirst} onClose={() => setSheet(null)} />}
     </Card>
