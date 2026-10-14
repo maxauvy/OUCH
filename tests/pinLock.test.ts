@@ -17,6 +17,7 @@ import {
   waitLeft,
   withDelay,
   withHiddenAt,
+  withLanguage,
   type PinLock,
 } from '../src/lib/pinLock.ts'
 
@@ -192,4 +193,16 @@ test('what is read back from storage must be a lock, or it is no lock', () => {
   for (const junk of [null, 'x', [], {}, { ...stored, salt: 'not base64!' }, { ...stored, hash: 3 }, { ...stored, iterations: 5_000_000_000 }, { ...stored, iterations: 1.5 }, { ...stored, delayMinutes: 7 }, { ...stored, failures: -1 }, { ...stored, failures: 'x' }, { ...stored, lockedUntil: 'x' }, { ...stored, lastHiddenAt: NaN }]) {
     assert.equal(parseLock(junk), null, JSON.stringify(junk))
   }
+})
+
+test('the language is kept with the lock, survives a change of code, and only fr or en is read back', async () => {
+  const en = await createLock('1234', 1, 'en')
+  assert.equal(en.language, 'en')
+  assert.equal((await createLock('1234')).language, undefined)
+  assert.equal(withLanguage(lock, 'fr').language, 'fr')
+  assert.equal((await changePin(en, '1234', '5678', T0))?.language, 'en')
+  const stored = JSON.parse(JSON.stringify(en))
+  assert.equal(parseLock(stored)?.language, 'en')
+  assert.equal(parseLock({ ...stored, language: 'de' })?.language, undefined)
+  assert.equal(parseLock({ ...stored, language: 3 })?.language, undefined)
 })

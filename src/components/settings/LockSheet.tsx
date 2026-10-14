@@ -74,7 +74,7 @@ export function LockSheet({
       setStep('choose')
       return
     }
-    const saved = mode === 'change' ? await changeLockPin(current.current, code) : await enableLock(code)
+    const saved = mode === 'change' ? await changeLockPin(current.current, code) : await enableLock(code, undefined, language)
     if (!saved) {
       setMessage(s.saveFailed)
       setStep('choose')

@@ -1,3 +1,4 @@
+import { useLockState } from './lib/appLock'
 import { AppLockGate } from './components/lock/AppLockGate'
 import { handleProviderReturn } from './lib/autoBackupRuntime'
 import { useAutoBackup } from './hooks/useAutoBackup'
@@ -140,10 +141,14 @@ function AppShell() {
 
 export default function App() {
   const settings = useSettings()
+  const loaded = useSettingsLoaded()
+  const lock = useLockState()
   useAppliedLanguage(settings.language)
 
+  // The lock is drawn before the settings are read: until they are, it speaks
+  // the language it was given, not the default one.
   return (
-    <I18nProvider language={settings.language}>
+    <I18nProvider language={loaded ? settings.language : (lock.language ?? settings.language)}>
       <AppLockGate>
         <AppShell />
       </AppLockGate>

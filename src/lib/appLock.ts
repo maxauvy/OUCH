@@ -13,10 +13,12 @@ import {
   waitLeft,
   withDelay,
   withHiddenAt,
+  withLanguage,
   type LockDelayMin,
   type PinLock,
 } from './pinLock.ts'
 import { clearLock, loadLock, saveLock } from './pinLockStore.ts'
+import type { Language } from '../i18n/language.ts'
 
 export interface LockSnapshot {
   /** A code has been set. */
@@ -24,6 +26,8 @@ export interface LockSnapshot {
   /** The app is asking for it now. */
   locked: boolean
   delayMinutes: LockDelayMin
+  /** The language kept with the lock, for drawing it before the settings are read. */
+  language?: Language
 }
 
 let lock: PinLock | null = loadLock()
@@ -32,7 +36,7 @@ let snapshot = build()
 const listeners = new Set<() => void>()
 
 function build(): LockSnapshot {
-  return { enabled: lock !== null, locked, delayMinutes: lock?.delayMinutes ?? DEFAULT_LOCK_DELAY_MIN }
+  return { enabled: lock !== null, locked, delayMinutes: lock?.delayMinutes ?? DEFAULT_LOCK_DELAY_MIN, language: lock?.language }
 }
 
 function publish(): void {
@@ -93,8 +97,12 @@ export function lockNow(): void {
 }
 
 /** Sets the code. The app stays open: the person has just chosen it. False if it could not be kept. */
-export async function enableLock(pin: string, delayMinutes: LockDelayMin = DEFAULT_LOCK_DELAY_MIN): Promise<boolean> {
-  const saved = keep(await createLock(pin, delayMinutes))
+export async function enableLock(
+  pin: string,
+  delayMinutes: LockDelayMin = DEFAULT_LOCK_DELAY_MIN,
+  language?: Language
+): Promise<boolean> {
+  const saved = keep(await createLock(pin, delayMinutes, language))
   if (!saved) lock = null
   locked = false
   publish()
@@ -117,6 +125,13 @@ export async function changeLockPin(current: string, next: string): Promise<bool
   keep(changed)
   publish()
   return true
+}
+
+/** Keeps the app's language with the lock, so that the next start draws the lock in it. */
+export function syncLockLanguage(language: Language): void {
+  if (!lock || lock.language === language) return
+  keep(withLanguage(lock, language))
+  publish()
 }
 
 export function setLockDelay(delayMinutes: LockDelayMin): void {

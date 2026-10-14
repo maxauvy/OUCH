@@ -5,6 +5,8 @@
 // code is short (4 digits, quick to type when it hurts), and nothing here ever
 // erases anything after a failure.
 
+import type { Language } from '../i18n/language.ts'
+
 export const PIN_LENGTH = 4
 
 /** How long the app may stay out of sight before it asks for the code again (minutes); 0 is "right away". */
@@ -34,6 +36,8 @@ export interface PinLock {
   lockedUntil?: number
   /** When the app last went out of sight (ms); the delay counts from there. */
   lastHiddenAt?: number
+  /** The app's language, kept here because the lock is drawn before the settings are read: without it, the lock screen would flash in the default language. */
+  language?: Language
 }
 
 export function isValidPin(pin: string): boolean {
@@ -72,7 +76,11 @@ function sameHash(a: string, b: string): boolean {
 }
 
 /** A new lock for `pin`, with a fresh salt. Throws if `pin` is not `PIN_LENGTH` digits. */
-export async function createLock(pin: string, delayMinutes: LockDelayMin = DEFAULT_LOCK_DELAY_MIN): Promise<PinLock> {
+export async function createLock(
+  pin: string,
+  delayMinutes: LockDelayMin = DEFAULT_LOCK_DELAY_MIN,
+  language?: Language
+): Promise<PinLock> {
   if (!isValidPin(pin)) throw new Error('invalid code')
   const salt = crypto.getRandomValues(new Uint8Array(SALT_BYTES))
   return {
@@ -81,6 +89,7 @@ export async function createLock(pin: string, delayMinutes: LockDelayMin = DEFAU
     iterations: PBKDF2_ITERATIONS,
     delayMinutes,
     failures: 0,
+    ...(language ? { language } : {}),
   }
 }
 
@@ -118,11 +127,15 @@ export async function changePin(lock: PinLock, current: string, next: string, no
   if (!isValidPin(next)) return null
   const checked = await tryPin(lock, current, now)
   if (!checked.ok) return null
-  return { ...(await createLock(next, lock.delayMinutes)), lastHiddenAt: lock.lastHiddenAt }
+  return { ...(await createLock(next, lock.delayMinutes, lock.language)), lastHiddenAt: lock.lastHiddenAt }
 }
 
 export function withDelay(lock: PinLock, delayMinutes: LockDelayMin): PinLock {
   return { ...lock, delayMinutes }
+}
+
+export function withLanguage(lock: PinLock, language: Language): PinLock {
+  return { ...lock, language }
 }
 
 export function withHiddenAt(lock: PinLock, at: number): PinLock {
@@ -155,5 +168,6 @@ export function parseLock(raw: unknown): PinLock | null {
   const lock: PinLock = { salt: v.salt, hash: v.hash, iterations: v.iterations, delayMinutes: v.delayMinutes, failures: v.failures }
   if (v.lockedUntil !== undefined) lock.lockedUntil = v.lockedUntil as number
   if (v.lastHiddenAt !== undefined) lock.lastHiddenAt = v.lastHiddenAt as number
+  if (v.language === 'fr' || v.language === 'en') lock.language = v.language
   return lock
 }

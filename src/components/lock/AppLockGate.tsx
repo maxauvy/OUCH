@@ -1,5 +1,6 @@
-import type { ReactNode } from 'react'
-import { useLockState } from '../../lib/appLock'
+import { useEffect, type ReactNode } from 'react'
+import { useSettings, useSettingsLoaded } from '../../hooks/useSettings'
+import { syncLockLanguage, useLockState } from '../../lib/appLock'
 import { LockScreen } from './LockScreen'
 
 /**
@@ -9,6 +10,12 @@ import { LockScreen } from './LockScreen'
  */
 export function AppLockGate({ children }: { children: ReactNode }) {
   const { locked } = useLockState()
+  const { language } = useSettings()
+  const loaded = useSettingsLoaded()
+  // The lock keeps the language the app is in (read at the next start, before the settings).
+  useEffect(() => {
+    if (loaded) syncLockLanguage(language)
+  }, [loaded, language])
   return (
     <>
       {/* `contents`: no box of its own, so the app's layout is not touched. */}
