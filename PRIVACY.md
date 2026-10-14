@@ -44,7 +44,7 @@ L'export CSV (Réglages, zone sensible) est différent : il produit deux fichier
 
 ## Sauvegarde automatique (accès anticipé)
 
-Facultative, désactivée par défaut, et pas encore proposée à tout le monde : on l'active en ajoutant `?autobackup` à l'adresse de l'app. La personne choisit un mot de passe, relie son compte Dropbox (l'accord se donne sur le site de Dropbox, OUCH n'en voit jamais le mot de passe) et OUCH y dépose des copies chiffrées de son journal.
+Facultative, désactivée par défaut, et pas encore proposée à tout le monde : on l'active sur un appareil en touchant cinq fois de suite la ligne « Créé avec soin par… » au bas d'une page (ou en ajoutant `?autobackup` à l'adresse de l'app), et on la désactive de la même façon. La personne choisit un mot de passe, relie son compte Dropbox (l'accord se donne sur le site de Dropbox, OUCH n'en voit jamais le mot de passe) et OUCH y dépose des copies chiffrées de son journal.
 
 - **Ce qui part :** le même fichier que la sauvegarde exportée (AES-256-GCM, même format), fabriqué dans le navigateur avant l'envoi. Dropbox ne reçoit que ce fichier chiffré, son nom (par exemple `ouch-20261013-172542.json`), sa taille et le moment de l'envoi. Il ne peut pas lire le journal.
 - **Où :** dans le dossier réservé à OUCH (« App folder » : `Applications/` du Dropbox de la personne). OUCH n'a pas accès au reste du Dropbox. Permissions demandées : lire et écrire des fichiers dans ce dossier, et le lister.

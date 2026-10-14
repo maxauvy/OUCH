@@ -1172,6 +1172,8 @@ const en: Translations = {
     sourceCode: 'Source code',
     updateAvailable: 'Update available',
     reload: 'Reload',
+    earlyOn: 'Early-access features turned on for this device.',
+    earlyOff: 'Early-access features turned off.',
   },
 }
 

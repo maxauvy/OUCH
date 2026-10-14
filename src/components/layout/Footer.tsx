@@ -1,4 +1,7 @@
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from '../../i18n'
+import { isEarlyAccess, setEarlyAccess } from '../../lib/earlyAccess'
+import { registerTap, type TapRun } from '../../lib/earlyAccessTaps'
 import { reloadToLatest, useLatestCommit } from '../../hooks/useLatestCommit'
 import { buildId } from '../../lib/buildId'
 
@@ -9,11 +12,31 @@ export function Footer() {
   const latest = useLatestCommit()
   const isRelease = __APP_COMMIT__ !== 'dev' && __APP_COMMIT__ !== 'unknown'
   const outdated = isRelease && latest !== null && latest !== buildId(__APP_COMMIT__, __APP_IS_TAGGED_RELEASE__)
+
+  // Five quick taps on the credit line switch early access on or off for this
+  // device (see lib/earlyAccess.ts). Nothing on screen invites it: it is for
+  // trying a feature on a phone before it is offered to everyone.
+  const taps = useRef<TapRun | null>(null)
+  const [said, setSaid] = useState<string | null>(null)
+  useEffect(() => {
+    if (said === null) return
+    const timer = setTimeout(() => setSaid(null), 4000)
+    return () => clearTimeout(timer)
+  }, [said])
+  function onCreditTap() {
+    const { run, done } = registerTap(taps.current, Date.now())
+    taps.current = run
+    if (!done) return
+    const next = !isEarlyAccess()
+    setEarlyAccess(next)
+    setSaid(next ? t.footer.earlyOn : t.footer.earlyOff)
+  }
+
   return (
     // Muted ink without extra opacity: that is what keeps it at 4.5:1 or more.
     <div className="text-center text-caption mt-2 pt-3" style={{ color: 'var(--color-ink-muted)' }}>
       <p>
-        {t.footer.credit} ·{' '}
+        <span onClick={onCreditTap}>{t.footer.credit}</span> ·{' '}
         <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className="underline">
           {t.footer.sourceCode}
         </a>
@@ -43,7 +66,8 @@ export function Footer() {
         )}
       </p>
       <p role="status">
-        {outdated && (
+        {said}
+        {!said && outdated && (
           <>
             {t.footer.updateAvailable} ·{' '}
             <button type="button" onClick={() => void reloadToLatest()} className="underline font-medium">
