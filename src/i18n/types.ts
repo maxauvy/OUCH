@@ -748,6 +748,15 @@ export interface Translations {
     changed: string
     removed: string
     saveFailed: string
+    trace: {
+      title: string
+      hint: string
+      empty: string
+      refresh: string
+      copy: string
+      copied: string
+      clear: string
+    }
   }
 
   autoBackup: {
