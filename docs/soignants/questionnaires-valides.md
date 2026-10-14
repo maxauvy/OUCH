@@ -2,7 +2,7 @@
 
 *Version 0.1, brouillon pour relecture. Établi le 14 octobre 2026, pour OUCH v0.5.0. **Ce document n'est pas un avis juridique** : les informations sur les droits viennent de pages publiques, souvent secondaires, **qu'aucune démarche auprès des détenteurs n'a confirmées**. Elles sont à vérifier par écrit avant tout usage.*
 
-Cette note répond à une question qu'un soignant pose vite : *« pourquoi OUCH n'utilise-t-il pas un questionnaire validé, le BASDAI, le FIQR… ? »* Elle dit ce qu'OUCH utilise aujourd'hui, pourquoi il n'intègre pas de questionnaire complet, ce qu'il faudrait pour en intégrer un, et ce qu'OUCH fait en attendant. Pour le reste de l'état des vérifications, voir le [statut de validation](statut-de-validation.md).
+Cette note répond à une question qu'un soignant pose vite : *« pourquoi OUCH n'utilise-t-il pas un questionnaire validé, le BASDAI, le FIQR… ? »* Elle dit ce qu'OUCH utilise aujourd'hui, pourquoi il n'intègre pas de questionnaire complet, ce qu'il faudrait pour en intégrer un, et ce qu'OUCH fait en attendant. Pour le reste de l'état des vérifications, voir le [statut de validation](statut-de-validation.md). Une version de deux pages, à lire avec des soignants, existe aussi : la [note de cadrage](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-note-scores-valides-v0.5.0.pdf) ([English](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-validated-scores-note-v0.5.0.pdf), [source](../note-scores-valides/)).
 
 ## 1. Ce qu'OUCH utilise aujourd'hui
 
