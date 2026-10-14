@@ -1,6 +1,6 @@
 # Statut de validation d'OUCH
 
-*Version 0.1, brouillon pour relecture. Établi le 9 octobre 2026 d'après le code de la v0.3.0 ; le nombre de tests et le tableau par jour de la semaine ont été ajoutés le 14 octobre 2026, pour la v0.5.0.*
+*Version 0.2, brouillon pour relecture. Établi le 9 octobre 2026 d'après le code de la v0.3.0 ; mis à jour le 14 octobre 2026 pour la v0.5.0 : nombre de tests, tableau par jour de la semaine, statut des maladies déclarées, sauvegarde chiffrée et verrou par code, et la note sur les [questionnaires validés](questionnaires-valides.md).*
 
 Ce document dit, sans l'enjoliver, **ce qui a été vérifié dans OUCH et ce qui ne l'a pas été**. « Validé » n'est employé que pour un instrument reconnu par la littérature, utilisé tel quel. Pour tout le reste, le mot juste est « conçu », « testé » ou « non évalué ».
 
@@ -18,7 +18,8 @@ OUCH est en bonne position sur le niveau 2, partiellement sur le 1, et **n'a pas
 | Composant | Ce qui a été fait | Ce qui n'a pas été fait |
 |---|---|---|
 | **Douleur, échelle numérique 0 à 10** | Instrument recommandé pour l'intensité (IMMPACT, HAS) et largement validé, repris tel quel (références 1, 3, 10). Rappel sur 24 h, qui limite le biais de mémoire (6) | L'équivalence de la saisie sur téléphone (curseur, ou onze cases les jours de poussée) avec une échelle sur papier n'a pas été étudiée dans OUCH |
-| **Fatigue, sommeil, brouillard mental, humeur, stress, activité** | Échelles numériques simples, présentées comme telles | **Aucune validation.** Pas de comparaison avec un instrument validé de ces dimensions |
+| **Fatigue, sommeil, brouillard mental, humeur, stress, activité** | Échelles numériques simples, présentées comme telles | **Aucune validation.** Pas de comparaison avec un instrument validé de ces dimensions. Aucun questionnaire complet n'est intégré (BASDAI, FIQR…) : voir la [note sur les questionnaires validés](questionnaires-valides.md) |
+| **Maladies déclarées, statut « diagnostiquée » ou « suspectée », année du diagnostic** | Reprises telles que la personne les déclare, sans rien en déduire ; testées (13 tests sur le statut, l'année et le nom libre) | **Déclaratif, jamais vérifié par un soignant.** Le statut peut être pris pour un diagnostic établi : c'est l'objet de la question 9 du protocole |
 | **Catégories légère, modérée, sévère** (≤ 3, 4–6, ≥ 7) | Seuils conventionnels, choisis dans la littérature (5) et indiqués comme variables selon le retentissement | Pas de calibration sur les patients d'OUCH ; ils ne tiennent pas compte du retentissement fonctionnel |
 | **Calculs descriptifs** (moyenne, médiane, quartiles, écart-type, répartition, moyenne glissante sur 7 jours) | Formules simples, vérifiées par 264 tests automatiques (dont des valeurs de référence, comme la méthode de calcul des quantiles de R) ; jours manquants jamais imputés | Pas de comparaison systématique avec un logiciel de statistique sur de gros jeux de données. L'usage de la moyenne sur 7 jours reprend la pratique des essais, sans validation propre |
 | **Variation relative, repère de 30 %** | Repère issu d'études d'amélioration sous traitement (2, 4, 8, 9), cité comme tel | Établi pour des groupes de patients et des baisses ; non validé pour un individu ni pour une hausse |
@@ -29,8 +30,10 @@ OUCH est en bonne position sur le niveau 2, partiellement sur le 1, et **n'a pas
 | **Corrélations** (Spearman) et comparaisons de médianes | Méthode standard, libellés de force conventionnels | Pas de correction des comparaisons multiples ni de l'autocorrélation ; pas de valeur p ni d'intervalle de confiance |
 | **Score de la « météo du jour »** (carte à partager) | Pondérations 0,60 / 0,25 / 0,15 | **Aucune validation** : choisies par le concepteur ; hors du rapport médical |
 | **Références du rapport** | Les 15 références ont été vérifiées à la source (PubMed ou texte officiel) | Le choix des références n'a pas fait l'objet d'une revue systématique |
+| **Sauvegarde chiffrée** (fichier, et copies automatiques facultatives vers Dropbox, en accès anticipé) | AES-256-GCM avec une clé dérivée du mot de passe (PBKDF2, 600 000 itérations) ; aller-retour, altération et mauvais mot de passe testés ; pour les copies automatiques, comparaison de l'empreinte de ce qui revient du service et vérification que la copie s'ouvre (tests sur un faux fournisseur, et essais réels) | Pas d'audit externe du chiffrement ni du format ; les essais réels portent sur peu d'appareils |
+| **Verrou par code** (facultatif) | Logique testée (27 tests : codes, pauses après des erreurs, délais, verrou conservé après un rechargement) et essayée sur un iPhone | **C'est un verrou d'affichage, pas un chiffrement.** Sur iPhone, l'aperçu du sélecteur d'applications peut montrer le dernier écran (mesuré, non contournable depuis une page web). Pas d'audit de sécurité |
 | **Logiciel** | Lint, tests et build à chaque modification (intégration continue), politique de sécurité de contenu, import de sauvegarde durci, mises à jour de dépendances automatisées | Pas d'audit de sécurité externe. Les contrôles d'accessibilité menés avant certaines publications ne font pas l'objet d'un rapport publié |
-| **Utilité du rapport en consultation** | Un [protocole de test](protocole-de-test.md) est rédigé | **Aucun test mené à ce jour** auprès de soignants |
+| **Utilité du rapport en consultation** | Un [protocole de test](protocole-de-test.md) est rédigé (version 0.2, avec le mode démo de l'app pour la phase A) | **Aucun test mené à ce jour** auprès de soignants |
 
 ## Ce qu'il faut savoir sur les poussées
 
@@ -56,7 +59,7 @@ Pistes, dans l'ordre où elles coûtent le moins ; chacune demande un cadre éth
 
 1. **Utilité et lisibilité** : le [protocole de test](protocole-de-test.md) existant, avec des soignants. Répond à la question 5 de manière qualitative.
 2. **Accord sur les poussées** : un groupe de patients tient OUCH pendant plusieurs mois et note de son côté, indépendamment, ce qu'il appelle une poussée (journal papier, entretien). On compare les épisodes d'OUCH à ces repères : sensibilité, spécificité, valeur prédictive, accord (kappa), tolérance sur les dates, et sensibilité aux paramètres (durée minimale, seuil). Réponse à la question 1.
-3. **Validité de convergence des échelles** : comparer fatigue, sommeil, humeur d'OUCH à des instruments validés de ces dimensions, passés aux mêmes patients. Le choix et les droits d'utilisation des instruments sont à voir (voir la note sur les questionnaires). Réponse à la question 3.
+3. **Validité de convergence des échelles** : comparer fatigue, sommeil, humeur d'OUCH à des instruments validés de ces dimensions, passés aux mêmes patients. Le choix et les droits d'utilisation des instruments sont à voir (voir la [note sur les questionnaires validés](questionnaires-valides.md)). Réponse à la question 3.
 4. **Équivalence téléphone et papier** pour la douleur, et **observance du journal** (jours renseignés, abandons). Réponses aux questions 2 et 4.
 5. **Étude comparative** sur l'effet en consultation (avec et sans rapport), si les étapes précédentes le justifient. Réponse à la question 5, et en partie à la 6 avec un suivi d'événements indésirables.
 

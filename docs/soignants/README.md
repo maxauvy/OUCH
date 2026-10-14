@@ -14,6 +14,7 @@ Cette page rassemble ce qu'un soignant peut vouloir lire, essayer, ou discuter.
 | Sécurité | Chiffrement des sauvegardes, signalement d'une faille | [`SECURITY.md`](../../SECURITY.md) |
 | Dictionnaire des données | Savoir précisément ce que chaque champ saisi veut dire, comment il est enregistré, et les pièges de lecture | [`dictionnaire-des-donnees.md`](dictionnaire-des-donnees.md) |
 | Statut de validation | Savoir ce qui a été vérifié dans OUCH et ce qui ne l'a pas été, et ce qu'une étude minimale demanderait | [`statut-de-validation.md`](statut-de-validation.md) |
+| Questionnaires validés | Comprendre pourquoi OUCH n'intègre pas de questionnaire complet (BASDAI, FIQR…), ce qu'il utilise à la place, et ce qu'il faudrait pour en intégrer un | [`questionnaires-valides.md`](questionnaires-valides.md) |
 | Cadre réglementaire | Comprendre sur quoi repose la position « carnet descriptif, pas dispositif médical », et ses points faibles | [`cadre-reglementaire.md`](cadre-reglementaire.md) |
 | Protocole de test | Participer à un pilote avec des soignants : phases, ce qui est recueilli, garde-fous | [`protocole-de-test.md`](protocole-de-test.md) |
 | Sources scientifiques | Les 15 références du rapport, avec leur résumé et l'usage qu'OUCH en fait | Dans l'application : Réglages, puis À propos |
