@@ -76,6 +76,15 @@ export async function unlock(pin: string): Promise<UnlockResult> {
   return { ok: false, waitMs: out.waitMs }
 }
 
+/** Checks a code without changing whether the app is locked: to change or remove the code. Wrong codes count like on the lock screen. */
+export async function checkLockPin(pin: string): Promise<UnlockResult> {
+  if (!lock) return { ok: true }
+  const out = await tryPin(lock, pin, Date.now())
+  keep(out.lock)
+  publish()
+  return out.ok ? { ok: true } : { ok: false, waitMs: out.waitMs }
+}
+
 /** Locks now, whatever the delay ("Verrouiller maintenant"). */
 export function lockNow(): void {
   if (!lock) return

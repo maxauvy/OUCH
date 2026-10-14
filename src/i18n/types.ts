@@ -708,6 +708,43 @@ export interface Translations {
     waitMinutes: string
   }
 
+  lockSettings: {
+    title: string
+    helper: string
+    delayTitle: string
+    /** In the order of the delays: right away, 1, 5, 15 minutes */
+    delays: [string, string, string, string]
+    lockNow: string
+    change: string
+    cancel: string
+    close: string
+    finish: string
+    activateTitle: string
+    backupText: string
+    /** `{{date}}` */
+    lastBackup: string
+    noBackup: string
+    backupFirst: string
+    continueWithout: string
+    continue: string
+    chooseTitle: string
+    chooseText: string
+    confirmTitle: string
+    confirmText: string
+    different: string
+    doneTitle: string
+    /** After changing or removing the code */
+    doneOtherTitle: string
+    doneText: string
+    currentTitle: string
+    changeTitle: string
+    removeTitle: string
+    removeText: string
+    changed: string
+    removed: string
+    saveFailed: string
+  }
+
   autoBackup: {
     title: string
     intro: string
