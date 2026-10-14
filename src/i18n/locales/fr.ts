@@ -865,6 +865,12 @@ const fr: Translations = {
     showLabel: 'Voir le code saisi',
     hideLabel: 'Masquer le code saisi',
     erase: 'Effacer le dernier chiffre',
+    forgot: 'Code oublié ?',
+    forgotTitle: 'Code oublié',
+    forgotText:
+      'OUCH ne garde pas ton code : il n’existe aucun moyen de le retrouver. Tu peux effacer les données de cet appareil, puis restaurer une sauvegarde. Sans sauvegarde, le journal de cet appareil sera perdu.',
+    forgotAfter: 'Ensuite, dans Réglages > Mes données, importe ta sauvegarde (le fichier exporté, ou ta copie Dropbox si tu l’avais activée).',
+    forgotAction: 'Effacer cet appareil',
     wrong: 'Ce n’est pas le bon code. Réessaie.',
     waitSeconds: 'On fait une pause. Réessaie dans {{n}} {{n:seconde|secondes}}.',
     waitMinutes: 'On fait une pause. Réessaie dans {{n}} {{n:minute|minutes}}.',

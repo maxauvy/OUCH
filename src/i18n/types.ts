@@ -701,6 +701,11 @@ export interface Translations {
     showLabel: string
     hideLabel: string
     erase: string
+    forgot: string
+    forgotTitle: string
+    forgotText: string
+    forgotAfter: string
+    forgotAction: string
     wrong: string
     /** `{{n}}` seconds */
     waitSeconds: string

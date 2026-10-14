@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { unlock } from '../../lib/appLock'
 import { useTranslation } from '../../i18n'
 import { AppLogo } from '../ui/AppLogo'
+import { ForgotSheet } from './ForgotSheet'
 import { PinPad } from './PinPad'
 import { usePause, useWaitText } from './lockHooks'
 
@@ -14,6 +15,7 @@ export function LockScreen() {
   const t = useTranslation().lock
   const waitText = useWaitText()
   const [wrong, setWrong] = useState(false)
+  const [forgotOpen, setForgotOpen] = useState(false)
   const { waitMs, set: setWaitMs } = usePause()
   const dialogRef = useRef<HTMLDivElement>(null)
 
@@ -54,7 +56,16 @@ export function LockScreen() {
       <p role="status" className="text-control text-center mt-1.5 min-h-[2.75rem]" style={{ color: 'var(--color-ink-muted)' }}>
         {message}
       </p>
-      <PinPad onComplete={submit} onType={() => setWrong(false)} disabled={pausing} />
+      <PinPad onComplete={submit} onType={() => setWrong(false)} disabled={pausing || forgotOpen} />
+      <button
+        type="button"
+        onClick={() => setForgotOpen(true)}
+        className="min-h-11 px-3 mt-3 text-control underline"
+        style={{ color: 'var(--color-ink-muted)' }}
+      >
+        {t.forgot}
+      </button>
+      {forgotOpen && <ForgotSheet onClose={() => setForgotOpen(false)} />}
     </div>
   )
 }

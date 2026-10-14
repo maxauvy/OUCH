@@ -860,6 +860,12 @@ const en: Translations = {
     showLabel: 'Show the digits typed',
     hideLabel: 'Hide the digits typed',
     erase: 'Delete the last digit',
+    forgot: 'Forgot your code?',
+    forgotTitle: 'Forgot your code',
+    forgotText:
+      'OUCH does not keep your code: there is no way to get it back. You can erase this device’s data, then restore a backup. Without a backup, this device’s journal will be lost.',
+    forgotAfter: 'Then, in Settings > My data, import your backup (the exported file, or your Dropbox copy if you had it on).',
+    forgotAction: 'Erase this device',
     wrong: 'That is not the right code. Try again.',
     waitSeconds: 'Let us pause. Try again in {{n}} {{n:second|seconds}}.',
     waitMinutes: 'Let us pause. Try again in {{n}} {{n:minute|minutes}}.',

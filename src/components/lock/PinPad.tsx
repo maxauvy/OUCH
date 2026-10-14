@@ -51,6 +51,8 @@ export function PinPad({
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return
+      // Typed in a field (the word that confirms an erase), not on the pad.
+      if (e.target instanceof Element && e.target.closest('input, textarea')) return
       if (/^\d$/.test(e.key)) void press(e.key)
       else if (e.key === 'Backspace') erase()
     }
