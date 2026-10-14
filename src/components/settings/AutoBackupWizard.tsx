@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconBrandDropbox, IconBrandGoogleDrive, IconChevronRight, IconCircleCheck, IconFolder, IconServer } from '@tabler/icons-react'
+import { IconChevronRight, IconCircleCheck, IconCloud, IconFolder, IconServer } from '@tabler/icons-react'
 import { AVAILABLE_PROVIDERS, beginRedirectLink, REDIRECT_PROVIDERS, setUpAutoBackup, type ReturnNotice } from '../../lib/autoBackupRuntime'
 import type { AutoBackupState } from '../../db/types'
 import { format, useLanguage, useTranslation } from '../../i18n'
@@ -10,9 +10,11 @@ type ProviderId = AutoBackupState['provider']
 
 const MIN_PASSWORD_LENGTH = 10
 
+// Neutral pictograms, on purpose: the providers' own logos may only be the ones
+// they approve (Dropbox's branding guide says so), and the name in words is enough.
 const ROWS: { id: ProviderId; Icon: typeof IconFolder }[] = [
-  { id: 'dropbox', Icon: IconBrandDropbox },
-  { id: 'drive', Icon: IconBrandGoogleDrive },
+  { id: 'dropbox', Icon: IconCloud },
+  { id: 'drive', Icon: IconCloud },
   { id: 'webdav', Icon: IconServer },
   { id: 'memory', Icon: IconFolder },
 ]
