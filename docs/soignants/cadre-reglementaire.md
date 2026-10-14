@@ -1,6 +1,6 @@
 # Ce qu'OUCH est, et n'est pas : cadre réglementaire
 
-*Version 0.1, brouillon de travail. Établi le 9 octobre 2026 d'après la v0.3.0. **Ce document n'est pas un avis juridique ni une analyse de conformité** : il expose un raisonnement et ses points faibles, pour qu'un professionnel du droit ou de la réglementation puisse le contester.*
+*Version 0.1, brouillon de travail. Établi le 9 octobre 2026 d'après la v0.3.0 ; les points sur les envois facultatifs (sauvegarde automatique) et le verrou par code ont été ajoutés le 14 octobre 2026, pour la v0.5.0. **Ce document n'est pas un avis juridique ni une analyse de conformité** : il expose un raisonnement et ses points faibles, pour qu'un professionnel du droit ou de la réglementation puisse le contester.*
 
 ## En bref
 
@@ -34,10 +34,11 @@ Ce sont ces points qu'un expert réglementaire regardera d'abord, et c'est la **
 
 ## 3. Données de santé
 
+- **Verrou par code.** Facultatif, c'est un verrou d'affichage et non un chiffrement : il cache le journal à quelqu'un qui regarde un appareil déverrouillé, mais les données restent lisibles dans le stockage du navigateur, et sur iPhone l'aperçu du sélecteur d'applications peut montrer le dernier écran (voir [`PRIVACY.md`](../../PRIVACY.md)). Il ne doit donc pas être présenté comme une mesure de sécurité des données.
 - **Nature.** Le journal est une donnée de santé, catégorie particulière de données personnelles au sens du RGPD.
 - **Qui traite quoi.** Les données restent sur l'appareil du patient ; le développeur n'y a pas accès et n'exploite ni serveur ni compte (voir [`PRIVACY.md`](../../PRIVACY.md)). Un usage purement personnel est en principe hors du champ du RGPD, mais la qualification du développeur, qui ne reçoit rien, et celle d'un professionnel qui recommande OUCH ou en recueille des extraits, sont des **questions ouvertes**.
-- **Hébergement.** OUCH n'héberge pas de données de santé : la certification d'hébergeur de données de santé (HDS) n'est en principe pas en jeu, à confirmer si une fonction d'envoi vers un serveur était un jour ajoutée.
-- **Appels extérieurs.** Les deux services contactés (météo, nom de ville) ne reçoivent pas de donnée du journal ; ils reçoivent une position et une adresse IP, ce que [`PRIVACY.md`](../../PRIVACY.md) détaille.
+- **Hébergement.** OUCH n'héberge pas de données de santé : la certification d'hébergeur de données de santé (HDS) n'est en principe pas en jeu, à confirmer si une fonction d'envoi vers un serveur d'OUCH était un jour ajoutée. La sauvegarde automatique, facultative et en accès anticipé, n'en est pas une : elle envoie des copies **déjà chiffrées sur l'appareil** (mot de passe que seule la personne connaît) vers le compte Dropbox de la personne, dans un dossier réservé à OUCH. L'hébergeur est alors celui que la personne a choisi, et il ne peut pas lire les copies ; la qualification de ce cas reste une question ouverte.
+- **Appels extérieurs.** Les services contactés (météo, nom de ville) ne reçoivent pas de donnée du journal, et la sauvegarde automatique vers Dropbox, si la personne l'active, n'en reçoit que sous forme chiffrée ; ils reçoivent une position et une adresse IP, ce que [`PRIVACY.md`](../../PRIVACY.md) détaille.
 
 ## 4. Cadre des essais
 

@@ -1,6 +1,6 @@
 # Statut de validation d'OUCH
 
-*Version 0.1, brouillon pour relecture. Établi le 9 octobre 2026 d'après le code de la v0.3.0.*
+*Version 0.1, brouillon pour relecture. Établi le 9 octobre 2026 d'après le code de la v0.3.0 ; le nombre de tests et le tableau par jour de la semaine ont été ajoutés le 14 octobre 2026, pour la v0.5.0.*
 
 Ce document dit, sans l'enjoliver, **ce qui a été vérifié dans OUCH et ce qui ne l'a pas été**. « Validé » n'est employé que pour un instrument reconnu par la littérature, utilisé tel quel. Pour tout le reste, le mot juste est « conçu », « testé » ou « non évalué ».
 
@@ -20,9 +20,10 @@ OUCH est en bonne position sur le niveau 2, partiellement sur le 1, et **n'a pas
 | **Douleur, échelle numérique 0 à 10** | Instrument recommandé pour l'intensité (IMMPACT, HAS) et largement validé, repris tel quel (références 1, 3, 10). Rappel sur 24 h, qui limite le biais de mémoire (6) | L'équivalence de la saisie sur téléphone (curseur, ou onze cases les jours de poussée) avec une échelle sur papier n'a pas été étudiée dans OUCH |
 | **Fatigue, sommeil, brouillard mental, humeur, stress, activité** | Échelles numériques simples, présentées comme telles | **Aucune validation.** Pas de comparaison avec un instrument validé de ces dimensions |
 | **Catégories légère, modérée, sévère** (≤ 3, 4–6, ≥ 7) | Seuils conventionnels, choisis dans la littérature (5) et indiqués comme variables selon le retentissement | Pas de calibration sur les patients d'OUCH ; ils ne tiennent pas compte du retentissement fonctionnel |
-| **Calculs descriptifs** (moyenne, médiane, quartiles, écart-type, répartition, moyenne glissante sur 7 jours) | Formules simples, vérifiées par 147 tests automatiques (dont des valeurs de référence, comme la méthode de calcul des quantiles de R) ; jours manquants jamais imputés | Pas de comparaison systématique avec un logiciel de statistique sur de gros jeux de données. L'usage de la moyenne sur 7 jours reprend la pratique des essais, sans validation propre |
+| **Calculs descriptifs** (moyenne, médiane, quartiles, écart-type, répartition, moyenne glissante sur 7 jours) | Formules simples, vérifiées par 264 tests automatiques (dont des valeurs de référence, comme la méthode de calcul des quantiles de R) ; jours manquants jamais imputés | Pas de comparaison systématique avec un logiciel de statistique sur de gros jeux de données. L'usage de la moyenne sur 7 jours reprend la pratique des essais, sans validation propre |
 | **Variation relative, repère de 30 %** | Repère issu d'études d'amélioration sous traitement (2, 4, 8, 9), cité comme tel | Établi pour des groupes de patients et des baisses ; non validé pour un individu ni pour une hausse |
 | **Poussées** | Définition écrite, paramétrée, testée sur des cas construits (19 tests) | **Voir ci-dessous** : définition propre à OUCH, calibrée sur des données fictives, jamais comparée à des poussées identifiées par des patients ou des soignants |
+| **Jour de la semaine** (écart à la moyenne et bande que le hasard suffit à produire) | Formules écrites, testées sur des cas construits (6 tests) ; bande à 5 % avec correction de Bonferroni pour sept comparaisons ; rien d'affiché avant 4 jours notés pour chaque jour de la semaine | Les journées ne sont pas indépendantes (une poussée dure plusieurs jours), donc la bande est indicative ; description sans lien de cause ; pas de comparaison avec une autre méthode |
 | **Contexte des 3 jours avant une poussée** | Description seule, sans signal | Aucun lien établi ; abandon volontaire d'un repérage des mesures « inhabituelles » (voir ci-dessous) |
 | **Avant et après un changement de traitement** et « écart habituel » | Fenêtres et seuils fixés, testés sur des séries construites ; l'écart habituel donne un repère de hasard pour ne pas lire une différence comme un effet | Les durées (28, 7, 28 jours ; 14 jours renseignés ; 6 paires ; 80e centile) sont des choix de conception sans base empirique citée. Aucun test statistique. Retour vers la moyenne non corrigé |
 | **Corrélations** (Spearman) et comparaisons de médianes | Méthode standard, libellés de force conventionnels | Pas de correction des comparaisons multiples ni de l'autocorrélation ; pas de valeur p ni d'intervalle de confiance |
@@ -67,7 +68,7 @@ Pistes, dans l'ordre où elles coûtent le moins ; chacune demande un cadre éth
 | « Le rapport décrit les données déclarées par le patient » | « OUCH mesure l'évolution de la maladie » |
 | « Les poussées sont repérées par rapport au niveau habituel du patient, selon une définition propre à OUCH » | « OUCH détecte les crises » |
 | « Une comparaison avant et après un changement de traitement, sans conclusion sur son effet » | « OUCH mesure l'efficacité d'un traitement » |
-| « 147 tests automatiques vérifient les calculs » | « Les calculs sont cliniquement validés » |
+| « 264 tests automatiques vérifient les calculs » | « Les calculs sont cliniquement validés » |
 
 ## Mise à jour
 

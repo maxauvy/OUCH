@@ -114,7 +114,7 @@ La version détaillée, avec ce que chaque service extérieur reçoit, est dans 
 
 OUCH n'est pas un dispositif médical : il décrit ce que la personne note, sans poser de diagnostic ni recommander de traitement, et ne remplace pas un avis médical.
 
-Une plaquette de deux pages ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.4.0/OUCH-plaquette-soignants-v0.4.0.pdf)), une note méthodologique qui détaille chaque calcul, seuil et source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.4.0/OUCH-note-methodologique-v0.4.0.pdf)), et un formulaire de retour clinique sont rassemblés dans [`docs/soignants/`](docs/soignants/README.md).
+Une plaquette de deux pages ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-plaquette-soignants-v0.5.0.pdf)), une note méthodologique qui détaille chaque calcul, seuil et source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-note-methodologique-v0.5.0.pdf)), et un formulaire de retour clinique sont rassemblés dans [`docs/soignants/`](docs/soignants/README.md).
 
 ## Contribuer
 
