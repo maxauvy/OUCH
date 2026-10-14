@@ -8,6 +8,7 @@ import {
   changePin,
   createLock,
   DEFAULT_LOCK_DELAY_MIN,
+  lockAtStart,
   shouldLock,
   tryPin,
   waitLeft,
@@ -30,8 +31,29 @@ export interface LockSnapshot {
   language?: Language
 }
 
+// Marks the session in which the code was entered. `sessionStorage` is gone
+// when the app is closed (by the person or by the system), so a marker that is
+// missing means a launch from scratch; if it cannot be read, that is assumed too.
+const SESSION_KEY = 'ouch:lock-session'
+
+function sessionSeen(): boolean {
+  try {
+    return sessionStorage.getItem(SESSION_KEY) !== null
+  } catch {
+    return false
+  }
+}
+
+function markSession(): void {
+  try {
+    sessionStorage.setItem(SESSION_KEY, '1')
+  } catch {
+    // Without it, a reload asks for the code again: the safe side.
+  }
+}
+
 let lock: PinLock | null = loadLock()
-let locked = lock !== null && shouldLock(lock, Date.now())
+let locked = lock !== null && lockAtStart(lock, Date.now(), sessionSeen())
 let snapshot = build()
 const listeners = new Set<() => void>()
 
@@ -74,6 +96,7 @@ export async function unlock(pin: string): Promise<UnlockResult> {
   keep(out.lock)
   if (out.ok) {
     locked = false
+    markSession()
     publish()
     return { ok: true }
   }
@@ -105,6 +128,7 @@ export async function enableLock(
   const saved = keep(await createLock(pin, delayMinutes, language))
   if (!saved) lock = null
   locked = false
+  markSession()
   publish()
   return saved
 }

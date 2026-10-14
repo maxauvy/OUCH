@@ -8,6 +8,7 @@ import {
   FREE_FAILURES,
   isLockDelay,
   isValidPin,
+  lockAtStart,
   LOCK_DELAYS_MIN,
   MAX_WAIT_MS,
   parseLock,
@@ -205,4 +206,17 @@ test('the language is kept with the lock, survives a change of code, and only fr
   assert.equal(parseLock(stored)?.language, 'en')
   assert.equal(parseLock({ ...stored, language: 'de' })?.language, undefined)
   assert.equal(parseLock({ ...stored, language: 3 })?.language, undefined)
+})
+
+test('a launch from scratch always asks, even inside the delay', () => {
+  const l = withHiddenAt(withDelay(lock, 15), T0)
+  assert.equal(lockAtStart(l, T0 + 5_000, false), true)
+  assert.equal(lockAtStart(withHiddenAt(lock, T0), T0 + 1_000, false), true)
+})
+
+test('a reload inside the same session follows the delay', () => {
+  const l = withHiddenAt(withDelay(lock, 15), T0)
+  assert.equal(lockAtStart(l, T0 + 5_000, true), false)
+  assert.equal(lockAtStart(l, T0 + 15 * 60_000, true), true)
+  assert.equal(lockAtStart(lock, T0, true), true) // never seen leaving: asks
 })

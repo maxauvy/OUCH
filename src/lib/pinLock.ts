@@ -154,6 +154,18 @@ export function shouldLock(lock: PinLock, now: number): boolean {
   return away < 0 || away >= lock.delayMinutes * 60_000
 }
 
+/**
+ * Whether the app is locked when it starts. A launch from scratch (the app was
+ * closed by the person, or by the system) always asks for the code, whatever the
+ * delay: closing an app is a clear sign of being done with it. Only a page that
+ * reloads inside the same session (`sessionSeen`: the person unlocked it
+ * earlier in this very session) follows the delay, so that an update's
+ * "Recharger" does not ask again.
+ */
+export function lockAtStart(lock: PinLock, now: number, sessionSeen: boolean): boolean {
+  return !sessionSeen || shouldLock(lock, now)
+}
+
 /** What was kept, if it still has the shape of a lock: anything else is "no lock", never a crash. */
 export function parseLock(raw: unknown): PinLock | null {
   if (typeof raw !== 'object' || raw === null) return null
