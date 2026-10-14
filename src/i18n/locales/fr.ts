@@ -1177,6 +1177,8 @@ const fr: Translations = {
     sourceCode: 'Code source',
     updateAvailable: 'Mise à jour disponible',
     reload: 'Recharger',
+    earlyOn: 'Fonctions à l’essai activées sur cet appareil.',
+    earlyOff: 'Fonctions à l’essai désactivées.',
   },
 }
 

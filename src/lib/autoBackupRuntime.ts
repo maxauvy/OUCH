@@ -13,29 +13,6 @@ import type { BackupProvider } from './cloud/provider'
 import { dropboxProvider } from './cloud/dropboxProvider'
 import { cleanReturnAddress, finishDropboxLink, forgetPendingDropboxLink, getDropboxToken, readDropboxReturn, startDropboxLink, unlinkDropbox } from './cloud/dropboxLink'
 
-const FLAG = 'ouch:autobackup'
-
-/** Early access: the card is shown in development, and on a device where it
- * was asked for with `?autobackup` at the end of the address (`?autobackup=0`
- * takes it back). Until it has been tried on phones, it is not for everyone. */
-function readFlag(): boolean {
-  try {
-    const params = new URLSearchParams(location.search)
-    if (params.has('autobackup')) {
-      if (params.get('autobackup') === '0') localStorage.removeItem(FLAG)
-      else localStorage.setItem(FLAG, '1')
-      params.delete('autobackup')
-      const rest = params.toString()
-      history.replaceState(null, '', `${location.pathname}${rest ? `?${rest}` : ''}${location.hash}`)
-    }
-    return import.meta.env.DEV || localStorage.getItem(FLAG) === '1'
-  } catch {
-    return import.meta.env.DEV
-  }
-}
-
-export const AUTO_BACKUP_AVAILABLE = readFlag()
-
 type ProviderId = AutoBackupState['provider']
 
 /** Providers that can be chosen today, in the order they are listed. The

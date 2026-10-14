@@ -1011,5 +1011,7 @@ export interface Translations {
     sourceCode: string
     updateAvailable: string
     reload: string
+    earlyOn: string
+    earlyOff: string
   }
 }

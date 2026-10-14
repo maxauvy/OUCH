@@ -12,7 +12,7 @@ import { SupportCard } from '../components/about/SupportCard'
 import { BackupSection } from '../components/settings/BackupSection'
 import { IS_DEMO } from '../lib/demoMode'
 import { exitDemo, startDemo } from '../lib/demoSession'
-import { AUTO_BACKUP_AVAILABLE } from '../lib/autoBackupRuntime'
+import { useEarlyAccess } from '../lib/earlyAccess'
 import { AutoBackupCard } from '../components/settings/AutoBackupCard'
 import { SensitiveZoneCard } from '../components/settings/SensitiveZoneCard'
 import { InstallCard } from '../components/install/InstallCard'
@@ -29,6 +29,7 @@ import { radioGroupProps, radioProps } from '../lib/a11y'
  * `onReplayTour`: in the demo, opens the guided tour again. */
 export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?: boolean; onReplayTour?: () => void }) {
   const settings = useSettings()
+  const earlyAccess = useEarlyAccess()
   const t = useTranslation()
   const { intlLocale } = useLocale()
   const [locating, setLocating] = useState(false)
@@ -367,7 +368,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           </Card>
         ) : (
           <>
-        {AUTO_BACKUP_AVAILABLE && <AutoBackupCard />}
+        {earlyAccess && <AutoBackupCard />}
 
         <Card>
           <SectionTitle>{t.settings.backupTitle}</SectionTitle>
