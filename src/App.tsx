@@ -1,3 +1,4 @@
+import { AppLockGate } from './components/lock/AppLockGate'
 import { handleProviderReturn } from './lib/autoBackupRuntime'
 import { useAutoBackup } from './hooks/useAutoBackup'
 import { useEffect, useState } from 'react'
@@ -143,7 +144,9 @@ export default function App() {
 
   return (
     <I18nProvider language={settings.language}>
-      <AppShell />
+      <AppLockGate>
+        <AppShell />
+      </AppLockGate>
     </I18nProvider>
   )
 }

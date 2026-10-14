@@ -855,6 +855,21 @@ const fr: Translations = {
     neverBackedUp: 'Aucune sauvegarde pour l’instant.',
   },
 
+  lock: {
+    dialogLabel: 'Verrouillage',
+    title: 'Ton journal est à l’abri des regards',
+    hint: 'Entre ton code pour l’ouvrir.',
+    typed: '{{n}} {{n:chiffre saisi|chiffres saisis}} sur 4',
+    show: 'Voir',
+    hide: 'Masquer',
+    showLabel: 'Voir le code saisi',
+    hideLabel: 'Masquer le code saisi',
+    erase: 'Effacer le dernier chiffre',
+    wrong: 'Ce n’est pas le bon code. Réessaie.',
+    waitSeconds: 'On fait une pause. Réessaie dans {{n}} {{n:seconde|secondes}}.',
+    waitMinutes: 'On fait une pause. Réessaie dans {{n}} {{n:minute|minutes}}.',
+  },
+
   autoBackup: {
     title: 'Sauvegarde automatique',
     intro:

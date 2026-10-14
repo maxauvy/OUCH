@@ -850,6 +850,21 @@ const en: Translations = {
     neverBackedUp: 'No backup yet.',
   },
 
+  lock: {
+    dialogLabel: 'Lock',
+    title: 'Your journal is out of sight',
+    hint: 'Enter your code to open it.',
+    typed: '{{n}} of 4 {{n:digit|digits}} typed',
+    show: 'Show',
+    hide: 'Hide',
+    showLabel: 'Show the digits typed',
+    hideLabel: 'Hide the digits typed',
+    erase: 'Delete the last digit',
+    wrong: 'That is not the right code. Try again.',
+    waitSeconds: 'Let us pause. Try again in {{n}} {{n:second|seconds}}.',
+    waitMinutes: 'Let us pause. Try again in {{n}} {{n:minute|minutes}}.',
+  },
+
   autoBackup: {
     title: 'Automatic backup',
     intro:

@@ -690,6 +690,24 @@ export interface Translations {
     neverBackedUp: string
   }
 
+  lock: {
+    dialogLabel: string
+    title: string
+    hint: string
+    /** `{{n}}` digits typed, for a screen reader */
+    typed: string
+    show: string
+    hide: string
+    showLabel: string
+    hideLabel: string
+    erase: string
+    wrong: string
+    /** `{{n}}` seconds */
+    waitSeconds: string
+    /** `{{n}}` minutes */
+    waitMinutes: string
+  }
+
   autoBackup: {
     title: string
     intro: string
