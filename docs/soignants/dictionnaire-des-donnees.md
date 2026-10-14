@@ -1,6 +1,6 @@
 # Dictionnaire des données d'OUCH
 
-*Décrit d'après le code de `main` au 9 octobre 2026 : la v0.3.0, plus deux corrections fusionnées le même jour (douleur facultative, variation de pression), signalées comme telles et pas encore publiées dans une version numérotée (`src/db/types.ts`, `src/lib/backupSanitize.ts`, `src/lib/loggedEntries.ts`, les écrans de saisie). À mettre à jour quand un champ change.*
+*Décrit d'après le code de `main` au 9 octobre 2026 : la v0.3.0, plus deux corrections fusionnées le même jour (douleur facultative, variation de pression), complété jusqu'à la v0.5.0 le 14 octobre 2026 (état local de la sauvegarde automatique, verrou par code) (`src/db/types.ts`, `src/lib/backupSanitize.ts`, `src/lib/loggedEntries.ts`, les écrans de saisie). À mettre à jour quand un champ change.*
 
 Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'est enregistré, et ce que cela signifie. Il sert à lire un rapport, à comparer avec vos propres outils, ou à relire une sauvegarde.
 
@@ -87,8 +87,11 @@ Un changement de dose ferme la période en cours la veille et en ouvre une nouve
 | `language`, `theme`, `onboardingDone`, `parentGender` | `fr` / `en`, `system` / `light` / `dark`, booléen, `maman` / `papa` (écran Enfants) | Oui |
 | `hardDaysCardEnabled`, `lightFormEnabled` | booléens | Oui. Le mot des jours difficiles et l'écran allégé pendant une poussée |
 | `lastBackupAt`, `backupReminderSnoozedUntil`, `fullFormDay`, `hardDaysSeen` | état local de l'appareil | **Non** : propres à chaque appareil |
+| `autoBackup` | état local de la sauvegarde automatique, facultative et en accès anticipé : fournisseur, dernière copie envoyée et vérifiée (nom, taille, empreinte, date), dernière tentative, et ce que le fournisseur a répondu en cas d'échec | **Non** : propre à chaque appareil, jamais dans une sauvegarde ni dans une copie |
 
 Nom et date de naissance saisis pour un rapport ne sont **pas** des réglages : ils ne sont pas enregistrés.
+
+Le **verrou par code**, facultatif, n'est pas un réglage de la base : il est gardé à part dans le stockage du navigateur (une empreinte salée du code, jamais le code, le délai choisi, le nombre d'erreurs de suite, la langue et l'état verrouillé), et ne fait partie d'aucune sauvegarde ni d'aucun export. Il cache l'écran sans chiffrer les données (voir [`PRIVACY.md`](../../PRIVACY.md)).
 
 ## Ce qui est calculé, et non enregistré
 

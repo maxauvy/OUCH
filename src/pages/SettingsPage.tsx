@@ -1,4 +1,3 @@
-import { useLockState } from '../lib/appLock'
 import { useState } from 'react'
 import { IconBell, IconHeartbeat, IconInfoCircle, IconShieldLock, IconUser } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
@@ -32,8 +31,6 @@ import { radioGroupProps, radioProps } from '../lib/a11y'
 export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?: boolean; onReplayTour?: () => void }) {
   const settings = useSettings()
   const earlyAccess = useEarlyAccess()
-  // Early access shows the lock's setting; a lock that is already set stays reachable (to change or remove it) even if early access is switched off.
-  const lockState = useLockState()
   // Raised to open the "Mes données" group from the lock's sheet ("Faire d'abord une sauvegarde").
   const [backupSignal, setBackupSignal] = useState(0)
   function goToBackupSection() {
@@ -306,7 +303,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           </div>
         </Card>
 
-        {!IS_DEMO && (earlyAccess || lockState.enabled) && <LockCard lastBackupAt={settings.lastBackupAt} onBackupFirst={goToBackupSection} />}
+        {!IS_DEMO && <LockCard lastBackupAt={settings.lastBackupAt} onBackupFirst={goToBackupSection} />}
 
         <Card>
           <SectionTitle>{t.settings.languageTitle}</SectionTitle>

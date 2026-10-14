@@ -8,18 +8,20 @@ Cette page rassemble ce qu'un soignant peut vouloir lire, essayer, ou discuter.
 
 | Document | Pour quoi faire | Où |
 |---|---|---|
-| Plaquette (2 pages) | Voir en un coup d'œil ce que le patient saisit, pourquoi c'est pertinent, et ce que contient le rapport | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.4.0/OUCH-plaquette-soignants-v0.4.0.pdf) · [source](../plaquette-soignants/) |
-| Note méthodologique (8 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et sept questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.4.0/OUCH-note-methodologique-v0.4.0.pdf) · [source](../note-methodologique/) |
+| Plaquette (2 pages) | Voir en un coup d'œil ce que le patient saisit, pourquoi c'est pertinent, et ce que contient le rapport | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-plaquette-soignants-v0.5.0.pdf) · [source](../plaquette-soignants/) |
+| Note méthodologique (8 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et sept questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-note-methodologique-v0.5.0.pdf) · [source](../note-methodologique/) |
+| Scores validés, note de cadrage (2 pages) | Discuter de l'ajout éventuel de questionnaires validés : ce qu'OUCH ferait et ne ferait pas, les outils envisagés maladie par maladie et leurs droits, cinq questions | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-note-scores-valides-v0.5.0.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-validated-scores-note-v0.5.0.pdf) · [source](../note-scores-valides/) |
 | Vie privée | Savoir ce qui est enregistré, où, et ce qui quitte l'appareil | [`PRIVACY.md`](../../PRIVACY.md) |
 | Sécurité | Chiffrement des sauvegardes, signalement d'une faille | [`SECURITY.md`](../../SECURITY.md) |
 | Dictionnaire des données | Savoir précisément ce que chaque champ saisi veut dire, comment il est enregistré, et les pièges de lecture | [`dictionnaire-des-donnees.md`](dictionnaire-des-donnees.md) |
 | Statut de validation | Savoir ce qui a été vérifié dans OUCH et ce qui ne l'a pas été, et ce qu'une étude minimale demanderait | [`statut-de-validation.md`](statut-de-validation.md) |
+| Questionnaires validés | Comprendre pourquoi OUCH n'intègre pas de questionnaire complet (BASDAI, FIQR…), ce qu'il utilise à la place, et ce qu'il faudrait pour en intégrer un | [`questionnaires-valides.md`](questionnaires-valides.md) |
 | Cadre réglementaire | Comprendre sur quoi repose la position « carnet descriptif, pas dispositif médical », et ses points faibles | [`cadre-reglementaire.md`](cadre-reglementaire.md) |
 | Protocole de test | Participer à un pilote avec des soignants : phases, ce qui est recueilli, garde-fous | [`protocole-de-test.md`](protocole-de-test.md) |
 | Sources scientifiques | Les 15 références du rapport, avec leur résumé et l'usage qu'OUCH en fait | Dans l'application : Réglages, puis À propos |
 | Journal des versions | Ce qui change d'une version à l'autre | [`CHANGELOG.md`](../../CHANGELOG.md) |
 
-Les PDF sont joints à la [release v0.4.0](https://github.com/maxauvy/OUCH/releases/tag/v0.4.0) et correspondent à cette version du code ; les sources sont des pages HTML conçues pour s'imprimer en PDF, et chaque dossier donne la commande pour les produire.
+Les PDF sont joints à la [release v0.5.0](https://github.com/maxauvy/OUCH/releases/tag/v0.5.0) et correspondent à cette version du code ; les sources sont des pages HTML conçues pour s'imprimer en PDF, et chaque dossier donne la commande pour les produire.
 
 ## Essayer en deux minutes
 

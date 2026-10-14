@@ -1,6 +1,6 @@
 # Protocole de test avec des soignants
 
-*Version 0.1, brouillon pour relecture. Proposé le 9 octobre 2026, pour OUCH v0.3.0.*
+*Version 0.2, brouillon pour relecture. Proposé le 9 octobre 2026 pour OUCH v0.3.0 ; mis à jour le 14 octobre 2026 pour la v0.5.0 : mode démo intégré à l'app, nouveaux éléments du rapport à relire (jour de la semaine, statut des maladies), sauvegarde et verrou par code dans les garde-fous.*
 
 Ce document décrit comment tester OUCH avec des professionnels de santé : ce qu'on cherche à apprendre, qui on sollicite, ce qu'on leur demande, ce qui est recueilli (et ce qui ne l'est pas), et comment on décide de changer l'application. C'est un **pilote d'usage**, pas une étude clinique : il ne mesure ni l'efficacité d'un traitement ni un bénéfice pour la santé, et ne prétend à aucune valeur statistique. Les chiffres proposés (nombre de participants, durées, seuils de décision) sont des points de départ à discuter.
 
@@ -14,12 +14,14 @@ Ce document décrit comment tester OUCH avec des professionnels de santé : ce q
 3. Les catégories de douleur (≤ 3, 4–6, ≥ 7), la comparaison avant et après un changement de traitement et les corrélations aident-ils ou risquent-ils d'être sur-interprétés ?
 4. La différence entre la version « Médecin traitant » (2 pages) et « Centre douleur » (environ 5 pages) est-elle la bonne ?
 5. Quel effort le journal demande-t-il aux patients, en particulier les jours difficiles ?
+6. Le tableau « Douleur selon le jour de la semaine » (écart à la moyenne et bande que le hasard suffit à produire), présent dans les deux versions du rapport, est-il lisible ? Risque-t-il d'être lu comme un effet réel alors que les journées ne sont pas indépendantes ?
+7. Le statut des maladies (« diagnostiquée en 2019 », « suspectée »), tel que le patient le déclare et tel que le rapport le reprend, aide-t-il à lire le reste, ou risque-t-il d'être pris pour un diagnostic établi ?
 
 **Ce qu'on ne cherche pas à établir** : que OUCH améliore la douleur, l'observance ou la prise en charge ; que ses seuils sont validés ; que ses poussées correspondent à celles que cliniciens ou patients identifient. Ces questions demanderaient une autre étude, avec un cadre éthique et statistique à part.
 
 ## 2. Deux phases
 
-**Phase A : relecture par les soignants, sans patient.** Le soignant lit la plaquette et la note méthodologique, essaie l'application avec les données de démonstration, et répond aux questions de l'annexe B. Environ une heure au total. Elle ne fait intervenir aucune donnée de patient.
+**Phase A : relecture par les soignants, sans patient.** Le soignant lit la plaquette et la note méthodologique, essaie l'application avec les données de démonstration (le mode démo de l'app, à l'adresse <https://maxauvy.github.io/OUCH/?demo> : 90 jours fictifs, une visite guidée, un historique à part qui n'affecte rien de réel et s'efface avec « Quitter »), et répond aux questions de l'annexe B. Environ une heure au total. Elle ne fait intervenir aucune donnée de patient.
 
 **Phase B : usage en consultation, avec des patients volontaires.** Un soignant ayant fait la phase A propose OUCH à quelques patients adultes. Pendant 4 à 6 semaines, les patients tiennent leur journal comme ils l'entendent. À la consultation suivante, un patient qui le souhaite apporte son rapport. Le soignant le lit dans le cadre normal de la consultation, puis remplit une courte grille (annexe A) sans mention d'identité. Un entretien de 20 à 30 minutes clôt la participation du soignant.
 
@@ -33,6 +35,7 @@ Rien n'oblige à passer à la phase B : la phase A est utile seule.
 - Inclus : adulte, douleur chronique (fibromyalgie ou autre), téléphone personnel, volontaire après avoir lu le texte de l'annexe C. Proposer à 2 à 4 patients par soignant au plus.
 - Non invités, à l'appréciation du soignant : un patient en crise aiguë, ou pour qui un suivi quotidien de la douleur serait source d'anxiété ou de fixation. Le soignant n'a pas à justifier son choix.
 - Aucune obligation de saisir tous les jours : l'application est conçue pour qu'un jour sans saisie n'ait pas de conséquence, et le rapport le dit.
+- Ce qui n'est **pas** proposé aux patients du pilote : la sauvegarde automatique vers un service en ligne (elle est en accès anticipé et n'est pas ouverte à tous). Les patients utilisent la sauvegarde manuelle, qui reste sur leur téléphone ou dans le service de leur choix.
 
 ## 4. Déroulé type
 
@@ -45,6 +48,8 @@ Rien n'oblige à passer à la phase B : la phase A est utile seule.
 
 Le soignant peut arrêter à tout moment, sans raison à donner. Un patient aussi : supprimer ses données se fait dans Réglages, et cela n'a aucune conséquence sur sa prise en charge.
 
+À la semaine 0, le soignant rappelle au patient de **faire une sauvegarde** (Réglages, Mes données) et d'en refaire une vers la semaine 3 : c'est la seule façon de ne pas perdre son journal en changeant de téléphone ou si le navigateur efface les données du site.
+
 ## 5. Ce qui est recueilli
 
 **Auprès des soignants.**
@@ -53,6 +58,8 @@ Le soignant peut arrêter à tout moment, sans raison à donner. Un patient auss
 - Le questionnaire de fin et les notes de l'entretien.
 
 **Auprès des patients : rien n'est recueilli par OUCH ni par le développeur.** Les données du journal restent sur le téléphone, et le rapport appartient au patient. Si un patient veut donner un avis, il le fait à son soignant ou par le [formulaire « Retour clinique »](https://github.com/maxauvy/OUCH/issues/new?template=retour-clinique.yml), sans donnée identifiable.
+
+Rien ne quitte le téléphone du patient du fait du pilote : la météo facultative et le nom de la ville sont les seuls appels extérieurs de l'app, et ils ne reçoivent aucune donnée du journal (voir [`PRIVACY.md`](../../PRIVACY.md)).
 
 *Option, à n'activer qu'après avis (voir 7) : un court questionnaire d'usage pour les patients, anonyme, remis par le soignant. Il n'est pas prévu dans la version 0.1 de ce protocole.*
 
@@ -82,6 +89,7 @@ Les retours sont lus par le mainteneur et par au moins un soignant avant toute d
 **Garde-fous.**
 - OUCH n'est pas un dispositif médical, et le pilote n'en fait pas un : le rapport est un support de discussion. Aucune décision thérapeutique ne repose sur lui seul, et le soignant garde sa pratique habituelle.
 - Aucune donnée de patient ne doit figurer dans un retour, une issue ou un courriel : la case du formulaire le rappelle.
+- **Perdre son journal est un risque réel**, et le pilote ne doit pas le créer : téléphone changé, données du navigateur effacées, ou **code oublié** si le patient active le verrou par code facultatif (qui cache l'écran, sans chiffrer, et dont le seul recours est d'effacer l'appareil puis de restaurer une sauvegarde). D'où le rappel de sauvegarde (section 4) et une phrase dans le texte lu au patient (annexe C). Le verrou n'est pas recommandé ni écarté : c'est le choix du patient.
 - Un patient en difficulté est pris en charge comme d'habitude ; OUCH ne contacte personne.
 - Un défaut de l'application (calcul erroné, texte trompeur) se signale par le formulaire ou par courriel, et passe avant toute autre tâche.
 
@@ -112,7 +120,7 @@ Les retours sont lus par le mainteneur et par au moins un soignant avant toute d
 
 ## Annexe B : questionnaire de fin et entretien
 
-Les sept questions de la [note méthodologique](../note-methodologique/) :
+Les sept questions de la [note méthodologique](../note-methodologique/) (les questions 8 et 9 sont plus bas) :
 
 1. La définition des poussées a-t-elle un sens pour vous ? Quel critère préféreriez-vous ?
 2. Les catégories ≤ 3, 4–6, ≥ 7 vous servent-elles, ou lisez-vous l'évolution de la personne par rapport à elle-même ?
@@ -122,6 +130,11 @@ Les sept questions de la [note méthodologique](../note-methodologique/) :
 6. Quelles données vous manquent pour décider, qu'un carnet pourrait apporter ?
 7. La comparaison avant et après un changement de traitement est-elle un format utile ? Quelle durée choisiriez-vous ?
 
+Deux questions de plus, propres aux éléments ajoutés au rapport depuis la note :
+
+8. Le tableau « Douleur selon le jour de la semaine » et sa bande de hasard : le lisez-vous comme une description, ou risque-t-il de faire croire à un effet ? Faut-il le retirer de la version « Médecin traitant » ?
+9. Le statut des maladies déclarées (« diagnostiquée en 2019 », « suspectée ») aide-t-il à lire le rapport, et est-il assez clair qu'il est déclaré par le patient et non vérifié ?
+
 Puis, ouvertes : ce qui vous a surpris ; ce que vous craignez que l'on fasse dire au rapport ; ce qui vous ferait le recommander, ou non ; si vous continueriez à l'utiliser. Facultatif : une échelle d'utilisabilité de 10 items (type SUS) appliquée au rapport.
 
 ## Annexe C : texte à lire au patient
@@ -130,4 +143,4 @@ Puis, ouvertes : ce qui vous a surpris ; ce que vous craignez que l'on fasse dir
 
 > Je teste un carnet de douleur gratuit qui s'appelle OUCH, et je vous propose de l'essayer, si vous le souhaitez. Vous y notez votre journée en moins d'une minute sur votre téléphone ; les jours difficiles, la douleur seule suffit. Vos notes restent sur votre téléphone : personne d'autre n'y a accès, ni moi, ni le créateur de l'application. Si vous voulez, vous pouvez en tirer un résumé à m'apporter à la prochaine consultation, et c'est vous qui décidez de me le montrer ou non.
 >
-> Vous n'êtes pas obligé(e) de noter tous les jours, ni d'aller au bout. Vous pouvez arrêter quand vous voulez, supprimer vos notes d'un geste, et cela ne changera rien à votre suivi. L'application n'est pas un avis médical : elle sert seulement à vous aider à me raconter vos journées avec des chiffres. Je ne note rien de ce que vous y écrivez, et je ne vous demanderai que votre impression si vous avez envie de la partager.
+> Vous n'êtes pas obligé(e) de noter tous les jours, ni d'aller au bout. Vous pouvez arrêter quand vous voulez, supprimer vos notes d'un geste, et cela ne changera rien à votre suivi. Je vous suggère de faire de temps en temps une sauvegarde (dans les Réglages de l'application) : si vous changez de téléphone, c'est la seule façon de retrouver vos notes. Si vous le souhaitez, vous pouvez aussi cacher l'application derrière un code ; dans ce cas, notez-le bien, car personne ne peut le retrouver. L'application n'est pas un avis médical : elle sert seulement à vous aider à me raconter vos journées avec des chiffres. Je ne note rien de ce que vous y écrivez, et je ne vous demanderai que votre impression si vous avez envie de la partager.
