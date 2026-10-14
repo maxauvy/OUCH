@@ -12,6 +12,7 @@ export function SettingsGroup({
   title,
   summary,
   defaultOpen = false,
+  openSignal = 0,
   id,
   children,
 }: PropsWithChildren<{
@@ -19,9 +20,16 @@ export function SettingsGroup({
   title: string
   summary?: string
   defaultOpen?: boolean
+  /** Raised (changed to a higher number) to open the group from outside, once. */
+  openSignal?: number
   id?: string
 }>) {
   const [open, setOpen] = useState(defaultOpen)
+  const [seenSignal, setSeenSignal] = useState(openSignal)
+  if (openSignal !== seenSignal) {
+    setSeenSignal(openSignal)
+    if (openSignal > 0) setOpen(true)
+  }
   const bodyId = useId()
   return (
     <section id={id} className="flex flex-col gap-4 scroll-mt-4">

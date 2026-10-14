@@ -1,3 +1,4 @@
+import { useLockState } from '../lib/appLock'
 import { useState } from 'react'
 import { IconBell, IconHeartbeat, IconInfoCircle, IconShieldLock, IconUser } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
@@ -13,6 +14,7 @@ import { BackupSection } from '../components/settings/BackupSection'
 import { IS_DEMO } from '../lib/demoMode'
 import { exitDemo, startDemo } from '../lib/demoSession'
 import { useEarlyAccess } from '../lib/earlyAccess'
+import { LockCard } from '../components/settings/LockCard'
 import { AutoBackupCard } from '../components/settings/AutoBackupCard'
 import { SensitiveZoneCard } from '../components/settings/SensitiveZoneCard'
 import { InstallCard } from '../components/install/InstallCard'
@@ -30,6 +32,14 @@ import { radioGroupProps, radioProps } from '../lib/a11y'
 export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?: boolean; onReplayTour?: () => void }) {
   const settings = useSettings()
   const earlyAccess = useEarlyAccess()
+  // Early access shows the lock's setting; a lock that is already set stays reachable (to change or remove it) even if early access is switched off.
+  const lockState = useLockState()
+  // Raised to open the "Mes données" group from the lock's sheet ("Faire d'abord une sauvegarde").
+  const [backupSignal, setBackupSignal] = useState(0)
+  function goToBackupSection() {
+    setBackupSignal((n) => n + 1)
+    requestAnimationFrame(() => document.getElementById('backup')?.scrollIntoView({ block: 'start' }))
+  }
   const t = useTranslation()
   const { intlLocale } = useLocale()
   const [locating, setLocating] = useState(false)
@@ -296,6 +306,8 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           </div>
         </Card>
 
+        {!IS_DEMO && (earlyAccess || lockState.enabled) && <LockCard lastBackupAt={settings.lastBackupAt} onBackupFirst={goToBackupSection} />}
+
         <Card>
           <SectionTitle>{t.settings.languageTitle}</SectionTitle>
           <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
@@ -340,7 +352,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         </Card>
       </SettingsGroup>
 
-      <SettingsGroup id="backup" icon={IconShieldLock} title={t.settings.groups.data} summary={IS_DEMO ? t.demo.settingsTitle : dataSummary} defaultOpen={openBackup}>
+      <SettingsGroup id="backup" icon={IconShieldLock} title={t.settings.groups.data} summary={IS_DEMO ? t.demo.settingsTitle : dataSummary} defaultOpen={openBackup} openSignal={backupSignal}>
         {IS_DEMO ? (
           <Card>
             <SectionTitle>{t.demo.settingsTitle}</SectionTitle>

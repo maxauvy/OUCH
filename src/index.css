@@ -329,3 +329,9 @@ input::-webkit-date-and-time-value {
   border-radius: var(--radius-card);
   scroll-margin-top: 16px;
 }
+
+/* The app is covered the moment it goes out of sight, before the system takes
+   its picture for the app switcher (see lib/appLock.ts). */
+html[data-covered] #root {
+  visibility: hidden;
+}

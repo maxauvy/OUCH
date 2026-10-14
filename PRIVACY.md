@@ -15,9 +15,10 @@ Dans le navigateur de l'appareil (base IndexedDB du site, plus une clé de `loca
 - le journal : douleur, zones, fatigue, sommeil, brouillard mental, stress, humeur, activité, actions qui ont aidé, notes, jour de règles si la personne l'active ;
 - les traitements : nom, type, doses, périodes, prises, soulagement, effets indésirables ;
 - les réglages : prénom, langue, maladies déclarées, heure du rappel, et, si la météo automatique est activée, la **position exacte** de l'appareil ;
+- si le verrou par code est activé : l'empreinte salée du code (jamais le code), le délai choisi, le nombre d'erreurs de suite et le moment où l'app a quitté l'écran pour la dernière fois, dans une clé de `localStorage` (voir plus bas) ;
 - si la sauvegarde automatique est activée : l'état de la dernière copie (date, taille, empreinte, ce qu'a répondu Dropbox en cas d'échec), dans les réglages, ainsi que la clé de chiffrement et les jetons Dropbox dans deux bases à part (voir plus bas).
 
-Ces données sont stockées **en clair** : quiconque a accès à l'appareil déverrouillé ou au profil du navigateur peut les lire. Seules les sauvegardes exportées sont chiffrées (voir plus bas).
+Ces données sont stockées **en clair** : quiconque a accès à l'appareil déverrouillé ou au profil du navigateur peut les lire. Le verrou par code (voir plus bas) cache l'écran, il ne les chiffre pas. Seules les sauvegardes exportées sont chiffrées (voir plus bas).
 
 Le nom et la date de naissance saisis pour générer un rapport ne sont **pas** enregistrés : ils servent à fabriquer le PDF, puis disparaissent.
 
@@ -41,6 +42,18 @@ Le **développeur n'a accès à aucune donnée de journal** : elles n'arrivent j
 L'export produit un fichier chiffré dans le navigateur (WebCrypto) : AES-256-GCM, clé dérivée du mot de passe de la personne par PBKDF2-SHA-256 (600 000 itérations, sel aléatoire de 16 octets). Le mot de passe n'est enregistré nulle part : **perdu, il rend la sauvegarde irrécupérable**, par conception. Le fichier contient tout le journal, les traitements et les réglages, donc aussi la position exacte si elle a été enregistrée. Il ne contient que des données d'OUCH, et l'import vérifie sa forme avant de déchiffrer. Le détail des champs est dans le [dictionnaire des données](docs/soignants/dictionnaire-des-donnees.md).
 
 L'export CSV (Réglages, zone sensible) est différent : il produit deux fichiers **en clair**, non chiffrés, qui ne servent pas à restaurer OUCH. Il n'est produit que sur demande et dans le navigateur ; les notes libres peuvent en être exclues. Ce qui est fait du fichier ensuite, par exemple le partager par e-mail, relève de la personne.
+
+## Verrou par code
+
+Facultatif, désactivé par défaut, en **accès anticipé** le temps d'être essayé sur d'autres appareils (on l'affiche dans Réglages en touchant cinq fois de suite la ligne « Créé avec soin par… » au bas d'une page ; un verrou déjà réglé reste toujours accessible), puis réglé dans Réglages (Rappel et affichage). C'est un **verrou d'affichage** : il cache le journal à quelqu'un qui regarde un appareil déverrouillé (un proche, un collègue, un appareil prêté). Il **ne chiffre rien** : les données restent en clair dans le navigateur, et quiconque sait ouvrir les outils du navigateur ou lire le stockage du site peut les lire. Il ne remplace donc ni le verrouillage de l'appareil, ni un chiffrement de disque.
+
+- **Le code :** quatre chiffres. L'app n'en garde qu'une **empreinte salée** (PBKDF2-SHA-256, 100 000 itérations, volontairement légères puisque ce n'est pas du chiffrement). Le code lui-même n'est enregistré nulle part : **il ne peut pas être réaffiché**, seulement changé ou retiré, en donnant le code actuel.
+- **Où :** une clé de `localStorage` de l'appareil (lue avant d'afficher quoi que ce soit, pour que le journal n'apparaisse pas un instant). Elle ne fait partie d'aucune sauvegarde, d'aucun export ni d'aucune copie automatique : un nouvel appareil démarre sans code.
+- **Quand l'app se verrouille :** à l'ouverture, puis quand elle revient à l'écran après le délai choisi (aussitôt, 1, 5 ou 15 minutes ; 1 minute par défaut), ou à la demande (« Verrouiller maintenant »). Dès que l'app quitte l'écran, son contenu est masqué avant que le système prenne l'aperçu du sélecteur d'applications.
+- **Erreurs :** les quatre premiers codes faux de suite ne coûtent rien ; dès le cinquième, une pause de 30 secondes s'impose, et elle double à chaque nouvel échec jusqu'à 15 minutes. Pendant une pause, même le bon code est refusé. **Rien n'est jamais effacé** après des erreurs.
+- **Code oublié :** il n'existe aucun moyen de le retrouver. La seule issue est d'effacer les données de cet appareil (après avoir tapé le mot de confirmation), puis de restaurer une sauvegarde. Sans sauvegarde, le journal de l'appareil est perdu : c'est pourquoi l'activation du verrou affiche la date de la dernière sauvegarde et propose d'en faire une d'abord.
+- **Effacer ses données** retire aussi le verrou. La **sauvegarde automatique** continue pendant que l'app est verrouillée. Le mode démo n'a pas de verrou.
+- **Le développeur** n'a accès à rien de tout cela : rien n'est envoyé.
 
 ## Sauvegarde automatique (accès anticipé)
 
@@ -81,5 +94,7 @@ Pour une faille de sécurité, voir [`SECURITY.md`](SECURITY.md). Pour une erreu
 ## English summary
 
 OUCH keeps a pain diary, so health data. The diary, treatments and settings live in the browser on the person's own device, unencrypted, with no account and no server. Only three optional features contact a third party: automatic weather ([Open-Meteo](https://open-meteo.com/) receives the device's coordinates and IP), the town name ([Nominatim](https://nominatim.openstreetmap.org/) receives a position rounded to about 1 km) and, in early access and off by default, automatic backup to [Dropbox](https://www.dropbox.com/): an already-encrypted file, in OUCH's own app folder, the three latest copies kept, checked after each upload; Dropbox cannot read it. The site itself is hosted on GitHub Pages, which sees what any web host sees. The donation link is a plain link, loaded only if tapped. There are no analytics, no tracking cookies and no third-party scripts, and a content security policy blocks any other outgoing call.
+
+An optional code lock (4 digits, only a salted hash of it kept in the device's local storage, never in backups) hides the journal from someone looking at an unlocked device. It is a display lock, not encryption: the data stays readable in the browser's storage. From the fifth wrong code in a row the app makes you pause (30 seconds, doubling up to 15 minutes), and it never erases anything; a forgotten code can only be got around by erasing the device and restoring a backup.
 
 Backups are encrypted in the browser (AES-256-GCM, key from the password with PBKDF2-SHA-256, 600,000 iterations); a lost password means a lost backup. The name and birth date typed to produce a report are never stored. Settings has a button to delete all local data. The developer has no access to any diary data. For institutional use, consult your data protection officer. The CSV export (Settings) is different: two plain, unencrypted files that cannot restore OUCH, made only on request in the browser, with the free-text notes optional.

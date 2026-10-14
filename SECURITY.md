@@ -28,7 +28,7 @@ Les versions déployées sur <https://maxauvy.github.io/OUCH/> : seule la derni�
 
 Ces points sont connus et documentés dans la section [Vie privée du README](README.md#vie-privée) :
 
-- Les données du journal sont stockées **en clair** dans le navigateur (IndexedDB). Quiconque a accès à l'appareil déverrouillé ou au profil du navigateur peut les lire. Seules les sauvegardes exportées sont chiffrées.
+- Les données du journal sont stockées **en clair** dans le navigateur (IndexedDB). Quiconque a accès à l'appareil déverrouillé ou au profil du navigateur peut les lire. Le verrou par code facultatif cache l'écran, il ne chiffre rien. Seules les sauvegardes exportées sont chiffrées.
 - Une sauvegarde dont le mot de passe est perdu est irrécupérable, par conception.
 - Le navigateur peut effacer les données d'un site ; l'app demande un stockage persistant et rappelle de sauvegarder, mais ne peut pas l'empêcher.
 - Une mauvaise configuration de l'appareil de la personne (compte partagé, appareil déverrouillé, extension malveillante).
