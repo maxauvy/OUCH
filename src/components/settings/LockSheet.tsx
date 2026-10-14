@@ -141,6 +141,11 @@ export function LockSheet({
             <IconCircleCheck size={20} aria-hidden style={{ color: 'var(--color-brand)' }} />
             {mode === 'remove' ? s.removed : mode === 'change' ? s.changed : s.doneText}
           </p>
+          {mode === 'activate' && (
+            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              {s.previewNote}
+            </p>
+          )}
           <button
             type="button"
             onClick={onClose}

@@ -903,15 +903,8 @@ const en: Translations = {
     changed: 'The code is changed.',
     removed: 'The code is removed.',
     saveFailed: 'The code could not be saved on this device.',
-    trace: {
-      title: 'Preview diagnostic (trial)',
-      hint: 'To understand what the iPhone does when the app goes to the background. Do the gesture (go home, open the app switcher, then come back to OUCH), refresh here and copy the log.',
-      empty: 'Nothing recorded yet.',
-      refresh: 'Refresh',
-      copy: 'Copy',
-      copied: 'Copied',
-      clear: 'Clear',
-    },
+    previewNote:
+      'On iPhone, the app switcher’s picture can show the last screen shown: the system takes the picture before OUCH can hide it. Before leaving the app, go back to a screen that is not sensitive, such as Today.',
   },
 
   autoBackup: {
