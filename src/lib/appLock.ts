@@ -9,12 +9,14 @@ import {
   createLock,
   DEFAULT_LOCK_DELAY_MIN,
   lockAtStart,
+  reloadPassValid,
   shouldLock,
   tryPin,
   waitLeft,
   withDelay,
   withHiddenAt,
   withLanguage,
+  withLocked,
   type LockDelayMin,
   type PinLock,
 } from './pinLock.ts'
@@ -52,8 +54,36 @@ function markSession(): void {
   }
 }
 
+// The pass a reload from "Recharger" leaves (see `lockAtStart`): in localStorage
+// and not in sessionStorage, because some systems start a fresh session at a
+// reload. It is read and removed at once, and lasts seconds.
+const PASS_KEY = 'ouch:lock-reload-pass'
+
+/** Called by the app just before it reloads itself, from an unlocked state. */
+export function grantReloadPass(): void {
+  if (!lock || locked) return
+  try {
+    localStorage.setItem(PASS_KEY, String(Date.now()))
+  } catch {
+    // Without it the reload asks for the code: slower, never less safe.
+  }
+}
+
+function takeReloadPass(now: number): boolean {
+  try {
+    const raw = localStorage.getItem(PASS_KEY)
+    localStorage.removeItem(PASS_KEY)
+    return raw !== null && reloadPassValid(Number(raw), now)
+  } catch {
+    return false
+  }
+}
+
 let lock: PinLock | null = loadLock()
-let locked = lock !== null && lockAtStart(lock, Date.now(), sessionSeen())
+let locked = lock !== null && lockAtStart(lock, Date.now(), sessionSeen(), takeReloadPass(Date.now()))
+// A lock that is on stays on through a reload, until the code is entered.
+if (lock && locked && !lock.locked) saveLock(withLocked(lock, true))
+if (lock) lock = { ...lock, locked }
 let snapshot = build()
 const listeners = new Set<() => void>()
 
@@ -93,7 +123,7 @@ export type UnlockResult = { ok: true } | { ok: false; waitMs: number }
 export async function unlock(pin: string): Promise<UnlockResult> {
   if (!lock) return { ok: true }
   const out = await tryPin(lock, pin, Date.now())
-  keep(out.lock)
+  keep(out.ok ? withLocked(out.lock, false) : out.lock)
   if (out.ok) {
     locked = false
     markSession()
@@ -116,6 +146,7 @@ export async function checkLockPin(pin: string): Promise<UnlockResult> {
 export function lockNow(): void {
   if (!lock) return
   locked = true
+  keep(withLocked(lock, true))
   publish()
 }
 
@@ -173,13 +204,16 @@ const COVERED = 'covered'
 function onHidden(): void {
   if (!lock) return
   document.documentElement.dataset[COVERED] = '1'
-  keep(withHiddenAt(lock, Date.now()))
+  // Only an unlocked app leaves a time: a locked one going away (or reloading)
+  // must not restart the delay, or a reload would open it.
+  if (!locked) keep(withHiddenAt(lock, Date.now()))
 }
 
 function onVisible(): void {
   delete document.documentElement.dataset[COVERED]
   if (lock && !locked && shouldLock(lock, Date.now())) {
     locked = true
+    keep(withLocked(lock, true))
     publish()
   }
 }
@@ -187,5 +221,8 @@ function onVisible(): void {
 if (typeof document !== 'undefined') {
   document.addEventListener('visibilitychange', () => (document.visibilityState === 'hidden' ? onHidden() : onVisible()))
   window.addEventListener('pagehide', onHidden)
-  window.addEventListener('pageshow', onVisible)
+  // `pageshow` also fires at every load, where the start-up rule (`lockAtStart`) has already decided: only a page brought back from the back/forward cache is a return.
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) onVisible()
+  })
 }

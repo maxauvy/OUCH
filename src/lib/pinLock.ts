@@ -36,6 +36,12 @@ export interface PinLock {
   lockedUntil?: number
   /** When the app last went out of sight (ms); the delay counts from there. */
   lastHiddenAt?: number
+  /**
+   * The app is locked, until the code is entered. Kept so that a locked app
+   * stays locked through a reload (a pull to refresh, F5): the lock must not be
+   * something a reload gets around.
+   */
+  locked?: boolean
   /** The app's language, kept here because the lock is drawn before the settings are read: without it, the lock screen would flash in the default language. */
   language?: Language
 }
@@ -134,6 +140,10 @@ export function withDelay(lock: PinLock, delayMinutes: LockDelayMin): PinLock {
   return { ...lock, delayMinutes }
 }
 
+export function withLocked(lock: PinLock, locked: boolean): PinLock {
+  return { ...lock, locked }
+}
+
 export function withLanguage(lock: PinLock, language: Language): PinLock {
   return { ...lock, language }
 }
@@ -154,15 +164,28 @@ export function shouldLock(lock: PinLock, now: number): boolean {
   return away < 0 || away >= lock.delayMinutes * 60_000
 }
 
+/** How long the "Recharger" pass lasts (ms): enough for a reload, far too short for anything else. */
+export const RELOAD_PASS_MS = 10_000
+
+/** Whether a pass given at `givenAt` still holds at `now`. A pass from the future (a clock set back) does not. */
+export function reloadPassValid(givenAt: number | undefined, now: number): boolean {
+  return givenAt !== undefined && now >= givenAt && now - givenAt <= RELOAD_PASS_MS
+}
+
 /**
- * Whether the app is locked when it starts. A launch from scratch (the app was
- * closed by the person, or by the system) always asks for the code, whatever the
- * delay: closing an app is a clear sign of being done with it. Only a page that
- * reloads inside the same session (`sessionSeen`: the person unlocked it
- * earlier in this very session) follows the delay, so that an update's
- * "Recharger" does not ask again.
+ * Whether the app is locked when it starts.
+ * - A lock that was on stays on: a reload never gets around it.
+ * - A launch from scratch (the app was closed by the person, or by the system)
+ *   always asks, whatever the delay: closing an app is a clear sign of being done.
+ * - The one exception is the reload that the app itself starts from "Recharger"
+ *   after an update, from an unlocked app: it leaves a pass lasting
+ *   `RELOAD_PASS_MS`, used once, so that the code is not asked twice in a row.
+ * - Otherwise a page reloading inside the session where the code was entered
+ *   (`sessionSeen`) follows the delay.
  */
-export function lockAtStart(lock: PinLock, now: number, sessionSeen: boolean): boolean {
+export function lockAtStart(lock: PinLock, now: number, sessionSeen: boolean, reloadPass = false): boolean {
+  if (lock.locked) return true
+  if (reloadPass) return false
   return !sessionSeen || shouldLock(lock, now)
 }
 
@@ -181,5 +204,6 @@ export function parseLock(raw: unknown): PinLock | null {
   if (v.lockedUntil !== undefined) lock.lockedUntil = v.lockedUntil as number
   if (v.lastHiddenAt !== undefined) lock.lastHiddenAt = v.lastHiddenAt as number
   if (v.language === 'fr' || v.language === 'en') lock.language = v.language
+  if (v.locked === true) lock.locked = true
   return lock
 }
