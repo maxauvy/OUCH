@@ -12,6 +12,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ### Corrigé
 - Le verrou par code ne demandait pas le code quand on fermait l'app puis qu'on la relançait dans la minute (le délai s'appliquait aussi aux relances). Une app fermée, par soi ou par le système, demande maintenant toujours le code au lancement ; le délai ne joue plus que lorsque l'app revient à l'écran sans avoir été fermée.
+- Le verrou par code redemandait le code juste après une mise à jour (« Recharger »). L'app laisse maintenant, au moment de se recharger elle-même depuis un état déverrouillé, un laissez-passer de 10 secondes, utilisé une seule fois : le code n'est pas redemandé deux fois de suite, et ce laissez-passer ne sert pas à rouvrir une app verrouillée, ni à un lancement à froid. En contrepartie, deux contournements possibles sont fermés : un verrou « verrouillé » (par « Verrouiller maintenant » ou après le délai) le reste maintenant après un rechargement de la page, et une app verrouillée qui quitte l'écran ne repart plus le compte du délai. Avec « Aussitôt », le rechargement de la page rouvrait aussi l'écran de verrouillage même juste après avoir saisi le code ; c'est réglé pour le cas de « Recharger ».
 
 ## [0.4.0] - 2026-10-12
 

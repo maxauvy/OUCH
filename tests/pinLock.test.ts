@@ -12,6 +12,8 @@ import {
   LOCK_DELAYS_MIN,
   MAX_WAIT_MS,
   parseLock,
+  RELOAD_PASS_MS,
+  reloadPassValid,
   shouldLock,
   tryPin,
   waitAfter,
@@ -19,6 +21,7 @@ import {
   withDelay,
   withHiddenAt,
   withLanguage,
+  withLocked,
   type PinLock,
 } from '../src/lib/pinLock.ts'
 
@@ -219,4 +222,35 @@ test('a reload inside the same session follows the delay', () => {
   assert.equal(lockAtStart(l, T0 + 5_000, true), false)
   assert.equal(lockAtStart(l, T0 + 15 * 60_000, true), true)
   assert.equal(lockAtStart(lock, T0, true), true) // never seen leaving: asks
+})
+
+test('a lock that was on stays on through a reload, whatever the session, the delay or a pass', () => {
+  const l = withLocked(withHiddenAt(withDelay(lock, 15), T0), true)
+  assert.equal(lockAtStart(l, T0 + 1_000, true), true)
+  assert.equal(lockAtStart(l, T0 + 1_000, true, true), true)
+  assert.equal(lockAtStart(withLocked(l, false), T0 + 1_000, true), false)
+})
+
+test('the pass from "Recharger" lets one reload through, even from a fresh session', () => {
+  const l = withHiddenAt(withDelay(lock, 0), T0)
+  assert.equal(lockAtStart(l, T0 + 1_000, true), true)
+  assert.equal(lockAtStart(l, T0 + 1_000, true, true), false)
+  assert.equal(lockAtStart(l, T0 + 1_000, false, true), false)
+})
+
+test('the pass lasts seconds, and a pass from the future is no pass', () => {
+  assert.equal(reloadPassValid(undefined, T0), false)
+  assert.equal(reloadPassValid(T0, T0), true)
+  assert.equal(reloadPassValid(T0, T0 + RELOAD_PASS_MS), true)
+  assert.equal(reloadPassValid(T0, T0 + RELOAD_PASS_MS + 1), false)
+  assert.equal(reloadPassValid(T0 + 5_000, T0), false)
+  assert.equal(reloadPassValid(Number('x'), T0), false)
+})
+
+test('the locked mark is read back, and only when it is true', async () => {
+  const stored = JSON.parse(JSON.stringify(withLocked(lock, true)))
+  assert.equal(parseLock(stored)?.locked, true)
+  assert.equal(parseLock({ ...stored, locked: false })?.locked, undefined)
+  assert.equal(parseLock({ ...stored, locked: 'yes' })?.locked, undefined)
+  assert.equal(withLocked(lock, false).locked, false)
 })

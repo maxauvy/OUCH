@@ -1,3 +1,4 @@
+import { grantReloadPass } from '../lib/appLock'
 import { useEffect, useState } from 'react'
 import { buildId } from '../lib/buildId'
 
@@ -54,5 +55,7 @@ export async function reloadToLatest(): Promise<void> {
       })
     }
   }
+  // The code lock would ask again after this reload; the app started it itself, from an unlocked state.
+  grantReloadPass()
   window.location.reload()
 }
