@@ -8,8 +8,8 @@ Cette page rassemble ce qu'un soignant peut vouloir lire, essayer, ou discuter.
 
 | Document | Pour quoi faire | Où |
 |---|---|---|
-| Plaquette (2 pages) | Voir en un coup d'œil ce que le patient saisit, pourquoi c'est pertinent, et ce que contient le rapport | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-plaquette-soignants-v0.5.0.pdf) · [source](../plaquette-soignants/) |
-| Note méthodologique (8 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et sept questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-note-methodologique-v0.5.0.pdf) · [source](../note-methodologique/) |
+| Plaquette (2 pages) | Voir en un coup d'œil ce que le patient saisit, pourquoi c'est pertinent, et ce que contient le rapport | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-plaquette-soignants-v0.5.0.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-leaflet-for-professionals-v0.5.0.pdf) · [source](../plaquette-soignants/) |
+| Note méthodologique (8 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et sept questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-note-methodologique-v0.5.0.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-methodology-note-v0.5.0.pdf) · [source](../note-methodologique/) |
 | Scores validés, note de cadrage (2 pages) | Discuter de l'ajout éventuel de questionnaires validés : ce qu'OUCH ferait et ne ferait pas, les outils envisagés maladie par maladie et leurs droits, cinq questions | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-note-scores-valides-v0.5.0.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-validated-scores-note-v0.5.0.pdf) · [source](../note-scores-valides/) |
 | Vie privée | Savoir ce qui est enregistré, où, et ce qui quitte l'appareil | [`PRIVACY.md`](../../PRIVACY.md) |
 | Sécurité | Chiffrement des sauvegardes, signalement d'une faille | [`SECURITY.md`](../../SECURITY.md) |
