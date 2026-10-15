@@ -147,6 +147,16 @@ test('what was answered to the leads is restored, and only what is well formed',
   assert.equal(sanitizeSettings({ leadChoices: 'x' })?.leadChoices, undefined)
 })
 
+test('the trial under way and the switches of the lead cards are restored, and only well formed', () => {
+  const trial = { key: 'action:marche', action: 'Marche', start: '2026-10-05', end: '2026-10-11' }
+  const out = sanitizeSettings({ leadTrial: trial, leadPromptEnabled: false, weeklySentenceEnabled: 'no', leadDotEnabled: false, trialsEnabled: true, leadsSeen: { prompted: ['sleep'] } })
+  assert.deepEqual(out, { leadTrial: trial, leadPromptEnabled: false, leadDotEnabled: false, trialsEnabled: true })
+  assert.equal(sanitizeSettings({ leadTrial: { ...trial, key: 'sleep' } })?.leadTrial, undefined)
+  assert.equal(sanitizeSettings({ leadTrial: { ...trial, end: '2026-12-31' } })?.leadTrial, undefined)
+  assert.equal(sanitizeSettings({ leadTrial: { ...trial, end: '2026-10-01' } })?.leadTrial, undefined)
+  assert.equal(sanitizeSettings({ leadTrial: { ...trial, start: 'later' } })?.leadTrial, undefined)
+})
+
 test('the hard-days switch is restored from a backup, which flare it was shown for is not', () => {
   const out = sanitizeSettings({ hardDaysCardEnabled: false, hardDaysSeen: { start: '2026-10-01', date: '2026-10-05', dismissed: true } })
   assert.deepEqual(out, { hardDaysCardEnabled: false })

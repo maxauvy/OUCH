@@ -37,6 +37,12 @@ function ongoingFlare(entries: LoggedEntry[], today: string) {
   return { before, episodes, episode: episodes.find((e) => e.ongoing) ?? null }
 }
 
+/** Whether a flare is under way as of yesterday: a stretch where nothing
+ * should ask the person to look at patterns or try anything. */
+export function flareUnderWay(entries: LoggedEntry[], today: string): boolean {
+  return ongoingFlare(entries, today).episode !== null
+}
+
 /** Whether the day's page asks for the pain only, then offers the rest.
  * It lasts as long as the flare does, unlike the card, which shows once. The
  * person can open the full form, and that holds for the rest of that day. */

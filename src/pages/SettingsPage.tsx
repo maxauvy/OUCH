@@ -263,6 +263,26 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
             />
           </div>
         </Card>
+
+        <Card>
+          <SectionTitle>{t.settings.leadHintsTitle}</SectionTitle>
+          <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.settings.leadHintsHelper}
+          </p>
+          {(
+            [
+              ['leadPromptEnabled', t.settings.leadPromptLabel],
+              ['weeklySentenceEnabled', t.settings.weeklySentenceLabel],
+              ['leadDotEnabled', t.settings.leadDotLabel],
+              ['trialsEnabled', t.settings.trialsLabel],
+            ] as const
+          ).map(([key, label]) => (
+            <div key={key} className="flex items-center justify-between gap-3 py-2">
+              <span className="text-control">{label}</span>
+              <Toggle checked={settings[key]} onChange={(v) => updateSettings({ [key]: v })} label={label} />
+            </div>
+          ))}
+        </Card>
       </SettingsGroup>
 
       <SettingsGroup icon={IconBell} title={t.settings.groups.display} summary={displaySummary}>

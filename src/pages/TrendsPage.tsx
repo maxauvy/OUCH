@@ -17,6 +17,10 @@ import { LeadsCard } from '../components/trends/LeadsCard'
 import { DoctorReportPage } from './DoctorReportPage'
 import { PATTERN_MIN_DAYS } from '../lib/insights'
 import { arrangeLeads, choiceFor, findLeads, type Lead, type LeadChoice } from '../lib/leads'
+import { startTrial } from '../lib/leadTrial'
+import { remember } from '../lib/leadHints'
+import { updateLeadsSeen } from '../lib/leadsSeenStore'
+import { useLeadList } from '../hooks/useLeadList'
 import { weekdayProfile } from '../lib/weekdays'
 import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
 import { usePalette } from '../hooks/usePalette'
@@ -78,6 +82,19 @@ export function TrendsPage() {
   )
   const answerLead = (lead: Lead, choice: LeadChoice['choice']) =>
     void updateSettings({ leadChoices: { ...settings.leadChoices, [lead.key]: choiceFor(lead, choice, Date.now()) } })
+  // Opening Trends is seeing its card: the dot on the tab clears for those leads.
+  const openingLeads = useLeadList()
+  const openingKeys = openingLeads?.shown.map((l) => l.key).join('\n') ?? ''
+  useEffect(() => {
+    if (!openingKeys) return
+    const keys = openingKeys.split('\n')
+    void updateLeadsSeen((seen) => (keys.every((k) => seen.trends.includes(k)) ? seen : { ...seen, trends: remember(seen.trends, keys) }))
+  }, [openingKeys])
+  const beginTrial = (lead: Lead) => {
+    const trial = startTrial(lead, todayISO())
+    if (trial) void updateSettings({ leadTrial: trial })
+  }
+  const declineTrial = (lead: Lead) => void updateLeadsSeen((seen) => ({ ...seen, declined: remember(seen.declined, [lead.key]) }))
   const clearLead = (lead: Lead) => {
     const { [lead.key]: _gone, ...rest } = settings.leadChoices ?? {}
     void updateSettings({ leadChoices: rest })
@@ -239,6 +256,11 @@ export function TrendsPage() {
               choices={settings.leadChoices}
               onAnswer={answerLead}
               onUndo={clearLead}
+              trial={settings.leadTrial}
+              trialsEnabled={settings.trialsEnabled}
+              declined={settings.leadsSeen?.declined ?? []}
+              onStartTrial={beginTrial}
+              onDeclineTrial={declineTrial}
             />
           )}
         </>
