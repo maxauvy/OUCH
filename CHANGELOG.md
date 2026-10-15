@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- Dans Tendances, les deux cartes « Ce qui accompagne ta douleur » et « Ce qui accompagne tes meilleurs jours », qui alignaient jusqu'à huit facteurs avec trois barres chacun, sont remplacées par **une carte, « Ce que tes notes racontent »**, qui montre une piste à la fois (au plus trois, avec des flèches pour passer de l'une à l'autre) : deux grands chiffres (la douleur moyenne les jours doux et les jours plus durs), une phrase qui le dit (« Après tes meilleures nuits, ta douleur est en moyenne 2,1 points plus basse »), le nombre de jours, et ce que la piste ne dit pas (« Une douleur forte abîme aussi le sommeil : ça va peut-être dans les deux sens. C'est une piste, pas une preuve. »). Les pistes viennent du sommeil, du stress, de l'activité de la veille et des actions notées dans « ce qui t'a aidé » ; la fatigue, le brouillard mental, l'humeur et la température n'y sont plus (les premiers sont des signes qui montent avec la douleur, pas des pistes ; la météo reste dans le rapport). Elles passent le même seuil que le rapport : au moins 14 jours, une corrélation de Spearman d'au moins 0,3 et plus forte que ce que le hasard donne en général (environ 2/√n), deux groupes d'au moins 4 jours chacun, et un point d'écart de douleur. Quand rien ne ressort, la carte le dit (« Rien ne se détache pour l'instant »). Deux gestes : « Oui, à noter pour ma consultation » garde la piste (et l'annulation reste à un geste), « Pas vraiment » la range sous « Pistes écartées », d'où on peut la rouvrir ; elle revient d'elle-même si elle se précise (un point d'écart de plus, deux fois plus de jours, ou si elle change de sens). Ces réponses sont gardées sur l'appareil et reprises par une sauvegarde ; elles ne changent aucun calcul. Les pistes gardées ne figurent pas encore dans le rapport.
+
 ## [0.5.0] - 2026-10-14
 
 ### Ajouté

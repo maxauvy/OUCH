@@ -254,17 +254,15 @@ await scene(6, 'treatment review', async () => {
   await cam({ z: 1, ms: 700 }); await wait(0.5)
 })
 
-// ── 7. What goes with the pain
-await scene(7, 'associations', async () => {
-  await caption('Comprendre', 'Ce qui *accompagne* ta douleur', 'Sommeil, stress, marche : des associations, pas une preuve.')
+// ── 7. What the notes say
+await scene(7, 'leads', async () => {
+  await caption('Comprendre', 'Ce que tes notes *racontent*', 'Une piste à la fois. Jamais une preuve.')
   await tab('Tendances'); await wait(0.5)
-  const stress = await section('Stress')
-  await bring(stress, 1500, 330); await wait(0.6)
-  await cam({ fy: await phoneY(stress), z: 1.35, ms: 900 }); await wait(2.0)
-  await cam({ z: 1, ms: 700 })
-  const walk = F.getByText('Marche courte', { exact: true }).last()
-  await bring(walk, 1500, 330); await wait(0.5)
-  await cam({ fy: await phoneY(walk) + 30, z: 1.4, ms: 900 }); await wait(2.2)
+  const card = await section('Ce que tes notes racontent')
+  await bring(card, 1500, 330); await wait(0.6)
+  await cam({ fy: await phoneY(card), z: 1.35, ms: 900 }); await wait(2.6)
+  const next = F.getByRole('button', { name: 'Piste suivante' })
+  if (await next.count()) { await tap(next); await wait(2.4) }
   await cam({ z: 1, ms: 700 }); await wait(0.4)
 })
 
