@@ -30,11 +30,11 @@ The day's measures are boiled down to a single picture, from clear skies to a st
 
 The journal is a monthly calendar, colored by each day's weather. You can go back and fix any day.
 
-Trends shows your pain curve over 7, 30 or 90 days, or since the beginning, with its 7-day average. It also shows which days of the week tend to go best and worst, what seems linked to your pain (sleep, stress, fatigue, brain fog, mood, activity, temperature), what goes with your best days, and how you use your treatments. These are associations found in your own data, not proof, and the app says so.
+Trends shows your pain curve over 7, 30 or 90 days, or since the beginning, with its 7-day average. It also shows which days of the week tend to go best and worst, what your notes let you see (“what your notes say”: sleep, stress, the day before's activity and what helped, one lead at a time, with the two averages and the number of days), and how you use your treatments. These are associations found in your own data, not proof, and the app says so. You can keep a lead for your appointment, set it aside, or try for a week an action you noted yourself; the app can also bring a lead to the day's page, sum up your week in a sentence on Sundays, or do it quietly with a dot on the tab (each can be turned off in Settings, and none of it shows during a flare).
 
 ### A report for your doctor
 
-From Trends, you can generate a report to print or save as a PDF. It covers the time since your last appointment and compares it with the same length of time just before. It comes in two versions: a 2-page summary for your GP, and a detailed 5-page report for a pain clinic (a CETD in France), with painkiller use and associated factors. It can be read in French or English and lists the conditions you declared.
+From Trends, you can generate a report to print or save as a PDF. It covers the time since your last appointment and compares it with the same length of time just before. It comes in two versions: a 2-page summary for your GP, and a detailed 5-page report for a pain clinic (a CETD in France), with painkiller use and associated factors. It can be read in French or English, lists the conditions you declared and, under “What the patient noticed”, carries the leads you kept and your one-week trials.
 
 The report describes the data without interpreting it, and its thresholds cite their sources (IMMPACT, the French health authority HAS, and other published work), summarised in Settings → About → Scientific sources. It is built on your device; the name and date of birth you type into it are not saved.
 

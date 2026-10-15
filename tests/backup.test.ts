@@ -157,6 +157,13 @@ test('the trial under way and the switches of the lead cards are restored, and o
   assert.equal(sanitizeSettings({ leadTrial: { ...trial, start: 'later' } })?.leadTrial, undefined)
 })
 
+test('the closed weeks are restored, each one well formed', () => {
+  const week = { key: 'action:marche', action: 'Marche', start: '2026-10-05', end: '2026-10-11' }
+  const out = sanitizeSettings({ leadTrialHistory: [week, { ...week, key: 'sleep' }, { ...week, end: 'x' }, 'no', { ...week, start: '2026-09-01', end: '2026-09-07' }] })
+  assert.deepEqual(out?.leadTrialHistory, [week, { ...week, start: '2026-09-01', end: '2026-09-07' }])
+  assert.equal(sanitizeSettings({ leadTrialHistory: 'x' })?.leadTrialHistory, undefined)
+})
+
 test('the hard-days switch is restored from a backup, which flare it was shown for is not', () => {
   const out = sanitizeSettings({ hardDaysCardEnabled: false, hardDaysSeen: { start: '2026-10-01', date: '2026-10-05', dismissed: true } })
   assert.deepEqual(out, { hardDaysCardEnabled: false })

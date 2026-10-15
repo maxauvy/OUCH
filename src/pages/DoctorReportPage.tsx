@@ -95,12 +95,13 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             illnessDetails: { status: settings.illnessStatus, otherName: settings.otherIllnessName, year: settings.illnessYear },
             agenda: agenda.split('\n'),
             leadChoices: settings.leadChoices,
+            leadTrials: { history: settings.leadTrialHistory, current: settings.leadTrial },
             includeNotes,
             includeCycle,
             demo: IS_DEMO,
           })
         : null,
-    [entries, medications, variant, language, consultation, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, agenda, includeNotes, includeCycle]
+    [entries, medications, variant, language, consultation, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.leadTrialHistory, settings.leadTrial, agenda, includeNotes, includeCycle]
   )
 
   // Browsers name the saved PDF after the page title.

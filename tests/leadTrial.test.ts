@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry } from '../src/db/types.ts'
 import type { Lead } from '../src/lib/leads.ts'
-import { continueTrial, startTrial, trialStatus, type LeadTrial } from '../src/lib/leadTrial.ts'
+import { MAX_TRIAL_HISTORY, archiveTrial, continueTrial, reportTrials, startTrial, trialStatus, type LeadTrial } from '../src/lib/leadTrial.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
 const START = '2026-10-05'
@@ -84,4 +84,41 @@ test('with too few days of one sort there is nothing to compare', () => {
 
 test('before the end it never says too few', () => {
   assert.equal(trialStatus(trial, [entry(0, 3)], day(3)).tooFew, false)
+})
+
+test('a closed week is kept once, the newest kept past a cap', () => {
+  assert.deepEqual(archiveTrial(undefined, trial), [trial])
+  assert.deepEqual(archiveTrial([trial], trial), [trial])
+  const many = Array.from({ length: MAX_TRIAL_HISTORY + 5 }, (_, i) => ({ ...trial, start: shiftISO(START, i * 10), end: shiftISO(START, i * 10 + 6) }))
+  const kept = many.reduce<LeadTrial[]>((h, t) => archiveTrial(h, t), [])
+  assert.equal(kept.length, MAX_TRIAL_HISTORY)
+  assert.equal(kept.at(-1)?.start, many.at(-1)?.start)
+})
+
+const WEEK = [entry(0, 3, ['Marche']), entry(1, 5), entry(2, 4, ['Marche']), entry(3, 6), entry(4, 5), entry(5, 4, ['Marche']), entry(6, 7)]
+
+test('the report takes the weeks that ended in its periods and can be compared', () => {
+  const out = reportTrials([trial], undefined, WEEK, day(-30), day(20))
+  assert.equal(out.length, 1)
+  assert.equal(out[0].result.with.n, 3)
+  assert.equal(out[0].result.without.n, 4)
+  // ended before the periods, or after them
+  assert.deepEqual(reportTrials([trial], undefined, WEEK, day(10), day(20)), [])
+  assert.deepEqual(reportTrials([trial], undefined, WEEK, day(-30), day(3)), [])
+})
+
+test('a week with too few days of one sort is left out of the report', () => {
+  assert.deepEqual(reportTrials([trial], undefined, [entry(0, 3, ['Marche']), entry(1, 5), entry(2, 6)], day(-30), day(20)), [])
+})
+
+test('the week under way is on the report once it is over, even if the patient never closed it', () => {
+  assert.equal(reportTrials([], trial, WEEK, day(-30), day(20)).length, 1)
+  assert.deepEqual(reportTrials([], trial, WEEK, day(-30), day(5)), [])
+})
+
+test('the weeks come oldest first', () => {
+  const later: LeadTrial = { ...trial, start: day(20), end: day(26) }
+  const entries = [...WEEK, ...WEEK.map((e, i) => ({ ...e, date: day(20 + i) }))]
+  const out = reportTrials([later, trial], undefined, entries, day(-30), day(40))
+  assert.deepEqual(out.map((t) => t.trial.start), [day(0), day(20)])
 })

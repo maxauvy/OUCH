@@ -306,6 +306,8 @@ export interface Settings {
   trialsEnabled: boolean
   /** The one-week trial under way, or just over and waiting to be closed. Restored from a backup. */
   leadTrial?: LeadTrial
+  /** The weeks the person closed, so the report can say what each showed. Restored from a backup. */
+  leadTrialHistory?: LeadTrial[]
   /** What the lead cards have already shown on this device. Per device. */
   leadsSeen?: LeadsSeen
 }

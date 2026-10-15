@@ -31,7 +31,7 @@ import type {
 } from '../db/types.ts'
 import { cleanOtherName, FIRST_DIAGNOSIS_YEAR } from './illnessStatus.ts'
 import type { LeadChoices } from './leads.ts'
-import type { LeadTrial } from './leadTrial.ts'
+import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
 
 /** Far above any real journal (a hundred years is ~36 500 days). */
 export const MAX_ENTRIES = 40_000
@@ -236,6 +236,12 @@ function leadTrial(v: unknown): LeadTrial | undefined {
   return days >= 0 && days <= 30 ? { key, action, start: v.start, end: v.end } : undefined
 }
 
+/** The weeks closed: each one well formed, a cap of them. */
+function leadTrialHistory(v: unknown): LeadTrial[] | undefined {
+  if (!Array.isArray(v)) return undefined
+  return v.slice(0, MAX_TRIAL_HISTORY).flatMap((t) => leadTrial(t) ?? [])
+}
+
 /** Only what is valid is kept, and nothing is filled in: a setting the file
  * does not (validly) hold stays as it is on this device. */
 export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
@@ -272,6 +278,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     leadDotEnabled: bool(raw.leadDotEnabled),
     trialsEnabled: bool(raw.trialsEnabled),
     leadTrial: leadTrial(raw.leadTrial),
+    leadTrialHistory: leadTrialHistory(raw.leadTrialHistory),
   })
 }
 

@@ -64,7 +64,7 @@ sup{font-size:6.6pt;line-height:0}
 <div class="hd"><p class="eyebrow">Methodology note for discussion with healthcare professionals</p>
 <h1>How OUCH calculates its figures</h1>
 <p class="sub">Formulas, thresholds, sources and limits of each indicator in the report, so that you can check and challenge them.</p></div>
-<div class="meta"><b>Reference document</b><br>14 October 2026<br>OUCH v0.5.0</div>
+<div class="meta"><b>Reference document</b><br>15 October 2026<br>OUCH v0.6.0</div>
 </header>
 
 <div class="box">
@@ -95,7 +95,7 @@ sup{font-size:6.6pt;line-height:0}
 <tr><td>Weather, “what helped” actions</td><td>measurements; free labels</td><td>Optional weather (Open-Meteo, the person’s location; mean pressure of the day). Actions: walking, warm bath… counted, not ranked.</td></tr>
 </table>
 
-</div><div class="foot"><span>Prepared on 14 October 2026 from the published code of OUCH v0.5.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
+</div><div class="foot"><span>Prepared on 15 October 2026 from the published code of OUCH v0.6.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>2 · Periods and completeness</h2>
 <table>
@@ -120,7 +120,7 @@ sup{font-size:6.6pt;line-height:0}
 <tr><td>Day of the week</td><td>Difference between each weekday’s mean pain and the period’s, if each has ≥ 4 days. Band: <span class="f">± 2.69 × standard deviation / √<i>n</i><sub>min</sub></span>.</td><td>2.69: 5% for seven comparisons (Bonferroni). Days are not independent: indicative only.</td></tr>
 </table>
 
-</div><div class="foot"><span>Prepared on 14 October 2026 from the published code of OUCH v0.5.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
+</div><div class="foot"><span>Prepared on 15 October 2026 from the published code of OUCH v0.6.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>4 · Flare detection</h2>
 <p>A flare is a run of days clearly above what is <b>usual for the person</b>, not above a fixed value: 7/10 is an ordinary day for one person and an emergency for another. <b>There is no consensus definition of a flare</b>; this one is specific to OUCH. It reuses the minimal clinically important difference<sup>[2][4]</sup>, established for improvement and applied here to a worsening, which is an extrapolation. It is computed over the whole history, because a day’s usual level needs entries from before the report period. An episode is attributed to the period in which it starts; its days are counted where they fall.</p>
@@ -138,7 +138,7 @@ sup{font-size:6.6pt;line-height:0}
 <h3>What comes before a flare (detailed version)</h3>
 <p>For each flare, the report gives the <b>mean of the 3 previous days</b> for six measures (sleep duration and quality, stress, fatigue, brain fog, mood, with at least 2 days with an entry), and below it the <b>usual mean of the 28 days before</b>, excluding flares (at least 10 days). Treatment changes noted in the previous 14 days are added. Nothing is highlighted: in a trial where anything more than one standard deviation away was flagged, something was flagged before 37% of the 3-day windows that precede no flare, and the reader would see a cause in it.</p>
 
-</div><div class="foot"><span>Prepared on 14 October 2026 from the published code of OUCH v0.5.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
+</div><div class="foot"><span>Prepared on 15 October 2026 from the published code of OUCH v0.6.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>5 · Treatments</h2>
 <table>
@@ -165,7 +165,7 @@ sup{font-size:6.6pt;line-height:0}
 </table>
 <p style="margin-top:2mm"><b>Strength.</b> |ρ| &lt; 0.1: negligible; &lt; 0.3: weak; &lt; 0.5: moderate; above: strong (conventional labels, with no test, p-value or confidence interval). <b>Median comparisons</b> (at least 3 days per group): the day after a very active day (previous day’s activity ≥ 8); at least 2 positive actions versus none; period days versus the others, if the person includes them.</p>
 
-</div><div class="foot"><span>Prepared on 14 October 2026 from the published code of OUCH v0.5.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
+</div><div class="foot"><span>Prepared on 15 October 2026 from the published code of OUCH v0.6.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>7 · Before and after a change of regular treatment</h2>
 <p>New in version 0.3.0 (the other calculations are unchanged since 0.2.1, apart from the day-of-week table, added in 0.4.0, section 3). For each start, dose change or stop of a <b>regular</b> treatment, the report (both versions, for the period and the 5 weeks before it) and the Trends screen compare the diary before and after. It is a description of two periods: it does not say whether the treatment “works”. As-needed treatments have no comparison: what they do is itself a measure.</p>
@@ -180,14 +180,18 @@ sup{font-size:6.6pt;line-height:0}
 <p><b>Limits.</b> One comparison per change, with no test. An improvement may follow a treatment started at the bottom of a painful period (regression to the mean), the weather, the season or another change.</p>
 <h2>8 · Where the method is solid, where it is less so</h2>
 <div class="cards">
-<div class="card"><b class="t">1. Solid</b><p>Standard statistics, formulas published here and tested: 264 automated tests pass on this version, before-and-after comparisons included.</p><p>Validated 0–10 numeric scale, 24-hour recall, missing days never imputed.</p></div>
+<div class="card"><b class="t">1. Solid</b><p>Standard statistics, formulas published here and tested: 313 automated tests pass on this version, before-and-after comparisons included.</p><p>Validated 0–10 numeric scale, 24-hour recall, missing days never imputed.</p></div>
 <div class="card l"><b class="t">2. More fragile</b><p>Flare definition, extrapolated and non-consensual. Before-and-after comparisons: no test, exposed to regression to the mean. Mild, moderate, severe categories are conventional. Fatigue, sleep and mood scales not validated.</p><p>Seven correlations read without correction for multiple comparisons, on non-independent days.</p></div>
 <div class="card i"><b class="t">3. Missing</b><p>No clinical validation of OUCH itself: no comparison with a validated instrument (BPI, for example), and no flares confirmed by patients or clinicians.</p><p>Missing days are not necessarily random: people sometimes fill in less on bad days. Nothing is verified by a clinician.</p></div>
 </div>
 
-</div><div class="foot"><span>Prepared on 14 October 2026 from the published code of OUCH v0.5.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
+
+
+</div><div class="foot"><span>Prepared on 15 October 2026 from the published code of OUCH v0.6.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
 </div>
-<div class="page"><div class="bar"></div><div class="in"><h2>Seven questions for you</h2>
+<div class="page"><div class="bar"></div><div class="in"><h2>9 · What the patient noticed (report)</h2>
+<p>In both versions of the report, a section carries the leads the patient <b>chose to keep</b> for the appointment (appendix, “Trends: leads”), recomputed over the two periods of the report with the same rule. Each line gives the mean pain and the number of days of the two groups compared. <b>One-week trials</b> that ended in these periods are added, when each kind of day counts at least 2; the report reminds that seven days is little. A kept lead that no longer passes the rule on the report’s data is left out. Nothing in it is interpreted: these are the patient’s observations, unverified, <b>with no cause established</b>. Limits: the Trends leads are read without correction for multiple comparisons, on non-independent days, and the patient keeps only the ones that speak to them: it is a selection. The actions in trials are the ones they noted themselves (free text); OUCH suggests none.</p>
+<h2>Eight questions for you</h2>
 <ol class="q">
 <li>Does the definition of flares (at least 3 days more than 2 points or 30% above the 28-day median) make sense to you? Which criterion would you prefer?</li>
 <li>Are the categories ≤ 3, 4–6, ≥ 7 useful to you, or do you read the person’s course against their own baseline?</li>
@@ -196,12 +200,19 @@ sup{font-size:6.6pt;line-height:0}
 <li>Which indicators do you really use, and which would you remove from the report?</li>
 <li>What data do you lack today to make decisions, that a diary could provide?</li>
 <li>Is the before-and-after comparison around a treatment change (28 days before, 7 days not counted, 28 days after, with the patient’s usual variation) a useful format? What length would you choose?</li>
+<li>Is the “What the patient noticed” section (kept leads, one-week trials) useful to you, or might it steer the appointment towards a cause nothing establishes? Should it be removed from the general practitioner version?</li>
 </ol>
 
-<h2>Appendix · What the app shows the person, outside the report</h2>
+</div><div class="foot"><span>Prepared on 15 October 2026 from the published code of OUCH v0.6.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
+</div>
+<div class="page"><div class="bar"></div><div class="in"><h2>Appendix · What the app shows the person, outside the report</h2>
 <table>
 <tr><th style="width:26%">Screen</th><th style="width:44%">Calculation</th><th>Status</th></tr>
-<tr><td>Trends: factors</td><td>Days split into three groups by factor (0–3, 4–6, 7–10; for temperature, the lower, middle and upper third of the person’s values). Mean pain of each group; a sentence appears only if the two extremes have ≥ 3 days and differ by at least 1.2 points. Same principle for “with / without” an action.</td><td>1.2-point threshold chosen for readability, unsourced. Observed means, presented as “an association, not proof”.</td></tr>
+<tr><td>Trends: leads</td><td>For sleep (the value entered that day), stress, the previous day’s activity and each action noted under “what helped”: at least 14 days, a Spearman correlation (section 6) of at least <span class="f">max(0.3; 2/√n)</span>, two groups of at least 4 days (upper and lower third of the person’s values, or days with and without the action) and a point of mean pain between them. At most three leads, the strongest first, those the person kept coming first. Fatigue, brain fog, mood and weather are not among them.</td><td>Same correlation threshold as the report; 4 days and 1 point chosen for readability, unsourced. No correction for multiple comparisons: with several factors, a false lead is possible. Presented as “a lead, not proof”.</td></tr>
+<tr><td>Leads: the patient’s answers</td><td>“Yes, note it for my appointment” keeps the lead; “Not really” sets it aside. A lead set aside comes back if its gap grows by a point, if the number of days doubles or if it changes direction.</td><td>Preferences: they change no calculation. Only kept leads go on the report (section 9).</td></tr>
+<tr><td>Today: a lead, a dot on the tab</td><td>A lead not yet seen is offered once, after the day’s pain is logged; the dot flags a lead the Trends card has not shown yet. Never during a flare under way.</td><td>Display: no further calculation. Each element can be turned off in Settings.</td></tr>
+<tr><td>Your week in one sentence</td><td>On Sundays, if at least 5 days of the week are logged and the 3 gentlest days share one action (present on at most one other day) or a declared night of at least 7 h. No tie for third place, no flare under way.</td><td>Descriptive, on three days: no test, to be read as a remark.</td></tr>
+<tr><td>One-week trial</td><td>After “Yes” on an action lead: 7 days, mean pain on the days with the action and on the other days, if each kind has at least 2 days, and whether it goes the same way as the lead it started from. The action is the one the patient noted themselves.</td><td>A description of seven days, presented as “an idea, not an answer”: no test, and no control for what else changes in the week.</td></tr>
 <tr><td>Trends: day of the week</td><td>Best and worst days, if each weekday has ≥ 4 days and one of the two falls outside the band (section 3); otherwise, a sentence says the days look alike.</td><td>Descriptive.</td></tr>
 <tr><td>Trends: before and after a change</td><td>Same calculation as in section 7, plus sleep and the effects reported before and after, and a curve on request. Each measure is placed “within” or “beyond” the person’s usual variation, when the history allows.</td><td>Description, presented as such: it does not say whether the treatment “works”. Replaces the former 2-week comparison.</td></tr>
 <tr><td>Today, on flare days</td><td>Pain is rated in eleven boxes to tap (0 to 10), with “one point less / more” to correct. Nothing is preselected, so as not to anchor the answer on a starting value. A single blue, deeper as pain rises.</td><td>Same 0–10 scale: entries and report unchanged. No source cited on the effect of this input mode.</td></tr>
@@ -209,7 +220,7 @@ sup{font-size:6.6pt;line-height:0}
 <tr><td>“The last few days have been harder” card</td><td>Shown once per flare under way the day before, with what the person noted as helpful during their previous flares. During the flare, entry shrinks to pain, the rest on request.</td><td>No outside suggestion; both can be turned off.</td></tr>
 </table>
 
-</div><div class="foot"><span>Prepared on 14 October 2026 from the published code of OUCH v0.5.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
+</div><div class="foot"><span>Prepared on 15 October 2026 from the published code of OUCH v0.6.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>References, and what each one contributes</h2>
 <p class="small" style="margin-bottom:2.5mm">Each summary restates the main conclusion of the study, from its official abstract (PubMed); it is the same text as in the app’s “Scientific sources” section. These studies concern groups of patients: they establish nothing certain for a given person.</p>
@@ -222,7 +233,7 @@ sup{font-size:6.6pt;line-height:0}
 <li>Dixon WG, Beukenhorst AL, Yimer BB, et al. How the weather affects the pain of citizen scientists using a smartphone app. <i>NPJ Digit Med</i>. 2019;2:105. PMID 31667359.<div class="u"><b>What the study says.</b> “Cloudy with a Chance of Pain”: 2,658 patients rated their pain every day for 15 months. Links exist with humidity, atmospheric pressure and wind, but they are modest. <b>In OUCH.</b> OUCH records the day’s weather so the person can see whether it matters for them, without presenting the link as established.</div></li>
 <li>Salaffi F, Stancati A, Silvestri CA, Ciapetti A, Grassi W. Minimal clinically important changes in chronic musculoskeletal pain intensity measured on a numerical rating scale. <i>Eur J Pain</i>. 2004;8(4):283-291. PMID 15207508.<div class="u"><b>What the study says.</b> In 825 patients, a drop of one point (15%) is the smallest perceptible difference; a drop of 2 points (33%) corresponds to “much better”. A larger drop is needed when baseline pain is high. <b>In OUCH.</b> Confirms the 2-point or 30% benchmark used by the report.</div></li>
 </ol>
-</div><div class="foot"><span>Prepared on 14 October 2026 from the published code of OUCH v0.5.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
+</div><div class="foot"><span>Prepared on 15 October 2026 from the published code of OUCH v0.6.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>References, continued</h2>
 <ol class="refs" start="9"><li>Ostelo RWJG, Deyo RA, Stratford P, et al. Interpreting change scores for pain and functional status in low back pain: towards international consensus regarding minimal important change. <i>Spine</i>. 2008;33(1):90-94. PMID 18165753.<div class="u"><b>What the study says.</b> Expert consensus for low back pain: a 2-point change on the 0–10 scale is a minimal important change, and a 30% improvement is a useful threshold whatever the scale. <b>In OUCH.</b> Confirms, by another route, the 2-point or 30% benchmark.</div></li>
@@ -233,6 +244,6 @@ sup{font-size:6.6pt;line-height:0}
 <li>Finan PH, Goodin BR, Smith MT. The association of sleep and pain: an update and a path forward. <i>J Pain</i>. 2013;14(12):1539-1552. PMID 24290442.<div class="u"><b>What the study says.</b> Review: sleep disturbances predict the onset and worsening of chronic pain, and predict pain more strongly than pain predicts sleep. The link nonetheless runs in both directions. <b>In OUCH.</b> The report pairs pain with the previous night’s sleep, noting that the link runs both ways.</div></li>
 <li>Andrews NE, Strong J, Meredith PJ. Activity pacing, avoidance, endurance, and associations with patient functioning in chronic pain: a systematic review and meta-analysis. <i>Arch Phys Med Rehabil</i>. 2012;93(11):2109-2121. PMID 22728699.<div class="u"><b>What the study says.</b> Review of 41 studies: avoiding activity and pushing through to severe pain are both associated with more pain and disability. The direction of causation is not established. <b>In OUCH.</b> The report compares pain the day after a very active day, noting that too much and too little activity are both associated with more pain.</div></li>
 </ol>
-</div><div class="foot"><span>Prepared on 14 October 2026 from the published code of OUCH v0.5.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
+</div><div class="foot"><span>Prepared on 15 October 2026 from the published code of OUCH v0.6.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
 </div>
 </body></html>

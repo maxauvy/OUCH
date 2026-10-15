@@ -11,6 +11,7 @@ import { flareUnderWay } from '../src/lib/hardDays.ts'
 import { arrangeLeads, findLeads } from '../src/lib/leads.ts'
 import { leadToBring } from '../src/lib/leadHints.ts'
 import { weeklyFinding } from '../src/lib/weeklySentence.ts'
+import { reportTrials } from '../src/lib/leadTrial.ts'
 
 const END = '2026-10-12'
 const logged = (h: ReturnType<typeof buildDemoHistory>) => h.entries as LoggedEntry[]
@@ -160,4 +161,17 @@ test('with a calm end the day is outside a flare, a lead is brought on most days
   }
   assert.equal(sundays, 2)
   assert.ok(brought >= 9, `a lead is brought on ${brought} of 14 days`)
+})
+
+test('a week of the short walk is among the trials already closed, and the report can compare it, in both languages', () => {
+  for (const end of DATES) {
+    for (const language of ['fr', 'en'] as const) {
+      const h = buildDemoHistory({ endDate: end, language })
+      const [week] = h.settings.leadTrialHistory ?? []
+      assert.ok(week, `${end} ${language}`)
+      assert.equal(week.key, language === 'fr' ? 'action:marche courte' : 'action:short walk')
+      assert.equal(week.action, language === 'fr' ? 'Marche courte' : 'Short walk')
+      assert.equal(reportTrials(h.settings.leadTrialHistory, undefined, logged(h), shiftISO(end, -180), end).length, 1, `${end} ${language}`)
+    }
+  }
 })
