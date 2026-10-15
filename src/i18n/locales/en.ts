@@ -1036,6 +1036,7 @@ const en: Translations = {
     trialNote:
       'No streak to keep: a day without {{action}} counts too, it is the point of comparison. The box fills in when you note “{{action}}” under “{{where}}”.',
     trialStop: 'Stop the trial',
+    trialPaused: 'Your trial is waiting: nothing to do for now. We pick it up again when things ease.',
     trialDoneLabel: 'Your trial is over',
     trialSmall: 'Over 7 days, that is little: an idea, not an answer.',
     trialFew: 'There are too few days of each kind to compare, and that is fine: you can carry on for another week.',

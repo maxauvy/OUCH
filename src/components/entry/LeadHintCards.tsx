@@ -118,6 +118,19 @@ export function WeeklyCard({ finding, date, onSee }: { finding: WeeklyFinding; d
   )
 }
 
+/** During a flare the trial asks for nothing: one calm line says it is still there. */
+export function TrialPausedCard({ trial }: { trial: LeadTrial }) {
+  const lh = useTranslation().leadHints
+  return (
+    <section aria-label={lh.trialLabel} className="rounded-[var(--radius-card)] px-4 py-3" style={{ background: 'var(--color-brand-soft)' }}>
+      <p className="text-caption font-semibold uppercase tracking-[0.06em]" style={{ color: 'var(--color-brand)' }}>
+        {lh.trialLabel} · {capitalise(trial.action)}
+      </p>
+      <p className="text-body mt-1">{lh.trialPaused}</p>
+    </section>
+  )
+}
+
 /** The one-week trial, on the day's page: where the week is while it runs, and what it showed once it is over. */
 export function TrialCard({
   trial,

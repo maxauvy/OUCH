@@ -1041,6 +1041,7 @@ const fr: Translations = {
     trialNote:
       'Pas de série à tenir : un jour sans {{action}} compte aussi, il sert de point de comparaison. La case se remplit quand tu notes « {{action}} » dans « {{where}} ».',
     trialStop: 'Arrêter l’essai',
+    trialPaused: 'Ton essai attend : rien à faire pour l’instant. On y revient quand ça ira mieux.',
     trialDoneLabel: 'Ton essai est terminé',
     trialSmall: 'Sur 7 jours, c’est peu : une idée, pas une réponse.',
     trialFew: 'Il y a trop peu de jours de chaque sorte pour comparer, ce n’est pas grave : tu peux continuer une semaine.',

@@ -4,6 +4,8 @@
 //   node scripts/generate-demo-history.mjs [output.json] [end-date YYYY-MM-DD]
 //   DEMO_LANG=en node scripts/generate-demo-history.mjs …   (English tags, notes and medication names)
 //   DEMO_TODAY=empty …        leave today without an entry, to open on an empty Today page
+//   DEMO_END=calm …           end the last flare four days earlier: Today opens outside a flare, on the
+//                             cards that bring a lead (and a trial, once started) to the day's page
 //   DEMO_ILLNESSES=fibromyalgie,migraine …   several tracked illnesses (default: fibromyalgie only)
 //   DEMO_DAYS=330 …           a longer history (default 90): the story below ends the same way, and
 //                             calmer months come before it, with one more background treatment (the
@@ -25,6 +27,8 @@
 // - pain following sleep, stress, pressure drops, storms and periods, and
 //   "what helped" tags with clear associations (and one reverse one: rest is
 //   taken on bad days);
+// - leads already answered on Trends: the short walk and the meditation kept
+//   for the appointment, rest set aside (see src/lib/demoData.ts);
 
 // The history itself lives in src/lib/demoData.ts, shared with the app's own
 // demo mode (Settings, or the ?demo link): this script only wraps it in an
@@ -48,6 +52,7 @@ const { entries, medications, settings } = buildDemoHistory({
   language,
   days: Number(process.env.DEMO_DAYS ?? DEMO_STORY_DAYS),
   emptyToday: process.env.DEMO_TODAY === 'empty',
+  calmEnd: process.env.DEMO_END === 'calm',
   illnesses: (process.env.DEMO_ILLNESSES ?? 'fibromyalgie').split(',').map((s) => s.trim()).filter(Boolean),
 })
 const bundle = { version: 2, exportedAt: new Date().toISOString(), entries, medications, settings }
