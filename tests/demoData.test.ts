@@ -6,6 +6,11 @@ import { sanitizeBackup } from '../src/lib/backupSanitize.ts'
 import { detectFlares } from '../src/lib/flares.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 import type { LoggedEntry } from '../src/db/types.ts'
+import { sanitizeSettings } from '../src/lib/backupSanitize.ts'
+import { flareUnderWay } from '../src/lib/hardDays.ts'
+import { arrangeLeads, findLeads } from '../src/lib/leads.ts'
+import { leadToBring } from '../src/lib/leadHints.ts'
+import { weeklyFinding } from '../src/lib/weeklySentence.ts'
 
 const END = '2026-10-12'
 const logged = (h: ReturnType<typeof buildDemoHistory>) => h.entries as LoggedEntry[]
@@ -93,4 +98,66 @@ test('a long history adds earlier months before the same story', () => {
   assert.ok(long.entries.length > 350)
   assert.ok(long.medications.some((m) => m.name === 'Amitriptyline'))
   assert.ok(!buildDemoHistory({ endDate: END, language: 'fr' }).medications.some((m) => m.name === 'Amitriptyline'))
+})
+
+// Fourteen end dates, two full weeks, so every weekday falls under every position.
+const DATES = Array.from({ length: 14 }, (_, i) => shiftISO('2026-10-01', i))
+const recent = (h: ReturnType<typeof buildDemoHistory>, end: string) => logged(h).filter((e) => e.date >= shiftISO(end, -30))
+
+test('the leads were answered: the short walk and the meditation kept, rest set aside, and the backup keeps them', () => {
+  const fr = buildDemoHistory({ endDate: END, language: 'fr' })
+  assert.deepEqual(
+    Object.entries(fr.settings.leadChoices ?? {}).map(([k, c]) => [k, c.choice]),
+    [['action:marche courte', 'kept'], ['action:méditation / respiration', 'kept'], ['action:repos / sieste', 'dismissed']]
+  )
+  const en = buildDemoHistory({ endDate: END, language: 'en' })
+  assert.deepEqual(Object.keys(en.settings.leadChoices ?? {}), ['action:short walk', 'action:meditation / breathing', 'action:rest / nap'])
+  assert.deepEqual(sanitizeSettings(fr.settings)?.leadChoices, fr.settings.leadChoices)
+})
+
+test('Trends has something to say whatever the day, and opens on a lead already kept on most of them', () => {
+  let keptFirst = 0
+  let walk = 0
+  for (const end of DATES) {
+    const h = buildDemoHistory({ endDate: end, language: 'fr' })
+    const { shown } = arrangeLeads(findLeads(recent(h, end)), h.settings.leadChoices)
+    assert.ok(shown.length >= 2, `${end}: ${shown.length} leads`)
+    if (h.settings.leadChoices?.[shown[0].key]?.choice === 'kept') keptFirst++
+    if (shown.some((l) => l.key === 'action:marche courte')) walk++
+  }
+  assert.ok(keptFirst >= 10, `a kept lead opens the card on ${keptFirst} of 14 days`)
+  assert.ok(walk >= 9, `the walk is on the card on ${walk} of 14 days`)
+})
+
+test('the short walk goes with an easier day over the whole history, so the report has its line', () => {
+  for (const end of DATES) {
+    const h = buildDemoHistory({ endDate: end, language: 'fr' })
+    const walk = findLeads(logged(h)).find((l) => l.key === 'action:marche courte')
+    assert.ok(walk && walk.gap < -1, `${end}: ${walk?.gap}`)
+  }
+})
+
+test('by default the day opens in a flare, so no lead is brought to it', () => {
+  for (const end of DATES) {
+    const h = buildDemoHistory({ endDate: end, language: 'fr' })
+    assert.equal(flareUnderWay(logged(h), end), true, end)
+  }
+})
+
+test('with a calm end the day is outside a flare, a lead is brought on most days, and Sundays have their sentence', () => {
+  let brought = 0
+  let sundays = 0
+  for (const end of DATES) {
+    const h = buildDemoHistory({ endDate: end, language: 'fr', calmEnd: true })
+    assert.equal(flareUnderWay(logged(h), end), false, end)
+    assert.equal(h.entries.at(-1)?.painLevel, 4)
+    const { shown } = arrangeLeads(findLeads(recent(h, end)), h.settings.leadChoices)
+    if (leadToBring({ shown, choices: h.settings.leadChoices, seen: undefined, today: end, enabled: true, quiet: false })) brought++
+    if (new Date(`${end}T12:00:00Z`).getUTCDay() === 0) {
+      sundays++
+      assert.ok(weeklyFinding(logged(h), end, false), `${end}: nothing to say on a Sunday`)
+    }
+  }
+  assert.equal(sundays, 2)
+  assert.ok(brought >= 9, `a lead is brought on ${brought} of 14 days`)
 })

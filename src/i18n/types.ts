@@ -898,6 +898,7 @@ export interface Translations {
     /** `{{action}}` in the middle of a sentence, `{{where}}` the title of the "what helped" field */
     trialNote: string
     trialStop: string
+    trialPaused: string
     trialDoneLabel: string
     trialSmall: string
     trialFew: string

@@ -19,11 +19,23 @@
 // - pain following sleep, stress, pressure drops, storms and periods, and
 //   "what helped" tags with clear associations (and one reverse one: rest is
 //   taken on bad days);
+// - the leads of Trends already met: the short walk and the meditation kept
+//   for the appointment (so the card opens on a kept lead with its offer of a
+//   one-week trial, and the report has its "what the patient noticed"), and
+//   rest set aside (the reverse association above), so "leads set aside" is
+//   there to open. Sleep and stress are left unanswered, to be tried. Which leads stand out also depends on the day (the
+//   weekdays fall differently), so a choice for a lead that is not there that
+//   day simply does nothing;
 // - settings for a finished setup (name, illness, cycle tracking), so the
 //   report and the Kids tab work without going through the setup.
+//
+// By default the demo opens in the middle of a flare, and the cards that bring
+// a lead to the day's page stay quiet in a flare. `calmEnd` ends the last
+// flare four days earlier, so Today opens on those cards instead.
 
-import type { DailyEntry, Illness, Medication, MedicationIntake, Settings } from '../db/types.ts'
+import type { DailyEntry, Illness, LoggedEntry, Medication, MedicationIntake, Settings } from '../db/types.ts'
 import type { DemoLanguage } from './demoMode.ts'
+import { actionKey, choiceFor, findLeads, type LeadChoice, type LeadChoices } from './leads.ts'
 import { shiftISO } from './medications.ts'
 
 export interface DemoOptions {
@@ -37,6 +49,8 @@ export interface DemoOptions {
   emptyToday?: boolean
   /** The weather is fetched on its own: off for the in-app demo, which makes no network call */
   autoWeather?: boolean
+  /** End the last flare before the end instead of leaving it going on, so the day's page is not in a flare */
+  calmEnd?: boolean
 }
 
 export interface DemoHistory {
@@ -71,7 +85,7 @@ interface Flare {
 }
 
 export function buildDemoHistory(options: DemoOptions): DemoHistory {
-  const { endDate, language, emptyToday = false, autoWeather = true } = options
+  const { endDate, language, emptyToday = false, autoWeather = true, calmEnd = false } = options
   const illnesses = options.illnesses ?? ['fibromyalgie']
   const STORY_DAYS = DEMO_STORY_DAYS
   const DAYS = Math.max(STORY_DAYS, options.days ?? STORY_DAYS)
@@ -101,7 +115,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     ...(LEAD > 0 ? [{ start: -70, length: 7, intensity: 4 }] : []),
     { start: 22, length: 6, intensity: 3.5 },
     { start: 53, length: 7, intensity: 2.5 },
-    { start: 84, length: 5, intensity: 5.2, ongoing: true },
+    calmEnd ? { start: 79, length: 6, intensity: 4.2 } : { start: 84, length: 5, intensity: 5.2, ongoing: true },
   ]
   function flareBoost(i: number) {
     for (const f of FLARES) {
@@ -135,7 +149,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
    * with more pain; Trends is honest about that being an association. */
   const ACTIONS: Action[] = [
     { name: 'Méditation / respiration', p: () => 0.35, effect: 1.5 },
-    { name: 'Marche courte', p: (base) => (base < 4.5 ? 0.45 : 0.12), effect: 0.8 },
+    { name: 'Marche courte', p: (base) => (base < 4.5 ? 0.6 : 0.08), effect: 1.2 },
     { name: 'Kiné / soins', p: (_, weekday) => (weekday === 2 ? 0.9 : 0), effect: 1.4 },
     { name: 'Étirements doux', p: () => 0.3, effect: 0.6 },
     { name: 'Bain chaud', p: () => 0.2, effect: 0.6 },
@@ -284,7 +298,10 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     const helped = ACTIONS.filter((a) => chance(a.p(basePain, weekday))).slice(0, isToday ? 1 : undefined)
     const positiveActions = helped.map((a) => a.name)
     // Never quite pain-free: that is what living with a chronic illness looks like.
-    const pain = isToday ? 4 : clamp(basePain - helped.reduce((sum, a) => sum + a.effect, 0), 1)
+    // With `calmEnd` the last days are ordinary ones: a stray spike there would
+    // keep the flare going.
+    const calmCap = calmEnd && s >= STORY_DAYS - 4 ? 4.4 : 10
+    const pain = isToday ? 4 : Math.min(calmCap, clamp(basePain - helped.reduce((sum, a) => sum + a.effect, 0), 1))
     const painLevel = Math.round(pain)
 
     const activityLevel = round(isWeekend ? 5.5 + noise(3.5) : 4.5 - (pain - 4) * 0.6 + noise(2.5))
@@ -348,6 +365,21 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     })
   }
 
+  // What the person answered to the leads on Trends, worked out from the
+  // history itself: the numbers a choice was made on are the ones the lead has
+  // (a set-aside lead comes back when it gets stronger). English tags make
+  // English keys.
+  const recent = findLeads((entries as LoggedEntry[]).filter((e) => e.date >= shiftISO(endDate, -30)))
+  const answerKey = (name: string) => `action:${actionKey(language === 'en' ? (EN_STRINGS[name] ?? name) : name)}`
+  const leadChoices: LeadChoices = {}
+  const answer = (key: string, frenchKey: string, choice: LeadChoice['choice'], gap: number) => {
+    const lead = recent.find((l) => l.key === frenchKey)
+    leadChoices[key] = lead ? choiceFor(lead, choice, now) : { choice, at: now, gap, days: 30 }
+  }
+  answer(answerKey('Marche courte'), 'action:marche courte', 'kept', -2.5)
+  answer(answerKey('Méditation / respiration'), 'action:méditation / respiration', 'kept', -1.9)
+  answer(answerKey('Repos / sieste'), 'action:repos / sieste', 'dismissed', 2.5)
+
   // A finished setup, so the demo opens on the app itself with the report and
   // the Kids tab filled in. The theme is left out: it stays whatever the device
   // already uses. The language is the one of the data: tags, notes and
@@ -368,6 +400,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     ...(autoWeather ? { autoWeatherLat: 45.764, autoWeatherLon: 4.8357 } : {}),
     autoWeatherLabel: 'Lyon',
     enabledFactors: ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes'],
+    leadChoices,
   }
 
   const history = { entries, medications, settings }
