@@ -2,31 +2,10 @@ import { useRef, useState } from 'react'
 import { IconChevronLeft, IconChevronRight, IconNotebook } from '@tabler/icons-react'
 import { Card, SectionTitle } from '../ui/Card'
 import { actionInSentence, type Lead, type LeadChoice, type LeadChoices } from '../../lib/leads'
-import { format, useLanguage, useLocale, useTranslation, type Translations } from '../../i18n'
+import type { LeadTrial } from '../../lib/leadTrial'
+import { capitalise, leadSentence, leadTexts } from './leadTexts'
+import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { usePalette } from '../../hooks/usePalette'
-
-type LeadTexts = { title: string; high: string; low: string; note: string }
-
-function textsFor(lead: Lead, t: Translations['trends']): LeadTexts {
-  const action = actionInSentence(lead.action ?? '')
-  switch (lead.kind) {
-    case 'sleep':
-      return { title: t.leadTitleSleep, high: t.leadSleepHigh, low: t.leadSleepLow, note: t.leadNoteSleep }
-    case 'stress':
-      return { title: t.leadTitleStress, high: t.leadStressHigh, low: t.leadStressLow, note: t.leadNoteStress }
-    case 'activity':
-      return { title: t.leadTitleActivity, high: t.leadActivityHigh, low: t.leadActivityLow, note: t.leadNoteActivity }
-    case 'action':
-      return {
-        title: format(t.leadTitleAction, { action }),
-        high: format(t.leadActionHigh, { action }),
-        low: t.leadActionLow,
-        note: t.leadNoteAction,
-      }
-  }
-}
-
-const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 /**
  * The few things in the notes that go with a clearly different pain, one at a
@@ -41,24 +20,42 @@ export function LeadsCard({
   choices,
   onAnswer,
   onUndo,
+  trial,
+  trialsEnabled,
+  declined,
+  onStartTrial,
+  onDeclineTrial,
 }: {
   shown: Lead[]
   dismissed: Lead[]
   choices: LeadChoices | undefined
   onAnswer: (lead: Lead, choice: LeadChoice['choice']) => void
   onUndo: (lead: Lead) => void
+  /** The trial under way, if any: one at a time */
+  trial: LeadTrial | undefined
+  trialsEnabled: boolean
+  /** Leads the person said "not now" to for a trial */
+  declined: string[]
+  onStartTrial: (lead: Lead) => void
+  onDeclineTrial: (lead: Lead) => void
 }) {
   const i18n = useTranslation()
   const t = i18n.trends
   const language = useLanguage()
   const { intlLocale } = useLocale()
   const palette = usePalette()
-  const [index, setIndex] = useState(0)
+  // The lead on show is followed by its key, not its place: keeping one moves
+  // it to the front of the list, and the card must stay on it (its next step,
+  // the offer of a trial, is right there). A lead set aside leaves the list:
+  // the card goes to the one that took its place.
+  const [view, setView] = useState<{ key: string | null; at: number }>({ key: null, at: 0 })
   const heading = useRef<HTMLDivElement>(null)
   const nf = new Intl.NumberFormat(intlLocale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 
-  const current = shown[Math.min(index, shown.length - 1)]
-  const at = current ? shown.indexOf(current) : 0
+  const found = shown.findIndex((l) => l.key === view.key)
+  const at = Math.max(0, found >= 0 ? found : Math.min(view.at, shown.length - 1))
+  const current = shown[at]
+  const goTo = (to: number) => setView({ key: shown[to].key, at: to })
 
   // The card the person answered leaves the list: keep them where they were.
   const dismiss = (lead: Lead) => {
@@ -85,18 +82,23 @@ export function LeadsCard({
           onKeep={() => onAnswer(current, 'kept')}
           onDismiss={() => dismiss(current)}
           onUndo={() => onUndo(current)}
+          trial={trial}
+          trialsEnabled={trialsEnabled}
+          declined={declined.includes(current.key)}
+          onStartTrial={() => onStartTrial(current)}
+          onDeclineTrial={() => onDeclineTrial(current)}
         />
       )}
 
       {shown.length > 1 && (
         <div className="flex items-center justify-center gap-2 mt-4">
-          <PagerButton label={t.leadsPrevious} disabled={at === 0} onClick={() => setIndex(at - 1)}>
+          <PagerButton label={t.leadsPrevious} disabled={at === 0} onClick={() => goTo(at - 1)}>
             <IconChevronLeft size={20} aria-hidden />
           </PagerButton>
           <span className="text-caption tabular-nums min-w-[4.5rem] text-center" style={{ color: palette.inkMuted }} aria-live="polite">
             {format(t.leadsCount, { i: at + 1, n: shown.length }, language)}
           </span>
-          <PagerButton label={t.leadsNext} disabled={at === shown.length - 1} onClick={() => setIndex(at + 1)}>
+          <PagerButton label={t.leadsNext} disabled={at === shown.length - 1} onClick={() => goTo(at + 1)}>
             <IconChevronRight size={20} aria-hidden />
           </PagerButton>
         </div>
@@ -113,7 +115,7 @@ export function LeadsCard({
           <ul className="mt-1">
             {dismissed.map((lead) => (
               <li key={lead.key} className="flex items-center justify-between gap-3 py-1.5">
-                <span className="text-control">{textsFor(lead, t).title}</span>
+                <span className="text-control">{leadTexts(lead, t).title}</span>
                 <button
                   type="button"
                   onClick={() => onUndo(lead)}
@@ -164,6 +166,11 @@ function LeadView({
   onKeep,
   onDismiss,
   onUndo,
+  trial,
+  trialsEnabled,
+  declined,
+  onStartTrial,
+  onDeclineTrial,
 }: {
   lead: Lead
   choice: LeadChoice | undefined
@@ -172,16 +179,16 @@ function LeadView({
   onKeep: () => void
   onDismiss: () => void
   onUndo: () => void
+  trial: LeadTrial | undefined
+  trialsEnabled: boolean
+  declined: boolean
+  onStartTrial: () => void
+  onDeclineTrial: () => void
 }) {
   const t = useTranslation().trends
   const palette = usePalette()
-  const texts = textsFor(lead, t)
-  const gap = Math.abs(lead.gap)
-  const sentence = format(
-    lead.gap < 0 ? t.leadSentenceLower : t.leadSentenceHigher,
-    { when: capitalise(texts.high), gap: nf.format(gap), n: gap },
-    language
-  )
+  const texts = leadTexts(lead, t)
+  const sentence = leadSentence(lead, t, nf, language)
   const basis =
     lead.kind === 'action'
       ? format(t.leadBasisAction, { n: lead.days, a: lead.high.n, b: lead.low.n }, language)
@@ -237,6 +244,62 @@ function LeadView({
           </button>
         </div>
       )}
+
+      {kept && trialsEnabled && lead.kind === 'action' && (
+        <TrialInvitation lead={lead} trial={trial} declined={declined} onStart={onStartTrial} onDecline={onDeclineTrial} />
+      )}
+    </div>
+  )
+}
+
+/** After a "yes" on an action: the offer to try it for a week, or where the trial under way is. */
+function TrialInvitation({
+  lead,
+  trial,
+  declined,
+  onStart,
+  onDecline,
+}: {
+  lead: Lead
+  trial: LeadTrial | undefined
+  declined: boolean
+  onStart: () => void
+  onDecline: () => void
+}) {
+  const t = useTranslation().trends
+  const palette = usePalette()
+  if (trial) {
+    return trial.key === lead.key ? (
+      <p className="text-caption mt-3" style={{ color: palette.inkMuted }}>
+        {t.leadTrialRunning}
+      </p>
+    ) : null
+  }
+  if (declined) return null
+  return (
+    <div className="rounded-xl px-3.5 py-3 mt-3" style={{ background: 'var(--color-brand-soft)' }}>
+      <p className="text-control font-semibold">{t.leadTrialTitle}</p>
+      <p className="text-caption mt-1 leading-snug" style={{ color: 'var(--color-ink)' }}>
+        {format(t.leadTrialBody, { action: actionInSentence(lead.action ?? '') })}
+      </p>
+      <div className="flex flex-wrap gap-2 mt-2.5">
+        <button
+          type="button"
+          onClick={onStart}
+          className="rounded-[var(--radius-control)] px-3.5 min-h-11 text-control font-medium"
+          style={{ background: 'var(--color-brand)', color: 'var(--color-on-brand)' }}
+        >
+          {t.leadTrialStart}
+        </button>
+        <button
+          type="button"
+          onClick={onDecline}
+          className="rounded-[var(--radius-control)] px-3.5 min-h-11 text-control font-medium"
+          style={{ boxShadow: 'inset 0 0 0 1px var(--color-hairline)', color: 'var(--color-ink)', background: 'var(--color-surface)' }}
+        >
+          {t.leadTrialLater}
+        </button>
+      </div>
     </div>
   )
 }

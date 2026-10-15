@@ -11,7 +11,18 @@ const TAB_ICONS: Record<Tab, Icon> = {
   settings: IconSettings,
 }
 
-export function TabBar({ active, onChange, hidden = [] }: { active: Tab; onChange: (t: Tab) => void; hidden?: Tab[] }) {
+/** `badged` tabs carry a small dot, named for screen readers: something new is there, without a number. */
+export function TabBar({
+  active,
+  onChange,
+  hidden = [],
+  badged = [],
+}: {
+  active: Tab
+  onChange: (t: Tab) => void
+  hidden?: Tab[]
+  badged?: Tab[]
+}) {
   const t = useTranslation()
   const ALL: { id: Tab; label: string }[] = [
     { id: 'today', label: t.tabs.today },
@@ -38,10 +49,20 @@ export function TabBar({ active, onChange, hidden = [] }: { active: Tab; onChang
               key={tab.id}
               onClick={() => onChange(tab.id)}
               aria-current={isActive ? 'page' : undefined}
+              aria-label={badged.includes(tab.id) ? `${tab.label}, ${t.tabs.trendsNew}` : undefined}
               className="flex-1 flex flex-col items-center gap-0.5 py-2.5"
               style={{ color: isActive ? 'var(--color-brand)' : 'var(--color-ink-muted)' }}
             >
-              <Icon size={22} stroke={isActive ? 2 : 1.6} aria-hidden />
+              <span className="relative">
+                <Icon size={22} stroke={isActive ? 2 : 1.6} aria-hidden />
+                {badged.includes(tab.id) && (
+                  <span
+                    aria-hidden
+                    className="absolute -top-0.5 -right-1 w-2.5 h-2.5 rounded-full"
+                    style={{ background: 'var(--color-brand)', boxShadow: '0 0 0 2px var(--color-surface)' }}
+                  />
+                )}
+              </span>
               {/* Capped: five labels share the screen width, so they only grow
                   as far as the longest one ("Aujourd'hui") still fits — 13px on
                   a 360px phone, up to 16px on wider screens. iOS caps its own

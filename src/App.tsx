@@ -17,6 +17,8 @@ import { SetupWizard } from './components/setup/SetupWizard'
 import { useSettings, useSettingsLoaded } from './hooks/useSettings'
 import { hasPain } from './lib/loggedEntries'
 import { useTodayEntry } from './hooks/useEntries'
+import { useLeadList } from './hooks/useLeadList'
+import { trendsDot } from './lib/leadHints'
 import { updateSettings, todayISO } from './db'
 import { maybeShowReminder } from './lib/reminder'
 import { clearWipedNotice, wipedNotice } from './lib/wipe'
@@ -49,6 +51,7 @@ function AppShell() {
   const settings = useSettings()
   const settingsLoaded = useSettingsLoaded()
   const todayEntry = useTodayEntry()
+  const leadList = useLeadList()
   useAppliedTheme(settings.theme)
   useAutoBackup()
   // Set when the data was just deleted from Settings: said once at the start.
@@ -109,7 +112,15 @@ function AppShell() {
   return (
     <>
       <main className="flex-1">
-        {tab === 'today' && <TodayPage onGoToBackup={goToBackup} />}
+        {tab === 'today' && (
+          <TodayPage
+            onGoToBackup={goToBackup}
+            onGoToTab={(next) => {
+              setBackupRequested(false)
+              setTab(next)
+            }}
+          />
+        )}
         {tab === 'journal' && <JournalPage />}
         {tab === 'trends' && <TrendsPage />}
         {tab === 'kids' && settings.kidsTabEnabled && <ChildViewPage />}
@@ -118,6 +129,7 @@ function AppShell() {
       <TabBar
         active={tab}
         hidden={settings.kidsTabEnabled ? [] : ['kids']}
+        badged={tab !== 'trends' && trendsDot({ shown: leadList?.shown ?? [], seen: settings.leadsSeen, enabled: settings.leadDotEnabled }) ? ['trends'] : []}
         onChange={(next) => {
           setBackupRequested(false)
           setTab(next)

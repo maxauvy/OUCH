@@ -4,6 +4,8 @@
 import type { Language } from '../i18n/language'
 import type { HardDaysSeen } from '../lib/hardDays'
 import type { LeadChoices } from '../lib/leads'
+import type { LeadsSeen } from '../lib/leadHints'
+import type { LeadTrial } from '../lib/leadTrial'
 
 export type FactorKey =
   | 'fatigue'
@@ -294,6 +296,18 @@ export interface Settings {
   hardDaysSeen?: HardDaysSeen
   /** What the person answered to the leads on Trends ("note it for my appointment", "not really"), by lead. Restored from a backup. */
   leadChoices?: LeadChoices
+  /** A card on the day's page, once, when a new lead shows in the notes. Switchable, restored from a backup. */
+  leadPromptEnabled: boolean
+  /** The Sunday sentence about the gentlest days of the week. Switchable, restored from a backup. */
+  weeklySentenceEnabled: boolean
+  /** A dot on the Trends tab when a new lead is there. Switchable, restored from a backup. */
+  leadDotEnabled: boolean
+  /** The offer to try, for a week, an action that goes with softer days. Switchable, restored from a backup. */
+  trialsEnabled: boolean
+  /** The one-week trial under way, or just over and waiting to be closed. Restored from a backup. */
+  leadTrial?: LeadTrial
+  /** What the lead cards have already shown on this device. Per device. */
+  leadsSeen?: LeadsSeen
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness
@@ -323,6 +337,10 @@ export const DEFAULT_SETTINGS: Settings = {
   hardDaysCardEnabled: true,
   lightFormEnabled: true,
   kidsTabEnabled: false,
+  leadPromptEnabled: true,
+  weeklySentenceEnabled: true,
+  leadDotEnabled: true,
+  trialsEnabled: true,
 }
 
 export type PainWeatherLevel = 1 | 2 | 3 | 4 | 5

@@ -23,6 +23,7 @@ export interface Translations {
     today: string
     journal: string
     trends: string
+    trendsNew: string
     kids: string
     settings: string
   }
@@ -215,6 +216,12 @@ export interface Translations {
     leadsDismissedTitle: string
     leadsDismissedHint: string
     leadReopen: string
+    leadTrialTitle: string
+    /** `{{action}}` as the person wrote it */
+    leadTrialBody: string
+    leadTrialStart: string
+    leadTrialLater: string
+    leadTrialRunning: string
     medicationsTitle: string
     medicationsCaption: string
     daysOne: string
@@ -878,6 +885,34 @@ export interface Translations {
     later: string
   }
 
+  leadHints: {
+    promptLabel: string
+    promptSee: string
+    promptLater: string
+    close: string
+    trialLabel: string
+    /** `{{action}}` as the person wrote it, `{{n}}` days with it out of seven */
+    trialTitle: string
+    /** `{{day}}` of seven */
+    trialDay: string
+    /** `{{action}}` in the middle of a sentence, `{{where}}` the title of the "what helped" field */
+    trialNote: string
+    trialStop: string
+    trialDoneLabel: string
+    trialSmall: string
+    trialFew: string
+    trialSame: string
+    trialOther: string
+    trialKept: string
+    trialKeep: string
+    trialContinue: string
+    trialEnd: string
+    weeklyLabel: string
+    /** `{{action}}` in the middle of a sentence */
+    weeklyAction: string
+    weeklySleep: string
+    weeklySee: string
+  }
   hardDays: {
     label: string
     lead: string
@@ -1039,6 +1074,12 @@ export interface Translations {
     kidsTabHelper: string
     lightFormTitle: string
     lightFormHelper: string
+    leadHintsTitle: string
+    leadHintsHelper: string
+    leadPromptLabel: string
+    weeklySentenceLabel: string
+    leadDotLabel: string
+    trialsLabel: string
     appearanceTitle: string
     /** Accessible name of the light/dark choice (no visible title). */
     themeTitle: string

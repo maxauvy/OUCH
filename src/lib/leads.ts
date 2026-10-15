@@ -128,7 +128,7 @@ export function actionInSentence(action: string): string {
 }
 
 /** Two spellings of one action ("Marche", " marche ") are the same action. */
-const actionKey = (name: string) => name.trim().toLowerCase()
+export const actionKey = (name: string) => name.trim().toLowerCase()
 
 function actionLeads(entries: LoggedEntry[]): Lead[] {
   if (entries.length < LEAD_MIN_DAYS) return []

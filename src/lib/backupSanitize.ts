@@ -31,6 +31,7 @@ import type {
 } from '../db/types.ts'
 import { cleanOtherName, FIRST_DIAGNOSIS_YEAR } from './illnessStatus.ts'
 import type { LeadChoices } from './leads.ts'
+import type { LeadTrial } from './leadTrial.ts'
 
 /** Far above any real journal (a hundred years is ~36 500 days). */
 export const MAX_ENTRIES = 40_000
@@ -225,6 +226,16 @@ function leadChoices(v: unknown): LeadChoices | undefined {
   return out
 }
 
+/** A one-week trial: a known kind of key, its action, and a first and last day a few days apart. */
+function leadTrial(v: unknown): LeadTrial | undefined {
+  if (!isRecord(v)) return undefined
+  const key = str(v.key)
+  const action = str(v.action)
+  if (!key?.startsWith('action:') || !action?.trim() || !isISODate(v.start) || !isISODate(v.end)) return undefined
+  const days = (Date.parse(`${v.end}T12:00:00Z`) - Date.parse(`${v.start}T12:00:00Z`)) / 86_400_000
+  return days >= 0 && days <= 30 ? { key, action, start: v.start, end: v.end } : undefined
+}
+
 /** Only what is valid is kept, and nothing is filled in: a setting the file
  * does not (validly) hold stays as it is on this device. */
 export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
@@ -256,6 +267,11 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     illnessYear: illnessYear(raw.illnessYear, raw.illnessStatus),
     childIllness: oneOf(raw.childIllness, ILLNESSES),
     leadChoices: leadChoices(raw.leadChoices),
+    leadPromptEnabled: bool(raw.leadPromptEnabled),
+    weeklySentenceEnabled: bool(raw.weeklySentenceEnabled),
+    leadDotEnabled: bool(raw.leadDotEnabled),
+    trialsEnabled: bool(raw.trialsEnabled),
+    leadTrial: leadTrial(raw.leadTrial),
   })
 }
 
