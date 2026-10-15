@@ -20,6 +20,7 @@ import {
   type WeekRow,
 } from '../../lib/report'
 import type { FlareEpisode } from '../../lib/flares'
+import { actionInSentence, type Lead } from '../../lib/leads'
 import type { TreatmentReview } from '../../lib/treatmentReview'
 import { CONTEXT_KEYS, type ContextKey, type TreatmentEvent } from '../../lib/flareContext'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
@@ -178,6 +179,7 @@ function gpPages(d: ReportData): Block[][] {
         </div>
       </div>,
       d.weekdays && <WeekdaysBlock d={d} />,
+      d.noticed.length > 0 && <Noticed d={d} />,
       d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all={false} list={notes} from={from} to={to} continued={continued} />),
       <>
         <H level={2}>{f.t.method}</H>
@@ -378,6 +380,7 @@ function painClinicPages(d: ReportData): Block[][] {
         <p className="r-small">{f.t.zonesWpi}</p>
       </>,
       d.weekdays && <WeekdaysBlock d={d} />,
+      d.noticed.length > 0 && <Noticed d={d} />,
       <Associations d={d} />,
     ],
     [
@@ -1287,6 +1290,46 @@ function NonDrug({ d }: { d: ReportData }) {
 
 function agendaItems(d: ReportData): string[] {
   return d.options.agenda.map((a) => a.trim()).filter(Boolean)
+}
+
+/** The leads the patient kept for the appointment, in their own diary's numbers: the high side of each factor first. */
+function noticedLine(d: ReportData, lead: Lead): string {
+  const { f } = d
+  const t = f.t
+  const action = actionInSentence(lead.action ?? '')
+  const [name, high, low] = {
+    sleep: [t.noticedSleep, t.noticedSleepHigh, t.noticedSleepLow],
+    stress: [t.noticedStress, t.noticedStressHigh, t.noticedStressLow],
+    activity: [t.noticedActivity, t.noticedActivityHigh, t.noticedActivityLow],
+    action: [lead.action ?? '', f.format(t.noticedActionHigh, { action }), t.noticedActionLow],
+  }[lead.kind]
+  return f.format(t.noticedLine, {
+    name,
+    a: f.nf(lead.high.mean),
+    aLabel: high,
+    aN: lead.high.n,
+    b: f.nf(lead.low.mean),
+    bLabel: low,
+    bN: lead.low.n,
+  })
+}
+
+function Noticed({ d }: { d: ReportData }) {
+  const { f, noticed } = d
+  if (!noticed.length) return null
+  return (
+    <>
+      <H level={2}>{f.t.noticed}</H>
+      <div className="r-quote">
+        <ul>
+          {noticed.map((lead) => (
+            <li key={lead.key}>{noticedLine(d, lead)}</li>
+          ))}
+        </ul>
+      </div>
+      <p className="r-small">{f.t.noticedNote}</p>
+    </>
+  )
 }
 
 function Agenda({ d }: { d: ReportData }) {

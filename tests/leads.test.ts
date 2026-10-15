@@ -8,6 +8,8 @@ import {
   choiceFor,
   findLeads,
   isDismissed,
+  keptLeads,
+  actionInSentence,
   leadThreshold,
   type Lead,
   type LeadChoices,
@@ -144,4 +146,28 @@ test('a dismissed lead comes back if it turns the other way', () => {
 test('a kept lead is never reported as dismissed', () => {
   assert.equal(isDismissed(lead('a', -2), choiceFor(lead('a', -2), 'kept', 1)), false)
   assert.equal(isDismissed(lead('a', -2), undefined), false)
+})
+
+test('only the kept leads go on the report, the strongest first, at most three', () => {
+  const leads = [lead('a', -3, 30, -0.9), lead('b', -2, 30, -0.8), lead('c', -2, 30, -0.7), lead('d', -2, 30, -0.6), lead('e', -2, 30, -0.5)]
+  const choices: LeadChoices = {
+    a: choiceFor(leads[0], 'kept', 1),
+    b: choiceFor(leads[1], 'dismissed', 1),
+    c: choiceFor(leads[2], 'kept', 1),
+    d: choiceFor(leads[3], 'kept', 1),
+    e: choiceFor(leads[4], 'kept', 1),
+  }
+  assert.deepEqual(keptLeads(leads, choices).map((l) => l.key), ['a', 'c', 'd'])
+  assert.deepEqual(keptLeads(leads, undefined), [])
+})
+
+test('a kept lead that no longer passes the bar is not reported on old numbers', () => {
+  const choices: LeadChoices = { gone: choiceFor(lead('gone', -2), 'kept', 1) }
+  assert.deepEqual(keptLeads([lead('other', -2)], choices), [])
+})
+
+test('an action reads in lower case in a sentence, an acronym keeps its capitals', () => {
+  assert.equal(actionInSentence('Marche courte'), 'marche courte')
+  assert.equal(actionInSentence('TENS'), 'TENS')
+  assert.equal(actionInSentence('x'), 'x')
 })

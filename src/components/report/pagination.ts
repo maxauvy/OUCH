@@ -41,6 +41,9 @@ export interface Part {
   block: number
   from: number
   to: number
+  /** A list or table that can be split between two rows. Other blocks may hold
+   * `data-row` elements too (a table inside a grid), but only move whole. */
+  splittable: boolean
   node: ReactNode
 }
 
@@ -63,7 +66,7 @@ export function buildSheets(pages: Block[][], cuts: Cut[]): Sheet[] {
     if (page === 0 || !cuts.some((c) => c.page === page - 1)) flush()
     const part = (block: number, from: number, to: number) => {
       const b = blocks[block]
-      parts.push({ page, block, from, to, node: isRows(b) ? b.render(from, to, from > 0) : b })
+      parts.push({ page, block, from, to, splittable: isRows(b), node: isRows(b) ? b.render(from, to, from > 0) : b })
     }
     blocks.forEach((b, block) => {
       const rows = isRows(b) ? b.rows : 1
@@ -120,7 +123,7 @@ export function findCut(sections: HTMLElement[], sheets: Sheet[], cuts: Cut[]): 
       if (bottomOf(el.children) <= limit) continue
       const part = sheets[s].parts[i]
       const first = i === 0
-      const rows = Array.from(el.querySelectorAll<HTMLElement>('[data-row]'))
+      const rows = part.splittable ? Array.from(el.querySelectorAll<HTMLElement>('[data-row]')) : []
       let cut: Cut | null = null
       if (rows.length) {
         const over = rows.findIndex((r) => r.getBoundingClientRect().bottom > limit)

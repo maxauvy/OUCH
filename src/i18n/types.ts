@@ -624,6 +624,22 @@ export interface Translations {
     zonesNote: string
     zonesWpi: string
     agenda: string
+    noticed: string
+    noticedNote: string
+    /** `{{name}}`, then each side: `{{a}}` pain with `{{aLabel}}`, `{{aN}}` days; `{{b}}`… the other side */
+    noticedLine: string
+    noticedSleep: string
+    noticedStress: string
+    noticedActivity: string
+    noticedSleepHigh: string
+    noticedSleepLow: string
+    noticedStressHigh: string
+    noticedStressLow: string
+    noticedActivityHigh: string
+    noticedActivityLow: string
+    /** `{{action}}` as the patient wrote it */
+    noticedActionHigh: string
+    noticedActionLow: string
     notes: string
     notesHintGp: string
     notesHintAll: string
