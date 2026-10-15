@@ -1,6 +1,6 @@
 # Ce qu'OUCH est, et n'est pas : cadre réglementaire
 
-*Version 0.1, brouillon de travail. Établi le 9 octobre 2026 d'après la v0.3.0 ; les points sur les envois facultatifs (sauvegarde automatique) et le verrou par code ont été ajoutés le 14 octobre 2026, pour la v0.5.0. **Ce document n'est pas un avis juridique ni une analyse de conformité** : il expose un raisonnement et ses points faibles, pour qu'un professionnel du droit ou de la réglementation puisse le contester.*
+*Version 0.1, brouillon de travail. Établi le 9 octobre 2026 d'après la v0.3.0 ; les points sur les envois facultatifs (sauvegarde automatique) et le verrou par code ont été ajoutés le 14 octobre 2026, pour la v0.5.0, puis les pistes de Tendances et les essais d'une semaine le 15 octobre 2026, pour la v0.6.0. **Ce document n'est pas un avis juridique ni une analyse de conformité** : il expose un raisonnement et ses points faibles, pour qu'un professionnel du droit ou de la réglementation puisse le contester.*
 
 ## En bref
 
@@ -21,12 +21,14 @@ OUCH se présente comme un **carnet** que le patient tient, et un **résumé des
 
 ## 2. Là où le raisonnement est le plus exposé
 
-OUCH ne se contente pas de stocker : il **calcule**. Quatre fonctions peuvent se lire comme du suivi de maladie ou une aide à la décision, ce qui est le critère à discuter :
+OUCH ne se contente pas de stocker : il **calcule**. Six fonctions peuvent se lire comme du suivi de maladie ou une aide à la décision, ce qui est le critère à discuter :
 
 1. **Le repérage des poussées** : un algorithme qualifie des périodes comme « poussée » à partir des notes du patient.
 2. **La comparaison avant et après un changement de traitement**, présenté au soignant : même descriptif et accompagné de réserves, il porte sur l'effet apparent d'un traitement.
 3. **Le rapport destiné au médecin**, lu pour informer une prise en charge, par un tiers qui n'est pas l'utilisateur.
 4. **Le mot des jours difficiles et l'écran allégé**, qui se déclenchent quand l'algorithme repère une poussée en cours : l'application adapte son comportement à l'état supposé du patient, même sans lui donner de conseil.
+5. **Les pistes de Tendances**, et les cartes qui les amènent (page du jour, point sur l'onglet, phrase du dimanche) : l'application relève des associations dans les notes et les met en avant, avec des mots qui évitent la cause (« une piste, pas une preuve ») mais qui orientent le regard du patient.
+6. **L'essai d'une semaine** : l'application invite le patient à reprendre pendant sept jours une action qu'il a lui-même notée, puis compare ses jours avec et sans. L'action vient du patient et le résultat est décrit sans conclure, mais le geste ressemble à une intervention : c'est la raison des garde-fous du [protocole de test](protocole-de-test.md) (pas de suggestion d'action, rien pendant une poussée, texte libre qui peut contenir une modification de traitement).
 
 Ce sont ces points qu'un expert réglementaire regardera d'abord, et c'est la **destination prévue** (ce que le fabricant dit, écrit et promet) qui comptera, davantage que la sobriété des textes. Si une qualification de dispositif médical était retenue, elle imposerait un tout autre cadre (système de qualité, évaluation clinique, marquage CE, classification selon la règle applicable aux logiciels).
 
@@ -54,6 +56,7 @@ La destination prévue ressort de tout ce qui est publié. Quelques règles pour
 | « Résume le journal du patient » | « Détecte », « diagnostique », « prédit », « alerte » |
 | « Repère les jours nettement au-dessus de son niveau habituel » | « Détecte les crises » |
 | « Décrit ce qui a changé autour d'un traitement » | « Mesure l'efficacité d'un traitement » |
+| « Montre ce que les notes du patient laissent voir, comme une piste » ; « un essai d'une semaine que le patient mène lui-même, avec ses propres actions » | « Trouve ce qui soulage », « recommande », « personnalise votre prise en charge » |
 | « Un support de discussion en consultation » | « Une aide à la décision » ; « améliore la prise en charge » |
 | « Données auto-déclarées » | « Données fiables », « données cliniques » |
 

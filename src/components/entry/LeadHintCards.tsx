@@ -3,7 +3,7 @@ import { IconNotebook, IconSparkles, IconX } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { Lead, LeadChoices } from '../../lib/leads'
 import { actionInSentence, choiceFor } from '../../lib/leads'
-import { continueTrial, trialStatus, type LeadTrial } from '../../lib/leadTrial'
+import { archiveTrial, continueTrial, trialStatus, type LeadTrial } from '../../lib/leadTrial'
 import { remember } from '../../lib/leadHints'
 import type { LoggedEntry } from '../../db/types'
 import type { WeeklyFinding } from '../../lib/weeklySentence'
@@ -134,12 +134,15 @@ export function TrialPausedCard({ trial }: { trial: LeadTrial }) {
 /** The one-week trial, on the day's page: where the week is while it runs, and what it showed once it is over. */
 export function TrialCard({
   trial,
+  history,
   entries,
   today,
   lead,
   choices,
 }: {
   trial: LeadTrial
+  /** The weeks closed before */
+  history: LeadTrial[] | undefined
   entries: LoggedEntry[]
   today: string
   /** The lead as the notes read today, when it still is one */
@@ -155,7 +158,9 @@ export function TrialCard({
   const status = trialStatus(trial, entries, today, choices?.[trial.key]?.gap ?? lead?.gap)
   const action = actionInSentence(trial.action)
   const title = format(lh.trialTitle, { action: capitalise(trial.action), n: status.withDays }, language)
+  // Stopping a week half way leaves nothing to say; finishing or carrying on a week that ran its course keeps it for the report.
   const clear = () => void updateSettings({ leadTrial: undefined })
+  const finish = () => void updateSettings({ leadTrial: undefined, leadTrialHistory: archiveTrial(history, trial) })
 
   if (!status.over) {
     return (
@@ -246,10 +251,10 @@ export function TrialCard({
             {lh.trialKeep}
           </button>
         )}
-        <button type="button" className={BUTTON} style={keepable ? SECONDARY : PRIMARY} onClick={() => void updateSettings({ leadTrial: continueTrial(trial, today) })}>
+        <button type="button" className={BUTTON} style={keepable ? SECONDARY : PRIMARY} onClick={() => void updateSettings({ leadTrial: continueTrial(trial, today), leadTrialHistory: archiveTrial(history, trial) })}>
           {lh.trialContinue}
         </button>
-        <button type="button" className={BUTTON} style={SECONDARY} onClick={clear}>
+        <button type="button" className={BUTTON} style={SECONDARY} onClick={finish}>
           {lh.trialEnd}
         </button>
       </div>

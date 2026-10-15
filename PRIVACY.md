@@ -15,6 +15,7 @@ Dans le navigateur de l'appareil (base IndexedDB du site, plus une clé de `loca
 - le journal : douleur, zones, fatigue, sommeil, brouillard mental, stress, humeur, activité, actions qui ont aidé, notes, jour de règles si la personne l'active ;
 - les traitements : nom, type, doses, périodes, prises, soulagement, effets indésirables ;
 - les réglages : prénom, langue, maladies déclarées, heure du rappel, et, si la météo automatique est activée, la **position exacte** de l'appareil ;
+- ce que la personne a répondu aux pistes de Tendances (« à noter pour ma consultation », « pas vraiment »), les essais d'une semaine qu'elle a lancés (l'action, les dates) et ce que les cartes de pistes ont déjà montré sur l'appareil : tout se calcule sur l'appareil, rien n'est envoyé, et les deux premiers font partie d'une sauvegarde ;
 - si le verrou par code est activé : l'empreinte salée du code (jamais le code), le délai choisi, le nombre d'erreurs de suite et le moment où l'app a quitté l'écran pour la dernière fois, dans une clé de `localStorage` (voir plus bas) ;
 - si la sauvegarde automatique est activée : l'état de la dernière copie (date, taille, empreinte, ce qu'a répondu Dropbox en cas d'échec), dans les réglages, ainsi que la clé de chiffrement et les jetons Dropbox dans deux bases à part (voir plus bas).
 
@@ -75,7 +76,7 @@ Le mode démo remplit une base séparée avec un historique fictif, calculé sur
 
 ## Rapport pour le médecin, image de la météo
 
-Le rapport est fabriqué sur l'appareil. Une fois imprimé ou envoyé, il relève de la personne : OUCH ne sait pas à qui elle le donne. Il porte la mention « données auto-déclarées, non vérifiées par un soignant ». Même chose pour l'image de la météo du jour : rien n'est envoyé automatiquement.
+Le rapport est fabriqué sur l'appareil. Il reprend, dans la rubrique « Ce que le patient a remarqué », les pistes que la personne a choisi de garder et ses essais d'une semaine terminés. Une fois imprimé ou envoyé, il relève de la personne : OUCH ne sait pas à qui elle le donne. Il porte la mention « données auto-déclarées, non vérifiées par un soignant ». Même chose pour l'image de la météo du jour : rien n'est envoyé automatiquement.
 
 ## Effacer ses données
 

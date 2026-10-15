@@ -106,3 +106,41 @@ export function trialStatus(
     tooFew: over && !comparable,
   }
 }
+
+/** Weeks closed by the person, kept so the report can say what each showed. */
+export const MAX_TRIAL_HISTORY = 30
+
+/** `history` with `trial` added once (the same action from the same day is the same week), the oldest dropped past a cap. */
+export function archiveTrial(history: LeadTrial[] | undefined, trial: LeadTrial): LeadTrial[] {
+  const rest = (history ?? []).filter((t) => !(t.key === trial.key && t.start === trial.start))
+  return [...rest, trial].slice(-MAX_TRIAL_HISTORY)
+}
+
+export interface ReportTrial {
+  trial: LeadTrial
+  result: TrialResult
+}
+
+/** The weeks that ended between `from` and `to` and can be compared, for the
+ * report: the closed ones, and the current one if it is over but not closed.
+ * Computed on the diary as it reads today, like the rest of the report. */
+export function reportTrials(
+  history: LeadTrial[] | undefined,
+  current: LeadTrial | undefined,
+  entries: LoggedEntry[],
+  from: string,
+  to: string
+): ReportTrial[] {
+  const all = archiveTrialsWith(history, current)
+  const out: ReportTrial[] = []
+  for (const trial of all) {
+    if (trial.end < from || trial.end > to) continue
+    const { result } = trialStatus(trial, entries, to)
+    if (result) out.push({ trial, result })
+  }
+  return out.sort((a, b) => a.trial.end.localeCompare(b.trial.end))
+}
+
+function archiveTrialsWith(history: LeadTrial[] | undefined, current: LeadTrial | undefined): LeadTrial[] {
+  return current ? archiveTrial(history, current) : (history ?? [])
+}

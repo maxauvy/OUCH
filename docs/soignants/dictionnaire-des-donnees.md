@@ -1,6 +1,6 @@
 # Dictionnaire des données d'OUCH
 
-*Décrit d'après le code de `main` au 9 octobre 2026 : la v0.3.0, plus deux corrections fusionnées le même jour (douleur facultative, variation de pression), complété jusqu'à la v0.5.0 le 14 octobre 2026 (état local de la sauvegarde automatique, verrou par code) (`src/db/types.ts`, `src/lib/backupSanitize.ts`, `src/lib/loggedEntries.ts`, les écrans de saisie). À mettre à jour quand un champ change.*
+*Décrit d'après le code de `main` au 9 octobre 2026 : la v0.3.0, plus deux corrections fusionnées le même jour (douleur facultative, variation de pression), complété jusqu'à la v0.5.0 le 14 octobre 2026 (état local de la sauvegarde automatique, verrou par code), puis jusqu'à la v0.6.0 le 15 octobre 2026 (pistes de Tendances, essais d'une semaine) (`src/db/types.ts`, `src/lib/backupSanitize.ts`, `src/lib/loggedEntries.ts`, les écrans de saisie). À mettre à jour quand un champ change.*
 
 Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'est enregistré, et ce que cela signifie. Il sert à lire un rapport, à comparer avec vos propres outils, ou à relire une sauvegarde.
 
@@ -86,7 +86,10 @@ Un changement de dose ferme la période en cours la veille et en ouvre une nouve
 | `reminderEnabled`, `reminderTime` | booléen, `HH:MM` | Oui |
 | `language`, `theme`, `onboardingDone`, `parentGender` | `fr` / `en`, `system` / `light` / `dark`, booléen, `maman` / `papa` (écran Enfants) | Oui |
 | `hardDaysCardEnabled`, `lightFormEnabled` | booléens | Oui. Le mot des jours difficiles et l'écran allégé pendant une poussée |
-| `lastBackupAt`, `backupReminderSnoozedUntil`, `fullFormDay`, `hardDaysSeen` | état local de l'appareil | **Non** : propres à chaque appareil |
+| `leadChoices` | par piste de Tendances (clé `sleep`, `stress`, `activity` ou `action:` suivi de l'action en minuscules) : la réponse du patient (`kept` « à noter pour ma consultation », ou `dismissed` « pas vraiment »), la date, et l'écart de douleur et le nombre de jours sur lesquels il a répondu | Oui. Un choix du patient : il ne change aucun calcul, il décide de ce qui figure dans la rubrique « Ce que le patient a remarqué » du rapport |
+| `leadTrial`, `leadTrialHistory` | un essai d'une semaine : la piste d'origine, l'action telle que le patient l'a écrite, premier et dernier jour. `leadTrial` est l'essai en cours (ou terminé, en attente d'être clos), `leadTrialHistory` les semaines closes (30 au plus) | Oui. Seule la semaine est enregistrée : le résultat est recalculé à partir du journal, à chaque affichage |
+| `leadPromptEnabled`, `weeklySentenceEnabled`, `leadDotEnabled`, `trialsEnabled` | booléens, tous vrais par défaut | Oui. La carte d'une piste sur la page du jour, la phrase du dimanche, le point sur l'onglet Tendances, et l'offre d'un essai d'une semaine |
+| `lastBackupAt`, `backupReminderSnoozedUntil`, `fullFormDay`, `hardDaysSeen`, `leadsSeen` | état local de l'appareil (`leadsSeen` : ce que les cartes de pistes ont déjà montré) | **Non** : propres à chaque appareil |
 | `autoBackup` | état local de la sauvegarde automatique, facultative et en accès anticipé : fournisseur, dernière copie envoyée et vérifiée (nom, taille, empreinte, date), dernière tentative, et ce que le fournisseur a répondu en cas d'échec | **Non** : propre à chaque appareil, jamais dans une sauvegarde ni dans une copie |
 
 Nom et date de naissance saisis pour un rapport ne sont **pas** des réglages : ils ne sont pas enregistrés.
@@ -95,7 +98,7 @@ Le **verrou par code**, facultatif, n'est pas un réglage de la base : il est ga
 
 ## Ce qui est calculé, et non enregistré
 
-Ces valeurs sont recalculées à chaque affichage à partir des données ci-dessus : moyennes et statistiques, moyenne glissante sur 7 jours, poussées, contexte des 3 jours avant une poussée, comparaison avant et après un changement de traitement, corrélations, score de la « météo du jour ». Leurs formules, seuils et limites sont dans la [note méthodologique](../note-methodologique/).
+Ces valeurs sont recalculées à chaque affichage à partir des données ci-dessus : moyennes et statistiques, moyenne glissante sur 7 jours, poussées, contexte des 3 jours avant une poussée, comparaison avant et après un changement de traitement, corrélations, pistes de Tendances (sommeil, stress, activité de la veille, actions), phrase du dimanche, résultat d'un essai d'une semaine, score de la « météo du jour ». Leurs formules, seuils et limites sont dans la [note méthodologique](../note-methodologique/).
 
 ## Sauvegarde et migration
 
@@ -117,7 +120,8 @@ Réglages, zone sensible, « Exporter en CSV, en clair » : deux fichiers en cla
 3. **La variation de pression est calculée, pas enregistrée.** Le champ `pressureDeltaFromPrevious` n'est jamais rempli par l'application. Depuis la correction du 9 octobre 2026 (PR #113), le rapport « Centre douleur » calcule lui-même la variation : pression moyenne du jour moins celle du **jour précédent ayant un niveau de douleur** (des jours sans saisie peuvent les séparer), en hPa. Il faut une pression à la fois pour le jour et pour le précédent, c'est-à-dire que la météo automatique doit avoir été utilisée régulièrement ; en dessous de 14 jours exploitables, la ligne n'apparaît pas. Avant cette correction, la ligne ne pouvait pas apparaître avec de vraies données.
 4. **Un jour non renseigné n'est pas un jour sans douleur.** Les mauvais jours sont parfois moins remplis : le rapport affiche la part de jours renseignés pour que cela se voie.
 5. **Échelles non validées** : fatigue, sommeil, brouillard mental, humeur, stress et activité sont des échelles numériques simples. Seule la douleur suit l'échelle numérique de 0 à 10 recommandée.
-6. **Une saisie rétroactive est possible** : une journée peut être remplie ou corrigée plus tard, donc le rappel sur 24 h n'est pas garanti pour toutes les entrées.
+6. **Les pistes gardées sont une sélection du patient.** La rubrique « Ce que le patient a remarqué » du rapport reprend ce que le patient a choisi de garder (et les essais d'une semaine qu'il a menés) : ce qui lui parle, pas tout ce que les données montrent. Les actions d'un essai sont celles que le patient a **notées lui-même** dans « Ce qui a aidé aujourd'hui » (texte libre) : OUCH n'en propose aucune. Les semaines d'essai incluent les jours de poussée qui tombent dans la semaine.
+7. **Une saisie rétroactive est possible** : une journée peut être remplie ou corrigée plus tard, donc le rappel sur 24 h n'est pas garanti pour toutes les entrées.
 
 ## Ce qui n'est pas recueilli
 

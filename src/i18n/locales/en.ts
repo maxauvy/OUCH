@@ -756,6 +756,9 @@ const en: Translations = {
     noticedActivityLow: 'after a quiet day',
     noticedActionHigh: 'on days with {{action}}',
     noticedActionLow: 'on the other days',
+    noticedTrialLine:
+      '{{action}}: one-week trial from {{from}} to {{to}}, mean pain of {{a}}/10 on the days with it ({{aN}} {{aN:day|days}}), against {{b}}/10 on the other days ({{bN}} {{bN:day|days}}).',
+    noticedTrialNote: 'A one-week trial describes seven days: that is little, an idea rather than an answer.',
     notes: 'Patient notes',
     notesHintGp: 'recent difficult days',
     notesHintAll: 'all, over the period covered',

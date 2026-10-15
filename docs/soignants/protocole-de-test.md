@@ -1,6 +1,6 @@
 # Protocole de test avec des soignants
 
-*Version 0.2, brouillon pour relecture. Proposé le 9 octobre 2026 pour OUCH v0.3.0 ; mis à jour le 14 octobre 2026 pour la v0.5.0 : mode démo intégré à l'app, nouveaux éléments du rapport à relire (jour de la semaine, statut des maladies), sauvegarde et verrou par code dans les garde-fous.*
+*Version 0.3, brouillon pour relecture. Proposé le 9 octobre 2026 pour OUCH v0.3.0 ; mis à jour le 14 octobre 2026 pour la v0.5.0 (mode démo intégré à l'app, nouveaux éléments du rapport à relire : jour de la semaine, statut des maladies ; sauvegarde et verrou par code dans les garde-fous), puis le 15 octobre 2026 pour la v0.6.0 : pistes de Tendances, essais d'une semaine et rubrique « Ce que le patient a remarqué » du rapport, avec leurs garde-fous et deux questions de plus.*
 
 Ce document décrit comment tester OUCH avec des professionnels de santé : ce qu'on cherche à apprendre, qui on sollicite, ce qu'on leur demande, ce qui est recueilli (et ce qui ne l'est pas), et comment on décide de changer l'application. C'est un **pilote d'usage**, pas une étude clinique : il ne mesure ni l'efficacité d'un traitement ni un bénéfice pour la santé, et ne prétend à aucune valeur statistique. Les chiffres proposés (nombre de participants, durées, seuils de décision) sont des points de départ à discuter.
 
@@ -16,12 +16,13 @@ Ce document décrit comment tester OUCH avec des professionnels de santé : ce q
 5. Quel effort le journal demande-t-il aux patients, en particulier les jours difficiles ?
 6. Le tableau « Douleur selon le jour de la semaine » (écart à la moyenne et bande que le hasard suffit à produire), présent dans les deux versions du rapport, est-il lisible ? Risque-t-il d'être lu comme un effet réel alors que les journées ne sont pas indépendantes ?
 7. Le statut des maladies (« diagnostiquée en 2019 », « suspectée »), tel que le patient le déclare et tel que le rapport le reprend, aide-t-il à lire le reste, ou risque-t-il d'être pris pour un diagnostic établi ?
+8. La rubrique « Ce que le patient a remarqué » (les pistes que le patient a choisi de garder, et ses essais d'une semaine) apporte-t-elle quelque chose en consultation, ou risque-t-elle d'orienter la discussion vers une cause que rien n'établit ? Les essais d'une semaine, décrits comme « une idée, pas une réponse », sont-ils bien lus ainsi ?
 
 **Ce qu'on ne cherche pas à établir** : que OUCH améliore la douleur, l'observance ou la prise en charge ; que ses seuils sont validés ; que ses poussées correspondent à celles que cliniciens ou patients identifient. Ces questions demanderaient une autre étude, avec un cadre éthique et statistique à part.
 
 ## 2. Deux phases
 
-**Phase A : relecture par les soignants, sans patient.** Le soignant lit la plaquette et la note méthodologique, essaie l'application avec les données de démonstration (le mode démo de l'app, à l'adresse <https://maxauvy.github.io/OUCH/?demo> : 90 jours fictifs, une visite guidée, un historique à part qui n'affecte rien de réel et s'efface avec « Quitter »), et répond aux questions de l'annexe B. Environ une heure au total. Elle ne fait intervenir aucune donnée de patient.
+**Phase A : relecture par les soignants, sans patient.** Le soignant lit la plaquette et la note méthodologique, essaie l'application avec les données de démonstration (le mode démo de l'app, à l'adresse <https://maxauvy.github.io/OUCH/?demo> : 90 jours fictifs, une visite guidée, des pistes de Tendances déjà gardées ou écartées et un essai d'une semaine terminé, un historique à part qui n'affecte rien de réel et s'efface avec « Quitter »), et répond aux questions de l'annexe B. Environ une heure au total. Elle ne fait intervenir aucune donnée de patient.
 
 **Phase B : usage en consultation, avec des patients volontaires.** Un soignant ayant fait la phase A propose OUCH à quelques patients adultes. Pendant 4 à 6 semaines, les patients tiennent leur journal comme ils l'entendent. À la consultation suivante, un patient qui le souhaite apporte son rapport. Le soignant le lit dans le cadre normal de la consultation, puis remplit une courte grille (annexe A) sans mention d'identité. Un entretien de 20 à 30 minutes clôt la participation du soignant.
 
@@ -90,6 +91,7 @@ Les retours sont lus par le mainteneur et par au moins un soignant avant toute d
 - OUCH n'est pas un dispositif médical, et le pilote n'en fait pas un : le rapport est un support de discussion. Aucune décision thérapeutique ne repose sur lui seul, et le soignant garde sa pratique habituelle.
 - Aucune donnée de patient ne doit figurer dans un retour, une issue ou un courriel : la case du formulaire le rappelle.
 - **Perdre son journal est un risque réel**, et le pilote ne doit pas le créer : téléphone changé, données du navigateur effacées, ou **code oublié** si le patient active le verrou par code facultatif (qui cache l'écran, sans chiffrer, et dont le seul recours est d'effacer l'appareil puis de restaurer une sauvegarde). D'où le rappel de sauvegarde (section 4) et une phrase dans le texte lu au patient (annexe C). Le verrou n'est pas recommandé ni écarté : c'est le choix du patient.
+- **Les pistes et les essais ne sont pas des conseils.** OUCH ne suggère aucune action : une piste d'action (« les jours avec marche courte ») vient de ce que le patient a lui-même noté dans « Ce qui a aidé aujourd'hui » (texte libre), et l'essai d'une semaine ne fait que comparer ses jours avec et sans cette action. Le texte libre peut tout contenir, y compris une modification de traitement : si un patient évoque un essai qui touche à son traitement, le soignant le recadre comme d'habitude. Rien de tout cela n'apparaît pendant une poussée, et chaque élément se coupe dans Réglages (« Pistes dans tes notes »).
 - Un patient en difficulté est pris en charge comme d'habitude ; OUCH ne contacte personne.
 - Un défaut de l'application (calcul erroné, texte trompeur) se signale par le formulaire ou par courriel, et passe avant toute autre tâche.
 
@@ -120,7 +122,7 @@ Les retours sont lus par le mainteneur et par au moins un soignant avant toute d
 
 ## Annexe B : questionnaire de fin et entretien
 
-Les sept questions de la [note méthodologique](../note-methodologique/) (les questions 8 et 9 sont plus bas) :
+Les huit questions de la [note méthodologique](../note-methodologique/) (les questions 9 à 11 sont plus bas) :
 
 1. La définition des poussées a-t-elle un sens pour vous ? Quel critère préféreriez-vous ?
 2. Les catégories ≤ 3, 4–6, ≥ 7 vous servent-elles, ou lisez-vous l'évolution de la personne par rapport à elle-même ?
@@ -129,11 +131,13 @@ Les sept questions de la [note méthodologique](../note-methodologique/) (les qu
 5. Quels indicateurs utilisez-vous vraiment, lesquels feriez-vous disparaître ?
 6. Quelles données vous manquent pour décider, qu'un carnet pourrait apporter ?
 7. La comparaison avant et après un changement de traitement est-elle un format utile ? Quelle durée choisiriez-vous ?
+8. La rubrique « Ce que le patient a remarqué » du rapport (les pistes que le patient a choisi de garder) : la lisez-vous comme une observation du patient, ou comme un résultat ? Aide-t-elle la consultation, ou risque-t-elle d'orienter vers une cause que rien n'établit ? Faut-il la retirer de la version « Médecin traitant » ?
 
-Deux questions de plus, propres aux éléments ajoutés au rapport depuis la note :
+Trois questions de plus, propres aux éléments ajoutés depuis la note (le tableau par jour de la semaine, le statut des maladies, les essais d'une semaine) :
 
-8. Le tableau « Douleur selon le jour de la semaine » et sa bande de hasard : le lisez-vous comme une description, ou risque-t-il de faire croire à un effet ? Faut-il le retirer de la version « Médecin traitant » ?
-9. Le statut des maladies déclarées (« diagnostiquée en 2019 », « suspectée ») aide-t-il à lire le rapport, et est-il assez clair qu'il est déclaré par le patient et non vérifié ?
+9. Le tableau « Douleur selon le jour de la semaine » et sa bande de hasard : le lisez-vous comme une description, ou risque-t-il de faire croire à un effet ? Faut-il le retirer de la version « Médecin traitant » ?
+10. Le statut des maladies déclarées (« diagnostiquée en 2019 », « suspectée ») aide-t-il à lire le rapport, et est-il assez clair qu'il est déclaré par le patient et non vérifié ?
+11. Les essais d'une semaine (jours avec et sans une action choisie par le patient) vous semblent-ils utiles, ou trop courts pour être montrés ? Quelle durée ou quelles précautions de lecture ?
 
 Puis, ouvertes : ce qui vous a surpris ; ce que vous craignez que l'on fasse dire au rapport ; ce qui vous ferait le recommander, ou non ; si vous continueriez à l'utiliser. Facultatif : une échelle d'utilisabilité de 10 items (type SUS) appliquée au rapport.
 

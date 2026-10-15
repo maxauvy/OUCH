@@ -21,6 +21,7 @@ import {
 } from '../../lib/report'
 import type { FlareEpisode } from '../../lib/flares'
 import { actionInSentence, type Lead } from '../../lib/leads'
+import type { ReportTrial } from '../../lib/leadTrial'
 import type { TreatmentReview } from '../../lib/treatmentReview'
 import { CONTEXT_KEYS, type ContextKey, type TreatmentEvent } from '../../lib/flareContext'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
@@ -179,7 +180,7 @@ function gpPages(d: ReportData): Block[][] {
         </div>
       </div>,
       d.weekdays && <WeekdaysBlock d={d} />,
-      d.noticed.length > 0 && <Noticed d={d} />,
+      (d.noticed.length > 0 || d.trials.length > 0) && <Noticed d={d} />,
       d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all={false} list={notes} from={from} to={to} continued={continued} />),
       <>
         <H level={2}>{f.t.method}</H>
@@ -380,7 +381,7 @@ function painClinicPages(d: ReportData): Block[][] {
         <p className="r-small">{f.t.zonesWpi}</p>
       </>,
       d.weekdays && <WeekdaysBlock d={d} />,
-      d.noticed.length > 0 && <Noticed d={d} />,
+      (d.noticed.length > 0 || d.trials.length > 0) && <Noticed d={d} />,
       <Associations d={d} />,
     ],
     [
@@ -1314,9 +1315,23 @@ function noticedLine(d: ReportData, lead: Lead): string {
   })
 }
 
+/** One week the patient tried, as the diary reads it: the days with the action beside the others. */
+function trialLine(d: ReportData, { trial, result }: ReportTrial): string {
+  const { f } = d
+  return f.format(f.t.noticedTrialLine, {
+    action: trial.action,
+    from: f.dayMonth(trial.start),
+    to: f.dayMonth(trial.end),
+    a: f.nf(result.with.mean),
+    aN: result.with.n,
+    b: f.nf(result.without.mean),
+    bN: result.without.n,
+  })
+}
+
 function Noticed({ d }: { d: ReportData }) {
-  const { f, noticed } = d
-  if (!noticed.length) return null
+  const { f, noticed, trials } = d
+  if (!noticed.length && !trials.length) return null
   return (
     <>
       <H level={2}>{f.t.noticed}</H>
@@ -1325,9 +1340,14 @@ function Noticed({ d }: { d: ReportData }) {
           {noticed.map((lead) => (
             <li key={lead.key}>{noticedLine(d, lead)}</li>
           ))}
+          {trials.map((t) => (
+            <li key={`${t.trial.key}-${t.trial.start}`}>{trialLine(d, t)}</li>
+          ))}
         </ul>
       </div>
-      <p className="r-small">{f.t.noticedNote}</p>
+      <p className="r-small">
+        {noticed.length > 0 && f.t.noticedNote} {trials.length > 0 && f.t.noticedTrialNote}
+      </p>
     </>
   )
 }

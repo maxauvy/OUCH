@@ -647,6 +647,9 @@ export interface Translations {
     /** `{{action}}` as the patient wrote it */
     noticedActionHigh: string
     noticedActionLow: string
+    /** `{{action}}`, the week `{{from}}` to `{{to}}`, then pain `{{a}}` on `{{aN}}` days with it and `{{b}}` on `{{bN}}` days without */
+    noticedTrialLine: string
+    noticedTrialNote: string
     notes: string
     notesHintGp: string
     notesHintAll: string

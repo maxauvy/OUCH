@@ -5,6 +5,7 @@ import { flareContext, type FlareContext } from '../../lib/flareContext'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
 import { loggedEntries } from '../../lib/loggedEntries'
 import { findLeads, keptLeads, type Lead, type LeadChoices } from '../../lib/leads'
+import { reportTrials, type LeadTrial, type ReportTrial } from '../../lib/leadTrial'
 import { shiftISO } from '../../lib/medications'
 import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '../../lib/treatmentReview'
 import { weekdayProfile, type WeekdayProfile } from '../../lib/weekdays'
@@ -28,6 +29,8 @@ export interface ReportOptions {
   agenda: string[]
   /** What the patient answered to the leads on Trends; the kept ones go on the report */
   leadChoices?: LeadChoices
+  /** The one-week trials: the weeks closed, and the one under way (kept if it is over) */
+  leadTrials?: { history?: LeadTrial[]; current?: LeadTrial }
   includeNotes: boolean
   includeCycle: boolean
   /** Made in the demo: every page says the data is made up */
@@ -65,6 +68,8 @@ export interface ReportData {
   weekdays: WeekdayProfile | null
   /** The leads the patient kept for the appointment, over both periods, as the diary reads today */
   noticed: Lead[]
+  /** The one-week trials that ended in the two periods and can be compared */
+  trials: ReportTrial[]
 }
 
 /** Flares found in the whole history, since the usual level before one
@@ -114,6 +119,7 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     },
     weekdays: weekdayProfile(current),
     noticed: keptLeads(findLeads([...previous, ...current]), options.leadChoices),
+    trials: reportTrials(options.leadTrials?.history, options.leadTrials?.current, entries, p.prevStart, p.end),
     reviews: treatmentReviews(entries, medications, detectable ? flareDays : null, options.end).filter(
       // A change with no logged day on either side has nothing to describe
       // (typically a treatment that predates the diary).

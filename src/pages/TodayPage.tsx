@@ -55,7 +55,7 @@ export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => voi
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       {!IS_DEMO && <BackupReminderCard onBackup={onGoToBackup} />}
-      {trial && logged && (flare ? <TrialPausedCard trial={trial} /> : <TrialCard trial={trial} entries={logged} today={date} lead={trialLead} choices={settings.leadChoices} />)}
+      {trial && logged && (flare ? <TrialPausedCard trial={trial} /> : <TrialCard trial={trial} history={settings.leadTrialHistory} entries={logged} today={date} lead={trialLead} choices={settings.leadChoices} />)}
       {weekly && weeklyVisible(settings.leadsSeen, date) && <WeeklyCard finding={weekly} date={date} onSee={() => onGoToTab('journal')} />}
       {bring && loggedAtOpen && <LeadPromptCard lead={bring} date={date} onSee={() => onGoToTab('trends')} />}
       <DailyEntryForm date={date} onGoToBackup={IS_DEMO ? undefined : onGoToBackup} />

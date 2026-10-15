@@ -761,6 +761,9 @@ const fr: Translations = {
     noticedActivityLow: 'après une journée tranquille',
     noticedActionHigh: 'les jours avec {{action}}',
     noticedActionLow: 'les autres jours',
+    noticedTrialLine:
+      '{{action}} : essai d’une semaine du {{from}} au {{to}}, douleur moyenne de {{a}}/10 les jours avec ({{aN}} {{aN:jour|jours}}), contre {{b}}/10 les autres jours ({{bN}} {{bN:jour|jours}}).',
+    noticedTrialNote: 'Un essai d’une semaine décrit sept jours : c’est peu, une idée plutôt qu’une réponse.',
     notes: 'Notes du patient',
     notesHintGp: 'jours difficiles récents',
     notesHintAll: 'toutes, sur la période analysée',

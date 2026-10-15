@@ -26,6 +26,8 @@
 //   there to open. Sleep and stress are left unanswered, to be tried. Which leads stand out also depends on the day (the
 //   weekdays fall differently), so a choice for a lead that is not there that
 //   day simply does nothing;
+//   A week of the short walk is among the trials already closed, so the report
+//   has one to show;
 // - settings for a finished setup (name, illness, cycle tracking), so the
 //   report and the Kids tab work without going through the setup.
 //
@@ -36,6 +38,7 @@
 import type { DailyEntry, Illness, LoggedEntry, Medication, MedicationIntake, Settings } from '../db/types.ts'
 import type { DemoLanguage } from './demoMode.ts'
 import { actionKey, choiceFor, findLeads, type LeadChoice, type LeadChoices } from './leads.ts'
+import { TRIAL_DAYS, TRIAL_MIN_GROUP, type LeadTrial } from './leadTrial.ts'
 import { shiftISO } from './medications.ts'
 
 export interface DemoOptions {
@@ -380,6 +383,20 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
   answer(answerKey('Méditation / respiration'), 'action:méditation / respiration', 'kept', -1.9)
   answer(answerKey('Repos / sieste'), 'action:repos / sieste', 'dismissed', 2.5)
 
+  // A week of the short walk the person already tried, the latest one in which
+  // the days with it and without it are enough to be compared: the report has a
+  // trial to show. Left out when no week qualifies.
+  const hasWalk = (e: DailyEntry) => (e.positiveActions ?? []).includes('Marche courte')
+  let walkTrial: LeadTrial | undefined
+  for (let back = 9; back <= 60 && !walkTrial; back++) {
+    const end = shiftISO(endDate, -back)
+    const start = shiftISO(end, -(TRIAL_DAYS - 1))
+    const week = entries.filter((e) => e.date >= start && e.date <= end)
+    if (week.filter(hasWalk).length >= TRIAL_MIN_GROUP && week.filter((e) => !hasWalk(e)).length >= TRIAL_MIN_GROUP) {
+      walkTrial = { key: answerKey('Marche courte'), action: 'Marche courte', start, end }
+    }
+  }
+
   // A finished setup, so the demo opens on the app itself with the report and
   // the Kids tab filled in. The theme is left out: it stays whatever the device
   // already uses. The language is the one of the data: tags, notes and
@@ -401,6 +418,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     autoWeatherLabel: 'Lyon',
     enabledFactors: ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes'],
     leadChoices,
+    ...(walkTrial && { leadTrialHistory: [walkTrial] }),
   }
 
   const history = { entries, medications, settings }
