@@ -173,21 +173,48 @@ export interface Translations {
     weekdayCalm: string
     /** Before every weekday has enough days: when the card will appear */
     weekdayWaiting: string
-    whatAffectsPain: string
-    averagesObserved: string
-    bucketLow: string
-    bucketMid: string
-    bucketHigh: string
-    insightHigher: string
-    insightLower: string
-    pointSingular: string
-    pointPlural: string
-    temperatureLabel: string
-    whatHelps: string
-    bucketWith: string
-    bucketWithout: string
-    insightTagHigher: string
-    insightTagLower: string
+    leadsTitle: string
+    /** Under the title: what the two big numbers are */
+    leadsCaption: string
+    leadsPrevious: string
+    leadsNext: string
+    /** `{{i}}` of `{{n}}` leads */
+    leadsCount: string
+    leadsNone: string
+    leadTitleSleep: string
+    leadTitleStress: string
+    leadTitleActivity: string
+    /** `{{action}}` as the person wrote it */
+    leadTitleAction: string
+    /** What each of the two numbers is about, high side then low side */
+    leadSleepHigh: string
+    leadSleepLow: string
+    leadStressHigh: string
+    leadStressLow: string
+    leadActivityHigh: string
+    leadActivityLow: string
+    /** `{{action}}` as the person wrote it */
+    leadActionHigh: string
+    leadActionLow: string
+    /** `{{when}}` the high side, capitalised; `{{gap}}` shown, `{{n}}` the same as a number for the plural */
+    leadSentenceLower: string
+    leadSentenceHigher: string
+    /** `{{n}}` days noted */
+    leadBasisScale: string
+    /** `{{n}}` days noted, `{{a}}` with the action, `{{b}}` without */
+    leadBasisAction: string
+    leadNoteSleep: string
+    leadNoteStress: string
+    leadNoteActivity: string
+    leadNoteAction: string
+    leadKeep: string
+    leadDismiss: string
+    leadKept: string
+    leadUndo: string
+    /** `{{n}}` leads set aside */
+    leadsDismissedTitle: string
+    leadsDismissedHint: string
+    leadReopen: string
     medicationsTitle: string
     medicationsCaption: string
     daysOne: string

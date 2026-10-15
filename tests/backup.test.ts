@@ -131,6 +131,22 @@ test('settings keep only valid values and never invent any', () => {
   assert.equal(sanitizeSettings({ reminderTime: '07:30' })?.reminderTime, '07:30')
 })
 
+test('what was answered to the leads is restored, and only what is well formed', () => {
+  const good = { choice: 'kept', at: 5, gap: -1.8, days: 40 }
+  const out = sanitizeSettings({
+    leadChoices: {
+      sleep: good,
+      'action:marche': { choice: 'dismissed', at: 6, gap: -1.2, days: 20 },
+      stress: { choice: 'maybe', at: 5, gap: 1, days: 3 },
+      activity: { choice: 'kept', at: 'yesterday', gap: 1, days: 3 },
+      other: { choice: 'kept', at: 5, gap: 99, days: 3 },
+      broken: 'x',
+    },
+  })
+  assert.deepEqual(out?.leadChoices, { sleep: good, 'action:marche': { choice: 'dismissed', at: 6, gap: -1.2, days: 20 } })
+  assert.equal(sanitizeSettings({ leadChoices: 'x' })?.leadChoices, undefined)
+})
+
 test('the hard-days switch is restored from a backup, which flare it was shown for is not', () => {
   const out = sanitizeSettings({ hardDaysCardEnabled: false, hardDaysSeen: { start: '2026-10-01', date: '2026-10-05', dismissed: true } })
   assert.deepEqual(out, { hardDaysCardEnabled: false })

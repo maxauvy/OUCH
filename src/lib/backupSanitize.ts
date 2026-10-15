@@ -30,6 +30,7 @@ import type {
   WeatherInfo,
 } from '../db/types.ts'
 import { cleanOtherName, FIRST_DIAGNOSIS_YEAR } from './illnessStatus.ts'
+import type { LeadChoices } from './leads.ts'
 
 /** Far above any real journal (a hundred years is ~36 500 days). */
 export const MAX_ENTRIES = 40_000
@@ -207,6 +208,23 @@ export function sanitizeMedication(raw: unknown, now = Date.now()): Medication |
   })
 }
 
+const MAX_LEAD_CHOICES = 100
+
+/** What was answered to each lead: a known answer, when, and the numbers it was given on. */
+function leadChoices(v: unknown): LeadChoices | undefined {
+  if (!isRecord(v)) return undefined
+  const out: LeadChoices = {}
+  for (const [key, raw] of Object.entries(v).slice(0, MAX_LEAD_CHOICES)) {
+    if (key.length > MAX_SHORT_TEXT || !isRecord(raw)) continue
+    const choice = oneOf(raw.choice, ['kept', 'dismissed'] as const)
+    const at = num(raw.at, 0, Number.MAX_SAFE_INTEGER)
+    const gap = num(raw.gap, -10, 10)
+    const days = num(raw.days, 0, MAX_ENTRIES)
+    if (choice && at !== undefined && gap !== undefined && days !== undefined) out[key] = { choice, at, gap, days }
+  }
+  return out
+}
+
 /** Only what is valid is kept, and nothing is filled in: a setting the file
  * does not (validly) hold stays as it is on this device. */
 export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
@@ -237,6 +255,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     otherIllnessName: typeof raw.otherIllnessName === 'string' ? cleanOtherName(raw.otherIllnessName) : undefined,
     illnessYear: illnessYear(raw.illnessYear, raw.illnessStatus),
     childIllness: oneOf(raw.childIllness, ILLNESSES),
+    leadChoices: leadChoices(raw.leadChoices),
   })
 }
 

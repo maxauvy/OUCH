@@ -3,6 +3,7 @@
 
 import type { Language } from '../i18n/language'
 import type { HardDaysSeen } from '../lib/hardDays'
+import type { LeadChoices } from '../lib/leads'
 
 export type FactorKey =
   | 'fatigue'
@@ -291,6 +292,8 @@ export interface Settings {
   fullFormDay?: string
   /** The flare it was last shown for. Per device, like the reminders above. */
   hardDaysSeen?: HardDaysSeen
+  /** What the person answered to the leads on Trends ("note it for my appointment", "not really"), by lead. Restored from a backup. */
+  leadChoices?: LeadChoices
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness

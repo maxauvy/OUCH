@@ -11,41 +11,18 @@ import { TreatmentReviewCard } from '../components/trends/TreatmentReviewCard'
 import { useFlares } from '../hooks/useFlares'
 import { flareDayCount, flaresOverlapping } from '../lib/flares'
 import { useMedications } from '../hooks/useMedications'
-import { todayISO } from '../db'
+import { todayISO, updateSettings } from '../db'
 import { formatPosology } from '../lib/medicationFormat'
-import { FactorAnalysisCard } from '../components/trends/FactorAnalysisCard'
+import { LeadsCard } from '../components/trends/LeadsCard'
 import { DoctorReportPage } from './DoctorReportPage'
-import { PATTERN_MIN_DAYS, analyzeFactor, analyzeTagPresence } from '../lib/insights'
+import { PATTERN_MIN_DAYS } from '../lib/insights'
+import { arrangeLeads, choiceFor, findLeads, type Lead, type LeadChoice } from '../lib/leads'
 import { weekdayProfile } from '../lib/weekdays'
 import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
 import { usePalette } from '../hooks/usePalette'
 import { subDays } from 'date-fns'
-import { format, useLocale, useTranslation, type Translations } from '../i18n'
+import { format, useLocale, useTranslation } from '../i18n'
 import { shiftISO } from '../lib/medications'
-import type { DailyEntry, Settings } from '../db/types'
-
-const FACTOR_DEFS: {
-  key: string
-  getValue: (e: DailyEntry) => number | null | undefined
-  label: (i18n: Translations) => string
-  bucketing?: 'fixed' | 'terciles'
-  /** Which settings toggle gates this factor; defaults to matching enabledFactors by key. */
-  isEnabled: (settings: Settings) => boolean
-}[] = [
-  { key: 'sleepQuality', getValue: (e) => e.sleepQuality, label: (i18n) => i18n.factors.sleep.label, isEnabled: (s) => s.enabledFactors.includes('sleep') },
-  { key: 'stressLevel', getValue: (e) => e.stressLevel, label: (i18n) => i18n.factors.stress.label, isEnabled: (s) => s.enabledFactors.includes('stress') },
-  { key: 'fatigueLevel', getValue: (e) => e.fatigueLevel, label: (i18n) => i18n.factors.fatigue.label, isEnabled: (s) => s.enabledFactors.includes('fatigue') },
-  { key: 'brainFog', getValue: (e) => e.brainFog, label: (i18n) => i18n.factors.brainFog.label, isEnabled: (s) => s.enabledFactors.includes('brainFog') },
-  { key: 'moodLevel', getValue: (e) => e.moodLevel, label: (i18n) => i18n.factors.mood.label, isEnabled: (s) => s.enabledFactors.includes('mood') },
-  { key: 'activityLevel', getValue: (e) => e.activityLevel, label: (i18n) => i18n.factors.activity.label, isEnabled: (s) => s.enabledFactors.includes('activity') },
-  {
-    key: 'tempC',
-    getValue: (e) => e.weather?.tempC,
-    label: (i18n) => i18n.trends.temperatureLabel,
-    bucketing: 'terciles',
-    isEnabled: (s) => s.enabledFactors.includes('weather'),
-  },
-]
 
 export function TrendsPage() {
   const entries = useLoggedEntries()
@@ -86,12 +63,25 @@ export function TrendsPage() {
   const avgPain = filtered.length ? filtered.reduce((s, e) => s + e.painLevel, 0) / filtered.length : null
   const weekdays = weekdayProfile(filtered)
 
-  const bucketLabels: [string, string, string] = [i18n.trends.bucketLow, i18n.trends.bucketMid, i18n.trends.bucketHigh]
-  const analyses = FACTOR_DEFS.filter((f) => f.isEnabled(settings)).map((f) =>
-    analyzeFactor(filtered, f.getValue, f.key, f.label(i18n), bucketLabels, {
-      bucketing: f.bucketing,
-    })
+  const leadList = useMemo(
+    () =>
+      arrangeLeads(
+        findLeads(filtered, {
+          sleep: settings.enabledFactors.includes('sleep'),
+          stress: settings.enabledFactors.includes('stress'),
+          activity: settings.enabledFactors.includes('activity'),
+          actions: settings.enabledFactors.includes('positiveActions'),
+        }),
+        settings.leadChoices
+      ),
+    [filtered, settings.enabledFactors, settings.leadChoices]
   )
+  const answerLead = (lead: Lead, choice: LeadChoice['choice']) =>
+    void updateSettings({ leadChoices: { ...settings.leadChoices, [lead.key]: choiceFor(lead, choice, Date.now()) } })
+  const clearLead = (lead: Lead) => {
+    const { [lead.key]: _gone, ...rest } = settings.leadChoices ?? {}
+    void updateSettings({ leadChoices: rest })
+  }
 
   // The range as dates, for medication periods (the entry filter above works
   // on timestamps). "All" starts at the first logged day.
@@ -109,10 +99,6 @@ export function TrendsPage() {
                 : []
             )
       )
-    : []
-
-  const positiveActionAnalyses = settings.enabledFactors.includes('positiveActions')
-    ? analyzeTagPresence(filtered, (e) => e.positiveActions, [i18n.trends.bucketWithout, i18n.trends.bucketWith])
     : []
 
   if (reporting) {
@@ -246,40 +232,14 @@ export function TrendsPage() {
             entries.length >= PATTERN_MIN_DAYS && <WeekdayWaiting />
           )}
 
-          {analyses.some((a) => a.buckets.some((b) => b.count > 0)) && (
-            <Card>
-              <SectionTitle>{i18n.trends.whatAffectsPain}</SectionTitle>
-              <p className="text-caption -mt-2 mb-1" style={{ color: t.inkMuted }}>
-                {i18n.trends.averagesObserved}
-              </p>
-              <div className="flex flex-col">
-                {analyses.map((a, i) => (
-                  <div key={a.key} style={i > 0 ? { borderTop: `1px solid ${t.hairline}` } : undefined}>
-                    <FactorAnalysisCard analysis={a} />
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
-
-          {positiveActionAnalyses.length > 0 && (
-            <Card>
-              <SectionTitle>{i18n.trends.whatHelps}</SectionTitle>
-              <p className="text-caption -mt-2 mb-1" style={{ color: t.inkMuted }}>
-                {i18n.trends.averagesObserved}
-              </p>
-              <div className="flex flex-col">
-                {positiveActionAnalyses.map((a, i) => (
-                  <div key={a.key} style={i > 0 ? { borderTop: `1px solid ${t.hairline}` } : undefined}>
-                    <FactorAnalysisCard
-                      analysis={a}
-                      insightHigherText={i18n.trends.insightTagHigher}
-                      insightLowerText={i18n.trends.insightTagLower}
-                    />
-                  </div>
-                ))}
-              </div>
-            </Card>
+          {entries.length >= PATTERN_MIN_DAYS && (
+            <LeadsCard
+              shown={leadList.shown}
+              dismissed={leadList.dismissed}
+              choices={settings.leadChoices}
+              onAnswer={answerLead}
+              onUndo={clearLead}
+            />
           )}
         </>
       )}
