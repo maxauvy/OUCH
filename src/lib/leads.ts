@@ -122,6 +122,11 @@ function scaleLead(
   return build(key, kind, high, low, spearman(pairs.map((p) => p.x), pairs.map((p) => p.pain)), pairs.length)
 }
 
+/** The action as it reads in the middle of a sentence: "Marche courte" becomes "marche courte", "TENS" stays. */
+export function actionInSentence(action: string): string {
+  return action.length > 1 && action[1] === action[1].toLowerCase() ? action.charAt(0).toLowerCase() + action.slice(1) : action
+}
+
 /** Two spellings of one action ("Marche", " marche ") are the same action. */
 const actionKey = (name: string) => name.trim().toLowerCase()
 
@@ -206,4 +211,11 @@ export function arrangeLeads(leads: Lead[], choices: LeadChoices | undefined): L
 
 export function choiceFor(lead: Lead, choice: LeadChoice['choice'], at: number): LeadChoice {
   return { choice, at, gap: lead.gap, days: lead.days }
+}
+
+/** The leads the person kept for the appointment, as they read in these
+ * entries today (a kept lead that no longer passes the bar is left out rather
+ * than reported on old numbers), the strongest first. */
+export function keptLeads(leads: Lead[], choices: LeadChoices | undefined): Lead[] {
+  return leads.filter((l) => choices?.[l.key]?.choice === 'kept').slice(0, LEAD_MAX)
 }

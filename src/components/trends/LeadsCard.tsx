@@ -1,19 +1,14 @@
 import { useRef, useState } from 'react'
 import { IconChevronLeft, IconChevronRight, IconNotebook } from '@tabler/icons-react'
 import { Card, SectionTitle } from '../ui/Card'
-import type { Lead, LeadChoice, LeadChoices } from '../../lib/leads'
+import { actionInSentence, type Lead, type LeadChoice, type LeadChoices } from '../../lib/leads'
 import { format, useLanguage, useLocale, useTranslation, type Translations } from '../../i18n'
 import { usePalette } from '../../hooks/usePalette'
 
 type LeadTexts = { title: string; high: string; low: string; note: string }
 
-/** The action as it reads in the middle of a sentence: "Marche courte" becomes "marche courte", "TENS" stays. */
-function inSentence(action: string): string {
-  return action.length > 1 && action[1] === action[1].toLowerCase() ? action.charAt(0).toLowerCase() + action.slice(1) : action
-}
-
 function textsFor(lead: Lead, t: Translations['trends']): LeadTexts {
-  const action = inSentence(lead.action ?? '')
+  const action = actionInSentence(lead.action ?? '')
   switch (lead.kind) {
     case 'sleep':
       return { title: t.leadTitleSleep, high: t.leadSleepHigh, low: t.leadSleepLow, note: t.leadNoteSleep }
