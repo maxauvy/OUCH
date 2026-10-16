@@ -8,6 +8,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 Une version d'entretien, après une revue du code de la semaine : deux corrections, une dans le rapport, et une protection à la restauration d'une sauvegarde ; le reste est du rangement.
 
+### Ajouté
+- Pour les patients, un **flyer A5** et une **plaquette A4**, en français et en anglais : les sources (HTML, images, script de génération des PDF) sont dans `communication/flyer-plaquette-patients/`, et les quatre PDF sont joints à la [release v0.6.0](https://github.com/maxauvy/OUCH/releases/tag/v0.6.0).
+
 ### Corrigé
 - Dans le rapport pour le médecin, la rubrique « Ce que le patient a remarqué » respecte maintenant les facteurs que la personne suit : une piste gardée sur un facteur qu'elle a retiré de son suivi (sommeil, stress, activité, actions) n'y figure plus, comme elle n'est plus dans Tendances.
 - À la restauration d'une sauvegarde, si toutes les réponses aux pistes (ou toutes les semaines d'essai terminées) du fichier sont inutilisables, celles de l'appareil sont gardées au lieu d'être effacées. Un fichier qui n'en contient aucune, volontairement, les efface toujours.
