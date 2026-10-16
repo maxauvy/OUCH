@@ -110,7 +110,7 @@ export function waitLeft(lock: PinLock, now: number): number {
   return lock.lockedUntil !== undefined && lock.lockedUntil > now ? lock.lockedUntil - now : 0
 }
 
-export type TryResult = { ok: true; lock: PinLock } | { ok: false; lock: PinLock; waitMs: number }
+type TryResult = { ok: true; lock: PinLock } | { ok: false; lock: PinLock; waitMs: number }
 
 /**
  * Checks a code. While a wait is running the code is not even looked at (the

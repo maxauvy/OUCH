@@ -34,8 +34,8 @@ import type { LeadChoices } from './leads.ts'
 import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
 
 /** Far above any real journal (a hundred years is ~36 500 days). */
-export const MAX_ENTRIES = 40_000
-export const MAX_MEDICATIONS = 2_000
+const MAX_ENTRIES = 40_000
+const MAX_MEDICATIONS = 2_000
 const MAX_TEXT = 10_000
 const MAX_SHORT_TEXT = 200
 const MAX_LIST = 200
@@ -286,7 +286,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
   })
 }
 
-export interface SanitizedBackup {
+interface SanitizedBackup {
   entries: LegacyDailyEntry[]
   medications: Medication[]
   settings?: LegacySettings

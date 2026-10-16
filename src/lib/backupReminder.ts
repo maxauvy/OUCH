@@ -3,9 +3,9 @@
 // is something worth keeping, and it comes back only if the journal changed
 // since the last backup, so a person who stopped writing is not nagged.
 
-export const FIRST_BACKUP_MIN_ENTRIES = 7
-export const BACKUP_INTERVAL_DAYS = 30
-export const SNOOZE_DAYS = 7
+const FIRST_BACKUP_MIN_ENTRIES = 7
+const BACKUP_INTERVAL_DAYS = 30
+const SNOOZE_DAYS = 7
 
 const DAY_MS = 86_400_000
 

@@ -41,7 +41,7 @@ import { actionKey, choiceFor, findLeads, type LeadChoice, type LeadChoices } fr
 import { TRIAL_DAYS, TRIAL_MIN_GROUP, type LeadTrial } from './leadTrial.ts'
 import { shiftISO } from './medications.ts'
 
-export interface DemoOptions {
+interface DemoOptions {
   /** Last day of the history (today, for the in-app demo) */
   endDate: string
   language: DemoLanguage
@@ -56,7 +56,7 @@ export interface DemoOptions {
   calmEnd?: boolean
 }
 
-export interface DemoHistory {
+interface DemoHistory {
   entries: DailyEntry[]
   medications: Medication[]
   settings: Partial<Settings>

@@ -12,9 +12,9 @@ import { shiftISO } from './medications.ts'
 export type WeeklyFinding = { kind: 'action'; action: string } | { kind: 'sleep' }
 
 /** Days of the week with a pain level before there is a week to speak of. */
-export const WEEK_MIN_DAYS = 5
+const WEEK_MIN_DAYS = 5
 /** A night counts as a good one from this many hours. */
-export const GOOD_NIGHT_HOURS = 7
+const GOOD_NIGHT_HOURS = 7
 /** The same thing on at most this many of the other days. */
 const MAX_ELSEWHERE = 1
 

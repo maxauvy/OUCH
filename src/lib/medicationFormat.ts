@@ -7,7 +7,7 @@ export function unitWord(t: Translations, unit: DoseUnit, amount: number, intlLo
   return new Intl.PluralRules(intlLocale).select(amount) === 'one' ? one : other
 }
 
-export function formatDose(t: Translations, dose: Dose, intlLocale: string): string {
+function formatDose(t: Translations, dose: Dose, intlLocale: string): string {
   return `${new Intl.NumberFormat(intlLocale).format(dose.amount)} ${unitWord(t, dose.unit, dose.amount, intlLocale)}`
 }
 

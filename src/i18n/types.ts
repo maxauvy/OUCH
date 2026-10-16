@@ -4,7 +4,7 @@
 
 import type { ChildTone } from '../lib/childView'
 
-export interface FactorText {
+interface FactorText {
   label: string
   helper: string
 }

@@ -9,7 +9,7 @@ export const OTHER_ILLNESS_NAME_MAX = 60
 /** Earliest year accepted for a diagnosis. */
 export const FIRST_DIAGNOSIS_YEAR = 1900
 
-export interface IllnessState {
+interface IllnessState {
   illnesses: Illness[]
   illnessStatus?: IllnessDetails['status']
   otherIllnessName?: string

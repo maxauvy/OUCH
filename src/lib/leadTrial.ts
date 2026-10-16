@@ -35,12 +35,12 @@ export function continueTrial(trial: LeadTrial, today: string): LeadTrial {
   return { ...trial, start: today, end: shiftISO(today, TRIAL_DAYS - 1) }
 }
 
-export interface TrialDay {
+interface TrialDay {
   date: string
   state: 'with' | 'without' | 'unlogged' | 'future'
 }
 
-export interface TrialResult {
+interface TrialResult {
   with: { mean: number; n: number }
   without: { mean: number; n: number }
   /** with.mean − without.mean */
@@ -49,7 +49,7 @@ export interface TrialResult {
   sameDirection: boolean | null
 }
 
-export interface TrialStatus {
+interface TrialStatus {
   /** The week is over: today is after its last day */
   over: boolean
   /** Day of the week we are on, 1 to 7 */

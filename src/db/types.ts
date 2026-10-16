@@ -36,7 +36,7 @@ export const ALL_FACTORS: FactorKey[] = [
   'notes',
 ]
 
-export const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
+const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
   'fatigue',
   'sleep',
   'stress',

@@ -41,7 +41,7 @@ function fromBase64(b64: string): Uint8Array {
   return bytes
 }
 
-export interface EncryptedPayload {
+interface EncryptedPayload {
   magic: string
   salt: string
   iv: string
@@ -142,7 +142,7 @@ export async function encryptJSONWithKey(data: unknown, backupKey: BackupKey): P
   }
 }
 
-export type OpenWithKeyFailure = 'format' | 'otherKey' | 'corrupt'
+type OpenWithKeyFailure = 'format' | 'otherKey' | 'corrupt'
 
 /** Opens a file with the kept key, without the password. `otherKey` when the
  * file was written with another salt (another password, or another setup):

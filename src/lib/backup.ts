@@ -52,13 +52,13 @@ export function downloadBlob(blob: Blob, filename: string) {
   URL.revokeObjectURL(url)
 }
 
-export type ImportMode = 'merge' | 'replace'
+type ImportMode = 'merge' | 'replace'
 
 /** A real backup is a few hundred KB; this only stops a huge file from being
  * read into memory. */
-export const MAX_BACKUP_BYTES = 25 * 1024 * 1024
+const MAX_BACKUP_BYTES = 25 * 1024 * 1024
 
-export interface ImportResult {
+interface ImportResult {
   imported: number
   skipped: number
 }

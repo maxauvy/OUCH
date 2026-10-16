@@ -15,7 +15,7 @@ export function shortFingerprint(sha256: string): string {
   return sha256.slice(0, 8)
 }
 
-export type CopyCheck =
+type CopyCheck =
   | { ok: true; exportedAt?: string; entries?: number }
   | { ok: false; reason: 'format' | 'otherKey' | 'corrupt' }
 

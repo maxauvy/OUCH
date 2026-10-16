@@ -11,7 +11,7 @@ import type { ReactNode } from 'react'
 // cuts.
 
 /** One row of a list or table, told apart in the DOM by `data-row`. */
-export interface RowsBlock {
+interface RowsBlock {
   rows: number
   /** Rows `from` to `to` (exclusive); `continued` when earlier rows are on a previous sheet. */
   render: (from: number, to: number, continued: boolean) => ReactNode
@@ -47,7 +47,7 @@ export interface Part {
   node: ReactNode
 }
 
-export interface Sheet {
+interface Sheet {
   parts: Part[]
 }
 

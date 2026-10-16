@@ -13,7 +13,7 @@ import { reportFormat, type ReportFormat } from './reportFormat'
 
 export type ReportVariant = 'gp' | 'painClinic'
 
-export interface ReportOptions {
+interface ReportOptions {
   variant: ReportVariant
   language: Language
   /** Date of the last consultation: start of the reported period */
@@ -75,7 +75,7 @@ export interface ReportData {
 /** Flares found in the whole history, since the usual level before one
  * needs entries from before the period it falls in. An episode belongs to
  * the period it starts in; its days are counted where they fall. */
-export interface FlareSummary {
+interface FlareSummary {
   /** False when there are too few entries to tell what is usual */
   detectable: boolean
   current: FlareEpisode[]

@@ -25,7 +25,7 @@ const WMO_TO_CONDITION: Record<number, WeatherInfo['condition']> = {
   99: 'orageux',
 }
 
-export function conditionFromWmoCode(code: number): WeatherInfo['condition'] {
+function conditionFromWmoCode(code: number): WeatherInfo['condition'] {
   return WMO_TO_CONDITION[code] ?? 'variable'
 }
 
@@ -53,7 +53,7 @@ export async function getCurrentPosition(): Promise<{ lat: number; lon: number }
   })
 }
 
-export interface FetchedWeather {
+interface FetchedWeather {
   tempC: number
   pressureHpa: number
   condition: WeatherInfo['condition']

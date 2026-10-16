@@ -6,7 +6,7 @@ import { arrangeLeads, findLeads, leadFactors, type LeadList } from '../lib/lead
 
 /** The days Trends looks at when it opens, and so what the dot and the card on
  * the day's page speak of. */
-export const LEAD_RANGE_DAYS = 30
+const LEAD_RANGE_DAYS = 30
 
 /** The leads Trends shows by default, arranged by what the person answered; null until the diary is read. */
 export function useLeadList(): LeadList | null {

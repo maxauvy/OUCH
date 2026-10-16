@@ -4,7 +4,7 @@
 
 import { ProviderError, type BackupProvider, type ProviderFailure, type RemoteCopy } from './provider.ts'
 
-export interface MemoryProvider extends BackupProvider {
+interface MemoryProvider extends BackupProvider {
   readonly id: 'memory'
   /** The files, by name. */
   readonly files: Map<string, { text: string; modifiedAt: string }>
