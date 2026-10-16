@@ -14,7 +14,6 @@ export type Week<T> = [T, T, T, T, T, T, T]
 
 export interface Translations {
   meta: {
-    appName: string
     htmlTitle: string
     metaDescription: string
   }
@@ -339,7 +338,6 @@ export interface Translations {
     /** Shown in the weather banner before any pain level is set. */
     painWeatherEmpty: string
     pain: string
-    painHelper: string
     painEndNone: string
     painEndExtreme: string
     /** Lighter form: under the empty counter */
@@ -348,7 +346,6 @@ export interface Translations {
     painLess: string
     painMore: string
     whereHurts: string
-    generalFeeling: string
     fatigueEndFine: string
     fatigueEndExhausted: string
     sleepQuality: string
@@ -823,7 +820,6 @@ export interface Translations {
     trust: [string, string, string]
     /** `{{provider}}` in `auth` and `quota` */
     failure: { auth: string; network: string; quota: string; other: string; mismatch: string; unreadable: string }
-    reconnect: string
     /** `{{detail}}` */
     failureDetail: string
     /** `{{date}}` */
@@ -1050,7 +1046,6 @@ export interface Translations {
     scaleLow: string
     scaleHigh: string
     painLabel: string
-    painCaption: string
     outside: string
   }
 

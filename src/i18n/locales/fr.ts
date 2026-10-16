@@ -4,7 +4,6 @@ import type { Translations } from '../types'
 // contract: every other locale file must fill in exactly these keys.
 const fr: Translations = {
   meta: {
-    appName: 'OUCH',
     htmlTitle: 'OUCH — Journal de douleur',
     metaDescription:
       'Un journal de douleur simple : suivez vos symptômes, comprenez ce qui les influence, partagez votre météo du jour.',
@@ -427,7 +426,6 @@ const fr: Translations = {
     painWeatherOfDay: 'Météo douleur du jour',
     painWeatherEmpty: 'Note ta douleur',
     pain: 'Douleur',
-    painHelper: "Intensité globale de la douleur aujourd'hui",
     painEndNone: 'Aucune',
     painEndExtreme: 'Insupportable',
     painTouch: 'touche ta douleur',
@@ -435,7 +433,6 @@ const fr: Translations = {
     painLess: 'Un point de moins',
     painMore: 'Un point de plus',
     whereHurts: 'Où as-tu mal ?',
-    generalFeeling: 'Ressenti général',
     fatigueEndFine: 'En forme',
     fatigueEndExhausted: 'À plat',
     sleepQuality: 'Qualité du sommeil',
@@ -977,7 +974,6 @@ const fr: Translations = {
       mismatch: 'La copie envoyée n’était pas identique à l’original, on l’a retirée. On réessaiera.',
       unreadable: 'La copie envoyée ne s’ouvrait pas, on l’a retirée. On réessaiera.',
     },
-    reconnect: 'Refaire le lien',
     failureDetail: 'Détail technique : {{detail}}',
     lastGood: 'Dernière copie réussie : {{date}}.',
     kb: '{{n}} Ko',
@@ -1191,7 +1187,6 @@ const fr: Translations = {
     scaleLow: 'Peu de douleur',
     scaleHigh: 'Beaucoup de douleur',
     painLabel: 'Douleur :',
-    painCaption: "Douleur ressentie aujourd'hui",
     outside: 'Dehors',
   },
 
