@@ -49,7 +49,7 @@ for (let b = 0; b * bar < DUR; b++) {
       add(t, 0.55, (x) => Math.min(1, x / 0.01) * Math.exp(-x * 4) * 0.22 * Math.sin(2 * Math.PI * f * x), 1, 1)
     }
     if (drums(t)) {
-      if (e === 0 || e === 4) add(t, 0.3, (x) => Math.exp(-x * 14) * 0.42 * Math.sin(2 * Math.PI * (45 * x + 14 * (1 - Math.exp(-x * 30)) / 30 * 30 * 0 + 90 * (1 - Math.exp(-x * 25)) / 25)), 1, 1)
+      if (e === 0 || e === 4) add(t, 0.3, (x) => Math.exp(-x * 14) * 0.42 * Math.sin(2 * Math.PI * (45 * x + 90 * (1 - Math.exp(-x * 25)) / 25)), 1, 1)
       if (e % 2 === 1 || BRIGHT) { let prev = 0; add(t, 0.06, (x) => { const n = Math.random() * 2 - 1; const hp = n - prev; prev = n; return hp * Math.exp(-x * 70) * 0.05 }, 0.8, 1.1) }
       if (e === 2 || e === 6) { let s = 0; add(t, 0.14, (x) => { const n = Math.random() * 2 - 1; s += 0.35 * (n - s); return s * Math.exp(-x * 26) * 0.10 }, 1, 1) }
     }

@@ -146,7 +146,7 @@ async function drag(x0, y0, x1, y1, ms = 900) {
 }
 const scroll = (dy, ms) => F.evaluate(([dy, ms]) => new Promise((res) => {
   const y0 = scrollY, t0 = performance.now(), ease = (t) => (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
-  const step = (now) => { const t = Math.min(1, (now - t0) / ms); scrollTo(0, y0 + dy * ease(t)); t < 1 ? requestAnimationFrame(step) : res() }
+  const step = (now) => { const t = Math.min(1, (now - t0) / ms); scrollTo(0, y0 + dy * ease(t)); if (t < 1) requestAnimationFrame(step); else res() }
   requestAnimationFrame(step)
 }), [dy, ms])
 const top = () => F.evaluate(() => scrollTo(0, 0))

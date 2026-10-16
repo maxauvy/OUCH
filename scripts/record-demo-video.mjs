@@ -75,7 +75,7 @@ const wait = (ms) => p.waitForTimeout(ms)
 const scroll = (dy, ms) => p.evaluate(([dy, ms]) => new Promise((res) => {
   const y0 = scrollY, t0 = performance.now()
   const ease = (t) => (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
-  const step = (now) => { const t = Math.min(1, (now - t0) / ms); scrollTo(0, y0 + dy * ease(t)); t < 1 ? requestAnimationFrame(step) : res() }
+  const step = (now) => { const t = Math.min(1, (now - t0) / ms); scrollTo(0, y0 + dy * ease(t)); if (t < 1) requestAnimationFrame(step); else res() }
   requestAnimationFrame(step)
 }), [dy, ms])
 async function tap(loc, hold = 120) {

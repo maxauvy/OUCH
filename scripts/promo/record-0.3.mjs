@@ -159,15 +159,9 @@ async function tap(loc, hold = 110) {
   const { x, y } = await pt(loc)
   await p.mouse.move(x, y, { steps: 8 }); await p.mouse.down(); await p.waitForTimeout(hold); await p.mouse.up()
 }
-async function drag(x0, y0, x1, y1, ms = 800) {
-  await p.mouse.move(x0, y0, { steps: 6 }); await p.mouse.down(); await p.waitForTimeout(120)
-  const n = 24
-  for (let i = 1; i <= n; i++) { await p.mouse.move(x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n); await p.waitForTimeout(ms / n) }
-  await p.mouse.up()
-}
 const scroll = (dy, ms) => F.evaluate(([dy, ms]) => new Promise((res) => {
   const y0 = scrollY, t0 = performance.now(), ease = (t) => (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
-  const step = (now) => { const t = Math.min(1, (now - t0) / ms); scrollTo(0, y0 + dy * ease(t)); t < 1 ? requestAnimationFrame(step) : res() }
+  const step = (now) => { const t = Math.min(1, (now - t0) / ms); scrollTo(0, y0 + dy * ease(t)); if (t < 1) requestAnimationFrame(step); else res() }
   requestAnimationFrame(step)
 }), [dy, ms])
 async function bring(loc, ms = 800, at = 330) { // scroll so the element sits `at` px from the top of the screen
