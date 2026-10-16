@@ -214,8 +214,9 @@ const MAX_LEAD_CHOICES = 100
 /** What was answered to each lead: a known answer, when, and the numbers it was given on. */
 function leadChoices(v: unknown): LeadChoices | undefined {
   if (!isRecord(v)) return undefined
+  const entries = Object.entries(v).slice(0, MAX_LEAD_CHOICES)
   const out: LeadChoices = {}
-  for (const [key, raw] of Object.entries(v).slice(0, MAX_LEAD_CHOICES)) {
+  for (const [key, raw] of entries) {
     if (key.length > MAX_SHORT_TEXT || !isRecord(raw)) continue
     const choice = oneOf(raw.choice, ['kept', 'dismissed'] as const)
     const at = num(raw.at, 0, Number.MAX_SAFE_INTEGER)
@@ -223,7 +224,8 @@ function leadChoices(v: unknown): LeadChoices | undefined {
     const days = num(raw.days, 0, MAX_ENTRIES)
     if (choice && at !== undefined && gap !== undefined && days !== undefined) out[key] = { choice, at, gap, days }
   }
-  return out
+  // Nothing in the file was usable: keep what this device holds, rather than clearing it.
+  return entries.length > 0 && Object.keys(out).length === 0 ? undefined : out
 }
 
 /** A one-week trial: a known kind of key, its action, and a first and last day a few days apart. */
@@ -239,7 +241,9 @@ function leadTrial(v: unknown): LeadTrial | undefined {
 /** The weeks closed: each one well formed, a cap of them. */
 function leadTrialHistory(v: unknown): LeadTrial[] | undefined {
   if (!Array.isArray(v)) return undefined
-  return v.slice(0, MAX_TRIAL_HISTORY).flatMap((t) => leadTrial(t) ?? [])
+  const weeks = v.slice(0, MAX_TRIAL_HISTORY).flatMap((t) => leadTrial(t) ?? [])
+  // Nothing in the file was usable: keep what this device holds, rather than clearing it.
+  return v.length > 0 && weeks.length === 0 ? undefined : weeks
 }
 
 /** Only what is valid is kept, and nothing is filled in: a setting the file

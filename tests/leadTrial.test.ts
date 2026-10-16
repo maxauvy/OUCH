@@ -116,6 +116,11 @@ test('the week under way is on the report once it is over, even if the patient n
   assert.deepEqual(reportTrials([], trial, WEEK, day(-30), day(5)), [])
 })
 
+test('a week that ends on the last day of the report is not over yet: that day is still being lived', () => {
+  assert.deepEqual(reportTrials([trial], undefined, WEEK, day(-30), day(6)), [])
+  assert.equal(reportTrials([trial], undefined, WEEK, day(-30), day(7)).length, 1)
+})
+
 test('the weeks come oldest first', () => {
   const later: LeadTrial = { ...trial, start: day(20), end: day(26) }
   const entries = [...WEEK, ...WEEK.map((e, i) => ({ ...e, date: day(20 + i) }))]

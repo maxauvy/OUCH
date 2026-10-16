@@ -123,7 +123,9 @@ export interface ReportTrial {
 
 /** The weeks that ended between `from` and `to` and can be compared, for the
  * report: the closed ones, and the current one if it is over but not closed.
- * Computed on the diary as it reads today, like the rest of the report. */
+ * Computed on the diary as it reads today, like the rest of the report. A week
+ * whose last day is the report's last day is not over yet, so it comes in the
+ * next report: that day is still being lived and logged. */
 export function reportTrials(
   history: LeadTrial[] | undefined,
   current: LeadTrial | undefined,
