@@ -1,0 +1,38 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>OUCH · Flyer B4 · Franc</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0&display=block">
+<link rel="stylesheet" href="base.css">
+<style>
+@page{size:148mm 210mm}
+:root{--ink:#10161b;--y:#ffd84a;--lav:#cdbff0}
+.f{background:#fffdf7;color:var(--ink)}
+.top{position:absolute;left:12mm;right:12mm;top:11mm;display:flex;justify-content:space-between;align-items:center}
+.top .b{display:flex;align-items:center;gap:2.6mm;font:800 6mm/1 "Bricolage Grotesque"}.top img{width:10mm;height:10mm;border-radius:2.4mm}
+.st{background:var(--lav);border-radius:99mm;padding:1.6mm 3.8mm;font:700 3.1mm/1 "Bricolage Grotesque";transform:rotate(3deg);box-shadow:0 0 0 .5mm var(--ink)}
+h1{position:absolute;left:12mm;right:10mm;top:27mm;font:800 13.4mm/1.0 "Bricolage Grotesque";letter-spacing:-.035em}
+mark{background:var(--y);color:inherit;padding:0 1.6mm;margin:0 -1.6mm;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.body{position:absolute;left:12mm;top:87mm;width:122mm;font-size:4mm;line-height:1.45}
+.list{position:absolute;left:12mm;top:122mm;width:66mm;font:700 3.8mm/1.25 "Bricolage Grotesque";display:flex;flex-direction:column;gap:3.2mm}
+.list div{display:flex;gap:2.6mm;align-items:baseline}.list i{font:800 3mm/1 "Bricolage Grotesque";font-style:normal;background:var(--ink);color:#fff;border-radius:1.4mm;padding:.9mm 1.4mm}
+.card{position:absolute;right:10mm;top:122mm;width:56mm;height:44mm;border-radius:3.5mm;overflow:hidden;transform:rotate(3.2deg);box-shadow:0 0 0 .5mm var(--ink),1.6mm 1.6mm 0 .5mm var(--ink);background:#e3eef6}
+.card img{display:block;width:100%}
+.cap{position:absolute;right:9mm;top:114mm;transform:rotate(-4deg);background:var(--y);font:800 3.2mm/1 "Bricolage Grotesque";padding:1.4mm 2.6mm;border-radius:1mm;box-shadow:0 0 0 .4mm var(--ink);z-index:2}
+.bar{position:absolute;left:0;right:0;bottom:0;height:42mm;background:var(--ink);color:#fff}
+.bar .qrb{position:absolute;left:12mm;top:7mm;background:#fff;border-radius:3mm;padding:2.4mm}.bar .qrb img{display:block;width:23mm;height:23mm}
+.bar .t{position:absolute;left:46mm;top:8mm;right:10mm}
+.bar .t b{display:block;font:800 5.2mm/1.1 "Bricolage Grotesque";margin-bottom:1.6mm}
+.bar .t p{font-size:3.1mm;line-height:1.4;color:#d9dee2}
+.bar .u{position:absolute;left:46mm;bottom:6mm;font:800 4.4mm "Bricolage Grotesque";color:var(--y)}
+.s{position:absolute;left:12mm;top:153mm;width:62mm;font-size:3.3mm;line-height:1.4;color:#4a555d}
+</style></head><body>
+<section class="sheet a5 f">
+  <div class="top"><div class="b"><img src="assets/logo.svg" alt="">OUCH</div><div class="st">Gratuit · sans compte</div></div>
+  <h1>Ta douleur :<br>ce qui l’aggrave,<br>ce qui l’apaise.<br><mark>Puis tu agis.</mark></h1>
+  <p class="body"><b>OUCH est un carnet de douleur.</b> En le tenant quelques semaines, tu vois ce qui semble jouer sur tes mauvais jours (sommeil, stress, activité) et ce qui t’a aidé. Un chiffre par jour suffit pour commencer.</p>
+  <div class="list"><div><i>01</i>Un chiffre par jour</div><div><i>02</i>Des pistes tirées de tes notes</div><div><i>03</i>Des essais d’une semaine</div></div>
+  <div class="cap">À garder pour ta consultation</div>
+  <div class="card"><img src="assets/piste.png" alt=""></div>
+  <div class="bar"><div class="qrb"><img class="qr" src="assets/qr.svg" alt="QR code"></div>
+    <div class="t"><b>Tu veux voir ?</b><p>Scanne le code, puis choisis « Découvrir avec un exemple » : 90 jours fictifs, pour tout voir sans rien saisir.</p></div>
+    <div class="u">maxauvy.github.io/OUCH</div></div>
+  <div class="s">Ça reste sur ton téléphone. Fait pour la fibromyalgie et les autres douleurs chroniques.</div>
+</section></body></html>
