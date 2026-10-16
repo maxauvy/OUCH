@@ -16,7 +16,7 @@ import { formatPosology } from '../lib/medicationFormat'
 import { LeadsCard } from '../components/trends/LeadsCard'
 import { DoctorReportPage } from './DoctorReportPage'
 import { PATTERN_MIN_DAYS } from '../lib/insights'
-import { arrangeLeads, choiceFor, findLeads, type Lead, type LeadChoice } from '../lib/leads'
+import { arrangeLeads, choiceFor, findLeads, leadFactors, type Lead, type LeadChoice } from '../lib/leads'
 import { startTrial } from '../lib/leadTrial'
 import { remember } from '../lib/leadHints'
 import { updateLeadsSeen } from '../lib/leadsSeenStore'
@@ -70,12 +70,7 @@ export function TrendsPage() {
   const leadList = useMemo(
     () =>
       arrangeLeads(
-        findLeads(filtered, {
-          sleep: settings.enabledFactors.includes('sleep'),
-          stress: settings.enabledFactors.includes('stress'),
-          activity: settings.enabledFactors.includes('activity'),
-          actions: settings.enabledFactors.includes('positiveActions'),
-        }),
+        findLeads(filtered, leadFactors(settings.enabledFactors)),
         settings.leadChoices
       ),
     [filtered, settings.enabledFactors, settings.leadChoices]

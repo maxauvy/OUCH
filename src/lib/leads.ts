@@ -10,7 +10,7 @@
 //
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
-import type { LoggedEntry } from '../db/types'
+import type { FactorKey, LoggedEntry } from '../db/types'
 import { shiftISO } from './medications.ts'
 import { spearman } from './report.ts'
 
@@ -166,6 +166,16 @@ export interface LeadFactors {
   stress: boolean
   activity: boolean
   actions: boolean
+}
+
+/** Which factors count, from the ones the person tracks. */
+export function leadFactors(enabled: FactorKey[]): LeadFactors {
+  return {
+    sleep: enabled.includes('sleep'),
+    stress: enabled.includes('stress'),
+    activity: enabled.includes('activity'),
+    actions: enabled.includes('positiveActions'),
+  }
 }
 
 /** Every lead the notes hold, the strongest first. Which factors count follows
