@@ -2,7 +2,6 @@ import type { Translations } from '../types'
 
 const en: Translations = {
   meta: {
-    appName: 'OUCH',
     htmlTitle: 'OUCH — Pain journal',
     metaDescription:
       'A simple pain journal: track your symptoms, understand what influences them, share your daily weather.',
@@ -425,7 +424,6 @@ const en: Translations = {
     painWeatherOfDay: "Today's pain weather",
     painWeatherEmpty: 'Log your pain',
     pain: 'Pain',
-    painHelper: "Overall pain intensity today",
     painEndNone: 'None',
     painEndExtreme: 'Unbearable',
     painTouch: 'touch your pain level',
@@ -433,7 +431,6 @@ const en: Translations = {
     painLess: 'One point less',
     painMore: 'One point more',
     whereHurts: 'Where does it hurt?',
-    generalFeeling: 'General feeling',
     fatigueEndFine: 'Fine',
     fatigueEndExhausted: 'Exhausted',
     sleepQuality: 'Sleep quality',
@@ -972,7 +969,6 @@ const en: Translations = {
       mismatch: 'The copy that was sent was not identical to the original, so it was removed. We will try again.',
       unreadable: 'The copy that was sent would not open, so it was removed. We will try again.',
     },
-    reconnect: 'Link again',
     failureDetail: 'Technical detail: {{detail}}',
     lastGood: 'Last successful copy: {{date}}.',
     kb: '{{n}} KB',
@@ -1186,7 +1182,6 @@ const en: Translations = {
     scaleLow: 'Little pain',
     scaleHigh: 'A lot of pain',
     painLabel: 'Pain:',
-    painCaption: 'Pain felt today',
     outside: 'Outside',
   },
 

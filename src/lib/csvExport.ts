@@ -7,12 +7,12 @@
 import type { DailyEntry, Medication } from '../db/types.ts'
 import { periodOn } from './medications.ts'
 
-export interface CsvOptions {
+interface CsvOptions {
   /** The free-text note of each day; off, the column is left out */
   includeNotes: boolean
 }
 
-export const JOURNAL_COLUMNS = [
+const JOURNAL_COLUMNS = [
   'date',
   'pain',
   'fatigue',
@@ -32,7 +32,7 @@ export const JOURNAL_COLUMNS = [
   'notes',
 ] as const
 
-export const INTAKE_COLUMNS = [
+const INTAKE_COLUMNS = [
   'date',
   'medication',
   'medication_id',

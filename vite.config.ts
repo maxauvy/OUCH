@@ -84,6 +84,12 @@ export default defineConfig(({ command }) => {
       __APP_VERSION__: JSON.stringify(version),
       __APP_IS_TAGGED_RELEASE__: JSON.stringify(tagged),
     },
+    build: {
+      // One bundle on purpose (see main.tsx): a page still running after an
+      // update must not ask for a chunk the new release has removed, and the
+      // report has to open offline. So the size warning is not a to-do.
+      chunkSizeWarningLimit: 1500,
+    },
     plugins: [
       versionFile(commit, date, tagged),
       // Build only: the dev server injects inline scripts for hot reload.

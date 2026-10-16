@@ -51,7 +51,7 @@ export function isBackupDue(state: {
   return true
 }
 
-export interface SentCopy {
+interface SentCopy {
   name: string
   bytes: number
   sha256: string

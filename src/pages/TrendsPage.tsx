@@ -1,32 +1,32 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { IconChevronRight, IconFileText } from '@tabler/icons-react'
-import { useLoggedEntries } from '../hooks/useEntries'
-import { useSettings } from '../hooks/useSettings'
-import { Card, SectionTitle } from '../components/ui/Card'
-import { Footer } from '../components/layout/Footer'
-import { PainTrendChart, type ChartMarker } from '../components/trends/PainTrendChart'
-import { MedicationsCard } from '../components/trends/MedicationsCard'
-import { FlaresCard } from '../components/trends/FlaresCard'
-import { TreatmentReviewCard } from '../components/trends/TreatmentReviewCard'
-import { useFlares } from '../hooks/useFlares'
-import { flareDayCount, flaresOverlapping } from '../lib/flares'
-import { useMedications } from '../hooks/useMedications'
-import { todayISO, updateSettings } from '../db'
-import { formatPosology } from '../lib/medicationFormat'
-import { LeadsCard } from '../components/trends/LeadsCard'
-import { DoctorReportPage } from './DoctorReportPage'
-import { PATTERN_MIN_DAYS } from '../lib/insights'
-import { arrangeLeads, choiceFor, findLeads, type Lead, type LeadChoice } from '../lib/leads'
-import { startTrial } from '../lib/leadTrial'
-import { remember } from '../lib/leadHints'
-import { updateLeadsSeen } from '../lib/leadsSeenStore'
-import { useLeadList } from '../hooks/useLeadList'
-import { weekdayProfile } from '../lib/weekdays'
-import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
-import { usePalette } from '../hooks/usePalette'
 import { subDays } from 'date-fns'
-import { format, useLocale, useTranslation } from '../i18n'
+
+import { Footer } from '../components/layout/Footer'
+import { FlaresCard } from '../components/trends/FlaresCard'
+import { LeadsCard } from '../components/trends/LeadsCard'
+import { MedicationsCard } from '../components/trends/MedicationsCard'
+import { PainTrendChart, type ChartMarker } from '../components/trends/PainTrendChart'
+import { TreatmentReviewCard } from '../components/trends/TreatmentReviewCard'
+import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
+import { Card, SectionTitle } from '../components/ui/Card'
+import { DoctorReportPage } from './DoctorReportPage'
+import { useLoggedEntries } from '../hooks/useEntries'
+import { useFlares } from '../hooks/useFlares'
+import { useLeadList } from '../hooks/useLeadList'
+import { useMedications } from '../hooks/useMedications'
+import { usePalette } from '../hooks/usePalette'
+import { useSettings } from '../hooks/useSettings'
+import { todayISO, updateSettings } from '../db'
+import { flareDayCount, flaresOverlapping } from '../lib/flares'
+import { remember } from '../lib/leadHints'
+import { startTrial } from '../lib/leadTrial'
+import { arrangeLeads, choiceFor, findLeads, leadFactors, PATTERN_MIN_DAYS, type Lead, type LeadChoice } from '../lib/leads'
+import { updateLeadsSeen } from '../lib/leadsSeenStore'
+import { formatPosology } from '../lib/medicationFormat'
 import { shiftISO } from '../lib/medications'
+import { weekdayProfile } from '../lib/weekdays'
+import { format, useLocale, useTranslation } from '../i18n'
 
 export function TrendsPage() {
   const entries = useLoggedEntries()
@@ -70,12 +70,7 @@ export function TrendsPage() {
   const leadList = useMemo(
     () =>
       arrangeLeads(
-        findLeads(filtered, {
-          sleep: settings.enabledFactors.includes('sleep'),
-          stress: settings.enabledFactors.includes('stress'),
-          activity: settings.enabledFactors.includes('activity'),
-          actions: settings.enabledFactors.includes('positiveActions'),
-        }),
+        findLeads(filtered, leadFactors(settings.enabledFactors)),
         settings.leadChoices
       ),
     [filtered, settings.enabledFactors, settings.leadChoices]

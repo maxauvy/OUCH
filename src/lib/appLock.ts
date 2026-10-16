@@ -23,7 +23,7 @@ import {
 import { clearLock, loadLock, saveLock } from './pinLockStore.ts'
 import type { Language } from '../i18n/language.ts'
 
-export interface LockSnapshot {
+interface LockSnapshot {
   /** A code has been set. */
   enabled: boolean
   /** The app is asking for it now. */
@@ -101,7 +101,7 @@ function keep(next: PinLock): boolean {
   return saveLock(next)
 }
 
-export function subscribeLock(onChange: () => void): () => void {
+function subscribeLock(onChange: () => void): () => void {
   listeners.add(onChange)
   return () => listeners.delete(onChange)
 }
@@ -117,7 +117,7 @@ export function lockWaitMs(now = Date.now()): number {
   return lock ? waitLeft(lock, now) : 0
 }
 
-export type UnlockResult = { ok: true } | { ok: false; waitMs: number }
+type UnlockResult = { ok: true } | { ok: false; waitMs: number }
 
 /** Tries a code; the app opens when it is the right one. */
 export async function unlock(pin: string): Promise<UnlockResult> {

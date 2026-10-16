@@ -1,7 +1,7 @@
 import { format, type Translations } from '../../i18n'
 import { actionInSentence, type Lead } from '../../lib/leads'
 
-export type LeadTexts = { title: string; high: string; low: string; note: string }
+type LeadTexts = { title: string; high: string; low: string; note: string }
 
 export const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 

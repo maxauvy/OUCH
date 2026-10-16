@@ -12,7 +12,7 @@ import { shiftISO } from './medications.ts'
 import { daysBetween, mean, quantile } from './report.ts'
 import { treatmentEvents, type TreatmentEvent } from './treatmentEvents.ts'
 
-export interface ReviewOptions {
+interface ReviewOptions {
   /** Days compared before the change, and after the settling-in days */
   windowDays: number
   /** Days after the change that are not counted: a background treatment
@@ -41,7 +41,7 @@ export interface Comparison {
   usualGap: number | null
 }
 
-export type ReviewStatus =
+type ReviewStatus =
   /** Both windows are over and have enough logged days */
   | 'ready'
   /** The window after is still running */
@@ -83,7 +83,7 @@ export function changeDate(event: TreatmentEvent): string {
   return event.kind === 'stopped' ? shiftISO(event.date, 1) : event.date
 }
 
-export interface ReviewWindows {
+interface ReviewWindows {
   beforeFrom: string
   beforeTo: string
   afterFrom: string

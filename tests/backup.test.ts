@@ -147,6 +147,11 @@ test('what was answered to the leads is restored, and only what is well formed',
   assert.equal(sanitizeSettings({ leadChoices: 'x' })?.leadChoices, undefined)
 })
 
+test('answers to the leads that are all unusable leave the ones on this device alone, an empty set clears them', () => {
+  assert.equal(sanitizeSettings({ leadChoices: { stress: { choice: 'maybe' }, broken: 'x' } })?.leadChoices, undefined)
+  assert.deepEqual(sanitizeSettings({ leadChoices: {} })?.leadChoices, {})
+})
+
 test('the trial under way and the switches of the lead cards are restored, and only well formed', () => {
   const trial = { key: 'action:marche', action: 'Marche', start: '2026-10-05', end: '2026-10-11' }
   const out = sanitizeSettings({ leadTrial: trial, leadPromptEnabled: false, weeklySentenceEnabled: 'no', leadDotEnabled: false, trialsEnabled: true, leadsSeen: { prompted: ['sleep'] } })
@@ -162,6 +167,9 @@ test('the closed weeks are restored, each one well formed', () => {
   const out = sanitizeSettings({ leadTrialHistory: [week, { ...week, key: 'sleep' }, { ...week, end: 'x' }, 'no', { ...week, start: '2026-09-01', end: '2026-09-07' }] })
   assert.deepEqual(out?.leadTrialHistory, [week, { ...week, start: '2026-09-01', end: '2026-09-07' }])
   assert.equal(sanitizeSettings({ leadTrialHistory: 'x' })?.leadTrialHistory, undefined)
+  // All unusable: the weeks on this device stay; an empty list clears them.
+  assert.equal(sanitizeSettings({ leadTrialHistory: ['no', { ...week, end: 'x' }] })?.leadTrialHistory, undefined)
+  assert.deepEqual(sanitizeSettings({ leadTrialHistory: [] })?.leadTrialHistory, [])
 })
 
 test('the hard-days switch is restored from a backup, which flare it was shown for is not', () => {

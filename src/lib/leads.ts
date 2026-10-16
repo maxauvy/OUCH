@@ -10,13 +10,13 @@
 //
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
-import type { LoggedEntry } from '../db/types'
+import type { FactorKey, LoggedEntry } from '../db/types'
 import { shiftISO } from './medications.ts'
 import { spearman } from './report.ts'
 
-export type LeadKind = 'sleep' | 'stress' | 'activity' | 'action'
+type LeadKind = 'sleep' | 'stress' | 'activity' | 'action'
 
-export interface LeadGroup {
+interface LeadGroup {
   /** Mean pain over the days of the group. */
   mean: number
   n: number
@@ -51,12 +51,15 @@ export interface LeadChoice {
 
 export type LeadChoices = Record<string, LeadChoice>
 
+/** Days with an entry before the Trends page has patterns worth looking at:
+ * about two weeks. Below it, the page says so rather than showing little. */
+export const PATTERN_MIN_DAYS = 14
 /** Days with a pain level and a value, at least, before a correlation is read. */
-export const LEAD_MIN_DAYS = 14
+const LEAD_MIN_DAYS = 14
 /** Days in each of the two groups compared. */
-export const LEAD_MIN_GROUP = 4
+const LEAD_MIN_GROUP = 4
 /** A full point of pain between the two groups. */
-export const LEAD_MIN_GAP = 1
+const LEAD_MIN_GAP = 1
 /** The most leads on the card at once: a few, so that none is noise piled on noise. */
 export const LEAD_MAX = 3
 /** A dismissed lead comes back with a point more of gap, or twice the days. */
@@ -166,6 +169,16 @@ export interface LeadFactors {
   stress: boolean
   activity: boolean
   actions: boolean
+}
+
+/** Which factors count, from the ones the person tracks. */
+export function leadFactors(enabled: FactorKey[]): LeadFactors {
+  return {
+    sleep: enabled.includes('sleep'),
+    stress: enabled.includes('stress'),
+    activity: enabled.includes('activity'),
+    actions: enabled.includes('positiveActions'),
+  }
 }
 
 /** Every lead the notes hold, the strongest first. Which factors count follows

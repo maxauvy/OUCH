@@ -14,7 +14,7 @@ import type { LoggedEntry } from '../db/types'
 import { daysBetween, median } from './report.ts'
 import { shiftISO } from './medications.ts'
 
-export interface FlareOptions {
+interface FlareOptions {
   /** Days before a flare used to find the usual level */
   baselineDays: number
   /** Logged days needed in that window; below it nothing is detected */
@@ -37,7 +37,7 @@ export interface FlareOptions {
   asOf?: string
 }
 
-export const DEFAULT_FLARE_OPTIONS: FlareOptions = {
+const DEFAULT_FLARE_OPTIONS: FlareOptions = {
   baselineDays: 28,
   minBaselineDays: 10,
   minDays: 3,

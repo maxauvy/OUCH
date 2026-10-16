@@ -1,7 +1,7 @@
 // Cited by number in the report's method sections and key points, and
 // listed with summaries in Settings. Kept in their original language, as a
 // bibliography would be. Append only: footnote numbers refer to the position.
-export interface Reference {
+interface Reference {
   citation: string
   /** PubMed identifier; absent for the HAS guideline, which is not indexed. */
   pmid?: string

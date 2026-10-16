@@ -26,7 +26,7 @@ export interface HardDaysCard {
   helped: string[]
 }
 
-export const MAX_HELPED = 3
+const MAX_HELPED = 3
 
 /** The flare under way as of yesterday, if any: what both the card and the
  * lighter form on the day's page are based on. Days before today only, so

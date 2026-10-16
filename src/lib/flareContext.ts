@@ -20,7 +20,7 @@ export type { TreatmentEvent }
 export const CONTEXT_KEYS = ['sleepHours', 'sleepQuality', 'stressLevel', 'fatigueLevel', 'brainFog', 'moodLevel'] as const
 export type ContextKey = (typeof CONTEXT_KEYS)[number]
 
-export interface ContextOptions {
+interface ContextOptions {
   /** Days before the flare that are described */
   windowDays: number
   /** Days of the usual level, before that window */
@@ -32,9 +32,9 @@ export interface ContextOptions {
   eventDays: number
 }
 
-export const DEFAULT_CONTEXT_OPTIONS: ContextOptions = { windowDays: 3, usualDays: 28, minWindow: 2, minUsual: 10, eventDays: 14 }
+const DEFAULT_CONTEXT_OPTIONS: ContextOptions = { windowDays: 3, usualDays: 28, minWindow: 2, minUsual: 10, eventDays: 14 }
 
-export interface ContextValue {
+interface ContextValue {
   /** Mean of the days before the flare; null with too few logged days */
   window: number | null
   /** Mean of the 28 days before that, flare days left out; null likewise */

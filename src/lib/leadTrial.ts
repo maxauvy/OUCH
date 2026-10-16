@@ -35,12 +35,12 @@ export function continueTrial(trial: LeadTrial, today: string): LeadTrial {
   return { ...trial, start: today, end: shiftISO(today, TRIAL_DAYS - 1) }
 }
 
-export interface TrialDay {
+interface TrialDay {
   date: string
   state: 'with' | 'without' | 'unlogged' | 'future'
 }
 
-export interface TrialResult {
+interface TrialResult {
   with: { mean: number; n: number }
   without: { mean: number; n: number }
   /** with.mean − without.mean */
@@ -49,7 +49,7 @@ export interface TrialResult {
   sameDirection: boolean | null
 }
 
-export interface TrialStatus {
+interface TrialStatus {
   /** The week is over: today is after its last day */
   over: boolean
   /** Day of the week we are on, 1 to 7 */
@@ -123,7 +123,9 @@ export interface ReportTrial {
 
 /** The weeks that ended between `from` and `to` and can be compared, for the
  * report: the closed ones, and the current one if it is over but not closed.
- * Computed on the diary as it reads today, like the rest of the report. */
+ * Computed on the diary as it reads today, like the rest of the report. A week
+ * whose last day is the report's last day is not over yet, so it comes in the
+ * next report: that day is still being lived and logged. */
 export function reportTrials(
   history: LeadTrial[] | undefined,
   current: LeadTrial | undefined,

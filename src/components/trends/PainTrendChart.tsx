@@ -72,14 +72,14 @@ export interface ChartMarker {
 }
 
 /** A stretch of days with its mean drawn across it, dashed. */
-export interface ChartMean {
+interface ChartMean {
   from: string
   to: string
   value: number
 }
 
 /** Days shown as set apart (not counted in whatever is compared). */
-export interface ChartSpan {
+interface ChartSpan {
   from: string
   to: string
   label: string

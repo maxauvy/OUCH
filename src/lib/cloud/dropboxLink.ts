@@ -72,7 +72,7 @@ export async function startDropboxLink(): Promise<void> {
   location.assign(await authorizeUrl({ verifier, state, redirect: redirect() }))
 }
 
-export type DropboxReturn = { code: string; state: string } | { denied: true } | null
+type DropboxReturn = { code: string; state: string } | { denied: true } | null
 
 /** What Dropbox put in the address when sending the person back, if anything. */
 export function readDropboxReturn(search: string): DropboxReturn {

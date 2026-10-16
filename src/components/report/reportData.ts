@@ -4,7 +4,7 @@ import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, type FlareEp
 import { flareContext, type FlareContext } from '../../lib/flareContext'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
 import { loggedEntries } from '../../lib/loggedEntries'
-import { findLeads, keptLeads, type Lead, type LeadChoices } from '../../lib/leads'
+import { findLeads, keptLeads, type Lead, type LeadChoices, type LeadFactors } from '../../lib/leads'
 import { reportTrials, type LeadTrial, type ReportTrial } from '../../lib/leadTrial'
 import { shiftISO } from '../../lib/medications'
 import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '../../lib/treatmentReview'
@@ -13,7 +13,7 @@ import { reportFormat, type ReportFormat } from './reportFormat'
 
 export type ReportVariant = 'gp' | 'painClinic'
 
-export interface ReportOptions {
+interface ReportOptions {
   variant: ReportVariant
   language: Language
   /** Date of the last consultation: start of the reported period */
@@ -29,6 +29,8 @@ export interface ReportOptions {
   agenda: string[]
   /** What the patient answered to the leads on Trends; the kept ones go on the report */
   leadChoices?: LeadChoices
+  /** Which factors the patient tracks: a kept lead on one they no longer track stays off the report, as it is off Trends */
+  leadFactors?: LeadFactors
   /** The one-week trials: the weeks closed, and the one under way (kept if it is over) */
   leadTrials?: { history?: LeadTrial[]; current?: LeadTrial }
   includeNotes: boolean
@@ -75,7 +77,7 @@ export interface ReportData {
 /** Flares found in the whole history, since the usual level before one
  * needs entries from before the period it falls in. An episode belongs to
  * the period it starts in; its days are counted where they fall. */
-export interface FlareSummary {
+interface FlareSummary {
   /** False when there are too few entries to tell what is usual */
   detectable: boolean
   current: FlareEpisode[]
@@ -118,7 +120,7 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
       previousDays: flareDayCount(episodes, p.prevStart, shiftISO(p.start, -1)),
     },
     weekdays: weekdayProfile(current),
-    noticed: keptLeads(findLeads([...previous, ...current]), options.leadChoices),
+    noticed: keptLeads(findLeads([...previous, ...current], options.leadFactors), options.leadChoices),
     trials: reportTrials(options.leadTrials?.history, options.leadTrials?.current, entries, p.prevStart, p.end),
     reviews: treatmentReviews(entries, medications, detectable ? flareDays : null, options.end).filter(
       // A change with no logged day on either side has nothing to describe

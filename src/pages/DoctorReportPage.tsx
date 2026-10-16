@@ -6,6 +6,7 @@ import { todayISO } from '../db'
 import { useAllEntries } from '../hooks/useEntries'
 import { useMedications } from '../hooks/useMedications'
 import { useSettings } from '../hooks/useSettings'
+import { leadFactors } from '../lib/leads'
 import { shiftISO } from '../lib/medications'
 import { formatISODate } from '../lib/medicationFormat'
 import { buildImagePdf, type PdfImage } from '../lib/pdf'
@@ -95,13 +96,14 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             illnessDetails: { status: settings.illnessStatus, otherName: settings.otherIllnessName, year: settings.illnessYear },
             agenda: agenda.split('\n'),
             leadChoices: settings.leadChoices,
+            leadFactors: leadFactors(settings.enabledFactors),
             leadTrials: { history: settings.leadTrialHistory, current: settings.leadTrial },
             includeNotes,
             includeCycle,
             demo: IS_DEMO,
           })
         : null,
-    [entries, medications, variant, language, consultation, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.leadTrialHistory, settings.leadTrial, agenda, includeNotes, includeCycle]
+    [entries, medications, variant, language, consultation, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, settings.leadTrialHistory, settings.leadTrial, agenda, includeNotes, includeCycle]
   )
 
   // Browsers name the saved PDF after the page title.
