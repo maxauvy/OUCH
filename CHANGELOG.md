@@ -4,10 +4,19 @@ Les changements notables d'OUCH sont notés ici. Le format suit [Keep a Changelo
 
 Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/releases), et le site déployé affiche en pied de page la version qu'il exécute (avec le commit entre deux versions).
 
-## [Non publié]
+## [0.6.1] - 2026-10-16
+
+Une version d'entretien, après une revue du code de la semaine : deux corrections, une dans le rapport, et une protection à la restauration d'une sauvegarde ; le reste est du rangement.
+
+### Ajouté
+- Pour les patients, un **flyer A5** et une **plaquette A4**, en français et en anglais : les sources (HTML, images, script de génération des PDF) sont dans `communication/flyer-plaquette-patients/`, et les quatre PDF sont joints à la [release v0.6.0](https://github.com/maxauvy/OUCH/releases/tag/v0.6.0).
 
 ### Corrigé
 - Dans le rapport pour le médecin, la rubrique « Ce que le patient a remarqué » respecte maintenant les facteurs que la personne suit : une piste gardée sur un facteur qu'elle a retiré de son suivi (sommeil, stress, activité, actions) n'y figure plus, comme elle n'est plus dans Tendances.
+- À la restauration d'une sauvegarde, si toutes les réponses aux pistes (ou toutes les semaines d'essai terminées) du fichier sont inutilisables, celles de l'appareil sont gardées au lieu d'être effacées. Un fichier qui n'en contient aucune, volontairement, les efface toujours.
+
+### Modifié
+- Rangement du code, sans effet à l'écran : le calcul des facteurs des pistes n'est plus écrit en deux endroits, cinq textes inutilisés et 61 exports inutiles sont retirés, les scripts de vidéo n'ont plus d'avertissement, et le verrou par code a ses premiers tests (324 tests au total).
 
 ## [0.6.0] - 2026-10-15
 
