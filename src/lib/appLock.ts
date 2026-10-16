@@ -106,7 +106,7 @@ function subscribeLock(onChange: () => void): () => void {
   return () => listeners.delete(onChange)
 }
 
-const getLockSnapshot = (): LockSnapshot => snapshot
+export const getLockSnapshot = (): LockSnapshot => snapshot
 
 export function useLockState(): LockSnapshot {
   return useSyncExternalStore(subscribeLock, getLockSnapshot, getLockSnapshot)
