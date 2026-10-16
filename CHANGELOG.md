@@ -4,6 +4,11 @@ Les changements notables d'OUCH sont notés ici. Le format suit [Keep a Changelo
 
 Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/releases), et le site déployé affiche en pied de page la version qu'il exécute (avec le commit entre deux versions).
 
+## [Non publié]
+
+### Corrigé
+- Dans le rapport pour le médecin, la rubrique « Ce que le patient a remarqué » respecte maintenant les facteurs que la personne suit : une piste gardée sur un facteur qu'elle a retiré de son suivi (sommeil, stress, activité, actions) n'y figure plus, comme elle n'est plus dans Tendances.
+
 ## [0.6.0] - 2026-10-15
 
 ### Ajouté

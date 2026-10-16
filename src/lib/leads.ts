@@ -164,7 +164,7 @@ function actionLeads(entries: LoggedEntry[]): Lead[] {
   return leads
 }
 
-interface LeadFactors {
+export interface LeadFactors {
   sleep: boolean
   stress: boolean
   activity: boolean
