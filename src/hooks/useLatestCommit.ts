@@ -1,5 +1,5 @@
-import { grantReloadPass } from '../lib/appLock'
 import { useEffect, useState } from 'react'
+import { grantReloadPass } from '../lib/appLock'
 import { buildId } from '../lib/buildId'
 
 /** Build currently deployed (see `buildId`), read from version.json, or
