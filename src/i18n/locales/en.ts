@@ -318,6 +318,7 @@ const en: Translations = {
     trialsRange: '{{start}} – {{end}}',
     trialsWith: 'With {{action}}: {{mean}} on average ({{n}} {{n:day|days}})',
     trialsWithout: 'Without: {{mean}} on average ({{n}} {{n:day|days}})',
+    trialsHarder: 'The days with the action were the harder ones: probably the one used when it hurts.',
     trialsFew: 'Too few days of each sort to compare.',
     trialsAgain: 'Do another week',
     trialsRunning: 'A trial is under way: you will find it on Today.',
@@ -768,6 +769,7 @@ const en: Translations = {
     noticedActionLow: 'on the other days',
     noticedTrialLine:
       '{{action}}: one-week trial from {{from}} to {{to}}, mean pain of {{a}}/10 on the days with it ({{aN}} {{aN:day|days}}), against {{b}}/10 on the other days ({{bN}} {{bN:day|days}}).',
+    noticedTrialHarder: 'When the days with the action are the more painful ones, it is often because it is used on those days, not because it adds to the pain.',
     noticedTrialNote: 'A one-week trial describes seven days: that is little, an idea rather than an answer.',
     notes: 'Patient notes',
     notesHintGp: 'recent difficult days',
@@ -1052,6 +1054,7 @@ const en: Translations = {
     trialDoneLabel: 'Your trial is over',
     repeatLabel: 'A trial to do again?',
     repeatBody: '{{n}} {{n:week|weeks}} ago, you tried “{{action}}” for a week. Would you like to do it again?',
+    trialHarder: 'You probably turn to it just on the days you hurt more: this does not say whether it helps.',
     trialSmall: 'Over 7 days, that is little: an idea, not an answer.',
     trialFew: 'There are too few days of each kind to compare, and that is fine: you can carry on for another week.',
     trialSame: 'It goes the same way as your earlier days.',

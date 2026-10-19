@@ -267,6 +267,7 @@ export function TrialCard({
             {lh.trialSmall}
             {r.sameDirection === true && ` ${lh.trialSame}`}
             {r.sameDirection === false && ` ${lh.trialOther}`}
+            {r.gap > 0 && ` ${lh.trialHarder}`}
           </p>
         </>
       ) : (

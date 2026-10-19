@@ -237,6 +237,7 @@ export interface Translations {
     trialsWith: string
     trialsWithout: string
     trialsFew: string
+    trialsHarder: string
     trialsAgain: string
     trialsRunning: string
     medicationsTitle: string
@@ -665,6 +666,8 @@ export interface Translations {
     /** `{{action}}`, the week `{{from}}` to `{{to}}`, then pain `{{a}}` on `{{aN}}` days with it and `{{b}}` on `{{bN}}` days without */
     noticedTrialLine: string
     noticedTrialNote: string
+    /** Added when a week's days with the action were the harder ones */
+    noticedTrialHarder: string
     notes: string
     notesHintGp: string
     notesHintAll: string
@@ -920,6 +923,8 @@ export interface Translations {
     repeatLabel: string
     /** `{{action}}` as written, `{{n}}` weeks since it ended */
     repeatBody: string
+    /** After a trial whose days with the action were the harder ones */
+    trialHarder: string
     trialSmall: string
     trialFew: string
     trialSame: string
