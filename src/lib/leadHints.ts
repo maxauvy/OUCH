@@ -29,7 +29,8 @@ export function remember(keys: string[], add: string[]): string[] {
 }
 
 /** The lead to bring to the day's page, if any: one the person has not answered
- * and has not been shown before, once their pain is logged, outside a flare.
+ * and has not been shown before, once their pain is logged, outside a flare,
+ * and that is not the subject of a trial.
  * The one shown today stays until it is closed. */
 export function leadToBring(input: {
   shown: Lead[]
@@ -39,14 +40,17 @@ export function leadToBring(input: {
   enabled: boolean
   /** A flare is under way, or the day's pain is not logged yet */
   quiet: boolean
+  /** Leads already under trial, now or before: the trial says more than a sentence on the notes would. */
+  tried?: string[]
 }): Lead | null {
-  const { shown, choices, seen, today, enabled, quiet } = input
+  const { shown, choices, seen, today, enabled, quiet, tried = [] } = input
   if (!enabled || quiet) return null
+  const open = shown.filter((l) => !tried.includes(l.key))
   if (seen?.today?.date === today) {
     if (seen.today.dismissed) return null
-    return shown.find((l) => l.key === seen.today!.key) ?? null
+    return open.find((l) => l.key === seen.today!.key) ?? null
   }
-  return shown.find((l) => !choices?.[l.key] && !seen?.prompted.includes(l.key)) ?? null
+  return open.find((l) => !choices?.[l.key] && !seen?.prompted.includes(l.key)) ?? null
 }
 
 /** The dot on the Trends tab: a lead on its card that it has not shown yet. */

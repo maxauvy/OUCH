@@ -116,6 +116,11 @@ export function archiveTrial(history: LeadTrial[] | undefined, trial: LeadTrial)
   return [...rest, trial].slice(-MAX_TRIAL_HISTORY)
 }
 
+/** The leads a trial was made of, under way or closed: what the day's page does not bring as a lead. */
+export function triedKeys(current: LeadTrial | undefined, history: LeadTrial[] | undefined): string[] {
+  return [...new Set([...(current ? [current.key] : []), ...(history ?? []).map((t) => t.key)])]
+}
+
 export interface ReportTrial {
   trial: LeadTrial
   result: TrialResult

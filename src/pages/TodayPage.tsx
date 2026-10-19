@@ -8,6 +8,7 @@ import { useLoggedEntries, useTodayEntry } from '../hooks/useEntries'
 import { useLeadList } from '../hooks/useLeadList'
 import { flareUnderWay } from '../lib/hardDays'
 import { leadToBring, weeklyVisible } from '../lib/leadHints'
+import { triedKeys } from '../lib/leadTrial'
 import { weeklyFinding } from '../lib/weeklySentence'
 import { LeadPromptCard, TrialCard, TrialPausedCard, WeeklyCard } from '../components/entry/LeadHintCards'
 import type { Tab } from '../components/layout/TabBar'
@@ -43,6 +44,7 @@ export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => voi
         today: date,
         enabled: settings.leadPromptEnabled,
         quiet: flare || !painLogged,
+        tried: triedKeys(settings.leadTrial, settings.leadTrialHistory),
       })
     : null
   const weekly = useMemo(

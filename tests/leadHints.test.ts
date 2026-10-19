@@ -14,6 +14,13 @@ test('the first lead not answered and not shown before is brought', () => {
   assert.equal(leadToBring({ ...base, choices: { sleep: { choice: 'kept', at: 1, gap: -2, days: 30 } } })?.key, 'stress')
 })
 
+test('a lead that is, or was, under trial is not brought, even when it is the one shown today', () => {
+  assert.equal(leadToBring({ ...base, tried: ['sleep'] })?.key, 'stress')
+  assert.equal(leadToBring({ ...base, tried: ['sleep', 'stress'] }), null)
+  const open = { ...NO_LEADS_SEEN, prompted: ['sleep'], today: { date: '2026-10-12', key: 'sleep', dismissed: false } }
+  assert.equal(leadToBring({ ...base, seen: open, tried: ['sleep'] }), null)
+})
+
 test('nothing is brought when it is switched off, or while it is quiet', () => {
   assert.equal(leadToBring({ ...base, enabled: false }), null)
   assert.equal(leadToBring({ ...base, quiet: true }), null)
