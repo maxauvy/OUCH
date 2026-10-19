@@ -218,6 +218,18 @@ const fr: Translations = {
         usage:
           "Le rapport compare ta douleur le lendemain d’une journée très active, avec la mention que trop comme trop peu d’activité sont associés à plus de douleur.",
       },
+      {
+        summary:
+          'Critères préliminaires de l’American College of Rheumatology pour la fibromyalgie, qui n’exigent plus l’examen des points douloureux. Ils combinent un index de douleur diffuse (WPI), le nombre de régions du corps, sur 19, où la personne a eu mal, et une échelle de sévérité des symptômes.',
+        usage:
+          'Les zones de « Où as-tu mal ? » reprennent les 19 régions du WPI, avec le côté gauche ou droit, plus la tête, les mains et les pieds. OUCH ne calcule pas le WPI, qui porte sur la semaine écoulée et sert au médecin : il compte, jour par jour, ce que tu signales.',
+      },
+      {
+        summary:
+          'Révision de ces critères, après examen de 14 études de validation. Le WPI et ses 19 régions sont gardés, et la douleur généralisée suppose une douleur dans au moins 4 des 5 grandes régions du corps (mâchoire, poitrine et ventre exclus).',
+        usage:
+          'Même découpage du corps. Le rapport indique combien de ces régions sont signalées dans la période, comme un simple décompte. OUCH n’applique ni ces critères ni la définition de la douleur généralisée : seul un médecin pose un diagnostic.',
+      },
     ],
   },
 
@@ -894,6 +906,8 @@ const fr: Translations = {
       "Autre motif de ne présenter le lien météo-douleur que comme une piste à discuter.",
       "Note sur le sommeil de la nuit précédente : lien dans les deux sens, plutôt sommeil → douleur.",
       "Note sur l’activité de la veille : trop comme trop peu d’activité sont associés à plus de douleur.",
+      'Les 19 régions du corps du WPI servent de base aux zones de localisation ; OUCH ne calcule pas le WPI.',
+      'Même découpage ; le rapport décompte les régions signalées, sans appliquer les critères.',
     ],
     completeness: 'Complétude par dimension, sur les jours renseignés : {{list}}.',
     intensity: 'Intensité douloureuse',

@@ -216,6 +216,18 @@ const en: Translations = {
         usage:
           "The report compares your pain the day after a very active day, noting that both too much and too little activity are linked to more pain.",
       },
+      {
+        summary:
+          'Preliminary American College of Rheumatology criteria for fibromyalgia, which no longer require a tender-point examination. They combine a widespread pain index (WPI), the number of body regions, out of 19, where the person had pain, and a symptom severity scale.',
+        usage:
+          'The areas of “Where does it hurt?” follow the 19 WPI regions, with the left or right side, plus head, hands and feet. OUCH does not compute the WPI, which covers the past week and is for the doctor: it counts, day by day, what you report.',
+      },
+      {
+        summary:
+          'A revision of those criteria after a review of 14 validation studies. The WPI and its 19 regions are kept, and generalized pain requires pain in at least 4 of the 5 main body regions (jaw, chest and abdomen excluded).',
+        usage:
+          'The same split of the body. The report says how many of those regions are reported over the period, as a plain count. OUCH applies neither these criteria nor the definition of generalized pain: only a doctor makes a diagnosis.',
+      },
     ],
   },
 
@@ -889,6 +901,8 @@ const en: Translations = {
       "Another reason to present the weather-pain link only as a lead to discuss.",
       "Note on the previous night's sleep: the link runs both ways, more so sleep → pain.",
       "Note on the previous day's activity: both too much and too little activity are associated with more pain.",
+      'The 19 WPI body regions are the basis of the pain-location areas; OUCH does not compute the WPI.',
+      'The same split; the report counts the regions reported, without applying the criteria.',
     ],
     completeness: 'Completeness by measure, over logged days: {{list}}.',
     intensity: 'Pain intensity',
