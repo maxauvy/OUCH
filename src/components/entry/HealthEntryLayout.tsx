@@ -161,6 +161,8 @@ function WeatherHero({ weather }: { weather: PainWeather | null }) {
         background: look
           ? `linear-gradient(135deg, ${flat}, color-mix(in srgb, var(--color-weather-5) ${weather ? 10 : 5}%, var(--color-surface)))`
           : flat,
+        // A thin edge in the day's colour, so the card stands out from the background.
+        boxShadow: look ? `inset 0 0 0 1px color-mix(in srgb, ${tint} 38%, transparent)` : undefined,
       }}
     >
       <span

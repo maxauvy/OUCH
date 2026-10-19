@@ -41,7 +41,7 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
     <section
       aria-label={t.label}
       className="relative flex gap-3 rounded-[var(--radius-card)] py-3.5 pl-3.5 pr-12"
-      style={{ background: 'var(--color-brand-soft)' }}
+      style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}
     >
       <span
         className="w-9 h-9 shrink-0 rounded-full flex items-center justify-center"

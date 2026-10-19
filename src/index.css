@@ -349,9 +349,11 @@ html[data-covered]::after {
    token override or a `--look-*` alias of the measure colours, so the usual
    look is untouched when the stamp is absent. */
 :root[data-look='luminous'] {
-  --look-bg: linear-gradient(180deg, #e6f1fb 0%, #edf5f6 35%, #f3f1fa 100%);
-  --color-hairline: #dae5ee;
-  --card-shadow: 0 2px 8px rgba(40, 70, 110, 0.05);
+  --look-top: #eef6fd;
+  --look-bg: linear-gradient(180deg, #eef6fd 0%, #f3f8fa 35%, #f6f4fb 100%);
+  --color-hairline: #c9d9e6;
+  --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 40%, transparent);
+  --card-shadow: 0 2px 8px rgba(40, 70, 110, 0.06);
   --avatar-bg: linear-gradient(135deg, #bfe0f5, #d8cff3);
   --tab-pill: linear-gradient(135deg, #d3e8f7, #e0d9f5);
   --tab-pill-pad: 2px 16px;
@@ -362,8 +364,10 @@ html[data-covered]::after {
 }
 @media (prefers-color-scheme: dark) {
   :root[data-look='luminous']:not([data-theme='light']) {
+    --look-top: #0f1a24;
     --look-bg: linear-gradient(180deg, #0f1a24 0%, #111a22 40%, #161425 100%);
     --color-hairline: rgba(160, 185, 200, 0.16);
+    --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
     --card-shadow: none;
     --avatar-bg: linear-gradient(135deg, #1d3d56, #2c2a52);
     --tab-pill: linear-gradient(135deg, #1d3d56, #2c2a52);
@@ -373,8 +377,10 @@ html[data-covered]::after {
   }
 }
 :root[data-look='luminous'][data-theme='dark'] {
+  --look-top: #0f1a24;
   --look-bg: linear-gradient(180deg, #0f1a24 0%, #111a22 40%, #161425 100%);
   --color-hairline: rgba(160, 185, 200, 0.16);
+  --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
   --card-shadow: none;
   --avatar-bg: linear-gradient(135deg, #1d3d56, #2c2a52);
   --tab-pill: linear-gradient(135deg, #1d3d56, #2c2a52);
@@ -394,6 +400,11 @@ html[data-covered]::after {
   --look-meds-soft: var(--cat-meds-soft);
   --look-weather: var(--cat-weather);
   --look-weather-soft: var(--cat-weather-soft);
+}
+/* The root takes the colour the gradient starts with, so what shows behind the
+   status bar and when scrolling past the top matches the page. */
+html[data-look='luminous'] {
+  background: var(--look-top);
 }
 html[data-look='luminous'] body {
   background: var(--look-bg);
