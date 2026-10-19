@@ -30,6 +30,11 @@ export function startTrial(lead: Lead, today: string): LeadTrial | null {
   return { key: lead.key, action: lead.action, start: today, end: shiftISO(today, TRIAL_DAYS - 1) }
 }
 
+/** "Do it again": a new week from today for an action tried before. */
+export function restartTrial(trial: LeadTrial, today: string): LeadTrial {
+  return { key: trial.key, action: trial.action, start: today, end: shiftISO(today, TRIAL_DAYS - 1) }
+}
+
 /** "Carry on for another week": a new week from today, the same action. */
 export function continueTrial(trial: LeadTrial, today: string): LeadTrial {
   return { ...trial, start: today, end: shiftISO(today, TRIAL_DAYS - 1) }
@@ -114,6 +119,11 @@ export const MAX_TRIAL_HISTORY = 30
 export function archiveTrial(history: LeadTrial[] | undefined, trial: LeadTrial): LeadTrial[] {
   const rest = (history ?? []).filter((t) => !(t.key === trial.key && t.start === trial.start))
   return [...rest, trial].slice(-MAX_TRIAL_HISTORY)
+}
+
+/** The leads a trial was made of, under way or closed: what the day's page does not bring as a lead. */
+export function triedKeys(current: LeadTrial | undefined, history: LeadTrial[] | undefined): string[] {
+  return [...new Set([...(current ? [current.key] : []), ...(history ?? []).map((t) => t.key)])]
 }
 
 export interface ReportTrial {

@@ -7,9 +7,10 @@ import { hasPain } from '../lib/loggedEntries'
 import { useLoggedEntries, useTodayEntry } from '../hooks/useEntries'
 import { useLeadList } from '../hooks/useLeadList'
 import { flareUnderWay } from '../lib/hardDays'
-import { leadToBring, weeklyVisible } from '../lib/leadHints'
+import { leadToBring, trialToRepeat, weeklyVisible } from '../lib/leadHints'
+import { triedKeys } from '../lib/leadTrial'
 import { weeklyFinding } from '../lib/weeklySentence'
-import { LeadPromptCard, TrialCard, TrialPausedCard, WeeklyCard } from '../components/entry/LeadHintCards'
+import { LeadPromptCard, RepeatTrialCard, TrialCard, TrialPausedCard, WeeklyCard } from '../components/entry/LeadHintCards'
 import type { Tab } from '../components/layout/TabBar'
 import { useSettings } from '../hooks/useSettings'
 import { todayISO } from '../db'
@@ -43,8 +44,22 @@ export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => voi
         today: date,
         enabled: settings.leadPromptEnabled,
         quiet: flare || !painLogged,
+        tried: triedKeys(settings.leadTrial, settings.leadTrialHistory),
       })
     : null
+  // A trial done a while ago comes back, but never on a day that already has a lead to bring.
+  const repeat =
+    logged && !bring
+      ? trialToRepeat({
+          history: settings.leadTrialHistory,
+          current: settings.leadTrial,
+          seen: settings.leadsSeen,
+          entries: logged,
+          today: date,
+          enabled: settings.trialsEnabled && settings.leadPromptEnabled && settings.enabledFactors.includes('positiveActions'),
+          quiet: flare || !painLogged,
+        })
+      : null
   const weekly = useMemo(
     () => (logged && settings.weeklySentenceEnabled ? weeklyFinding(logged, date, flare) : null),
     [logged, settings.weeklySentenceEnabled, date, flare]
@@ -58,8 +73,10 @@ export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => voi
       {trial && logged && (flare ? <TrialPausedCard trial={trial} /> : <TrialCard trial={trial} history={settings.leadTrialHistory} entries={logged} today={date} lead={trialLead} choices={settings.leadChoices} />)}
       {weekly && weeklyVisible(settings.leadsSeen, date) && <WeeklyCard finding={weekly} date={date} onSee={() => onGoToTab('journal')} />}
       {bring && loggedAtOpen && <LeadPromptCard lead={bring} date={date} onSee={() => onGoToTab('trends')} />}
+      {repeat && loggedAtOpen && <RepeatTrialCard trial={repeat} date={date} />}
       <DailyEntryForm date={date} onGoToBackup={IS_DEMO ? undefined : onGoToBackup} />
       {bring && loggedAtOpen === false && <LeadPromptCard lead={bring} date={date} onSee={() => onGoToTab('trends')} />}
+      {repeat && loggedAtOpen === false && <RepeatTrialCard trial={repeat} date={date} />}
       {entry && hasPain(entry) && (
         <button
           onClick={() => setSharing(true)}

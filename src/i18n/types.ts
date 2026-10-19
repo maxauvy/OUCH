@@ -199,6 +199,14 @@ export interface Translations {
     /** `{{when}}` the high side, capitalised; `{{gap}}` shown, `{{n}}` the same as a number for the plural */
     leadSentenceLower: string
     leadSentenceHigher: string
+    /** An action noted on harder days: it says what is seen, not that the action does it. `{{action}}` as written, `{{gap}}`, `{{n}}` as above */
+    leadActionSentenceHigher: string
+    /** The same on the day's page, with the reserve in the card itself */
+    leadActionSentenceHigherDay: string
+    /** On the day's page, after an action that goes with a lower pain */
+    leadActionLowerDayNote: string
+    /** What an action that goes with a higher pain does not say */
+    leadNoteActionHigher: string
     /** `{{n}}` days noted */
     leadBasisScale: string
     /** `{{n}}` days noted, `{{a}}` with the action, `{{b}}` without */
@@ -221,6 +229,16 @@ export interface Translations {
     leadTrialStart: string
     leadTrialLater: string
     leadTrialRunning: string
+    trialsTitle: string
+    trialsCaption: string
+    /** `{{start}}` and `{{end}}` as dates */
+    trialsRange: string
+    /** `{{mean}}` pain, `{{n}}` days, `{{action}}` as written */
+    trialsWith: string
+    trialsWithout: string
+    trialsFew: string
+    trialsAgain: string
+    trialsRunning: string
     medicationsTitle: string
     medicationsCaption: string
     daysOne: string
@@ -899,6 +917,9 @@ export interface Translations {
     trialStop: string
     trialPaused: string
     trialDoneLabel: string
+    repeatLabel: string
+    /** `{{action}}` as written, `{{n}}` weeks since it ended */
+    repeatBody: string
     trialSmall: string
     trialFew: string
     trialSame: string

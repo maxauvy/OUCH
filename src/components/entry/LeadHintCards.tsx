@@ -3,13 +3,13 @@ import { IconNotebook, IconSparkles, IconX } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { Lead, LeadChoices } from '../../lib/leads'
 import { actionInSentence, choiceFor } from '../../lib/leads'
-import { archiveTrial, continueTrial, trialStatus, type LeadTrial } from '../../lib/leadTrial'
+import { archiveTrial, continueTrial, restartTrial, trialStatus, type LeadTrial } from '../../lib/leadTrial'
 import { remember } from '../../lib/leadHints'
 import type { LoggedEntry } from '../../db/types'
 import type { WeeklyFinding } from '../../lib/weeklySentence'
 import { updateLeadsSeen } from '../../lib/leadsSeenStore'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
-import { leadSentence, capitalise } from '../trends/leadTexts'
+import { leadDayNote, leadSentence, capitalise } from '../trends/leadTexts'
 
 const PRIMARY = { background: 'var(--color-brand)', color: 'var(--color-on-brand)' }
 const SECONDARY = { boxShadow: 'inset 0 0 0 1px var(--color-hairline)', color: 'var(--color-ink)', background: 'var(--color-surface)' }
@@ -45,6 +45,8 @@ export function LeadPromptCard({
   const { intlLocale } = useLocale()
   const nf = new Intl.NumberFormat(intlLocale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 
+  const note = leadDayNote(lead, t.trends)
+
   // Said once: remember it was shown, so the next day brings another one or none.
   useEffect(() => {
     void updateLeadsSeen((seen) =>
@@ -71,7 +73,8 @@ export function LeadPromptCard({
       </span>
       <div className="min-w-0">
         <p className="text-body font-semibold">{t.leadHints.promptLabel}</p>
-        <p className="text-body mt-0.5">{leadSentence(lead, t.trends, nf, language)}</p>
+        <p className="text-body mt-0.5">{leadSentence(lead, t.trends, nf, language, 'day')}</p>
+        {note && <p className="text-body mt-1" style={{ color: 'var(--color-ink-muted)' }}>{note}</p>}
         <div className="flex flex-wrap gap-2 mt-2.5">
           <button
             type="button"
@@ -90,6 +93,43 @@ export function LeadPromptCard({
         </div>
       </div>
       <Closer label={t.leadHints.close} onClick={() => void close()} />
+    </section>
+  )
+}
+
+/** A trial closed a while ago, offered again: what is done over time counts more than what is done once. */
+export function RepeatTrialCard({ trial, date }: { trial: LeadTrial; date: string }) {
+  const t = useTranslation()
+  const lh = t.leadHints
+  const language = useLanguage()
+  const weeks = Math.round((Date.parse(`${date}T12:00:00Z`) - Date.parse(`${trial.end}T12:00:00Z`)) / (7 * 86_400_000))
+
+  // Said once for a long while: the next offer waits, whatever the answer.
+  useEffect(() => {
+    void updateLeadsSeen((seen) =>
+      seen.repeat?.date === date && seen.repeat.key === trial.key
+        ? seen
+        : { ...seen, repeat: { date, key: trial.key, dismissed: false }, repeatShown: { ...seen.repeatShown, [trial.key]: date } }
+    )
+  }, [date, trial.key])
+
+  const close = () => updateLeadsSeen((seen) => ({ ...seen, repeat: { date, key: trial.key, dismissed: true } }))
+
+  return (
+    <section aria-label={lh.repeatLabel} className="relative rounded-[var(--radius-card)] py-3.5 pl-4 pr-12" style={{ background: 'var(--color-brand-soft)' }}>
+      <p className="text-caption font-semibold uppercase tracking-[0.06em]" style={{ color: 'var(--color-brand)' }}>
+        {lh.repeatLabel}
+      </p>
+      <p className="text-body mt-1">{format(lh.repeatBody, { action: actionInSentence(trial.action), n: weeks }, language)}</p>
+      <div className="flex flex-wrap gap-2 mt-2.5">
+        <button type="button" className={BUTTON} style={PRIMARY} onClick={() => void updateSettings({ leadTrial: restartTrial(trial, date) })}>
+          {t.trends.leadTrialStart}
+        </button>
+        <button type="button" className={BUTTON} style={SECONDARY} onClick={() => void close()}>
+          {t.trends.leadTrialLater}
+        </button>
+      </div>
+      <Closer label={lh.close} onClick={() => void close()} />
     </section>
   )
 }
