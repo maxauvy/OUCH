@@ -320,6 +320,7 @@ const fr: Translations = {
     trialsRange: '{{start}} – {{end}}',
     trialsWith: 'Avec {{action}} : {{mean}} en moyenne ({{n}} {{n:jour|jours}})',
     trialsWithout: 'Sans : {{mean}} en moyenne ({{n}} {{n:jour|jours}})',
+    trialsHarder: 'Les jours avec l’action étaient les plus difficiles : sans doute celle qu’on utilise quand on a mal.',
     trialsFew: 'Trop peu de jours de chaque sorte pour comparer.',
     trialsAgain: 'Refaire une semaine',
     trialsRunning: 'Un essai est en cours : tu le retrouves sur Aujourd’hui.',
@@ -773,6 +774,7 @@ const fr: Translations = {
     noticedActionLow: 'les autres jours',
     noticedTrialLine:
       '{{action}} : essai d’une semaine du {{from}} au {{to}}, douleur moyenne de {{a}}/10 les jours avec ({{aN}} {{aN:jour|jours}}), contre {{b}}/10 les autres jours ({{bN}} {{bN:jour|jours}}).',
+    noticedTrialHarder: 'Quand les jours avec l’action sont les plus douloureux, c’est souvent qu’elle est utilisée ces jours-là, pas qu’elle y contribue.',
     noticedTrialNote: 'Un essai d’une semaine décrit sept jours : c’est peu, une idée plutôt qu’une réponse.',
     notes: 'Notes du patient',
     notesHintGp: 'jours difficiles récents',
@@ -1057,6 +1059,7 @@ const fr: Translations = {
     trialDoneLabel: 'Ton essai est terminé',
     repeatLabel: 'Un essai à refaire ?',
     repeatBody: 'Il y a {{n}} {{n:semaine|semaines}}, tu as essayé « {{action}} » pendant une semaine. Ça te dit de le refaire ?',
+    trialHarder: 'Tu y as sans doute recours justement les jours où tu as plus mal : ça ne dit pas si ça aide ou non.',
     trialSmall: 'Sur 7 jours, c’est peu : une idée, pas une réponse.',
     trialFew: 'Il y a trop peu de jours de chaque sorte pour comparer, ce n’est pas grave : tu peux continuer une semaine.',
     trialSame: 'Ça va dans le même sens que tes jours d’avant.',

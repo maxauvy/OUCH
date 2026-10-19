@@ -1347,6 +1347,7 @@ function Noticed({ d }: { d: ReportData }) {
       </div>
       <p className="r-small">
         {noticed.length > 0 && f.t.noticedNote} {trials.length > 0 && f.t.noticedTrialNote}
+        {trials.some((x) => x.result.gap > 0) && ` ${f.t.noticedTrialHarder}`}
       </p>
     </>
   )

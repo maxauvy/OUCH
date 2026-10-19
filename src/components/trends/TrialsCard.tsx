@@ -54,6 +54,11 @@ export function TrialsCard({
                     ].join(' · ')
                   : t.trialsFew}
               </p>
+              {result && result.gap > 0 && (
+                <p className="text-caption leading-snug" style={{ color: palette.inkMuted }}>
+                  {t.trialsHarder}
+                </p>
+              )}
               {!running && (
                 <button
                   type="button"
