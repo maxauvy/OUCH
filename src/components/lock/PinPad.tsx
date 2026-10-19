@@ -1,9 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { IconBackspace, IconEye, IconEyeOff } from '@tabler/icons-react'
 import { PIN_LENGTH } from '../../lib/pinLock'
+import { useLuminous } from '../../lib/look'
 import { format, useLanguage, useTranslation } from '../../i18n'
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+/** How long a key stays lit after the finger leaves it, and after a press that did not come from a touch (the keyboard). */
+const LIT_AFTER_RELEASE_MS = 140
+const LIT_AFTER_PRESS_MS = 200
 
 /**
  * Four dots and a round keypad, for typing a code: the lock screen, and the
@@ -26,6 +30,29 @@ export function PinPad({
   const [digits, setDigits] = useState('')
   const [reveal, setReveal] = useState(false)
   const busy = useRef(false)
+  const look = useLuminous()
+  // The key that is lit: held under the finger, then a moment more, so that even a quick tap is seen.
+  const [lit, setLit] = useState<string | null>(null)
+  const litTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+
+  const held = useRef<string | null>(null)
+
+  function light(d: string, forMs?: number) {
+    clearTimeout(litTimer.current)
+    setLit(d)
+    if (forMs !== undefined) litTimer.current = setTimeout(() => setLit(null), forMs)
+  }
+  function touchDown(d: string) {
+    held.current = d
+    light(d)
+  }
+  /** Only a key that was pressed down is released: a pointer passing over it lights nothing. */
+  function touchUp(d: string) {
+    if (held.current !== d) return
+    held.current = null
+    light(d, LIT_AFTER_RELEASE_MS)
+  }
+  useEffect(() => () => clearTimeout(litTimer.current), [])
 
   async function press(d: string) {
     if (disabled || busy.current || digits.length >= PIN_LENGTH) return
@@ -53,8 +80,10 @@ export function PinPad({
       if (e.metaKey || e.ctrlKey || e.altKey) return
       // Typed in a field (the word that confirms an erase), not on the pad.
       if (e.target instanceof Element && e.target.closest('input, textarea')) return
-      if (/^\d$/.test(e.key)) void press(e.key)
-      else if (e.key === 'Backspace') erase()
+      if (/^\d$/.test(e.key)) {
+        if (look) light(e.key, LIT_AFTER_PRESS_MS)
+        void press(e.key)
+      } else if (e.key === 'Backspace') erase()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -95,13 +124,22 @@ export function PinPad({
       </button>
 
       <div className="grid grid-cols-3 gap-x-5 gap-y-4 mt-4 w-full max-w-[300px]" style={{ opacity: disabled ? 0.5 : 1 }}>
-        {KEYS.map((d) => (
-          <Key key={d} onPress={() => void press(d)}>
-            {d}
-          </Key>
+        {[...KEYS, '0'].map((d) => (
+          <Fragment key={d}>
+            {d === '0' && <span aria-hidden />}
+            <Key
+              onPress={() => {
+                if (look) light(d, LIT_AFTER_PRESS_MS)
+                void press(d)
+              }}
+              lit={look && lit === d}
+              onDown={look ? () => touchDown(d) : undefined}
+              onUp={look ? () => touchUp(d) : undefined}
+            >
+              {d}
+            </Key>
+          </Fragment>
         ))}
-        <span aria-hidden />
-        <Key onPress={() => void press('0')}>0</Key>
         <button
           type="button"
           onClick={erase}
@@ -116,13 +154,34 @@ export function PinPad({
   )
 }
 
-function Key({ children, onPress }: { children: string; onPress: () => void }) {
+function Key({
+  children,
+  onPress,
+  lit = false,
+  onDown,
+  onUp,
+}: {
+  children: string
+  onPress: () => void
+  /** The luminous look: the key shows that it is being, or has just been, touched. */
+  lit?: boolean
+  onDown?: () => void
+  onUp?: () => void
+}) {
   return (
     <button
       type="button"
       onClick={onPress}
-      className="mx-auto w-[76px] h-[76px] rounded-full text-[28px] font-medium"
-      style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+      onPointerDown={onDown}
+      onPointerUp={onUp}
+      onPointerCancel={onUp}
+      onPointerLeave={onUp}
+      className={`mx-auto w-[76px] h-[76px] rounded-full text-[28px] font-medium transition-[background-color,box-shadow,transform] duration-75 ${lit ? 'motion-safe:scale-[0.94]' : ''}`}
+      style={{
+        background: lit ? 'color-mix(in srgb, var(--color-brand) 30%, var(--color-surface))' : 'var(--color-brand-soft)',
+        boxShadow: lit ? 'inset 0 0 0 3px var(--color-brand)' : undefined,
+        color: 'var(--color-brand)',
+      }}
     >
       {children}
     </button>

@@ -38,14 +38,10 @@ function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   }, [theme])
 }
 
-/** The stamp the stylesheet reads for the luminous look (see lib/look.ts). */
+/** The look itself is stamped on the page by lib/look.ts; here, the status bar colour that goes with it. */
 function useAppliedLook(theme: 'system' | 'light' | 'dark') {
   const luminous = useLuminous()
   const dark = useIsDark(theme)
-  useEffect(() => {
-    if (luminous) document.documentElement.dataset.look = 'luminous'
-    else delete document.documentElement.dataset.look
-  }, [luminous])
   // The system tints the status bar area with this colour (the notch and the
   // dynamic island on a phone): it follows the gradient's first colour.
   useEffect(() => {

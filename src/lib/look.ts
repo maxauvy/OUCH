@@ -32,6 +32,14 @@ export function setLuminous(on: boolean): void {
   window.dispatchEvent(new Event(EVENT))
 }
 
+/** The stamp the stylesheet reads, put on the page root. Done as soon as this file is loaded and at each change, not in a React effect, so the lock screen (drawn before the rest of the app) already has the look. */
+function stamp(): void {
+  if (isLuminous()) document.documentElement.dataset.look = 'luminous'
+  else delete document.documentElement.dataset.look
+}
+stamp()
+for (const name of [EVENT, 'ouch:early-access-changed', 'storage']) window.addEventListener(name, stamp)
+
 function subscribe(onChange: () => void): () => void {
   window.addEventListener(EVENT, onChange)
   window.addEventListener('ouch:early-access-changed', onChange)
