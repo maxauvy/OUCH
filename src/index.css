@@ -349,8 +349,8 @@ html[data-covered]::after {
    token override or a `--look-*` alias of the measure colours, so the usual
    look is untouched when the stamp is absent. */
 :root[data-look='luminous'] {
-  --look-top: #eef6fd;
-  --look-bg: linear-gradient(180deg, #eef6fd 0%, #f3f8fa 35%, #f6f4fb 100%);
+  --look-top: #d6e9fa;
+  --look-bg: linear-gradient(180deg, #d6e9fa 0%, #e2f1f3 45%, #ebe4f8 100%);
   --color-hairline: #c9d9e6;
   --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 40%, transparent);
   --card-shadow: 0 2px 8px rgba(40, 70, 110, 0.06);
@@ -364,8 +364,8 @@ html[data-covered]::after {
 }
 @media (prefers-color-scheme: dark) {
   :root[data-look='luminous']:not([data-theme='light']) {
-    --look-top: #0f1a24;
-    --look-bg: linear-gradient(180deg, #0f1a24 0%, #111a22 40%, #161425 100%);
+    --look-top: #12283c;
+    --look-bg: linear-gradient(180deg, #12283c 0%, #131f2b 45%, #1d1a3a 100%);
     --color-hairline: rgba(160, 185, 200, 0.16);
     --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
     --card-shadow: none;
@@ -377,8 +377,8 @@ html[data-covered]::after {
   }
 }
 :root[data-look='luminous'][data-theme='dark'] {
-  --look-top: #0f1a24;
-  --look-bg: linear-gradient(180deg, #0f1a24 0%, #111a22 40%, #161425 100%);
+  --look-top: #12283c;
+  --look-bg: linear-gradient(180deg, #12283c 0%, #131f2b 45%, #1d1a3a 100%);
   --color-hairline: rgba(160, 185, 200, 0.16);
   --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
   --card-shadow: none;
@@ -406,6 +406,15 @@ html[data-covered]::after {
 html[data-look='luminous'] {
   background: var(--look-top);
 }
+/* The gradient sits on a layer fixed to the screen, so it stays as visible on a
+   long page as on a short one: the cards scroll over it. */
 html[data-look='luminous'] body {
+  background: transparent;
+}
+html[data-look='luminous'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
   background: var(--look-bg);
 }

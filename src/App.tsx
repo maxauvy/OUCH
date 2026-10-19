@@ -52,7 +52,7 @@ function useAppliedLook(theme: 'system' | 'light' | 'dark') {
     const meta = document.querySelector('meta[name="theme-color"]')
     if (!meta) return
     const usual = meta.getAttribute('content') ?? ''
-    meta.setAttribute('content', luminous ? (dark ? '#0f1a24' : '#eef6fd') : usual)
+    meta.setAttribute('content', luminous ? (dark ? '#12283c' : '#d6e9fa') : usual)
     return () => meta.setAttribute('content', usual)
   }, [luminous, dark])
 }
