@@ -344,12 +344,13 @@ html[data-covered]::after {
   background: var(--color-paper);
 }
 
-/* Luminous look (early access, see lib/look.ts): a lighter background, colour
+/* Luminous look (the app's look; Settings can bring back the classic one, see lib/look.ts): a lighter background, colour
    on section icons and chips, a pill on the pain weather. Everything is a
    token override or a `--look-*` alias of the measure colours, so the usual
    look is untouched when the stamp is absent. */
 :root[data-look='luminous'] {
   --look-top: #d6e9fa;
+  --look-bottom: #ebe4f8;
   --look-bg: linear-gradient(180deg, #d6e9fa 0%, #e2f1f3 45%, #ebe4f8 100%);
   --color-hairline: #c9d9e6;
   --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 40%, transparent);
@@ -365,6 +366,7 @@ html[data-covered]::after {
 @media (prefers-color-scheme: dark) {
   :root[data-look='luminous']:not([data-theme='light']) {
     --look-top: #12283c;
+    --look-bottom: #1d1a3a;
     --look-bg: linear-gradient(180deg, #12283c 0%, #131f2b 45%, #1d1a3a 100%);
     --color-hairline: rgba(160, 185, 200, 0.16);
     --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
@@ -378,6 +380,7 @@ html[data-covered]::after {
 }
 :root[data-look='luminous'][data-theme='dark'] {
   --look-top: #12283c;
+  --look-bottom: #1d1a3a;
   --look-bg: linear-gradient(180deg, #12283c 0%, #131f2b 45%, #1d1a3a 100%);
   --color-hairline: rgba(160, 185, 200, 0.16);
   --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
