@@ -1,31 +1,29 @@
-// The "luminous" look: a lighter background, colour on the section icons and a
-// pill on the pain weather. A per-device try-out, offered in Settings only in
-// early access (see `earlyAccess.ts`), kept in `localStorage` like it. The
-// `data-look` stamp on the page root is what the stylesheet reads.
+// The luminous look: a lighter background, colour on the section icons and a
+// pill on the pain weather. It is the look of the app; a switch in Settings
+// brings back the earlier one (the "classic" look). A per-device choice, kept in
+// `localStorage` so that it is known before anything is drawn (the lock screen
+// comes first). Only the choice to go back is stored, so a new device starts
+// with the luminous look. The `data-look` stamp on the page root is what the
+// stylesheet reads.
 
 import { useSyncExternalStore } from 'react'
-import { isEarlyAccess } from './earlyAccess'
 
-const KEY = 'ouch:look-luminous'
+const KEY = 'ouch:look'
+const CLASSIC = 'classic'
 const EVENT = 'ouch:look-changed'
 
-function stored(): boolean {
-  try {
-    return localStorage.getItem(KEY) === '1'
-  } catch {
-    return false
-  }
-}
-
-/** On only while early access is on: switching early access off brings the usual look back. */
 export function isLuminous(): boolean {
-  return isEarlyAccess() && stored()
+  try {
+    return localStorage.getItem(KEY) !== CLASSIC
+  } catch {
+    return true
+  }
 }
 
 export function setLuminous(on: boolean): void {
   try {
-    if (on) localStorage.setItem(KEY, '1')
-    else localStorage.removeItem(KEY)
+    if (on) localStorage.removeItem(KEY)
+    else localStorage.setItem(KEY, CLASSIC)
   } catch {
     // The choice cannot be kept: the switch will not move.
   }
@@ -38,19 +36,17 @@ function stamp(): void {
   else delete document.documentElement.dataset.look
 }
 stamp()
-for (const name of [EVENT, 'ouch:early-access-changed', 'storage']) window.addEventListener(name, stamp)
+for (const name of [EVENT, 'storage']) window.addEventListener(name, stamp)
 
 function subscribe(onChange: () => void): () => void {
   window.addEventListener(EVENT, onChange)
-  window.addEventListener('ouch:early-access-changed', onChange)
   window.addEventListener('storage', onChange)
   return () => {
     window.removeEventListener(EVENT, onChange)
-    window.removeEventListener('ouch:early-access-changed', onChange)
     window.removeEventListener('storage', onChange)
   }
 }
 
 export function useLuminous(): boolean {
-  return useSyncExternalStore(subscribe, isLuminous, () => false)
+  return useSyncExternalStore(subscribe, isLuminous, () => true)
 }

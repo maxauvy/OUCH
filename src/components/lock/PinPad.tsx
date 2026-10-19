@@ -6,8 +6,8 @@ import { format, useLanguage, useTranslation } from '../../i18n'
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 /** How long a key stays lit after the finger leaves it, and after a press that did not come from a touch (the keyboard). */
-const LIT_AFTER_RELEASE_MS = 140
-const LIT_AFTER_PRESS_MS = 200
+const LIT_AFTER_RELEASE_MS = 80
+const LIT_AFTER_PRESS_MS = 110
 
 /**
  * Four dots and a round keypad, for typing a code: the lock screen, and the

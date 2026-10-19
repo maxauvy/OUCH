@@ -368,17 +368,15 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
               </button>
             ))}
           </div>
-          {earlyAccess && (
-            <div className="flex items-center gap-3 mt-4 pt-4" style={{ borderTop: '1px solid var(--color-hairline)' }}>
-              <div className="flex-1 min-w-0">
-                <p className="text-body font-medium">{t.settings.lookLabel}</p>
-                <p className="text-caption mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
-                  {t.settings.lookHelper}
-                </p>
-              </div>
-              <Toggle checked={luminous} onChange={setLuminous} label={t.settings.lookLabel} />
+          <div className="flex items-center gap-3 mt-4 pt-4" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+            <div className="flex-1 min-w-0">
+              <p className="text-body font-medium">{t.settings.lookLabel}</p>
+              <p className="text-caption mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
+                {t.settings.lookHelper}
+              </p>
             </div>
-          )}
+            <Toggle checked={luminous} onChange={setLuminous} label={t.settings.lookLabel} />
+          </div>
         </Card>
       </SettingsGroup>
 

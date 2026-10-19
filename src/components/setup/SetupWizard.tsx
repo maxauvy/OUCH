@@ -74,7 +74,7 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
       aria-labelledby={`${ids}-title`}
       className="fixed inset-0 z-50 overflow-y-auto"
       // Keeps keyboard focus clear of the sticky buttons at the bottom.
-      style={{ background: 'var(--color-paper)', scrollPaddingBottom: 96 }}
+      style={{ background: 'var(--look-bg, var(--color-paper))', scrollPaddingBottom: 96 }}
     >
       <div className="min-h-full flex justify-center px-5 pt-5">
         <div className="w-full max-w-sm flex flex-col gap-4">
@@ -205,7 +205,7 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
           {step === 'done' && <DoneStep heading={heading(t.setup.doneTitle)} />}
 
           {/* Sticky so the buttons stay reachable when a step is taller than the screen */}
-          <div className="sticky bottom-0 -mx-1 px-1 pt-2 pb-5 mt-auto flex flex-col gap-2" style={{ background: 'var(--color-paper)' }}>
+          <div className="sticky bottom-0 -mx-1 px-1 pt-2 pb-5 mt-auto flex flex-col gap-2" style={{ background: 'var(--look-bottom, var(--color-paper))' }}>
             <div className="flex gap-2">
             {index > 0 && (
               <button
