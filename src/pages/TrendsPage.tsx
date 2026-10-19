@@ -4,6 +4,7 @@ import { subDays } from 'date-fns'
 
 import { Footer } from '../components/layout/Footer'
 import { FlaresCard } from '../components/trends/FlaresCard'
+import { TrialsCard } from '../components/trends/TrialsCard'
 import { LeadsCard } from '../components/trends/LeadsCard'
 import { MedicationsCard } from '../components/trends/MedicationsCard'
 import { PainTrendChart, type ChartMarker } from '../components/trends/PainTrendChart'
@@ -20,7 +21,7 @@ import { useSettings } from '../hooks/useSettings'
 import { todayISO, updateSettings } from '../db'
 import { flareDayCount, flaresOverlapping } from '../lib/flares'
 import { remember } from '../lib/leadHints'
-import { startTrial } from '../lib/leadTrial'
+import { restartTrial, startTrial, type LeadTrial } from '../lib/leadTrial'
 import { arrangeLeads, choiceFor, findLeads, leadFactors, PATTERN_MIN_DAYS, type Lead, type LeadChoice } from '../lib/leads'
 import { updateLeadsSeen } from '../lib/leadsSeenStore'
 import { formatPosology } from '../lib/medicationFormat'
@@ -89,6 +90,7 @@ export function TrendsPage() {
     const trial = startTrial(lead, todayISO())
     if (trial) void updateSettings({ leadTrial: trial })
   }
+  const againTrial = (past: LeadTrial) => void updateSettings({ leadTrial: restartTrial(past, todayISO()) })
   const declineTrial = (lead: Lead) => void updateLeadsSeen((seen) => ({ ...seen, declined: remember(seen.declined, [lead.key]) }))
   const clearLead = (lead: Lead) => {
     const { [lead.key]: _gone, ...rest } = settings.leadChoices ?? {}
@@ -256,6 +258,16 @@ export function TrendsPage() {
               declined={settings.leadsSeen?.declined ?? []}
               onStartTrial={beginTrial}
               onDeclineTrial={declineTrial}
+            />
+          )}
+
+          {settings.leadTrialHistory && settings.leadTrialHistory.length > 0 && (
+            <TrialsCard
+              history={settings.leadTrialHistory}
+              entries={entries}
+              today={today}
+              running={!!settings.leadTrial}
+              onAgain={againTrial}
             />
           )}
         </>

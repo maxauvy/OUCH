@@ -30,6 +30,11 @@ export function startTrial(lead: Lead, today: string): LeadTrial | null {
   return { key: lead.key, action: lead.action, start: today, end: shiftISO(today, TRIAL_DAYS - 1) }
 }
 
+/** "Do it again": a new week from today for an action tried before. */
+export function restartTrial(trial: LeadTrial, today: string): LeadTrial {
+  return { key: trial.key, action: trial.action, start: today, end: shiftISO(today, TRIAL_DAYS - 1) }
+}
+
 /** "Carry on for another week": a new week from today, the same action. */
 export function continueTrial(trial: LeadTrial, today: string): LeadTrial {
   return { ...trial, start: today, end: shiftISO(today, TRIAL_DAYS - 1) }

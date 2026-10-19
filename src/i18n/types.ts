@@ -229,6 +229,16 @@ export interface Translations {
     leadTrialStart: string
     leadTrialLater: string
     leadTrialRunning: string
+    trialsTitle: string
+    trialsCaption: string
+    /** `{{start}}` and `{{end}}` as dates */
+    trialsRange: string
+    /** `{{mean}}` pain, `{{n}}` days, `{{action}}` as written */
+    trialsWith: string
+    trialsWithout: string
+    trialsFew: string
+    trialsAgain: string
+    trialsRunning: string
     medicationsTitle: string
     medicationsCaption: string
     daysOne: string

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry } from '../src/db/types.ts'
 import type { Lead } from '../src/lib/leads.ts'
-import { MAX_TRIAL_HISTORY, archiveTrial, continueTrial, reportTrials, startTrial, trialStatus, triedKeys, type LeadTrial } from '../src/lib/leadTrial.ts'
+import { MAX_TRIAL_HISTORY, archiveTrial, continueTrial, reportTrials, restartTrial, startTrial, trialStatus, triedKeys, type LeadTrial } from '../src/lib/leadTrial.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
 const START = '2026-10-05'
@@ -132,4 +132,9 @@ test('the leads tried are the one under way and the closed ones, once each', () 
   const other: LeadTrial = { ...trial, key: 'action:yoga', action: 'Yoga' }
   assert.deepEqual(triedKeys(undefined, undefined), [])
   assert.deepEqual(triedKeys(trial, [trial, other]), [trial.key, other.key])
+})
+
+test('doing a week again is the same action from today, for seven days', () => {
+  const again = restartTrial(trial, day(60))
+  assert.deepEqual(again, { key: trial.key, action: trial.action, start: day(60), end: day(66) })
 })
