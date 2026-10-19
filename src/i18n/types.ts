@@ -161,6 +161,35 @@ export interface Translations {
     flareOngoing: string
     /** In the chart's legend and tooltip */
     flareBand: string
+    zonesTitle: string
+    zonesLess: string
+    zonesMore: string
+    /** `{{k}}` days of `{{n}}` */
+    zonesDaysOf: string
+    zonesNote: string
+    zonesFlareTitle: string
+    /** `{{n}}`, with a plural */
+    zonesFlareDays: string
+    zonesFlareDaysLabel: string
+    zonesOtherDaysLabel: string
+    zonesFlareIntro: string
+    zonesFlareNone: string
+    /** `{{flare}}`, `{{other}}`: the days needed */
+    zonesFlareWaiting: string
+    zonesFlareColFlare: string
+    zonesFlareColOther: string
+    /** `{{k}}` of `{{n}}` days */
+    zonesFlareCell: string
+    zonesFlareNote: string
+    zonesWeeksTitle: string
+    zonesWeeksIntro: string
+    zonesWeeksFlareRow: string
+    zonesWeeksNone: string
+    zonesWeeksAll: string
+    zonesWeeksUnlogged: string
+    /** `{{date}}`, `{{k}}` days of `{{n}}` */
+    zonesWeeksCell: string
+    zonesWeeksNote: string
     notLogged: string
     weekdayTitle: string
     weekdayBest: string
