@@ -53,7 +53,15 @@ export function TabBar({
               className="flex-1 flex flex-col items-center gap-0.5 py-2.5"
               style={{ color: isActive ? 'var(--color-brand)' : 'var(--color-ink-muted)' }}
             >
-              <span className="relative">
+              <span
+                className="relative"
+                style={{
+                  background: isActive ? 'var(--tab-pill, transparent)' : undefined,
+                  borderRadius: 999,
+                  padding: 'var(--tab-pill-pad, 0)',
+                  margin: 'var(--tab-pill-margin, 0)',
+                }}
+              >
                 <Icon size={22} stroke={isActive ? 2 : 1.6} aria-hidden />
                 {badged.includes(tab.id) && (
                   <span

@@ -81,7 +81,7 @@ export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => voi
         <button
           onClick={() => setSharing(true)}
           className="rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)] flex items-center justify-center gap-2"
-          style={{ background: 'var(--color-brand)' }}
+          style={{ background: 'var(--cta-bg, var(--color-brand))' }}
         >
           <IconShare size={18} aria-hidden />
           {t.today.share}

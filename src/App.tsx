@@ -1,4 +1,5 @@
 import { useLockState } from './lib/appLock'
+import { useLuminous } from './lib/look'
 import { AppLockGate } from './components/lock/AppLockGate'
 import { handleProviderReturn } from './lib/autoBackupRuntime'
 import { useAutoBackup } from './hooks/useAutoBackup'
@@ -36,6 +37,15 @@ function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   }, [theme])
 }
 
+/** The stamp the stylesheet reads for the luminous look (see lib/look.ts). */
+function useAppliedLook() {
+  const luminous = useLuminous()
+  useEffect(() => {
+    if (luminous) document.documentElement.dataset.look = 'luminous'
+    else delete document.documentElement.dataset.look
+  }, [luminous])
+}
+
 function useAppliedLanguage(language: Language) {
   useEffect(() => {
     document.documentElement.lang = language
@@ -53,6 +63,7 @@ function AppShell() {
   const todayEntry = useTodayEntry()
   const leadList = useLeadList()
   useAppliedTheme(settings.theme)
+  useAppliedLook()
   useAutoBackup()
   // Set when the data was just deleted from Settings: said once at the start.
   const [wiped] = useState(wipedNotice)

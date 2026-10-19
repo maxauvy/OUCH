@@ -5,7 +5,8 @@ import { fetchDailyWeather, formatCoordinates, WeatherError } from '../../lib/we
 import { saveCurrentLocation } from '../../lib/weatherLocation'
 import type { Settings } from '../../db/types'
 import { useTranslation } from '../../i18n'
-import { IconMapPin } from '@tabler/icons-react'
+import { IconCloud, IconMapPin } from '@tabler/icons-react'
+import { useLuminous } from '../../lib/look'
 
 const CONDITIONS: ExternalWeatherCondition[] = ['ensoleille', 'variable', 'nuageux', 'pluvieux', 'orageux', 'neige']
 
@@ -21,6 +22,7 @@ export function WeatherField({
   settings: Settings
 }) {
   const t = useTranslation()
+  const look = useLuminous()
   const tempId = useId()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -51,7 +53,18 @@ export function WeatherField({
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-        <span className="font-medium text-body">{t.weatherField.label}</span>
+        <span className="font-medium text-body flex items-center gap-2.5">
+          {look && (
+            <span
+              className="inline-flex items-center justify-center shrink-0 rounded-[7px]"
+              style={{ width: 28, height: 28, background: 'var(--look-outdoor-soft)', color: 'var(--look-outdoor)' }}
+              aria-hidden
+            >
+              <IconCloud size={17} stroke={1.8} />
+            </span>
+          )}
+          {t.weatherField.label}
+        </span>
         <button
           type="button"
           onClick={handleAutoFetch}
@@ -98,6 +111,7 @@ export function WeatherField({
           <Chip
             key={c}
             label={t.weatherConditions[c]}
+            tone="outdoor"
             selected={value?.condition === c}
             onClick={() => onChange({ ...value, source: value?.source === 'auto' && value.condition === c ? 'auto' : 'manual', condition: c })}
           />

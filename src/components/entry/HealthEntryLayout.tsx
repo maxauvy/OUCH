@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { format as formatDate, subDays } from 'date-fns'
 import {
   IconActivityHeartbeat,
+  IconAdjustmentsHorizontal,
   IconArrowDownRight,
   IconArrowRight,
   IconArrowUpRight,
@@ -11,6 +12,7 @@ import {
   IconClock,
   IconCloud,
   IconDroplet,
+  IconLeaf,
   IconMapPin,
   IconPencil,
   IconPill,
@@ -38,6 +40,7 @@ import { useHardDays } from '../../hooks/useHardDays'
 import { updateSettings } from '../../db'
 import { WeatherField } from './WeatherField'
 import { format, useLocale, useTranslation } from '../../i18n'
+import { useLuminous } from '../../lib/look'
 
 type Category = 'pain' | 'fatigue' | 'sleep' | 'stress' | 'fog' | 'mood' | 'activity' | 'cycle'
 
@@ -148,11 +151,17 @@ function PainBars({ values }: { values: (number | undefined)[] }) {
  * is set, so logging the first value doesn't push the page down. */
 function WeatherHero({ weather }: { weather: PainWeather | null }) {
   const t = useTranslation()
+  const look = useLuminous()
   const tint = weather?.color ?? 'var(--color-ink-muted)'
+  const flat = `color-mix(in srgb, ${tint} ${weather ? 16 : 8}%, var(--color-surface))`
   return (
     <div
       className="rounded-[var(--radius-card)] px-4 py-3.5 flex items-center gap-3.5"
-      style={{ background: `color-mix(in srgb, ${tint} ${weather ? 16 : 8}%, var(--color-surface))` }}
+      style={{
+        background: look
+          ? `linear-gradient(135deg, ${flat}, color-mix(in srgb, var(--color-weather-5) ${weather ? 10 : 5}%, var(--color-surface)))`
+          : flat,
+      }}
     >
       <span
         className="w-16 h-16 shrink-0 rounded-full flex items-center justify-center"
@@ -182,9 +191,18 @@ function WeatherHero({ weather }: { weather: PainWeather | null }) {
               }}
             />
           ))}
-          <span className="text-caption ml-1.5" style={{ color: 'var(--color-ink-muted)' }}>
-            {weather ? format(t.weatherCard.levelOf, { n: weather.level }) : '\u00a0'}
-          </span>
+          {look && weather ? (
+            <span
+              className="text-caption font-semibold ml-2 rounded-full px-2.5 py-0.5"
+              style={{ background: 'var(--color-surface)', color: weather.text }}
+            >
+              {format(t.weatherCard.levelOf, { n: weather.level })}
+            </span>
+          ) : (
+            <span className="text-caption ml-1.5" style={{ color: 'var(--color-ink-muted)' }}>
+              {weather ? format(t.weatherCard.levelOf, { n: weather.level }) : '\u00a0'}
+            </span>
+          )}
         </div>
       </div>
     </div>
@@ -354,11 +372,13 @@ export function HealthEntryLayout({
 
   const zonesBlock = has('painLocations') ? (
       <>
-        <GroupCaption>{t.entryForm.whereHurts}</GroupCaption>
+        <GroupCaption icon={IconMapPin} tone="fog">
+          {t.entryForm.whereHurts}
+        </GroupCaption>
         <Card className="!p-4">
           <div className="flex flex-wrap gap-2">
             {BODY_ZONES.map((z) => (
-              <Chip key={z} label={t.bodyZones[z]} selected={zones.includes(z)} onClick={() => toggleZone(z)} />
+              <Chip key={z} label={t.bodyZones[z]} selected={zones.includes(z)} onClick={() => toggleZone(z)} tone="fog" />
             ))}
           </div>
         </Card>
@@ -366,7 +386,9 @@ export function HealthEntryLayout({
   ) : null
   const medicationsBlock = has('medications') ? (
       <>
-        <GroupCaption>{t.entryForm.medicationsTaken}</GroupCaption>
+        <GroupCaption icon={IconPill} tone="meds">
+          {t.entryForm.medicationsTaken}
+        </GroupCaption>
         <Card className="!p-4">
           <MedicationsField
             date={date}
@@ -380,7 +402,9 @@ export function HealthEntryLayout({
   ) : null
   const notesBlock = has('notes') ? (
       <>
-        <GroupCaption>{t.entryForm.notes}</GroupCaption>
+        <GroupCaption icon={IconPencil} tone="weather">
+          {t.entryForm.notes}
+        </GroupCaption>
         <Card className="!p-4">
           <textarea
             value={local.notes ?? ''}
@@ -427,7 +451,7 @@ export function HealthEntryLayout({
         {isToday && settings.displayName && (
           <span
             className="w-9 h-9 rounded-full flex items-center justify-center text-caption font-semibold"
-            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+            style={{ background: 'var(--avatar-bg, var(--color-brand-soft))', color: 'var(--color-brand)' }}
             aria-hidden
           >
             {initials(settings.displayName)}
@@ -536,7 +560,9 @@ export function HealthEntryLayout({
 
       {!lightToday && metricRows.length > 0 && (
         <>
-          <GroupCaption>{t.entryForm.measuresTitle}</GroupCaption>
+          <GroupCaption icon={IconAdjustmentsHorizontal} tone="sleep">
+            {t.entryForm.measuresTitle}
+          </GroupCaption>
           {/* The first row's top border would double the card's own edge. */}
           <Card className="!p-0 overflow-hidden [&>div:first-child]:!border-t-0">{metricRows}</Card>
         </>
@@ -552,7 +578,9 @@ export function HealthEntryLayout({
 
       {!lightToday && has('positiveActions') && (
         <>
-          <GroupCaption>{t.entryForm.positiveActionsTitle}</GroupCaption>
+          <GroupCaption icon={IconLeaf} tone="mood">
+            {t.entryForm.positiveActionsTitle}
+          </GroupCaption>
           <Card className="!p-4">
             <TagInput
               values={local.positiveActions ?? []}

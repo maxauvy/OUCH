@@ -343,3 +343,58 @@ html[data-covered]::after {
   z-index: 2147483647;
   background: var(--color-paper);
 }
+
+/* Luminous look (early access, see lib/look.ts): a lighter background, colour
+   on section icons and chips, a pill on the pain weather. Everything is a
+   token override or a `--look-*` alias of the measure colours, so the usual
+   look is untouched when the stamp is absent. */
+:root[data-look='luminous'] {
+  --look-bg: linear-gradient(180deg, #e6f1fb 0%, #edf5f6 35%, #f3f1fa 100%);
+  --color-hairline: #dae5ee;
+  --card-shadow: 0 2px 8px rgba(40, 70, 110, 0.05);
+  --avatar-bg: linear-gradient(135deg, #bfe0f5, #d8cff3);
+  --tab-pill: linear-gradient(135deg, #d3e8f7, #e0d9f5);
+  --tab-pill-pad: 2px 16px;
+  --tab-pill-margin: -2px 0;
+  --cta-bg: linear-gradient(135deg, #0d5c8c, #2f5fa8);
+  --look-outdoor: #1d6c92;
+  --look-outdoor-soft: #e3f1f8;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-look='luminous']:not([data-theme='light']) {
+    --look-bg: linear-gradient(180deg, #0f1a24 0%, #111a22 40%, #161425 100%);
+    --color-hairline: rgba(160, 185, 200, 0.16);
+    --card-shadow: none;
+    --avatar-bg: linear-gradient(135deg, #1d3d56, #2c2a52);
+    --tab-pill: linear-gradient(135deg, #1d3d56, #2c2a52);
+    --cta-bg: var(--color-brand);
+    --look-outdoor: #6cc0e6;
+    --look-outdoor-soft: #14303d;
+  }
+}
+:root[data-look='luminous'][data-theme='dark'] {
+  --look-bg: linear-gradient(180deg, #0f1a24 0%, #111a22 40%, #161425 100%);
+  --color-hairline: rgba(160, 185, 200, 0.16);
+  --card-shadow: none;
+  --avatar-bg: linear-gradient(135deg, #1d3d56, #2c2a52);
+  --tab-pill: linear-gradient(135deg, #1d3d56, #2c2a52);
+  --cta-bg: var(--color-brand);
+  --look-outdoor: #6cc0e6;
+  --look-outdoor-soft: #14303d;
+}
+/* The measure colours, under the names the components use for the look. */
+:root[data-look='luminous'] {
+  --look-fog: var(--cat-fog);
+  --look-fog-soft: var(--cat-fog-soft);
+  --look-sleep: var(--cat-sleep);
+  --look-sleep-soft: var(--cat-sleep-soft);
+  --look-mood: var(--cat-mood);
+  --look-mood-soft: var(--cat-mood-soft);
+  --look-meds: var(--cat-meds);
+  --look-meds-soft: var(--cat-meds-soft);
+  --look-weather: var(--cat-weather);
+  --look-weather-soft: var(--cat-weather-soft);
+}
+html[data-look='luminous'] body {
+  background: var(--look-bg);
+}
