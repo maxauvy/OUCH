@@ -293,6 +293,11 @@ const fr: Translations = {
     leadActionLow: 'les autres jours',
     leadSentenceLower: '{{when}}, ta douleur est en moyenne {{gap}} {{n:point|points}} plus basse.',
     leadSentenceHigher: '{{when}}, ta douleur est en moyenne {{gap}} {{n:point|points}} plus haute.',
+    leadActionSentenceHigher: 'Tu notes {{action}} surtout les jours plus douloureux : ta douleur y est en moyenne {{gap}} {{n:point|points}} plus haute.',
+    leadActionSentenceHigherDay:
+      'Les jours avec {{action}} étaient plus difficiles ({{gap}} {{n:point|points}} de plus en moyenne). Ça ne dit pas que ça y est pour quelque chose : tu y as sans doute recours justement ces jours-là.',
+    leadActionLowerDayNote: 'Peut-être aussi l’inverse : on en fait plus quand ça va mieux.',
+    leadNoteActionHigher: 'Tu y as sans doute recours justement quand tu as plus mal, donc ça ne dit pas que ça aide ou non. Un essai d’une semaine compare mieux. C’est une piste, pas une preuve.',
     leadBasisScale: 'Sur {{n}} jours notés.',
     leadBasisAction: 'Sur {{n}} jours notés : {{a}} avec, {{b}} sans.',
     leadNoteSleep: 'Une douleur forte abîme aussi le sommeil : ça va peut-être dans les deux sens. C’est une piste, pas une preuve.',

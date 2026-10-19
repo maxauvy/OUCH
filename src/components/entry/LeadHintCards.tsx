@@ -9,7 +9,7 @@ import type { LoggedEntry } from '../../db/types'
 import type { WeeklyFinding } from '../../lib/weeklySentence'
 import { updateLeadsSeen } from '../../lib/leadsSeenStore'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
-import { leadSentence, capitalise } from '../trends/leadTexts'
+import { leadDayNote, leadSentence, capitalise } from '../trends/leadTexts'
 
 const PRIMARY = { background: 'var(--color-brand)', color: 'var(--color-on-brand)' }
 const SECONDARY = { boxShadow: 'inset 0 0 0 1px var(--color-hairline)', color: 'var(--color-ink)', background: 'var(--color-surface)' }
@@ -45,6 +45,8 @@ export function LeadPromptCard({
   const { intlLocale } = useLocale()
   const nf = new Intl.NumberFormat(intlLocale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 
+  const note = leadDayNote(lead, t.trends)
+
   // Said once: remember it was shown, so the next day brings another one or none.
   useEffect(() => {
     void updateLeadsSeen((seen) =>
@@ -71,7 +73,8 @@ export function LeadPromptCard({
       </span>
       <div className="min-w-0">
         <p className="text-body font-semibold">{t.leadHints.promptLabel}</p>
-        <p className="text-body mt-0.5">{leadSentence(lead, t.trends, nf, language)}</p>
+        <p className="text-body mt-0.5">{leadSentence(lead, t.trends, nf, language, 'day')}</p>
+        {note && <p className="text-body mt-1" style={{ color: 'var(--color-ink-muted)' }}>{note}</p>}
         <div className="flex flex-wrap gap-2 mt-2.5">
           <button
             type="button"

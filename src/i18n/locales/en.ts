@@ -291,6 +291,11 @@ const en: Translations = {
     leadActionLow: 'on the other days',
     leadSentenceLower: '{{when}}, your pain is on average {{gap}} {{n:point|points}} lower.',
     leadSentenceHigher: '{{when}}, your pain is on average {{gap}} {{n:point|points}} higher.',
+    leadActionSentenceHigher: 'You note {{action}} mostly on harder days: your pain is on average {{gap}} {{n:point|points}} higher then.',
+    leadActionSentenceHigherDay:
+      'Days with {{action}} were harder ({{gap}} {{n:point|points}} more on average). That does not say it has anything to do with it: you probably turn to it on exactly those days.',
+    leadActionLowerDayNote: 'It may be the other way round too: people do more on the days they feel better.',
+    leadNoteActionHigher: 'You probably turn to it just when you hurt more, so this does not say whether it helps. A one-week trial compares better. It is a lead, not proof.',
     leadBasisScale: 'Over {{n}} logged days.',
     leadBasisAction: 'Over {{n}} logged days: {{a}} with, {{b}} without.',
     leadNoteSleep: 'Strong pain also wrecks sleep, so it may go both ways. It is a lead, not proof.',
