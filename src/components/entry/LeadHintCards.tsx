@@ -62,7 +62,7 @@ export function LeadPromptCard({
     <section
       aria-label={t.leadHints.promptLabel}
       className="relative flex gap-3 rounded-[var(--radius-card)] py-3.5 pl-3.5 pr-12"
-      style={{ background: 'var(--color-brand-soft)' }}
+      style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}
     >
       <span
         className="w-9 h-9 shrink-0 rounded-full flex items-center justify-center"
@@ -116,7 +116,7 @@ export function RepeatTrialCard({ trial, date }: { trial: LeadTrial; date: strin
   const close = () => updateLeadsSeen((seen) => ({ ...seen, repeat: { date, key: trial.key, dismissed: true } }))
 
   return (
-    <section aria-label={lh.repeatLabel} className="relative rounded-[var(--radius-card)] py-3.5 pl-4 pr-12" style={{ background: 'var(--color-brand-soft)' }}>
+    <section aria-label={lh.repeatLabel} className="relative rounded-[var(--radius-card)] py-3.5 pl-4 pr-12" style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}>
       <p className="text-caption font-semibold uppercase tracking-[0.06em]" style={{ color: 'var(--color-brand)' }}>
         {lh.repeatLabel}
       </p>
@@ -144,7 +144,7 @@ export function WeeklyCard({ finding, date, onSee }: { finding: WeeklyFinding; d
     <section
       aria-label={t.weeklyLabel}
       className="relative rounded-[var(--radius-card)] py-3.5 pl-4 pr-12"
-      style={{ background: 'var(--color-brand-soft)' }}
+      style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}
     >
       <p className="text-caption font-semibold uppercase tracking-[0.06em]" style={{ color: 'var(--color-brand)' }}>
         {t.weeklyLabel}
@@ -162,7 +162,7 @@ export function WeeklyCard({ finding, date, onSee }: { finding: WeeklyFinding; d
 export function TrialPausedCard({ trial }: { trial: LeadTrial }) {
   const lh = useTranslation().leadHints
   return (
-    <section aria-label={lh.trialLabel} className="rounded-[var(--radius-card)] px-4 py-3" style={{ background: 'var(--color-brand-soft)' }}>
+    <section aria-label={lh.trialLabel} className="rounded-[var(--radius-card)] px-4 py-3" style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}>
       <p className="text-caption font-semibold uppercase tracking-[0.06em]" style={{ color: 'var(--color-brand)' }}>
         {lh.trialLabel} · {capitalise(trial.action)}
       </p>
@@ -204,7 +204,7 @@ export function TrialCard({
 
   if (!status.over) {
     return (
-      <section aria-label={lh.trialLabel} className="rounded-[var(--radius-card)] p-4" style={{ background: 'var(--color-brand-soft)' }}>
+      <section aria-label={lh.trialLabel} className="rounded-[var(--radius-card)] p-4" style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}>
         <p className="text-caption font-semibold uppercase tracking-[0.06em]" style={{ color: 'var(--color-brand)' }}>
           {lh.trialLabel}
         </p>
@@ -242,7 +242,7 @@ export function TrialCard({
   const [soft, hard] = r && withSide && withoutSide ? (r.gap <= 0 ? [withSide, withoutSide] : [withoutSide, withSide]) : [null, null]
   const keepable = !kept && lead
   return (
-    <section aria-label={lh.trialDoneLabel} className="rounded-[var(--radius-card)] p-4" style={{ background: 'var(--color-brand-soft)' }}>
+    <section aria-label={lh.trialDoneLabel} className="rounded-[var(--radius-card)] p-4" style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}>
       <p className="text-caption font-semibold uppercase tracking-[0.06em]" style={{ color: 'var(--color-brand)' }}>
         {lh.trialDoneLabel}
       </p>

@@ -1,5 +1,6 @@
 import { useLockState } from './lib/appLock'
 import { useLuminous } from './lib/look'
+import { useIsDark } from './hooks/useIsDark'
 import { AppLockGate } from './components/lock/AppLockGate'
 import { handleProviderReturn } from './lib/autoBackupRuntime'
 import { useAutoBackup } from './hooks/useAutoBackup'
@@ -38,12 +39,22 @@ function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
 }
 
 /** The stamp the stylesheet reads for the luminous look (see lib/look.ts). */
-function useAppliedLook() {
+function useAppliedLook(theme: 'system' | 'light' | 'dark') {
   const luminous = useLuminous()
+  const dark = useIsDark(theme)
   useEffect(() => {
     if (luminous) document.documentElement.dataset.look = 'luminous'
     else delete document.documentElement.dataset.look
   }, [luminous])
+  // The system tints the status bar area with this colour (the notch and the
+  // dynamic island on a phone): it follows the gradient's first colour.
+  useEffect(() => {
+    const meta = document.querySelector('meta[name="theme-color"]')
+    if (!meta) return
+    const usual = meta.getAttribute('content') ?? ''
+    meta.setAttribute('content', luminous ? (dark ? '#0f1a24' : '#eef6fd') : usual)
+    return () => meta.setAttribute('content', usual)
+  }, [luminous, dark])
 }
 
 function useAppliedLanguage(language: Language) {
@@ -63,7 +74,7 @@ function AppShell() {
   const todayEntry = useTodayEntry()
   const leadList = useLeadList()
   useAppliedTheme(settings.theme)
-  useAppliedLook()
+  useAppliedLook(settings.theme)
   useAutoBackup()
   // Set when the data was just deleted from Settings: said once at the start.
   const [wiped] = useState(wipedNotice)
