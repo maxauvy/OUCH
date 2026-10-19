@@ -4,6 +4,12 @@ Les changements notables d'OUCH sont notés ici. Le format suit [Keep a Changelo
 
 Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/releases), et le site déployé affiche en pied de page la version qu'il exécute (avec le commit entre deux versions).
 
+## [Non publié]
+
+### Modifié
+- **Où as-tu mal ? se saisit sur une silhouette.** On touche une grande région (tête et cou, épaules et bras, tronc, hanches et jambes), puis on précise la partie et le côté, gauche ou droite ; face et dos se changent d'un bouton. Les zones marquées s'éclairent d'un halo rouge doux sur la silhouette. Les zones passent de 13 à 24 : les 19 régions de l'index de douleur diffuse (WPI), côtés distingués, plus la tête, les mains et les pieds.
+- **Rien n'est converti à l'aveugle.** Les saisies d'avant (« Bras », « Jambes »…) ne disent pas le côté : elles sont gardées telles quelles, marquées « ancien », et la personne peut les retirer ou les remplacer. Les sauvegardes d'avant restent lisibles.
+
 ## [0.6.1] - 2026-10-16
 
 Une version d'entretien, après une revue du code de la semaine : deux corrections, une dans le rapport, et une protection à la restauration d'une sauvegarde ; le reste est du rangement.

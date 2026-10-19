@@ -21,12 +21,11 @@ import {
   IconWalk,
   type Icon,
 } from '@tabler/icons-react'
-import type { BodyZone, DailyEntry, Medication, PainWeather, Settings } from '../../db/types'
-import { BODY_ZONES } from '../../db/types'
+import type { DailyEntry, Medication, PainWeather, Settings } from '../../db/types'
 import { todayISO } from '../../db'
 import { computePainWeather } from '../../lib/painWeather'
 import { Card, GroupCaption } from '../ui/Card'
-import { Chip } from '../ui/Chip'
+import { BodyMap } from './BodyMap'
 import { Slider } from '../ui/Slider'
 import { FlarePainScale } from './FlarePainScale'
 import { Toggle } from '../ui/Toggle'
@@ -281,11 +280,6 @@ export function HealthEntryLayout({
             })
           : ''
 
-  const zones = local.painLocations ?? []
-  function toggleZone(z: BodyZone) {
-    setField('painLocations', zones.includes(z) ? zones.filter((x) => x !== z) : [...zones, z])
-  }
-
   const metricRows: ReactNode[] = []
   if (has('fatigue'))
     metricRows.push(
@@ -378,11 +372,7 @@ export function HealthEntryLayout({
           {t.entryForm.whereHurts}
         </GroupCaption>
         <Card className="!p-4">
-          <div className="flex flex-wrap gap-2">
-            {BODY_ZONES.map((z) => (
-              <Chip key={z} label={t.bodyZones[z]} selected={zones.includes(z)} onClick={() => toggleZone(z)} tone="fog" />
-            ))}
-          </div>
+          <BodyMap value={local.painLocations ?? []} onChange={(zones) => setField('painLocations', zones)} />
         </Card>
       </>
   ) : null
@@ -426,7 +416,7 @@ export function HealthEntryLayout({
 
   // The lighter form: what follows the pain, offered one part at a time.
   const lightItems: LightItem[] = []
-  if (zonesBlock) lightItems.push({ key: 'zones', label: t.hardDays.lightZones, icon: IconMapPin, filled: zones.length > 0, content: zonesBlock })
+  if (zonesBlock) lightItems.push({ key: 'zones', label: t.hardDays.lightZones, icon: IconMapPin, filled: (local.painLocations?.length ?? 0) > 0, content: zonesBlock })
   if (medicationsBlock)
     lightItems.push({
       key: 'meds',

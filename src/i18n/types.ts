@@ -2,6 +2,8 @@
 // here means adding it to *every* locale file — TypeScript will point at
 // each one that's missing it.
 
+import type { BodyZone } from '../db/types'
+import type { BodyGroupId, BodyRegion } from '../lib/bodyZones'
 import type { ChildTone } from '../lib/childView'
 
 interface FactorText {
@@ -315,20 +317,32 @@ export interface Translations {
     notes: FactorText
   }
 
-  bodyZones: {
-    head: string
-    neck: string
-    shoulders: string
-    arms: string
-    hands: string
-    upperBack: string
-    lowerBack: string
-    chest: string
-    stomach: string
-    hips: string
-    legs: string
-    feet: string
-    generalized: string
+  /** Full label of every zone identifier ("Épaule gauche"); the old coarse zones say they are old. */
+  bodyZones: Record<BodyZone, string>
+
+  /** The silhouette input: "Where does it hurt?" */
+  bodyMap: {
+    front: string
+    back: string
+    viewFront: string
+    viewBack: string
+    yourRight: string
+    yourLeft: string
+    hint: string
+    left: string
+    right: string
+    yes: string
+    /** The person says it hurts everywhere (the 'generalized' zone). */
+    everywhere: string
+    legacyTitle: string
+    legacyHint: string
+    removeLegacy: string
+    none: string
+    /** `{{list}}`: the chosen areas */
+    chosen: string
+    mapLabel: string
+    groups: Record<BodyGroupId, string>
+    regions: Record<BodyRegion, string>
   }
 
   weatherConditions: {

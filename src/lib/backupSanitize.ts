@@ -10,7 +10,6 @@
 
 import {
   ALL_FACTORS,
-  BODY_ZONES,
   DOSE_UNITS,
   ILLNESSES,
   ILLNESS_STATUSES,
@@ -18,7 +17,6 @@ import {
   MEDICATION_STOP_REASONS,
 } from '../db/types.ts'
 import type {
-  BodyZone,
   Dose,
   LegacyDailyEntry,
   LegacySettings,
@@ -29,6 +27,7 @@ import type {
   Settings,
   WeatherInfo,
 } from '../db/types.ts'
+import { cleanZones } from './bodyZones.ts'
 import { cleanOtherName, FIRST_DIAGNOSIS_YEAR } from './illnessStatus.ts'
 import type { LeadChoices } from './leads.ts'
 import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
@@ -161,7 +160,11 @@ export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry 
     // Free-text medication names of backups from before the registry existed.
     medications: strings(raw.medications),
     positiveActions: strings(raw.positiveActions),
-    painLocations: strings(raw.painLocations)?.filter((z): z is BodyZone => (BODY_ZONES as readonly string[]).includes(z)),
+    // Zones of every version are valid; an unknown one (or a repeat) is dropped.
+    painLocations: (() => {
+      const zones = strings(raw.painLocations)
+      return zones && cleanZones(zones)
+    })(),
     periodDay: typeof raw.periodDay === 'boolean' ? raw.periodDay : undefined,
     notes: str(raw.notes, MAX_TEXT),
   })

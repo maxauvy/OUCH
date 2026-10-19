@@ -35,6 +35,10 @@
 
   --color-ink: #14212b;
   --color-ink-muted: #5b6b76;
+  /* A body zone marked as painful: a soft red, never an alert colour. */
+  --zone-pain: #f0aaa4;
+  --zone-pain-line: #c4615a;
+  --zone-pain-glow: rgba(214, 107, 98, 0.75);
   --color-hairline: #e1e7eb;
 
   /* Brand accent — clinical blue. */
@@ -128,6 +132,9 @@
     --color-surface-raised: #1d2830;
     --color-ink: #e6edf1;
     --color-ink-muted: #93a3ae;
+    --zone-pain: #a24b45;
+    --zone-pain-line: #e08a83;
+    --zone-pain-glow: rgba(224, 138, 131, 0.6);
     --color-hairline: rgba(160, 185, 200, 0.16);
     --color-brand: #62aee0;
     --color-brand-soft: #173247;
@@ -169,6 +176,9 @@
   --color-surface-raised: #1d2830;
   --color-ink: #e6edf1;
   --color-ink-muted: #93a3ae;
+  --zone-pain: #a24b45;
+  --zone-pain-line: #e08a83;
+  --zone-pain-glow: rgba(224, 138, 131, 0.6);
   --color-hairline: rgba(160, 185, 200, 0.16);
   --color-brand: #62aee0;
   --color-brand-soft: #173247;

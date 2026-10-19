@@ -377,7 +377,7 @@ function painClinicPages(d: ReportData): Block[][] {
       </>,
       <>
         <H level={2}>{f.t.zones}</H>
-        <ZoneBars d={d} limit={13} columns={2} />
+        <ZoneBars d={d} limit={14} columns={2} />
         <p className="r-small">{f.t.zonesWpi}</p>
       </>,
       d.weekdays && <WeekdaysBlock d={d} />,
