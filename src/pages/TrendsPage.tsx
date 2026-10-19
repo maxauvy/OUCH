@@ -10,6 +10,7 @@ import { MedicationsCard } from '../components/trends/MedicationsCard'
 import { PainTrendChart, type ChartMarker } from '../components/trends/PainTrendChart'
 import { TreatmentReviewCard } from '../components/trends/TreatmentReviewCard'
 import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
+import { ZonesFlaresCard, ZonesMapCard, ZonesWeeksCard } from '../components/trends/ZonesCards'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { DoctorReportPage } from './DoctorReportPage'
 import { useLoggedEntries } from '../hooks/useEntries'
@@ -19,7 +20,7 @@ import { useMedications } from '../hooks/useMedications'
 import { usePalette } from '../hooks/usePalette'
 import { useSettings } from '../hooks/useSettings'
 import { todayISO, updateSettings } from '../db'
-import { flareDayCount, flaresOverlapping } from '../lib/flares'
+import { flareDayCount, flareDaySet, flaresOverlapping } from '../lib/flares'
 import { remember } from '../lib/leadHints'
 import { restartTrial, startTrial, type LeadTrial } from '../lib/leadTrial'
 import { arrangeLeads, choiceFor, findLeads, leadFactors, PATTERN_MIN_DAYS, type Lead, type LeadChoice } from '../lib/leads'
@@ -103,6 +104,8 @@ export function TrendsPage() {
   const rangeDays = RANGES[rangeIdx].days
   const rangeFrom = rangeDays == null ? (entries?.at(-1)?.date ?? today) : shiftISO(today, -rangeDays)
   const medicationsTracked = settings.enabledFactors.includes('medications')
+  const zonesTracked = settings.enabledFactors.includes('painLocations')
+  const flareDays = useMemo(() => flareDaySet(flares?.detectable ? flares.episodes : []), [flares])
   const doseMarkers: ChartMarker[] = medicationsTracked
     ? (medications ?? []).flatMap((m) =>
         m.regimen !== 'scheduled'
@@ -230,6 +233,14 @@ export function TrendsPage() {
               episodes={flaresOverlapping(flares.episodes, rangeFrom, today)}
               days={flareDayCount(flares.episodes, rangeFrom, today)}
             />
+          )}
+
+          {zonesTracked && (
+            <>
+              <ZonesMapCard entries={filtered} />
+              {flares?.detectable && <ZonesFlaresCard entries={entries} flareDays={flareDays} />}
+              <ZonesWeeksCard entries={entries} today={today} flareDays={flareDays} />
+            </>
           )}
 
           {medicationsTracked && medications && (
