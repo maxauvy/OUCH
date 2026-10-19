@@ -1564,7 +1564,7 @@ function Associations({ d }: { d: ReportData }) {
 
 /** Numbers (1-based) of the references the 2-page GP summary cites. Footnote
  * numbers are positions in REFERENCES, so the list keeps them with `value`. */
-const GP_REFERENCES = [1, 2, 8, 9]
+const GP_REFERENCES = [1, 2, 8, 9, 16]
 
 function References({
   numbers,
