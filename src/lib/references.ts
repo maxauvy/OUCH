@@ -82,4 +82,14 @@ export const REFERENCES: Reference[] = [
       'Andrews NE, Strong J, Meredith PJ. Activity pacing, avoidance, endurance, and associations with patient functioning in chronic pain: a systematic review and meta-analysis. Arch Phys Med Rehabil. 2012;93(11):2109-2121.',
     pmid: '22728699',
   },
+  {
+    citation:
+      'Wolfe F, Clauw DJ, Fitzcharles MA, Goldenberg DL, Katz RS, Mease P, Russell AS, Russell IJ, Winfield JB, Yunus MB. The American College of Rheumatology preliminary diagnostic criteria for fibromyalgia and measurement of symptom severity. Arthritis Care Res. 2010;62(5):600-610.',
+    pmid: '20461783',
+  },
+  {
+    citation:
+      'Wolfe F, Clauw DJ, Fitzcharles MA, Goldenberg DL, Häuser W, Katz RL, Mease PJ, Russell AS, Russell IJ, Walitt B. 2016 Revisions to the 2010/2011 fibromyalgia diagnostic criteria. Semin Arthritis Rheum. 2016;46(3):319-329.',
+    pmid: '27916278',
+  },
 ]
