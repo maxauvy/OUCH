@@ -1050,6 +1050,8 @@ const en: Translations = {
     trialStop: 'Stop the trial',
     trialPaused: 'Your trial is waiting: nothing to do for now. We pick it up again when things ease.',
     trialDoneLabel: 'Your trial is over',
+    repeatLabel: 'A trial to do again?',
+    repeatBody: '{{n}} {{n:week|weeks}} ago, you tried “{{action}}” for a week. Would you like to do it again?',
     trialSmall: 'Over 7 days, that is little: an idea, not an answer.',
     trialFew: 'There are too few days of each kind to compare, and that is fine: you can carry on for another week.',
     trialSame: 'It goes the same way as your earlier days.',

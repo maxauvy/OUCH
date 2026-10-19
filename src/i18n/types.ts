@@ -917,6 +917,9 @@ export interface Translations {
     trialStop: string
     trialPaused: string
     trialDoneLabel: string
+    repeatLabel: string
+    /** `{{action}}` as written, `{{n}}` weeks since it ended */
+    repeatBody: string
     trialSmall: string
     trialFew: string
     trialSame: string

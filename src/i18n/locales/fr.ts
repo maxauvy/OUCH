@@ -1055,6 +1055,8 @@ const fr: Translations = {
     trialStop: 'Arrêter l’essai',
     trialPaused: 'Ton essai attend : rien à faire pour l’instant. On y revient quand ça ira mieux.',
     trialDoneLabel: 'Ton essai est terminé',
+    repeatLabel: 'Un essai à refaire ?',
+    repeatBody: 'Il y a {{n}} {{n:semaine|semaines}}, tu as essayé « {{action}} » pendant une semaine. Ça te dit de le refaire ?',
     trialSmall: 'Sur 7 jours, c’est peu : une idée, pas une réponse.',
     trialFew: 'Il y a trop peu de jours de chaque sorte pour comparer, ce n’est pas grave : tu peux continuer une semaine.',
     trialSame: 'Ça va dans le même sens que tes jours d’avant.',
