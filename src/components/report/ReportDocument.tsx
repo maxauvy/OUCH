@@ -1,6 +1,8 @@
 import { createContext, createElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
 import './report.css'
 import type { LoggedEntry } from '../../db/types'
+import { DRAW_ORDER, OUTLINES, pieces, type View } from '../../lib/bodyOutlines'
+import { zoneSummary } from '../../lib/bodyZones'
 import { periodOn } from '../../lib/medications'
 import { formatIllnessList } from '../../lib/childView'
 import {
@@ -177,6 +179,7 @@ function gpPages(d: ReportData): Block[][] {
         <div>
           <H level={2}>{f.t.zones}</H>
           <ZoneBars d={d} limit={6} />
+          <ZoneFacts d={d} full={false} />
         </div>
       </div>,
       d.weekdays && <WeekdaysBlock d={d} />,
@@ -377,7 +380,13 @@ function painClinicPages(d: ReportData): Block[][] {
       </>,
       <>
         <H level={2}>{f.t.zones}</H>
-        <ZoneBars d={d} limit={13} columns={2} />
+        <div className="r-grid2">
+          <ZoneFigure d={d} />
+          <div>
+            <ZoneBars d={d} limit={10} />
+            <ZoneFacts d={d} full />
+          </div>
+        </div>
         <p className="r-small">{f.t.zonesWpi}</p>
       </>,
       d.weekdays && <WeekdaysBlock d={d} />,
@@ -1241,14 +1250,14 @@ function SymptomsTable({ d }: { d: ReportData }) {
 
 function ZoneBars({ d, limit, columns = 1 }: { d: ReportData; limit: number; columns?: 1 | 2 }) {
   const { f } = d
-  const shares = tagShares(d.current, (e) => e.painLocations).slice(0, limit)
+  const shares = zoneSummary(d.current).shares.slice(0, limit)
   if (!shares.length) return <p className="r-faint">—</p>
   return (
     <>
-      <div className={`r-bars${columns === 2 ? ' cols2' : ''}`}>
+      <div className={`r-bars wide${columns === 2 ? ' cols2' : ''}`}>
         {shares.map(([zone, share]) => (
           <div className="r-row" key={zone}>
-            <span>{f.all.bodyZones[zone as keyof typeof f.all.bodyZones] ?? zone}</span>
+            <span>{f.all.bodyZones[zone]}</span>
             <div>
               <div className="r-fill" style={{ width: `${share * 100}%` }} />
             </div>
@@ -1258,6 +1267,66 @@ function ZoneBars({ d, limit, columns = 1 }: { d: ReportData; limit: number; col
       </div>
       <p className="r-small">{f.t.zonesNote}</p>
     </>
+  )
+}
+
+/** The facts under the zones: counts of what was declared, never a WPI score. */
+function ZoneFacts({ d, full }: { d: ReportData; full: boolean }) {
+  const { f } = d
+  const z = zoneSummary(d.current)
+  const lines = [
+    z.areasReported > 0 && f.format(f.t.zonesAreas, { n: z.areasReported }),
+    full && z.meanAreasPerDay !== null && f.format(f.t.zonesMean, { mean: f.nf(z.meanAreasPerDay), days: z.daysWithAreas }),
+    z.widespreadDays > 0 && f.format(f.t.zonesWidespread, { n: z.widespreadDays }),
+    full && z.daysWithOldZones > 0 && f.format(f.t.zonesOld, { n: z.daysWithOldZones }),
+  ].filter((l): l is string => !!l)
+  if (!lines.length) return null
+  return (
+    <ul className="r-small" style={{ margin: '4px 0 0', paddingLeft: 16 }}>
+      {lines.map((l) => (
+        <li key={l}>{l}</li>
+      ))}
+    </ul>
+  )
+}
+
+/** Front and back silhouette, tinted by how often each zone is reported. */
+function ZoneFigure({ d }: { d: ReportData }) {
+  const { f } = d
+  const share = new Map(zoneSummary(d.current).shares)
+  const views: { view: View; x: number; label: string }[] = [
+    { view: 'front', x: 0, label: f.t.zonesFront },
+    { view: 'back', x: 215, label: f.t.zonesBack },
+  ]
+  return (
+    <figure style={{ margin: 0 }}>
+      <svg viewBox="0 0 415 412" role="img" aria-label={f.t.zonesFigureAlt} style={{ maxWidth: 300, margin: '0 auto' }}>
+        {views.map(({ view, x, label }) => (
+          <g key={view} transform={`translate(${x} 0)`}>
+            {DRAW_ORDER.flatMap((region) =>
+              pieces(region, view).map(({ zone, mirror }) => {
+                const s = share.get(zone) ?? 0
+                return (
+                  <path
+                    key={zone}
+                    d={OUTLINES[region].d}
+                    transform={mirror ? 'translate(200 0) scale(-1 1)' : undefined}
+                    strokeLinejoin="round"
+                    style={{ fill: s > 0 ? 'var(--r-blue-700)' : 'none', fillOpacity: s > 0 ? 0.12 + 0.83 * s : 0, stroke: 'var(--r-prev)', strokeWidth: 1.2 }}
+                  />
+                )
+              })
+            )}
+            <text x="100" y="408" textAnchor="middle" fontSize="13" fill="var(--r-muted)">
+              {label}
+            </text>
+          </g>
+        ))}
+      </svg>
+      <figcaption className="r-small" style={{ textAlign: 'center' }}>
+        {f.t.zonesScale}
+      </figcaption>
+    </figure>
   )
 }
 

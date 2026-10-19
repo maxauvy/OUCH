@@ -52,21 +52,29 @@ const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
 
 // Stable identifiers stored in entries — display labels live in the active
 // translation (`t.bodyZones[zone]`), not here.
-export const BODY_ZONES = [
-  'head',
-  'neck',
-  'shoulders',
-  'arms',
-  'hands',
-  'upperBack',
-  'lowerBack',
-  'chest',
-  'stomach',
-  'hips',
-  'legs',
-  'feet',
-  'generalized',
-] as const
+//
+// The zones follow the 19 regions of the Widespread Pain Index (WPI) with the
+// left and right side told apart, plus head, hands and feet (not in the WPI).
+// A zone is either on the midline (one identifier) or has a side, in which
+// case the identifier is the side followed by the region: 'leftShoulder'.
+export const MIDLINE_ZONES = ['head', 'neck', 'chest', 'stomach', 'upperBack', 'lowerBack'] as const
+export const SIDED_REGIONS = ['jaw', 'shoulder', 'upperArm', 'lowerArm', 'hand', 'hip', 'upperLeg', 'lowerLeg', 'foot'] as const
+export type MidlineZone = (typeof MIDLINE_ZONES)[number]
+export type SidedRegion = (typeof SIDED_REGIONS)[number]
+export type BodySide = 'left' | 'right'
+export type SidedZone = `${BodySide}${Capitalize<SidedRegion>}`
+
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+export const sidedZone = (side: BodySide, region: SidedRegion) => `${side}${cap(region)}` as SidedZone
+export const SIDED_ZONES: readonly SidedZone[] = SIDED_REGIONS.flatMap((r) => [sidedZone('left', r), sidedZone('right', r)])
+
+// Zones of the first versions, kept as they are: "Arms" does not say which
+// arm, which part of it, so nothing is converted by guesswork. They stay
+// readable and can be replaced by precise zones whenever the person edits
+// the day. 'generalized' is the person saying it hurts everywhere; it does not
+// tick every zone.
+export const COARSE_ZONES = ['shoulders', 'arms', 'hands', 'hips', 'legs', 'feet'] as const
+export const BODY_ZONES = [...MIDLINE_ZONES, ...SIDED_ZONES, ...COARSE_ZONES, 'generalized'] as const
 export type BodyZone = (typeof BODY_ZONES)[number]
 
 export type ExternalWeatherCondition =

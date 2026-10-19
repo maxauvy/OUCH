@@ -321,8 +321,8 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     if (isPeriodDay(i) && painLevel >= 4 && chance(0.6)) taken.push('Ibuprofène')
 
     const zoneCount = painLevel >= 7 ? 4 : painLevel >= 4 ? 2 : 1
-    const zones = new Set<string>(['lowerBack', 'neck', 'shoulders'].slice(0, Math.min(2, zoneCount)))
-    const extra = ['upperBack', 'hips', 'legs', 'hands', 'head', 'arms']
+    const zones = new Set<string>(['lowerBack', 'neck', 'leftShoulder'].slice(0, Math.min(2, zoneCount)))
+    const extra = ['upperBack', 'rightHip', 'leftUpperLeg', 'rightHand', 'head', 'leftUpperArm']
     while (zones.size < zoneCount) zones.add(pick(extra))
     if (painLevel >= 8 && chance(0.5)) zones.add('generalized')
     if (isPeriodDay(i) && chance(0.6)) zones.add('stomach')
