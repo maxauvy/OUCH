@@ -76,3 +76,51 @@ export function parseZone(zone: BodyZone): { region: BodyRegion; side?: BodySide
   }
   return null // coarse zones and 'generalized'
 }
+
+export interface ZoneSummary {
+  /** Logged days of the period. */
+  days: number
+  /** Share of logged days on which each zone is reported, most frequent first. */
+  shares: [BodyZone, number][]
+  /** How many of the 19 WPI areas are reported on at least one day. */
+  areasReported: number
+  /** Average number of WPI areas on the days that have some: null when no day has any. */
+  meanAreasPerDay: number | null
+  /** Days with at least one WPI area: the days the average rests on. */
+  daysWithAreas: number
+  /** Days on which the person said it hurts everywhere. */
+  widespreadDays: number
+  /** Days with a zone of the first versions ("Arms"), which say no side and are not counted as WPI areas. */
+  daysWithOldZones: number
+}
+
+/** What the report says about where it hurt: counts of what was declared, no WPI score. */
+export function zoneSummary(entries: readonly { painLocations?: readonly string[] }[]): ZoneSummary {
+  const counts = new Map<BodyZone, number>()
+  const ever = new Set<string>()
+  let daysWithAreas = 0
+  let areaTotal = 0
+  let widespreadDays = 0
+  let daysWithOldZones = 0
+  for (const e of entries) {
+    const zones = cleanZones(e.painLocations ?? [])
+    for (const z of zones) counts.set(z, (counts.get(z) ?? 0) + 1)
+    const areas = wpiCount(zones)
+    for (const z of zones) if (isWpiZone(z)) ever.add(z)
+    if (areas) {
+      daysWithAreas++
+      areaTotal += areas
+    }
+    if (zones.includes('generalized')) widespreadDays++
+    if (zones.some(isCoarseZone)) daysWithOldZones++
+  }
+  return {
+    days: entries.length,
+    shares: [...counts].map(([z, n]) => [z, n / entries.length] as [BodyZone, number]).sort((a, b) => b[1] - a[1] || BODY_ZONES.indexOf(a[0]) - BODY_ZONES.indexOf(b[0])),
+    areasReported: ever.size,
+    meanAreasPerDay: daysWithAreas ? areaTotal / daysWithAreas : null,
+    daysWithAreas,
+    widespreadDays,
+    daysWithOldZones,
+  }
+}

@@ -47,3 +47,24 @@ test('a backup of an earlier version, or of this one, comes back with its zones'
   assert.deepEqual(sanitizeEntry({ ...entry, painLocations: ['shoulders', 'stomach'] })?.painLocations, ['shoulders', 'stomach'])
   assert.deepEqual(sanitizeEntry({ ...entry, painLocations: ['leftShoulder', 'rightHip', 'leftBalloon'] })?.painLocations, ['leftShoulder', 'rightHip'])
 })
+
+import { zoneSummary } from '../src/lib/bodyZones.ts'
+
+test('the zone summary counts what was declared: no WPI score', () => {
+  const days = [
+    { painLocations: ['leftShoulder', 'neck', 'head'] },
+    { painLocations: ['leftShoulder', 'lowerBack', 'arms'] },
+    { painLocations: ['generalized'] },
+    { painLocations: [] },
+    {},
+  ]
+  const s = zoneSummary(days)
+  assert.equal(s.days, 5)
+  assert.deepEqual(s.shares[0], ['leftShoulder', 2 / 5])
+  assert.equal(s.areasReported, 3) // leftShoulder, neck, lowerBack (head is not a WPI area)
+  assert.equal(s.daysWithAreas, 2)
+  assert.equal(s.meanAreasPerDay, (2 + 2) / 2)
+  assert.equal(s.widespreadDays, 1)
+  assert.equal(s.daysWithOldZones, 1)
+  assert.equal(zoneSummary([{}]).meanAreasPerDay, null)
+})

@@ -90,7 +90,7 @@ sup{font-size:6.6pt;line-height:0}
 <tr><td>Pain of the day</td><td>integer from 0 to 10</td><td>The only measure needed for a day to count. Numeric scale, a recommended intensity measure<sup>[1][3]</sup> and widely validated<sup>[10]</sup>. The day just ended: 24-hour recall, which limits memory bias<sup>[6]</sup>. Slider, or eleven boxes on flare days: same scale.</td></tr>
 <tr><td>Fatigue, brain fog, stress</td><td>0 to 10, ↑ = more discomfort</td><td>Simple numeric scales, <b>not validated</b>.</td></tr>
 <tr><td>Sleep quality, mood, activity</td><td>0 to 10, ↑ = better</td><td>Simple scales, <b>not validated</b>. Sleep quality entered on a given day describes the previous night. Sleep duration, in hours, is self-reported.</td></tr>
-<tr><td>Painful areas</td><td>24 self-reported areas, left and right told apart</td><td>Follow the 19 regions of the WPI, plus head, hands and feet: a record of what the person reports, not a WPI score nor a classification criterion.</td></tr>
+<tr><td>Painful areas</td><td>24 self-reported areas, left and right</td><td>The 19 WPI regions, plus head, hands, feet: not a WPI score (§ 10).</td></tr>
 <tr><td>Treatments</td><td>register + the day’s doses</td><td>Name, type (regular, as needed, unspecified), dose and dates of each dosage. Each day: doses, relief (none to major) and side effects, for as-needed treatments.</td></tr>
 <tr><td>Weather, “what helped” actions</td><td>measurements; free labels</td><td>Optional weather (Open-Meteo, the person’s location; mean pressure of the day). Actions: walking, warm bath… counted, not ranked.</td></tr>
 </table>
@@ -191,7 +191,13 @@ sup{font-size:6.6pt;line-height:0}
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>9 · What the patient noticed (report)</h2>
 <p>In both versions of the report, a section carries the leads the patient <b>chose to keep</b> for the appointment (appendix, “Trends: leads”), recomputed over the two periods of the report with the same rule. Each line gives the mean pain and the number of days of the two groups compared. <b>One-week trials</b> that ended in these periods are added, when each kind of day counts at least 2; the report reminds that seven days is little. A kept lead that no longer passes the rule on the report’s data is left out. Nothing in it is interpreted: these are the patient’s observations, unverified, <b>with no cause established</b>. Limits: the Trends leads are read without correction for multiple comparisons, on non-independent days, and the patient keeps only the ones that speak to them: it is a selection. The actions in trials are the ones they noted themselves (free text); OUCH suggests none.</p>
-<h2>Eight questions for you</h2>
+<h2>10 · Where the pain is felt (report)</h2>
+<table>
+<tr><th style="width:24%">Indicator</th><th style="width:44%">Calculation</th><th>Notes</th></tr>
+<tr><td>Areas reported</td><td>For each area, the share of logged days on which it is reported, most frequent first (a day with no area entered reports none). Front and back silhouette tinted by that share (detailed version).</td><td>24 areas: the 19 WPI regions with the side, plus head, hands and feet. Areas from before the side was told apart (“Arms”) are listed as they were, not converted.</td></tr>
+<tr><td>WPI regions reported</td><td>Number of WPI regions (out of 19) reported on at least one day of the period; average of that number on the days when at least one region is reported; number of days of “pain everywhere”.</td><td>A count of what is declared, day by day: not the WPI (which covers the past week), nor a score, nor a classification or diagnostic criterion. Head, hands, feet, “pain everywhere” and old areas are not among the 19.</td></tr>
+</table>
+<h2>Nine questions for you</h2>
 <ol class="q">
 <li>Does the definition of flares (at least 3 days more than 2 points or 30% above the 28-day median) make sense to you? Which criterion would you prefer?</li>
 <li>Are the categories ≤ 3, 4–6, ≥ 7 useful to you, or do you read the person’s course against their own baseline?</li>
@@ -201,6 +207,7 @@ sup{font-size:6.6pt;line-height:0}
 <li>What data do you lack today to make decisions, that a diary could provide?</li>
 <li>Is the before-and-after comparison around a treatment change (28 days before, 7 days not counted, 28 days after, with the patient’s usual variation) a useful format? What length would you choose?</li>
 <li>Is the “What the patient noticed” section (kept leads, one-week trials) useful to you, or might it steer the appointment towards a cause nothing establishes? Should it be removed from the general practitioner version?</li>
+<li>Is the split into 24 areas (the 19 WPI regions with the side, plus head, hands and feet) useful to you? Should there be an intensity per area, or another split?</li>
 </ol>
 
 </div><div class="foot"><span>Prepared on 15 October 2026 from the published code of OUCH v0.6.0: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>

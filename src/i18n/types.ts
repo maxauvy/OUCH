@@ -660,6 +660,18 @@ export interface Translations {
     zones: string
     zonesNote: string
     zonesWpi: string
+    zonesFigureAlt: string
+    zonesFront: string
+    zonesBack: string
+    zonesScale: string
+    /** `{{n}}` */
+    zonesAreas: string
+    /** `{{mean}}`, `{{days}}` */
+    zonesMean: string
+    /** `{{n}}`, with a plural */
+    zonesWidespread: string
+    /** `{{n}}`, with a plural */
+    zonesOld: string
     agenda: string
     noticed: string
     noticedNote: string
