@@ -1247,6 +1247,8 @@ const fr: Translations = {
     themeAuto: 'Auto',
     themeLight: 'Clair',
     themeDark: 'Sombre',
+    lookLabel: 'Nouveau look (essai)',
+    lookHelper: 'Un fond plus lumineux, des icônes en couleur et la météo de la douleur en pastille. Tu peux revenir à l’apparence habituelle à tout moment.',
     languageTitle: 'Langue',
     languageHelper: "Choisis la langue de l'application.",
     parentGenderTitle: 'Comment te désigner auprès de ton enfant',

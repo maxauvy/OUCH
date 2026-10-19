@@ -6,16 +6,21 @@ export function Chip({
   selected,
   onClick,
   actionLabel,
+  tone,
 }: {
   label: string
   selected: boolean
   onClick: () => void
   actionLabel?: string
+  /** A measure category (`mood`, `outdoor`…): in the luminous look, the chip is picked out in its colour. */
+  tone?: string
 }) {
+  const accent = tone ? `var(--look-${tone}, var(--color-brand))` : 'var(--color-brand)'
+  const soft = tone ? `var(--look-${tone}-soft, var(--color-brand-soft))` : 'var(--color-brand-soft)'
   const style = {
-    background: selected ? 'var(--color-brand-soft)' : 'var(--color-surface)',
-    color: selected ? 'var(--color-brand)' : 'var(--color-ink)',
-    boxShadow: `inset 0 0 0 1px ${selected ? 'var(--color-brand)' : 'var(--color-hairline)'}`,
+    background: selected ? soft : 'var(--color-surface)',
+    color: selected ? accent : 'var(--color-ink)',
+    boxShadow: `inset 0 0 0 1px ${selected ? accent : 'var(--color-hairline)'}`,
   }
   return (
     <button

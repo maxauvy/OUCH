@@ -1242,6 +1242,8 @@ const en: Translations = {
     themeAuto: 'Auto',
     themeLight: 'Light',
     themeDark: 'Dark',
+    lookLabel: 'New look (trial)',
+    lookHelper: 'A lighter background, coloured icons and the pain weather as a pill. You can go back to the usual look at any time.',
     languageTitle: 'Language',
     languageHelper: "Choose the app's language.",
     parentGenderTitle: 'How to refer to you with your child',

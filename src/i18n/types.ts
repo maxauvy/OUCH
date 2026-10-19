@@ -1111,6 +1111,9 @@ export interface Translations {
     themeAuto: string
     themeLight: string
     themeDark: string
+    /** Early access only: the luminous look, as a switch */
+    lookLabel: string
+    lookHelper: string
     languageTitle: string
     languageHelper: string
     parentGenderTitle: string
