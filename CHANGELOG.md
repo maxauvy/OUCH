@@ -6,9 +6,16 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Une apparence lumineuse**, qui devient celle de l'app (clair et sombre) : un fond en dégradé doux du bleu au lavande, des icônes en couleur sur les sections de la page du jour (« Où as-tu mal ? », « Mesures du jour », météo extérieure, médicaments, « Ce qui a aidé »), des puces choisies à la couleur de leur section, la météo de la douleur avec une pastille « Niveau n sur 5 », un filet fin autour des cartes teintées pour qu'elles se détachent du fond, et le même habillage sur l'accueil, les feuilles (partage, code…) et la barre d'état. Un interrupteur « Apparence lumineuse » (Réglages, Rappel et affichage) permet de retrouver l'apparence d'avant, appareil par appareil.
+- Un essai d'une semaine : une carte « Tes essais » dans Tendances (les semaines terminées et leur résultat, avec « Refaire une semaine »), et, huit semaines après la fin d'un essai, une proposition de le refaire sur la page du jour si l'action est encore notée. Jamais pendant une poussée ni pendant un essai.
+
 ### Modifié
 - **Où as-tu mal ? se saisit sur une silhouette.** On touche une grande région (tête et cou, épaules et bras, tronc, hanches et jambes), puis on précise la partie et le côté, gauche ou droite ; face et dos se changent d'un bouton. Les zones marquées s'éclairent d'un halo rouge doux sur la silhouette. Les zones passent de 13 à 24 : les 19 régions de l'index de douleur diffuse (WPI), côtés distingués, plus la tête, les mains et les pieds.
 - **Rien n'est converti à l'aveugle.** Les saisies d'avant (« Bras », « Jambes »…) ne disent pas le côté : elles sont gardées telles quelles, marquées « ancien », et la personne peut les retirer ou les remplacer. Les sauvegardes d'avant restent lisibles.
+- **Le verrou par code** suit la nouvelle apparence : le logo repose sur une carte qui contient le message et le clavier. Une touche s'allume quand on la touche (et pour un chiffre tapé au clavier), pour confirmer qu'elle a été prise en compte.
+- Les pistes sont plus prudentes avec les actions : une piste n'est plus proposée pour une action à l'essai ou déjà essayée, et quand la douleur est plus haute les jours où l'action est notée, la phrase le dit sans laisser croire que l'action y est pour quelque chose (on y a souvent recours justement quand on a plus mal). Même réserve sur la carte de fin d'essai, dans « Tes essais » et dans la note du rapport pour le médecin.
+- Dépendances mises à jour (icônes, Vite, plugin React, types Node, oxlint, GitHub Actions).
 
 ## [0.6.1] - 2026-10-16
 
@@ -192,7 +199,9 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.5.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/maxauvy/OUCH/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/maxauvy/OUCH/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/maxauvy/OUCH/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/maxauvy/OUCH/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/maxauvy/OUCH/compare/v0.3.0...v0.3.1

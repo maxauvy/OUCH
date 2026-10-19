@@ -1125,7 +1125,7 @@ export interface Translations {
     themeAuto: string
     themeLight: string
     themeDark: string
-    /** Early access only: the luminous look, as a switch */
+    /** The luminous look, as a switch (off brings back the classic look) */
     lookLabel: string
     lookHelper: string
     languageTitle: string

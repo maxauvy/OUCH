@@ -62,7 +62,7 @@ export function ModalSheet({
         <div
           onClick={(e) => e.stopPropagation()}
           className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 flex flex-col gap-4 max-h-[92vh] overflow-y-auto"
-          style={{ background: 'var(--color-paper)' }}
+          style={{ background: 'var(--look-bg, var(--color-paper))' }}
         >
           <div className="flex items-start justify-between gap-2">
             <h2 id={titleId} className="text-heading font-semibold">
