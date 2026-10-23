@@ -64,7 +64,7 @@ sup{font-size:6.6pt;line-height:0}
 <div class="hd"><p class="eyebrow">Note méthodologique pour échange avec des soignants</p>
 <h1>Comment OUCH calcule ses chiffres</h1>
 <p class="sub">Formules, seuils, sources et limites de chaque indicateur du rapport, pour que vous puissiez les vérifier et les contester.</p></div>
-<div class="meta"><b>Document de référence</b><br>15 octobre 2026<br>OUCH v0.6.0</div>
+<div class="meta"><b>Document de référence</b><br>23 octobre 2026<br>OUCH v0.6.2</div>
 </header>
 
 <div class="box">
@@ -95,7 +95,7 @@ sup{font-size:6.6pt;line-height:0}
 <tr><td>Météo, actions « qui ont aidé »</td><td>mesures ; étiquettes libres</td><td>Météo facultative (Open-Meteo, position de la personne ; pression moyenne de la journée). Actions : marche, bain chaud… comptées, non classées.</td></tr>
 </table>
 
-</div><div class="foot"><span>Établi le 15 octobre 2026 à partir du code publié d’OUCH v0.6.0 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div><div class="foot"><span>Établi le 23 octobre 2026 à partir du code publié d’OUCH v0.6.2 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>2 · Périodes et complétude</h2>
 <table>
@@ -120,7 +120,7 @@ sup{font-size:6.6pt;line-height:0}
 <tr><td>Jour de la semaine</td><td>Écart de la douleur moyenne de chaque jour à celle de la période, si chacun compte ≥ 4 jours. Bande : <span class="f">± 2,69 × écart-type / √<i>n</i><sub>min</sub></span>.</td><td>2,69 : 5 % pour sept comparaisons (Bonferroni). Jours non indépendants : indicatif.</td></tr>
 </table>
 
-</div><div class="foot"><span>Établi le 15 octobre 2026 à partir du code publié d’OUCH v0.6.0 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div><div class="foot"><span>Établi le 23 octobre 2026 à partir du code publié d’OUCH v0.6.2 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>4 · Repérage des poussées</h2>
 <p>Une poussée est une série de jours nettement au-dessus de ce qui est <b>habituel pour la personne</b>, et non au-dessus d’une valeur fixe : 7/10 est une journée ordinaire pour l’un et une urgence pour l’autre. <b>Il n’existe pas de définition consensuelle de la poussée</b> ; celle-ci est propre à OUCH. Elle reprend l’écart minimal cliniquement important<sup>[2][4]</sup>, établi pour une amélioration et ici appliqué à une aggravation, ce qui est une extrapolation. Elle est calculée sur tout l’historique, car le niveau habituel d’un jour demande des entrées antérieures à la période du rapport. Un épisode est rattaché à la période où il commence ; ses jours sont comptés là où ils tombent.</p>
@@ -138,7 +138,7 @@ sup{font-size:6.6pt;line-height:0}
 <h3>Ce que précède une poussée (version détaillée)</h3>
 <p>Pour chaque poussée, le rapport donne la <b>moyenne des 3 jours précédents</b> de six mesures (durée et qualité du sommeil, stress, fatigue, brouillard mental, humeur, d’au moins 2 jours renseignés), et dessous la <b>moyenne habituelle des 28 jours d’avant</b>, hors poussées (au moins 10 jours). S’y ajoutent les changements de traitement notés dans les 14 jours précédents. Rien n’est mis en évidence : un essai où l’on signalait ce qui sortait de plus d’un écart-type signalait quelque chose avant 37 % des fenêtres de 3 jours qui ne précèdent aucune poussée, et le lecteur y verrait une cause.</p>
 
-</div><div class="foot"><span>Établi le 15 octobre 2026 à partir du code publié d’OUCH v0.6.0 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div><div class="foot"><span>Établi le 23 octobre 2026 à partir du code publié d’OUCH v0.6.2 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>5 · Traitements</h2>
 <table>
@@ -165,7 +165,7 @@ sup{font-size:6.6pt;line-height:0}
 </table>
 <p style="margin-top:2mm"><b>Force.</b> |ρ| &lt; 0,1 : négligeable ; &lt; 0,3 : faible ; &lt; 0,5 : modérée ; au-delà : forte (libellés conventionnels, sans test, valeur p ni intervalle de confiance). <b>Comparaisons de médianes</b> (au moins 3 jours par groupe) : lendemain d’une journée très active (activité de la veille ≥ 8) ; au moins 2 actions positives contre aucune ; jours de règles contre les autres, si la personne les inclut.</p>
 
-</div><div class="foot"><span>Établi le 15 octobre 2026 à partir du code publié d’OUCH v0.6.0 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div><div class="foot"><span>Établi le 23 octobre 2026 à partir du code publié d’OUCH v0.6.2 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>7 · Avant et après un changement de traitement de fond</h2>
 <p>Nouveau dans la version 0.3.0 (les autres calculs sont inchangés depuis la 0.2.1, hors le tableau par jour de la semaine, ajouté en 0.4.0, section 3). Pour chaque début, changement de dose ou arrêt d’un traitement <b>de fond</b>, le rapport (les deux versions, pour la période et les 5 semaines qui la précèdent) et l’écran Tendances comparent le journal avant et après. C’est une description de deux périodes : elle ne dit pas si le traitement « marche ». Les traitements au besoin n’ont pas de comparaison : ce qu’ils font en est une mesure.</p>
@@ -187,7 +187,7 @@ sup{font-size:6.6pt;line-height:0}
 
 
 
-</div><div class="foot"><span>Établi le 15 octobre 2026 à partir du code publié d’OUCH v0.6.0 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div><div class="foot"><span>Établi le 23 octobre 2026 à partir du code publié d’OUCH v0.6.2 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>9 · Ce que le patient a remarqué (rapport)</h2>
 <p>Dans les deux versions du rapport, une rubrique reprend les pistes que le patient a <b>choisi de garder</b> pour la consultation (annexe, « Tendances : pistes »), recalculées sur les deux périodes du rapport avec la même règle. Chaque ligne donne la douleur moyenne et le nombre de jours des deux groupes comparés. S’y ajoutent les <b>essais d’une semaine</b> terminés dans ces périodes, quand chaque sorte de jours en compte au moins 2 ; le rapport rappelle que sept jours, c’est peu. Une piste gardée qui ne passe plus la règle sur les données du rapport n’y figure pas. Rien n’y est interprété : ce sont des observations du patient, non vérifiées, <b>sans lien de cause établi</b>. Limites : les pistes de Tendances sont lues sans correction des comparaisons multiples, sur des jours non indépendants, et le patient ne garde que celles qui lui parlent : c’est une sélection. Les actions des essais sont celles qu’il a notées lui-même (texte libre) ; OUCH n’en suggère aucune.</p>
@@ -211,7 +211,7 @@ sup{font-size:6.6pt;line-height:0}
 <li>Le découpage en 24 zones (les 19 régions du WPI avec le côté, plus tête, mains et pieds) vous est-il utile ? Faudrait-il une intensité par zone, ou un autre découpage ?</li>
 </ol>
 
-</div><div class="foot"><span>Établi le 15 octobre 2026 à partir du code publié d’OUCH v0.6.0 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div><div class="foot"><span>Établi le 23 octobre 2026 à partir du code publié d’OUCH v0.6.2 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>Annexe · Ce que l’application montre à la personne, hors rapport</h2>
 <table>
@@ -228,7 +228,7 @@ sup{font-size:6.6pt;line-height:0}
 <tr><td>Carte « ces derniers jours ont été plus durs »</td><td>Affichée une fois par poussée en cours à la veille, avec ce que la personne a noté comme aidant lors de ses poussées précédentes. Pendant la poussée, la saisie se réduit à la douleur, le reste sur demande.</td><td>Aucune suggestion extérieure ; les deux sont désactivables.</td></tr>
 </table>
 
-</div><div class="foot"><span>Établi le 15 octobre 2026 à partir du code publié d’OUCH v0.6.0 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div><div class="foot"><span>Établi le 23 octobre 2026 à partir du code publié d’OUCH v0.6.2 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>Références, et ce que chacune apporte</h2>
 <p class="small" style="margin-bottom:2.5mm">Chaque résumé reprend la conclusion principale de l’étude, d’après son résumé officiel (PubMed) ; c’est le même texte que dans la section « Sources scientifiques » de l’application. Ces études portent sur des groupes de patients : elles n’établissent rien de certain pour une personne donnée.</p>
@@ -241,7 +241,7 @@ sup{font-size:6.6pt;line-height:0}
 <li>Dixon WG, Beukenhorst AL, Yimer BB, et al. How the weather affects the pain of citizen scientists using a smartphone app. <i>NPJ Digit Med</i>. 2019;2:105. PMID 31667359.<div class="u"><b>Ce que dit l’étude.</b> « Cloudy with a Chance of Pain » : 2 658 patients ont noté leur douleur chaque jour pendant 15 mois. Des liens existent avec l’humidité, la pression atmosphérique et le vent, mais ils sont modestes. <b>Dans OUCH.</b> OUCH enregistre la météo du jour pour que la personne puisse voir si elle compte pour elle, sans présenter le lien comme établi.</div></li>
 <li>Salaffi F, Stancati A, Silvestri CA, Ciapetti A, Grassi W. Minimal clinically important changes in chronic musculoskeletal pain intensity measured on a numerical rating scale. <i>Eur J Pain</i>. 2004;8(4):283-291. PMID 15207508.<div class="u"><b>Ce que dit l’étude.</b> Sur 825 patients, une baisse d’un point (15 %) est la plus petite différence perceptible ; une baisse de 2 points (33 %) correspond à « beaucoup mieux ». Il faut une baisse plus forte quand la douleur de départ est élevée. <b>Dans OUCH.</b> Confirme le repère de 2 points ou 30 % utilisé par le rapport.</div></li>
 </ol>
-</div><div class="foot"><span>Établi le 15 octobre 2026 à partir du code publié d’OUCH v0.6.0 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div><div class="foot"><span>Établi le 23 octobre 2026 à partir du code publié d’OUCH v0.6.2 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
 </div>
 <div class="page"><div class="bar"></div><div class="in"><h2>Suite des références</h2>
 <ol class="refs" start="9"><li>Ostelo RWJG, Deyo RA, Stratford P, et al. Interpreting change scores for pain and functional status in low back pain: towards international consensus regarding minimal important change. <i>Spine</i>. 2008;33(1):90-94. PMID 18165753.<div class="u"><b>Ce que dit l’étude.</b> Consensus d’experts pour la lombalgie : une variation de 2 points sur l’échelle 0-10 est un changement minimal important, et une amélioration de 30 % est un seuil utile quelle que soit l’échelle. <b>Dans OUCH.</b> Confirme, par un autre chemin, le repère de 2 points ou 30 %.</div></li>
@@ -254,6 +254,6 @@ sup{font-size:6.6pt;line-height:0}
 <li>Wolfe F, Clauw DJ, Fitzcharles MA, Goldenberg DL, Katz RS, Mease P, Russell AS, Russell IJ, Winfield JB, Yunus MB. The American College of Rheumatology preliminary diagnostic criteria for fibromyalgia and measurement of symptom severity. <i>Arthritis Care Res</i>. 2010;62(5):600-610. PMID 20461783.<div class="u"><b>Ce que dit l’étude.</b> Critères préliminaires de l’American College of Rheumatology pour la fibromyalgie, qui n’exigent plus l’examen des points douloureux. Ils combinent un index de douleur diffuse (WPI), le nombre de régions du corps, sur 19, où la personne a eu mal, et une échelle de sévérité des symptômes. <b>Dans OUCH.</b> Les zones de « Où as-tu mal ? » reprennent les 19 régions du WPI, avec le côté gauche ou droit, plus la tête, les mains et les pieds. OUCH ne calcule pas le WPI, qui porte sur la semaine écoulée et sert au médecin : il compte, jour par jour, ce que la personne signale.</div></li>
 <li>Wolfe F, Clauw DJ, Fitzcharles MA, Goldenberg DL, Häuser W, Katz RL, Mease PJ, Russell AS, Russell IJ, Walitt B. 2016 Revisions to the 2010/2011 fibromyalgia diagnostic criteria. <i>Semin Arthritis Rheum</i>. 2016;46(3):319-329. PMID 27916278.<div class="u"><b>Ce que dit l’étude.</b> Révision de ces critères, après examen de 14 études de validation. Le WPI et ses 19 régions sont gardés, et la douleur généralisée suppose une douleur dans au moins 4 des 5 grandes régions du corps (mâchoire, poitrine et ventre exclus). <b>Dans OUCH.</b> Même découpage du corps. Le rapport indique combien de ces régions sont signalées dans la période, comme un simple décompte. OUCH n’applique ni ces critères ni la définition de la douleur généralisée : seul un médecin pose un diagnostic.</div></li>
 </ol>
-</div><div class="foot"><span>Établi le 15 octobre 2026 à partir du code publié d’OUCH v0.6.0 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+</div><div class="foot"><span>Établi le 23 octobre 2026 à partir du code publié d’OUCH v0.6.2 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
 </div>
 </body></html>

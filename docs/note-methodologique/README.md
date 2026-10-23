@@ -1,6 +1,6 @@
 # Note méthodologique pour les soignants
 
-Source HTML de la note « Comment OUCH calcule ses chiffres » (9 pages A4, français ; la version anglaise est `index.en.html`), décrite d’après le code de la v0.6.0. À mettre à jour quand un calcul, un seuil ou une référence change (`src/lib/report.ts`, `flares.ts`, `flareContext.ts`, `references.ts`, `treatmentReview.ts`, `weekdays.ts`, `leads.ts`, `leadTrial.ts`, `weeklySentence.ts`).
+Source HTML de la note « Comment OUCH calcule ses chiffres » (9 pages A4, français ; la version anglaise est `index.en.html`), décrite d’après le code de la v0.6.2. À mettre à jour quand un calcul, un seuil ou une référence change (`src/lib/report.ts`, `flares.ts`, `flareContext.ts`, `references.ts`, `treatmentReview.ts`, `weekdays.ts`, `leads.ts`, `leadTrial.ts`, `weeklySentence.ts`).
 
 Les pages sont explicites (`.page`, 297 mm) : si un texte s'allonge, vérifier qu'il tient encore dans sa page avant d'imprimer. La police Public Sans est lue dans `node_modules` (`npm install`).
 
