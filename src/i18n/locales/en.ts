@@ -500,6 +500,28 @@ const en: Translations = {
     },
   },
 
+  zonesNotice: {
+    title: '“Where does it hurt?” gets more precise',
+    intro: 'You can now say left or right, and which part of the arm or leg, on a silhouette.',
+    before: 'Before',
+    now: 'Now',
+    silhouetteAlt: 'A silhouette with three precise areas marked',
+    doctorTitle: 'Easier for your doctor to read',
+    doctorBody: 'The areas follow the 19 regions they know (widespread pain index), with the side.',
+    keptTitle: 'Nothing is lost or changed',
+    keptBody: 'Your earlier areas stay, marked “old”: they do not say which side.',
+    mine: 'You had noted: {{list}}. You can make them precise by editing a day, whenever you like.',
+    minePlain: 'If you had areas noted before, they stay as they were, marked “old”. You can make them precise by editing a day.',
+    gotIt: 'Got it',
+    tryIt: 'Try it now',
+    close: 'Close',
+    cardTitle: 'The pain areas have changed',
+    cardText: 'Left and right, a silhouette, and the 19 regions your doctor knows. Read again what changes and why.',
+    cardButton: 'Read again',
+    chips: ['Head', 'Arms', 'Legs', 'Lower back'],
+    names: { shoulders: 'Shoulders', arms: 'Arms', hands: 'Hands', hips: 'Hips', legs: 'Legs', feet: 'Feet' },
+  },
+
   weatherConditions: {
     ensoleille: 'Sunny',
     variable: 'Variable',

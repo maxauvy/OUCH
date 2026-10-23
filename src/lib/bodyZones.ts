@@ -124,3 +124,10 @@ export function zoneSummary(entries: readonly { painLocations?: readonly string[
     daysWithOldZones,
   }
 }
+
+/** The zones of the first versions that a journal still holds, in the order of the list: who has some is told about the new zones, once. */
+export function oldZonesUsed(entries: readonly { painLocations?: readonly string[] }[]): BodyZone[] {
+  const used = new Set<string>()
+  for (const e of entries) for (const z of e.painLocations ?? []) if (isCoarseZone(z)) used.add(z)
+  return COARSE_ZONES.filter((z) => used.has(z))
+}

@@ -2,7 +2,7 @@
 // here means adding it to *every* locale file — TypeScript will point at
 // each one that's missing it.
 
-import type { BodyZone } from '../db/types'
+import type { BodyZone, COARSE_ZONES } from '../db/types'
 import type { BodyGroupId, BodyRegion } from '../lib/bodyZones'
 import type { ChildTone } from '../lib/childView'
 
@@ -372,6 +372,33 @@ export interface Translations {
     mapLabel: string
     groups: Record<BodyGroupId, string>
     regions: Record<BodyRegion, string>
+  }
+
+  /** Said once, in a sheet, to a journal that holds zones of the first versions; read again from Settings. */
+  zonesNotice: {
+    title: string
+    intro: string
+    before: string
+    now: string
+    silhouetteAlt: string
+    doctorTitle: string
+    doctorBody: string
+    keptTitle: string
+    keptBody: string
+    /** `{{list}}`: the old zones the journal holds */
+    mine: string
+    /** When the journal holds none (read again from Settings). */
+    minePlain: string
+    gotIt: string
+    tryIt: string
+    close: string
+    cardTitle: string
+    cardText: string
+    cardButton: string
+    /** The chips of the old input, in the picture. */
+    chips: string[]
+    /** The old zones, without "(old)". */
+    names: Record<(typeof COARSE_ZONES)[number], string>
   }
 
   weatherConditions: {

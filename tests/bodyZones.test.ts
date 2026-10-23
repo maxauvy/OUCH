@@ -68,3 +68,11 @@ test('the zone summary counts what was declared: no WPI score', () => {
   assert.equal(s.daysWithOldZones, 1)
   assert.equal(zoneSummary([{}]).meanAreasPerDay, null)
 })
+
+import { oldZonesUsed } from '../src/lib/bodyZones.ts'
+
+test('only a journal that holds zones of the first versions is told about the new ones', () => {
+  assert.deepEqual(oldZonesUsed([]), [])
+  assert.deepEqual(oldZonesUsed([{ painLocations: ['leftShoulder', 'neck', 'generalized'] }, {}]), [])
+  assert.deepEqual(oldZonesUsed([{ painLocations: ['legs', 'neck'] }, { painLocations: ['arms', 'legs'] }]), ['arms', 'legs'])
+})

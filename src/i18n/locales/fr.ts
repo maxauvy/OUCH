@@ -502,6 +502,28 @@ const fr: Translations = {
     },
   },
 
+  zonesNotice: {
+    title: '« Où as-tu mal ? » devient plus précis',
+    intro: 'Tu peux maintenant dire à gauche ou à droite, et quelle partie du bras ou de la jambe, sur une silhouette.',
+    before: 'Avant',
+    now: 'Maintenant',
+    silhouetteAlt: 'Une silhouette où trois zones précises sont marquées',
+    doctorTitle: 'Ton médecin lit plus facilement',
+    doctorBody: 'Les zones suivent les 19 régions qu’il connaît (index de douleur diffuse), avec le côté.',
+    keptTitle: 'Rien n’est perdu ni changé',
+    keptBody: 'Tes anciennes zones restent, marquées « ancien » : elles ne disent pas le côté.',
+    mine: 'Tu avais noté : {{list}}. Tu pourras les préciser en modifiant un jour, quand tu veux.',
+    minePlain: 'Si tu avais des zones notées avant, elles restent telles quelles, marquées « ancien ». Tu pourras les préciser en modifiant un jour.',
+    gotIt: 'Compris',
+    tryIt: 'Essayer maintenant',
+    close: 'Fermer',
+    cardTitle: 'Les zones de douleur ont changé',
+    cardText: 'Gauche et droite, une silhouette, et les 19 régions que ton médecin connaît. Relis ce qui change et pourquoi.',
+    cardButton: 'Relire',
+    chips: ['Tête', 'Bras', 'Jambes', 'Dos bas'],
+    names: { shoulders: 'Épaules', arms: 'Bras', hands: 'Mains', hips: 'Hanches', legs: 'Jambes', feet: 'Pieds' },
+  },
+
   weatherConditions: {
     ensoleille: 'Ensoleillé',
     variable: 'Variable',
