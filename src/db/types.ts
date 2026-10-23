@@ -318,6 +318,8 @@ export interface Settings {
   leadTrialHistory?: LeadTrial[]
   /** What the lead cards have already shown on this device. Per device. */
   leadsSeen?: LeadsSeen
+  /** The notice about the new body zones was seen on this device (shown once, to a journal that holds zones of the first versions). Per device. */
+  zonesNoticeSeen?: boolean
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness

@@ -4,7 +4,7 @@ import { useIsDark } from './hooks/useIsDark'
 import { AppLockGate } from './components/lock/AppLockGate'
 import { handleProviderReturn } from './lib/autoBackupRuntime'
 import { useAutoBackup } from './hooks/useAutoBackup'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
 import { DemoPill } from './components/demo/DemoPill'
 import { DemoTour } from './components/demo/DemoTour'
@@ -18,7 +18,9 @@ import { ChildViewPage } from './pages/ChildViewPage'
 import { SetupWizard } from './components/setup/SetupWizard'
 import { useSettings, useSettingsLoaded } from './hooks/useSettings'
 import { hasPain } from './lib/loggedEntries'
-import { useTodayEntry } from './hooks/useEntries'
+import { useAllEntries, useTodayEntry } from './hooks/useEntries'
+import { oldZonesUsed } from './lib/bodyZones'
+import { ZonesNotice } from './components/about/ZonesNotice'
 import { useLeadList } from './hooks/useLeadList'
 import { trendsDot } from './lib/leadHints'
 import { updateSettings, todayISO } from './db'
@@ -69,6 +71,9 @@ function AppShell() {
   const settingsLoaded = useSettingsLoaded()
   const todayEntry = useTodayEntry()
   const leadList = useLeadList()
+  const allEntries = useAllEntries()
+  // A journal that holds zones of the first versions is told about the new ones, once per device.
+  const oldZones = useMemo(() => oldZonesUsed(allEntries ?? []), [allEntries])
   useAppliedTheme(settings.theme)
   useAppliedLook(settings.theme)
   useAutoBackup()
@@ -153,6 +158,17 @@ function AppShell() {
           setTab(next)
         }}
       />
+      {settings.onboardingDone && !settings.zonesNoticeSeen && oldZones.length > 0 && !tourOpen && !IS_DEMO && (
+        <ZonesNotice
+          oldZones={oldZones}
+          onClose={() => void updateSettings({ zonesNoticeSeen: true })}
+          onTry={() => {
+            void updateSettings({ zonesNoticeSeen: true })
+            setBackupRequested(false)
+            setTab('today')
+          }}
+        />
+      )}
       {IS_DEMO &&
         (tourOpen ? (
           <DemoTour

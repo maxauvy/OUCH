@@ -8,6 +8,9 @@ import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
 import { AboutCard } from '../components/about/AboutCard'
 import { SourcesCard } from '../components/about/SourcesCard'
+import { ZonesNotice } from '../components/about/ZonesNotice'
+import { useAllEntries } from '../hooks/useEntries'
+import { oldZonesUsed } from '../lib/bodyZones'
 import { SupportCard } from '../components/about/SupportCard'
 import { BackupSection } from '../components/settings/BackupSection'
 import { IS_DEMO } from '../lib/demoMode'
@@ -33,6 +36,8 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
   const settings = useSettings()
   const earlyAccess = useEarlyAccess()
   const luminous = useLuminous()
+  const allEntries = useAllEntries()
+  const [zonesNoticeOpen, setZonesNoticeOpen] = useState(false)
   // Raised to open the "Mes données" group from the lock's sheet ("Faire d'abord une sauvegarde").
   const [backupSignal, setBackupSignal] = useState(0)
   function goToBackupSection() {
@@ -438,6 +443,22 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
 
       <SettingsGroup icon={IconInfoCircle} title={t.settings.groups.about}>
         <AboutCard withHeader />
+
+        <Card>
+          <SectionTitle>{t.zonesNotice.cardTitle}</SectionTitle>
+          <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.zonesNotice.cardText}
+          </p>
+          <button
+            type="button"
+            onClick={() => setZonesNoticeOpen(true)}
+            className="min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
+            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+          >
+            {t.zonesNotice.cardButton}
+          </button>
+        </Card>
+        {zonesNoticeOpen && <ZonesNotice oldZones={oldZonesUsed(allEntries ?? [])} onClose={() => setZonesNoticeOpen(false)} />}
 
         {!IS_DEMO && (
           <Card>
