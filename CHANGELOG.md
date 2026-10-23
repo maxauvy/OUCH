@@ -4,7 +4,9 @@ Les changements notables d'OUCH sont notés ici. Le format suit [Keep a Changelo
 
 Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/releases), et le site déployé affiche en pied de page la version qu'il exécute (avec le commit entre deux versions).
 
-## [Non publié]
+## [0.6.2] - 2026-10-23
+
+Où la douleur est ressentie prend de la précision : une silhouette, le côté gauche ou droit, et les 19 régions que le médecin connaît. L'apparence lumineuse devient celle de l'application, et les essais d'une semaine gagnent leur carte.
 
 ### Ajouté
 - **Une fenêtre, une seule fois, pour les personnes qui avaient des zones notées avec l'ancienne version** : elle dit ce qui change dans « Où as-tu mal ? » (gauche et droite, silhouette, les 19 régions que le médecin connaît), pourquoi, et que rien n'est perdu ni converti (les anciennes zones restent, marquées « ancien »). Elle ne s'affiche que si le journal contient une ancienne zone, jamais à une nouvelle personne ; fermer suffit. On peut la relire dans Réglages, rubrique « À propos ».
