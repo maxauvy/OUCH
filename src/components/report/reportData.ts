@@ -33,6 +33,10 @@ interface ReportOptions {
   leadFactors?: LeadFactors
   /** The one-week trials: the weeks closed, and the one under way (kept if it is over) */
   leadTrials?: { history?: LeadTrial[]; current?: LeadTrial }
+  /** The patient follows the morning stiffness (and it is offered): its description goes on the report */
+  includeStiffness?: boolean
+  /** Same for the wakings because of pain */
+  includeNightWakings?: boolean
   includeNotes: boolean
   includeCycle: boolean
   /** Made in the demo: every page says the data is made up */
@@ -48,6 +52,7 @@ export const SYMPTOMS: { key: SymptomKey; better: 1 | -1; max: number }[] = [
   { key: 'moodLevel', better: 1, max: 10 },
   { key: 'stressLevel', better: -1, max: 10 },
   { key: 'activityLevel', better: 1, max: 10 },
+  { key: 'dailyInterference', better: -1, max: 10 },
 ]
 
 export interface ReportData {

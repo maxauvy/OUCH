@@ -20,6 +20,41 @@ test('a well-formed entry is kept as it is', () => {
   assert.deepEqual(sanitizeEntry(full), full)
 })
 
+test('the morning stiffness survives a backup: every band, and its intensity', () => {
+  for (const band of ['none', 'lt30', '30to60', '1to2h', 'gt2h']) {
+    const e = { ...entry, morningStiffness: band, morningStiffnessSeverity: 7 }
+    assert.deepEqual(sanitizeEntry(e), e, band)
+  }
+  assert.equal(sanitizeEntry({ ...entry, morningStiffnessSeverity: 0 })?.morningStiffnessSeverity, 0)
+})
+
+test('the night wakings and the interference survive a backup, 0 included', () => {
+  for (const nightWakings of [0, 1, 2, 3]) assert.deepEqual(sanitizeEntry({ ...entry, nightWakings, dailyInterference: 4 }), { ...entry, nightWakings, dailyInterference: 4 })
+  assert.equal(sanitizeEntry({ ...entry, dailyInterference: 0 })?.dailyInterference, 0)
+})
+
+test('a number of wakings off the 0-3 choices, or an interference off the scale, is dropped', () => {
+  for (const bad of [4, -1, 1.5, '2', null]) assert.equal(sanitizeEntry({ ...entry, nightWakings: bad })?.nightWakings, undefined, String(bad))
+  assert.equal(sanitizeEntry({ ...entry, dailyInterference: 11 })?.dailyInterference, undefined)
+})
+
+test('the keys of the new indicators survive a settings backup', () => {
+  assert.deepEqual(sanitizeSettings({ enabledFactors: ['sleep', 'nightWaking', 'dailyInterference'] })?.enabledFactors, ['sleep', 'nightWaking', 'dailyInterference'])
+})
+
+test('an unknown band or an out-of-range intensity is dropped, not an error', () => {
+  const out = sanitizeEntry({ ...entry, morningStiffness: 'forever', morningStiffnessSeverity: 11 })
+  assert.equal(out?.morningStiffness, undefined)
+  assert.equal(out?.morningStiffnessSeverity, undefined)
+  assert.equal(out?.painLevel, 6)
+})
+
+test('the morning stiffness key and its intensity setting survive a settings backup', () => {
+  const out = sanitizeSettings({ enabledFactors: ['fatigue', 'morningStiffness', 'unknown'], morningStiffnessSeverityEnabled: true })
+  assert.deepEqual(out?.enabledFactors, ['fatigue', 'morningStiffness'])
+  assert.equal(out?.morningStiffnessSeverityEnabled, true)
+})
+
 test('a day without a pain level is kept without one: it is not a day of 0', () => {
   const out = sanitizeEntry({ date: '2026-05-04', painLocations: ['neck'], createdAt: 1, updatedAt: 2 })
   assert.deepEqual(out, { date: '2026-05-04', painLocations: ['neck'], createdAt: 1, updatedAt: 2 })

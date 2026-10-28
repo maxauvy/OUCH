@@ -20,6 +20,23 @@ test('the same day gives the same history', () => {
   assert.deepEqual(buildDemoHistory({ endDate: END, language: 'fr' }), buildDemoHistory({ endDate: END, language: 'fr' }))
 })
 
+test('the demo notes a morning stiffness that follows the pain', () => {
+  const { entries, settings } = buildDemoHistory({ endDate: END, language: 'fr' })
+  assert.ok(settings.enabledFactors?.includes('morningStiffness'))
+  const bands = ['none', 'lt30', '30to60', '1to2h', 'gt2h']
+  assert.ok(entries.every((e) => e.morningStiffness && bands.includes(e.morningStiffness)))
+  const rank = (e: (typeof entries)[number]) => bands.indexOf(e.morningStiffness!)
+  assert.ok(entries.filter((e) => (e.painLevel ?? 0) >= 7).every((e) => rank(e) === 3))
+  assert.ok(entries.filter((e) => (e.painLevel ?? 0) < 3).every((e) => rank(e) === 0))
+})
+
+test('the demo notes the night wakings and the interference from the day, with no draw of their own', () => {
+  const { entries, settings } = buildDemoHistory({ endDate: END, language: 'fr' })
+  assert.ok(settings.enabledFactors?.includes('nightWaking') && settings.enabledFactors.includes('dailyInterference'))
+  assert.ok(entries.every((e) => [0, 1, 2].includes(e.nightWakings!)))
+  assert.ok(entries.every((e) => e.dailyInterference === Math.round(e.painLevel! * 0.8)))
+})
+
 test('ninety days counted back from the end date, most of them logged, the last week always', () => {
   const h = buildDemoHistory({ endDate: END, language: 'fr' })
   const dates = h.entries.map((e) => e.date)

@@ -4,6 +4,15 @@ Les changements notables d'OUCH sont notés ici. Le format suit [Keep a Changelo
 
 Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/releases), et le site déployé affiche en pied de page la version qu'il exécute (avec le commit entre deux versions).
 
+## [Non publié]
+
+### Ajouté
+- **Un catalogue des indicateurs par maladie**, en coulisses : il dit quels indicateurs conviennent à quelle maladie (recommandés, suggérés, ou au choix). Aucune case ne change pour les personnes qui utilisent déjà l'application.
+- **Raideur au réveil** (accès anticipé, à activer dans Réglages › Suivi) : la durée du « dérouillage » en cinq tranches, de « Aucune » à « Plus de 2 h », facultative. Une intensité de 0 à 10 peut s'ajouter. Échelle non validée. Présente dans la sauvegarde, l'export CSV (`morning_stiffness`, `morning_stiffness_severity`) et le dictionnaire des données, et décrite dans le rapport pour le médecin (jours par tranche, tranche la plus fréquente), sans seuil.
+- **Les indicateurs sont rangés selon les maladies indiquées** (Réglages › Mon suivi) : d'abord ce qui se suit souvent avec elles, puis ce qui peut aussi aider, puis tous les autres, repliés. Cela ne fait que trier : aucun interrupteur ne bouge de lui-même. Sans maladie indiquée, la liste reste à plat comme avant. Les options d'un indicateur (réveils à cause de la douleur sous le sommeil, intensité sous la raideur) apparaissent une fois l'indicateur suivi.
+- **Réveils à cause de la douleur** (accès anticipé) : 0, 1, 2 ou « 3 fois ou plus », ajouté à la ligne du sommeil. Décrit dans le rapport : jours notés, jours avec au moins un réveil, moyenne par jour noté.
+- **Gêne dans mes gestes du jour** (accès anticipé) : une échelle de 0 à 10, distincte de l'effort fourni (« Activité physique »). Elle rejoint les symptômes du rapport. Échelle non validée.
+
 ## [0.6.2] - 2026-10-23
 
 Où la douleur est ressentie prend de la précision : une silhouette, le côté gauche ou droit, et les 19 régions que le médecin connaît. L'apparence lumineuse devient celle de l'application, et les essais d'une semaine gagnent leur carte.
