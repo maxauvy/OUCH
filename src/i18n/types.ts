@@ -58,6 +58,22 @@ export interface Translations {
     trackingTitle: string
     trackingIntro: string
     changeLater: string
+    /** The three levels of the tracking step. */
+    indicators: {
+      recommendedTitle: string
+      /** With illnesses declared */
+      recommendedHelper: string
+      /** With none: a simple starting point */
+      baseHelper: string
+      /** Under the recommended ones: nothing is compulsory */
+      optional: string
+      suggestedTitle: string
+      /** Under the suggestions that appeared because the illnesses changed */
+      addedNote: string
+      othersSummary: string
+      /** Rerun from Settings: nothing is changed for the person */
+      rerunHelper: string
+    }
     medicationsTitle: string
     medicationsIntro: string
     medicationsLater: string

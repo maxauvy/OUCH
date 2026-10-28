@@ -49,6 +49,16 @@ const fr: Translations = {
     trackingIntro:
       'La douleur est toujours notée. Le reste est au choix : ce que tu suis ici se retrouve dans le rapport (sommeil, fatigue, humeur, zones douloureuses…). Moins de facteurs, c’est une saisie plus rapide les jours difficiles.',
     changeLater: 'Tu pourras en ajouter ou en retirer à tout moment dans Réglages.',
+    indicators: {
+      recommendedTitle: 'Recommandé pour toi',
+      recommendedHelper: 'D’après les maladies que tu as indiquées, voici un point de départ. Tu peux tout modifier maintenant ou plus tard dans Réglages.',
+      baseHelper: 'Un point de départ simple. Indique tes maladies à l’étape précédente pour une proposition plus adaptée.',
+      optional: 'Rien n’est obligatoire : chaque indicateur se décoche d’un tap.',
+      suggestedTitle: 'Peut aussi t’être utile',
+      addedNote: 'Ajouté suite à ton changement de maladie.',
+      othersSummary: 'Voir tous les indicateurs',
+      rerunHelper: 'Voici ce que tu suis aujourd’hui, rangé selon tes maladies. Rien ne change tant que tu ne touches à rien.',
+    },
     medicationsTitle: 'Tes traitements',
     medicationsIntro:
       'Ton médecin voudra savoir ce que tu prends, à quelle dose, et ce qui a changé depuis la dernière fois. Le rapport le montre si tes traitements sont décrits ici.',
