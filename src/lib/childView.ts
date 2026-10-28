@@ -262,6 +262,13 @@ const FR_ILLNESSES: Record<Illness, IllnessCopy> = {
     older: (P) => `${P.Noun} a une maladie inflammatoire chronique, la spondyloarthrite, qui touche surtout le dos et le bassin et provoque douleurs et raideur, surtout la nuit et le matin. Bouger aide souvent à se sentir mieux, alors que rester longtemps immobile aggrave la raideur. Les jours changent selon l'inflammation du moment. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} a une spondyloarthrite, une maladie inflammatoire chronique qui touche surtout la colonne vertébrale et le bassin. Cette maladie provoque douleurs et raideur, surtout la nuit et le matin ; bouger aide, alors que rester immobile longtemps aggrave les choses. Il y a des périodes plus calmes et des poussées. Ce n'est pas contagieux.`,
   },
+  'rhumatisme-psoriasique': {
+    label: 'Rhumatisme psoriasique',
+    titleWithArticle: 'Le rhumatisme psoriasique',
+    young: (P) => `${P.Noun} a une maladie qui s'appelle rhumatisme psoriasique. Elle fait mal aux articulations, parfois avec la peau, et elle raidit le corps, surtout le matin. Ce n'est pas contagieux, et ce n'est jamais à cause de toi.`,
+    older: (P) => `${P.Noun} a une maladie inflammatoire chronique, le rhumatisme psoriasique : elle touche les articulations, qui deviennent douloureuses, gonflées ou raides, et peut aller avec une maladie de peau, le psoriasis. Les jours changent selon l'inflammation du moment. Ce n'est jamais à cause de toi.`,
+    teen: (P) => `${P.Noun} a un rhumatisme psoriasique, une maladie inflammatoire chronique des articulations qui peut s'accompagner de psoriasis, une maladie de peau. Elle provoque douleurs, gonflements et raideur, parfois aussi une grande fatigue. Il y a des périodes plus calmes et des poussées, et des traitements aident à la calmer. Ce n'est pas contagieux.`,
+  },
   endometriose: {
     label: 'Endométriose',
     titleWithArticle: "L'endométriose",
@@ -327,6 +334,13 @@ const EN_ILLNESSES: Record<Illness, IllnessCopy> = {
     young: (P) => `${P.Noun} has an illness called spondyloarthritis. It makes ${P.poss} back hurt and ${P.poss} body feel stiff, especially at night and when ${P.subj} wakes up. Moving gently helps ${P.obj} feel better. It's not contagious, and it's never your fault.`,
     older: (P) => `${P.Noun} has a chronic inflammatory illness called spondyloarthritis: it mainly affects the spine and pelvis, causing pain and stiffness, especially at night and in the morning. Moving often helps ${P.obj} feel better, while staying still for a long time makes the stiffness worse. Some days are worse than others depending on the inflammation. It's never your fault.`,
     teen: (P) => `${P.Noun} has spondyloarthritis, a chronic inflammatory disease that mainly affects the spine and pelvis. It causes pain and stiffness, especially at night and in the morning; moving helps, while staying still for a long time makes it worse. There are calmer periods and flares. It's not contagious.`,
+  },
+  'rhumatisme-psoriasique': {
+    label: 'Psoriatic arthritis',
+    titleWithArticle: 'Psoriatic arthritis',
+    young: (P) => `${P.Noun} has an illness called psoriatic arthritis. It makes the joints hurt, sometimes with the skin too, and it makes the body stiff, mostly in the morning. It's not contagious, and it's never your fault.`,
+    older: (P) => `${P.Noun} has a chronic inflammatory illness, psoriatic arthritis: it affects the joints, which become painful, swollen or stiff, and can come with a skin condition called psoriasis. Days change with the inflammation of the moment. It's never your fault.`,
+    teen: (P) => `${P.Noun} has psoriatic arthritis, a chronic inflammatory disease of the joints that can come with psoriasis, a skin condition. It causes pain, swelling and stiffness, sometimes great tiredness too. There are calmer periods and flares, and treatments help calm it. It's not contagious.`,
   },
   endometriose: {
     label: 'Endometriosis',

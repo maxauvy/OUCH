@@ -70,7 +70,7 @@ const R = 'recommended' as const
 const S = 'suggested' as const
 
 // The order is the display order, and breaks ties inside a priority.
-export const INDICATORS: readonly IndicatorDef[] = [
+const RAW_INDICATORS: readonly IndicatorDef[] = [
   { key: 'fatigue', kind: 'measure', priority: 0, reviewed: true, tiers: { fibromyalgie: R, arthrite: R, spondylarthrite: R, endometriose: R, sep: R, autre: R, lombalgie: S, myofasciale: S } },
   { key: 'sleep', kind: 'measure', priority: 0, reviewed: true, tiers: { fibromyalgie: R, arthrite: R, spondylarthrite: R, endometriose: R, migraine: R, lombalgie: R, sep: R, myofasciale: R, autre: R } },
   { key: 'morningStiffness', kind: 'measure', priority: 0, reviewed: false, tiers: { fibromyalgie: R, arthrite: R, spondylarthrite: R, lombalgie: R } },
@@ -99,6 +99,24 @@ export const INDICATORS: readonly IndicatorDef[] = [
   { key: 'feverInfection', kind: 'block', priority: 2, reviewed: false, tiers: { arthrite: R, sep: R } },
   { key: 'newSymptomMarker', kind: 'block', priority: 2, reviewed: false, tiers: { sep: S } },
 ]
+
+const RANK: Record<Tier, number> = { recommended: 2, suggested: 1 }
+
+/** Psoriatic arthritis follows the rheumatoid arthritis profile and the spondyloarthritis one together: for each
+ * indicator, the stronger of the two. No source of its own has been read for it yet, so it is not set apart further. */
+function withPsoriatic(def: IndicatorDef): IndicatorDef {
+  const tiers = [def.tiers.arthrite, def.tiers.spondylarthrite].filter((t): t is Tier => !!t)
+  const best = tiers.sort((a, b) => RANK[b] - RANK[a])[0]
+  return best ? { ...def, tiers: { ...def.tiers, 'rhumatisme-psoriasique': best } } : def
+}
+
+export const INDICATORS: readonly IndicatorDef[] = RAW_INDICATORS.map(withPsoriatic)
+
+/** The illnesses not yet read by a clinician are offered only with early access, and stay visible for someone who already chose one. */
+const UNREVIEWED_ILLNESSES: readonly Illness[] = ['rhumatisme-psoriasique']
+export function isIllnessOffered(illness: Illness, earlyAccess: boolean, chosen: readonly Illness[] = []): boolean {
+  return !UNREVIEWED_ILLNESSES.includes(illness) || earlyAccess || chosen.includes(illness)
+}
 
 export interface IndicatorPlan {
   /** Pre-selected, at most `MAX_RECOMMENDED_MEASURES` measures plus the blocks and details that go with them. */

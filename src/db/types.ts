@@ -325,6 +325,7 @@ export type Illness =
   | 'fibromyalgie'
   | 'arthrite'
   | 'spondylarthrite'
+  | 'rhumatisme-psoriasique'
   | 'endometriose'
   | 'migraine'
   | 'lombalgie'
@@ -336,6 +337,7 @@ export const ILLNESSES: Illness[] = [
   'fibromyalgie',
   'arthrite',
   'spondylarthrite',
+  'rhumatisme-psoriasique',
   'endometriose',
   'migraine',
   'lombalgie',
