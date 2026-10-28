@@ -12,14 +12,20 @@ import {
   ALL_FACTORS,
   DOSE_UNITS,
   ILLNESSES,
+  HEADACHE_DURATIONS,
   ILLNESS_STATUSES,
+  JOINTS,
   MORNING_STIFFNESS_BANDS,
   NIGHT_WAKINGS,
+  PERIOD_FLOWS,
+  REFRESHED_LEVELS,
   MEDICATION_REGIMENS,
   MEDICATION_STOP_REASONS,
 } from '../db/types.ts'
 import type {
   Dose,
+  Headache,
+  JointsFelt,
   LegacyDailyEntry,
   LegacySettings,
   Medication,
@@ -138,6 +144,32 @@ function intakes(v: unknown): MedicationIntake[] | undefined {
   return out
 }
 
+function bool(v: unknown): boolean | undefined {
+  return typeof v === 'boolean' ? v : undefined
+}
+
+function jointsFelt(v: unknown): JointsFelt | undefined {
+  if (!isRecord(v) || typeof v.yes !== 'boolean') return undefined
+  // The joints only go with a "yes"; an unknown one, or a repeat, is dropped.
+  const joints = v.yes ? [...new Set(strings(v.joints)?.filter((j) => (JOINTS as readonly string[]).includes(j)))] : []
+  return joints.length ? { yes: true, joints: joints as NonNullable<JointsFelt['joints']> } : { yes: v.yes }
+}
+
+function headache(v: unknown): Headache | undefined {
+  if (!isRecord(v) || typeof v.today !== 'boolean') return undefined
+  // The details only go with a headache that day.
+  if (!v.today) return { today: false }
+  return defined({
+    today: true,
+    duration: oneOf(v.duration, HEADACHE_DURATIONS),
+    aura: bool(v.aura),
+    nausea: bool(v.nausea),
+    sensitivity: bool(v.sensitivity),
+    triggers: strings(v.triggers, 60)?.slice(0, 20),
+    acuteMed: bool(v.acuteMed),
+  })
+}
+
 /** Null when the entry cannot be used (no valid day, or a pain level that is
  * not a number from 0 to 10). */
 export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry | null {
@@ -162,6 +194,13 @@ export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry 
     morningStiffnessSeverity: num(raw.morningStiffnessSeverity, 0, 10),
     nightWakings: typeof raw.nightWakings === 'number' && (NIGHT_WAKINGS as readonly number[]).includes(raw.nightWakings) ? (raw.nightWakings as NightWakings) : undefined,
     dailyInterference: num(raw.dailyInterference, 0, 10),
+    wakingRefreshed: oneOf(raw.wakingRefreshed, REFRESHED_LEVELS),
+    jointsFelt: jointsFelt(raw.jointsFelt),
+    periodFlow: oneOf(raw.periodFlow, PERIOD_FLOWS),
+    offCycleBleeding: bool(raw.offCycleBleeding),
+    bowelPain: bool(raw.bowelPain),
+    urinary: bool(raw.urinary),
+    headache: headache(raw.headache),
     weather: weather(raw.weather),
     intakes: intakes(raw.intakes),
     // Free-text medication names of backups from before the registry existed.

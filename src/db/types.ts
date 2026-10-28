@@ -22,6 +22,11 @@ export type FactorKey =
   | 'morningStiffness'
   | 'nightWaking'
   | 'dailyInterference'
+  | 'unrefreshedWaking'
+  | 'swollenJoints'
+  | 'periodFlow'
+  | 'bowelBladder'
+  | 'headacheEpisode'
 
 // Display order for the factor list in Settings. Labels/helpers live in the
 // active translation (`t.factors[key]`), not here.
@@ -40,6 +45,11 @@ export const ALL_FACTORS: FactorKey[] = [
   'morningStiffness',
   'nightWaking',
   'dailyInterference',
+  'unrefreshedWaking',
+  'swollenJoints',
+  'periodFlow',
+  'bowelBladder',
+  'headacheEpisode',
 ]
 
 const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
@@ -109,6 +119,42 @@ export type MorningStiffness = (typeof MORNING_STIFFNESS_BANDS)[number]
 export const NIGHT_WAKINGS = [0, 1, 2, 3] as const
 export type NightWakings = (typeof NIGHT_WAKINGS)[number]
 
+/** Whether the person woke rested, in four levels (not validated). */
+export const REFRESHED_LEVELS = ['yes', 'fairly', 'little', 'no'] as const
+export type Refreshed = (typeof REFRESHED_LEVELS)[number]
+
+/** Joints the person can say they feel painful or swollen, with the side. Their own list: the body zones are too broad for an elbow or an ankle. */
+export const JOINT_REGIONS = ['wrist', 'hand', 'elbow', 'knee', 'ankle', 'foot'] as const
+export type JointRegion = (typeof JOINT_REGIONS)[number]
+export type JointKey = `${BodySide}${Capitalize<JointRegion>}`
+export const JOINTS: readonly JointKey[] = JOINT_REGIONS.flatMap((r) => (['left', 'right'] as const).map((side) => `${side}${r.charAt(0).toUpperCase()}${r.slice(1)}` as JointKey))
+
+/** What the person felt, never a count by an examiner. */
+export interface JointsFelt {
+  yes: boolean
+  /** Only when `yes`. */
+  joints?: JointKey[]
+}
+
+export const PERIOD_FLOWS = ['none', 'spotting', 'light', 'heavy'] as const
+export type PeriodFlow = (typeof PERIOD_FLOWS)[number]
+
+export const HEADACHE_DURATIONS = ['lt4h', '4to24h', 'gt24h'] as const
+export type HeadacheDuration = (typeof HEADACHE_DURATIONS)[number]
+
+/** A headache day, for a condition that comes in episodes. `today: false` is an answer. */
+export interface Headache {
+  today: boolean
+  duration?: HeadacheDuration
+  aura?: boolean
+  nausea?: boolean
+  /** Bothered by light or noise. */
+  sensitivity?: boolean
+  triggers?: string[]
+  /** A medication for the attack was taken. */
+  acuteMed?: boolean
+}
+
 export interface DailyEntry {
   id?: number
   /** ISO date 'YYYY-MM-DD', one entry per day, unique index */
@@ -134,6 +180,18 @@ export interface DailyEntry {
   nightWakings?: NightWakings
   /** 0–10, not validated: how much the pain got in the way of the day's gestures. */
   dailyInterference?: number
+  /** Not validated: waking rested or not, inside the sleep block. */
+  wakingRefreshed?: Refreshed
+  /** What the person feels in their joints; a report of a feeling. Not validated. */
+  jointsFelt?: JointsFelt
+  /** The flow of the period; with the cycle tracking on. Not validated. */
+  periodFlow?: PeriodFlow
+  /** Bleeding outside the period. */
+  offCycleBleeding?: boolean
+  /** Pain at the toilet, and trouble passing urine, linked to the cycle. */
+  bowelPain?: boolean
+  urinary?: boolean
+  headache?: Headache
 
   weather?: WeatherInfo
   /** What was taken that day, pointing at the Medication registry. */

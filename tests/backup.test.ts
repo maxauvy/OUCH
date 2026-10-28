@@ -42,6 +42,52 @@ test('the keys of the new indicators survive a settings backup', () => {
   assert.deepEqual(sanitizeSettings({ enabledFactors: ['sleep', 'nightWaking', 'dailyInterference'] })?.enabledFactors, ['sleep', 'nightWaking', 'dailyInterference'])
 })
 
+test('the P1 indicators survive a backup as they were written', () => {
+  const full = {
+    ...entry,
+    wakingRefreshed: 'little',
+    jointsFelt: { yes: true, joints: ['leftWrist', 'rightKnee'] },
+    periodFlow: 'light',
+    offCycleBleeding: false,
+    bowelPain: true,
+    urinary: false,
+    headache: { today: true, duration: '4to24h', aura: false, nausea: true, sensitivity: true, triggers: ['stress'], acuteMed: true },
+  }
+  assert.deepEqual(sanitizeEntry(full), full)
+  assert.deepEqual(sanitizeEntry({ ...entry, jointsFelt: { yes: false } })?.jointsFelt, { yes: false })
+  assert.deepEqual(sanitizeEntry({ ...entry, headache: { today: false } })?.headache, { today: false })
+})
+
+test('bad P1 values are dropped field by field, never an error', () => {
+  const out = sanitizeEntry({
+    ...entry,
+    wakingRefreshed: 'maybe',
+    periodFlow: 'flood',
+    bowelPain: 'yes',
+    jointsFelt: { yes: true, joints: ['leftWrist', 'leftShoulder', 'leftWrist', 7] },
+    headache: { today: true, duration: 'forever', aura: 1, triggers: ['wine', 3] },
+  })
+  assert.equal(out?.wakingRefreshed, undefined)
+  assert.equal(out?.periodFlow, undefined)
+  assert.equal(out?.bowelPain, undefined)
+  assert.deepEqual(out?.jointsFelt, { yes: true, joints: ['leftWrist'] })
+  assert.deepEqual(out?.headache, { today: true, triggers: ['wine'] })
+  assert.equal(out?.painLevel, 6)
+  // Without a boolean "yes" the answer means nothing.
+  assert.equal(sanitizeEntry({ ...entry, jointsFelt: { joints: ['leftWrist'] }, headache: {} })?.jointsFelt, undefined)
+})
+
+test('details of a day without a headache, or without a "yes" for the joints, are not kept', () => {
+  const out = sanitizeEntry({ ...entry, headache: { today: false, aura: true, acuteMed: true }, jointsFelt: { yes: false, joints: ['leftWrist'] } })
+  assert.deepEqual(out?.headache, { today: false })
+  assert.deepEqual(out?.jointsFelt, { yes: false })
+})
+
+test('the keys of the P1 indicators survive a settings backup', () => {
+  const keys = ['unrefreshedWaking', 'swollenJoints', 'periodFlow', 'bowelBladder', 'headacheEpisode']
+  assert.deepEqual(sanitizeSettings({ enabledFactors: keys })?.enabledFactors, keys)
+})
+
 test('an unknown band or an out-of-range intensity is dropped, not an error', () => {
   const out = sanitizeEntry({ ...entry, morningStiffness: 'forever', morningStiffnessSeverity: 11 })
   assert.equal(out?.morningStiffness, undefined)

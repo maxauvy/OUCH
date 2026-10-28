@@ -2,7 +2,7 @@
 // here means adding it to *every* locale file — TypeScript will point at
 // each one that's missing it.
 
-import type { BodyZone, COARSE_ZONES, MorningStiffness } from '../db/types'
+import type { BodyZone, COARSE_ZONES, HeadacheDuration, JointKey, JointRegion, MorningStiffness, PeriodFlow, Refreshed } from '../db/types'
 import type { BodyGroupId, BodyRegion } from '../lib/bodyZones'
 import type { ChildTone } from '../lib/childView'
 
@@ -383,6 +383,11 @@ export interface Translations {
     morningStiffness: FactorText
     nightWaking: FactorText
     dailyInterference: FactorText
+    unrefreshedWaking: FactorText
+    swollenJoints: FactorText
+    periodFlow: FactorText
+    bowelBladder: FactorText
+    headacheEpisode: FactorText
   }
 
   /** Full label of every zone identifier ("Épaule gauche"); the old coarse zones say they are old. */
@@ -489,6 +494,34 @@ export interface Translations {
     nightWakingOptions: [string, string, string, string]
     dailyInterferenceEndNone: string
     dailyInterferenceEndMax: string
+    /** Waking rested or not, by level. */
+    refreshedOptions: Record<Refreshed, string>
+    /** The joints the person feels, by region ("Poignet"); the side comes from `bodyMap.left`/`right`. */
+    joints: {
+      no: string
+      yes: string
+      which: string
+      regions: Record<JointRegion, string>
+    }
+    periodFlowOptions: Record<PeriodFlow, string>
+    offCycleBleeding: string
+    bowelPain: string
+    urinary: string
+    headache: {
+      question: string
+      yes: string
+      no: string
+      duration: string
+      durations: Record<HeadacheDuration, string>
+      /** Heading of the signs that go with the attack */
+      with: string
+      aura: string
+      nausea: string
+      sensitivity: string
+      triggers: string
+      triggersPlaceholder: string
+      acuteMed: string
+    }
     stressEndCalm: string
     stressEndTense: string
     brainFogEndClear: string
@@ -783,6 +816,38 @@ export interface Translations {
       /** `{{v}}` mean per day noted */
       mean: string
       note: string
+    }
+    /** The other indicators the patient noted (waking, joints, cycle, headaches), described over the period. */
+    indicators: {
+      title: string
+      /** `{{list}}`, `{{n}}` days noted */
+      refreshed: string
+      /** `{{yes}}` days with a yes, `{{n}}` days noted */
+      joints: string
+      /** `{{list}}` */
+      jointsTop: string
+      /** `{{list}}` */
+      flow: string
+      /** `{{label}}`, `{{n}}` days with a yes, `{{k}}` days noted */
+      yesDays: string
+      /** `{{n}}` days with a headache, `{{k}}` days noted, `{{m}}` with an attack medication */
+      headache: string
+      /** `{{a}}` aura, `{{b}}` nausea, `{{c}}` light or noise */
+      headacheDetails: string
+      /** `{{list}}` */
+      headacheDurations: string
+      /** `{{list}}` */
+      headacheTriggers: string
+      /** `{{label}}`, `{{n}}` days */
+      item: string
+      note: string
+      refreshedLevels: Record<Refreshed, string>
+      flowLevels: Record<PeriodFlow, string>
+      durations: Record<HeadacheDuration, string>
+      jointNames: Record<JointKey, string>
+      offCycle: string
+      bowelPain: string
+      urinary: string
     }
     zones: string
     zonesNote: string
