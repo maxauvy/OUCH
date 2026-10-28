@@ -1,0 +1,97 @@
+// Run with `npm test`.
+import assert from 'node:assert/strict'
+import { test } from 'node:test'
+import { INDICATORS, MAX_RECOMMENDED_MEASURES, planForIllnesses } from '../src/lib/indicatorCatalog.ts'
+import type { IndicatorKey } from '../src/lib/indicatorCatalog.ts'
+import { ALL_FACTORS, ILLNESSES } from '../src/db/types.ts'
+
+const everything = { earlyAccess: true, implemented: INDICATORS.map((d) => d.key) }
+const measureKeys = new Set(INDICATORS.filter((d) => d.kind === 'measure').map((d) => d.key))
+const measures = (keys: IndicatorKey[]) => keys.filter((k) => measureKeys.has(k))
+
+test('with no illness, or only "autre", the base profile', () => {
+  const base = planForIllnesses([], everything)
+  assert.deepEqual(measures(base.recommended), ['fatigue', 'sleep', 'mood'])
+  assert.deepEqual(planForIllnesses(['autre'], everything), base)
+  assert.equal(base.cycle, 'off')
+})
+
+test('"autre" next to another illness adds nothing of its own', () => {
+  assert.deepEqual(planForIllnesses(['migraine', 'autre'], everything), planForIllnesses(['migraine'], everything))
+})
+
+test('the plan has no duplicates and every indicator is in exactly one list', () => {
+  for (const illnesses of [[], ...ILLNESSES.map((i) => [i]), ['fibromyalgie', 'spondylarthrite'], ['arthrite', 'sep', 'endometriose']] as const) {
+    const plan = planForIllnesses(illnesses, everything)
+    const all = [...plan.recommended, ...plan.suggested, ...plan.others]
+    assert.equal(new Set(all).size, all.length, illnesses.join('+'))
+    assert.equal(all.length, INDICATORS.length, `${illnesses.join('+')}: none is out of reach`)
+  }
+})
+
+test('the union of two illnesses is deduplicated, and recommended wins over suggested', () => {
+  const plan = planForIllnesses(['fibromyalgie', 'spondylarthrite'], everything)
+  assert.equal(plan.recommended.filter((k) => k === 'morningStiffness').length, 1)
+  // dailyInterference is only suggested for both.
+  assert.ok(plan.suggested.includes('dailyInterference'))
+  // stress is suggested for fibromyalgia, not for spondyloarthritis: still suggested.
+  const arthritis = planForIllnesses(['fibromyalgie', 'arthrite'], everything)
+  // dailyInterference: suggested for fibromyalgia, recommended for arthritis.
+  assert.ok(arthritis.recommended.includes('dailyInterference'))
+  assert.ok(!arthritis.suggested.includes('dailyInterference'))
+})
+
+test('fibromyalgia: pain plus five measures, under the cap', () => {
+  const plan = planForIllnesses(['fibromyalgie'], everything)
+  assert.deepEqual(measures(plan.recommended), ['fatigue', 'sleep', 'morningStiffness', 'brainFog', 'mood'])
+  assert.deepEqual(plan.recommended.filter((k) => k === 'nightWaking' || k === 'unrefreshedWaking'), ['nightWaking', 'unrefreshedWaking'])
+})
+
+test('the cap: never more than six measures beside pain, the surplus becomes a suggestion', () => {
+  const all = planForIllnesses(['fibromyalgie', 'arthrite', 'spondylarthrite', 'endometriose', 'migraine', 'lombalgie', 'sep', 'myofasciale'], everything)
+  const recommended = measures(all.recommended)
+  assert.equal(recommended.length, MAX_RECOMMENDED_MEASURES)
+  // Priority first: the P0 measures are kept, the P2 ones are the first to go.
+  assert.ok(recommended.includes('morningStiffness') && recommended.includes('dailyInterference'))
+  assert.ok(!recommended.includes('spasms') && !recommended.includes('legPain'))
+  assert.ok(measures(all.suggested).includes('spasms'))
+})
+
+test('a detail needs its parent: without it, it is not offered', () => {
+  const sleepless = INDICATORS.filter((d) => d.key !== 'sleep')
+  const plan = planForIllnesses(['fibromyalgie'], { ...everything, catalog: sleepless, implemented: sleepless.map((d) => d.key) })
+  assert.ok(!plan.recommended.includes('nightWaking'))
+})
+
+test('endometriosis switches the cycle on, and only it', () => {
+  assert.equal(planForIllnesses(['endometriose'], everything).cycle, 'on')
+  assert.equal(planForIllnesses(['fibromyalgie', 'endometriose'], everything).cycle, 'on')
+  for (const i of ILLNESSES.filter((i) => i !== 'endometriose')) assert.equal(planForIllnesses([i], everything).cycle, 'off', i)
+})
+
+test('deterministic: the same illnesses, in any order, give the same plan', () => {
+  assert.deepEqual(planForIllnesses(['sep', 'migraine', 'fibromyalgie'], everything), planForIllnesses(['fibromyalgie', 'sep', 'migraine'], everything))
+})
+
+test('indicators not built yet are ignored, whatever the early access', () => {
+  for (const earlyAccess of [false, true]) {
+    const plan = planForIllnesses(['fibromyalgie'], { earlyAccess })
+    const all = [...plan.recommended, ...plan.suggested, ...plan.others]
+    assert.ok(all.every((k) => (ALL_FACTORS as string[]).includes(k)), `earlyAccess ${earlyAccess}`)
+  }
+})
+
+test('without early access, only what a clinician has read is offered', () => {
+  const plan = planForIllnesses(['arthrite'], { implemented: INDICATORS.map((d) => d.key) })
+  const unreviewed = new Set(INDICATORS.filter((d) => !d.reviewed).map((d) => d.key))
+  const all = [...plan.recommended, ...plan.suggested, ...plan.others]
+  assert.ok(all.every((k) => !unreviewed.has(k)))
+  assert.ok(all.length > 0)
+})
+
+test('the catalogue is consistent: every historical indicator is built and reviewed', () => {
+  const historical = INDICATORS.filter((d) => (ALL_FACTORS as string[]).includes(d.key))
+  assert.ok(historical.every((d) => d.reviewed))
+  for (const factor of ALL_FACTORS) assert.ok(INDICATORS.some((d) => d.key === factor), `${factor} is in the catalogue`)
+  for (const d of INDICATORS.filter((d) => d.kind === 'detail')) assert.ok(d.parent && INDICATORS.some((p) => p.key === d.parent), `${d.key} has a parent`)
+})
