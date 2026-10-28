@@ -32,6 +32,8 @@ import { SYMPTOMS, type ReportData } from './reportData'
 import type { ReportFormat } from './reportFormat'
 import { REFERENCES } from '../../lib/references'
 import { buildSheets, findCut, rowsBlock, type Block, type Cut } from './pagination'
+import { summarizeMorningStiffness } from '../../lib/stiffnessSummary'
+import { MORNING_STIFFNESS_BANDS } from '../../db/types'
 
 
 /** The dashboard chart's viewBox width: its card's inner width in CSS pixels
@@ -182,6 +184,7 @@ function gpPages(d: ReportData): Block[][] {
           <ZoneFacts d={d} full={false} />
         </div>
       </div>,
+      d.options.includeStiffness && <StiffnessBlock d={d} />,
       d.weekdays && <WeekdaysBlock d={d} />,
       (d.noticed.length > 0 || d.trials.length > 0) && <Noticed d={d} />,
       d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all={false} list={notes} from={from} to={to} continued={continued} />),
@@ -327,6 +330,7 @@ function painClinicPages(d: ReportData): Block[][] {
             })}
           </>
         )),
+      d.options.includeStiffness && <StiffnessBlock d={d} />,
     ],
     // Everything on this page is optional: with no agenda, no medication and
     // no positive action, it would print blank but for its header and footer.
@@ -1199,6 +1203,33 @@ function WeeklyTable({ d, weeks, from, to }: { d: ReportData; weeks: WeekRow[]; 
         ))}
       </tbody>
     </table>
+  )
+}
+
+/** The morning stiffness the patient noted, described: the days in each band and the band noted most often.
+ * Nothing when no day carries it. */
+function StiffnessBlock({ d }: { d: ReportData }) {
+  const { f } = d
+  const s = summarizeMorningStiffness(d.current)
+  if (s.noted === 0) return null
+  const t = f.t.stiffness
+  return (
+    <>
+      <H level={2}>{t.title}</H>
+      <p>
+        {f.format(t.noted, { n: s.noted })}
+        {s.commonest && ` ${f.format(t.commonest, { band: t.bands[s.commonest] })}`}
+        {s.severity && ` ${f.format(t.severity, { v: f.nf(s.severity.mean), n: s.severity.n })}`}
+      </p>
+      <ul>
+        {MORNING_STIFFNESS_BANDS.map((b) => (
+          <li key={b}>
+            {t.bands[b].charAt(0).toUpperCase() + t.bands[b].slice(1)} : {f.format(t.band, { n: s.counts[b] })}
+          </li>
+        ))}
+      </ul>
+      <p className="r-small">{t.note}</p>
+    </>
   )
 }
 

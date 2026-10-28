@@ -719,6 +719,20 @@ export interface Translations {
     trendWorse: string
     symptomsNote: string
     symptomLabels: Record<'fatigueLevel' | 'sleepQuality' | 'sleepHours' | 'brainFog' | 'moodLevel' | 'stressLevel' | 'activityLevel', [string, string]>
+    /** Morning stiffness, as the patient noted it (not validated): the days in each band, described. */
+    stiffness: {
+      title: string
+      /** `{{n}}` days noted over the period */
+      noted: string
+      /** `{{band}}` */
+      commonest: string
+      /** `{{v}}` mean 0–10, `{{n}}` days */
+      severity: string
+      note: string
+      bands: Record<MorningStiffness, string>
+      /** `{{n}}` days, the band follows */
+      band: string
+    }
     zones: string
     zonesNote: string
     zonesWpi: string

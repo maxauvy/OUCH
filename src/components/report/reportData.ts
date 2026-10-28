@@ -33,6 +33,8 @@ interface ReportOptions {
   leadFactors?: LeadFactors
   /** The one-week trials: the weeks closed, and the one under way (kept if it is over) */
   leadTrials?: { history?: LeadTrial[]; current?: LeadTrial }
+  /** The patient follows the morning stiffness (and it is offered): its description goes on the report */
+  includeStiffness?: boolean
   includeNotes: boolean
   includeCycle: boolean
   /** Made in the demo: every page says the data is made up */
