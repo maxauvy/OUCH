@@ -1199,6 +1199,16 @@ export interface Translations {
     firstNamePlaceholder: string
     factorsTitle: string
     factorsHelper: string
+    /** The tracked indicators, ordered by the illnesses the person follows. */
+    indicators: {
+      recommendedTitle: string
+      recommendedHelper: string
+      suggestedTitle: string
+      othersSummary: string
+      /** Under "Morning stiffness": also ask how strong it was */
+      severityLabel: string
+      severityHelper: string
+    }
     cycleTracking: string
     cycleTrackingHelper: string
     weatherLocationTitle: string

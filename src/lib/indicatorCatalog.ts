@@ -195,3 +195,14 @@ export function withoutUnoffered(entry: DailyEntry, earlyAccess: boolean): Daily
   for (const [, fields] of hidden) for (const field of fields ?? []) delete copy[field]
   return copy
 }
+
+/** The options inside an indicator (night wakings inside sleep) that are offered, in display order. */
+export function detailsOf(parent: IndicatorKey, earlyAccess: boolean): IndicatorKey[] {
+  return INDICATORS.filter((d) => d.kind === 'detail' && d.parent === parent && isOffered(d.key, earlyAccess)).map((d) => d.key)
+}
+
+/** A list of indicators as rows: the details leave the list, to be shown under their parent. */
+export function withoutDetails(keys: readonly IndicatorKey[]): IndicatorKey[] {
+  const details = new Set(INDICATORS.filter((d) => d.kind === 'detail').map((d) => d.key))
+  return keys.filter((k) => !details.has(k))
+}

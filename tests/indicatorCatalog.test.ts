@@ -1,7 +1,7 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { INDICATORS, isOffered, MAX_RECOMMENDED_MEASURES, offeredFactors, planForIllnesses, withoutUnoffered } from '../src/lib/indicatorCatalog.ts'
+import { INDICATORS, isOffered, MAX_RECOMMENDED_MEASURES, offeredFactors, planForIllnesses, withoutDetails, withoutUnoffered, detailsOf } from '../src/lib/indicatorCatalog.ts'
 import type { IndicatorKey } from '../src/lib/indicatorCatalog.ts'
 import { ALL_FACTORS, ILLNESSES } from '../src/db/types.ts'
 
@@ -118,4 +118,11 @@ test('without early access an entry is shown without what the new indicators wro
   assert.deepEqual(withoutUnoffered(entry, false), { date: '2026-10-01', createdAt: 1, updatedAt: 1, painLevel: 5, fatigueLevel: 3 })
   assert.equal(withoutUnoffered(entry, true), entry)
   assert.equal(entry.nightWakings, 2)
+})
+
+test('the options inside sleep are listed under it, and leave the list of rows', () => {
+  assert.deepEqual(detailsOf('sleep', true), ['nightWaking'])
+  assert.deepEqual(detailsOf('sleep', false), [])
+  assert.deepEqual(detailsOf('fatigue', true), [])
+  assert.deepEqual(withoutDetails(['fatigue', 'sleep', 'nightWaking', 'mood']), ['fatigue', 'sleep', 'mood'])
 })
