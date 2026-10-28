@@ -343,6 +343,12 @@ export interface Settings {
   leadsSeen?: LeadsSeen
   /** Under "Morning stiffness": also ask how strong it was (0–10). Off until the person says yes. A preference, restored from a backup. */
   morningStiffnessSeverityEnabled: boolean
+  /** The invitation to follow new indicators (existing users, banner on the day's page) is over: they added some, or the person is a new one, who chose in the setup. A preference, restored from a backup. */
+  indicatorInviteDone: boolean
+  /** The banner waits until this day (ISO) after a cross. Restored from a backup. */
+  indicatorInviteSnoozeUntil?: string
+  /** How many times the cross was pressed, 0 to 2: at 2 the banner does not come back. Restored from a backup. */
+  indicatorInviteDismissCount?: number
   /** The notice about the new body zones was seen on this device (shown once, to a journal that holds zones of the first versions). Per device. */
   zonesNoticeSeen?: boolean
 }
@@ -379,6 +385,7 @@ export const DEFAULT_SETTINGS: Settings = {
   leadDotEnabled: true,
   trialsEnabled: true,
   morningStiffnessSeverityEnabled: false,
+  indicatorInviteDone: false,
 }
 
 export type PainWeatherLevel = 1 | 2 | 3 | 4 | 5

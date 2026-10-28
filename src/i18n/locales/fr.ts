@@ -247,6 +247,19 @@ const fr: Translations = {
     share: 'Partager ma météo du jour',
   },
 
+  indicatorInvite: {
+    region: 'Nouveaux indicateurs possibles',
+    banner: 'Nouveaux indicateurs possibles, d’après ce que tu as indiqué ({{list}}).',
+    see: 'Voir',
+    later: 'Plus tard',
+    sheetTitle: 'Compléter ton suivi ?',
+    sheetHint: 'Coche ce que tu veux ajouter. Tout est facultatif et modifiable dans les Réglages.',
+    add: 'Ajouter ({{n}})',
+    notNow: 'Plus tard',
+    footer: 'Tu suis déjà {{list}} : ces indicateurs restent en place.',
+    closeSheet: 'Fermer',
+  },
+
   journal: {
     title: 'Journal',
     empty: "Aucune entrée pour l'instant. Ta première météo du jour apparaîtra ici.",

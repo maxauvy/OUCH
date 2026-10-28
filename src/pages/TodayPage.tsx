@@ -17,6 +17,9 @@ import { todayISO } from '../db'
 import { useTranslation } from '../i18n'
 import { IconShare } from '@tabler/icons-react'
 import { BackupReminderCard } from '../components/backup/BackupReminderCard'
+import { IndicatorInviteBanner } from '../components/home/IndicatorInviteBanner'
+import { shouldShowInvite } from '../lib/indicatorInvite'
+import { useEarlyAccess } from '../lib/earlyAccess'
 
 export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => void; onGoToTab: (tab: Tab) => void }) {
   const entry = useTodayEntry()
@@ -64,12 +67,16 @@ export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => voi
     () => (logged && settings.weeklySentenceEnabled ? weeklyFinding(logged, date, flare) : null),
     [logged, settings.weeklySentenceEnabled, date, flare]
   )
+  const earlyAccess = useEarlyAccess()
+  // Not on a hard day, nor before the diary is read; the demo is nobody's own tracking.
+  const invite = !IS_DEMO && !!logged && shouldShowInvite(settings, { earlyAccess, today: date, quiet: flare })
   const trial = settings.leadTrial
   const trialLead = trial && leadList ? [...leadList.shown, ...leadList.dismissed].find((l) => l.key === trial.key) : undefined
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       {!IS_DEMO && <BackupReminderCard onBackup={onGoToBackup} />}
+      {invite && <IndicatorInviteBanner settings={settings} earlyAccess={earlyAccess} today={date} />}
       {trial && logged && (flare ? <TrialPausedCard trial={trial} /> : <TrialCard trial={trial} history={settings.leadTrialHistory} entries={logged} today={date} lead={trialLead} choices={settings.leadChoices} />)}
       {weekly && weeklyVisible(settings.leadsSeen, date) && <WeeklyCard finding={weekly} date={date} onSee={() => onGoToTab('journal')} />}
       {bring && loggedAtOpen && <LeadPromptCard lead={bring} date={date} onSee={() => onGoToTab('trends')} />}

@@ -292,6 +292,9 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     leadDotEnabled: bool(raw.leadDotEnabled),
     trialsEnabled: bool(raw.trialsEnabled),
     morningStiffnessSeverityEnabled: bool(raw.morningStiffnessSeverityEnabled),
+    indicatorInviteDone: bool(raw.indicatorInviteDone),
+    indicatorInviteSnoozeUntil: isISODate(raw.indicatorInviteSnoozeUntil) ? raw.indicatorInviteSnoozeUntil : undefined,
+    indicatorInviteDismissCount: typeof raw.indicatorInviteDismissCount === 'number' && Number.isInteger(raw.indicatorInviteDismissCount) ? num(raw.indicatorInviteDismissCount, 0, 2) : undefined,
     leadTrial: leadTrial(raw.leadTrial),
     leadTrialHistory: leadTrialHistory(raw.leadTrialHistory),
   })

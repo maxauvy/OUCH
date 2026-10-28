@@ -66,7 +66,8 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
     const next = steps[Math.min(steps.length - 1, Math.max(0, index + delta))]!
     if (next === 'tracking' && firstPass && appliedKeys === null) {
       const plan = planForIllnesses(settings.illnesses, { earlyAccess })
-      void updateSettings(planSettingsPatch(plan))
+      // Someone who chose their indicators here is never invited to choose again.
+      void updateSettings({ ...planSettingsPatch(plan), indicatorInviteDone: true })
       setAppliedKeys(plan.recommended)
     }
     setStep(next)

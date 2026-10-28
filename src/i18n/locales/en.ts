@@ -245,6 +245,19 @@ const en: Translations = {
     share: "Share today's weather",
   },
 
+  indicatorInvite: {
+    region: 'New indicators you could follow',
+    banner: 'New indicators you could follow, based on what you told us ({{list}}).',
+    see: 'See',
+    later: 'Later',
+    sheetTitle: 'Complete your tracking?',
+    sheetHint: 'Tick what you want to add. Everything is optional and can be changed in Settings.',
+    add: 'Add ({{n}})',
+    notNow: 'Later',
+    footer: 'You already track {{list}}: these indicators stay as they are.',
+    closeSheet: 'Close',
+  },
+
   journal: {
     title: 'Journal',
     empty: 'No entries yet. Your first daily weather will appear here.',

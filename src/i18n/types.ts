@@ -138,6 +138,26 @@ export interface Translations {
     share: string
   }
 
+  /** The invitation to follow new indicators, for someone who already uses the app. */
+  indicatorInvite: {
+    /** Accessible name of the banner */
+    region: string
+    /** `{{list}}`: the illnesses declared */
+    banner: string
+    see: string
+    /** The cross: "later" */
+    later: string
+    sheetTitle: string
+    sheetHint: string
+    /** `{{n}}` ticked */
+    add: string
+    /** The quiet link under the button */
+    notNow: string
+    /** `{{list}}`: what is followed already */
+    footer: string
+    closeSheet: string
+  }
+
   journal: {
     title: string
     empty: string
