@@ -9,7 +9,7 @@ Cette page rassemble ce qu'un soignant peut vouloir lire, essayer, ou discuter.
 | Document | Pour quoi faire | Où |
 |---|---|---|
 | Plaquette (2 pages) | Voir en un coup d'œil ce que le patient saisit, pourquoi c'est pertinent, et ce que contient le rapport | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.6.0/OUCH-plaquette-soignants-v0.6.0.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.6.0/OUCH-leaflet-for-professionals-v0.6.0.pdf) · [source](../plaquette-soignants/) |
-| Note méthodologique (9 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et huit questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.6.0/OUCH-note-methodologique-v0.6.0.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.6.0/OUCH-methodology-note-v0.6.0.pdf) · [source](../note-methodologique/) |
+| Note méthodologique (11 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et dix questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.6.0/OUCH-note-methodologique-v0.6.0.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.6.0/OUCH-methodology-note-v0.6.0.pdf) · [source](../note-methodologique/) |
 | Scores validés, note de cadrage (2 pages) | Discuter de l'ajout éventuel de questionnaires validés : ce qu'OUCH ferait et ne ferait pas, les outils envisagés maladie par maladie et leurs droits, cinq questions | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-note-scores-valides-v0.5.0.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-validated-scores-note-v0.5.0.pdf) · [source](../note-scores-valides/) |
 | Vie privée | Savoir ce qui est enregistré, où, et ce qui quitte l'appareil | [`PRIVACY.md`](../../PRIVACY.md) |
 | Sécurité | Chiffrement des sauvegardes, signalement d'une faille | [`SECURITY.md`](../../SECURITY.md) |
@@ -41,7 +41,7 @@ Rien de ce qui est saisi ne quitte l'appareil. Les données de démonstration so
 
 Le projet a surtout besoin de regards de terrain. Dans l'ordre où cela coûte le moins de temps :
 
-1. **Lire la note méthodologique** et répondre, même brièvement, aux huit questions de ses dernières pages : la définition d'une poussée, les catégories de douleur, ce que vous ne voulez pas voir dans un rapport.
+1. **Lire la note méthodologique** et répondre, même brièvement, aux dix questions de ses dernières pages : la définition d'une poussée, les catégories de douleur, ce que vous ne voulez pas voir dans un rapport.
 2. **Donner un retour précis** : un libellé qui prête à confusion, une donnée qui manque, un seuil que vous contestez. Le plus simple est le [formulaire « Retour clinique »](https://github.com/maxauvy/OUCH/issues/new?template=retour-clinique.yml) ; il ne demande pas de savoir utiliser GitHub.
 3. **Essayer avec quelques patients** qui le souhaitent, et dire ce que le rapport a changé, ou non, en consultation. Le [protocole de test](protocole-de-test.md) décrit comment, et ce qui est (ou n'est pas) recueilli.
 4. **Relire les références** : une étude manquante ou mal résumée se signale de la même façon.
