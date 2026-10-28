@@ -120,8 +120,7 @@ Contributions are welcome from clinicians and patients as much as from developer
 
 ## Ideas for what's next
 
-- CSV export of the journal.
-- A tappable body map instead of the list of areas.
+- Review of the new indicators by clinicians, to bring them out of early access.
 - A real push reminder (it would need a small server).
 - Several profiles on the same device.
 - Comparing two periods directly in Trends.
