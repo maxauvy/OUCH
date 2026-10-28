@@ -10,9 +10,17 @@
 // an extrapolation, and there is no consensus definition of a flare to
 // check against. Descriptive only: nothing here says why a flare happened.
 
-import type { LoggedEntry } from '../db/types'
+import type { Illness, LoggedEntry } from '../db/types'
 import { daysBetween, median } from './report.ts'
 import { shiftISO } from './medications.ts'
+
+/** Whether the flare reading applies to someone who follows these illnesses. It reads a pain that is
+ * there every day and rises for a while; a migraine comes in attacks, with days between without pain,
+ * so for a person who follows nothing else it would say nothing true. The report counts the days of
+ * headache instead. With any other illness declared, or none, it applies as before. */
+export function flaresApply(illnesses: readonly Illness[]): boolean {
+  return !(illnesses.length > 0 && illnesses.every((i) => i === 'migraine'))
+}
 
 interface FlareOptions {
   /** Days before a flare used to find the usual level */

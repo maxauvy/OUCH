@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { todayISO } from '../db'
-import { canDetectFlares, detectFlares, type FlareEpisode } from '../lib/flares'
+import { canDetectFlares, detectFlares, flaresApply, type FlareEpisode } from '../lib/flares'
+import { useSettings } from './useSettings'
 import { useLoggedEntries } from './useEntries'
 
 /** The flares in the whole journal, as of today, shared by Trends and the
@@ -9,8 +10,10 @@ import { useLoggedEntries } from './useEntries'
  * said when nothing could have been found. */
 export function useFlares(): { episodes: FlareEpisode[]; detectable: boolean } | null {
   const entries = useLoggedEntries()
+  const { illnesses } = useSettings()
+  const applies = flaresApply(illnesses)
   return useMemo(
-    () => (entries ? { episodes: detectFlares(entries, { asOf: todayISO() }), detectable: canDetectFlares(entries) } : null),
-    [entries]
+    () => (entries ? { episodes: applies ? detectFlares(entries, { asOf: todayISO() }) : [], detectable: applies && canDetectFlares(entries) } : null),
+    [entries, applies]
   )
 }

@@ -1,6 +1,6 @@
 import type { DailyEntry, LoggedEntry, Illness, IllnessDetails, Medication } from '../../db/types'
 import type { Language } from '../../i18n'
-import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, type FlareEpisode } from '../../lib/flares'
+import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresApply, type FlareEpisode } from '../../lib/flares'
 import { flareContext, type FlareContext } from '../../lib/flareContext'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
 import { loggedEntries } from '../../lib/loggedEntries'
@@ -98,11 +98,12 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
   const entries = loggedEntries(allEntries)
   const p = reportPeriods(options.consultation, options.end)
   const { current, previous } = splitEntries(entries, p)
-  const episodes = detectFlares(entries, { asOf: options.end })
+  const applies = flaresApply(options.illnesses)
+  const episodes = applies ? detectFlares(entries, { asOf: options.end }) : []
   const startingIn = (from: string, to: string) => episodes.filter((e) => e.start >= from && e.start <= to)
   const flareDays = flareDaySet(episodes)
   const currentFlares = startingIn(p.start, p.end)
-  const detectable = canDetectFlares(entries)
+  const detectable = applies && canDetectFlares(entries)
   const { settleDays, windowDays } = DEFAULT_REVIEW_OPTIONS
   const reviewFrom = shiftISO(p.start, -(settleDays + windowDays))
   return {

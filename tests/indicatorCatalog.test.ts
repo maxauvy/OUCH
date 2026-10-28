@@ -120,7 +120,7 @@ test('without early access an entry is shown without what the new indicators wro
 })
 
 test('the options inside sleep are listed under it, and leave the list of rows', () => {
-  assert.deepEqual(detailsOf('sleep', true), ['nightWaking'])
+  assert.deepEqual(detailsOf('sleep', true), ['nightWaking', 'unrefreshedWaking'])
   assert.deepEqual(detailsOf('sleep', false), [])
   assert.deepEqual(detailsOf('fatigue', true), [])
   assert.deepEqual(withoutDetails(['fatigue', 'sleep', 'nightWaking', 'mood']), ['fatigue', 'sleep', 'mood'])

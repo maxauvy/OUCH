@@ -7,6 +7,7 @@ import { hasPain } from '../lib/loggedEntries'
 import { useLoggedEntries, useTodayEntry } from '../hooks/useEntries'
 import { useLeadList } from '../hooks/useLeadList'
 import { flareUnderWay } from '../lib/hardDays'
+import { flaresApply } from '../lib/flares'
 import { leadToBring, trialToRepeat, weeklyVisible } from '../lib/leadHints'
 import { triedKeys } from '../lib/leadTrial'
 import { weeklyFinding } from '../lib/weeklySentence'
@@ -32,7 +33,7 @@ export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => voi
   // the entry only once today's pain is logged. Until the diary is read, nothing.
   const logged = useLoggedEntries()
   const leadList = useLeadList()
-  const flare = logged ? flareUnderWay(logged, date) : true
+  const flare = logged ? flaresApply(settings.illnesses) && flareUnderWay(logged, date) : true
   const painLogged = !!entry && hasPain(entry)
   // Where the card goes: at the top when the page opens with the pain already
   // logged (nothing moves under the fingers), below the form when it is logged

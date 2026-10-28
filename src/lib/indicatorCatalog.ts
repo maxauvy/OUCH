@@ -185,6 +185,11 @@ const ENTRY_FIELDS: Partial<Record<IndicatorKey, readonly (keyof DailyEntry)[]>>
   morningStiffness: ['morningStiffness', 'morningStiffnessSeverity'],
   nightWaking: ['nightWakings'],
   dailyInterference: ['dailyInterference'],
+  unrefreshedWaking: ['wakingRefreshed'],
+  swollenJoints: ['jointsFelt'],
+  periodFlow: ['periodFlow', 'offCycleBleeding'],
+  bowelBladder: ['bowelPain', 'urinary'],
+  headacheEpisode: ['headache'],
 }
 
 /** The entry as the screens show it: what an indicator not offered (no early

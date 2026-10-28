@@ -316,6 +316,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     const morningStiffness: DailyEntry['morningStiffness'] = painLevel >= 7 ? '1to2h' : painLevel >= 5 ? '30to60' : painLevel >= 3 ? 'lt30' : 'none'
     const nightWakings: DailyEntry['nightWakings'] = sleepQuality < 3.5 ? 2 : sleepQuality < 5.5 ? 1 : 0
     const dailyInterference = Math.round(painLevel * 0.8)
+    const wakingRefreshed: DailyEntry['wakingRefreshed'] = sleepQuality < 3.5 ? 'no' : sleepQuality < 5.5 ? 'little' : sleepQuality < 7.5 ? 'fairly' : 'yes'
     const moodLevel = round(7.5 - pain * 0.5 - (stress - 4) * 0.25 + positiveActions.length * 0.4 + noise(1.8))
 
     const taken = onPregabalin ? ['Prégabaline', 'Duloxétine'] : ['Duloxétine']
@@ -359,6 +360,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
       morningStiffness,
       nightWakings,
       dailyInterference,
+      wakingRefreshed,
       weather: {
         // The last two weeks come from the phone's position, the rest was typed.
         source: i >= DAYS - 14 ? 'auto' : 'manual',
@@ -423,7 +425,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     autoWeatherEnabled: autoWeather,
     ...(autoWeather ? { autoWeatherLat: 45.764, autoWeatherLon: 4.8357 } : {}),
     autoWeatherLabel: 'Lyon',
-    enabledFactors: ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes', 'morningStiffness', 'nightWaking', 'dailyInterference'],
+    enabledFactors: ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes', 'morningStiffness', 'nightWaking', 'dailyInterference', 'unrefreshedWaking'],
     leadChoices,
     ...(walkTrial && { leadTrialHistory: [walkTrial] }),
   }
