@@ -1,4 +1,5 @@
 import { hardDaysCard, lightFormActive, type HardDaysCard } from '../lib/hardDays'
+import { flaresApply } from '../lib/flares'
 import type { DailyEntry } from '../db/types'
 import { loggedEntries } from '../lib/loggedEntries'
 import { useStoredSettings } from './useSettings'
@@ -14,6 +15,8 @@ export function useHardDays(
 ): { ready: boolean; card: HardDaysCard | null; light: boolean } {
   const settings = useStoredSettings()
   if (!settings || !entriesLoaded) return { ready: false, card: null, light: false }
+  // Migraine alone has no flare to answer: the soft card and the lighter form stay out.
+  if (!flaresApply(settings.illnesses)) return { ready: true, card: null, light: false }
   const logged = loggedEntries(entries)
   return {
     ready: true,

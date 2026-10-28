@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry } from '../src/db/types.ts'
-import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresOverlapping, flareThreshold } from '../src/lib/flares.ts'
+import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresApply, flaresOverlapping, flareThreshold } from '../src/lib/flares.ts'
 import { shiftISO } from '../src/lib/medications.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
@@ -141,4 +141,13 @@ test('every day of a flare is in the set, logged or not', () => {
   const eps = detectFlares(series([7, null, 7, 7, 4, 4]))
   assert.deepEqual([...flareDaySet(eps)].sort(), [day(14), day(15), day(16), day(17)])
   assert.equal(flareDaySet([]).size, 0)
+})
+
+test('the flare reading is off for a person who follows migraine and nothing else, on for anyone else', () => {
+  assert.equal(flaresApply(['migraine']), false)
+  assert.equal(flaresApply(['migraine', 'migraine']), false)
+  assert.equal(flaresApply([]), true)
+  assert.equal(flaresApply(['fibromyalgie']), true)
+  assert.equal(flaresApply(['migraine', 'fibromyalgie']), true)
+  assert.equal(flaresApply(['migraine', 'autre']), true)
 })
