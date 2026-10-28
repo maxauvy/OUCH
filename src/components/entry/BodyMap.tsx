@@ -1,6 +1,6 @@
 import { useState, type KeyboardEvent } from 'react'
 import { COARSE_ZONES, type BodyZone } from '../../db/types'
-import { DRAW_ORDER, OUTLINES, pieces, type View } from '../../lib/bodyOutlines'
+import { DRAW_ORDER, pieces, type View } from '../../lib/bodyOutlines'
 import { format, useTranslation } from '../../i18n'
 import {
   BODY_GROUPS,
@@ -60,12 +60,12 @@ export function BodyMap({ value, onChange }: { value: BodyZone[]; onChange: (zon
             className="cursor-pointer outline-none"
           >
             {DRAW_ORDER.filter((r) => g.regions.includes(r)).flatMap((region) =>
-              pieces(region, view).map(({ zone, mirror }) => {
+              pieces(region, view).map(({ zone, mirror, d }) => {
                 const pain = chosen.has(zone)
                 return (
                   <path
                     key={zone}
-                    d={OUTLINES[region].d}
+                    d={d}
                     transform={mirror ? 'translate(200 0) scale(-1 1)' : undefined}
                     strokeLinejoin="round"
                     style={{

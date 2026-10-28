@@ -1,7 +1,7 @@
 import { IconArrowRight, IconCheck, IconStethoscope } from '@tabler/icons-react'
 import type { BodyZone } from '../../db/types'
 import { COARSE_ZONES } from '../../db/types'
-import { DRAW_ORDER, OUTLINES, pieces } from '../../lib/bodyOutlines'
+import { DRAW_ORDER, pieces } from '../../lib/bodyOutlines'
 import { format, useLanguage, useTranslation } from '../../i18n'
 import { ModalSheet } from '../ui/ModalSheet'
 
@@ -12,12 +12,12 @@ function MiniSilhouette({ label }: { label: string }) {
   return (
     <svg viewBox="30 0 140 392" role="img" aria-label={label} className="mx-auto block h-auto w-16">
       {DRAW_ORDER.flatMap((region) =>
-        pieces(region, 'front').map(({ zone, mirror }) => {
+        pieces(region, 'front').map(({ zone, mirror, d }) => {
           const marked = SHOWN.has(zone)
           return (
             <path
               key={zone}
-              d={OUTLINES[region].d}
+              d={d}
               transform={mirror ? 'translate(200 0) scale(-1 1)' : undefined}
               strokeLinejoin="round"
               style={{

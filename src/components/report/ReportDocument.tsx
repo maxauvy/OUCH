@@ -1,7 +1,7 @@
 import { createContext, createElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
 import './report.css'
 import type { LoggedEntry } from '../../db/types'
-import { DRAW_ORDER, OUTLINES, pieces, type View } from '../../lib/bodyOutlines'
+import { DRAW_ORDER, pieces, type View } from '../../lib/bodyOutlines'
 import { zoneSummary } from '../../lib/bodyZones'
 import { periodOn } from '../../lib/medications'
 import { formatIllnessList } from '../../lib/childView'
@@ -1417,12 +1417,12 @@ function ZoneFigure({ d }: { d: ReportData }) {
         {views.map(({ view, x, label }) => (
           <g key={view} transform={`translate(${x} 0)`}>
             {DRAW_ORDER.flatMap((region) =>
-              pieces(region, view).map(({ zone, mirror }) => {
+              pieces(region, view).map(({ zone, mirror, d }) => {
                 const s = share.get(zone) ?? 0
                 return (
                   <path
                     key={zone}
-                    d={OUTLINES[region].d}
+                    d={d}
                     transform={mirror ? 'translate(200 0) scale(-1 1)' : undefined}
                     strokeLinejoin="round"
                     style={{ fill: s > 0 ? 'var(--r-blue-700)' : 'none', fillOpacity: s > 0 ? 0.12 + 0.83 * s : 0, stroke: 'var(--r-prev)', strokeWidth: 1.2 }}
