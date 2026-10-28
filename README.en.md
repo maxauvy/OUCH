@@ -112,7 +112,7 @@ The detailed version, with what each outside service receives, is in [`PRIVACY.m
 
 OUCH is not a medical device: it describes what the person logs, makes no diagnosis, recommends no treatment, and does not replace medical advice.
 
-A two-page brochure ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.3.0/OUCH-plaquette-soignants-v0.3.0.pdf)), a methodology note detailing every calculation, threshold and source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.3.0/OUCH-note-methodologique-v0.3.0.pdf)), and a clinical feedback form are gathered in [`docs/soignants/`](docs/soignants/README.md) (all in French).
+A two-page brochure ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.7.0/OUCH-plaquette-soignants-v0.7.0.pdf)), a methodology note detailing every calculation, threshold and source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.7.0/OUCH-note-methodologique-v0.7.0.pdf)), and a clinical feedback form are gathered in [`docs/soignants/`](docs/soignants/README.md) (all in French).
 
 ## Contributing
 
