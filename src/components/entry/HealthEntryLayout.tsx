@@ -28,10 +28,12 @@ import {
 import {
   HEADACHE_DURATIONS,
   JOINT_REGIONS,
+  LEG_PAIN_LEVELS,
   MORNING_STIFFNESS_BANDS,
   NIGHT_WAKINGS,
   PERIOD_FLOWS,
   REFRESHED_LEVELS,
+  SYMPTOM_TAGS,
   type DailyEntry,
   type JointKey, type Medication, type PainWeather, type Settings } from '../../db/types'
 import { todayISO } from '../../db'
@@ -571,6 +573,78 @@ export function HealthEntryLayout({
         cat="cycle"
         label={t.entryForm.offCycleBleeding}
         flags={[{ label: t.entryForm.offCycleBleeding, value: local.offCycleBleeding, onChange: (v) => setField('offCycleBleeding', v) }]}
+      />
+    )
+  if (has('legPain'))
+    metricRows.push(
+      <ChoiceRow
+        key="legPain"
+        icon={IconWalk}
+        cat="pain"
+        label={t.factors.legPain.label}
+        options={LEG_PAIN_LEVELS.map((l) => ({ value: l, label: t.entryForm.legPainOptions[l] }))}
+        value={local.legPain}
+        onChange={(v) => setField('legPain', v as DailyEntry['legPain'])}
+      />
+    )
+  if (has('spasms'))
+    metricRows.push(
+      <MetricRow
+        key="spasms"
+        icon={IconWalk}
+        cat="activity"
+        label={t.factors.spasms.label}
+        value={local.spasms}
+        onChange={(v) => setField('spasms', v)}
+        endLabels={[t.entryForm.spasmsEndNone, t.entryForm.spasmsEndStrong]}
+      />
+    )
+  if (has('sensorySensitivity'))
+    metricRows.push(
+      <MetricRow
+        key="sensorySensitivity"
+        icon={IconBolt}
+        cat="stress"
+        label={t.factors.sensorySensitivity.label}
+        value={local.sensorySensitivity}
+        onChange={(v) => setField('sensorySensitivity', v)}
+        endLabels={[t.entryForm.sensoryEndNone, t.entryForm.sensoryEndStrong]}
+      />
+    )
+  if (has('symptomTags')) {
+    const ticked = local.symptomTags ?? []
+    metricRows.push(
+      <FlagRow
+        key="symptomTags"
+        icon={IconBrain}
+        cat="fog"
+        label={t.factors.symptomTags.label}
+        flags={SYMPTOM_TAGS.map((tag) => ({
+          label: t.entryForm.symptomTagLabels[tag],
+          value: ticked.includes(tag) ? true : undefined,
+          onChange: (v) => setField('symptomTags', v ? [...ticked, tag] : ticked.filter((x) => x !== tag)),
+        }))}
+      />
+    )
+  }
+  if (has('feverInfection'))
+    metricRows.push(
+      <FlagRow
+        key="feverInfection"
+        icon={IconActivityHeartbeat}
+        cat="pain"
+        label={t.factors.feverInfection.label}
+        flags={[{ label: t.entryForm.joints.yes, value: local.feverInfection, onChange: (v) => setField('feverInfection', v) }]}
+      />
+    )
+  if (has('newSymptomMarker'))
+    metricRows.push(
+      <FlagRow
+        key="newSymptom"
+        icon={IconActivityHeartbeat}
+        cat="fog"
+        label={t.factors.newSymptomMarker.label}
+        flags={[{ label: t.entryForm.joints.yes, value: local.newSymptom, onChange: (v) => setField('newSymptom', v) }]}
       />
     )
   if (has('dailyInterference'))

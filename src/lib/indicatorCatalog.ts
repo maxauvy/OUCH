@@ -190,6 +190,12 @@ const ENTRY_FIELDS: Partial<Record<IndicatorKey, readonly (keyof DailyEntry)[]>>
   periodFlow: ['periodFlow', 'offCycleBleeding'],
   bowelBladder: ['bowelPain', 'urinary'],
   headacheEpisode: ['headache'],
+  legPain: ['legPain'],
+  symptomTags: ['symptomTags'],
+  spasms: ['spasms'],
+  feverInfection: ['feverInfection'],
+  newSymptomMarker: ['newSymptom'],
+  sensorySensitivity: ['sensorySensitivity'],
 }
 
 /** The entry as the screens show it: what an indicator not offered (no early

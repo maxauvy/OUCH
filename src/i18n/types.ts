@@ -2,7 +2,7 @@
 // here means adding it to *every* locale file — TypeScript will point at
 // each one that's missing it.
 
-import type { BodyZone, COARSE_ZONES, HeadacheDuration, JointKey, JointRegion, MorningStiffness, PeriodFlow, Refreshed } from '../db/types'
+import type { BodyZone, COARSE_ZONES, HeadacheDuration, JointKey, JointRegion, LegPain, MorningStiffness, PeriodFlow, Refreshed, SymptomTag } from '../db/types'
 import type { BodyGroupId, BodyRegion } from '../lib/bodyZones'
 import type { ChildTone } from '../lib/childView'
 
@@ -388,6 +388,12 @@ export interface Translations {
     periodFlow: FactorText
     bowelBladder: FactorText
     headacheEpisode: FactorText
+    legPain: FactorText
+    symptomTags: FactorText
+    spasms: FactorText
+    feverInfection: FactorText
+    newSymptomMarker: FactorText
+    sensorySensitivity: FactorText
   }
 
   /** Full label of every zone identifier ("Épaule gauche"); the old coarse zones say they are old. */
@@ -504,6 +510,12 @@ export interface Translations {
       regions: Record<JointRegion, string>
     }
     periodFlowOptions: Record<PeriodFlow, string>
+    legPainOptions: Record<LegPain, string>
+    symptomTagLabels: Record<SymptomTag, string>
+    spasmsEndNone: string
+    spasmsEndStrong: string
+    sensoryEndNone: string
+    sensoryEndStrong: string
     offCycleBleeding: string
     bowelPain: string
     urinary: string
@@ -793,7 +805,7 @@ export interface Translations {
     trendBetter: string
     trendWorse: string
     symptomsNote: string
-    symptomLabels: Record<'fatigueLevel' | 'sleepQuality' | 'sleepHours' | 'brainFog' | 'moodLevel' | 'stressLevel' | 'activityLevel' | 'dailyInterference', [string, string]>
+    symptomLabels: Record<'fatigueLevel' | 'sleepQuality' | 'sleepHours' | 'brainFog' | 'moodLevel' | 'stressLevel' | 'activityLevel' | 'dailyInterference' | 'spasms' | 'sensorySensitivity', [string, string]>
     /** Morning stiffness, as the patient noted it (not validated): the days in each band, described. */
     stiffness: {
       title: string
@@ -848,6 +860,17 @@ export interface Translations {
       offCycle: string
       bowelPain: string
       urinary: string
+      legPainLevels: Record<LegPain, string>
+      /** `{{label}}` the leg pain level */
+      leg: string
+      tagLabels: Record<SymptomTag, string>
+      /** `{{n}}` days with a sign, `{{k}}` days noted */
+      tagsLine: string
+      /** `{{list}}` */
+      tagsTop: string
+      feverInfection: string
+      /** The patient's own marker: said as theirs */
+      newSymptom: string
     }
     zones: string
     zonesNote: string
