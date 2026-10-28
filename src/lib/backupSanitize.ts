@@ -13,6 +13,7 @@ import {
   DOSE_UNITS,
   ILLNESSES,
   ILLNESS_STATUSES,
+  MORNING_STIFFNESS_BANDS,
   MEDICATION_REGIMENS,
   MEDICATION_STOP_REASONS,
 } from '../db/types.ts'
@@ -155,6 +156,8 @@ export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry 
     brainFog: num(raw.brainFog, 0, 10),
     moodLevel: num(raw.moodLevel, 0, 10),
     activityLevel: num(raw.activityLevel, 0, 10),
+    morningStiffness: oneOf(raw.morningStiffness, MORNING_STIFFNESS_BANDS),
+    morningStiffnessSeverity: num(raw.morningStiffnessSeverity, 0, 10),
     weather: weather(raw.weather),
     intakes: intakes(raw.intakes),
     // Free-text medication names of backups from before the registry existed.
@@ -284,6 +287,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     weeklySentenceEnabled: bool(raw.weeklySentenceEnabled),
     leadDotEnabled: bool(raw.leadDotEnabled),
     trialsEnabled: bool(raw.trialsEnabled),
+    morningStiffnessSeverityEnabled: bool(raw.morningStiffnessSeverityEnabled),
     leadTrial: leadTrial(raw.leadTrial),
     leadTrialHistory: leadTrialHistory(raw.leadTrialHistory),
   })

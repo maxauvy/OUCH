@@ -1,7 +1,7 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { INDICATORS, MAX_RECOMMENDED_MEASURES, planForIllnesses } from '../src/lib/indicatorCatalog.ts'
+import { INDICATORS, isOffered, MAX_RECOMMENDED_MEASURES, offeredFactors, planForIllnesses } from '../src/lib/indicatorCatalog.ts'
 import type { IndicatorKey } from '../src/lib/indicatorCatalog.ts'
 import { ALL_FACTORS, ILLNESSES } from '../src/db/types.ts'
 
@@ -89,9 +89,26 @@ test('without early access, only what a clinician has read is offered', () => {
   assert.ok(all.length > 0)
 })
 
-test('the catalogue is consistent: every historical indicator is built and reviewed', () => {
-  const historical = INDICATORS.filter((d) => (ALL_FACTORS as string[]).includes(d.key))
-  assert.ok(historical.every((d) => d.reviewed))
+const ORIGINAL = ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes']
+
+test('the eleven original indicators are reviewed, and always offered', () => {
+  for (const key of ORIGINAL) {
+    assert.ok(INDICATORS.find((d) => d.key === key)?.reviewed, key)
+    assert.ok(isOffered(key, false), key)
+  }
+  assert.deepEqual(offeredFactors(false), ORIGINAL)
+})
+
+test('a new indicator is offered only with early access; an unknown key never is', () => {
+  assert.equal(isOffered('morningStiffness', false), false)
+  assert.equal(isOffered('morningStiffness', true), true)
+  assert.equal(isOffered('cycle', true), false)
+  assert.equal(isOffered('whatever', true), false)
+  assert.ok(offeredFactors(true).includes('morningStiffness'))
+  assert.ok(!offeredFactors(false).includes('morningStiffness'))
+})
+
+test('the catalogue is consistent: every factor is in it, every detail has a parent', () => {
   for (const factor of ALL_FACTORS) assert.ok(INDICATORS.some((d) => d.key === factor), `${factor} is in the catalogue`)
   for (const d of INDICATORS.filter((d) => d.kind === 'detail')) assert.ok(d.parent && INDICATORS.some((p) => p.key === d.parent), `${d.key} has a parent`)
 })

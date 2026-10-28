@@ -426,6 +426,7 @@ const en: Translations = {
     positiveActions: { label: 'What helped', helper: 'Actions or strategies used during the day' },
     painLocations: { label: 'Pain location', helper: 'Areas of the body affected' },
     notes: { label: 'Free notes', helper: "Anything that doesn't fit the boxes" },
+    morningStiffness: { label: 'Morning stiffness', helper: 'How long it takes to loosen up on waking' },
   },
 
   bodyZones: {
@@ -565,6 +566,10 @@ const en: Translations = {
     sleepEndBad: 'Very poor',
     sleepEndExcellent: 'Excellent',
     sleepDuration: 'Sleep duration',
+    morningStiffnessBands: { none: 'None', lt30: 'Under 30 min', '30to60': '30 min to 1 h', '1to2h': '1 to 2 h', gt2h: 'Over 2 h' },
+    morningStiffnessSeverity: 'Stiffness intensity',
+    morningStiffnessEndNone: 'None',
+    morningStiffnessEndStrong: 'Very strong',
     stressEndCalm: 'Relaxed',
     stressEndTense: 'Very tense',
     brainFogEndClear: 'Clear mind',

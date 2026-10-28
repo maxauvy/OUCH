@@ -18,10 +18,11 @@ import {
   IconPill,
   IconMoodSmile,
   IconMoon,
+  IconSunrise,
   IconWalk,
   type Icon,
 } from '@tabler/icons-react'
-import type { DailyEntry, Medication, PainWeather, Settings } from '../../db/types'
+import { MORNING_STIFFNESS_BANDS, type DailyEntry, type Medication, type PainWeather, type Settings } from '../../db/types'
 import { todayISO } from '../../db'
 import { computePainWeather } from '../../lib/painWeather'
 import { Card, GroupCaption } from '../ui/Card'
@@ -40,6 +41,9 @@ import { updateSettings } from '../../db'
 import { WeatherField } from './WeatherField'
 import { format, useLocale, useTranslation } from '../../i18n'
 import { useLuminous } from '../../lib/look'
+import { isOffered } from '../../lib/indicatorCatalog'
+import { useEarlyAccess } from '../../lib/earlyAccess'
+import { Chip } from '../ui/Chip'
 
 type Category = 'pain' | 'fatigue' | 'sleep' | 'stress' | 'fog' | 'mood' | 'activity' | 'cycle'
 
@@ -106,6 +110,40 @@ function MetricRow({
         endLabels={endLabels}
         accent={`var(--cat-${cat})`}
       />
+    </div>
+  )
+}
+
+/** A choice among a few bands rather than a slider (the duration of a stiffness). Pressing the
+ * chosen band again clears it: a day left blank is not the same as the first band. */
+function ChoiceRow({
+  icon,
+  cat,
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  icon: Icon
+  cat: Category
+  label: string
+  options: { value: string; label: string }[]
+  value: string | undefined
+  onChange: (v: string | undefined) => void
+}) {
+  return (
+    <div className="px-4 pt-3.5 pb-3" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+      <div className="flex items-center gap-2.5">
+        <CategoryIcon icon={icon} cat={cat} />
+        <span id={`choice-${cat}-${label}`} className="flex-1 text-body font-medium">
+          {label}
+        </span>
+      </div>
+      <div role="group" aria-labelledby={`choice-${cat}-${label}`} className="flex flex-wrap gap-2 mt-3">
+        {options.map((o) => (
+          <Chip key={o.value} label={o.label} selected={value === o.value} onClick={() => onChange(value === o.value ? undefined : o.value)} />
+        ))}
+      </div>
     </div>
   )
 }
@@ -246,7 +284,8 @@ export function HealthEntryLayout({
 }) {
   const t = useTranslation()
   const { intlLocale } = useLocale()
-  const has = (key: string) => settings.enabledFactors.includes(key as never)
+  const earlyAccess = useEarlyAccess()
+  const has = (key: string) => settings.enabledFactors.includes(key as never) && isOffered(key, earlyAccess)
   const isToday = date === todayISO()
   const { ready, card, light } = useHardDays(date, allEntries, entriesLoaded)
   // Only today's page: another day is edited in full.
@@ -317,6 +356,31 @@ export function HealthEntryLayout({
         endLabels={['0 h', '12 h']}
       />
     )
+  if (has('morningStiffness')) {
+    metricRows.push(
+      <ChoiceRow
+        key="morningStiffness"
+        icon={IconSunrise}
+        cat="activity"
+        label={t.factors.morningStiffness.label}
+        options={MORNING_STIFFNESS_BANDS.map((b) => ({ value: b, label: t.entryForm.morningStiffnessBands[b] }))}
+        value={local.morningStiffness}
+        onChange={(v) => setField('morningStiffness', v as DailyEntry['morningStiffness'])}
+      />
+    )
+    if (settings.morningStiffnessSeverityEnabled)
+      metricRows.push(
+        <MetricRow
+          key="morningStiffnessSeverity"
+          icon={IconSunrise}
+          cat="activity"
+          label={t.entryForm.morningStiffnessSeverity}
+          value={local.morningStiffnessSeverity}
+          onChange={(v) => setField('morningStiffnessSeverity', v)}
+          endLabels={[t.entryForm.morningStiffnessEndNone, t.entryForm.morningStiffnessEndStrong]}
+        />
+      )
+  }
   if (has('stress'))
     metricRows.push(
       <MetricRow

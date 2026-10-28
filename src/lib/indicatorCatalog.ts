@@ -164,3 +164,16 @@ export function planForIllnesses(illnesses: readonly Illness[], options: PlanOpt
     cycle: illnesses.includes('endometriose') ? 'on' : 'off',
   }
 }
+
+/** Whether an indicator is offered to this person: built, and either read by a
+ * clinician or switched on by early access. The key of an old backup that is
+ * not in the catalogue is not offered. */
+export function isOffered(key: string, earlyAccess: boolean): boolean {
+  const def = INDICATORS.find((d) => d.key === key)
+  return !!def && (def.reviewed || earlyAccess) && (ALL_FACTORS as string[]).includes(key)
+}
+
+/** The factors the setup and the settings list, in display order. */
+export function offeredFactors(earlyAccess: boolean) {
+  return ALL_FACTORS.filter((key) => isOffered(key, earlyAccess))
+}

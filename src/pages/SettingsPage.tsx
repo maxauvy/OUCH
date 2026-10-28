@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { IconBell, IconHeartbeat, IconInfoCircle, IconShieldLock, IconUser } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
-import { ALL_FACTORS, type FactorKey, type ParentGender, type ThemePref } from '../db/types'
+import { type FactorKey, type ParentGender, type ThemePref } from '../db/types'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
@@ -29,6 +29,7 @@ import { formatCoordinates } from '../lib/weather'
 import { saveCurrentLocation } from '../lib/weatherLocation'
 import { format, LANGUAGES, useLocale, useTranslation } from '../i18n'
 import { radioGroupProps, radioProps } from '../lib/a11y'
+import { isOffered, offeredFactors } from '../lib/indicatorCatalog'
 
 /** `openBackup`: arrive from the backup reminder, with the data group already open.
  * `onReplayTour`: in the demo, opens the guided tour again. */
@@ -63,7 +64,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
   const parentLabel = PARENT_OPTIONS.find((o) => o.value === settings.parentGender)?.label
   const profileSummary = [settings.displayName, settings.kidsTabEnabled ? parentLabel : undefined].filter(Boolean).join(' · ')
 
-  const factorCount = settings.enabledFactors.length
+  const factorCount = settings.enabledFactors.filter((k) => isOffered(k, earlyAccess)).length
   const hasLocation = settings.autoWeatherLat !== undefined && settings.autoWeatherLon !== undefined
   const trackingSummary = [
     format(factorCount === 1 ? t.settings.factorsCountOne : t.settings.factorsCountOther, { n: factorCount }),
@@ -180,7 +181,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
             {t.settings.factorsHelper}
           </p>
           <div className="flex flex-col gap-3.5">
-            {ALL_FACTORS.map((key) => (
+            {offeredFactors(earlyAccess).map((key) => (
               <div key={key} className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-control font-medium">{t.factors[key].label}</p>

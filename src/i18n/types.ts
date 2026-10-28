@@ -2,7 +2,7 @@
 // here means adding it to *every* locale file — TypeScript will point at
 // each one that's missing it.
 
-import type { BodyZone, COARSE_ZONES } from '../db/types'
+import type { BodyZone, COARSE_ZONES, MorningStiffness } from '../db/types'
 import type { BodyGroupId, BodyRegion } from '../lib/bodyZones'
 import type { ChildTone } from '../lib/childView'
 
@@ -344,6 +344,7 @@ export interface Translations {
     positiveActions: FactorText
     painLocations: FactorText
     notes: FactorText
+    morningStiffness: FactorText
   }
 
   /** Full label of every zone identifier ("Épaule gauche"); the old coarse zones say they are old. */
@@ -441,6 +442,11 @@ export interface Translations {
     sleepEndBad: string
     sleepEndExcellent: string
     sleepDuration: string
+    /** Choice of the stiffness on waking, by band. */
+    morningStiffnessBands: Record<MorningStiffness, string>
+    morningStiffnessSeverity: string
+    morningStiffnessEndNone: string
+    morningStiffnessEndStrong: string
     stressEndCalm: string
     stressEndTense: string
     brainFogEndClear: string

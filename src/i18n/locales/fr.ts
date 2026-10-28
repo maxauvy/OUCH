@@ -428,6 +428,7 @@ const fr: Translations = {
     positiveActions: { label: 'Ce qui a aidé', helper: 'Actions ou stratégies mises en place dans la journée' },
     painLocations: { label: 'Localisation de la douleur', helper: 'Zones du corps touchées' },
     notes: { label: 'Notes libres', helper: 'Tout ce qui ne rentre pas dans les cases' },
+    morningStiffness: { label: 'Raideur au réveil', helper: 'Combien de temps il faut pour se « dérouiller »' },
   },
 
   bodyZones: {
@@ -567,6 +568,10 @@ const fr: Translations = {
     sleepEndBad: 'Très mauvaise',
     sleepEndExcellent: 'Excellente',
     sleepDuration: 'Durée de sommeil',
+    morningStiffnessBands: { none: 'Aucune', lt30: 'Moins de 30 min', '30to60': '30 min à 1 h', '1to2h': '1 à 2 h', gt2h: 'Plus de 2 h' },
+    morningStiffnessSeverity: 'Intensité de la raideur',
+    morningStiffnessEndNone: 'Aucune',
+    morningStiffnessEndStrong: 'Très forte',
     stressEndCalm: 'Calme',
     stressEndTense: 'Sous pression',
     brainFogEndClear: 'Esprit clair',

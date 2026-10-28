@@ -1,7 +1,9 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { IconCheck, IconDeviceFloppy, IconFileText, IconMicroscope, type Icon } from '@tabler/icons-react'
 import { db, updateSettings } from '../../db'
-import { ALL_FACTORS, type ParentGender } from '../../db/types'
+import type { ParentGender } from '../../db/types'
+import { offeredFactors } from '../../lib/indicatorCatalog'
+import { useEarlyAccess } from '../../lib/earlyAccess'
 import { useSettings } from '../../hooks/useSettings'
 import { useMedications } from '../../hooks/useMedications'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -35,6 +37,7 @@ const inputStyle = { background: 'var(--color-input)', color: 'var(--color-ink)'
 export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wiped?: boolean }) {
   const t = useTranslation()
   const settings = useSettings()
+  const earlyAccess = useEarlyAccess()
   const ids = useId()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const tracksMedications = settings.enabledFactors.includes('medications')
@@ -155,7 +158,7 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
                   {t.settings.factorsTitle}
                 </p>
                 <div role="group" aria-labelledby={`${ids}-factors`} className="flex flex-wrap gap-2">
-                  {ALL_FACTORS.map((key) => {
+                  {offeredFactors(earlyAccess).map((key) => {
                     const on = settings.enabledFactors.includes(key)
                     return (
                       <Chip
