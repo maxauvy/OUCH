@@ -47,16 +47,16 @@ test('the journal has one row per day, oldest first, an empty cell for what was 
   )
   const rows = csv.split('\r\n')
   assert.equal(rows.at(-1), '')
-  assert.equal(rows[0], 'date,pain,fatigue,sleep_quality,sleep_hours,stress,brain_fog,mood,activity,period_day,weather_source,weather_condition,temperature_c,pressure_hpa,pain_locations,positive_actions,morning_stiffness,morning_stiffness_severity,notes')
-  assert.equal(rows[1], '2026-10-01,,,,,,,,,,,,,,,,,,seulement une note')
-  assert.equal(rows[2], '2026-10-02,6,7,,5.5,,,,,0,auto,pluvieux,-1.5,1012,lowerBack|neck,,,,"Dur, très dur"')
+  assert.equal(rows[0], 'date,pain,fatigue,sleep_quality,sleep_hours,stress,brain_fog,mood,activity,period_day,weather_source,weather_condition,temperature_c,pressure_hpa,pain_locations,positive_actions,morning_stiffness,morning_stiffness_severity,night_wakings,daily_interference,notes')
+  assert.equal(rows[1], '2026-10-01,,,,,,,,,,,,,,,,,,,,seulement une note')
+  assert.equal(rows[2], '2026-10-02,6,7,,5.5,,,,,0,auto,pluvieux,-1.5,1012,lowerBack|neck,,,,,,"Dur, très dur"')
 })
 
 test('without the notes, the column is gone and their text is nowhere', () => {
   const csv = journalCsv([entry('2026-10-01', { painLevel: 4, notes: 'privé' })], { includeNotes: false })
   assert.ok(!csv.includes('notes'))
   assert.ok(!csv.includes('privé'))
-  assert.equal(csv.split('\r\n')[1], '2026-10-01,4,,,,,,,,,,,,,,,,')
+  assert.equal(csv.split('\r\n')[1], '2026-10-01,4,,,,,,,,,,,,,,,,,,')
 })
 
 test('the intakes have one row per intake with the posology of that day', () => {
@@ -90,6 +90,13 @@ test('an intake of a medication no longer in the list keeps its id and loses onl
 test('the morning stiffness goes out as its band and its 0-10 intensity, before the notes', () => {
   const csv = journalCsv([entry('2026-10-01', { morningStiffness: '1to2h', morningStiffnessSeverity: 6, notes: 'x' })], { includeNotes: true })
   const [header, row] = csv.split('\r\n')
-  assert.deepEqual(header!.split(',').slice(-3), ['morning_stiffness', 'morning_stiffness_severity', 'notes'])
-  assert.deepEqual(row!.split(',').slice(-3), ['1to2h', '6', 'x'])
+  assert.deepEqual(header!.split(',').slice(-5, -2), ['morning_stiffness', 'morning_stiffness_severity', 'night_wakings'])
+  assert.deepEqual(row!.split(',').slice(-5), ['1to2h', '6', '', '', 'x'])
+})
+
+test('the night wakings and the interference go out as numbers, before the notes', () => {
+  const csv = journalCsv([entry('2026-10-01', { nightWakings: 0, dailyInterference: 7 })], { includeNotes: true })
+  const [header, row] = csv.split('\r\n')
+  assert.deepEqual(header!.split(',').slice(-3), ['night_wakings', 'daily_interference', 'notes'])
+  assert.deepEqual(row!.split(',').slice(-3), ['0', '7', ''])
 })

@@ -345,6 +345,8 @@ export interface Translations {
     painLocations: FactorText
     notes: FactorText
     morningStiffness: FactorText
+    nightWaking: FactorText
+    dailyInterference: FactorText
   }
 
   /** Full label of every zone identifier ("Épaule gauche"); the old coarse zones say they are old. */
@@ -447,6 +449,10 @@ export interface Translations {
     morningStiffnessSeverity: string
     morningStiffnessEndNone: string
     morningStiffnessEndStrong: string
+    /** The choices 0, 1, 2 and 3 or more, in that order. */
+    nightWakingOptions: [string, string, string, string]
+    dailyInterferenceEndNone: string
+    dailyInterferenceEndMax: string
     stressEndCalm: string
     stressEndTense: string
     brainFogEndClear: string
@@ -718,7 +724,7 @@ export interface Translations {
     trendBetter: string
     trendWorse: string
     symptomsNote: string
-    symptomLabels: Record<'fatigueLevel' | 'sleepQuality' | 'sleepHours' | 'brainFog' | 'moodLevel' | 'stressLevel' | 'activityLevel', [string, string]>
+    symptomLabels: Record<'fatigueLevel' | 'sleepQuality' | 'sleepHours' | 'brainFog' | 'moodLevel' | 'stressLevel' | 'activityLevel' | 'dailyInterference', [string, string]>
     /** Morning stiffness, as the patient noted it (not validated): the days in each band, described. */
     stiffness: {
       title: string
@@ -732,6 +738,15 @@ export interface Translations {
       bands: Record<MorningStiffness, string>
       /** `{{n}}` days, the band follows */
       band: string
+    }
+    /** Wakings because of pain, as the patient noted them (not validated), described. */
+    nightWakings: {
+      title: string
+      /** `{{n}}` days noted, `{{w}}` of them with at least one waking */
+      noted: string
+      /** `{{v}}` mean per day noted */
+      mean: string
+      note: string
     }
     zones: string
     zonesNote: string

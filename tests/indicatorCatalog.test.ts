@@ -1,7 +1,7 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { INDICATORS, isOffered, MAX_RECOMMENDED_MEASURES, offeredFactors, planForIllnesses } from '../src/lib/indicatorCatalog.ts'
+import { INDICATORS, isOffered, MAX_RECOMMENDED_MEASURES, offeredFactors, planForIllnesses, withoutUnoffered } from '../src/lib/indicatorCatalog.ts'
 import type { IndicatorKey } from '../src/lib/indicatorCatalog.ts'
 import { ALL_FACTORS, ILLNESSES } from '../src/db/types.ts'
 
@@ -111,4 +111,11 @@ test('a new indicator is offered only with early access; an unknown key never is
 test('the catalogue is consistent: every factor is in it, every detail has a parent', () => {
   for (const factor of ALL_FACTORS) assert.ok(INDICATORS.some((d) => d.key === factor), `${factor} is in the catalogue`)
   for (const d of INDICATORS.filter((d) => d.kind === 'detail')) assert.ok(d.parent && INDICATORS.some((p) => p.key === d.parent), `${d.key} has a parent`)
+})
+
+test('without early access an entry is shown without what the new indicators wrote; the journal keeps it', () => {
+  const entry = { date: '2026-10-01', createdAt: 1, updatedAt: 1, painLevel: 5, fatigueLevel: 3, morningStiffness: 'lt30', morningStiffnessSeverity: 4, nightWakings: 2, dailyInterference: 6 } as const
+  assert.deepEqual(withoutUnoffered(entry, false), { date: '2026-10-01', createdAt: 1, updatedAt: 1, painLevel: 5, fatigueLevel: 3 })
+  assert.equal(withoutUnoffered(entry, true), entry)
+  assert.equal(entry.nightWakings, 2)
 })

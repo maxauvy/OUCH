@@ -20,6 +20,8 @@ export type FactorKey =
   | 'painLocations'
   | 'notes'
   | 'morningStiffness'
+  | 'nightWaking'
+  | 'dailyInterference'
 
 // Display order for the factor list in Settings. Labels/helpers live in the
 // active translation (`t.factors[key]`), not here.
@@ -36,6 +38,8 @@ export const ALL_FACTORS: FactorKey[] = [
   'painLocations',
   'notes',
   'morningStiffness',
+  'nightWaking',
+  'dailyInterference',
 ]
 
 const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
@@ -101,6 +105,10 @@ export interface WeatherInfo {
 export const MORNING_STIFFNESS_BANDS = ['none', 'lt30', '30to60', '1to2h', 'gt2h'] as const
 export type MorningStiffness = (typeof MORNING_STIFFNESS_BANDS)[number]
 
+/** Wakings in the night because of pain; 3 stands for "three or more". */
+export const NIGHT_WAKINGS = [0, 1, 2, 3] as const
+export type NightWakings = (typeof NIGHT_WAKINGS)[number]
+
 export interface DailyEntry {
   id?: number
   /** ISO date 'YYYY-MM-DD', one entry per day, unique index */
@@ -122,6 +130,10 @@ export interface DailyEntry {
   morningStiffness?: MorningStiffness
   /** 0–10, only asked when `Settings.morningStiffnessSeverityEnabled` is on. Not validated. */
   morningStiffnessSeverity?: number
+  /** Not validated: wakings because of pain, inside the sleep block. 0 is an answer. */
+  nightWakings?: NightWakings
+  /** 0–10, not validated: how much the pain got in the way of the day's gestures. */
+  dailyInterference?: number
 
   weather?: WeatherInfo
   /** What was taken that day, pointing at the Medication registry. */

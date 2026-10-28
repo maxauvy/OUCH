@@ -10,7 +10,7 @@
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
 import { ALL_FACTORS } from '../db/types.ts'
-import type { Illness } from '../db/types.ts'
+import type { DailyEntry, Illness } from '../db/types.ts'
 
 /** Every indicator the catalogue knows, built or not yet. */
 export type IndicatorKey =
@@ -176,4 +176,22 @@ export function isOffered(key: string, earlyAccess: boolean): boolean {
 /** The factors the setup and the settings list, in display order. */
 export function offeredFactors(earlyAccess: boolean) {
   return ALL_FACTORS.filter((key) => isOffered(key, earlyAccess))
+}
+
+/** The fields of an entry each new indicator writes. */
+const ENTRY_FIELDS: Partial<Record<IndicatorKey, readonly (keyof DailyEntry)[]>> = {
+  morningStiffness: ['morningStiffness', 'morningStiffnessSeverity'],
+  nightWaking: ['nightWakings'],
+  dailyInterference: ['dailyInterference'],
+}
+
+/** The entry as the screens show it: what an indicator not offered (no early
+ * access) wrote is left out. The journal itself keeps it, and so do the backup
+ * and the CSV: this is only about what is displayed. */
+export function withoutUnoffered(entry: DailyEntry, earlyAccess: boolean): DailyEntry {
+  const hidden = Object.entries(ENTRY_FIELDS).filter(([key]) => !isOffered(key, earlyAccess))
+  if (!hidden.length) return entry
+  const copy: DailyEntry = { ...entry }
+  for (const [, fields] of hidden) for (const field of fields ?? []) delete copy[field]
+  return copy
 }

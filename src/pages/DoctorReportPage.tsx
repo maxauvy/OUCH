@@ -19,7 +19,7 @@ import { Toggle } from '../components/ui/Toggle'
 import { ReportDocument } from '../components/report/ReportDocument'
 import { buildReportData, type ReportVariant } from '../components/report/reportData'
 import { withCut, type Cut } from '../components/report/pagination'
-import { isOffered } from '../lib/indicatorCatalog'
+import { isOffered, withoutUnoffered } from '../lib/indicatorCatalog'
 import { useEarlyAccess } from '../lib/earlyAccess'
 
 /** A4 width in CSS pixels (210 mm at 96 dpi): the preview is scaled from it. */
@@ -88,7 +88,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
   const data = useMemo(
     () =>
       entries && medications
-        ? buildReportData(entries, medications, {
+        ? buildReportData(entries.map((e) => withoutUnoffered(e, earlyAccess)), medications, {
             variant,
             language,
             consultation,
@@ -102,6 +102,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             leadFactors: leadFactors(settings.enabledFactors),
             leadTrials: { history: settings.leadTrialHistory, current: settings.leadTrial },
             includeStiffness: settings.enabledFactors.includes('morningStiffness') && isOffered('morningStiffness', earlyAccess),
+            includeNightWakings: settings.enabledFactors.includes('nightWaking') && isOffered('nightWaking', earlyAccess),
             includeNotes,
             includeCycle,
             demo: IS_DEMO,

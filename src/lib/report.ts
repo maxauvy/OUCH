@@ -167,7 +167,7 @@ export function trailingMeans(values: (number | undefined)[], window = 7, minVal
 // ---------------------------------------------------------------------------
 // Other symptoms, zones, actions, notes
 
-export type SymptomKey = 'fatigueLevel' | 'sleepQuality' | 'sleepHours' | 'brainFog' | 'moodLevel' | 'stressLevel' | 'activityLevel'
+export type SymptomKey = 'fatigueLevel' | 'sleepQuality' | 'sleepHours' | 'brainFog' | 'moodLevel' | 'stressLevel' | 'activityLevel' | 'dailyInterference'
 
 export function meanOf(entries: LoggedEntry[], key: SymptomKey): { mean: number; n: number } | null {
   const v = entries.map((e) => e[key]).filter((x): x is number => typeof x === 'number')

@@ -427,6 +427,8 @@ const en: Translations = {
     painLocations: { label: 'Pain location', helper: 'Areas of the body affected' },
     notes: { label: 'Free notes', helper: "Anything that doesn't fit the boxes" },
     morningStiffness: { label: 'Morning stiffness', helper: 'How long it takes to loosen up on waking' },
+    nightWaking: { label: 'Waking up because of pain', helper: 'Added to the sleep row' },
+    dailyInterference: { label: 'Pain getting in the way of my day', helper: 'How much pain interferes with what you do during the day' },
   },
 
   bodyZones: {
@@ -570,6 +572,9 @@ const en: Translations = {
     morningStiffnessSeverity: 'Stiffness intensity',
     morningStiffnessEndNone: 'None',
     morningStiffnessEndStrong: 'Very strong',
+    nightWakingOptions: ['None', 'Once', 'Twice', '3 times or more'],
+    dailyInterferenceEndNone: 'Not at all',
+    dailyInterferenceEndMax: 'Can hardly do anything',
     stressEndCalm: 'Relaxed',
     stressEndTense: 'Very tense',
     brainFogEndClear: 'Clear mind',
@@ -866,6 +871,7 @@ const en: Translations = {
       moodLevel: ['Mood', '↑ = better'],
       stressLevel: ['Stress', '↑ = higher'],
       activityLevel: ['Activity', '↑ = more active'],
+      dailyInterference: ['Pain getting in the way of the day', '↑ = more affected'],
     },
     stiffness: {
       title: 'Morning stiffness',
@@ -875,6 +881,12 @@ const en: Translations = {
       note: 'How long it took to loosen up, as the person noted it; not a validated scale, with no threshold or comparison.',
       bands: { none: 'none', lt30: 'under 30 min', '30to60': '30 min to 1 h', '1to2h': '1 to 2 h', gt2h: 'over 2 h' },
       band: '{{n}} {{n:day|days}}',
+    },
+    nightWakings: {
+      title: 'Waking up because of pain',
+      noted: '{{n}} {{n:day|days}} noted, {{w}} of them with at least one waking.',
+      mean: 'On average {{v}} per day noted (“3 times or more” counts as 3).',
+      note: 'As the person noted it; not a validated scale, with no threshold or comparison.',
     },
     zones: 'Most frequent pain locations',
     zonesNote: 'Share of logged days on which the area is reported.',

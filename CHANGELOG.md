@@ -8,7 +8,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ### Ajouté
 - **Un catalogue des indicateurs par maladie**, en coulisses : il dit quels indicateurs conviennent à quelle maladie (recommandés, suggérés, ou au choix). Aucune case ne change pour les personnes qui utilisent déjà l'application.
-- **Raideur au réveil** (accès anticipé, à activer dans Réglages › Suivi) : la durée du « dérouillage » en cinq tranches, de « Aucune » à « Plus de 2 h », facultative. Une intensité de 0 à 10 peut s'ajouter. Échelle non validée. Présente dans la sauvegarde, l'export CSV (`morning_stiffness`, `morning_stiffness_severity`) et le dictionnaire des données.
+- **Raideur au réveil** (accès anticipé, à activer dans Réglages › Suivi) : la durée du « dérouillage » en cinq tranches, de « Aucune » à « Plus de 2 h », facultative. Une intensité de 0 à 10 peut s'ajouter. Échelle non validée. Présente dans la sauvegarde, l'export CSV (`morning_stiffness`, `morning_stiffness_severity`) et le dictionnaire des données, et décrite dans le rapport pour le médecin (jours par tranche, tranche la plus fréquente), sans seuil.
+- **Réveils à cause de la douleur** (accès anticipé) : 0, 1, 2 ou « 3 fois ou plus », ajouté à la ligne du sommeil. Décrit dans le rapport : jours notés, jours avec au moins un réveil, moyenne par jour noté.
+- **Gêne dans mes gestes du jour** (accès anticipé) : une échelle de 0 à 10, distincte de l'effort fourni (« Activité physique »). Elle rejoint les symptômes du rapport. Échelle non validée.
 
 ## [0.6.2] - 2026-10-23
 

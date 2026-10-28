@@ -429,6 +429,8 @@ const fr: Translations = {
     painLocations: { label: 'Localisation de la douleur', helper: 'Zones du corps touchées' },
     notes: { label: 'Notes libres', helper: 'Tout ce qui ne rentre pas dans les cases' },
     morningStiffness: { label: 'Raideur au réveil', helper: 'Combien de temps il faut pour se « dérouiller »' },
+    nightWaking: { label: 'Réveils à cause de la douleur', helper: 'Ajouté à la ligne du sommeil' },
+    dailyInterference: { label: 'Gêne dans mes gestes du jour', helper: 'À quel point la douleur gêne ce que tu fais dans la journée' },
   },
 
   bodyZones: {
@@ -572,6 +574,9 @@ const fr: Translations = {
     morningStiffnessSeverity: 'Intensité de la raideur',
     morningStiffnessEndNone: 'Aucune',
     morningStiffnessEndStrong: 'Très forte',
+    nightWakingOptions: ['Aucun', '1 fois', '2 fois', '3 fois ou plus'],
+    dailyInterferenceEndNone: 'Aucune gêne',
+    dailyInterferenceEndMax: 'Presque rien possible',
     stressEndCalm: 'Calme',
     stressEndTense: 'Sous pression',
     brainFogEndClear: 'Esprit clair',
@@ -871,6 +876,7 @@ const fr: Translations = {
       moodLevel: ['Humeur', '↑ = meilleure'],
       stressLevel: ['Stress', '↑ = plus élevé'],
       activityLevel: ['Activité', '↑ = plus actif(ve)'],
+      dailyInterference: ['Gêne dans les gestes du jour', '↑ = plus gêné(e)'],
     },
     stiffness: {
       title: 'Raideur au réveil',
@@ -880,6 +886,12 @@ const fr: Translations = {
       note: 'Durée du « dérouillage » telle que la personne l’a notée ; échelle non validée, sans seuil ni comparaison.',
       bands: { none: 'aucune', lt30: 'moins de 30 min', '30to60': '30 min à 1 h', '1to2h': '1 à 2 h', gt2h: 'plus de 2 h' },
       band: '{{n}} {{n:jour|jours}}',
+    },
+    nightWakings: {
+      title: 'Réveils à cause de la douleur',
+      noted: '{{n}} {{n:jour noté|jours notés}}, dont {{w}} avec au moins un réveil.',
+      mean: 'En moyenne {{v}} par jour noté (« 3 fois ou plus » compte pour 3).',
+      note: 'Tel que la personne l’a noté ; échelle non validée, sans seuil ni comparaison.',
     },
     zones: 'Localisations les plus fréquentes',
     zonesNote: 'Part des jours renseignés où la zone est signalée.',

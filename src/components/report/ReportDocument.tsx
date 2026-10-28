@@ -33,6 +33,7 @@ import type { ReportFormat } from './reportFormat'
 import { REFERENCES } from '../../lib/references'
 import { buildSheets, findCut, rowsBlock, type Block, type Cut } from './pagination'
 import { summarizeMorningStiffness } from '../../lib/stiffnessSummary'
+import { summarizeNightWakings } from '../../lib/nightWakings'
 import { MORNING_STIFFNESS_BANDS } from '../../db/types'
 
 
@@ -185,6 +186,7 @@ function gpPages(d: ReportData): Block[][] {
         </div>
       </div>,
       d.options.includeStiffness && <StiffnessBlock d={d} />,
+      d.options.includeNightWakings && <NightWakingsBlock d={d} />,
       d.weekdays && <WeekdaysBlock d={d} />,
       (d.noticed.length > 0 || d.trials.length > 0) && <Noticed d={d} />,
       d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all={false} list={notes} from={from} to={to} continued={continued} />),
@@ -331,6 +333,7 @@ function painClinicPages(d: ReportData): Block[][] {
           </>
         )),
       d.options.includeStiffness && <StiffnessBlock d={d} />,
+      d.options.includeNightWakings && <NightWakingsBlock d={d} />,
     ],
     // Everything on this page is optional: with no agenda, no medication and
     // no positive action, it would print blank but for its header and footer.
@@ -1228,6 +1231,23 @@ function StiffnessBlock({ d }: { d: ReportData }) {
           </li>
         ))}
       </ul>
+      <p className="r-small">{t.note}</p>
+    </>
+  )
+}
+
+/** The wakings because of pain the patient noted, described. Nothing when no day carries it. */
+function NightWakingsBlock({ d }: { d: ReportData }) {
+  const { f } = d
+  const s = summarizeNightWakings(d.current)
+  if (s.noted === 0) return null
+  const t = f.t.nightWakings
+  return (
+    <>
+      <H level={2}>{t.title}</H>
+      <p>
+        {f.format(t.noted, { n: s.noted, w: s.withWaking })} {f.format(t.mean, { v: f.nf(s.mean ?? 0) })}
+      </p>
       <p className="r-small">{t.note}</p>
     </>
   )

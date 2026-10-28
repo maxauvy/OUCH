@@ -7,7 +7,9 @@ import {
   IconArrowRight,
   IconArrowUpRight,
   IconBattery2,
+  IconBed,
   IconBolt,
+  IconHandStop,
   IconBrain,
   IconClock,
   IconCloud,
@@ -22,7 +24,7 @@ import {
   IconWalk,
   type Icon,
 } from '@tabler/icons-react'
-import { MORNING_STIFFNESS_BANDS, type DailyEntry, type Medication, type PainWeather, type Settings } from '../../db/types'
+import { MORNING_STIFFNESS_BANDS, NIGHT_WAKINGS, type DailyEntry, type Medication, type PainWeather, type Settings } from '../../db/types'
 import { todayISO } from '../../db'
 import { computePainWeather } from '../../lib/painWeather'
 import { Card, GroupCaption } from '../ui/Card'
@@ -356,6 +358,18 @@ export function HealthEntryLayout({
         endLabels={['0 h', '12 h']}
       />
     )
+  if (has('sleep') && has('nightWaking'))
+    metricRows.push(
+      <ChoiceRow
+        key="nightWakings"
+        icon={IconBed}
+        cat="sleep"
+        label={t.factors.nightWaking.label}
+        options={NIGHT_WAKINGS.map((n) => ({ value: String(n), label: t.entryForm.nightWakingOptions[n] }))}
+        value={local.nightWakings === undefined ? undefined : String(local.nightWakings)}
+        onChange={(v) => setField('nightWakings', v === undefined ? undefined : (Number(v) as DailyEntry['nightWakings']))}
+      />
+    )
   if (has('morningStiffness')) {
     metricRows.push(
       <ChoiceRow
@@ -381,6 +395,18 @@ export function HealthEntryLayout({
         />
       )
   }
+  if (has('dailyInterference'))
+    metricRows.push(
+      <MetricRow
+        key="dailyInterference"
+        icon={IconHandStop}
+        cat="activity"
+        label={t.factors.dailyInterference.label}
+        value={local.dailyInterference}
+        onChange={(v) => setField('dailyInterference', v)}
+        endLabels={[t.entryForm.dailyInterferenceEndNone, t.entryForm.dailyInterferenceEndMax]}
+      />
+    )
   if (has('stress'))
     metricRows.push(
       <MetricRow

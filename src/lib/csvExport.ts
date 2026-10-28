@@ -31,6 +31,8 @@ const JOURNAL_COLUMNS = [
   'positive_actions',
   'morning_stiffness',
   'morning_stiffness_severity',
+  'night_wakings',
+  'daily_interference',
   'notes',
 ] as const
 
@@ -96,6 +98,8 @@ export function journalCsv(entries: DailyEntry[], options: CsvOptions): string {
       positive_actions: e.positiveActions?.join(LIST_SEPARATOR),
       morning_stiffness: e.morningStiffness,
       morning_stiffness_severity: e.morningStiffnessSeverity,
+      night_wakings: e.nightWakings,
+      daily_interference: e.dailyInterference,
       notes: e.notes,
     }
     rows.push(columns.map((c) => cells[c]))
