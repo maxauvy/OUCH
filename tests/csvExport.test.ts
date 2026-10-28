@@ -47,7 +47,7 @@ test('the journal has one row per day, oldest first, an empty cell for what was 
   )
   const rows = csv.split('\r\n')
   assert.equal(rows.at(-1), '')
-  assert.equal(rows[0], 'date,pain,fatigue,sleep_quality,sleep_hours,stress,brain_fog,mood,activity,period_day,weather_source,weather_condition,temperature_c,pressure_hpa,pain_locations,positive_actions,morning_stiffness,morning_stiffness_severity,night_wakings,daily_interference,waking_refreshed,joints_felt,joint_areas,period_flow,off_cycle_bleeding,bowel_pain,urinary,headache,headache_duration,headache_aura,headache_nausea,headache_sensitivity,headache_triggers,headache_acute_med,notes')
+  assert.equal(rows[0], 'date,pain,fatigue,sleep_quality,sleep_hours,stress,brain_fog,mood,activity,period_day,weather_source,weather_condition,temperature_c,pressure_hpa,pain_locations,positive_actions,morning_stiffness,morning_stiffness_severity,night_wakings,daily_interference,waking_refreshed,joints_felt,joint_areas,period_flow,off_cycle_bleeding,bowel_pain,urinary,headache,headache_duration,headache_aura,headache_nausea,headache_sensitivity,headache_triggers,headache_acute_med,leg_pain,symptom_tags,spasms,fever_infection,new_symptom,sensory_sensitivity,notes')
   const columns = rows[0]!.split(',').length
   assert.equal(rows[1], '2026-10-01' + ','.repeat(columns - 1) + 'seulement une note')
   assert.ok(rows[2]!.startsWith('2026-10-02,6,7,,5.5,,,,,0,auto,pluvieux,-1.5,1012,lowerBack|neck,,'))
@@ -133,4 +133,9 @@ test('the P1 indicators go out in their own columns, with the choices as words a
     [c.headache, c.headache_duration, c.headache_aura, c.headache_nausea, c.headache_sensitivity, c.headache_triggers, c.headache_acute_med],
     ['1', '4to24h', '0', '1', '1', 'stress|wine', '1']
   )
+})
+
+test('the P2 indicators go out in their own columns', () => {
+  const c = cells(journalCsv([entry('2026-10-01', { legPain: 'belowKnee', symptomTags: ['tingling', 'shocks'], spasms: 4, feverInfection: false, newSymptom: true, sensorySensitivity: 7 })], { includeNotes: true }))
+  assert.deepEqual([c.leg_pain, c.symptom_tags, c.spasms, c.fever_infection, c.new_symptom, c.sensory_sensitivity], ['belowKnee', 'tingling|shocks', '4', '0', '1', '7'])
 })

@@ -1,7 +1,7 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { INDICATORS, isOffered, MAX_RECOMMENDED_MEASURES, offeredFactors, planForIllnesses, withoutDetails, withoutUnoffered, detailsOf, planSettingsPatch, wizardSections, countFollowed } from '../src/lib/indicatorCatalog.ts'
+import { INDICATORS, isOffered, MAX_RECOMMENDED_MEASURES, offeredFactors, planForIllnesses, withoutDetails, withoutUnoffered, detailsOf, isIllnessOffered, planSettingsPatch, wizardSections, countFollowed } from '../src/lib/indicatorCatalog.ts'
 import type { IndicatorKey } from '../src/lib/indicatorCatalog.ts'
 import { ALL_FACTORS, ILLNESSES } from '../src/db/types.ts'
 
@@ -151,4 +151,21 @@ test('the done step counts the followed indicators, not the options inside them'
   assert.equal(countFollowed(['fatigue', 'sleep', 'nightWaking', 'notes'], true), 3)
   assert.equal(countFollowed(['fatigue', 'sleep', 'nightWaking', 'notes'], false), 3)
   assert.equal(countFollowed(['fatigue', 'morningStiffness'], false), 1)
+})
+
+test('psoriatic arthritis is the union of rheumatoid arthritis and spondyloarthritis, the stronger tier of the two', () => {
+  const psoriatic = planForIllnesses(['rhumatisme-psoriasique'], everything)
+  const union = new Set([...planForIllnesses(['arthrite'], everything).recommended, ...planForIllnesses(['spondylarthrite'], everything).recommended])
+  // Under the cap of the two together, the recommended ones are those of either profile.
+  for (const key of psoriatic.recommended) assert.ok(union.has(key), key)
+  assert.ok(psoriatic.recommended.includes('morningStiffness') && psoriatic.recommended.includes('swollenJoints'))
+  assert.ok(psoriatic.suggested.includes('mood'))
+  assert.equal(psoriatic.cycle, 'off')
+})
+
+test('the illness not yet read is offered with early access, or when already chosen', () => {
+  assert.equal(isIllnessOffered('rhumatisme-psoriasique', false), false)
+  assert.equal(isIllnessOffered('rhumatisme-psoriasique', true), true)
+  assert.equal(isIllnessOffered('rhumatisme-psoriasique', false, ['rhumatisme-psoriasique']), true)
+  assert.equal(isIllnessOffered('migraine', false), true)
 })

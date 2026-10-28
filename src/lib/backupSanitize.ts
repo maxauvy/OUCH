@@ -15,14 +15,17 @@ import {
   HEADACHE_DURATIONS,
   ILLNESS_STATUSES,
   JOINTS,
+  LEG_PAIN_LEVELS,
   MORNING_STIFFNESS_BANDS,
   NIGHT_WAKINGS,
   PERIOD_FLOWS,
   REFRESHED_LEVELS,
+  SYMPTOM_TAGS,
   MEDICATION_REGIMENS,
   MEDICATION_STOP_REASONS,
 } from '../db/types.ts'
 import type {
+  DailyEntry,
   Dose,
   Headache,
   JointsFelt,
@@ -201,6 +204,15 @@ export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry 
     bowelPain: bool(raw.bowelPain),
     urinary: bool(raw.urinary),
     headache: headache(raw.headache),
+    legPain: oneOf(raw.legPain, LEG_PAIN_LEVELS),
+    symptomTags: (() => {
+      const tags = strings(raw.symptomTags)
+      return tags && [...new Set(tags.filter((t) => (SYMPTOM_TAGS as readonly string[]).includes(t)))] as DailyEntry['symptomTags']
+    })(),
+    spasms: num(raw.spasms, 0, 10),
+    feverInfection: bool(raw.feverInfection),
+    newSymptom: bool(raw.newSymptom),
+    sensorySensitivity: num(raw.sensorySensitivity, 0, 10),
     weather: weather(raw.weather),
     intakes: intakes(raw.intakes),
     // Free-text medication names of backups from before the registry existed.

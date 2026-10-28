@@ -1,7 +1,7 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { summarizeCycleSymptoms, summarizeHeadaches, summarizeJoints, summarizeRefreshed } from '../src/lib/indicatorSummaries.ts'
+import { summarizeCycleSymptoms, summarizeHeadaches, summarizeJoints, summarizeNerveSigns, summarizeRefreshed } from '../src/lib/indicatorSummaries.ts'
 import type { DailyEntry } from '../src/db/types.ts'
 
 const day = (date: string, extra: Partial<DailyEntry>): DailyEntry => ({ date, createdAt: 1, updatedAt: 1, ...extra })
@@ -57,4 +57,17 @@ test('a day without a headache keeps its details out, whatever the file said', (
   const s = summarizeHeadaches([day('2026-10-01', { headache: { today: false, acuteMed: true } as never })])
   assert.equal(s.headacheDays, 0)
   assert.equal(s.acuteMedDays, 0)
+})
+
+test('nerve signs: the leg by level, the signs by days, an empty list is a day answered with none', () => {
+  const s = summarizeNerveSigns([
+    day('2026-10-01', { legPain: 'toKnee', symptomTags: ['tingling', 'shocks'], feverInfection: false, newSymptom: true }),
+    day('2026-10-02', { legPain: 'none', symptomTags: [], feverInfection: true }),
+    day('2026-10-03', { symptomTags: ['tingling'], newSymptom: false }),
+    day('2026-10-04', {}),
+  ])
+  assert.deepEqual(s.leg, { none: 1, toKnee: 1, belowKnee: 0 })
+  assert.deepEqual([s.legNoted, s.tagsNoted, s.tagDays], [2, 3, 2])
+  assert.deepEqual(s.tags, [{ tag: 'tingling', days: 2 }, { tag: 'shocks', days: 1 }])
+  assert.deepEqual([s.feverNoted, s.feverDays, s.newSymptomNoted, s.newSymptomDays], [2, 1, 2, 1])
 })

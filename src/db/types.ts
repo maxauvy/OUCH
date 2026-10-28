@@ -27,6 +27,12 @@ export type FactorKey =
   | 'periodFlow'
   | 'bowelBladder'
   | 'headacheEpisode'
+  | 'legPain'
+  | 'symptomTags'
+  | 'spasms'
+  | 'feverInfection'
+  | 'newSymptomMarker'
+  | 'sensorySensitivity'
 
 // Display order for the factor list in Settings. Labels/helpers live in the
 // active translation (`t.factors[key]`), not here.
@@ -50,6 +56,12 @@ export const ALL_FACTORS: FactorKey[] = [
   'periodFlow',
   'bowelBladder',
   'headacheEpisode',
+  'legPain',
+  'symptomTags',
+  'spasms',
+  'feverInfection',
+  'newSymptomMarker',
+  'sensorySensitivity',
 ]
 
 const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
@@ -155,6 +167,14 @@ export interface Headache {
   acuteMed?: boolean
 }
 
+/** How far the leg pain goes (not validated). 'none' is an answer. */
+export const LEG_PAIN_LEVELS = ['none', 'toKnee', 'belowKnee'] as const
+export type LegPain = (typeof LEG_PAIN_LEVELS)[number]
+
+/** The signs of the day the person ticks, as they are described in the illnesses that bring them (nerve pain, multiple sclerosis). */
+export const SYMPTOM_TAGS = ['tingling', 'numbness', 'burning', 'shocks', 'blurredVision', 'urgency', 'dizziness'] as const
+export type SymptomTag = (typeof SYMPTOM_TAGS)[number]
+
 export interface DailyEntry {
   id?: number
   /** ISO date 'YYYY-MM-DD', one entry per day, unique index */
@@ -192,6 +212,18 @@ export interface DailyEntry {
   bowelPain?: boolean
   urinary?: boolean
   headache?: Headache
+  /** Not validated: leg pain, in three levels. */
+  legPain?: LegPain
+  /** Not validated: the signs of the day ticked; an empty list is an answer (none today). */
+  symptomTags?: SymptomTag[]
+  /** 0–10, not validated: muscle spasms or stiffness in the legs. */
+  spasms?: number
+  /** Fever or an infection at the moment: context, nothing more. */
+  feverInfection?: boolean
+  /** Said by the person: a new or worse symptom for over 24 hours. A declaration, no algorithm reads it. */
+  newSymptom?: boolean
+  /** 0–10, not validated: sensitivity to noise, light, smells, touch. */
+  sensorySensitivity?: number
 
   weather?: WeatherInfo
   /** What was taken that day, pointing at the Medication registry. */
@@ -293,6 +325,7 @@ export type Illness =
   | 'fibromyalgie'
   | 'arthrite'
   | 'spondylarthrite'
+  | 'rhumatisme-psoriasique'
   | 'endometriose'
   | 'migraine'
   | 'lombalgie'
@@ -304,6 +337,7 @@ export const ILLNESSES: Illness[] = [
   'fibromyalgie',
   'arthrite',
   'spondylarthrite',
+  'rhumatisme-psoriasique',
   'endometriose',
   'migraine',
   'lombalgie',

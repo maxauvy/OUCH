@@ -34,7 +34,7 @@ import { REFERENCES } from '../../lib/references'
 import { buildSheets, findCut, rowsBlock, type Block, type Cut } from './pagination'
 import { summarizeMorningStiffness } from '../../lib/stiffnessSummary'
 import { summarizeNightWakings } from '../../lib/nightWakings'
-import { summarizeCycleSymptoms, summarizeHeadaches, summarizeJoints, summarizeRefreshed } from '../../lib/indicatorSummaries'
+import { summarizeCycleSymptoms, summarizeHeadaches, summarizeJoints, summarizeNerveSigns, summarizeRefreshed } from '../../lib/indicatorSummaries'
 import { MORNING_STIFFNESS_BANDS } from '../../db/types'
 
 
@@ -1280,6 +1280,15 @@ function OtherIndicatorsBlock({ d }: { d: ReportData }) {
   if (cycle.offCycleNoted > 0) lines.push(f.format(t.yesDays, { label: t.offCycle, n: cycle.offCycleDays, k: cycle.offCycleNoted }))
   if (cycle.bowelNoted > 0) lines.push(f.format(t.yesDays, { label: t.bowelPain, n: cycle.bowelDays, k: cycle.bowelNoted }))
   if (cycle.urinaryNoted > 0) lines.push(f.format(t.yesDays, { label: t.urinary, n: cycle.urinaryDays, k: cycle.urinaryNoted }))
+
+  const nerve = summarizeNerveSigns(d.current)
+  if (nerve.legNoted > 0) lines.push(f.format(t.leg, { list: (Object.keys(nerve.leg) as (keyof typeof nerve.leg)[]).filter((k) => nerve.leg[k] > 0).map((k) => item(t.legPainLevels[k], nerve.leg[k])).join(', ') }))
+  if (nerve.tagsNoted > 0) {
+    lines.push(f.format(t.tagsLine, { n: nerve.tagDays, k: nerve.tagsNoted }))
+    if (nerve.tags.length) lines.push(f.format(t.tagsTop, { list: nerve.tags.map((x) => item(t.tagLabels[x.tag], x.days)).join(', ') }))
+  }
+  if (nerve.feverNoted > 0) lines.push(f.format(t.yesDays, { label: t.feverInfection, n: nerve.feverDays, k: nerve.feverNoted }))
+  if (nerve.newSymptomNoted > 0) lines.push(f.format(t.yesDays, { label: t.newSymptom, n: nerve.newSymptomDays, k: nerve.newSymptomNoted }))
 
   const headache = summarizeHeadaches(d.current)
   if (headache.noted > 0) {

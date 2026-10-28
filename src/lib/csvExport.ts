@@ -47,6 +47,12 @@ const JOURNAL_COLUMNS = [
   'headache_sensitivity',
   'headache_triggers',
   'headache_acute_med',
+  'leg_pain',
+  'symptom_tags',
+  'spasms',
+  'fever_infection',
+  'new_symptom',
+  'sensory_sensitivity',
   'notes',
 ] as const
 
@@ -128,6 +134,12 @@ export function journalCsv(entries: DailyEntry[], options: CsvOptions): string {
       headache_sensitivity: e.headache?.sensitivity,
       headache_triggers: e.headache?.triggers?.join(LIST_SEPARATOR),
       headache_acute_med: e.headache?.acuteMed,
+      leg_pain: e.legPain,
+      symptom_tags: e.symptomTags?.join(LIST_SEPARATOR),
+      spasms: e.spasms,
+      fever_infection: e.feverInfection,
+      new_symptom: e.newSymptom,
+      sensory_sensitivity: e.sensorySensitivity,
       notes: e.notes,
     }
     rows.push(columns.map((c) => cells[c]))

@@ -22,7 +22,7 @@ test('without early access nothing new is on offer: no banner for someone who fo
 
 test('what is invitable is what the illnesses recommend or suggest and is not followed yet', () => {
   const list = invitableIndicators({ illnesses: ['fibromyalgie'], enabledFactors: ELEVEN }, true)
-  assert.deepEqual(list, ['morningStiffness', 'dailyInterference', 'nightWaking', 'unrefreshedWaking'])
+  assert.deepEqual(list, ['morningStiffness', 'dailyInterference', 'sensorySensitivity', 'nightWaking', 'unrefreshedWaking'])
   // An option inside sleep is only offered when sleep is followed.
   const noSleep = invitableIndicators({ illnesses: ['fibromyalgie'], enabledFactors: ELEVEN.filter((k) => k !== 'sleep') }, true)
   assert.ok(noSleep.includes('sleep') && noSleep.includes('nightWaking'))

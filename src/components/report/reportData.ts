@@ -53,6 +53,8 @@ export const SYMPTOMS: { key: SymptomKey; better: 1 | -1; max: number }[] = [
   { key: 'stressLevel', better: -1, max: 10 },
   { key: 'activityLevel', better: 1, max: 10 },
   { key: 'dailyInterference', better: -1, max: 10 },
+  { key: 'spasms', better: -1, max: 10 },
+  { key: 'sensorySensitivity', better: -1, max: 10 },
 ]
 
 export interface ReportData {

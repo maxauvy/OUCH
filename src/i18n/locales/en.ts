@@ -238,6 +238,12 @@ const en: Translations = {
         usage:
           'The same split of the body. The report says how many of those regions are reported over the period, as a plain count. OUCH applies neither these criteria nor the definition of generalized pain: only a doctor makes a diagnosis.',
       },
+      {
+        summary:
+          'Expert rheumatologists examined 20 people with back pain to find which of the signs of so-called inflammatory pain weigh most in their judgement: relief with exercise, pain at night, a gradual start, a start before age 40 and no relief with rest. When at least four of these five signs were present, sensitivity was 77% and specificity 91.7% in that group, then 79.6% and 72.4% in a validation group of 648 people.',
+        usage:
+          'It supports the wakings because of pain (night pain is one of the signs) and the point of noting what helped, movement or rest. OUCH describes these elements, it does not classify pain or count criteria: only a doctor can.',
+      },
     ],
   },
 
@@ -457,6 +463,12 @@ const en: Translations = {
     periodFlow: { label: 'Period flow', helper: 'Shown when cycle tracking is on' },
     bowelBladder: { label: 'Pain at the toilet, urinary trouble', helper: 'To see what comes back with the cycle' },
     headacheEpisode: { label: 'Headache', helper: 'An attack or not, how long, and what goes with it' },
+    legPain: { label: 'Leg pain', helper: 'How far down it goes' },
+    symptomTags: { label: 'Signs of the day', helper: 'Tingling, burning, blurred vision…' },
+    spasms: { label: 'Stiffness or spasms (legs)', helper: 'Cramps, legs that tighten' },
+    feverInfection: { label: 'Fever or infection right now', helper: 'To keep the context of the day' },
+    newSymptomMarker: { label: 'New symptom for over 24 hours', helper: 'A box you tick, nothing is calculated' },
+    sensorySensitivity: { label: 'Sensitivity (noise, light, smells, touch)', helper: 'How strong everything feels' },
   },
 
   bodyZones: {
@@ -611,6 +623,12 @@ const en: Translations = {
       regions: { wrist: 'Wrist', hand: 'Hand', elbow: 'Elbow', knee: 'Knee', ankle: 'Ankle', foot: 'Foot' },
     },
     periodFlowOptions: { none: 'None', spotting: 'Spotting', light: 'Light', heavy: 'Heavy' },
+    legPainOptions: { none: 'None', toKnee: 'Down to the knee', belowKnee: 'Below the knee' },
+    symptomTagLabels: { tingling: 'Tingling', numbness: 'Numbness', burning: 'Burning', shocks: 'Shocks', blurredVision: 'Blurred vision', urgency: 'Urinary urgency', dizziness: 'Dizziness' },
+    spasmsEndNone: 'None',
+    spasmsEndStrong: 'Very strong',
+    sensoryEndNone: 'None',
+    sensoryEndStrong: 'Very strong',
     offCycleBleeding: 'Bleeding outside the period',
     bowelPain: 'Pain at the toilet',
     urinary: 'Urinary trouble',
@@ -925,6 +943,8 @@ const en: Translations = {
       stressLevel: ['Stress', '↑ = higher'],
       activityLevel: ['Activity', '↑ = more active'],
       dailyInterference: ['Pain getting in the way of the day', '↑ = more affected'],
+      spasms: ['Stiffness or spasms (legs)', '↑ = more spasms'],
+      sensorySensitivity: ['Sensitivity (noise, light, smells, touch)', '↑ = more sensitive'],
     },
     stiffness: {
       title: 'Morning stiffness',
@@ -963,6 +983,13 @@ const en: Translations = {
         leftAnkle: 'left ankle', rightAnkle: 'right ankle', leftFoot: 'left foot', rightFoot: 'right foot',
       },
       offCycle: 'Bleeding outside the period',
+      legPainLevels: { none: 'none', toKnee: 'down to the knee', belowKnee: 'below the knee' },
+      leg: 'Leg pain: {{list}}.',
+      tagLabels: { tingling: 'tingling', numbness: 'numbness', burning: 'burning', shocks: 'shocks', blurredVision: 'blurred vision', urgency: 'urinary urgency', dizziness: 'dizziness' },
+      tagsLine: 'Signs of the day ticked: {{n}} {{n:day|days}} out of {{k}} noted.',
+      tagsTop: 'Most often ticked: {{list}}.',
+      feverInfection: 'Fever or infection',
+      newSymptom: 'Days the person ticked “new symptom for over 24 hours” (their own declaration)',
       bowelPain: 'Pain at the toilet',
       urinary: 'Urinary trouble',
     },
@@ -1029,6 +1056,7 @@ const en: Translations = {
       "Note on the previous day's activity: both too much and too little activity are associated with more pain.",
       'The 19 WPI body regions are the basis of the pain-location areas; OUCH does not compute the WPI.',
       'The same split; the report counts the regions reported, without applying the criteria.',
+      "Night pain and relief with movement are among the signs described for inflammatory back pain: the report counts wakings because of pain, without classifying the pain.",
     ],
     completeness: 'Completeness by measure, over logged days: {{list}}.',
     intensity: 'Pain intensity',

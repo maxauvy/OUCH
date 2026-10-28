@@ -88,6 +88,25 @@ test('the keys of the P1 indicators survive a settings backup', () => {
   assert.deepEqual(sanitizeSettings({ enabledFactors: keys })?.enabledFactors, keys)
 })
 
+test('the P2 indicators survive a backup as they were written, an empty list of signs included', () => {
+  const full = { ...entry, legPain: 'toKnee', symptomTags: ['tingling', 'dizziness'], spasms: 3, feverInfection: true, newSymptom: false, sensorySensitivity: 8 }
+  assert.deepEqual(sanitizeEntry(full), full)
+  assert.deepEqual(sanitizeEntry({ ...entry, symptomTags: [] })?.symptomTags, [])
+})
+
+test('bad P2 values are dropped, an unknown sign or a repeat is left out', () => {
+  const out = sanitizeEntry({ ...entry, legPain: 'hip', symptomTags: ['tingling', 'tingling', 'fever', 4], spasms: 11, feverInfection: 'yes', newSymptom: 1, sensorySensitivity: -1 })
+  assert.equal(out?.legPain, undefined)
+  assert.deepEqual(out?.symptomTags, ['tingling'])
+  for (const k of ['spasms', 'feverInfection', 'newSymptom', 'sensorySensitivity'] as const) assert.equal(out?.[k], undefined, k)
+  assert.equal(out?.painLevel, 6)
+})
+
+test('the keys of the P2 indicators survive a settings backup', () => {
+  const keys = ['legPain', 'symptomTags', 'spasms', 'feverInfection', 'newSymptomMarker', 'sensorySensitivity']
+  assert.deepEqual(sanitizeSettings({ enabledFactors: keys })?.enabledFactors, keys)
+})
+
 test('an unknown band or an out-of-range intensity is dropped, not an error', () => {
   const out = sanitizeEntry({ ...entry, morningStiffness: 'forever', morningStiffnessSeverity: 11 })
   assert.equal(out?.morningStiffness, undefined)

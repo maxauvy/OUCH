@@ -4,8 +4,8 @@
 //
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
-import { HEADACHE_DURATIONS, PERIOD_FLOWS, REFRESHED_LEVELS } from '../db/types.ts'
-import type { DailyEntry, HeadacheDuration, JointKey, PeriodFlow, Refreshed } from '../db/types.ts'
+import { HEADACHE_DURATIONS, LEG_PAIN_LEVELS, PERIOD_FLOWS, REFRESHED_LEVELS, SYMPTOM_TAGS } from '../db/types.ts'
+import type { DailyEntry, HeadacheDuration, JointKey, LegPain, PeriodFlow, Refreshed, SymptomTag } from '../db/types.ts'
 
 const countBy = <T extends string>(all: readonly T[], values: readonly T[]) => Object.fromEntries(all.map((k) => [k, values.filter((v) => v === k).length])) as Record<T, number>
 
@@ -95,5 +95,42 @@ export function summarizeHeadaches(entries: readonly DailyEntry[]): HeadacheSumm
     nauseaDays: attacks.filter((h) => h.nausea).length,
     sensitivityDays: attacks.filter((h) => h.sensitivity).length,
     triggers: [...tally].map(([trigger, days]) => ({ trigger, days })).sort((a, b) => b.days - a.days || a.trigger.localeCompare(b.trigger)).slice(0, 3),
+  }
+}
+
+export interface NerveSummary {
+  legNoted: number
+  leg: Record<LegPain, number>
+  /** Days with at least one sign ticked, over the days where the list was answered (an empty list is an answer). */
+  tagsNoted: number
+  tagDays: number
+  /** The signs ticked on the most days, at most five. */
+  tags: { tag: SymptomTag; days: number }[]
+  feverNoted: number
+  feverDays: number
+  /** Days the person said "new symptom for over 24 hours": a declaration, shown as such, not a relapse count. */
+  newSymptomNoted: number
+  newSymptomDays: number
+}
+
+export function summarizeNerveSigns(entries: readonly DailyEntry[]): NerveSummary {
+  const legs = entries.flatMap((e) => (e.legPain ? [e.legPain] : []))
+  const lists = entries.flatMap((e) => (e.symptomTags ? [e.symptomTags] : []))
+  const answers = (pick: (e: DailyEntry) => boolean | undefined) => {
+    const values = entries.flatMap((e) => (pick(e) === undefined ? [] : [pick(e)!]))
+    return { noted: values.length, yes: values.filter(Boolean).length }
+  }
+  const fever = answers((e) => e.feverInfection)
+  const fresh = answers((e) => e.newSymptom)
+  return {
+    legNoted: legs.length,
+    leg: countBy(LEG_PAIN_LEVELS, legs),
+    tagsNoted: lists.length,
+    tagDays: lists.filter((l) => l.length > 0).length,
+    tags: SYMPTOM_TAGS.map((tag) => ({ tag, days: lists.filter((l) => l.includes(tag)).length })).filter((x) => x.days > 0).sort((a, b) => b.days - a.days).slice(0, 5),
+    feverNoted: fever.noted,
+    feverDays: fever.yes,
+    newSymptomNoted: fresh.noted,
+    newSymptomDays: fresh.yes,
   }
 }

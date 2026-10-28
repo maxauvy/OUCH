@@ -107,3 +107,12 @@ test('a backup restores a year for a diagnosed illness only, and only a real one
   assert.deepEqual(out.illnessYear, { fibromyalgie: 2019 })
   assert.deepEqual(sanitizeSettings({ illnessYear: { fibromyalgie: 2019 } }), {})
 })
+
+test('psoriatic arthritis: its status and year survive a backup, and it is listed with its own name', () => {
+  const out = sanitizeSettings({ illnesses: ['rhumatisme-psoriasique', 'nonsense'], illnessStatus: { 'rhumatisme-psoriasique': 'diagnosed' }, illnessYear: { 'rhumatisme-psoriasique': 2021 } })
+  assert.deepEqual(out?.illnesses, ['rhumatisme-psoriasique'])
+  assert.deepEqual(out?.illnessStatus, { 'rhumatisme-psoriasique': 'diagnosed' })
+  assert.deepEqual(out?.illnessYear, { 'rhumatisme-psoriasique': 2021 })
+  assert.equal(formatIllnessList('fr', ['rhumatisme-psoriasique']), 'Rhumatisme psoriasique')
+  assert.equal(formatIllnessList('en', ['arthrite', 'rhumatisme-psoriasique']), 'Rheumatoid arthritis and psoriatic arthritis')
+})

@@ -240,6 +240,12 @@ const fr: Translations = {
         usage:
           'Même découpage du corps. Le rapport indique combien de ces régions sont signalées dans la période, comme un simple décompte. OUCH n’applique ni ces critères ni la définition de la douleur généralisée : seul un médecin pose un diagnostic.',
       },
+      {
+        summary:
+          'Des rhumatologues experts ont examiné 20 personnes qui avaient mal au dos pour retrouver, parmi les signes d’une douleur dite inflammatoire, ceux qui pèsent le plus dans leur jugement : le soulagement par l’exercice, la douleur nocturne, un début progressif, un début avant 40 ans et l’absence de soulagement par le repos. Quand au moins quatre de ces cinq signes sont réunis, la sensibilité était de 77 % et la spécificité de 91,7 % dans ce groupe, puis de 79,6 % et 72,4 % dans un groupe de contrôle de 648 personnes.',
+        usage:
+          'Elle soutient les réveils à cause de la douleur (la douleur de nuit en fait partie) et l’intérêt de noter ce qui a aidé, mouvement ou repos. OUCH décrit ces éléments, il ne classe pas la douleur et ne compte pas de critères : seul un médecin peut le faire.',
+      },
     ],
   },
 
@@ -459,6 +465,12 @@ const fr: Translations = {
     periodFlow: { label: 'Abondance des règles', helper: 'Visible quand le suivi du cycle est activé' },
     bowelBladder: { label: 'Douleur à la selle, troubles urinaires', helper: 'Pour voir ce qui revient avec le cycle' },
     headacheEpisode: { label: 'Mal de tête', helper: 'Une crise ou non, sa durée et ce qui l’accompagne' },
+    legPain: { label: 'Douleur dans la jambe', helper: 'Jusqu’où elle descend' },
+    symptomTags: { label: 'Symptômes du jour', helper: 'Fourmillements, brûlures, vision floue…' },
+    spasms: { label: 'Raideur ou spasmes (jambes)', helper: 'Crampes, jambes qui se raidissent' },
+    feverInfection: { label: 'Fièvre ou infection en ce moment', helper: 'Pour garder le contexte de la journée' },
+    newSymptomMarker: { label: 'Nouveau symptôme depuis plus de 24 h', helper: 'Une case à cocher par toi, rien n’est calculé' },
+    sensorySensitivity: { label: 'Sensibilité (bruit, lumière, odeurs, toucher)', helper: 'À quel point tout paraît fort' },
   },
 
   bodyZones: {
@@ -613,6 +625,12 @@ const fr: Translations = {
       regions: { wrist: 'Poignet', hand: 'Main', elbow: 'Coude', knee: 'Genou', ankle: 'Cheville', foot: 'Pied' },
     },
     periodFlowOptions: { none: 'Aucune', spotting: 'Traces', light: 'Légères', heavy: 'Abondantes' },
+    legPainOptions: { none: 'Aucune', toKnee: 'Jusqu’au genou', belowKnee: 'Sous le genou' },
+    symptomTagLabels: { tingling: 'Fourmillements', numbness: 'Engourdissements', burning: 'Brûlures', shocks: 'Décharges', blurredVision: 'Vision floue', urgency: 'Urgence urinaire', dizziness: 'Vertiges' },
+    spasmsEndNone: 'Aucun',
+    spasmsEndStrong: 'Très forts',
+    sensoryEndNone: 'Aucune',
+    sensoryEndStrong: 'Très forte',
     offCycleBleeding: 'Saignements hors règles',
     bowelPain: 'Douleur à la selle',
     urinary: 'Troubles urinaires',
@@ -930,6 +948,8 @@ const fr: Translations = {
       stressLevel: ['Stress', '↑ = plus élevé'],
       activityLevel: ['Activité', '↑ = plus actif(ve)'],
       dailyInterference: ['Gêne dans les gestes du jour', '↑ = plus gêné(e)'],
+      spasms: ['Raideur ou spasmes (jambes)', '↑ = plus de spasmes'],
+      sensorySensitivity: ['Sensibilité (bruit, lumière, odeurs, toucher)', '↑ = plus sensible'],
     },
     stiffness: {
       title: 'Raideur au réveil',
@@ -968,6 +988,13 @@ const fr: Translations = {
         leftAnkle: 'cheville gauche', rightAnkle: 'cheville droite', leftFoot: 'pied gauche', rightFoot: 'pied droit',
       },
       offCycle: 'Saignements hors règles',
+      legPainLevels: { none: 'aucune', toKnee: 'jusqu’au genou', belowKnee: 'sous le genou' },
+      leg: 'Douleur dans la jambe : {{list}}.',
+      tagLabels: { tingling: 'fourmillements', numbness: 'engourdissements', burning: 'brûlures', shocks: 'décharges', blurredVision: 'vision floue', urgency: 'urgence urinaire', dizziness: 'vertiges' },
+      tagsLine: 'Symptômes du jour cochés : {{n}} {{n:jour|jours}} sur {{k}} {{k:jour noté|jours notés}}.',
+      tagsTop: 'Les plus cochés : {{list}}.',
+      feverInfection: 'Fièvre ou infection',
+      newSymptom: 'Jours où la personne a coché « nouveau symptôme depuis plus de 24 h » (sa déclaration)',
       bowelPain: 'Douleur à la selle',
       urinary: 'Troubles urinaires',
     },
@@ -1034,6 +1061,7 @@ const fr: Translations = {
       "Note sur l’activité de la veille : trop comme trop peu d’activité sont associés à plus de douleur.",
       'Les 19 régions du corps du WPI servent de base aux zones de localisation ; OUCH ne calcule pas le WPI.',
       'Même découpage ; le rapport décompte les régions signalées, sans appliquer les critères.',
+      "La douleur de nuit et le soulagement par le mouvement font partie des signes décrits d’une douleur inflammatoire du dos : le rapport compte les réveils à cause de la douleur, sans classer la douleur.",
     ],
     completeness: 'Complétude par dimension, sur les jours renseignés : {{list}}.',
     intensity: 'Intensité douloureuse',

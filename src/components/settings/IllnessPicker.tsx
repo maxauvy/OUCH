@@ -5,6 +5,8 @@ import { useSettings } from '../../hooks/useSettings'
 import { getIllnessLabel } from '../../lib/childView'
 import { cleanOtherName, OTHER_ILLNESS_NAME_MAX, parseDiagnosisYear, setIllnessStatus, setIllnessYear, toggleIllness } from '../../lib/illnessStatus'
 import { format, useLanguage, useTranslation } from '../../i18n'
+import { useEarlyAccess } from '../../lib/earlyAccess'
+import { isIllnessOffered } from '../../lib/indicatorCatalog'
 import { Chip } from '../ui/Chip'
 
 /** Illnesses being tracked, several allowed, and for each one whether it is
@@ -15,6 +17,7 @@ export function IllnessPicker() {
   const t = useTranslation()
   const language = useLanguage()
   const settings = useSettings()
+  const earlyAccess = useEarlyAccess()
   const { illnesses, illnessStatus, otherIllnessName, illnessYear } = settings
   const state = { illnesses, illnessStatus, otherIllnessName, illnessYear }
   const chosen = ILLNESSES.filter((illness) => illnesses.includes(illness))
@@ -26,7 +29,7 @@ export function IllnessPicker() {
   return (
     <>
       <div role="group" aria-label={t.settings.illnessesTitle} className="flex flex-wrap gap-2">
-        {ILLNESSES.map((illness) => (
+        {ILLNESSES.filter((illness) => isIllnessOffered(illness, earlyAccess, illnesses)).map((illness) => (
           <Chip
             key={illness}
             label={getIllnessLabel(language, illness)}
