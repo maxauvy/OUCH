@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { format as formatDate } from 'date-fns'
 import type { BodyZone } from '../../db/types'
-import { DRAW_ORDER, OUTLINES, pieces, type View } from '../../lib/bodyOutlines'
+import { DRAW_ORDER, pieces, type View } from '../../lib/bodyOutlines'
 import { zoneSummary } from '../../lib/bodyZones'
 import { compareFlareZones, MIN_FLARE_DAYS, MIN_OTHER_DAYS, zoneStrips } from '../../lib/zoneTrends'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
@@ -22,12 +22,12 @@ function HeatSilhouette({ view, share, label }: { view: View; share: (zone: Body
   return (
     <svg viewBox="0 0 200 392" role="img" aria-label={label} className="mx-auto block h-auto w-full max-w-[230px]">
       {DRAW_ORDER.flatMap((region) =>
-        pieces(region, view).map(({ zone, mirror }) => {
+        pieces(region, view).map(({ zone, mirror, d }) => {
           const s = share(zone)
           return (
             <path
               key={zone}
-              d={OUTLINES[region].d}
+              d={d}
               transform={mirror ? 'translate(200 0) scale(-1 1)' : undefined}
               strokeLinejoin="round"
               style={{

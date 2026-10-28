@@ -5,11 +5,11 @@ import { BODY_ZONES, COARSE_ZONES, SIDED_ZONES } from '../src/db/types.ts'
 import { BODY_GROUPS, cleanZones, isCoarseZone, isWpiZone, parseZone, WPI_ZONES, wpiCount, zonesOfRegion } from '../src/lib/bodyZones.ts'
 import { sanitizeEntry } from '../src/lib/backupSanitize.ts'
 
-test('the zones follow the 19 areas of the Widespread Pain Index, with head, hands and feet on top', () => {
+test('the zones follow the 19 areas of the Widespread Pain Index, with head, hands, feet and the pelvis on top', () => {
   assert.equal(WPI_ZONES.length, 19)
   assert.equal(new Set(WPI_ZONES).size, 19)
-  assert.equal(BODY_ZONES.length, 6 + 18 + 6 + 1)
-  for (const z of ['head', 'leftHand', 'rightHand', 'leftFoot', 'rightFoot', 'generalized', 'arms']) assert.equal(isWpiZone(z), false, z)
+  assert.equal(BODY_ZONES.length, 7 + 18 + 6 + 1)
+  for (const z of ['pelvis', 'head', 'leftHand', 'rightHand', 'leftFoot', 'rightFoot', 'generalized', 'arms']) assert.equal(isWpiZone(z), false, z)
   for (const z of ['leftJaw', 'rightShoulder', 'neck', 'chest', 'stomach', 'upperBack', 'lowerBack', 'leftLowerLeg']) assert.equal(isWpiZone(z), true, z)
 })
 
@@ -25,7 +25,7 @@ test('a region with a side stands for its left and right zones', () => {
 test('every region is in exactly one group of the input', () => {
   const all = BODY_GROUPS.flatMap((g) => g.regions)
   assert.equal(new Set(all).size, all.length)
-  assert.equal(all.length, 15)
+  assert.equal(all.length, 16)
 })
 
 test('the count of WPI areas leaves out what is not one, and repeats', () => {
@@ -75,4 +75,19 @@ test('only a journal that holds zones of the first versions is told about the ne
   assert.deepEqual(oldZonesUsed([]), [])
   assert.deepEqual(oldZonesUsed([{ painLocations: ['leftShoulder', 'neck', 'generalized'] }, {}]), [])
   assert.deepEqual(oldZonesUsed([{ painLocations: ['legs', 'neck'] }, { painLocations: ['arms', 'legs'] }]), ['arms', 'legs'])
+})
+
+test('the pelvis is a zone of its own, outside the Widespread Pain Index: it is no 20th area and changes no count', () => {
+  assert.ok((BODY_ZONES as readonly string[]).includes('pelvis'))
+  assert.equal(isWpiZone('pelvis'), false)
+  assert.equal(wpiCount(['pelvis', 'neck']), 1)
+  assert.deepEqual(parseZone('pelvis'), { region: 'pelvis' })
+  assert.deepEqual(zonesOfRegion('pelvis'), ['pelvis'])
+  assert.deepEqual(cleanZones(['pelvis', 'pelvis', 'stomach']), ['pelvis', 'stomach'])
+})
+
+test('the pelvis survives a backup, and an old journal that has no pelvis reads as before', () => {
+  const entry = { date: '2026-05-04', createdAt: 1, updatedAt: 2 }
+  assert.deepEqual(sanitizeEntry({ ...entry, painLocations: ['pelvis', 'stomach'] })?.painLocations, ['pelvis', 'stomach'])
+  assert.deepEqual(sanitizeEntry({ ...entry, painLocations: ['stomach'] })?.painLocations, ['stomach'])
 })

@@ -85,7 +85,7 @@ const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
 // left and right side told apart, plus head, hands and feet (not in the WPI).
 // A zone is either on the midline (one identifier) or has a side, in which
 // case the identifier is the side followed by the region: 'leftShoulder'.
-export const MIDLINE_ZONES = ['head', 'neck', 'chest', 'stomach', 'upperBack', 'lowerBack'] as const
+export const MIDLINE_ZONES = ['head', 'neck', 'chest', 'stomach', 'upperBack', 'lowerBack', 'pelvis'] as const
 export const SIDED_REGIONS = ['jaw', 'shoulder', 'upperArm', 'lowerArm', 'hand', 'hip', 'upperLeg', 'lowerLeg', 'foot'] as const
 export type MidlineZone = (typeof MIDLINE_ZONES)[number]
 export type SidedRegion = (typeof SIDED_REGIONS)[number]

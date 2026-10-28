@@ -6,13 +6,14 @@ export type View = 'front' | 'back'
 // Each region is drawn once for the midline, or twice for a side (the right
 // twin is the mirror image). Outlines are in a 200 x 392 box, the left half
 // as seen on screen. Regions the back shows differ from the ones the front shows.
-export const OUTLINES: Record<BodyRegion, { d: string; views: View[] }> = {
+export const OUTLINES: Record<BodyRegion, { d: string; views: View[]; /** A different shape from behind, for a region seen differently there (the pelvis is the lower belly in front, the sacrum behind). */ dBack?: string }> = {
   head: { d: 'M100,10 C111,10 117,20 117,31 C117,43 110,51 100,51 C90,51 83,43 83,31 C83,20 89,10 100,10 Z', views: ['front', 'back'] },
   jaw: { d: 'M84,46 C84,42 89,41 93,43 C96,45 96,50 92,52 C88,53 84,50 84,46 Z', views: ['front'] },
   neck: { d: 'M92,52 L108,52 L108,66 Q100,69 92,66 Z', views: ['front', 'back'] },
   shoulder: { d: 'M88,68 C74,64 56,68 50,82 C47,92 56,97 66,95 C70,84 78,79 88,78 Z', views: ['front', 'back'] },
   chest: { d: 'M82,78 C92,74 108,74 118,78 C124,92 124,108 118,122 L82,122 C76,108 76,92 82,78 Z', views: ['front'] },
-  stomach: { d: 'M82,124 L118,124 C121,138 121,154 116,168 L84,168 C79,154 79,138 82,124 Z', views: ['front'] },
+  stomach: { d: 'M82,124 L118,124 C120,134 120,142 118,150 L82,150 C80,142 80,134 82,124 Z', views: ['front'] },
+  pelvis: { d: 'M84,152 L116,152 C117,160 116,166 112,170 L88,170 C84,166 83,160 84,152 Z', dBack: 'M91,164 L109,164 C110,174 108,184 100,190 C92,184 90,174 91,164 Z', views: ['front', 'back'] },
   upperBack: { d: 'M82,78 C92,74 108,74 118,78 C124,92 124,108 118,122 L82,122 C76,108 76,92 82,78 Z', views: ['back'] },
   lowerBack: { d: 'M82,124 L118,124 C120,138 120,150 118,162 L82,162 C80,150 80,138 82,124 Z', views: ['back'] },
   upperArm: { d: 'M50,98 C56,94 64,95 67,100 C67,116 65,134 62,148 C58,152 51,152 47,148 C46,132 47,114 50,98 Z', views: ['front', 'back'] },
@@ -25,17 +26,19 @@ export const OUTLINES: Record<BodyRegion, { d: string; views: View[] }> = {
 }
 
 export const DRAW_ORDER: BodyRegion[] = [
-  'head', 'neck', 'chest', 'stomach', 'upperBack', 'lowerBack', 'hip', 'upperLeg', 'lowerLeg', 'foot',
+  'head', 'neck', 'chest', 'stomach', 'pelvis', 'upperBack', 'lowerBack', 'hip', 'upperLeg', 'lowerLeg', 'foot',
   'upperArm', 'lowerArm', 'hand', 'shoulder', 'jaw',
 ]
 
 /** The pieces to draw for a region in a view: [zone, mirrored]. Seen from the front the left of the screen is the person's right; from the back it is their left. */
-export function pieces(region: BodyRegion, view: View): { zone: BodyZone; mirror: boolean }[] {
-  if (!OUTLINES[region].views.includes(view)) return []
-  if (!isSidedRegion(region)) return [{ zone: region, mirror: false }]
+export function pieces(region: BodyRegion, view: View): { zone: BodyZone; mirror: boolean; d: string }[] {
+  const { views, d: front, dBack } = OUTLINES[region]
+  if (!views.includes(view)) return []
+  const d = view === 'back' && dBack ? dBack : front
+  if (!isSidedRegion(region)) return [{ zone: region, mirror: false, d }]
   const [onScreenLeft, onScreenRight] = view === 'front' ? (['right', 'left'] as const) : (['left', 'right'] as const)
   return [
-    { zone: zonesOfRegion(region)[onScreenLeft === 'left' ? 0 : 1], mirror: false },
-    { zone: zonesOfRegion(region)[onScreenRight === 'left' ? 0 : 1], mirror: true },
+    { zone: zonesOfRegion(region)[onScreenLeft === 'left' ? 0 : 1], mirror: false, d },
+    { zone: zonesOfRegion(region)[onScreenRight === 'left' ? 0 : 1], mirror: true, d },
   ]
 }

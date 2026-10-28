@@ -22,8 +22,8 @@ export function zonesOfRegion(region: BodyRegion): BodyZone[] {
   return isSidedRegion(region) ? [sidedZone('left', region), sidedZone('right', region)] : [region]
 }
 
-/** The regions of the Widespread Pain Index not drawn in it: head, hands and feet. */
-const OUTSIDE_WPI: readonly BodyRegion[] = ['head', 'hand', 'foot']
+/** The regions of the Widespread Pain Index not drawn in it: head, hands and feet, and the pelvis, which the index has no area for. */
+const OUTSIDE_WPI: readonly BodyRegion[] = ['head', 'hand', 'foot', 'pelvis']
 
 /**
  * The 19 areas of the Widespread Pain Index (WPI, ACR 2010/2016 fibromyalgia
@@ -58,7 +58,7 @@ export function cleanZones(zones: readonly string[]): BodyZone[] {
 export const BODY_GROUPS: readonly { id: 'head' | 'arms' | 'trunk' | 'legs'; regions: readonly BodyRegion[] }[] = [
   { id: 'head', regions: ['head', 'jaw', 'neck'] },
   { id: 'arms', regions: ['shoulder', 'upperArm', 'lowerArm', 'hand'] },
-  { id: 'trunk', regions: ['chest', 'stomach', 'upperBack', 'lowerBack'] },
+  { id: 'trunk', regions: ['chest', 'stomach', 'pelvis', 'upperBack', 'lowerBack'] },
   { id: 'legs', regions: ['hip', 'upperLeg', 'lowerLeg', 'foot'] },
 ]
 export type BodyGroupId = (typeof BODY_GROUPS)[number]['id']
