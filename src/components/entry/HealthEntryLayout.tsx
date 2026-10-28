@@ -636,6 +636,20 @@ export function HealthEntryLayout({
 
       </Card>
 
+      {/* The one new indicator the lighter form keeps: a single row of five choices, under the pain, optional. */}
+      {lightToday && has('morningStiffness') && (
+        <Card className="!p-0 overflow-hidden [&>div:first-child]:!border-t-0">
+          <ChoiceRow
+            icon={IconSunrise}
+            cat="activity"
+            label={t.factors.morningStiffness.label}
+            options={MORNING_STIFFNESS_BANDS.map((b) => ({ value: b, label: t.entryForm.morningStiffnessBands[b] }))}
+            value={local.morningStiffness}
+            onChange={(v) => setField('morningStiffness', v as DailyEntry['morningStiffness'])}
+          />
+        </Card>
+      )}
+
       {lightToday && <LightExtras noted={local.painLevel !== undefined} items={lightItems} />}
 
       {!lightToday && zonesBlock}
