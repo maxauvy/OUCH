@@ -122,8 +122,7 @@ Les contributions sont bienvenues, de soignants et de patients comme de dévelop
 
 ## Idées pour la suite
 
-- Export CSV du journal.
-- Une carte du corps à toucher, à la place de la liste de zones.
+- Relecture des nouveaux indicateurs par des cliniciens, pour les sortir de l'accès anticipé.
 - Un vrai rappel push (il demanderait un petit serveur).
 - Plusieurs profils sur le même appareil.
 - Comparer deux périodes directement dans Tendances.
