@@ -852,6 +852,8 @@ export interface Translations {
       headacheDurations: string
       /** `{{list}}` */
       headacheTriggers: string
+      /** One sentence of reference points for medication overuse headache, with `{{ref}}` the number of its source; only in the report */
+      headacheReference: string
       /** `{{label}}`, `{{n}}` days */
       item: string
       note: string
