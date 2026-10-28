@@ -2,8 +2,9 @@ import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { IconCheck, IconDeviceFloppy, IconFileText, IconMicroscope, type Icon } from '@tabler/icons-react'
 import { db, updateSettings } from '../../db'
 import type { ParentGender } from '../../db/types'
-import { offeredFactors } from '../../lib/indicatorCatalog'
+import { countFollowed, planForIllnesses, planSettingsPatch, type IndicatorKey } from '../../lib/indicatorCatalog'
 import { useEarlyAccess } from '../../lib/earlyAccess'
+import { TrackingStep } from './TrackingStep'
 import { useSettings } from '../../hooks/useSettings'
 import { useMedications } from '../../hooks/useMedications'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -15,7 +16,6 @@ import { AboutCard } from '../about/AboutCard'
 import { Acronym } from '../about/Acronym'
 import { AppLogo } from '../ui/AppLogo'
 import { Card } from '../ui/Card'
-import { Chip } from '../ui/Chip'
 import { Toggle } from '../ui/Toggle'
 import { MedicationsSection } from '../settings/MedicationsSection'
 import { IllnessPicker } from '../settings/IllnessPicker'
@@ -46,6 +46,10 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
   // Run again from Settings by someone who already logs: no "first day".
   const hasEntries = !!useLiveQuery(() => db.entries.count(), [])
   const index = Math.max(0, steps.indexOf(step))
+  // The plan is applied once, the first time the tracking step is reached by someone who has not started yet:
+  // coming back to it, or running the setup again from Settings, never changes a choice.
+  const firstPass = !hasEntries && !settings.onboardingDone
+  const [appliedKeys, setAppliedKeys] = useState<IndicatorKey[] | null>(null)
 
   // New step: back to the top, and focus its title so screen readers say where they are.
   const firstRender = useRef(true)
@@ -58,7 +62,16 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
     headingRef.current?.focus()
   }, [step])
 
-  const go = (delta: number) => setStep(steps[Math.min(steps.length - 1, Math.max(0, index + delta))]!)
+  const go = (delta: number) => {
+    const next = steps[Math.min(steps.length - 1, Math.max(0, index + delta))]!
+    if (next === 'tracking' && firstPass && appliedKeys === null) {
+      const plan = planForIllnesses(settings.illnesses, { earlyAccess })
+      // Someone who chose their indicators here is never invited to choose again.
+      void updateSettings({ ...planSettingsPatch(plan), indicatorInviteDone: true })
+      setAppliedKeys(plan.recommended)
+    }
+    setStep(next)
+  }
   const isLast = step === 'done'
 
   const progress = format(t.setup.progress, { n: index + 1, total: steps.length })
@@ -150,46 +163,13 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
           )}
 
           {step === 'tracking' && (
-            <>
-              {heading(t.setup.trackingTitle)}
-              <Intro>{t.setup.trackingIntro}</Intro>
-              <Card>
-                <p id={`${ids}-factors`} className="text-control font-medium mb-3">
-                  {t.settings.factorsTitle}
-                </p>
-                <div role="group" aria-labelledby={`${ids}-factors`} className="flex flex-wrap gap-2">
-                  {offeredFactors(earlyAccess).map((key) => {
-                    const on = settings.enabledFactors.includes(key)
-                    return (
-                      <Chip
-                        key={key}
-                        label={t.factors[key].label}
-                        selected={on}
-                        onClick={() =>
-                          updateSettings({
-                            enabledFactors: on ? settings.enabledFactors.filter((k) => k !== key) : [...settings.enabledFactors, key],
-                          })
-                        }
-                      />
-                    )
-                  })}
-                </div>
-                <div className="flex items-center justify-between gap-3 mt-5">
-                  <div>
-                    <p className="text-control font-medium">{t.settings.cycleTracking}</p>
-                    <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-                      {t.settings.cycleTrackingHelper}
-                    </p>
-                  </div>
-                  <Toggle
-                    checked={settings.cycleTrackingEnabled}
-                    onChange={(v) => updateSettings({ cycleTrackingEnabled: v })}
-                    label={t.settings.cycleTracking}
-                  />
-                </div>
-              </Card>
-              <Hint>{t.setup.changeLater}</Hint>
-            </>
+            <TrackingStep
+              heading={heading(t.setup.trackingTitle)}
+              intro={<Intro>{t.setup.trackingIntro}</Intro>}
+              hint={<Hint>{t.setup.changeLater}</Hint>}
+              applied={appliedKeys}
+              firstPass={firstPass}
+            />
           )}
 
           {step === 'medications' && (
@@ -457,6 +437,7 @@ function ReminderStep({ heading }: { heading: ReactNode }) {
 function DoneStep({ heading }: { heading: ReactNode }) {
   const t = useTranslation()
   const settings = useSettings()
+  const earlyAccess = useEarlyAccess()
   const medications = useMedications()
   const tracksMedications = settings.enabledFactors.includes('medications')
   const described = medications?.filter((m) => m.regimen !== 'unspecified').length ?? 0
@@ -477,7 +458,7 @@ function DoneStep({ heading }: { heading: ReactNode }) {
         parent: settings.parentGender === 'papa' ? t.settings.parentGenderPapa : t.settings.parentGenderMaman,
       }),
     },
-    { done: true, text: format(t.setup.checkFactors, { n: settings.enabledFactors.length }) },
+    { done: true, text: format(t.setup.checkFactors, { n: countFollowed(settings.enabledFactors, earlyAccess) }) },
     ...(tracksMedications
       ? [{ done: described > 0, text: described > 0 ? format(t.setup.checkMedications, { n: described }) : t.setup.checkNoMedications }]
       : []),

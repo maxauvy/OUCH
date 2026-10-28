@@ -47,6 +47,16 @@ const en: Translations = {
     trackingIntro:
       'Pain is always logged. The rest is up to you: what you track here shows up in the report (sleep, fatigue, mood, painful areas…). Fewer factors means a quicker entry on hard days.',
     changeLater: 'You can add or remove factors at any time in Settings.',
+    indicators: {
+      recommendedTitle: 'Recommended for you',
+      recommendedHelper: 'Based on the illnesses you told us about, here is a starting point. You can change everything now or later in Settings.',
+      baseHelper: 'A simple starting point. Tell us your illnesses on the previous step for a more suitable proposal.',
+      optional: 'Nothing is compulsory: each indicator can be unticked with a tap.',
+      suggestedTitle: 'May also help',
+      addedNote: 'Added because you changed your illnesses.',
+      othersSummary: 'See all indicators',
+      rerunHelper: 'This is what you follow today, sorted by your illnesses. Nothing changes unless you touch it.',
+    },
     medicationsTitle: 'Your medications',
     medicationsIntro:
       'Your doctor will want to know what you take, at what dose, and what changed since last time. The report shows it when your medications are described here.',
@@ -233,6 +243,19 @@ const en: Translations = {
 
   today: {
     share: "Share today's weather",
+  },
+
+  indicatorInvite: {
+    region: 'New indicators you could follow',
+    banner: 'New indicators you could follow, based on what you told us ({{list}}).',
+    see: 'See',
+    later: 'Later',
+    sheetTitle: 'Complete your tracking?',
+    sheetHint: 'Tick what you want to add. Everything is optional and can be changed in Settings.',
+    add: 'Add ({{n}})',
+    notNow: 'Later',
+    footer: 'You already track {{list}}: these indicators stay as they are.',
+    closeSheet: 'Close',
   },
 
   journal: {

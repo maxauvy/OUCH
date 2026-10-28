@@ -58,6 +58,22 @@ export interface Translations {
     trackingTitle: string
     trackingIntro: string
     changeLater: string
+    /** The three levels of the tracking step. */
+    indicators: {
+      recommendedTitle: string
+      /** With illnesses declared */
+      recommendedHelper: string
+      /** With none: a simple starting point */
+      baseHelper: string
+      /** Under the recommended ones: nothing is compulsory */
+      optional: string
+      suggestedTitle: string
+      /** Under the suggestions that appeared because the illnesses changed */
+      addedNote: string
+      othersSummary: string
+      /** Rerun from Settings: nothing is changed for the person */
+      rerunHelper: string
+    }
     medicationsTitle: string
     medicationsIntro: string
     medicationsLater: string
@@ -120,6 +136,26 @@ export interface Translations {
 
   today: {
     share: string
+  }
+
+  /** The invitation to follow new indicators, for someone who already uses the app. */
+  indicatorInvite: {
+    /** Accessible name of the banner */
+    region: string
+    /** `{{list}}`: the illnesses declared */
+    banner: string
+    see: string
+    /** The cross: "later" */
+    later: string
+    sheetTitle: string
+    sheetHint: string
+    /** `{{n}}` ticked */
+    add: string
+    /** The quiet link under the button */
+    notNow: string
+    /** `{{list}}`: what is followed already */
+    footer: string
+    closeSheet: string
   }
 
   journal: {

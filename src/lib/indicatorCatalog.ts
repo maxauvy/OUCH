@@ -10,7 +10,7 @@
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
 import { ALL_FACTORS } from '../db/types.ts'
-import type { DailyEntry, Illness } from '../db/types.ts'
+import type { DailyEntry, FactorKey, Illness, Settings } from '../db/types.ts'
 
 /** Every indicator the catalogue knows, built or not yet. */
 export type IndicatorKey =
@@ -55,6 +55,8 @@ export interface IndicatorDef {
   parent?: IndicatorKey
   /** 0 first. Decides who stays recommended when the cap is exceeded. */
   priority: 0 | 1 | 2
+  /** The indicator that defines an illness (the migraine episode, the period): over the cap it stays before the shared ones, which other illnesses recommend too. */
+  specific?: true
   /** False until a clinician has read it: shown only with early access. */
   reviewed: boolean
   tiers: Partial<Record<Illness, Tier>>
@@ -77,11 +79,11 @@ export const INDICATORS: readonly IndicatorDef[] = [
   { key: 'mood', kind: 'measure', priority: 0, reviewed: true, tiers: { fibromyalgie: R, sep: R, autre: R, arthrite: S, spondylarthrite: S, endometriose: S, migraine: S, lombalgie: S, myofasciale: S } },
   { key: 'stress', kind: 'measure', priority: 0, reviewed: true, tiers: { migraine: R, myofasciale: R, fibromyalgie: S, endometriose: S, autre: S } },
   { key: 'activity', kind: 'measure', priority: 0, reviewed: true, tiers: { lombalgie: R, myofasciale: R, fibromyalgie: S, arthrite: S, spondylarthrite: S, autre: S } },
-  { key: 'periodFlow', kind: 'measure', priority: 1, reviewed: false, tiers: { endometriose: R } },
-  { key: 'bowelBladder', kind: 'measure', priority: 1, reviewed: false, tiers: { endometriose: R } },
-  { key: 'headacheEpisode', kind: 'measure', priority: 1, reviewed: false, tiers: { migraine: R } },
-  { key: 'legPain', kind: 'measure', priority: 2, reviewed: false, tiers: { lombalgie: R } },
-  { key: 'spasms', kind: 'measure', priority: 2, reviewed: false, tiers: { sep: R } },
+  { key: 'periodFlow', kind: 'measure', priority: 1, specific: true, reviewed: false, tiers: { endometriose: R } },
+  { key: 'bowelBladder', kind: 'measure', priority: 1, specific: true, reviewed: false, tiers: { endometriose: R } },
+  { key: 'headacheEpisode', kind: 'measure', priority: 1, specific: true, reviewed: false, tiers: { migraine: R } },
+  { key: 'legPain', kind: 'measure', priority: 2, specific: true, reviewed: false, tiers: { lombalgie: R } },
+  { key: 'spasms', kind: 'measure', priority: 2, specific: true, reviewed: false, tiers: { sep: R } },
   { key: 'sensorySensitivity', kind: 'measure', priority: 2, reviewed: false, tiers: { fibromyalgie: S } },
 
   { key: 'nightWaking', kind: 'detail', parent: 'sleep', priority: 0, reviewed: false, tiers: { fibromyalgie: R, spondylarthrite: R, lombalgie: R, myofasciale: R } },
@@ -139,11 +141,11 @@ export function planForIllnesses(illnesses: readonly Illness[], options: PlanOpt
     else if (tier === S) suggested.add(def.key)
   }
 
-  // Over the cap, the measures of highest priority stay; the rest turn into suggestions.
+  // Over the cap, the measures that define an illness stay, then the highest priority; the rest turn into suggestions.
   const measures = available
     .map((def, index) => ({ def, index }))
     .filter(({ def }) => def.kind === 'measure' && recommended.has(def.key))
-    .sort((a, b) => a.def.priority - b.def.priority || a.index - b.index)
+    .sort((a, b) => Number(!a.def.specific) - Number(!b.def.specific) || a.def.priority - b.def.priority || a.index - b.index)
   for (const { def } of measures.slice(MAX_RECOMMENDED_MEASURES)) {
     recommended.delete(def.key)
     suggested.add(def.key)
@@ -205,4 +207,40 @@ export function detailsOf(parent: IndicatorKey, earlyAccess: boolean): Indicator
 export function withoutDetails(keys: readonly IndicatorKey[]): IndicatorKey[] {
   const details = new Set(INDICATORS.filter((d) => d.kind === 'detail').map((d) => d.key))
   return keys.filter((k) => !details.has(k))
+}
+
+/** What the setup saves when it pre-selects the plan, the first time and only then: the recommended
+ * indicators become the followed ones (they replace the defaults, which tick everything), and the cycle
+ * starts on when the plan says so. It never switches the cycle off. */
+export function planSettingsPatch(plan: IndicatorPlan): Pick<Settings, 'enabledFactors'> & Partial<Pick<Settings, 'cycleTrackingEnabled'>> {
+  return {
+    enabledFactors: plan.recommended as FactorKey[],
+    ...(plan.cycle === 'on' ? { cycleTrackingEnabled: true } : {}),
+  }
+}
+
+export interface WizardSections {
+  recommended: IndicatorKey[]
+  suggested: IndicatorKey[]
+  /** Recommended since the person changed their illnesses, after the plan was applied: shown as suggestions, not ticked for them. */
+  added: IndicatorKey[]
+  others: IndicatorKey[]
+}
+
+/** The three levels of the setup, details left out (they hang under their parent). `applied` is what the
+ * plan pre-selected, or null before it has been: an indicator that became recommended since is "added". */
+export function wizardSections(plan: IndicatorPlan, applied: readonly IndicatorKey[] | null): WizardSections {
+  const kept = applied ? plan.recommended.filter((k) => applied.includes(k)) : plan.recommended
+  const added = applied ? plan.recommended.filter((k) => !applied.includes(k)) : []
+  return {
+    recommended: withoutDetails(kept),
+    suggested: withoutDetails(plan.suggested),
+    added: withoutDetails(added),
+    others: withoutDetails(plan.others),
+  }
+}
+
+/** How many of the followed indicators are measures or blocks of their own (the options inside one do not count). */
+export function countFollowed(enabled: readonly string[], earlyAccess: boolean): number {
+  return withoutDetails(enabled.filter((k) => isOffered(k, earlyAccess)) as IndicatorKey[]).length
 }

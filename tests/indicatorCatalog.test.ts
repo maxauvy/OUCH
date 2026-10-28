@@ -1,7 +1,7 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { INDICATORS, isOffered, MAX_RECOMMENDED_MEASURES, offeredFactors, planForIllnesses, withoutDetails, withoutUnoffered, detailsOf } from '../src/lib/indicatorCatalog.ts'
+import { INDICATORS, isOffered, MAX_RECOMMENDED_MEASURES, offeredFactors, planForIllnesses, withoutDetails, withoutUnoffered, detailsOf, planSettingsPatch, wizardSections, countFollowed } from '../src/lib/indicatorCatalog.ts'
 import type { IndicatorKey } from '../src/lib/indicatorCatalog.ts'
 import { ALL_FACTORS, ILLNESSES } from '../src/db/types.ts'
 
@@ -51,10 +51,9 @@ test('the cap: never more than six measures beside pain, the surplus becomes a s
   const all = planForIllnesses(['fibromyalgie', 'arthrite', 'spondylarthrite', 'endometriose', 'migraine', 'lombalgie', 'sep', 'myofasciale'], everything)
   const recommended = measures(all.recommended)
   assert.equal(recommended.length, MAX_RECOMMENDED_MEASURES)
-  // Priority first: the P0 measures are kept, the P2 ones are the first to go.
-  assert.ok(recommended.includes('morningStiffness') && recommended.includes('dailyInterference'))
-  assert.ok(!recommended.includes('spasms') && !recommended.includes('legPain'))
-  assert.ok(measures(all.suggested).includes('spasms'))
+  // What defines an illness stays before the shared measures, so a second illness never takes it away.
+  assert.ok(['periodFlow', 'bowelBladder', 'headacheEpisode', 'legPain', 'spasms'].every((k) => recommended.includes(k as never)))
+  assert.ok(measures(all.suggested).includes('sleep') || measures(all.suggested).includes('morningStiffness'))
 })
 
 test('a detail needs its parent: without it, it is not offered', () => {
@@ -125,4 +124,31 @@ test('the options inside sleep are listed under it, and leave the list of rows',
   assert.deepEqual(detailsOf('sleep', false), [])
   assert.deepEqual(detailsOf('fatigue', true), [])
   assert.deepEqual(withoutDetails(['fatigue', 'sleep', 'nightWaking', 'mood']), ['fatigue', 'sleep', 'mood'])
+})
+
+test('the setup pre-selects the recommended ones in place of the defaults, and starts the cycle only when asked', () => {
+  const fibro = planSettingsPatch(planForIllnesses(['fibromyalgie']))
+  assert.deepEqual(fibro.enabledFactors, ['fatigue', 'sleep', 'brainFog', 'mood', 'painLocations', 'medications', 'positiveActions', 'notes'])
+  assert.equal('cycleTrackingEnabled' in fibro, false)
+  assert.equal(planSettingsPatch(planForIllnesses(['endometriose'])).cycleTrackingEnabled, true)
+  // With no illness: the base profile, not the eleven defaults.
+  assert.deepEqual(planSettingsPatch(planForIllnesses([])).enabledFactors, ['fatigue', 'sleep', 'mood', 'painLocations', 'medications', 'notes'])
+})
+
+test('after an illness change, what became recommended is shown as added, not ticked', () => {
+  const before = planForIllnesses(['fibromyalgie'], everything)
+  const after = planForIllnesses(['fibromyalgie', 'migraine'], everything)
+  const sections = wizardSections(after, before.recommended)
+  assert.ok(sections.added.includes('headacheEpisode') && !sections.recommended.includes('headacheEpisode'))
+  assert.ok(sections.recommended.includes('fatigue'))
+  assert.deepEqual(wizardSections(after, null).added, [])
+  assert.ok(wizardSections(after, null).recommended.includes('headacheEpisode'))
+  // No detail is a row of its own.
+  assert.ok(!sections.recommended.includes('nightWaking'))
+})
+
+test('the done step counts the followed indicators, not the options inside them', () => {
+  assert.equal(countFollowed(['fatigue', 'sleep', 'nightWaking', 'notes'], true), 3)
+  assert.equal(countFollowed(['fatigue', 'sleep', 'nightWaking', 'notes'], false), 3)
+  assert.equal(countFollowed(['fatigue', 'morningStiffness'], false), 1)
 })
