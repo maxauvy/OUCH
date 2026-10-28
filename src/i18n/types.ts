@@ -182,6 +182,8 @@ export interface Translations {
     daysTrackedOther: string
     avgPain: string
     painEvolution: string
+    /** The card of what else the person noted (stiffness, wakings, joints…), over the range */
+    indicatorsTitle: string
     dailyRating: string
     weeklyMean: string
     weeklyMeanLegend: string
@@ -1332,6 +1334,10 @@ export interface Translations {
       /** Under "Morning stiffness": also ask how strong it was */
       severityLabel: string
       severityHelper: string
+      /** Opens the setup's choice again, as a sheet */
+      reviewButton: string
+      reviewTitle: string
+      reviewClose: string
     }
     cycleTracking: string
     cycleTrackingHelper: string

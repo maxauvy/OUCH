@@ -29,6 +29,7 @@ import { formatPosology } from '../lib/medicationFormat'
 import { shiftISO } from '../lib/medications'
 import { weekdayProfile } from '../lib/weekdays'
 import { format, useLocale, useTranslation } from '../i18n'
+import { IndicatorsCard } from '../components/trends/IndicatorsCard'
 
 export function TrendsPage() {
   const entries = useLoggedEntries()
@@ -242,6 +243,8 @@ export function TrendsPage() {
               <ZonesWeeksCard entries={entries} today={today} flareDays={flareDays} />
             </>
           )}
+
+          <IndicatorsCard entries={filtered} />
 
           {medicationsTracked && medications && (
             <>

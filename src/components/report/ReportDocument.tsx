@@ -34,7 +34,7 @@ import { REFERENCES } from '../../lib/references'
 import { buildSheets, findCut, rowsBlock, type Block, type Cut } from './pagination'
 import { summarizeMorningStiffness } from '../../lib/stiffnessSummary'
 import { summarizeNightWakings } from '../../lib/nightWakings'
-import { summarizeCycleSymptoms, summarizeHeadaches, summarizeJoints, summarizeNerveSigns, summarizeRefreshed } from '../../lib/indicatorSummaries'
+import { otherIndicatorLines } from '../../lib/indicatorLines'
 import { MORNING_STIFFNESS_BANDS } from '../../db/types'
 
 
@@ -1262,45 +1262,7 @@ function NightWakingsBlock({ d }: { d: ReportData }) {
 function OtherIndicatorsBlock({ d }: { d: ReportData }) {
   const { f } = d
   const t = f.t.indicators
-  const lines: string[] = []
-  const item = (label: string, n: number) => f.format(t.item, { label, n })
-
-  const refreshed = summarizeRefreshed(d.current)
-  if (refreshed.noted > 0)
-    lines.push(f.format(t.refreshed, { list: (Object.keys(refreshed.counts) as (keyof typeof refreshed.counts)[]).filter((k) => refreshed.counts[k] > 0).map((k) => item(t.refreshedLevels[k], refreshed.counts[k])).join(', '), n: refreshed.noted }))
-
-  const joints = summarizeJoints(d.current)
-  if (joints.noted > 0) {
-    lines.push(f.format(t.joints, { yes: joints.yesDays, n: joints.noted }))
-    if (joints.top.length) lines.push(f.format(t.jointsTop, { list: joints.top.map((j) => item(t.jointNames[j.joint], j.days)).join(', ') }))
-  }
-
-  const cycle = summarizeCycleSymptoms(d.current)
-  if (cycle.flowNoted > 0) lines.push(f.format(t.flow, { list: (Object.keys(cycle.flow) as (keyof typeof cycle.flow)[]).filter((k) => cycle.flow[k] > 0).map((k) => item(t.flowLevels[k], cycle.flow[k])).join(', ') }))
-  if (cycle.offCycleNoted > 0) lines.push(f.format(t.yesDays, { label: t.offCycle, n: cycle.offCycleDays, k: cycle.offCycleNoted }))
-  if (cycle.bowelNoted > 0) lines.push(f.format(t.yesDays, { label: t.bowelPain, n: cycle.bowelDays, k: cycle.bowelNoted }))
-  if (cycle.urinaryNoted > 0) lines.push(f.format(t.yesDays, { label: t.urinary, n: cycle.urinaryDays, k: cycle.urinaryNoted }))
-
-  const nerve = summarizeNerveSigns(d.current)
-  if (nerve.legNoted > 0) lines.push(f.format(t.leg, { list: (Object.keys(nerve.leg) as (keyof typeof nerve.leg)[]).filter((k) => nerve.leg[k] > 0).map((k) => item(t.legPainLevels[k], nerve.leg[k])).join(', ') }))
-  if (nerve.tagsNoted > 0) {
-    lines.push(f.format(t.tagsLine, { n: nerve.tagDays, k: nerve.tagsNoted }))
-    if (nerve.tags.length) lines.push(f.format(t.tagsTop, { list: nerve.tags.map((x) => item(t.tagLabels[x.tag], x.days)).join(', ') }))
-  }
-  if (nerve.feverNoted > 0) lines.push(f.format(t.yesDays, { label: t.feverInfection, n: nerve.feverDays, k: nerve.feverNoted }))
-  if (nerve.newSymptomNoted > 0) lines.push(f.format(t.yesDays, { label: t.newSymptom, n: nerve.newSymptomDays, k: nerve.newSymptomNoted }))
-
-  const headache = summarizeHeadaches(d.current)
-  if (headache.noted > 0) {
-    lines.push(f.format(t.headache, { n: headache.headacheDays, k: headache.noted, m: headache.acuteMedDays }))
-    if (headache.headacheDays > 0) {
-      lines.push(f.format(t.headacheDetails, { a: headache.auraDays, b: headache.nauseaDays, c: headache.sensitivityDays }))
-      const durations = (Object.keys(headache.durations) as (keyof typeof headache.durations)[]).filter((k) => headache.durations[k] > 0)
-      if (durations.length) lines.push(f.format(t.headacheDurations, { list: durations.map((k) => item(t.durations[k], headache.durations[k])).join(', ') }))
-      if (headache.triggers.length) lines.push(f.format(t.headacheTriggers, { list: headache.triggers.map((x) => item(x.trigger, x.days)).join(', ') }))
-    }
-  }
-
+  const lines = otherIndicatorLines(d.current, f.t, f.format)
   if (lines.length === 0) return null
   return (
     <>
