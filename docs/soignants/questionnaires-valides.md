@@ -1,6 +1,6 @@
 # Note sur les questionnaires validés
 
-*Version 0.1, brouillon pour relecture. Établi le 14 octobre 2026, pour OUCH v0.5.0. **Ce document n'est pas un avis juridique** : les informations sur les droits viennent de pages publiques, souvent secondaires, **qu'aucune démarche auprès des détenteurs n'a confirmées**. Elles sont à vérifier par écrit avant tout usage.*
+*Version 0.1, brouillon pour relecture. Établi le 14 octobre 2026, pour OUCH v0.5.0 ; mis à jour le 28 octobre 2026 pour la v0.7.0 (items inspirés ajoutés, § 4). **Ce document n'est pas un avis juridique** : les informations sur les droits viennent de pages publiques, souvent secondaires, **qu'aucune démarche auprès des détenteurs n'a confirmées**. Elles sont à vérifier par écrit avant tout usage.*
 
 Cette note répond à une question qu'un soignant pose vite : *« pourquoi OUCH n'utilise-t-il pas un questionnaire validé, le BASDAI, le FIQR… ? »* Elle dit ce qu'OUCH utilise aujourd'hui, pourquoi il n'intègre pas de questionnaire complet, ce qu'il faudrait pour en intégrer un, et ce qu'OUCH fait en attendant. Pour le reste de l'état des vérifications, voir le [statut de validation](statut-de-validation.md). Une version de deux pages, à lire avec des soignants, existe aussi : la [note de cadrage](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-note-scores-valides-v0.5.0.pdf) ([English](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-validated-scores-note-v0.5.0.pdf), [source](../note-scores-valides/)).
 
@@ -36,7 +36,8 @@ Pour chacun : à quoi il sert, et ce que disent les sources consultées sur ses 
 
 ## 4. Ce que fait OUCH en attendant
 
-- **Des items inspirés, jamais appelés par le nom d'un questionnaire.** Le journal peut demander des choses proches de ce que mesurent ces instruments (par exemple une raideur matinale, qui est un item du BASDAI et de la polyarthrite rhumatoïde, voir le backlog), mais comme des échelles simples, **dites non validées**, jamais comme « le BASDAI » ou « le FIQR » ni comme leur score.
+- **Des items inspirés, jamais appelés par le nom d'un questionnaire.** Le journal peut demander des choses proches de ce que mesurent ces instruments (par exemple une raideur matinale, qui figure dans des instruments de suivi de la spondyloarthrite, de la polyarthrite et de la fibromyalgie), mais comme des échelles simples, **dites non validées**, jamais comme « le BASDAI » ou « le FIQR » ni comme leur score.
+- **Les items inspirés ajoutés dans la v0.7.0** (accès anticipé, facultatifs, **non validés**) sont : la raideur au réveil (durée en cinq tranches, intensité de 0 à 10 en option), les réveils à cause de la douleur, le réveil reposé, un seul item de gêne dans les gestes du jour (le fonctionnement physique est un domaine recommandé pour les essais sur la douleur : un item n'est pas un questionnaire), les articulations douloureuses ou gonflées dites comme un ressenti, la sensibilité au bruit, à la lumière, aux odeurs et au toucher, et les spasmes. Aucun n'est présenté sous le nom d'un instrument, aucun n'est repris tel quel, et les instruments protégés dont les droits ne sont pas confirmés (questionnaire de capacité fonctionnelle de la polyarthrite, indice d'incapacité lombaire) ne sont pas reproduits.
 - **Aucun score calculé** à partir d'items inspirés, et aucun seuil d'activité de maladie.
 - **Dans le rapport,** ces items sont décrits (évolution, moyenne) comme les autres, avec la mention que les échelles autres que la douleur ne sont pas validées.
 
