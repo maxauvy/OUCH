@@ -31,6 +31,8 @@ import { format, LANGUAGES, useLocale, useTranslation } from '../i18n'
 import { radioGroupProps, radioProps } from '../lib/a11y'
 import { isOffered } from '../lib/indicatorCatalog'
 import { IndicatorPicker } from '../components/settings/IndicatorPicker'
+import { TrackingStep } from '../components/setup/TrackingStep'
+import { ModalSheet } from '../components/ui/ModalSheet'
 
 /** `openBackup`: arrive from the backup reminder, with the data group already open.
  * `onReplayTour`: in the demo, opens the guided tour again. */
@@ -40,6 +42,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
   const luminous = useLuminous()
   const allEntries = useAllEntries()
   const [zonesNoticeOpen, setZonesNoticeOpen] = useState(false)
+  const [reviewing, setReviewing] = useState(false)
   // Raised to open the "Mes données" group from the lock's sheet ("Faire d'abord une sauvegarde").
   const [backupSignal, setBackupSignal] = useState(0)
   function goToBackupSection() {
@@ -175,6 +178,14 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
             {t.settings.factorsHelper}
           </p>
           <IndicatorPicker settings={settings} earlyAccess={earlyAccess} />
+          <button
+            type="button"
+            onClick={() => setReviewing(true)}
+            className="mt-4 min-h-11 text-control font-semibold underline underline-offset-4"
+            style={{ color: 'var(--color-brand)' }}
+          >
+            {t.settings.indicators.reviewButton}
+          </button>
         </Card>
 
         {settings.enabledFactors.includes('medications') && (
@@ -467,6 +478,13 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           </p>
         </Card>
       </SettingsGroup>
+
+      {reviewing && (
+        <ModalSheet title={t.settings.indicators.reviewTitle} closeLabel={t.settings.indicators.reviewClose} onClose={() => setReviewing(false)}>
+          {/* The setup's own choice, with nothing pre-selected: what is followed stays as it is. */}
+          <TrackingStep heading={null} intro={null} hint={null} applied={null} firstPass={false} />
+        </ModalSheet>
+      )}
 
       {!IS_DEMO && <SupportCard />}
 
