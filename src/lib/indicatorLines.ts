@@ -30,6 +30,7 @@ export interface IndicatorWording {
     headacheDetails: string
     headacheDurations: string
     headacheTriggers: string
+    headacheReference: string
     item: string
     refreshedLevels: Record<string, string>
     flowLevels: Record<string, string>
@@ -69,7 +70,7 @@ export function nightWakingLines(entries: readonly DailyEntry[], t: IndicatorWor
 }
 
 /** Waking rested, joints, cycle symptoms, nerve signs and headaches: one line each, only for what a day carries. */
-export function otherIndicatorLines(entries: readonly DailyEntry[], t: IndicatorWording, format: Format): string[] {
+export function otherIndicatorLines(entries: readonly DailyEntry[], t: IndicatorWording, format: Format, options: { mohReference?: number } = {}): string[] {
   const w = t.indicators
   const lines: string[] = []
   const item = (label: string, n: number) => format(w.item, { label, n })
@@ -106,6 +107,8 @@ export function otherIndicatorLines(entries: readonly DailyEntry[], t: Indicator
       const durations = present(headache.durations)
       if (durations.length) lines.push(format(w.headacheDurations, { list: durations.map((k) => item(w.durations[k]!, headache.durations[k])).join(', ') }))
       if (headache.triggers.length) lines.push(format(w.headacheTriggers, { list: headache.triggers.map((x) => item(x.trigger, x.days)).join(', ') }))
+      // The reference points for medication overuse only go with a source (the report), and only where an attack medication was noted.
+      if (options.mohReference !== undefined && headache.acuteMedDays > 0) lines.push(format(w.headacheReference, { ref: options.mohReference }))
     }
   }
   return lines

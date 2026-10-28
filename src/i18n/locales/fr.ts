@@ -246,6 +246,12 @@ const fr: Translations = {
         usage:
           'Elle soutient les réveils à cause de la douleur (la douleur de nuit en fait partie) et l’intérêt de noter ce qui a aidé, mouvement ou repos. OUCH décrit ces éléments, il ne classe pas la douleur et ne compte pas de critères : seul un médecin peut le faire.',
       },
+      {
+        summary:
+          'Recommandation de sociétés allemande, autrichienne et suisse de neurologie sur la céphalée par abus de médicaments. Elle rappelle la définition de la classification internationale des céphalées : un mal de tête présent au moins 15 jours par mois chez une personne qui a déjà une maladie céphalalgique, avec un usage régulier, depuis plus de 3 mois, d’un traitement de crise. Le seuil de prise est d’au moins 15 jours par mois pour les antalgiques simples (anti-inflammatoires, aspirine, paracétamol) et d’au moins 10 jours par mois pour les associations d’antalgiques, les triptans, les dérivés de l’ergot et les opioïdes.',
+        usage:
+          'Dans le rapport, à côté du nombre de jours de mal de tête et de jours de traitement de crise pris, une phrase redit ces repères, avec leur source. OUCH ne connaît pas la classe du médicament et ne calcule rien : le repère ne dit pas qu’une personne est concernée, seul un médecin peut le dire.',
+      },
     ],
   },
 
@@ -980,6 +986,8 @@ const fr: Translations = {
       headacheDetails: 'Ces jours-là : aura {{a}}, nausées {{b}}, gêne à la lumière ou au bruit {{c}}.',
       headacheDurations: 'Durée : {{list}}.',
       headacheTriggers: 'Déclencheurs les plus cités : {{list}}.',
+      headacheReference:
+        'À titre de repère, la définition de la céphalée par abus de médicaments (classification internationale des céphalées, reprise dans la référence {{ref}}) cite un mal de tête d’au moins 15 jours par mois et une prise régulière d’un traitement de crise depuis plus de 3 mois, d’au moins 15 jours par mois pour les antalgiques simples, d’au moins 10 jours par mois pour les autres classes. Les jours notés ici ne disent pas la classe du médicament : ils ne permettent pas de conclure, seul un médecin peut le faire.',
       item: '{{label}} ({{n}})',
       note: 'Tel que la personne l’a noté ; échelles non validées, sans seuil ni comparaison.',
       refreshedLevels: { yes: 'oui', fairly: 'assez', little: 'peu', no: 'pas du tout' },
@@ -1065,6 +1073,7 @@ const fr: Translations = {
       'Les 19 régions du corps du WPI servent de base aux zones de localisation ; OUCH ne calcule pas le WPI.',
       'Même découpage ; le rapport décompte les régions signalées, sans appliquer les critères.',
       "La douleur de nuit et le soulagement par le mouvement font partie des signes décrits d’une douleur inflammatoire du dos : le rapport compte les réveils à cause de la douleur, sans classer la douleur.",
+      "Repère cité à côté du décompte des jours de mal de tête et de traitement de crise pris, sans calcul ni conclusion.",
     ],
     completeness: 'Complétude par dimension, sur les jours renseignés : {{list}}.',
     intensity: 'Intensité douloureuse',

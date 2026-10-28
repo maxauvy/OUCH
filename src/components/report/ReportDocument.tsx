@@ -35,6 +35,7 @@ import { buildSheets, findCut, rowsBlock, type Block, type Cut } from './paginat
 import { summarizeMorningStiffness } from '../../lib/stiffnessSummary'
 import { summarizeNightWakings } from '../../lib/nightWakings'
 import { otherIndicatorLines } from '../../lib/indicatorLines'
+import { summarizeHeadaches } from '../../lib/indicatorSummaries'
 import { MORNING_STIFFNESS_BANDS } from '../../db/types'
 
 
@@ -198,7 +199,7 @@ function gpPages(d: ReportData): Block[][] {
           <p>{f.t.methodGp}</p>
         </div>
       </>,
-      <References numbers={GP_REFERENCES} title={f.t.references} />,
+      <References numbers={gpReferences(d)} title={f.t.references} />,
     ],
   ]
 }
@@ -1262,7 +1263,7 @@ function NightWakingsBlock({ d }: { d: ReportData }) {
 function OtherIndicatorsBlock({ d }: { d: ReportData }) {
   const { f } = d
   const t = f.t.indicators
-  const lines = otherIndicatorLines(d.current, f.t, f.format)
+  const lines = otherIndicatorLines(d.current, f.t, f.format, { mohReference: MOH_REFERENCE })
   if (lines.length === 0) return null
   return (
     <>
@@ -1640,6 +1641,12 @@ function Associations({ d }: { d: ReportData }) {
 /** Numbers (1-based) of the references the 2-page GP summary cites. Footnote
  * numbers are positions in REFERENCES, so the list keeps them with `value`. */
 const GP_REFERENCES = [1, 2, 8, 9, 16]
+
+/** The guideline that recalls the definition of medication overuse headache, cited by the reference points in the headache lines. */
+const MOH_REFERENCE = REFERENCES.findIndex((r) => r.pmid === '36031642') + 1
+
+/** The short report lists its sources by hand: the guideline joins them when the reference points are on it. */
+const gpReferences = (d: ReportData) => (summarizeHeadaches(d.current).acuteMedDays > 0 ? [...GP_REFERENCES, MOH_REFERENCE] : GP_REFERENCES)
 
 function References({
   numbers,

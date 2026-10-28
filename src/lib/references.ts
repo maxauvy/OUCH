@@ -97,4 +97,9 @@ export const REFERENCES: Reference[] = [
       'Sieper J, van der Heijde D, Landewé R, et al. New criteria for inflammatory back pain in patients with chronic back pain: a real patient exercise by experts from the Assessment of SpondyloArthritis international Society (ASAS). Ann Rheum Dis. 2009;68(6):784-788.',
     pmid: '19147614',
   },
+  {
+    citation:
+      'Diener HC, Kropp P, Dresler T, et al. Management of medication overuse (MO) and medication overuse headache (MOH) S1 guideline. Neurol Res Pract. 2022;4(1):37.',
+    pmid: '36031642',
+  },
 ]

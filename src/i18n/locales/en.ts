@@ -244,6 +244,12 @@ const en: Translations = {
         usage:
           'It supports the wakings because of pain (night pain is one of the signs) and the point of noting what helped, movement or rest. OUCH describes these elements, it does not classify pain or count criteria: only a doctor can.',
       },
+      {
+        summary:
+          'Guideline from the German, Austrian and Swiss neurology societies on medication overuse headache. It recalls the definition of the international classification of headache disorders: headache on at least 15 days a month in someone who already has a headache disorder, with regular use of an attack medication for more than 3 months. The intake threshold is at least 15 days a month for simple analgesics (anti-inflammatories, aspirin, paracetamol) and at least 10 days a month for combination analgesics, triptans, ergot derivatives and opioids.',
+        usage:
+          'In the report, next to the count of headache days and days with an attack medication taken, one sentence restates these reference points with their source. OUCH does not know the class of the medication and computes nothing: the reference point does not say a person is concerned, only a doctor can.',
+      },
     ],
   },
 
@@ -975,6 +981,8 @@ const en: Translations = {
       headacheDetails: 'On those days: aura {{a}}, nausea {{b}}, bothered by light or noise {{c}}.',
       headacheDurations: 'Duration: {{list}}.',
       headacheTriggers: 'Most cited triggers: {{list}}.',
+      headacheReference:
+        'As a reference point, the definition of medication overuse headache (international classification of headache disorders, recalled in reference {{ref}}) cites headache on at least 15 days a month and regular use of an attack medication for more than 3 months, on at least 15 days a month for simple analgesics and at least 10 days a month for the other classes. The days noted here do not say the class of the medication: they do not allow a conclusion, only a doctor can make one.',
       item: '{{label}} ({{n}})',
       note: 'As the person noted it; not validated scales, with no threshold or comparison.',
       refreshedLevels: { yes: 'yes', fairly: 'fairly', little: 'little', no: 'not at all' },
@@ -1060,6 +1068,7 @@ const en: Translations = {
       'The 19 WPI body regions are the basis of the pain-location areas; OUCH does not compute the WPI.',
       'The same split; the report counts the regions reported, without applying the criteria.',
       "Night pain and relief with movement are among the signs described for inflammatory back pain: the report counts wakings because of pain, without classifying the pain.",
+      "Reference point cited next to the count of headache days and attack-medication days, with no calculation or conclusion.",
     ],
     completeness: 'Completeness by measure, over logged days: {{list}}.',
     intensity: 'Pain intensity',

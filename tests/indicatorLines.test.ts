@@ -49,3 +49,16 @@ test('the other indicators: one line each, a "no" counted over the days answered
   assert.ok(english.includes('Painful or swollen joints, as felt: 1 day out of 2 noted.'))
   assert.ok(english.includes('Most often named: left wrist (1).'))
 })
+
+test('the reference points for medication overuse need a source number, and an attack medication noted', () => {
+  const withMed = [day('2026-10-01', { headache: { today: true, acuteMed: true } })]
+  const withoutMed = [day('2026-10-01', { headache: { today: true } })]
+  // No number given (Trends): no sentence, whatever is noted.
+  assert.ok(!otherIndicatorLines(withMed, fr.report, inFr).some((l) => l.includes('repère')))
+  // A number and a day with a medication: the sentence, citing it, and saying it concludes nothing.
+  const line = otherIndicatorLines(withMed, fr.report, inFr, { mohReference: 19 }).find((l) => l.includes('À titre de repère'))
+  assert.ok(line?.includes('référence 19') && line.includes('15 jours par mois') && line.includes('10 jours par mois') && line.includes('seul un médecin'))
+  // No medication noted: no sentence, even in the report.
+  assert.ok(!otherIndicatorLines(withoutMed, fr.report, inFr, { mohReference: 19 }).some((l) => l.includes('repère')))
+  assert.ok(otherIndicatorLines(withMed, en.report, inEn, { mohReference: 19 }).some((l) => l.includes('reference 19') && l.includes('only a doctor')))
+})
