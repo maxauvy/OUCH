@@ -238,6 +238,12 @@ const en: Translations = {
         usage:
           'The same split of the body. The report says how many of those regions are reported over the period, as a plain count. OUCH applies neither these criteria nor the definition of generalized pain: only a doctor makes a diagnosis.',
       },
+      {
+        summary:
+          'Expert rheumatologists examined 20 people with back pain to find which of the signs of so-called inflammatory pain weigh most in their judgement: relief with exercise, pain at night, a gradual start, a start before age 40 and no relief with rest. When at least four of these five signs were present, sensitivity was 77% and specificity 91.7% in that group, then 79.6% and 72.4% in a validation group of 648 people.',
+        usage:
+          'It supports the wakings because of pain (night pain is one of the signs) and the point of noting what helped, movement or rest. OUCH describes these elements, it does not classify pain or count criteria: only a doctor can.',
+      },
     ],
   },
 
@@ -1050,6 +1056,7 @@ const en: Translations = {
       "Note on the previous day's activity: both too much and too little activity are associated with more pain.",
       'The 19 WPI body regions are the basis of the pain-location areas; OUCH does not compute the WPI.',
       'The same split; the report counts the regions reported, without applying the criteria.',
+      "Night pain and relief with movement are among the signs described for inflammatory back pain: the report counts wakings because of pain, without classifying the pain.",
     ],
     completeness: 'Completeness by measure, over logged days: {{list}}.',
     intensity: 'Pain intensity',
