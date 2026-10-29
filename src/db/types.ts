@@ -382,9 +382,8 @@ export interface Settings {
   backupReminderSnoozedUntil?: number
   /** Set once the person has linked a place to keep copies. Per device. */
   autoBackup?: AutoBackupState
-  /** The soft message on the day's page when the last days were harder.
-   * Switchable, and a preference: restored from a backup. */
-  hardDaysCardEnabled: boolean
+  /** Everything the app offers on its own, in one switch: the soft word when the last days were harder, the list on the day's page (leads, Sunday sentence, trials, the invitation), the dot on Trends and the trial offers. A preference, restored from a backup. */
+  suggestionsEnabled: boolean
   /** Pain first, the rest on request, while a flare is under way. Switchable, restored from a backup. */
   lightFormEnabled: boolean
   /** The Kids tab in the tab bar: a page to explain the illness to a child, which not everyone needs. Off until the person says yes (the setup asks), so no answer is a no. A preference, restored from a backup. */
@@ -395,14 +394,6 @@ export interface Settings {
   hardDaysSeen?: HardDaysSeen
   /** What the person answered to the leads on Trends ("note it for my appointment", "not really"), by lead. Restored from a backup. */
   leadChoices?: LeadChoices
-  /** A card on the day's page, once, when a new lead shows in the notes. Switchable, restored from a backup. */
-  leadPromptEnabled: boolean
-  /** The Sunday sentence about the gentlest days of the week. Switchable, restored from a backup. */
-  weeklySentenceEnabled: boolean
-  /** A dot on the Trends tab when a new lead is there. Switchable, restored from a backup. */
-  leadDotEnabled: boolean
-  /** The offer to try, for a week, an action that goes with softer days. Switchable, restored from a backup. */
-  trialsEnabled: boolean
   /** The one-week trial under way, or just over and waiting to be closed. Restored from a backup. */
   leadTrial?: LeadTrial
   /** The weeks the person closed, so the report can say what each showed. Restored from a backup. */
@@ -429,6 +420,12 @@ export interface Settings {
 export interface LegacySettings extends Omit<Partial<Settings>, 'enabledFactors'> {
   childIllness?: Illness
   design?: 'health' | 'classic'
+  /** Before v8 the suggestions were five switches, one for each. */
+  hardDaysCardEnabled?: boolean
+  leadPromptEnabled?: boolean
+  weeklySentenceEnabled?: boolean
+  leadDotEnabled?: boolean
+  trialsEnabled?: boolean
   enabledFactors?: (FactorKey | 'cycle')[]
 }
 
@@ -445,13 +442,9 @@ export const DEFAULT_SETTINGS: Settings = {
   language: 'fr',
   parentGender: 'maman',
   illnesses: [],
-  hardDaysCardEnabled: true,
+  suggestionsEnabled: true,
   lightFormEnabled: true,
   kidsTabEnabled: false,
-  leadPromptEnabled: true,
-  weeklySentenceEnabled: true,
-  leadDotEnabled: true,
-  trialsEnabled: true,
   morningStiffnessSeverityEnabled: false,
   indicatorInviteDone: false,
 }

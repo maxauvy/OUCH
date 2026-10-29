@@ -344,3 +344,8 @@ test('files from before the iteration count was stored are still accepted', asyn
   const { iterations: _dropped, ...legacy } = await encryptJSON({}, 'pw')
   assert.ok(isEncryptedPayload(legacy))
 })
+
+test('the suggestions switch is read from a backup, only when it is a boolean', () => {
+  assert.deepEqual(sanitizeSettings({ suggestionsEnabled: false }), { suggestionsEnabled: false })
+  assert.deepEqual(sanitizeSettings({ suggestionsEnabled: 'no' }), {})
+})

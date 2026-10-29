@@ -34,3 +34,19 @@ test('the older upgrades still apply', () => {
   assert.equal(s.cycleTrackingEnabled, true)
   assert.deepEqual(s.enabledFactors, ['sleep'])
 })
+
+test('the five suggestion switches become one, off if any of them was off', () => {
+  const off: LegacySettings = { hardDaysCardEnabled: true, leadPromptEnabled: true, weeklySentenceEnabled: true, leadDotEnabled: false, trialsEnabled: true }
+  upgradeLegacySettings(off)
+  assert.equal(off.suggestionsEnabled, false)
+  for (const k of ['hardDaysCardEnabled', 'leadPromptEnabled', 'weeklySentenceEnabled', 'leadDotEnabled', 'trialsEnabled']) assert.equal(k in off, false)
+  const on: LegacySettings = { hardDaysCardEnabled: true, leadPromptEnabled: true, weeklySentenceEnabled: true, leadDotEnabled: true, trialsEnabled: true }
+  upgradeLegacySettings(on)
+  assert.equal(on.suggestionsEnabled, undefined)
+})
+
+test('a suggestions choice already made is never overridden by old switches', () => {
+  const s: LegacySettings = { suggestionsEnabled: true, trialsEnabled: false }
+  upgradeLegacySettings(s)
+  assert.equal(s.suggestionsEnabled, true)
+})

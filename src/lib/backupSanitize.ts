@@ -329,6 +329,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     onboardingDone: bool(raw.onboardingDone),
     language: oneOf(raw.language, ['fr', 'en'] as const),
     parentGender: oneOf(raw.parentGender, ['maman', 'papa'] as const),
+    suggestionsEnabled: bool(raw.suggestionsEnabled),
     hardDaysCardEnabled: bool(raw.hardDaysCardEnabled),
     lightFormEnabled: bool(raw.lightFormEnabled),
     kidsTabEnabled: bool(raw.kidsTabEnabled),

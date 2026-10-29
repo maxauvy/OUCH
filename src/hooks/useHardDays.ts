@@ -20,7 +20,7 @@ export function useHardDays(
   const logged = loggedEntries(entries)
   return {
     ready: true,
-    card: hardDaysCard({ entries: logged, today: date, seen: settings.hardDaysSeen, enabled: settings.hardDaysCardEnabled }),
+    card: hardDaysCard({ entries: logged, today: date, seen: settings.hardDaysSeen, enabled: settings.suggestionsEnabled }),
     light: lightFormActive({ entries: logged, today: date, enabled: settings.lightFormEnabled, fullFormDay: settings.fullFormDay }),
   }
 }

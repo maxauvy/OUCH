@@ -24,12 +24,12 @@ export function useTodayMessages(): TodayMessages | null {
   return useMemo(() => {
     if (!logged || !leadList) return null
     const flare = flaresApply(settings.illnesses) && flareUnderWay(logged, today)
-    const trialsOn = settings.trialsEnabled && settings.leadPromptEnabled && settings.enabledFactors.includes('positiveActions')
+    const trialsOn = settings.suggestionsEnabled && settings.enabledFactors.includes('positiveActions')
     return todayMessages({
       today,
       quiet: flare,
       later: settings.leadsSeen?.later,
-      allow: { leads: settings.leadPromptEnabled, weekly: settings.weeklySentenceEnabled, trials: trialsOn },
+      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn },
       leads: leadList.shown,
       leadChoices: settings.leadChoices,
       tried: triedKeys(settings.leadTrial, settings.leadTrialHistory),
