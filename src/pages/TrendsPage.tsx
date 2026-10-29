@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { IconChevronRight, IconFileText } from '@tabler/icons-react'
 
 import { Footer } from '../components/layout/Footer'
@@ -11,7 +11,8 @@ import { TreatmentReviewCard } from '../components/trends/TreatmentReviewCard'
 import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
 import { ZonesFlaresCard, ZonesMapCard, ZonesWeeksCard } from '../components/trends/ZonesCards'
 import { Card, SectionTitle } from '../components/ui/Card'
-import { DoctorReportPage } from './DoctorReportPage'
+// The report, its charts and the page capture are fetched when it is opened.
+const DoctorReportPage = lazy(() => import('./DoctorReportPage').then((m) => ({ default: m.DoctorReportPage })))
 import { useLoggedEntries } from '../hooks/useEntries'
 import { useFlares } from '../hooks/useFlares'
 import { useLeadList } from '../hooks/useLeadList'
@@ -120,12 +121,14 @@ export function TrendsPage() {
 
   if (reporting) {
     return (
-      <DoctorReportPage
-        onBack={() => {
-          returningFromReport.current = true
-          setReporting(false)
-        }}
-      />
+      <Suspense fallback={null}>
+        <DoctorReportPage
+          onBack={() => {
+            returningFromReport.current = true
+            setReporting(false)
+          }}
+        />
+      </Suspense>
     )
   }
 

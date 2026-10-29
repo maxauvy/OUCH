@@ -1,7 +1,6 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { IconArrowLeft, IconFileTypePdf, IconPrinter } from '@tabler/icons-react'
-import { toCanvas } from 'html-to-image'
 import { useAllEntries } from '../hooks/useEntries'
 import { useMedications } from '../hooks/useMedications'
 import { useSettings } from '../hooks/useSettings'
@@ -34,6 +33,7 @@ const canPrint = !(navigator as Navigator & { standalone?: boolean }).standalone
 /** The preview's pages as JPEGs, at twice the A4 size in CSS pixels (about
  * 190 dpi once printed). */
 async function capturePages(container: HTMLElement): Promise<PdfImage[]> {
+  const { toCanvas } = await import('html-to-image')
   const images: PdfImage[] = []
   for (const page of Array.from(container.querySelectorAll<HTMLElement>('.report-page'))) {
     const canvas = await toCanvas(page, {
