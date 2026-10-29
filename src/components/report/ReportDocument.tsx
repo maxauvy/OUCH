@@ -1,4 +1,5 @@
 import { createContext, createElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
+import { periodDayOf } from '../../lib/periodDay'
 import './report.css'
 import type { LoggedEntry } from '../../db/types'
 import { DRAW_ORDER, pieces, type View } from '../../lib/bodyOutlines'
@@ -1562,7 +1563,7 @@ function Associations({ d }: { d: ReportData }) {
       const n = e.positiveActions?.length
       return n === undefined ? undefined : n >= 2 ? true : n === 0 ? false : undefined
     }),
-    options.includeCycle && all.some((e) => e.periodDay) ? compareContext(all, 'period', (e) => !!e.periodDay) : null,
+    options.includeCycle && all.some((e) => periodDayOf(e)) ? compareContext(all, 'period', (e) => !!periodDayOf(e)) : null,
   ].filter((c): c is ContextComparison => c !== null)
 
   if (!rows.length && !contexts.length) return null

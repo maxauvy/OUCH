@@ -46,7 +46,7 @@ Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'
 | `weather` | **Météo extérieure** (facultative) | objet, voir ci-dessous | Automatique ou à la main |
 | `intakes` | **Médicaments pris** | liste d'objets, voir ci-dessous | Liés au registre des traitements |
 | `positiveActions` | **Ce qui a aidé aujourd'hui** | liste de textes | Suggestions : repos / sieste, chaleur, froid, étirements doux, marche courte, méditation / respiration, bain chaud, kiné / soins, etc. ; le patient ajoute les siennes |
-| `periodDay` | **Règles aujourd'hui** | vrai / faux | N'apparaît que si le suivi du cycle est activé |
+| `periodDay` | **Règles aujourd'hui** | vrai / faux | N'apparaît que si le suivi du cycle est activé, et pas quand l'indicateur « abondance des règles » est suivi : le rapport lit alors le flux (léger ou abondant = jour de règles ; aucun ou traces = non) et, sans flux, cette case |
 | `notes` | **Notes** | texte libre | |
 | `createdAt`, `updatedAt` | (non affichés) | horodatages en millisecondes | Création et dernière modification de l'entrée |
 
