@@ -8,7 +8,7 @@ import type { LoggedEntry } from '../src/db/types.ts'
 import { sanitizeSettings } from '../src/lib/backupSanitize.ts'
 import { flareUnderWay } from '../src/lib/hardDays.ts'
 import { arrangeLeads, findLeads } from '../src/lib/leads.ts'
-import { leadToBring } from '../src/lib/leadHints.ts'
+import { todayMessages } from '../src/lib/todayMessages.ts'
 import { weeklyFinding } from '../src/lib/weeklySentence.ts'
 import { reportTrials } from '../src/lib/leadTrial.ts'
 import { shiftISO } from '../src/lib/dates.ts'
@@ -170,7 +170,8 @@ test('with a calm end the day is outside a flare, a lead is brought on most days
     assert.equal(flareUnderWay(logged(h), end), false, end)
     assert.equal(h.entries.at(-1)?.painLevel, 4)
     const { shown } = arrangeLeads(findLeads(recent(h, end)), h.settings.leadChoices)
-    if (leadToBring({ shown, choices: h.settings.leadChoices, seen: undefined, today: end, enabled: true, quiet: false })) brought++
+    const list = todayMessages({ today: end, quiet: false, later: undefined, allow: { leads: true, weekly: false, trials: false }, leads: shown, leadChoices: h.settings.leadChoices, tried: [], weekly: null, repeat: null, invite: false, trial: undefined })
+    if (list.items.some((m) => m.kind === 'lead')) brought++
     if (new Date(`${end}T12:00:00Z`).getUTCDay() === 0) {
       sundays++
       assert.ok(weeklyFinding(logged(h), end, false), `${end}: nothing to say on a Sunday`)

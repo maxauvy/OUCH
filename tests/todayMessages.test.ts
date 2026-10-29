@@ -44,7 +44,7 @@ test('the sheet lists the Sunday sentence, then the leads, a trial to repeat, th
     invite: true,
     trial: trial(),
   })
-  assert.deepEqual(kinds(r), [`weekly:${TODAY}`, 'lead:sleep', 'lead:action:bain', 'repeat:action:etirements', 'invite', 'trial'])
+  assert.deepEqual(kinds(r), [`weekly:${TODAY}`, 'lead:sleep', 'lead:action:bain', 'repeat:action:etirements:2026-10-31', 'invite', 'trial'])
   assert.equal(r.count, 5)
 })
 

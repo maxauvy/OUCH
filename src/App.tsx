@@ -17,6 +17,7 @@ import { useAllEntries, useTodayEntry } from './hooks/useEntries'
 import { oldZonesUsed } from './lib/bodyZones'
 import { ZonesNotice } from './components/about/ZonesNotice'
 import { useLeadList } from './hooks/useLeadList'
+import { useTodayMessages } from './hooks/useTodayMessages'
 import { trendsDot } from './lib/leadHints'
 import { updateSettings } from './db'
 import { maybeShowReminder } from './lib/reminder'
@@ -80,6 +81,12 @@ function AppShell() {
   const settingsLoaded = useSettingsLoaded()
   const todayEntry = useTodayEntry()
   const leadList = useLeadList()
+  const messages = useTodayMessages()
+  // The leads the day's list brings, or has had set aside, are not "new" on the Trends tab: the line says it already.
+  const announced = [
+    ...(messages?.items.flatMap((m) => (m.kind === 'lead' ? [m.lead.key] : [])) ?? []),
+    ...Object.keys(settings.leadsSeen?.later ?? {}).flatMap((k) => (k.startsWith('lead:') ? [k.slice(5)] : [])),
+  ]
   const allEntries = useAllEntries()
   // A journal that holds zones of the first versions is told about the new ones, once per device.
   const oldZones = useMemo(() => oldZonesUsed(allEntries ?? []), [allEntries])
@@ -173,7 +180,7 @@ function AppShell() {
       <TabBar
         active={tab}
         hidden={settings.kidsTabEnabled ? [] : ['kids']}
-        badged={tab !== 'trends' && trendsDot({ shown: leadList?.shown ?? [], seen: settings.leadsSeen, enabled: settings.leadDotEnabled }) ? ['trends'] : []}
+        badged={tab !== 'trends' && trendsDot({ shown: leadList?.shown ?? [], seen: settings.leadsSeen, enabled: settings.leadDotEnabled, announced }) ? ['trends'] : []}
         onChange={(next) => {
           setBackupRequested(false)
           setTab(next)

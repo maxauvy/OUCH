@@ -93,7 +93,9 @@ export function todayMessages(input: TodayMessagesInput): TodayMessages {
       if (!leadChoices?.[lead.key] && !tried.includes(lead.key) && waiting(key)) items.push({ kind: 'lead', key, lead })
     }
   }
-  if (allow.trials && repeat && waiting(`repeat:${repeat.key}`)) items.push({ kind: 'repeat', key: `repeat:${repeat.key}`, trial: repeat })
+  // Keyed by the trial it follows: after the next week done, the offer is a new one.
+  const repeatKey = repeat ? `repeat:${repeat.key}:${repeat.end}` : ''
+  if (allow.trials && repeat && waiting(repeatKey)) items.push({ kind: 'repeat', key: repeatKey, trial: repeat })
   if (invite) items.push({ kind: 'invite', key: 'invite' })
 
   const count = items.length

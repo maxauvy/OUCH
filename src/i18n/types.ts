@@ -1184,6 +1184,14 @@ export interface Translations {
     weeklySleep: string
     weeklySee: string
   }
+  /** The quiet line under the title of the day's page, and the sheet it opens. */
+  todayList: {
+    /** `{{n}} {{n:thing|things}}`: how many things wait. */
+    line: string
+    see: string
+    sheetTitle: string
+    close: string
+  }
   hardDays: {
     label: string
     lead: string

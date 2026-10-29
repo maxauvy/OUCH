@@ -39,16 +39,16 @@ test('it waits for a quiet day: a flare, or the diary not read yet', () => {
   assert.equal(show(existing(), { quiet: true }), false)
 })
 
-test('one cross hides it five days, then it is back', () => {
+test('one "later" hides it seven days, then it is back', () => {
   const s = existing()
   const patch = snoozeInvite(s, '2026-10-28')
   assert.equal(patch.indicatorInviteDismissCount, 1)
-  assert.equal(patch.indicatorInviteSnoozeUntil, '2026-11-02')
-  assert.equal(INVITE_SNOOZE_DAYS, 5)
+  assert.equal(patch.indicatorInviteSnoozeUntil, '2026-11-04')
+  assert.equal(INVITE_SNOOZE_DAYS, 7)
   const later = { ...s, ...patch }
   assert.equal(show(later, { today: '2026-10-29' }), false)
-  assert.equal(show(later, { today: '2026-11-01' }), false)
-  assert.equal(show(later, { today: '2026-11-02' }), true)
+  assert.equal(show(later, { today: '2026-11-03' }), false)
+  assert.equal(show(later, { today: '2026-11-04' }), true)
 })
 
 test('two crosses and it never comes back', () => {

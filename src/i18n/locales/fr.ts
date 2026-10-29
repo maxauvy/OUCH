@@ -1341,6 +1341,12 @@ const fr: Translations = {
     weeklySleep: 'Tes trois jours les plus doux de la semaine ont suivi une nuit de plus de 7 h.',
     weeklySee: 'Voir mes jours',
   },
+  todayList: {
+    line: '{{n}} {{n:petite chose|petites choses}} pour toi',
+    see: 'Voir',
+    sheetTitle: 'Pour toi',
+    close: 'Fermer',
+  },
   hardDays: {
     label: 'Un mot pour toi',
     lead: 'Ces derniers jours ont été plus durs.',
