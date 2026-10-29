@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { format as formatDate, subDays } from 'date-fns'
 import {
   IconActivityHeartbeat,
   IconAdjustmentsHorizontal,
@@ -37,6 +36,8 @@ import {
   type DailyEntry,
   type JointKey, type Medication, type PainWeather, type Settings } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
+import { shiftISO } from '../../lib/dates'
+import { painVsRecent } from '../../lib/painTrend'
 import { Card, GroupCaption } from '../ui/Card'
 import { BodyMap } from './BodyMap'
 import { Slider } from '../ui/Slider'
@@ -281,9 +282,8 @@ function HeadacheBlock({ value, onChange, knownTriggers }: { value: DailyEntry['
 
 /** Pain for the 7 days ending on `date`, oldest first (undefined = no entry). */
 function lastSevenDays(date: string, byDate: Map<string, DailyEntry>, current: number | undefined) {
-  const end = new Date(date + 'T00:00:00')
   return Array.from({ length: 7 }, (_, i) => {
-    const iso = formatDate(subDays(end, 6 - i), 'yyyy-MM-dd')
+    const iso = shiftISO(date, i - 6)
     return iso === date ? current : byDate.get(iso)?.painLevel
   })
 }
@@ -429,10 +429,9 @@ export function HealthEntryLayout({
   const byDate = new Map(allEntries.map((e) => [e.date, e]))
   const knownTriggers = Array.from(new Set(allEntries.flatMap((e) => e.headache?.triggers ?? []))).slice(0, 30)
   const bars = lastSevenDays(date, byDate, local.painLevel)
-  const previous = bars.slice(0, 6).filter((v): v is number => v !== undefined)
-  const avg = previous.length ? previous.reduce((s, v) => s + v, 0) / previous.length : null
-  const delta = avg !== null && local.painLevel !== undefined ? local.painLevel - avg : null
-  const deltaText = new Intl.NumberFormat(intlLocale, { maximumFractionDigits: 1 }).format(Math.abs(delta ?? 0))
+  // The same reading as the shared card: the 6 days before, at least 3 of them logged.
+  const vsRecent = local.painLevel === undefined ? null : painVsRecent(date, local.painLevel, allEntries)
+  const deltaText = new Intl.NumberFormat(intlLocale, { maximumFractionDigits: 1 }).format(Math.abs(vsRecent?.delta ?? 0))
 
   const weather = computePainWeather({
     painLevel: local.painLevel ?? 0,
@@ -846,19 +845,19 @@ export function HealthEntryLayout({
                     {' '}/ 10
                   </span>
                 </p>
-                {delta !== null && (
+                {vsRecent && (
                   <p
                     className="text-caption mt-1.5 flex items-center gap-1"
                     style={{
                       color:
-                        Math.abs(delta) < 0.25 ? 'var(--color-ink-muted)' : delta < 0 ? 'var(--cat-mood)' : 'var(--cat-pain)',
+                        vsRecent.trend === 'same' ? 'var(--color-ink-muted)' : vsRecent.trend === 'lower' ? 'var(--cat-mood)' : 'var(--cat-pain)',
                     }}
                   >
-                    {Math.abs(delta) < 0.25 ? (
+                    {vsRecent.trend === 'same' ? (
                       <>
                         <IconArrowRight size={14} aria-hidden /> {t.entryForm.vsAverageSame}
                       </>
-                    ) : delta < 0 ? (
+                    ) : vsRecent.trend === 'lower' ? (
                       <>
                         <IconArrowDownRight size={14} aria-hidden /> {format(t.entryForm.vsAverageBelow, { delta: deltaText })}
                       </>

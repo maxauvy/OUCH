@@ -4,6 +4,11 @@ Les changements notables d'OUCH sont notés ici. Le format suit [Keep a Changelo
 
 Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/releases), et le site déployé affiche en pied de page la version qu'il exécute (avec le commit entre deux versions).
 
+## [Non publié]
+
+### Modifié
+- **« Par rapport à ta moyenne » dit la même chose partout.** La ligne sous la douleur du jour et la carte à partager lisent désormais les mêmes 6 jours précédents, avec au moins 3 jours renseignés, et parlent de « moyenne » quand l'écart est de moins d'un demi-point. Avant, la ligne de la page du jour se contentait d'un seul jour et tolérait un quart de point.
+
 ## [0.7.0] - 2026-10-28
 
 Le suivi s'adapte aux maladies : l'accueil propose les indicateurs qui conviennent à ce que la personne a indiqué, et quatorze nouveaux indicateurs arrivent en accès anticipé, le temps que des cliniciens relisent les libellés et les tranches. Aucune case ne change pour les personnes qui utilisent déjà l'application.
