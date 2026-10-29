@@ -4,8 +4,7 @@ import { lockNow, setLockDelay, useLockState } from '../../lib/appLock'
 import { LOCK_DELAYS_MIN } from '../../lib/pinLock'
 import { useTranslation } from '../../i18n'
 import { radioGroupProps, radioProps } from '../../lib/a11y'
-import { Card, SectionTitle } from '../ui/Card'
-import { Toggle } from '../ui/Toggle'
+import { SettingToggle } from './SettingToggle'
 import { LockSheet, type LockSheetMode } from './LockSheet'
 
 /**
@@ -22,14 +21,7 @@ export function LockCard({ lastBackupAt, onBackupFirst }: { lastBackupAt?: numbe
   const soft = { background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }
 
   return (
-    <Card>
-      <SectionTitle>{t.title}</SectionTitle>
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-          {t.helper}
-        </p>
-        <Toggle checked={enabled} onChange={(on) => setSheet(on ? 'activate' : 'remove')} label={t.title} />
-      </div>
+    <SettingToggle icon={IconLock} title={t.title} helper={t.helper} checked={enabled} onChange={(on) => setSheet(on ? 'activate' : 'remove')}>
       <p className="text-caption mt-3" style={{ color: 'var(--color-ink-muted)' }}>
         {t.previewNote}
       </p>
@@ -79,6 +71,6 @@ export function LockCard({ lastBackupAt, onBackupFirst }: { lastBackupAt?: numbe
       )}
 
       {sheet && <LockSheet mode={sheet} lastBackupAt={lastBackupAt} onBackupFirst={onBackupFirst} onClose={() => setSheet(null)} />}
-    </Card>
+    </SettingToggle>
   )
 }

@@ -2,7 +2,7 @@ import { useState, type ComponentType } from 'react'
 import { IconAlertTriangle, IconChevronRight, IconDownload, IconTrash } from '@tabler/icons-react'
 import { useEntryCount } from '../../hooks/useEntries'
 import { useTranslation } from '../../i18n'
-import { Card } from '../ui/Card'
+import { Card, SectionTitle } from '../ui/Card'
 import { CsvExportDialog } from './CsvExportDialog'
 import { DeleteDialog } from './DeleteDataDialog'
 
@@ -19,14 +19,8 @@ export function SensitiveZoneCard() {
   const nothingToExport = days === 0
 
   return (
-    <Card className="!border-[color:color-mix(in_srgb,var(--color-danger)_45%,var(--color-hairline))]">
-      <h2
-        className="flex items-center gap-1.5 text-caption font-semibold uppercase tracking-[0.06em] mb-1"
-        style={{ color: 'var(--color-danger)' }}
-      >
-        <IconAlertTriangle size={16} aria-hidden />
-        {t.sensitive.title}
-      </h2>
+    <Card>
+      <SectionTitle icon={IconAlertTriangle}>{t.sensitive.title}</SectionTitle>
       <ul>
         <ActionRow
           icon={IconDownload}

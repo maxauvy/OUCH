@@ -4,7 +4,7 @@ import type { AutoBackupState } from '../../db/types'
 import { useSettings } from '../../hooks/useSettings'
 import { backupNow, clearReturnNotice, peekReturnNotice, stopAutoBackup } from '../../lib/autoBackupRuntime'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
-import { Card } from '../ui/Card'
+import { Card, SectionTitle } from '../ui/Card'
 import { AutoBackupRestore } from './AutoBackupRestore'
 import { AutoBackupWizard } from './AutoBackupWizard'
 import { TrustLines } from './TrustLines'
@@ -45,10 +45,7 @@ function CardOff({ onChoose }: { onChoose: () => void }) {
   const t = useTranslation().autoBackup
   return (
     <Card>
-      <div className="flex items-center gap-2 mb-1">
-        <IconCloudUpload size={20} aria-hidden style={{ color: 'var(--color-brand)' }} />
-        <h3 className="text-body font-medium">{t.title}</h3>
-      </div>
+      <SectionTitle icon={IconCloudUpload}>{t.title}</SectionTitle>
       <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
         {t.intro}
       </p>
@@ -89,15 +86,18 @@ function CardOn({ state }: { state: AutoBackupState }) {
 
   return (
     <Card>
-      <div className="flex items-center gap-2 mb-2">
-        <Icon size={20} aria-hidden style={{ color: failure ? 'var(--color-ink-muted)' : 'var(--color-brand)' }} />
-        <h3 className="text-body font-medium flex-1">{t.title}</h3>
-        {!failure && (
-          <span className="text-caption font-medium rounded-full px-2.5 py-0.5" style={SOFT_BUTTON}>
-            {t.active}
-          </span>
-        )}
-      </div>
+      <SectionTitle
+        icon={Icon}
+        action={
+          !failure && (
+            <span className="text-caption font-medium rounded-full px-2.5 py-0.5" style={SOFT_BUTTON}>
+              {t.active}
+            </span>
+          )
+        }
+      >
+        {t.title}
+      </SectionTitle>
 
       {failure ? (
         <div role="status" className="mb-3">

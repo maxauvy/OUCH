@@ -1,9 +1,19 @@
-import type { PropsWithChildren, ReactNode } from 'react'
+import { useContext, type PropsWithChildren, type ReactNode } from 'react'
 import type { Icon } from '@tabler/icons-react'
 import { useLuminous } from '../../lib/look'
+import { FlatCardContext } from './flatCard'
+import { RoundIcon } from './RoundIcon'
 
-/** `tour` marks the card for the demo tour, which outlines it. */
+/** `tour` marks the card for the demo tour, which outlines it. Inside a settings group it is a section of the group's card: a rule above it, nothing around it. */
 export function Card({ children, className = '', tour }: PropsWithChildren<{ className?: string; tour?: string }>) {
+  const flat = useContext(FlatCardContext)
+  if (flat) {
+    return (
+      <div data-tour={tour} className={`py-5 border-t first:border-t-0 first:pt-4 ${className}`} style={{ borderColor: 'var(--color-hairline)' }}>
+        {children}
+      </div>
+    )
+  }
   return (
     <div
       data-tour={tour}
@@ -19,7 +29,18 @@ export function Card({ children, className = '', tour }: PropsWithChildren<{ cla
   )
 }
 
-export function SectionTitle({ children, action }: PropsWithChildren<{ action?: ReactNode }>) {
+/** The title of a card. In a settings group it is the section's title: a round icon, then the title in bold. */
+export function SectionTitle({ children, action, icon }: PropsWithChildren<{ action?: ReactNode; icon?: Icon }>) {
+  const flat = useContext(FlatCardContext)
+  if (flat) {
+    return (
+      <div className="flex items-center gap-3 mb-3">
+        {icon && <RoundIcon icon={icon} />}
+        <h2 className="flex-1 min-w-0 text-body font-semibold">{children}</h2>
+        {action}
+      </div>
+    )
+  }
   return (
     <div className="flex items-center justify-between mb-3">
       <h2

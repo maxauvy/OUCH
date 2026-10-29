@@ -1571,6 +1571,7 @@ const fr: Translations = {
     groups: {
       profile: 'Mon profil',
       tracking: 'Mon suivi',
+      messages: 'Ce que l’app te dit',
       display: 'Rappel et affichage',
       data: 'Mes données',
       about: 'À propos',
@@ -1579,6 +1580,7 @@ const fr: Translations = {
     factorsCountOther: '{{n}} facteurs suivis',
     summaryReminderOn: 'Rappel à {{time}}',
     summaryReminderOff: 'Pas de rappel',
+    summaryMessages: '{{n}} sur 3 actifs',
     privacyNote:
       "OUCH garde toutes tes données sur cet appareil, dans son stockage local : aucune donnée de santé n'en sort. Seule la météo automatique contacte des services extérieurs, avec ta position et jamais ton journal. Le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
     notMedicalDevice:
