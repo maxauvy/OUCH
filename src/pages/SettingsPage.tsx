@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconBell, IconHeartbeat, IconInfoCircle, IconShieldLock, IconUser } from '@tabler/icons-react'
+import { IconBell, IconCalendarHeart, IconDatabaseExport, IconHeart, IconHeartHandshake, IconHeartbeat, IconId, IconInfoCircle, IconLanguage, IconLayoutList, IconListCheck, IconMapPin, IconMoodKid, IconPalette, IconPill, IconPlayerPlay, IconRefresh, IconShieldLock, IconSparkles, IconStethoscope, IconUser, IconUsers } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
 import { type ParentGender, type ThemePref } from '../db/types'
@@ -24,6 +24,7 @@ import { InstallCard } from '../components/install/InstallCard'
 import { MedicationsSection } from '../components/settings/MedicationsSection'
 import { IllnessPicker } from '../components/settings/IllnessPicker'
 import { SettingsGroup } from '../components/settings/SettingsGroup'
+import { SettingToggle } from '../components/settings/SettingToggle'
 import { canNotify, requestNotificationPermission } from '../lib/reminder'
 import { formatCoordinates } from '../lib/weather'
 import { saveCurrentLocation } from '../lib/weatherLocation'
@@ -79,6 +80,9 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
     .filter(Boolean)
     .join(' · ')
 
+  const messagesOn = [settings.hardDaysCardEnabled, settings.lightFormEnabled, settings.suggestionsEnabled].filter(Boolean).length
+  const messagesSummary = format(t.settings.summaryMessages, { n: messagesOn })
+
   const displaySummary = [
     settings.reminderEnabled ? format(t.settings.summaryReminderOn, { time: settings.reminderTime }) : t.settings.summaryReminderOff,
     THEME_OPTIONS.find((o) => o.value === settings.theme)?.label,
@@ -122,7 +126,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
 
       <SettingsGroup icon={IconUser} title={t.settings.groups.profile} summary={profileSummary}>
         <Card>
-          <SectionTitle>{t.settings.firstNameTitle}</SectionTitle>
+          <SectionTitle icon={IconId}>{t.settings.firstNameTitle}</SectionTitle>
           <p className="text-caption mb-2" style={{ color: 'var(--color-ink-muted)' }}>
             {format(t.settings.firstNameHelper, { name: settings.displayName || '…' })}
           </p>
@@ -139,7 +143,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
 
         {settings.kidsTabEnabled && (
           <Card>
-            <SectionTitle>{t.settings.parentGenderTitle}</SectionTitle>
+            <SectionTitle icon={IconUsers}>{t.settings.parentGenderTitle}</SectionTitle>
             <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
               {t.settings.parentGenderHelper}
             </p>
@@ -163,7 +167,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         )}
 
         <Card>
-          <SectionTitle>{t.settings.illnessesTitle}</SectionTitle>
+          <SectionTitle icon={IconStethoscope}>{t.settings.illnessesTitle}</SectionTitle>
           <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
             {t.settings.illnessesHelper}
           </p>
@@ -173,7 +177,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
 
       <SettingsGroup icon={IconHeartbeat} title={t.settings.groups.tracking} summary={trackingSummary}>
         <Card>
-          <SectionTitle>{t.settings.factorsTitle}</SectionTitle>
+          <SectionTitle icon={IconListCheck}>{t.settings.factorsTitle}</SectionTitle>
           <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
             {t.settings.factorsHelper}
           </p>
@@ -190,28 +194,22 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
 
         {settings.enabledFactors.includes('medications') && (
           <Card>
-            <SectionTitle>{t.medications.title}</SectionTitle>
+            <SectionTitle icon={IconPill}>{t.medications.title}</SectionTitle>
             <MedicationsSection />
           </Card>
         )}
 
-        <Card className="flex items-center justify-between">
-          <div>
-            <p className="text-control font-medium">{t.settings.cycleTracking}</p>
-            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-              {t.settings.cycleTrackingHelper}
-            </p>
-          </div>
-          <Toggle
-            checked={settings.cycleTrackingEnabled}
-            onChange={(v) => updateSettings({ cycleTrackingEnabled: v })}
-            label={t.settings.cycleTracking}
-          />
-        </Card>
+        <SettingToggle
+          icon={IconCalendarHeart}
+          title={t.settings.cycleTracking}
+          helper={t.settings.cycleTrackingHelper}
+          checked={settings.cycleTrackingEnabled}
+          onChange={(v) => updateSettings({ cycleTrackingEnabled: v })}
+        />
 
         {settings.enabledFactors.includes('weather') && (
           <Card>
-            <SectionTitle>{t.settings.weatherLocationTitle}</SectionTitle>
+            <SectionTitle icon={IconMapPin}>{t.settings.weatherLocationTitle}</SectionTitle>
             <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
               {settings.autoWeatherLat === undefined || settings.autoWeatherLon === undefined
                 ? t.settings.weatherLocationUnset
@@ -232,34 +230,31 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
             </p>
           </Card>
         )}
+      </SettingsGroup>
 
-        <Card>
-          <SectionTitle>{t.settings.hardDaysTitle}</SectionTitle>
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-              {t.settings.hardDaysHelper}
-            </p>
-            <Toggle
-              checked={settings.hardDaysCardEnabled}
-              onChange={(v) => updateSettings({ hardDaysCardEnabled: v })}
-              label={t.settings.hardDaysTitle}
-            />
-          </div>
-        </Card>
-
-        <Card>
-          <SectionTitle>{t.settings.suggestionsTitle}</SectionTitle>
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-              {t.settings.suggestionsHelper}
-            </p>
-            <Toggle
-              checked={settings.suggestionsEnabled}
-              onChange={(v) => updateSettings({ suggestionsEnabled: v })}
-              label={t.settings.suggestionsTitle}
-            />
-          </div>
-          <details className="mt-3">
+      <SettingsGroup icon={IconHeartHandshake} title={t.settings.groups.messages} summary={messagesSummary}>
+        <SettingToggle
+          icon={IconHeart}
+          title={t.settings.hardDaysTitle}
+          helper={t.settings.hardDaysHelper}
+          checked={settings.hardDaysCardEnabled}
+          onChange={(v) => updateSettings({ hardDaysCardEnabled: v })}
+        />
+        <SettingToggle
+          icon={IconLayoutList}
+          title={t.settings.lightFormTitle}
+          helper={t.settings.lightFormHelper}
+          checked={settings.lightFormEnabled}
+          onChange={(v) => updateSettings({ lightFormEnabled: v })}
+        />
+        <SettingToggle
+          icon={IconSparkles}
+          title={t.settings.suggestionsTitle}
+          helper={t.settings.suggestionsHelper}
+          checked={settings.suggestionsEnabled}
+          onChange={(v) => updateSettings({ suggestionsEnabled: v })}
+        >
+          <details className="mt-2">
             <summary className="text-caption font-semibold cursor-pointer min-h-11 flex items-center" style={{ color: 'var(--color-brand)' }}>
               {t.settings.suggestionsDetail}
             </summary>
@@ -272,65 +267,44 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
               {t.settings.suggestionsPrivacy}
             </p>
           </details>
-        </Card>
-
-        <Card>
-          <SectionTitle>{t.settings.lightFormTitle}</SectionTitle>
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-              {t.settings.lightFormHelper}
-            </p>
-            <Toggle
-              checked={settings.lightFormEnabled}
-              onChange={(v) => updateSettings({ lightFormEnabled: v })}
-              label={t.settings.lightFormTitle}
-            />
-          </div>
-        </Card>
+        </SettingToggle>
       </SettingsGroup>
 
       <SettingsGroup icon={IconBell} title={t.settings.groups.display} summary={displaySummary}>
-        <Card>
-          <SectionTitle>{t.settings.reminderTitle}</SectionTitle>
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-              {t.settings.reminderHelper}
-            </p>
-            <Toggle checked={settings.reminderEnabled} onChange={handleReminderToggle} label={t.settings.reminderTitle} />
-          </div>
+        <SettingToggle
+          icon={IconBell}
+          title={t.settings.reminderTitle}
+          helper={t.settings.reminderHelper}
+          checked={settings.reminderEnabled}
+          onChange={handleReminderToggle}
+        >
           {settings.reminderEnabled && (
             <input
               type="time"
               aria-label={t.settings.reminderTitle}
               value={settings.reminderTime}
               onChange={(e) => updateSettings({ reminderTime: e.target.value })}
-              className="rounded-xl px-3.5 py-2.5 text-body outline-none"
+              className="rounded-xl px-3.5 py-2.5 text-body outline-none mt-3"
               style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
             />
           )}
           <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
             {t.settings.reminderNote}
           </p>
-        </Card>
+        </SettingToggle>
 
-        <Card>
-          <SectionTitle>{t.settings.kidsTabTitle}</SectionTitle>
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-              {t.settings.kidsTabHelper}
-            </p>
-            <Toggle
-              checked={settings.kidsTabEnabled}
-              onChange={(v) => updateSettings({ kidsTabEnabled: v })}
-              label={t.settings.kidsTabTitle}
-            />
-          </div>
-        </Card>
+        <SettingToggle
+          icon={IconMoodKid}
+          title={t.settings.kidsTabTitle}
+          helper={t.settings.kidsTabHelper}
+          checked={settings.kidsTabEnabled}
+          onChange={(v) => updateSettings({ kidsTabEnabled: v })}
+        />
 
         {!IS_DEMO && <LockCard lastBackupAt={settings.lastBackupAt} onBackupFirst={goToBackupSection} />}
 
         <Card>
-          <SectionTitle>{t.settings.languageTitle}</SectionTitle>
+          <SectionTitle icon={IconLanguage}>{t.settings.languageTitle}</SectionTitle>
           <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
             {t.settings.languageHelper}
           </p>
@@ -353,7 +327,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         </Card>
 
         <Card>
-          <SectionTitle>{t.settings.appearanceTitle}</SectionTitle>
+          <SectionTitle icon={IconPalette}>{t.settings.appearanceTitle}</SectionTitle>
           <div className="flex gap-2" {...radioGroupProps(t.settings.themeTitle)}>
             {THEME_OPTIONS.map((opt) => (
               <button
@@ -385,7 +359,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
       <SettingsGroup id="backup" icon={IconShieldLock} title={t.settings.groups.data} summary={IS_DEMO ? t.demo.settingsTitle : dataSummary} defaultOpen={openBackup} openSignal={backupSignal}>
         {IS_DEMO ? (
           <Card>
-            <SectionTitle>{t.demo.settingsTitle}</SectionTitle>
+            <SectionTitle icon={IconPlayerPlay}>{t.demo.settingsTitle}</SectionTitle>
             <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
               {t.demo.settingsText}
             </p>
@@ -413,12 +387,12 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         {earlyAccess && <AutoBackupCard />}
 
         <Card>
-          <SectionTitle>{t.settings.backupTitle}</SectionTitle>
+          <SectionTitle icon={IconDatabaseExport}>{t.settings.backupTitle}</SectionTitle>
           <BackupSection />
         </Card>
 
         <Card>
-          <SectionTitle>{t.setup.rerunTitle}</SectionTitle>
+          <SectionTitle icon={IconRefresh}>{t.setup.rerunTitle}</SectionTitle>
           <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
             {t.setup.rerunHelper}
           </p>
@@ -442,7 +416,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         <AboutCard withHeader />
 
         <Card>
-          <SectionTitle>{t.zonesNotice.cardTitle}</SectionTitle>
+          <SectionTitle icon={IconInfoCircle}>{t.zonesNotice.cardTitle}</SectionTitle>
           <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
             {t.zonesNotice.cardText}
           </p>
@@ -459,7 +433,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
 
         {!IS_DEMO && (
           <Card>
-            <SectionTitle>{t.demo.cardTitle}</SectionTitle>
+            <SectionTitle icon={IconPlayerPlay}>{t.demo.cardTitle}</SectionTitle>
             <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
               {t.demo.cardText}
             </p>

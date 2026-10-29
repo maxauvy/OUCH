@@ -1,3 +1,4 @@
+import { IconBooks } from '@tabler/icons-react'
 import { Card, SectionTitle } from '../ui/Card'
 import { format, useTranslation } from '../../i18n'
 import { REFERENCES } from '../../lib/references'
@@ -12,7 +13,7 @@ export function SourcesCard() {
   const s = t.sources
   return (
     <Card>
-      <SectionTitle>{s.title}</SectionTitle>
+      <SectionTitle icon={IconBooks}>{s.title}</SectionTitle>
       <p className="text-caption leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
         {s.intro}
       </p>

@@ -1566,6 +1566,7 @@ const en: Translations = {
     groups: {
       profile: 'My profile',
       tracking: 'My tracking',
+      messages: 'What the app tells you',
       display: 'Reminder and display',
       data: 'My data',
       about: 'About',
@@ -1574,6 +1575,7 @@ const en: Translations = {
     factorsCountOther: '{{n}} factors tracked',
     summaryReminderOn: 'Reminder at {{time}}',
     summaryReminderOff: 'No reminder',
+    summaryMessages: '{{n}} of 3 on',
     privacyNote:
       "OUCH keeps all your data on this device, in local storage: no health data ever leaves it. Only automatic weather contacts outside services, with your position and never your journal. Sharing your weather and making backups is always something you choose to do.",
     notMedicalDevice:
