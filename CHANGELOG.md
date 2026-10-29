@@ -4,7 +4,9 @@ Les changements notables d'OUCH sont notés ici. Le format suit [Keep a Changelo
 
 Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/releases), et le site déployé affiche en pied de page la version qu'il exécute (avec le commit entre deux versions).
 
-## [Non publié]
+## [0.7.1] - 2026-10-29
+
+Une version de rangement : la page du jour et les Réglages se simplifient, l'application démarre plus vite, et le code qui calcule les écarts et les règles est unifié. Aucune saisie n'est touchée et aucun réglage ne change de sens ; les anciens interrupteurs de suggestions sont repris dans le nouveau.
 
 ### Modifié
 - **Réglages : une carte par groupe, un même dessin partout.** Chaque groupe (Mon profil, Mon suivi, Rappel et affichage…) est une seule carte : l'en-tête reste en haut, puis les réglages s'ouvrent dessous, séparés par un filet, au lieu d'une carte-titre suivie de plusieurs cartes. Chaque réglage commence par une pastille ronde et un titre en gras, comme les cartes de la page du jour, et les interrupteurs sont toujours à droite du titre. Un nouveau groupe « Ce que l'app te dit » réunit « Un mot les jours difficiles », « Écran allégé les jours difficiles » et « Des suggestions », qui encombraient « Mon suivi ». Aucun réglage ne change de sens.
@@ -239,7 +241,10 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.6.1...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/maxauvy/OUCH/compare/v0.7.0...v0.7.1
+[0.7.0]: https://github.com/maxauvy/OUCH/compare/v0.6.2...v0.7.0
+[0.6.2]: https://github.com/maxauvy/OUCH/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/maxauvy/OUCH/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/maxauvy/OUCH/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/maxauvy/OUCH/compare/v0.4.0...v0.5.0
