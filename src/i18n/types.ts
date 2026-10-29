@@ -1362,16 +1362,15 @@ export interface Translations {
     reminderNote: string
     hardDaysTitle: string
     hardDaysHelper: string
+    suggestionsTitle: string
+    suggestionsHelper: string
+    suggestionsDetail: string
+    suggestionsItems: readonly string[]
+    suggestionsPrivacy: string
     kidsTabTitle: string
     kidsTabHelper: string
     lightFormTitle: string
     lightFormHelper: string
-    leadHintsTitle: string
-    leadHintsHelper: string
-    leadPromptLabel: string
-    weeklySentenceLabel: string
-    leadDotLabel: string
-    trialsLabel: string
     appearanceTitle: string
     /** Accessible name of the light/dark choice (no visible title). */
     themeTitle: string

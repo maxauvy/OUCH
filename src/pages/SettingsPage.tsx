@@ -248,6 +248,33 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         </Card>
 
         <Card>
+          <SectionTitle>{t.settings.suggestionsTitle}</SectionTitle>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.settings.suggestionsHelper}
+            </p>
+            <Toggle
+              checked={settings.suggestionsEnabled}
+              onChange={(v) => updateSettings({ suggestionsEnabled: v })}
+              label={t.settings.suggestionsTitle}
+            />
+          </div>
+          <details className="mt-3">
+            <summary className="text-caption font-semibold cursor-pointer min-h-11 flex items-center" style={{ color: 'var(--color-brand)' }}>
+              {t.settings.suggestionsDetail}
+            </summary>
+            <ul className="text-caption list-disc pl-5 space-y-1" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.settings.suggestionsItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <p className="text-caption mt-3" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.settings.suggestionsPrivacy}
+            </p>
+          </details>
+        </Card>
+
+        <Card>
           <SectionTitle>{t.settings.lightFormTitle}</SectionTitle>
           <div className="flex items-center justify-between gap-3">
             <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
@@ -259,26 +286,6 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
               label={t.settings.lightFormTitle}
             />
           </div>
-        </Card>
-
-        <Card>
-          <SectionTitle>{t.settings.leadHintsTitle}</SectionTitle>
-          <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.settings.leadHintsHelper}
-          </p>
-          {(
-            [
-              ['leadPromptEnabled', t.settings.leadPromptLabel],
-              ['weeklySentenceEnabled', t.settings.weeklySentenceLabel],
-              ['leadDotEnabled', t.settings.leadDotLabel],
-              ['trialsEnabled', t.settings.trialsLabel],
-            ] as const
-          ).map(([key, label]) => (
-            <div key={key} className="flex items-center justify-between gap-3 py-2">
-              <span className="text-control">{label}</span>
-              <Toggle checked={settings[key]} onChange={(v) => updateSettings({ [key]: v })} label={label} />
-            </div>
-          ))}
         </Card>
       </SettingsGroup>
 

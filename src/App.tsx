@@ -180,7 +180,7 @@ function AppShell() {
       <TabBar
         active={tab}
         hidden={settings.kidsTabEnabled ? [] : ['kids']}
-        badged={tab !== 'trends' && trendsDot({ shown: leadList?.shown ?? [], seen: settings.leadsSeen, enabled: settings.leadDotEnabled, announced }) ? ['trends'] : []}
+        badged={tab !== 'trends' && trendsDot({ shown: leadList?.shown ?? [], seen: settings.leadsSeen, enabled: settings.suggestionsEnabled, announced }) ? ['trends'] : []}
         onChange={(next) => {
           setBackupRequested(false)
           setTab(next)

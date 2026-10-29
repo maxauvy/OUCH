@@ -270,7 +270,7 @@ export function TrendsPage() {
               onAnswer={answerLead}
               onUndo={clearLead}
               trial={settings.leadTrial}
-              trialsEnabled={settings.trialsEnabled}
+              trialsEnabled={settings.suggestionsEnabled}
               declined={settings.leadsSeen?.declined ?? []}
               onStartTrial={beginTrial}
               onDeclineTrial={declineTrial}
