@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { DailyEntry } from '../../db/types'
 import { useAllEntries, useEntry, upsertEntry } from '../../hooks/useEntries'
@@ -7,7 +8,7 @@ import { defaultIntakes } from '../../lib/medications'
 import { useTranslation } from '../../i18n'
 import { HealthEntryLayout } from './HealthEntryLayout'
 
-export function DailyEntryForm({ date, onGoToBackup }: { date: string; onGoToBackup?: () => void }) {
+export function DailyEntryForm({ date, onGoToBackup, afterHeader }: { date: string; onGoToBackup?: () => void; afterHeader?: ReactNode }) {
   const dbEntry = useEntry(date)
   const settings = useSettings()
   const allEntries = useAllEntries()
@@ -89,6 +90,7 @@ export function DailyEntryForm({ date, onGoToBackup }: { date: string; onGoToBac
       medications={medications ?? []}
       knownPositiveActions={knownPositiveActions}
       onGoToBackup={onGoToBackup}
+      afterHeader={afterHeader}
     />
   )
 }

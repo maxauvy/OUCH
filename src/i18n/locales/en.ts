@@ -1336,6 +1336,12 @@ const en: Translations = {
     weeklySleep: 'Your three gentlest days this week followed a night of more than 7 h.',
     weeklySee: 'See my days',
   },
+  todayList: {
+    line: '{{n}} small {{n:thing|things}} for you',
+    see: 'See',
+    sheetTitle: 'For you',
+    close: 'Close',
+  },
   hardDays: {
     label: 'A note for you',
     lead: 'The last few days have been harder.',

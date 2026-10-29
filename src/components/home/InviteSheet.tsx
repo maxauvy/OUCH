@@ -1,54 +1,14 @@
 import { useState } from 'react'
-import { IconX } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { FactorKey, Settings } from '../../db/types'
-import { formatIllnessList } from '../../lib/childView'
 import { completeInvite, invitableIndicators, snoozeInvite } from '../../lib/indicatorInvite'
 import type { IndicatorKey } from '../../lib/indicatorCatalog'
 import { format, useLanguage, useTranslation } from '../../i18n'
 import { Chip } from '../ui/Chip'
 import { ModalSheet } from '../ui/ModalSheet'
 
-/** A quiet line on the day's page: new indicators fit what the person declared.
- * "See" opens a sheet with nothing ticked; the cross means "later". */
-export function IndicatorInviteBanner({ settings, earlyAccess, today }: { settings: Settings; earlyAccess: boolean; today: string }) {
-  const t = useTranslation()
-  const language = useLanguage()
-  const [open, setOpen] = useState(false)
-  const list = formatIllnessList(language, settings.illnesses)
-
-  return (
-    <>
-      <section
-        aria-label={t.indicatorInvite.region}
-        className="rounded-[var(--radius-card)] pl-4 pr-1 py-1 flex items-center gap-2"
-        style={{ background: 'var(--color-surface)', boxShadow: 'inset 0 0 0 1px var(--color-hairline)' }}
-      >
-        <p className="flex-1 text-control py-2">{format(t.indicatorInvite.banner, { list })}</p>
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="min-h-11 px-3 text-control font-semibold"
-          style={{ color: 'var(--color-brand)' }}
-        >
-          {t.indicatorInvite.see}
-        </button>
-        <button
-          type="button"
-          onClick={() => void updateSettings(snoozeInvite(settings, today))}
-          aria-label={t.indicatorInvite.later}
-          className="w-11 h-11 shrink-0 rounded-[var(--radius-control)] flex items-center justify-center"
-          style={{ color: 'var(--color-ink-muted)' }}
-        >
-          <IconX size={18} aria-hidden />
-        </button>
-      </section>
-      {open && <InviteSheet settings={settings} earlyAccess={earlyAccess} today={today} onClose={() => setOpen(false)} />}
-    </>
-  )
-}
-
-function InviteSheet({ settings, earlyAccess, today, onClose }: { settings: Settings; earlyAccess: boolean; today: string; onClose: () => void }) {
+/** The sheet of the invitation to follow new indicators: nothing is ticked, and a sheet closed with nothing ticked is "later". */
+export function InviteSheet({ settings, earlyAccess, today, onClose }: { settings: Settings; earlyAccess: boolean; today: string; onClose: () => void }) {
   const t = useTranslation()
   const language = useLanguage()
   // Nothing is ticked: what is added is only what the person chooses.

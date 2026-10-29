@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import {
   IconActivityHeartbeat,
   IconAdjustmentsHorizontal,
@@ -157,6 +158,7 @@ export function HealthEntryLayout({
   medications,
   knownPositiveActions,
   onGoToBackup,
+  afterHeader,
 }: {
   date: string
   local: Partial<DailyEntry>
@@ -170,6 +172,8 @@ export function HealthEntryLayout({
   knownPositiveActions: string[]
   /** Opens the backup section; the last-backup line under the title uses it */
   onGoToBackup?: () => void
+  /** Under the title, on the day's page: the line that says what waits. */
+  afterHeader?: ReactNode
 }) {
   const t = useTranslation()
   const { intlLocale } = useLocale()
@@ -304,6 +308,7 @@ export function HealthEntryLayout({
   return (
     <div className="flex flex-col gap-3">
       {header}
+      {isToday && afterHeader}
 
       {isToday && card && <HardDaysCard date={date} card={card} light={lightToday} />}
 

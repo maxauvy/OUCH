@@ -11,7 +11,7 @@ import { detailsOf, planForIllnesses, withoutDetails, type IndicatorKey } from '
 import { shiftISO } from './dates.ts'
 
 /** A cross hides the banner for this many days. */
-export const INVITE_SNOOZE_DAYS = 5
+export const INVITE_SNOOZE_DAYS = 7
 /** The second cross is the last: the invitation stays in Settings. */
 export const INVITE_MAX_DISMISSALS = 2
 
