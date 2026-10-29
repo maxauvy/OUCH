@@ -1,4 +1,5 @@
 import { IconShield, IconShieldCheck } from '@tabler/icons-react'
+import { todayISO } from '../../lib/dates'
 import { useSettings } from '../../hooks/useSettings'
 import { useEntryCount } from '../../hooks/useEntries'
 import { format, useLocale, useTranslation } from '../../i18n'
@@ -19,7 +20,7 @@ export function LastBackupLine({ onClick }: { onClick: () => void }) {
   // The year only when it is not this one.
   const date = (ms: number) => {
     const d = new Date(ms)
-    const sameYear = d.getFullYear() === new Date().getFullYear()
+    const sameYear = d.getFullYear() === Number(todayISO().slice(0, 4))
     return d.toLocaleDateString(intlLocale, { day: 'numeric', month: 'short', ...(sameYear ? {} : { year: 'numeric' }) })
   }
   const Icon = lastBackupAt === undefined ? IconShield : IconShieldCheck

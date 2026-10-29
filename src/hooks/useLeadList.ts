@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { subDays } from 'date-fns'
+import { shiftISO, todayISO } from '../lib/dates'
 import { useLoggedEntries } from './useEntries'
 import { useSettings } from './useSettings'
 import { arrangeLeads, findLeads, leadFactors, type LeadList } from '../lib/leads'
@@ -14,8 +14,8 @@ export function useLeadList(): LeadList | null {
   const { enabledFactors, leadChoices } = useSettings()
   return useMemo(() => {
     if (!entries) return null
-    const cutoff = subDays(new Date(), LEAD_RANGE_DAYS)
-    const recent = entries.filter((e) => new Date(e.date + 'T00:00:00') >= cutoff)
+    const since = shiftISO(todayISO(), -(LEAD_RANGE_DAYS - 1))
+    const recent = entries.filter((e) => e.date >= since)
     return arrangeLeads(findLeads(recent, leadFactors(enabledFactors)), leadChoices)
   }, [entries, enabledFactors, leadChoices])
 }

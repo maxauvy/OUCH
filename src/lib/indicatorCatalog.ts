@@ -12,33 +12,8 @@
 import { ALL_FACTORS } from '../db/types.ts'
 import type { DailyEntry, FactorKey, Illness, Settings } from '../db/types.ts'
 
-/** Every indicator the catalogue knows, built or not yet. */
-export type IndicatorKey =
-  | 'fatigue'
-  | 'sleep'
-  | 'stress'
-  | 'brainFog'
-  | 'mood'
-  | 'activity'
-  | 'weather'
-  | 'medications'
-  | 'positiveActions'
-  | 'painLocations'
-  | 'notes'
-  | 'morningStiffness'
-  | 'nightWaking'
-  | 'dailyInterference'
-  | 'unrefreshedWaking'
-  | 'swollenJoints'
-  | 'periodFlow'
-  | 'bowelBladder'
-  | 'headacheEpisode'
-  | 'legPain'
-  | 'symptomTags'
-  | 'spasms'
-  | 'feverInfection'
-  | 'newSymptomMarker'
-  | 'sensorySensitivity'
+/** Every indicator the catalogue knows: the keys of `ALL_FACTORS`. */
+export type IndicatorKey = FactorKey
 
 /** Absent from an illness's profile = "others", the free choice. */
 export type Tier = 'recommended' | 'suggested'
@@ -190,7 +165,7 @@ export function planForIllnesses(illnesses: readonly Illness[], options: PlanOpt
  * not in the catalogue is not offered. */
 export function isOffered(key: string, earlyAccess: boolean): boolean {
   const def = INDICATORS.find((d) => d.key === key)
-  return !!def && (def.reviewed || earlyAccess) && (ALL_FACTORS as string[]).includes(key)
+  return !!def && (def.reviewed || earlyAccess) && (ALL_FACTORS as readonly string[]).includes(key)
 }
 
 /** The factors the setup and the settings list, in display order. */

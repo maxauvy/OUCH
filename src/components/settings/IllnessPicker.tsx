@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { updateSettings } from '../../db'
+import { todayISO } from '../../lib/dates'
 import { ILLNESSES, ILLNESS_STATUSES, type Illness, type IllnessStatus } from '../../db/types'
 import { useSettings } from '../../hooks/useSettings'
 import { getIllnessLabel } from '../../lib/childView'
@@ -83,7 +84,7 @@ function StatusRow({
   const t = useTranslation()
   const language = useLanguage()
   const label = getIllnessLabel(language, illness)
-  const thisYear = new Date().getFullYear()
+  const thisYear = Number(todayISO().slice(0, 4))
   const [yearInvalid, setYearInvalid] = useState(false)
   return (
     <div className="py-2.5" style={{ borderTop: '1px solid var(--color-hairline)' }}>
