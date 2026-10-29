@@ -90,7 +90,7 @@ class OuchDB extends Dexie {
     // (see `upgradeLegacySettings`): v4 turned the single illness into a
     // list, v5 dropped the 'cycle' factor, v6 removed the classic design, v7
     // made the Kids tab optional (kept for whoever already had it), v8 folded
-    // the five suggestion switches into one. Declared once: a journal from
+    // the four suggestion switches into one. Declared once: a journal from
     // any of them runs it on the way to v8.
     this.version(8)
       .stores({

@@ -382,7 +382,10 @@ export interface Settings {
   backupReminderSnoozedUntil?: number
   /** Set once the person has linked a place to keep copies. Per device. */
   autoBackup?: AutoBackupState
-  /** Everything the app offers on its own, in one switch: the soft word when the last days were harder, the list on the day's page (leads, Sunday sentence, trials, the invitation), the dot on Trends and the trial offers. A preference, restored from a backup. */
+  /** The soft message on the day's page when the last days were harder.
+   * Switchable on its own, and a preference: restored from a backup. */
+  hardDaysCardEnabled: boolean
+  /** Everything else the app offers on its own, in one switch: the list on the day's page (leads, Sunday sentence, trials, the invitation), the dot on Trends and the trial offers. A preference, restored from a backup. */
   suggestionsEnabled: boolean
   /** Pain first, the rest on request, while a flare is under way. Switchable, restored from a backup. */
   lightFormEnabled: boolean
@@ -420,8 +423,7 @@ export interface Settings {
 export interface LegacySettings extends Omit<Partial<Settings>, 'enabledFactors'> {
   childIllness?: Illness
   design?: 'health' | 'classic'
-  /** Before v8 the suggestions were five switches, one for each. */
-  hardDaysCardEnabled?: boolean
+  /** Before v8 the suggestions were four switches, one for each. */
   leadPromptEnabled?: boolean
   weeklySentenceEnabled?: boolean
   leadDotEnabled?: boolean
@@ -442,6 +444,7 @@ export const DEFAULT_SETTINGS: Settings = {
   language: 'fr',
   parentGender: 'maman',
   illnesses: [],
+  hardDaysCardEnabled: true,
   suggestionsEnabled: true,
   lightFormEnabled: true,
   kidsTabEnabled: false,

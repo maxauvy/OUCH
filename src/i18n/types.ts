@@ -1360,6 +1360,8 @@ export interface Translations {
     reminderTitle: string
     reminderHelper: string
     reminderNote: string
+    hardDaysTitle: string
+    hardDaysHelper: string
     suggestionsTitle: string
     suggestionsHelper: string
     suggestionsDetail: string

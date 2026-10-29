@@ -35,12 +35,12 @@ test('the older upgrades still apply', () => {
   assert.deepEqual(s.enabledFactors, ['sleep'])
 })
 
-test('the five suggestion switches become one, off if any of them was off', () => {
-  const off: LegacySettings = { hardDaysCardEnabled: true, leadPromptEnabled: true, weeklySentenceEnabled: true, leadDotEnabled: false, trialsEnabled: true }
+test('the four suggestion switches become one, off if any of them was off', () => {
+  const off: LegacySettings = { leadPromptEnabled: true, weeklySentenceEnabled: true, leadDotEnabled: false, trialsEnabled: true }
   upgradeLegacySettings(off)
   assert.equal(off.suggestionsEnabled, false)
-  for (const k of ['hardDaysCardEnabled', 'leadPromptEnabled', 'weeklySentenceEnabled', 'leadDotEnabled', 'trialsEnabled']) assert.equal(k in off, false)
-  const on: LegacySettings = { hardDaysCardEnabled: true, leadPromptEnabled: true, weeklySentenceEnabled: true, leadDotEnabled: true, trialsEnabled: true }
+  for (const k of ['leadPromptEnabled', 'weeklySentenceEnabled', 'leadDotEnabled', 'trialsEnabled']) assert.equal(k in off, false)
+  const on: LegacySettings = { leadPromptEnabled: true, weeklySentenceEnabled: true, leadDotEnabled: true, trialsEnabled: true }
   upgradeLegacySettings(on)
   assert.equal(on.suggestionsEnabled, undefined)
 })
@@ -49,4 +49,11 @@ test('a suggestions choice already made is never overridden by old switches', ()
   const s: LegacySettings = { suggestionsEnabled: true, trialsEnabled: false }
   upgradeLegacySettings(s)
   assert.equal(s.suggestionsEnabled, true)
+})
+
+test('the note on hard days keeps its own switch', () => {
+  const s: LegacySettings = { hardDaysCardEnabled: false, leadPromptEnabled: true }
+  upgradeLegacySettings(s)
+  assert.equal(s.hardDaysCardEnabled, false)
+  assert.equal(s.suggestionsEnabled, undefined)
 })

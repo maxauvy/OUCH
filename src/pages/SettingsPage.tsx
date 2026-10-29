@@ -234,6 +234,20 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         )}
 
         <Card>
+          <SectionTitle>{t.settings.hardDaysTitle}</SectionTitle>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.settings.hardDaysHelper}
+            </p>
+            <Toggle
+              checked={settings.hardDaysCardEnabled}
+              onChange={(v) => updateSettings({ hardDaysCardEnabled: v })}
+              label={t.settings.hardDaysTitle}
+            />
+          </div>
+        </Card>
+
+        <Card>
           <SectionTitle>{t.settings.suggestionsTitle}</SectionTitle>
           <div className="flex items-center justify-between gap-3">
             <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
