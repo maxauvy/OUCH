@@ -4,18 +4,13 @@ import { useIsDark } from './hooks/useIsDark'
 import { AppLockGate } from './components/lock/AppLockGate'
 import { handleProviderReturn } from './lib/autoBackupRuntime'
 import { useAutoBackup } from './hooks/useAutoBackup'
-import { useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
 import { DemoPill } from './components/demo/DemoPill'
-import { DemoTour } from './components/demo/DemoTour'
 import { IS_DEMO } from './lib/demoMode'
 import { finishTour, tourPending } from './lib/demoSession'
 import { TodayPage } from './pages/TodayPage'
 import { JournalPage } from './pages/JournalPage'
-import { TrendsPage } from './pages/TrendsPage'
-import { SettingsPage } from './pages/SettingsPage'
-import { ChildViewPage } from './pages/ChildViewPage'
-import { SetupWizard } from './components/setup/SetupWizard'
 import { useSettings, useSettingsLoaded } from './hooks/useSettings'
 import { hasPain } from './lib/loggedEntries'
 import { useAllEntries, useTodayEntry } from './hooks/useEntries'
@@ -30,6 +25,19 @@ import { requestStorageProtection } from './lib/storage'
 import { getTranslations, I18nProvider } from './i18n'
 import type { Language } from './i18n'
 import { todayISO } from './lib/dates'
+
+// The day's page and the journal open the app. The other screens, the first-run
+// setup and the demo tour are loaded on demand, so the first paint does not wait
+// for the charts and the report; once the app is idle they are fetched anyway
+// (and kept offline by the service worker), so opening a tab is not slower.
+const loadTrends = () => import('./pages/TrendsPage').then((m) => ({ default: m.TrendsPage }))
+const loadSettings = () => import('./pages/SettingsPage').then((m) => ({ default: m.SettingsPage }))
+const loadKids = () => import('./pages/ChildViewPage').then((m) => ({ default: m.ChildViewPage }))
+const TrendsPage = lazy(loadTrends)
+const SettingsPage = lazy(loadSettings)
+const ChildViewPage = lazy(loadKids)
+const SetupWizard = lazy(() => import('./components/setup/SetupWizard').then((m) => ({ default: m.SetupWizard })))
+const DemoTour = lazy(() => import('./components/demo/DemoTour').then((m) => ({ default: m.DemoTour })))
 
 function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   useEffect(() => {
@@ -76,6 +84,14 @@ function AppShell() {
   // A journal that holds zones of the first versions is told about the new ones, once per device.
   const oldZones = useMemo(() => oldZonesUsed(allEntries ?? []), [allEntries])
   useAppliedTheme(settings.theme)
+  useEffect(() => {
+    if (!settings.onboardingDone) return
+    const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 2000))
+    idle(() => {
+      void loadTrends()
+      void loadSettings()
+    })
+  }, [settings.onboardingDone])
   useAppliedLook(settings.theme)
   useAutoBackup()
   // Set when the data was just deleted from Settings: said once at the start.
@@ -123,19 +139,22 @@ function AppShell() {
   // neither focus nor a screen reader can wander into it.
   if (!settings.onboardingDone) {
     return (
-      <SetupWizard
-        wiped={wiped}
-        onDone={() => {
-          setTab('today')
-          updateSettings({ onboardingDone: true })
-        }}
-      />
+      <Suspense fallback={null}>
+        <SetupWizard
+          wiped={wiped}
+          onDone={() => {
+            setTab('today')
+            updateSettings({ onboardingDone: true })
+          }}
+        />
+      </Suspense>
     )
   }
 
   return (
     <>
       <main className="flex-1">
+        <Suspense fallback={null}>
         {tab === 'today' && (
           <TodayPage
             onGoToBackup={goToBackup}
@@ -149,6 +168,7 @@ function AppShell() {
         {tab === 'trends' && <TrendsPage />}
         {tab === 'kids' && settings.kidsTabEnabled && <ChildViewPage />}
         {tab === 'settings' && <SettingsPage openBackup={backupRequested} onReplayTour={() => setTourOpen(true)} />}
+        </Suspense>
       </main>
       <TabBar
         active={tab}
@@ -172,13 +192,15 @@ function AppShell() {
       )}
       {IS_DEMO &&
         (tourOpen ? (
-          <DemoTour
-            setTab={setTab}
-            onClose={() => {
-              finishTour()
-              setTourOpen(false)
-            }}
-          />
+          <Suspense fallback={null}>
+            <DemoTour
+              setTab={setTab}
+              onClose={() => {
+                finishTour()
+                setTourOpen(false)
+              }}
+            />
+          </Suspense>
         ) : (
           <DemoPill />
         ))}

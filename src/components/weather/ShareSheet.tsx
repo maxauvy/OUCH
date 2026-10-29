@@ -1,5 +1,4 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { toPng } from 'html-to-image'
 import { IconX } from '@tabler/icons-react'
 import type { LoggedEntry } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
@@ -45,6 +44,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: LoggedEntry
 
   async function capture(): Promise<Blob> {
     if (!cardRef.current) throw new Error(t.shareSheet.cardNotFound)
+    const { toPng } = await import('html-to-image')
     const dataUrl = await toPng(cardRef.current, { pixelRatio: 2, cacheBust: true })
     const res = await fetch(dataUrl)
     return res.blob()

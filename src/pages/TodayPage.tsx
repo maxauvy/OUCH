@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
+import { LazyShareSheet } from '../components/weather/LazyShareSheet'
 import { IS_DEMO } from '../lib/demoMode'
 import { DailyEntryForm } from '../components/entry/DailyEntryForm'
 import { Footer } from '../components/layout/Footer'
-import { ShareSheet } from '../components/weather/ShareSheet'
 import { hasPain } from '../lib/loggedEntries'
 import { useLoggedEntries, useTodayEntry } from '../hooks/useEntries'
 import { useLeadList } from '../hooks/useLeadList'
@@ -96,7 +96,7 @@ export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => voi
         </button>
       )}
       {sharing && entry && hasPain(entry) && (
-        <ShareSheet entry={entry} displayName={settings.displayName || undefined} onClose={() => setSharing(false)} />
+        <LazyShareSheet entry={entry} displayName={settings.displayName || undefined} onClose={() => setSharing(false)} />
       )}
       <Footer />
     </div>

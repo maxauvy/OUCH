@@ -7,6 +7,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Modifié
+- **L'application démarre plus vite.** Seules la page du jour et le Journal sont chargés au lancement (environ 415 Ko au lieu de 1,3 Mo, soit 125 Ko au lieu de 393 Ko une fois compressés). Tendances et Réglages se chargent discrètement dès que l'application est au repos ; le rapport et le partage d'image, quand on les ouvre. Rien ne change à l'écran, hors ligne comprise.
 - **« Par rapport à ta moyenne » dit la même chose partout.** La ligne sous la douleur du jour et la carte à partager lisent désormais les mêmes 6 jours précédents, avec au moins 3 jours renseignés, et parlent de « moyenne » quand l'écart est de moins d'un demi-point. Avant, la ligne de la page du jour se contentait d'un seul jour et tolérait un quart de point.
 
 ## [0.7.0] - 2026-10-28

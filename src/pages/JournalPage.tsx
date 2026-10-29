@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
+import { LazyShareSheet } from '../components/weather/LazyShareSheet'
 import { CalendarHeatmap } from '../components/journal/CalendarHeatmap'
 import { Card } from '../components/ui/Card'
 import { DailyEntryForm } from '../components/entry/DailyEntryForm'
 import { Footer } from '../components/layout/Footer'
-import { ShareSheet } from '../components/weather/ShareSheet'
 import { useAllEntries, useEntry, deleteEntry } from '../hooks/useEntries'
 import { hasPain } from '../lib/loggedEntries'
 import { useSettings } from '../hooks/useSettings'
@@ -68,7 +68,7 @@ export function JournalPage() {
       )}
 
       {sharing && selectedEntry && hasPain(selectedEntry) && (
-        <ShareSheet entry={selectedEntry} displayName={settings.displayName || undefined} onClose={() => setSharing(false)} />
+        <LazyShareSheet entry={selectedEntry} displayName={settings.displayName || undefined} onClose={() => setSharing(false)} />
       )}
       <Footer />
     </div>
