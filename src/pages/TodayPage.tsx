@@ -14,13 +14,13 @@ import { weeklyFinding } from '../lib/weeklySentence'
 import { LeadPromptCard, RepeatTrialCard, TrialCard, TrialPausedCard, WeeklyCard } from '../components/entry/LeadHintCards'
 import type { Tab } from '../components/layout/TabBar'
 import { useSettings } from '../hooks/useSettings'
-import { todayISO } from '../db'
 import { useTranslation } from '../i18n'
 import { IconShare } from '@tabler/icons-react'
 import { BackupReminderCard } from '../components/backup/BackupReminderCard'
 import { IndicatorInviteBanner } from '../components/home/IndicatorInviteBanner'
 import { shouldShowInvite } from '../lib/indicatorInvite'
 import { useEarlyAccess } from '../lib/earlyAccess'
+import { todayISO } from '../lib/dates'
 
 export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => void; onGoToTab: (tab: Tab) => void }) {
   const entry = useTodayEntry()

@@ -6,10 +6,10 @@ import { medicationReports, painStats, reportPeriods, splitEntries, type Medicat
 import { loggedEntries } from '../../lib/loggedEntries'
 import { findLeads, keptLeads, type Lead, type LeadChoices, type LeadFactors } from '../../lib/leads'
 import { reportTrials, type LeadTrial, type ReportTrial } from '../../lib/leadTrial'
-import { shiftISO } from '../../lib/medications'
 import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '../../lib/treatmentReview'
 import { weekdayProfile, type WeekdayProfile } from '../../lib/weekdays'
 import { reportFormat, type ReportFormat } from './reportFormat'
+import { shiftISO } from '../../lib/dates'
 
 export type ReportVariant = 'gp' | 'painClinic'
 

@@ -23,12 +23,13 @@ import { oldZonesUsed } from './lib/bodyZones'
 import { ZonesNotice } from './components/about/ZonesNotice'
 import { useLeadList } from './hooks/useLeadList'
 import { trendsDot } from './lib/leadHints'
-import { updateSettings, todayISO } from './db'
+import { updateSettings } from './db'
 import { maybeShowReminder } from './lib/reminder'
 import { clearWipedNotice, wipedNotice } from './lib/wipe'
 import { requestStorageProtection } from './lib/storage'
 import { getTranslations, I18nProvider } from './i18n'
 import type { Language } from './i18n'
+import { todayISO } from './lib/dates'
 
 function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   useEffect(() => {

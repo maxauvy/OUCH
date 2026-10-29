@@ -7,7 +7,7 @@
 
 import type { LoggedEntry } from '../db/types'
 import { actionKey } from './leads.ts'
-import { shiftISO } from './medications.ts'
+import { shiftISO } from './dates.ts'
 
 export type WeeklyFinding = { kind: 'action'; action: string } | { kind: 'sleep' }
 

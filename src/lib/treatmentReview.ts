@@ -8,9 +8,9 @@
 // its chance rate reads as a finding).
 
 import type { LoggedEntry, Medication } from '../db/types'
-import { shiftISO } from './medications.ts'
-import { daysBetween, mean, quantile } from './report.ts'
 import { treatmentEvents, type TreatmentEvent } from './treatmentEvents.ts'
+import { daysBetween, shiftISO } from './dates.ts'
+import { mean, quantile } from './stats.ts'
 
 interface ReviewOptions {
   /** Days compared before the change, and after the settling-in days */

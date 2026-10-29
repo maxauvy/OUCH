@@ -7,7 +7,8 @@
 
 import type { LoggedEntry } from '../db/types'
 import { actionKey, type Lead } from './leads.ts'
-import { shiftISO } from './medications.ts'
+import { shiftISO } from './dates.ts'
+import { mean } from './stats.ts'
 
 export const TRIAL_DAYS = 7
 /** Days of each sort (with, without) before the two are compared. */
@@ -67,8 +68,6 @@ interface TrialStatus {
   /** The week is over but a comparison would rest on too few days */
   tooFew: boolean
 }
-
-const mean = (a: number[]) => a.reduce((s, v) => s + v, 0) / a.length
 
 export function trialStatus(
   trial: LeadTrial,

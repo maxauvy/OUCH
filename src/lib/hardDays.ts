@@ -9,7 +9,7 @@
 
 import type { LoggedEntry } from '../db/types'
 import { detectFlares, type FlareEpisode } from './flares.ts'
-import { shiftISO } from './medications.ts'
+import { shiftISO } from './dates.ts'
 
 /** The flare the card was last shown for, kept in the settings. */
 export interface HardDaysSeen {

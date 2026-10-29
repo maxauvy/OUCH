@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { db, todayISO } from '../db'
+import { db } from '../db'
 import type { DailyEntry, LoggedEntry } from '../db/types'
 import { hasPain, loggedEntries } from '../lib/loggedEntries'
+import { todayISO } from '../lib/dates'
 
 export function useAllEntries(): DailyEntry[] | undefined {
   return useLiveQuery(() => db.entries.orderBy('date').reverse().toArray(), [])

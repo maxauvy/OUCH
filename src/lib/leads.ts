@@ -11,8 +11,8 @@
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
 import type { FactorKey, LoggedEntry } from '../db/types'
-import { shiftISO } from './medications.ts'
-import { spearman } from './report.ts'
+import { shiftISO } from './dates.ts'
+import { mean, spearman } from './stats.ts'
 
 type LeadKind = 'sleep' | 'stress' | 'activity' | 'action'
 
@@ -65,8 +65,6 @@ export const LEAD_MAX = 3
 /** A dismissed lead comes back with a point more of gap, or twice the days. */
 const COMEBACK_EXTRA_GAP = 1
 const COMEBACK_DAYS_FACTOR = 2
-
-const mean = (a: number[]) => a.reduce((s, v) => s + v, 0) / a.length
 
 /** What the correlation has to reach for `n` days: the "weak" mark, and twice
  * the size chance alone tends to give. */

@@ -4,7 +4,7 @@ import { test } from 'node:test'
 import type { LoggedEntry } from '../src/db/types.ts'
 import type { Lead } from '../src/lib/leads.ts'
 import { MAX_TRIAL_HISTORY, archiveTrial, continueTrial, reportTrials, restartTrial, startTrial, trialStatus, triedKeys, type LeadTrial } from '../src/lib/leadTrial.ts'
-import { shiftISO } from '../src/lib/medications.ts'
+import { shiftISO } from '../src/lib/dates.ts'
 
 const START = '2026-10-05'
 const day = (n: number) => shiftISO(START, n)

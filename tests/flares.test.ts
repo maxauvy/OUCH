@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry } from '../src/db/types.ts'
 import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresApply, flaresOverlapping, flareThreshold } from '../src/lib/flares.ts'
-import { shiftISO } from '../src/lib/medications.ts'
+import { shiftISO } from '../src/lib/dates.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
 const entry = (date: string, painLevel: number): LoggedEntry => ({ date, painLevel, createdAt: 0, updatedAt: 0 })

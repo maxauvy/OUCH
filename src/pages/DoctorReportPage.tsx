@@ -2,12 +2,10 @@ import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type Reac
 import { createPortal } from 'react-dom'
 import { IconArrowLeft, IconFileTypePdf, IconPrinter } from '@tabler/icons-react'
 import { toCanvas } from 'html-to-image'
-import { todayISO } from '../db'
 import { useAllEntries } from '../hooks/useEntries'
 import { useMedications } from '../hooks/useMedications'
 import { useSettings } from '../hooks/useSettings'
 import { leadFactors } from '../lib/leads'
-import { shiftISO } from '../lib/medications'
 import { formatISODate } from '../lib/medicationFormat'
 import { buildImagePdf, type PdfImage } from '../lib/pdf'
 import { downloadBlob } from '../lib/backup'
@@ -21,6 +19,7 @@ import { buildReportData, type ReportVariant } from '../components/report/report
 import { withCut, type Cut } from '../components/report/pagination'
 import { isOffered, withoutUnoffered } from '../lib/indicatorCatalog'
 import { useEarlyAccess } from '../lib/earlyAccess'
+import { shiftISO, todayISO } from '../lib/dates'
 
 /** A4 width in CSS pixels (210 mm at 96 dpi): the preview is scaled from it. */
 const PAGE_WIDTH = 794

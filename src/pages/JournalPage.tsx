@@ -9,8 +9,8 @@ import { hasPain } from '../lib/loggedEntries'
 import { useSettings } from '../hooks/useSettings'
 import { useFlares } from '../hooks/useFlares'
 import { flareDaySet } from '../lib/flares'
-import { todayISO } from '../db'
 import { useTranslation } from '../i18n'
+import { todayISO } from '../lib/dates'
 
 export function JournalPage() {
   const entries = useAllEntries()

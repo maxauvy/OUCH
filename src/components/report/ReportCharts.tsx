@@ -1,11 +1,11 @@
 import type { LoggedEntry } from '../../db/types'
 import type { FlareEpisode } from '../../lib/flares'
-import { shiftISO } from '../../lib/medications'
 import { rollingMean, type ReportPeriods } from '../../lib/report'
 import type { MedicationReport } from '../../lib/report'
 import { periodOn } from '../../lib/medications'
 import type { ReportFormat } from './reportFormat'
 import { R, rampColor } from './reportColors'
+import { shiftISO } from '../../lib/dates'
 
 // Every time chart shares this frame, so pain, treatments and symptoms line
 // up day for day when stacked. viewBox units; the SVG scales to the page.

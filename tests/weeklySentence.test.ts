@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry } from '../src/db/types.ts'
 import { isSunday, weeklyFinding } from '../src/lib/weeklySentence.ts'
-import { shiftISO } from '../src/lib/medications.ts'
+import { shiftISO } from '../src/lib/dates.ts'
 
 const SUNDAY = '2026-10-11'
 const day = (n: number) => shiftISO(SUNDAY, n - 6) // n = 0..6, Monday to Sunday

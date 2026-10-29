@@ -11,8 +11,8 @@
 // check against. Descriptive only: nothing here says why a flare happened.
 
 import type { Illness, LoggedEntry } from '../db/types'
-import { daysBetween, median } from './report.ts'
-import { shiftISO } from './medications.ts'
+import { daysBetween, shiftISO } from './dates.ts'
+import { median } from './stats.ts'
 
 /** Whether the flare reading applies to someone who follows these illnesses. It reads a pain that is
  * there every day and rises for a while; a migraine comes in attacks, with days between without pain,

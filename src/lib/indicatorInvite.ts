@@ -8,7 +8,7 @@
 
 import type { FactorKey, Settings } from '../db/types.ts'
 import { detailsOf, planForIllnesses, withoutDetails, type IndicatorKey } from './indicatorCatalog.ts'
-import { shiftISO } from './medications.ts'
+import { shiftISO } from './dates.ts'
 
 /** A cross hides the banner for this many days. */
 export const INVITE_SNOOZE_DAYS = 5
