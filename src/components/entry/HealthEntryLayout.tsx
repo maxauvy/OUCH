@@ -443,7 +443,8 @@ export function HealthEntryLayout({
         </>
       )}
 
-      {!lightToday && settings.cycleTrackingEnabled && (
+      {/* The flow, when it is followed, says the same thing: one question, not two. */}
+      {!lightToday && settings.cycleTrackingEnabled && !has('periodFlow') && (
         <Card className="!p-4 flex items-center gap-3">
           <CategoryIcon icon={IconDroplet} cat="cycle" />
           <div className="flex-1">
