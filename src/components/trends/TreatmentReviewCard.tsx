@@ -3,7 +3,6 @@ import { format as formatDate } from 'date-fns'
 import type { LoggedEntry, Medication } from '../../db/types'
 import { flareDaySet, type FlareEpisode } from '../../lib/flares'
 import { posologyChange } from '../../lib/medicationFormat'
-import { shiftISO } from '../../lib/medications'
 import type { TreatmentEvent } from '../../lib/treatmentEvents'
 import {
   REVIEW_MEASURES,
@@ -17,6 +16,7 @@ import { usePalette } from '../../hooks/usePalette'
 import { format, useLanguage, useLocale, useTranslation, type Translations } from '../../i18n'
 import { Card, SectionTitle } from '../ui/Card'
 import { PainTrendChart } from './PainTrendChart'
+import { shiftISO } from '../../lib/dates'
 
 /**
  * What the diary shows around a change of background treatment: the same

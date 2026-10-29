@@ -39,7 +39,7 @@ import type { DailyEntry, Illness, LoggedEntry, Medication, MedicationIntake, Se
 import type { DemoLanguage } from './demoMode.ts'
 import { actionKey, choiceFor, findLeads, type LeadChoice, type LeadChoices } from './leads.ts'
 import { TRIAL_DAYS, TRIAL_MIN_GROUP, type LeadTrial } from './leadTrial.ts'
-import { shiftISO } from './medications.ts'
+import { shiftISO } from './dates.ts'
 
 interface DemoOptions {
   /** Last day of the history (today, for the in-app demo) */

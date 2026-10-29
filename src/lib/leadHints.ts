@@ -8,7 +8,7 @@
 import type { LoggedEntry } from '../db/types'
 import { actionKey, type Lead, type LeadChoices } from './leads.ts'
 import type { LeadTrial } from './leadTrial.ts'
-import { shiftISO } from './medications.ts'
+import { shiftISO } from './dates.ts'
 
 export interface LeadsSeen {
   /** Leads already brought to the day's page: each comes once. */

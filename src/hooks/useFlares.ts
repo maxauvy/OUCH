@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { todayISO } from '../db'
 import { canDetectFlares, detectFlares, flaresApply, type FlareEpisode } from '../lib/flares'
 import { useSettings } from './useSettings'
 import { useLoggedEntries } from './useEntries'
+import { todayISO } from '../lib/dates'
 
 /** The flares in the whole journal, as of today, shared by Trends and the
  * Journal. Null until the entries are read. `detectable` is false while

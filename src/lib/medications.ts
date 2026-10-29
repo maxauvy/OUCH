@@ -5,16 +5,10 @@ import type {
   MedicationPeriod,
   MedicationStopReason,
 } from '../db/types'
+import { shiftISO } from './dates.ts'
 
 export function newMedicationId(): string {
   return crypto.randomUUID()
-}
-
-/** Shifts an ISO date by whole days (UTC noon, so DST never skips a day). */
-export function shiftISO(iso: string, days: number): string {
-  const d = new Date(`${iso}T12:00:00Z`)
-  d.setUTCDate(d.getUTCDate() + days)
-  return d.toISOString().slice(0, 10)
 }
 
 /** Names are matched loosely: "Paracétamol " and "paracétamol" are one medication. */

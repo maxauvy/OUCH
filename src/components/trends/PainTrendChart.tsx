@@ -3,11 +3,11 @@ import { format } from 'date-fns'
 import type { Locale } from 'date-fns'
 import type { DailyEntry } from '../../db/types'
 import { themeFor } from '../../lib/theme'
-import { shiftISO } from '../../lib/medications'
 import { flareDaySet, type FlareEpisode } from '../../lib/flares'
-import { daysBetween, trailingMeans } from '../../lib/report'
+import { trailingMeans } from '../../lib/report'
 import { usePalette } from '../../hooks/usePalette'
 import { useLocale, useTranslation, type Translations } from '../../i18n'
+import { daysBetween, shiftISO } from '../../lib/dates'
 
 /** Same window as the doctor report's curve. */
 const WINDOW = 7

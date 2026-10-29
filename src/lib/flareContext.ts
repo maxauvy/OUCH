@@ -8,9 +8,9 @@
 
 import type { LoggedEntry, Medication } from '../db/types'
 import type { FlareEpisode } from './flares.ts'
-import { shiftISO } from './medications.ts'
-import { mean } from './report.ts'
 import { treatmentEvents, type TreatmentEvent } from './treatmentEvents.ts'
+import { shiftISO } from './dates.ts'
+import { mean } from './stats.ts'
 
 export type { TreatmentEvent }
 

@@ -12,7 +12,7 @@
 // report says so.
 
 import type { LoggedEntry } from '../db/types'
-import { mean, sd } from './report.ts'
+import { mean, sd } from './stats.ts'
 
 export const MIN_PER_WEEKDAY = 4
 export const BONFERRONI_Z_7 = 2.69

@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { compareFlareZones, zoneStrips } from '../src/lib/zoneTrends.ts'
-import { shiftISO } from '../src/lib/medications.ts'
+import { shiftISO } from '../src/lib/dates.ts'
 
 const END = '2026-10-19'
 const day = (i: number, zones: string[] = []) => ({ date: shiftISO(END, -i), painLocations: zones })

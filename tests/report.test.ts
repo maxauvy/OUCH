@@ -2,30 +2,9 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry, Medication, MedicationIntake } from '../src/db/types.ts'
-import {
-  association,
-  compareContext,
-  daysBetween,
-  daysWithRescueMedication,
-  mean,
-  meanOf,
-  median,
-  medicationReports,
-  painStats,
-  pressureChange,
-  quantile,
-  reportPeriods,
-  rollingMean,
-  sd,
-  spearman,
-  splitEntries,
-  strengthIndex,
-  tagShares,
-  trailingMeans,
-  weeklyRows,
-  collapseDoublePeriod,
-} from '../src/lib/report.ts'
-import { shiftISO } from '../src/lib/medications.ts'
+import { association, compareContext, daysWithRescueMedication, meanOf, medicationReports, painStats, pressureChange, reportPeriods, rollingMean, splitEntries, strengthIndex, tagShares, trailingMeans, weeklyRows, collapseDoublePeriod } from '../src/lib/report.ts'
+import { daysBetween, shiftISO } from '../src/lib/dates.ts'
+import { mean, median, quantile, sd, spearman } from '../src/lib/stats.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
 const entry = (date: string, painLevel: number, extra: Partial<LoggedEntry> = {}): LoggedEntry => ({

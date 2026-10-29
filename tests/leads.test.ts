@@ -14,7 +14,7 @@ import {
   type Lead,
   type LeadChoices,
 } from '../src/lib/leads.ts'
-import { shiftISO } from '../src/lib/medications.ts'
+import { shiftISO } from '../src/lib/dates.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
 const entry = (n: number, painLevel: number, extra: Partial<LoggedEntry> = {}): LoggedEntry => ({

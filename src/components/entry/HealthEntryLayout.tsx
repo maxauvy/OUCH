@@ -36,7 +36,6 @@ import {
   SYMPTOM_TAGS,
   type DailyEntry,
   type JointKey, type Medication, type PainWeather, type Settings } from '../../db/types'
-import { todayISO } from '../../db'
 import { computePainWeather } from '../../lib/painWeather'
 import { Card, GroupCaption } from '../ui/Card'
 import { BodyMap } from './BodyMap'
@@ -57,6 +56,7 @@ import { useLuminous } from '../../lib/look'
 import { isOffered } from '../../lib/indicatorCatalog'
 import { useEarlyAccess } from '../../lib/earlyAccess'
 import { Chip } from '../ui/Chip'
+import { todayISO } from '../../lib/dates'
 
 type Category = 'pain' | 'fatigue' | 'sleep' | 'stress' | 'fog' | 'mood' | 'activity' | 'cycle'
 

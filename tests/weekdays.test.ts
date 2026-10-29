@@ -2,8 +2,8 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry } from '../src/db/types.ts'
-import { shiftISO } from '../src/lib/medications.ts'
 import { BONFERRONI_Z_7, MIN_PER_WEEKDAY, weekdayIndex, weekdayProfile } from '../src/lib/weekdays.ts'
+import { shiftISO } from '../src/lib/dates.ts'
 
 // 2026-10-05 is a Monday.
 const MONDAY = '2026-10-05'

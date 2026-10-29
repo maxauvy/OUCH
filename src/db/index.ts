@@ -2,6 +2,7 @@ import Dexie, { type EntityTable } from 'dexie'
 import type { BodyZone, DailyEntry, LegacyDailyEntry, LegacySettings, Medication, Settings } from './types'
 import { DEFAULT_SETTINGS } from './types'
 import { createLegacyConverter } from '../lib/medications'
+import { todayISO } from '../lib/dates'
 import { buildDemoHistory } from '../lib/demoData'
 import { DEMO_DB_NAME, DEMO_LANGUAGE, type DemoLanguage } from '../lib/demoMode'
 import { upgradeLegacySettings } from './settingsUpgrade'
@@ -146,9 +147,4 @@ export async function updateSettings(patch: Partial<Settings>): Promise<Settings
   const next = { ...current, ...patch, id: 1 as const }
   await db.settings.put(next)
   return next
-}
-
-export function todayISO(d = new Date()): string {
-  const tz = d.getTimezoneOffset() * 60000
-  return new Date(d.getTime() - tz).toISOString().slice(0, 10)
 }

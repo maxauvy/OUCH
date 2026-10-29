@@ -1,5 +1,4 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
-import { todayISO } from '../../db'
 import {
   DOSE_UNITS,
   MEDICATION_REGIMENS,
@@ -16,6 +15,7 @@ import { formatISODate, formatPosology } from '../../lib/medicationFormat'
 import { radioGroupProps, radioProps } from '../../lib/a11y'
 import { format, useLocale, useTranslation } from '../../i18n'
 import { Chip } from '../ui/Chip'
+import { todayISO } from '../../lib/dates'
 
 const inputStyle = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 const inputClass = 'w-full rounded-xl px-3.5 py-2.5 text-body outline-none'

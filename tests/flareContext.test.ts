@@ -4,7 +4,7 @@ import { test } from 'node:test'
 import type { LoggedEntry, Medication } from '../src/db/types.ts'
 import { detectFlares, flareDaySet } from '../src/lib/flares.ts'
 import { flareContext } from '../src/lib/flareContext.ts'
-import { shiftISO } from '../src/lib/medications.ts'
+import { shiftISO } from '../src/lib/dates.ts'
 
 const day = (n: number) => shiftISO('2026-09-01', n)
 const entry = (n: number, painLevel: number, extra: Partial<LoggedEntry> = {}): LoggedEntry => ({

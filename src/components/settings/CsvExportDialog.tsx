@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { IconAlertTriangle, IconDownload } from '@tabler/icons-react'
-import { db, todayISO } from '../../db'
+import { db } from '../../db'
 import { downloadBlob } from '../../lib/backup'
 import { intakesCsv, journalCsv } from '../../lib/csvExport'
 import { format, useLanguage, useTranslation } from '../../i18n'
 import { ModalSheet } from '../ui/ModalSheet'
 import { Toggle } from '../ui/Toggle'
+import { todayISO } from '../../lib/dates'
 
 /**
  * The journal as two CSV files, for a spreadsheet or an analysis tool. They

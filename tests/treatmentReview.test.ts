@@ -2,8 +2,8 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry, Medication } from '../src/db/types.ts'
-import { shiftISO } from '../src/lib/medications.ts'
 import { changeDate, reviewWindows, treatmentReviews } from '../src/lib/treatmentReview.ts'
+import { shiftISO } from '../src/lib/dates.ts'
 
 const START = '2026-01-01'
 const day = (n: number) => shiftISO(START, n)
