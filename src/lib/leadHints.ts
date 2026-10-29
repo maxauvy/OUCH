@@ -9,6 +9,7 @@ import type { LoggedEntry } from '../db/types'
 import { actionKey, type Lead, type LeadChoices } from './leads.ts'
 import type { LeadTrial } from './leadTrial.ts'
 import { shiftISO } from './dates.ts'
+import type { MessageLaterMap } from './todayMessages.ts'
 
 export interface LeadsSeen {
   /** Leads already brought to the day's page: each comes once. */
@@ -25,6 +26,8 @@ export interface LeadsSeen {
   repeat?: { date: string; key: string; dismissed: boolean }
   /** When each trial was last offered again, by lead key: the next offer waits. */
   repeatShown?: Record<string, string>
+  /** What was set aside or done in the list of the day's page, by message key. */
+  later?: MessageLaterMap
 }
 
 export const NO_LEADS_SEEN: LeadsSeen = { prompted: [], trends: [], declined: [] }
