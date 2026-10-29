@@ -63,10 +63,6 @@ export const BODY_GROUPS: readonly { id: 'head' | 'arms' | 'trunk' | 'legs'; reg
 ]
 export type BodyGroupId = (typeof BODY_GROUPS)[number]['id']
 
-export function groupOfRegion(region: BodyRegion): BodyGroupId {
-  return BODY_GROUPS.find((g) => g.regions.includes(region))!.id
-}
-
 /** Which region and side a zone identifier is: 'leftShoulder' is the shoulder, left. */
 export function parseZone(zone: BodyZone): { region: BodyRegion; side?: BodySide } | null {
   if ((MIDLINE_ZONES as readonly string[]).includes(zone)) return { region: zone as MidlineZone }

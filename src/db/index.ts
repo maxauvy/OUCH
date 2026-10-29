@@ -86,40 +86,11 @@ class OuchDB extends Dexie {
           delete entry.medications
         })
       })
-    // v4 turned the single illness (childIllness) into a list. It was
-    // shown on the child view, so it is kept as the first tracked illness.
-    this.version(4)
-      .stores({
-        entries: '++id, &date, painLevel, createdAt',
-        settings: 'id',
-        medications: 'id, name',
-      })
-      .upgrade(async (tx) => {
-        await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
-      })
-    // v5 dropped the 'cycle' factor, which duplicated cycleTrackingEnabled
-    // without doing anything. Whoever switched it on wanted cycle tracking.
-    this.version(5)
-      .stores({
-        entries: '++id, &date, painLevel, createdAt',
-        settings: 'id',
-        medications: 'id, name',
-      })
-      .upgrade(async (tx) => {
-        await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
-      })
-    // v6 removed the classic design: the interface style setting is gone.
-    this.version(6)
-      .stores({
-        entries: '++id, &date, painLevel, createdAt',
-        settings: 'id',
-        medications: 'id, name',
-      })
-      .upgrade(async (tx) => {
-        await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
-      })
-    // v7 made the Kids tab optional, off unless asked for. Everyone who was
-    // already using the app had it, so they keep it.
+    // v4 to v7 only changed the settings, all by the same idempotent upgrade
+    // (see `upgradeLegacySettings`): v4 turned the single illness into a
+    // list, v5 dropped the 'cycle' factor, v6 removed the classic design, v7
+    // made the Kids tab optional (kept for whoever already had it). Declared
+    // once: a journal from any of them runs it on the way to v7.
     this.version(7)
       .stores({
         entries: '++id, &date, painLevel, createdAt',

@@ -7,36 +7,10 @@ import type { LeadChoices } from '../lib/leads'
 import type { LeadsSeen } from '../lib/leadHints'
 import type { LeadTrial } from '../lib/leadTrial'
 
-export type FactorKey =
-  | 'fatigue'
-  | 'sleep'
-  | 'stress'
-  | 'brainFog'
-  | 'mood'
-  | 'activity'
-  | 'weather'
-  | 'medications'
-  | 'positiveActions'
-  | 'painLocations'
-  | 'notes'
-  | 'morningStiffness'
-  | 'nightWaking'
-  | 'dailyInterference'
-  | 'unrefreshedWaking'
-  | 'swollenJoints'
-  | 'periodFlow'
-  | 'bowelBladder'
-  | 'headacheEpisode'
-  | 'legPain'
-  | 'symptomTags'
-  | 'spasms'
-  | 'feverInfection'
-  | 'newSymptomMarker'
-  | 'sensorySensitivity'
-
 // Display order for the factor list in Settings. Labels/helpers live in the
-// active translation (`t.factors[key]`), not here.
-export const ALL_FACTORS: FactorKey[] = [
+// active translation (`t.factors[key]`), not here. The one list of the
+// indicators a person can follow: the key type is read from it.
+export const ALL_FACTORS = [
   'fatigue',
   'sleep',
   'stress',
@@ -62,7 +36,9 @@ export const ALL_FACTORS: FactorKey[] = [
   'feverInfection',
   'newSymptomMarker',
   'sensorySensitivity',
-]
+] as const
+
+export type FactorKey = (typeof ALL_FACTORS)[number]
 
 const DEFAULT_ENABLED_FACTORS: FactorKey[] = [
   'fatigue',

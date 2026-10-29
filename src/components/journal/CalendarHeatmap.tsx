@@ -29,7 +29,7 @@ export function CalendarHeatmap({
   /** Days inside a flare, marked by a short bar under the number */
   flareDays?: Set<string>
 }) {
-  const [cursor, setCursor] = useState(new Date())
+  const [cursor, setCursor] = useState(() => new Date())
   const t = usePalette()
   const i18n = useTranslation()
   const { dateFnsLocale } = useLocale()

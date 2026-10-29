@@ -76,7 +76,7 @@ test('indicators not built yet are ignored, whatever the early access', () => {
   for (const earlyAccess of [false, true]) {
     const plan = planForIllnesses(['fibromyalgie'], { earlyAccess })
     const all = [...plan.recommended, ...plan.suggested, ...plan.others]
-    assert.ok(all.every((k) => (ALL_FACTORS as string[]).includes(k)), `earlyAccess ${earlyAccess}`)
+    assert.ok(all.every((k) => (ALL_FACTORS as readonly string[]).includes(k)), `earlyAccess ${earlyAccess}`)
   }
 })
 

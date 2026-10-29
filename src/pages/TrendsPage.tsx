@@ -1,6 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { IconChevronRight, IconFileText } from '@tabler/icons-react'
-import { subDays } from 'date-fns'
 
 import { Footer } from '../components/layout/Footer'
 import { FlaresCard } from '../components/trends/FlaresCard'
@@ -63,8 +62,8 @@ export function TrendsPage() {
     if (!entries) return []
     const days = RANGES[rangeIdx].days
     if (days == null) return entries
-    const cutoff = subDays(new Date(), days)
-    return entries.filter((e) => new Date(e.date + 'T00:00:00') >= cutoff)
+    const since = shiftISO(todayISO(), -(days - 1))
+    return entries.filter((e) => e.date >= since)
   }, [entries, rangeIdx]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const avgPain = filtered.length ? filtered.reduce((s, e) => s + e.painLevel, 0) / filtered.length : null
