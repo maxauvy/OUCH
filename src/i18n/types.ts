@@ -178,9 +178,6 @@ export interface Translations {
     /** Fewer than two weeks logged; `{{n}}` days so far */
     emptyEarly: string
     notEnoughData: string
-    daysTrackedOne: string
-    daysTrackedOther: string
-    avgPain: string
     painEvolution: string
     /** The card of what else the person noted (stiffness, wakings, joints…), over the range */
     indicatorsTitle: string
@@ -188,17 +185,48 @@ export interface Translations {
     weeklyMean: string
     weeklyMeanLegend: string
     flaresTitle: string
-    /** `{{n}}` flares, `{{days}}` days in total */
-    flaresSummary: string
     flaresNone: string
     flaresHelper: string
     flareRange: string
-    /** `{{days}}`, `{{peak}}` out of 10, `{{usual}}` level */
-    flareDetails: string
     flareBack: string
     flareOngoing: string
     /** In the chart's legend and tooltip */
     flareBand: string
+    /** The block at the top of Trends, for the consultation. */
+    consultTitle: string
+    consultIntro: string
+    factPain: string
+    /** `{{v}}` is the mean. */
+    factPainValue: string
+    factFlares: string
+    /** `{{n}} {{days}}`: how many flares, how many days in all. */
+    factFlaresValue: string
+    factFlaresNone: string
+    factZone: string
+    /** `{{k}}` days of `{{n}}` logged. */
+    factZoneDays: string
+    factTreatment: string
+    /** The chips that switch what the curve shows. */
+    layersLabel: string
+    layerFlares: string
+    layerTreatment: string
+    layerTrials: string
+    /** In the chart's legend. */
+    trialBand: string
+    /** The list under the curve. */
+    timelineTitle: string
+    /** `{{n}} {{n:day|days}}` */
+    timelineFlare: string
+    /** `{{peak}}`/10, `{{usual}}` */
+    timelineFlarePeak: string
+    timelineStarted: string
+    /** `{{name}}`, `{{dose}}` */
+    timelineDose: string
+    timelineStopped: string
+    /** `{{action}}` */
+    timelineTrial: string
+    timelineTrialRunning: string
+    timelineTrialDone: string
     zonesTitle: string
     zonesLess: string
     zonesMore: string
