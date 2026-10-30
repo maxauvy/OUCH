@@ -84,6 +84,7 @@ export function TrialCard({
         {lh.trialDoneLabel}
       </p>
       <p className="text-body font-semibold mt-1">{title}</p>
+      {status.withDays > 0 && <p className="text-body mt-1">{lh.trialWords}</p>}
       {r && soft && hard ? (
         <>
           <div className="grid grid-cols-2 gap-2.5 mt-2.5">

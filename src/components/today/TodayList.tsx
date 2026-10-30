@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
-import { IconAdjustmentsHorizontal, IconCalendarWeek, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
+import { format as formatDate } from 'date-fns'
+import { IconAdjustmentsHorizontal, IconCalendarWeek, IconLeaf, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { LoggedEntry, Settings } from '../../db/types'
 import { useLeadList } from '../../hooks/useLeadList'
@@ -68,7 +69,7 @@ export function TodayList({
 }) {
   const t = useTranslation()
   const language = useLanguage()
-  const { intlLocale } = useLocale()
+  const { intlLocale, dateFnsLocale } = useLocale()
   const nf = new Intl.NumberFormat(intlLocale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
   const leadList = useLeadList()
   const [open, setOpen] = useState(false)
@@ -178,6 +179,16 @@ export function TodayList({
             <p className="text-body mt-0.5">{format(t.indicatorInvite.banner, { list: formatIllnessList(language, settings.illnesses) })}</p>
           </ListCard>
         )
+      case 'calm': {
+        const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMM', { locale: dateFnsLocale })
+        return (
+          <ListCard key={m.key} icon={IconLeaf} label={lh.calmLabel} actions={[{ label: lh.calmThanks, primary: true, onClick: () => done(m.key) }]}>
+            <p className="text-body mt-0.5">
+              {format(lh.calmBody, { start: day(m.episode.start), end: day(m.episode.end), n: m.episode.recoveryDays ?? 1 }, language)}
+            </p>
+          </ListCard>
+        )
+      }
       case 'trial': {
         const lead = leadList ? [...leadList.shown, ...leadList.dismissed].find((l) => l.key === m.trial.key) : undefined
         return <TrialCard key={m.key} trial={m.trial} history={settings.leadTrialHistory} entries={entries} today={today} lead={lead} choices={settings.leadChoices} />

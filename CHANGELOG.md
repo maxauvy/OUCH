@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Un petit mot pour reconnaître ce qui a été fait.** Quand un essai d'une semaine est terminé, sa carte ajoute une phrase douce (« Tu as mené cet essai à ton rythme. Chaque jour noté compte. ») si l'action a été notée au moins un jour. Dans la feuille « Pour toi », un message « Retour au calme » apparaît dans la semaine qui suit la fin d'une poussée, quand la douleur est revenue à son niveau habituel : il dit en combien de jours, et se ferme avec « Merci », sans revenir. Pas de score, pas de série, rien à perdre ; ces mots suivent le réglage « Suggestions » et ne s'affichent jamais pendant une poussée.
+
 ### Modifié
 - **Tendances : un bloc « Pour ma consultation », une courbe à calques, une frise.** En haut, les deux tuiles et le bouton du rapport laissent place à un cadre qui réunit ce qu'un médecin lit en premier sur la période choisie : douleur moyenne, poussées, zone la plus signalée, dernier changement de traitement, chacun avec son petit dessin, et le rapport en dessous. Un fait sans rien derrière (pas de zones suivies, trop peu de jours) n'est pas montré vide. Sous la courbe, des puces (Poussées, Traitement, Essais) allument ou éteignent ce qu'elle montre ; les essais d'une semaine s'y dessinent comme une fine bande. La carte « Poussées » est remplacée par une frise « Ce qui s'est passé » : poussées (avec pic et niveau habituel), changements de traitement et essais, datés, du plus récent au plus ancien.
 
