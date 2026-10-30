@@ -4,6 +4,11 @@ Les changements notables d'OUCH sont notés ici. Le format suit [Keep a Changelo
 
 Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/releases), et le site déployé affiche en pied de page la version qu'il exécute (avec le commit entre deux versions).
 
+## [Non publié]
+
+### Corrigé
+- **Un essai en cours seul reste accessible.** Quand un essai était la seule chose de la feuille « Pour toi », la ligne discrète n'apparaissait pas et sa carte n'était nulle part. La ligne dit maintenant « Un essai est en cours », avec « Voir ».
+
 ## [0.7.1] - 2026-10-29
 
 Une version de rangement : la page du jour et les Réglages se simplifient, l'application démarre plus vite, et le code qui calcule les écarts et les règles est unifié. Aucune saisie n'est touchée et aucun réglage ne change de sens ; les anciens interrupteurs de suggestions sont repris dans le nouveau.

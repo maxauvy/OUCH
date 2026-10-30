@@ -10,7 +10,8 @@
 //   second "later" is the last, it does not come back on the day's page (a lead
 //   stays in Trends, an invitation in Settings).
 // - A trial under way is a state, not a message: it is in the sheet, it is not
-//   counted, and a list with only a trial has no line.
+//   counted, and a list with only a trial has its own line ("a trial is under way"),
+//   so the card is never out of reach.
 // - The reminder to back up is not part of it: it keeps its own card.
 //
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
@@ -47,7 +48,7 @@ export type TodayMessage =
 export interface TodayMessages {
   /** In the order the sheet lists them. */
   items: TodayMessage[]
-  /** What the line says: the things that wait for an answer. A trial under way is not one. */
+  /** What the line counts: the things that wait for an answer. A trial under way is not one. */
   count: number
 }
 

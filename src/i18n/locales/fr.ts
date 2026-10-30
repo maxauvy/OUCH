@@ -1343,6 +1343,7 @@ const fr: Translations = {
   },
   todayList: {
     line: '{{n}} {{n:petite chose|petites choses}} pour toi',
+    trialLine: 'Un essai est en cours',
     see: 'Voir',
     sheetTitle: 'Pour toi',
     close: 'Fermer',

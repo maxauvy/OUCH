@@ -1338,6 +1338,7 @@ const en: Translations = {
   },
   todayList: {
     line: '{{n}} small {{n:thing|things}} for you',
+    trialLine: 'A trial is under way',
     see: 'See',
     sheetTitle: 'For you',
     close: 'Close',
