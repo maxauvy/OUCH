@@ -95,6 +95,7 @@ export function PainTrendChart({
   periodMeans = [],
   periodMeansLabel,
   setApart,
+  trialSpans = [],
 }: {
   /** Every entry: the mean of the range's first days reaches back before it. */
   entries: DailyEntry[]
@@ -111,6 +112,8 @@ export function PainTrendChart({
   /** Legend entry for the dashed means */
   periodMeansLabel?: string
   setApart?: ChartSpan
+  /** One-week trials, drawn as a thin band along the bottom */
+  trialSpans?: { from: string; to: string }[]
 }) {
   const t = usePalette()
   const i18n = useTranslation()
@@ -192,6 +195,19 @@ export function PainTrendChart({
                 ifOverflow="hidden"
               />
             )}
+            {trialSpans.map((s) => (
+              <ReferenceArea
+                key={s.from}
+                x1={daysBetween(from, s.from) - 0.5}
+                x2={daysBetween(from, s.to) + 0.5}
+                y1={0}
+                y2={0.5}
+                fill={t.brand}
+                fillOpacity={0.55}
+                stroke="none"
+                ifOverflow="hidden"
+              />
+            ))}
             {periodMeans.map((m) => (
               <ReferenceLine
                 key={m.from}
@@ -265,6 +281,12 @@ export function PainTrendChart({
           <li className="flex items-center gap-1.5">
             <span className="w-4 h-3 rounded-[3px]" style={{ background: t.brand, opacity: 0.14 }} aria-hidden />
             {i18n.trends.flareBand}
+          </li>
+        )}
+        {trialSpans.length > 0 && (
+          <li className="flex items-center gap-1.5">
+            <span className="w-4 h-[3px] rounded-full" style={{ background: t.brand, opacity: 0.55 }} aria-hidden />
+            {i18n.trends.trialBand}
           </li>
         )}
         {periodMeans.length > 0 && periodMeansLabel && (

@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- **Tendances : un bloc « Pour ma consultation », une courbe à calques, une frise.** En haut, les deux tuiles et le bouton du rapport laissent place à un cadre qui réunit ce qu'un médecin lit en premier sur la période choisie : douleur moyenne, poussées, zone la plus signalée, dernier changement de traitement, chacun avec son petit dessin, et le rapport en dessous. Un fait sans rien derrière (pas de zones suivies, trop peu de jours) n'est pas montré vide. Sous la courbe, des puces (Poussées, Traitement, Essais) allument ou éteignent ce qu'elle montre ; les essais d'une semaine s'y dessinent comme une fine bande. La carte « Poussées » est remplacée par une frise « Ce qui s'est passé » : poussées (avec pic et niveau habituel), changements de traitement et essais, datés, du plus récent au plus ancien.
+
 ### Corrigé
 - **Un essai en cours seul reste accessible.** Quand un essai était la seule chose de la feuille « Pour toi », la ligne discrète n'apparaissait pas et sa carte n'était nulle part. La ligne dit maintenant « Un essai est en cours », avec « Voir ».
 

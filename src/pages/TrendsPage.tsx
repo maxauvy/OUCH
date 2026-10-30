@@ -2,7 +2,8 @@ import { lazy, Suspense, useEffect, useId, useMemo, useRef, useState } from 'rea
 import { IconChevronRight, IconFileText } from '@tabler/icons-react'
 
 import { Footer } from '../components/layout/Footer'
-import { FlaresCard } from '../components/trends/FlaresCard'
+import { ConsultationCard } from '../components/trends/ConsultationCard'
+import { TimelineCard } from '../components/trends/TimelineCard'
 import { TrialsCard } from '../components/trends/TrialsCard'
 import { LeadsCard } from '../components/trends/LeadsCard'
 import { MedicationsCard } from '../components/trends/MedicationsCard'
@@ -20,12 +21,14 @@ import { useMedications } from '../hooks/useMedications'
 import { usePalette } from '../hooks/usePalette'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
-import { flareDayCount, flareDaySet, flaresOverlapping } from '../lib/flares'
+import { flareDaySet, flaresOverlapping } from '../lib/flares'
 import { remember } from '../lib/leadHints'
 import { restartTrial, startTrial, type LeadTrial } from '../lib/leadTrial'
 import { arrangeLeads, choiceFor, findLeads, leadFactors, PATTERN_MIN_DAYS, type Lead, type LeadChoice } from '../lib/leads'
 import { updateLeadsSeen } from '../lib/leadsSeenStore'
 import { formatPosology } from '../lib/medicationFormat'
+import { treatmentEvents } from '../lib/treatmentEvents'
+import { lastTreatmentEvent, timelineItems, trialSpans } from '../lib/trendsTimeline'
 import { weekdayProfile } from '../lib/weekdays'
 import { format, useLocale, useTranslation } from '../i18n'
 import { IndicatorsCard } from '../components/trends/IndicatorsCard'
@@ -41,6 +44,8 @@ export function TrendsPage() {
   const flares = useFlares()
   const { intlLocale, language } = useLocale()
   const [reporting, setReporting] = useState(false)
+  // What the curve shows besides the pain itself; a convenience of this visit, not a setting.
+  const [layers, setLayers] = useState({ flares: true, treatment: true, trials: true })
   const reportIds = useId()
   const reportButtonRef = useRef<HTMLButtonElement>(null)
   const returningFromReport = useRef(false)
@@ -67,7 +72,6 @@ export function TrendsPage() {
     return entries.filter((e) => e.date >= since)
   }, [entries, rangeIdx]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const avgPain = filtered.length ? filtered.reduce((s, e) => s + e.painLevel, 0) / filtered.length : null
   const weekdays = weekdayProfile(filtered)
 
   const leadList = useMemo(
@@ -107,6 +111,20 @@ export function TrendsPage() {
   const medicationsTracked = settings.enabledFactors.includes('medications')
   const zonesTracked = settings.enabledFactors.includes('painLocations')
   const flareDays = useMemo(() => flareDaySet(flares?.detectable ? flares.episodes : []), [flares])
+  const events = useMemo(() => (medicationsTracked && medications ? treatmentEvents(medications) : []), [medicationsTracked, medications])
+  const timeline = useMemo(
+    () =>
+      timelineItems({
+        from: rangeFrom,
+        to: today,
+        flares: flares?.detectable ? flares.episodes : [],
+        events,
+        history: settings.leadTrialHistory ?? [],
+        current: settings.leadTrial,
+        today,
+      }),
+    [rangeFrom, today, flares, events, settings.leadTrialHistory, settings.leadTrial]
+  )
   const doseMarkers: ChartMarker[] = medicationsTracked
     ? (medications ?? []).flatMap((m) =>
         m.regimen !== 'scheduled'
@@ -118,6 +136,15 @@ export function TrendsPage() {
             )
       )
     : []
+
+  // The chips only offer what there is to show in this range.
+  const layerChips = (
+    [
+      ['flares', i18n.trends.layerFlares, timeline.some((i) => i.kind === 'flare')],
+      ['treatment', i18n.trends.layerTreatment, doseMarkers.length > 0],
+      ['trials', i18n.trends.layerTrials, timeline.some((i) => i.kind === 'trial')],
+    ] as const
+  ).flatMap(([key, label, there]) => (there ? [[key, label] as const] : []))
 
   if (reporting) {
     return (
@@ -139,6 +166,15 @@ export function TrendsPage() {
       <h1 className="text-title font-semibold px-1">{i18n.trends.title}</h1>
 
       {entries.length > 0 && (
+        <ConsultationCard
+          entries={filtered}
+          from={rangeFrom}
+          to={today}
+          episodes={flaresOverlapping(flares?.episodes ?? [], rangeFrom, today)}
+          flaresApply={!!flares?.detectable}
+          zonesTracked={zonesTracked}
+          lastTreatment={lastTreatmentEvent(events, today)}
+          action={
         <button
           ref={reportButtonRef}
           data-tour="report"
@@ -166,6 +202,8 @@ export function TrendsPage() {
           </span>
           <IconChevronRight size={20} aria-hidden style={{ color: t.inkMuted }} />
         </button>
+          }
+        />
       )}
 
       <div className="flex gap-2 px-1">
@@ -192,25 +230,6 @@ export function TrendsPage() {
         </Card>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="flex flex-col items-center py-4">
-              <span className="text-display font-bold" style={{ color: t.ink }}>
-                {filtered.length}
-              </span>
-              <span className="text-caption" style={{ color: t.inkMuted }}>
-                {filtered.length === 1 ? i18n.trends.daysTrackedOne : i18n.trends.daysTrackedOther}
-              </span>
-            </Card>
-            <Card className="flex flex-col items-center py-4">
-              <span className="text-display font-bold" style={{ color: t.ink }}>
-                {avgPain != null ? avgPain.toFixed(1) : '—'}
-              </span>
-              <span className="text-caption" style={{ color: t.inkMuted }}>
-                {i18n.trends.avgPain}
-              </span>
-            </Card>
-          </div>
-
           {entries.length < PATTERN_MIN_DAYS && (
             <Card>
               <p className="text-control" style={{ color: t.inkMuted }}>
@@ -225,18 +244,30 @@ export function TrendsPage() {
               entries={entries ?? []}
               from={rangeFrom}
               to={today}
-              markers={doseMarkers}
-              flares={flares?.episodes}
+              markers={layers.treatment ? doseMarkers : []}
+              flares={layers.flares ? flares?.episodes : undefined}
+              trialSpans={layers.trials ? trialSpans(timeline) : []}
               showMean={rangeDays !== 7}
             />
+            {layerChips.length > 1 && (
+              <div role="group" aria-label={i18n.trends.layersLabel} className="flex flex-wrap gap-2 mt-3">
+                {layerChips.map(([key, label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-pressed={layers[key]}
+                    onClick={() => setLayers((l) => ({ ...l, [key]: !l[key] }))}
+                    className="rounded-[var(--radius-control)] px-3.5 py-1.5 text-caption font-semibold"
+                    style={{ background: layers[key] ? t.brand : t.brandSoft, color: layers[key] ? 'var(--color-on-brand)' : t.brand }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
           </Card>
 
-          {flares?.detectable && (
-            <FlaresCard
-              episodes={flaresOverlapping(flares.episodes, rangeFrom, today)}
-              days={flareDayCount(flares.episodes, rangeFrom, today)}
-            />
-          )}
+          {timeline.length > 0 && <TimelineCard items={timeline} />}
 
           {zonesTracked && (
             <>
