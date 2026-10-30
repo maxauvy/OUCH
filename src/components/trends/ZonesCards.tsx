@@ -220,10 +220,13 @@ export function ZonesWeeksCard({ entries, today, flareDays }: { entries: DayZone
     <Card>
       <SectionTitle>{t.zonesWeeksTitle}</SectionTitle>
       <p className="mb-3 text-control leading-snug">{t.zonesWeeksIntro}</p>
-      <table className="w-full border-separate" style={{ borderSpacing: '2px 4px' }}>
+      <table className="w-full table-fixed border-separate" style={{ borderSpacing: '2px 4px' }}>
+        <colgroup>
+          <col style={{ width: 124 }} />
+        </colgroup>
         <tbody>
           <tr>
-            <th scope="row" className="w-[124px] text-left text-caption font-normal" style={{ color: FLARE_INK }}>
+            <th scope="row" className="text-left text-caption font-normal" style={{ color: FLARE_INK }}>
               {t.zonesWeeksFlareRow}
             </th>
             {strips.weeks.map((w) => (
