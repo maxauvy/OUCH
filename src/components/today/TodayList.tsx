@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconAdjustmentsHorizontal, IconCalendarWeek, IconLeaf, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
+import { IconAdjustmentsHorizontal, IconCalendarMonth, IconCalendarWeek, IconLeaf, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { LoggedEntry, Settings } from '../../db/types'
 import { useLeadList } from '../../hooks/useLeadList'
@@ -186,6 +186,25 @@ export function TodayList({
             <p className="text-body mt-0.5">
               {format(lh.calmBody, { start: day(m.episode.start), end: day(m.episode.end), n: m.episode.recoveryDays ?? 1 }, language)}
             </p>
+          </ListCard>
+        )
+      }
+      case 'month': {
+        const s = m.summary
+        const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMM', { locale: dateFnsLocale })
+        const month = formatDate(new Date(s.first + 'T00:00:00'), 'LLLL', { locale: dateFnsLocale })
+        return (
+          <ListCard key={m.key} icon={IconCalendarMonth} label={format(lh.monthLabel, { month }, language)} actions={[{ label: lh.monthThanks, primary: true, onClick: () => done(m.key) }]}>
+            <p className="text-body mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
+              {lh.monthIntro}
+            </p>
+            <ul className="text-body mt-1.5 flex flex-col gap-1">
+              {s.trials > 0 && <li>{format(lh.monthTrials, { n: s.trials }, language)}</li>}
+              {s.softestWeek && (
+                <li>{format(lh.monthSoftest, { start: day(s.softestWeek.start), end: day(s.softestWeek.end), mean: nf.format(s.softestWeek.mean) }, language)}</li>
+              )}
+              {s.back && <li>{format(lh.monthBack, { flares: s.back.flares, days: s.back.days }, language)}</li>}
+            </ul>
           </ListCard>
         )
       }

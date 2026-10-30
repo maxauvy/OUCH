@@ -1207,6 +1207,12 @@ export interface Translations {
     calmLabel: string
     calmBody: string
     calmThanks: string
+    monthLabel: string
+    monthIntro: string
+    monthTrials: string
+    monthSoftest: string
+    monthBack: string
+    monthThanks: string
     trialKeep: string
     trialContinue: string
     trialEnd: string

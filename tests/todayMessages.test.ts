@@ -16,7 +16,7 @@ const base: TodayMessagesInput = {
   today: TODAY,
   quiet: false,
   later: undefined,
-  allow: { leads: true, weekly: true, trials: true, calm: true },
+  allow: { leads: true, weekly: true, trials: true, calm: true, month: true },
   leads: [],
   leadChoices: undefined,
   tried: [],
@@ -24,6 +24,7 @@ const base: TodayMessagesInput = {
   repeat: null,
   invite: false,
   calm: null,
+  month: null,
   trial: undefined,
 }
 const kinds = (r: { items: { key: string }[] }) => r.items.map((i) => i.key)
@@ -67,7 +68,7 @@ test('a lead already answered, or under trial, is not brought again', () => {
 })
 
 test('suggestions switched off stay out, a trial under way stays', () => {
-  const r = todayMessages({ ...base, allow: { leads: false, weekly: false, trials: false, calm: false }, leads: [lead('sleep')], weekly: { kind: 'sleep' }, repeat: trial(), trial: trial() })
+  const r = todayMessages({ ...base, allow: { leads: false, weekly: false, trials: false, calm: false, month: false }, leads: [lead('sleep')], weekly: { kind: 'sleep' }, repeat: trial(), trial: trial() })
   assert.deepEqual(kinds(r), ['trial'])
 })
 
@@ -133,6 +134,14 @@ test('no word for a flare that is going on, whose end is unknown, too old, or wi
 
 test('the word of calm is not brought when suggestions are off, nor on a hard day', () => {
   const calm = episode('2026-10-24')
-  assert.deepEqual(kinds(todayMessages({ ...base, calm, allow: { ...base.allow, calm: false } })), [])
+  assert.deepEqual(kinds(todayMessages({ ...base, calm, allow: { ...base.allow, calm: false, month: false } })), [])
   assert.deepEqual(kinds(todayMessages({ ...base, calm, quiet: true })), [])
+})
+
+test('the summary of the month is listed once, away when thanked, and not brought when suggestions are off or on a hard day', () => {
+  const month = { month: '2026-09', first: '2026-09-01', last: '2026-09-30', trials: 2, softestWeek: null, back: { flares: 1, days: 2 } }
+  assert.deepEqual(kinds(todayMessages({ ...base, month })), ['month:2026-09'])
+  assert.deepEqual(kinds(todayMessages({ ...base, month, later: markDone(undefined, 'month:2026-09') })), [])
+  assert.deepEqual(kinds(todayMessages({ ...base, month, allow: { ...base.allow, month: false } })), [])
+  assert.deepEqual(kinds(todayMessages({ ...base, month, quiet: true })), [])
 })
