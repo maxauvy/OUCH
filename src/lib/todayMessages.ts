@@ -19,6 +19,7 @@
 import type { FlareEpisode } from './flares.ts'
 import type { Lead, LeadChoices } from './leads.ts'
 import type { LeadTrial } from './leadTrial.ts'
+import type { MonthSummary } from './monthSummary.ts'
 import type { WeeklyFinding } from './weeklySentence.ts'
 import { daysBetween, shiftISO } from './dates.ts'
 
@@ -48,6 +49,7 @@ export type TodayMessage =
   | { kind: 'repeat'; key: string; trial: LeadTrial }
   | { kind: 'invite'; key: 'invite' }
   | { kind: 'calm'; key: string; episode: FlareEpisode }
+  | { kind: 'month'; key: string; summary: MonthSummary }
   | { kind: 'trial'; key: 'trial'; trial: LeadTrial }
 
 export interface TodayMessages {
@@ -63,7 +65,7 @@ export interface TodayMessagesInput {
   quiet: boolean
   later: MessageLaterMap | undefined
   /** Which suggestions the person lets through. */
-  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean }
+  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean; month: boolean }
   /** The leads Trends shows by default (`LeadList.shown`). */
   leads: Lead[]
   leadChoices: LeadChoices | undefined
@@ -77,6 +79,8 @@ export interface TodayMessagesInput {
   invite: boolean
   /** A flare that just ended and whose way back to the usual level is known (`recentReturn`). */
   calm: FlareEpisode | null
+  /** The summary of the month that just ended (`monthSummary`). */
+  month: MonthSummary | null
   /** The trial under way, or just over and waiting to be closed. */
   trial: LeadTrial | undefined
 }
@@ -95,7 +99,7 @@ export function recentReturn(episodes: readonly FlareEpisode[], today: string): 
 }
 
 export function todayMessages(input: TodayMessagesInput): TodayMessages {
-  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, trial } = input
+  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, trial } = input
   if (quiet) return { items: [], count: 0 }
   const waiting = (key: string) => !isAway(later?.[key], today)
 
@@ -113,6 +117,8 @@ export function todayMessages(input: TodayMessagesInput): TodayMessages {
   if (invite) items.push({ kind: 'invite', key: 'invite' })
   const calmKey = calm ? `calm:${calm.start}` : ''
   if (allow.calm && calm && waiting(calmKey)) items.push({ kind: 'calm', key: calmKey, episode: calm })
+  const monthKey = month ? `month:${month.month}` : ''
+  if (allow.month && month && waiting(monthKey)) items.push({ kind: 'month', key: monthKey, summary: month })
 
   const count = items.length
   if (trial) items.push({ kind: 'trial', key: 'trial', trial })

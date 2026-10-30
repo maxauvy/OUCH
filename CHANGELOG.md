@@ -7,6 +7,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Ajouté
+- **Un résumé calme du mois qui vient de finir.** Dans les 7 premiers jours du mois, la feuille « Pour toi » propose « Ton mois de septembre » : les essais d'une semaine menés jusqu'au bout, la semaine la plus douce (celles de sept jours à partir du 1er, avec au moins 5 jours notés, et seulement s'il y en a deux) et, après les poussées terminées dans le mois, le nombre de jours qu'il a fallu pour revenir au niveau habituel. Une ligne sans rien derrière n'est pas montrée, et le résumé demande au moins deux lignes et 10 jours notés dans le mois. « Merci » le ferme pour de bon. Il suit le réglage « Suggestions » et se tait pendant une poussée.
 - **Un petit mot pour reconnaître ce qui a été fait.** Quand un essai d'une semaine est terminé, sa carte ajoute une phrase douce (« Tu as mené cet essai à ton rythme. Chaque jour noté compte. ») si l'action a été notée au moins un jour. Dans la feuille « Pour toi », un message « Retour au calme » apparaît dans la semaine qui suit la fin d'une poussée, quand la douleur est revenue à son niveau habituel : il dit en combien de jours, et se ferme avec « Merci », sans revenir. Pas de score, pas de série, rien à perdre ; ces mots suivent le réglage « Suggestions » et ne s'affichent jamais pendant une poussée.
 
 ### Modifié
