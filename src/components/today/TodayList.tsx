@@ -187,10 +187,10 @@ export function TodayList({
 
   return (
     <>
-      {messages.count > 0 && (
+      {messages.items.length > 0 && (
         <div className="px-1 flex items-center gap-2 text-control" style={{ color: 'var(--color-ink-muted)' }}>
           <span aria-hidden className="w-2 h-2 rounded-full shrink-0" style={{ background: 'var(--color-brand)' }} />
-          <p className="flex-1">{format(t.todayList.line, { n: messages.count }, language)}</p>
+          <p className="flex-1">{messages.count > 0 ? format(t.todayList.line, { n: messages.count }, language) : t.todayList.trialLine}</p>
           <button type="button" onClick={() => setOpen(true)} className="font-semibold underline underline-offset-2 min-h-11 px-1" style={{ color: 'var(--color-brand)' }}>
             {t.todayList.see}
           </button>

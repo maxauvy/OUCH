@@ -48,7 +48,7 @@ test('the sheet lists the Sunday sentence, then the leads, a trial to repeat, th
   assert.equal(r.count, 5)
 })
 
-test('a trial under way is listed but not counted, and alone it makes no line', () => {
+test('a trial under way is listed but not counted, and alone it is not a count', () => {
   const r = todayMessages({ ...base, trial: trial() })
   assert.deepEqual(kinds(r), ['trial'])
   assert.equal(r.count, 0)

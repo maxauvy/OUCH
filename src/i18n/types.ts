@@ -1188,6 +1188,8 @@ export interface Translations {
   todayList: {
     /** `{{n}} {{n:thing|things}}`: how many things wait. */
     line: string
+    /** The line when only a trial under way is in the list (nothing waits for an answer). */
+    trialLine: string
     see: string
     sheetTitle: string
     close: string
