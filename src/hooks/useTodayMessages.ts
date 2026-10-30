@@ -7,8 +7,9 @@ import { flareUnderWay } from '../lib/hardDays'
 import { shouldShowInvite } from '../lib/indicatorInvite'
 import { NO_LEADS_SEEN, trialToRepeat } from '../lib/leadHints'
 import { triedKeys } from '../lib/leadTrial'
-import { todayMessages, type TodayMessages } from '../lib/todayMessages'
+import { recentReturn, todayMessages, type TodayMessages } from '../lib/todayMessages'
 import { weeklyFinding } from '../lib/weeklySentence'
+import { useFlares } from './useFlares'
 import { useLeadList } from './useLeadList'
 import { useLoggedEntries } from './useEntries'
 import { useSettings } from './useSettings'
@@ -19,6 +20,7 @@ export function useTodayMessages(): TodayMessages | null {
   const leadList = useLeadList()
   const settings = useSettings()
   const earlyAccess = useEarlyAccess()
+  const flares = useFlares()
   const today = todayISO()
 
   return useMemo(() => {
@@ -29,7 +31,7 @@ export function useTodayMessages(): TodayMessages | null {
       today,
       quiet: flare,
       later: settings.leadsSeen?.later,
-      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn },
+      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled },
       leads: leadList.shown,
       leadChoices: settings.leadChoices,
       tried: triedKeys(settings.leadTrial, settings.leadTrialHistory),
@@ -44,7 +46,8 @@ export function useTodayMessages(): TodayMessages | null {
         quiet: flare,
       }),
       invite: !IS_DEMO && shouldShowInvite(settings, { earlyAccess, today, quiet: flare }),
+      calm: recentReturn(flares?.episodes ?? [], today),
       trial: settings.leadTrial,
     })
-  }, [logged, leadList, settings, earlyAccess, today])
+  }, [logged, leadList, settings, earlyAccess, today, flares])
 }

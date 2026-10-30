@@ -1203,6 +1203,10 @@ export interface Translations {
     trialSame: string
     trialOther: string
     trialKept: string
+    trialWords: string
+    calmLabel: string
+    calmBody: string
+    calmThanks: string
     trialKeep: string
     trialContinue: string
     trialEnd: string

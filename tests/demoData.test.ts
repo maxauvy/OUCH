@@ -170,7 +170,7 @@ test('with a calm end the day is outside a flare, a lead is brought on most days
     assert.equal(flareUnderWay(logged(h), end), false, end)
     assert.equal(h.entries.at(-1)?.painLevel, 4)
     const { shown } = arrangeLeads(findLeads(recent(h, end)), h.settings.leadChoices)
-    const list = todayMessages({ today: end, quiet: false, later: undefined, allow: { leads: true, weekly: false, trials: false }, leads: shown, leadChoices: h.settings.leadChoices, tried: [], weekly: null, repeat: null, invite: false, trial: undefined })
+    const list = todayMessages({ today: end, quiet: false, later: undefined, allow: { leads: true, weekly: false, trials: false, calm: false }, leads: shown, leadChoices: h.settings.leadChoices, tried: [], weekly: null, repeat: null, invite: false, calm: null, trial: undefined })
     if (list.items.some((m) => m.kind === 'lead')) brought++
     if (new Date(`${end}T12:00:00Z`).getUTCDay() === 0) {
       sundays++

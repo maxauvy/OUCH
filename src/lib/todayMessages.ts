@@ -16,10 +16,14 @@
 //
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
+import type { FlareEpisode } from './flares.ts'
 import type { Lead, LeadChoices } from './leads.ts'
 import type { LeadTrial } from './leadTrial.ts'
 import type { WeeklyFinding } from './weeklySentence.ts'
-import { shiftISO } from './dates.ts'
+import { daysBetween, shiftISO } from './dates.ts'
+
+/** A flare is still worth a word of recognition this many days after its last day. */
+export const CALM_DAYS = 7
 
 /** How long a message set aside stays away. */
 export const LATER_DAYS = 7
@@ -43,6 +47,7 @@ export type TodayMessage =
   | { kind: 'lead'; key: string; lead: Lead }
   | { kind: 'repeat'; key: string; trial: LeadTrial }
   | { kind: 'invite'; key: 'invite' }
+  | { kind: 'calm'; key: string; episode: FlareEpisode }
   | { kind: 'trial'; key: 'trial'; trial: LeadTrial }
 
 export interface TodayMessages {
@@ -58,7 +63,7 @@ export interface TodayMessagesInput {
   quiet: boolean
   later: MessageLaterMap | undefined
   /** Which suggestions the person lets through. */
-  allow: { leads: boolean; weekly: boolean; trials: boolean }
+  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean }
   /** The leads Trends shows by default (`LeadList.shown`). */
   leads: Lead[]
   leadChoices: LeadChoices | undefined
@@ -70,6 +75,8 @@ export interface TodayMessagesInput {
   repeat: LeadTrial | null
   /** The invitation to follow new indicators shows today (`shouldShowInvite`). */
   invite: boolean
+  /** A flare that just ended and whose way back to the usual level is known (`recentReturn`). */
+  calm: FlareEpisode | null
   /** The trial under way, or just over and waiting to be closed. */
   trial: LeadTrial | undefined
 }
@@ -81,8 +88,14 @@ export function isAway(later: MessageLater | undefined, today: string): boolean 
   return later.until !== undefined && today < later.until
 }
 
+/** The last flare that is over, when it ended within `CALM_DAYS` and the pain came back to the usual level at least a day later. */
+export function recentReturn(episodes: readonly FlareEpisode[], today: string): FlareEpisode | null {
+  const over = episodes.filter((e) => !e.ongoing && !e.endUnknown && (e.recoveryDays ?? 0) >= 1 && daysBetween(e.end, today) <= CALM_DAYS)
+  return over.at(-1) ?? null
+}
+
 export function todayMessages(input: TodayMessagesInput): TodayMessages {
-  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, trial } = input
+  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, trial } = input
   if (quiet) return { items: [], count: 0 }
   const waiting = (key: string) => !isAway(later?.[key], today)
 
@@ -98,6 +111,8 @@ export function todayMessages(input: TodayMessagesInput): TodayMessages {
   const repeatKey = repeat ? `repeat:${repeat.key}:${repeat.end}` : ''
   if (allow.trials && repeat && waiting(repeatKey)) items.push({ kind: 'repeat', key: repeatKey, trial: repeat })
   if (invite) items.push({ kind: 'invite', key: 'invite' })
+  const calmKey = calm ? `calm:${calm.start}` : ''
+  if (allow.calm && calm && waiting(calmKey)) items.push({ kind: 'calm', key: calmKey, episode: calm })
 
   const count = items.length
   if (trial) items.push({ kind: 'trial', key: 'trial', trial })
