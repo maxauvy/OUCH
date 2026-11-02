@@ -10,13 +10,27 @@ OUCH est un carnet de douleur pour la fibromyalgie et les autres douleurs chroni
 
 Les carnets de suivi existants (Pain Diary, MyPainDiary…) sont fermés, ou pénibles à utiliser les jours où l'on n'en peut plus. OUCH fait le choix inverse : de gros boutons, presque rien à remplir, et aucune donnée qui quitte l'appareil sans que la personne l'ait décidé.
 
+## Pourquoi l'installer
+
+**Suivre, en moins d'une minute.** Seule la douleur suffit pour qu'une journée compte ; le reste (sommeil, zones douloureuses, traitements, météo) est facultatif, et les jours les plus durs l'écran s'allège. Installée sur l'écran d'accueil, l'app s'ouvre en un geste et marche sans réseau. Pas de compte : le journal reste sur le téléphone.
+
+**Comprendre, sans rien promettre.** Les notes finissent par raconter des choses : ce qui précède une poussée, ce qui revient les bons jours. OUCH montre des rapprochements, jamais des causes : la personne garde ce qui lui parle et écarte le reste. Elle arrive en consultation avec un rapport qui dit ce qui s'est passé, au lieu de chercher dans sa mémoire.
+
+**Soulager, par les gestes qui vont bien.** On note ce qui a aidé (une marche courte, un bain chaud, des étirements…). On peut essayer une de ces actions pendant une semaine et mettre côte à côte les jours avec et sans. Quand une poussée se termine, l'app dit en combien de jours la douleur est revenue à son niveau habituel. Pas de score, pas de série, rien à perdre.
+
+OUCH est libre et gratuit, et c'est un carnet, pas un avis médical : il ne pose pas de diagnostic et ne recommande aucun traitement.
+
 ## Ce qu'on peut faire
 
 ### Noter sa journée
 
 Seule la douleur, de 0 à 10, suffit pour qu'une journée compte. On peut y ajouter la fatigue, le sommeil, le stress, le brouillard mental, l'humeur, l'activité, les zones douloureuses, la météo du jour (par géolocalisation ou à la main) et, si on le souhaite, le cycle. On note aussi ce qui a aidé : une marche courte, un bain chaud, de la méditation… Tout ce dont on ne se sert pas peut être désactivé dans les réglages.
 
-À la première ouverture, un assistant propose de préparer le suivi : maladies suivies, prénom, traitements, rappel quotidien. Tout est facultatif, on peut passer à tout moment et le relancer depuis les réglages.
+« Où as-tu mal ? » se saisit sur une silhouette, de face et de dos : on touche une grande région, puis on précise la partie et le côté, gauche ou droite (24 zones, dont les 19 régions que le médecin connaît).
+
+À la première ouverture, un assistant propose de préparer le suivi : maladies suivies, prénom, traitements, rappel quotidien. Selon les maladies indiquées, il range les indicateurs en trois niveaux (recommandés, utiles aussi, tous les autres) ; de nouveaux indicateurs (raideur au réveil, réveils nocturnes, gêne dans les gestes, mal de tête…) sont proposés en accès anticipé, non validés. Tout est facultatif, on peut passer à tout moment et le relancer depuis les réglages.
+
+Les jours de poussée, l'écran s'allège et l'app ne propose rien : seulement un mot bienveillant. Ce qui attend la personne les autres jours (une piste, un essai en cours, un bilan) tient en une ligne discrète, « 2 petites choses pour toi », qui ouvre une feuille.
 
 ### Suivre ses traitements
 
@@ -30,7 +44,7 @@ Les mesures du jour se résument en une image, du ciel dégagé à l'orage, avec
 
 Le journal est un calendrier du mois, coloré selon la météo de chaque jour. On peut revenir corriger n'importe quelle journée.
 
-Tendances affiche la courbe de douleur sur 7, 30 ou 90 jours, ou depuis le début, avec sa moyenne sur 7 jours. On y voit aussi les jours de la semaine où ça va le mieux ou le moins bien, ce que ses notes laissent voir (« ce que tes notes racontent » : le sommeil, le stress, l'activité de la veille et ce qui a aidé, une piste à la fois, avec les deux moyennes et le nombre de jours), et l'usage des traitements. Ce sont des associations relevées dans ses propres données, pas des preuves : l'app le dit. La personne peut garder une piste pour sa consultation, l'écarter, ou essayer pendant une semaine une action qu'elle a elle-même notée ; l'app peut aussi lui amener une piste sur la page du jour, la résumer le dimanche en une phrase, ou le faire discrètement par un point sur l'onglet (chacun se coupe dans Réglages, et rien de cela n'apparaît pendant une poussée).
+Tendances commence par un bloc « Pour ma consultation » (douleur moyenne, poussées, zone la plus signalée, dernier changement de traitement). Viennent ensuite la courbe de douleur sur 7, 30 ou 90 jours, ou depuis le début, avec sa moyenne sur 7 jours et des calques (poussées, traitements, essais), une frise « Ce qui s'est passé », des cartes sur les zones douloureuses (où, pendant les poussées, semaine par semaine) et un bilan calme du mois qui vient de finir. On y voit aussi les jours de la semaine où ça va le mieux ou le moins bien, ce que ses notes laissent voir (« ce que tes notes racontent » : le sommeil, le stress, l'activité de la veille et ce qui a aidé, une piste à la fois, avec les deux moyennes et le nombre de jours), et l'usage des traitements. Ce sont des associations relevées dans ses propres données, pas des preuves : l'app le dit. La personne peut garder une piste pour sa consultation, l'écarter, ou essayer pendant une semaine une action qu'elle a elle-même notée ; l'app peut aussi lui amener une piste sur la page du jour, la résumer le dimanche en une phrase, ou le faire discrètement par un point sur l'onglet (tout cela se coupe d'un seul réglage, « Suggestions », et rien n'apparaît pendant une poussée). Quand un essai ou une poussée se termine, l'app le reconnaît en une phrase douce.
 
 ### Un rapport pour le médecin
 
@@ -40,14 +54,15 @@ Le rapport décrit les données sans les interpréter, et ses seuils citent leur
 
 ### Expliquer à son enfant
 
-L'onglet Enfants est fait pour être montré à un enfant. Il raconte la météo du jour avec des mots simples (« aujourd'hui, le ciel de maman est un peu voilé »), propose des idées pour aider, et explique la maladie (fibromyalgie, polyarthrite rhumatoïde, spondyloarthrite, endométriose, migraine, lombalgie, sclérose en plaques, douleur myofasciale) pour trois âges : 4–7, 8–12 et 13–17 ans. On choisit maman ou papa.
+L'onglet Enfants est fait pour être montré à un enfant. Il raconte la météo du jour avec des mots simples (« aujourd'hui, le ciel de maman est un peu voilé »), propose des idées pour aider, et explique la maladie (fibromyalgie, polyarthrite rhumatoïde, spondyloarthrite, rhumatisme psoriasique, endométriose, migraine, lombalgie, sclérose en plaques, douleur myofasciale) pour trois âges : 4–7, 8–12 et 13–17 ans. On choisit maman ou papa.
 
 ### Et aussi
 
 - Français et anglais, au choix à la première ouverture, modifiable à tout moment.
-- Un design sobre centré sur les chiffres, et un mode sombre.
+- Une apparence lumineuse (que l'on peut couper dans Réglages) et un mode sombre.
+- Un verrou par code à quatre chiffres, facultatif, qui cache l'écran.
 - L'app s'installe sur l'écran d'accueil (mobile ou ordinateur) et marche hors connexion après la première ouverture. Le texte suit la taille de police réglée sur le téléphone.
-- Les données restent dans le navigateur (IndexedDB). Pour sauvegarder ou changer d'appareil, on exporte un fichier chiffré avec un mot de passe de son choix (AES-256-GCM, dans le navigateur), qu'on réimporte ensuite ; un export CSV (deux fichiers en clair : le journal et les prises) sert à l'analyse, pas à la restauration. L'app rappelle de faire une sauvegarde quand il y a quelque chose à perdre, et demande au navigateur de ne pas effacer les données.
+- Les données restent dans le navigateur (IndexedDB). Pour sauvegarder ou changer d'appareil, on exporte un fichier chiffré avec un mot de passe de son choix (AES-256-GCM, dans le navigateur), qu'on réimporte ensuite ; un export CSV (deux fichiers en clair : le journal et les prises) sert à l'analyse, pas à la restauration. L'app rappelle de faire une sauvegarde quand il y a quelque chose à perdre, et demande au navigateur de ne pas effacer les données. En accès anticipé, une sauvegarde automatique envoie ce même fichier chiffré vers un Dropbox.
 
 ## Essayer avec des données de démo
 
@@ -114,7 +129,7 @@ La version détaillée, avec ce que chaque service extérieur reçoit, est dans 
 
 OUCH n'est pas un dispositif médical : il décrit ce que la personne note, sans poser de diagnostic ni recommander de traitement, et ne remplace pas un avis médical.
 
-Une plaquette de deux pages ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.7.2/OUCH-plaquette-soignants-v0.7.2.pdf)), une note méthodologique qui détaille chaque calcul, seuil et source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.7.2/OUCH-note-methodologique-v0.7.2.pdf)), et un formulaire de retour clinique sont rassemblés dans [`docs/soignants/`](docs/soignants/README.md).
+Une plaquette de deux pages ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.8.0/OUCH-plaquette-soignants-v0.8.0.pdf)), une note méthodologique qui détaille chaque calcul, seuil et source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.8.0/OUCH-note-methodologique-v0.8.0.pdf)), et un formulaire de retour clinique sont rassemblés dans [`docs/soignants/`](docs/soignants/README.md).
 
 ## Contribuer
 

@@ -3,7 +3,7 @@
 2 languages (fr, en) x 2 palettes, from flyer.<lang>.html and plaquette.<lang>.html.
 
   python3 build.py            # build/ (HTML per palette) and pdf/ (the PDFs)
-  python3 build.py --previews # also apercus/*.png (needs `npm i --no-save playwright` at the repo root)
+  python3 build.py --previews # also apercus/*.png (needs `npm i --no-save playwright` at the repo root; uses the installed Chrome when Playwright has no browser of its own)
 
 Needs Google Chrome and a network connection (Google Fonts, Material Symbols).
 The sources hold the copy and the layout; a palette is only four colours injected after the page's own <style>.
