@@ -6,7 +6,7 @@ Ce document décrit ce qu'il faut configurer **à la main**, une fois, pour le d
 
 ## 1. Créer le site GoatCounter
 
-Sur <https://www.goatcounter.com> (hébergé, gratuit pour un usage non commercial) : créer un site, code au choix (ex. `ouch`). L'endpoint d'envoi est alors `https://CODE.goatcounter.com/count`.
+Sur <https://www.goatcounter.com> (hébergé, gratuit pour un usage non commercial) : créer un site avec le code `ouch`. L'endpoint d'envoi est alors `https://ouch.goatcounter.com/count`.
 
 ## 2. Régler la collecte (Settings → Data collection)
 
@@ -26,11 +26,11 @@ Le tableau de bord reste privé. Les chiffres se lisent dans **Événements** (c
 
 ## 3. Brancher le déploiement
 
-Dans le dépôt GitHub officiel, **Settings → Secrets and variables → Actions → Variables** (des variables, pas des secrets : elles finissent dans le bundle public) :
+Dans le dépôt GitHub officiel (variables **de dépôt**, pas celles d'un « environment »), **Settings → Secrets and variables → Actions → Variables** (des variables, pas des secrets : elles finissent dans le bundle public) :
 
 | Variable | Valeur |
 |---|---|
-| `AUDIENCE_URL` | `https://CODE.goatcounter.com/count` |
+| `AUDIENCE_URL` | `https://ouch.goatcounter.com/count` |
 | `AUDIENCE_HOST` | `maxauvy.github.io` |
 
 `.github/workflows/deploy.yml` les passe au build sous les noms `VITE_AUDIENCE_URL` et `VITE_AUDIENCE_HOST`, **uniquement** quand le dépôt est `maxauvy/OUCH`. La politique de sécurité du contenu (`connect-src`) ajoute alors l'origine de GoatCounter ; sans ces variables, elle n'y figure pas.
