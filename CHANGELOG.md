@@ -6,10 +6,16 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.8.0] - 2026-11-02
+
+Une version qui dit pourquoi installer OUCH (suivre, comprendre, soulager par les gestes qui vont bien), avec une documentation et des captures remises à jour, et une mesure d'audience anonyme, une fois par semaine. Aucune saisie n'est touchée et aucun réglage ne change de sens.
+
 ### Ajouté
 - **Une mesure d'audience anonyme, une fois par semaine.** Pour savoir combien d'installations sont utilisées, OUCH envoie, au plus une fois par semaine, un signal « actif cette semaine » (le numéro de la semaine, et si l'app est installée ou ouverte dans un navigateur) à GoatCounter. Aucune donnée de santé, aucun identifiant, aucun cookie, aucun script tiers : c'est l'app elle-même qui émet la requête. Elle est active par défaut et se coupe dans Réglages (« Mesure d'audience anonyme ») ; elle ne part pas non plus si le navigateur envoie Do Not Track ou Global Privacy Control, en démo, ni hors du site officiel. Le détail est dans « À propos » et dans `PRIVACY.md`.
 
 ### Modifié
+- **La documentation est refaite pour la 0.8.0.** Le README (français et anglais) s'ouvre sur « Pourquoi l'installer » : suivre en moins d'une minute, comprendre sans rien promettre, soulager par les gestes qui vont bien. Ses sections décrivent maintenant ce que l'app fait aujourd'hui : la silhouette de « Où as-tu mal ? », les indicateurs proposés selon les maladies, la ligne « petites choses pour toi », le bloc « Pour ma consultation » de Tendances, le verrou par code, la sauvegarde automatique en accès anticipé. Les captures de la plaquette pour les soignants et du flyer pour les patients, en français et en anglais, sont refaites depuis le mode démo ; le dictionnaire des données décrit le réglage « Suggestions » et l'invitation aux indicateurs, et le nombre de tests automatiques (475) est le même partout. La plaquette et la note méthodologique portent la v0.8.0.
+- **La description du site** (partage et recherche) parle des gestes qui soulagent, à la place de la météo du jour.
 - **La présentation de la vie privée tient compte de ce signal** (accueil, Réglages, `PRIVACY.md`, README, cadre réglementaire, dictionnaire des données). Le journal, lui, ne quitte toujours l'appareil que par un geste de la personne.
 
 ## [0.7.2] - 2026-10-30
