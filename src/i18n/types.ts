@@ -1152,6 +1152,28 @@ export interface Translations {
       denied: string
       /** `{{provider}}` */
       linkFailed: string
+      /** The form for a server of one's own (WebDAV). Shown on the password step. */
+      server: {
+        title: string
+        text: string
+        urlLabel: string
+        urlPlaceholder: string
+        userLabel: string
+        passwordLabel: string
+        passwordNote: string
+        test: string
+        testing: string
+        ok: string
+        /** What the test found, by problem. `{{detail}}` is the technical detail. */
+        problems: { invalid: string; insecure: string; unreachable: string; auth: string; notfound: string; refused: string }
+        helpTitle: string
+        helpIntro: string
+        /** `{{origin}}` */
+        helpSteps: string
+        helpApache: string
+        helpNginx: string
+        helpNote: string
+      }
     }
     restorePanel: {
       title: string

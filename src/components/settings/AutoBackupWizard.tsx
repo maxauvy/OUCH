@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { IconChevronRight, IconCircleCheck, IconCloud, IconFolder, IconServer } from '@tabler/icons-react'
-import { AVAILABLE_PROVIDERS, beginRedirectLink, REDIRECT_PROVIDERS, setUpAutoBackup, type ReturnNotice } from '../../lib/autoBackupRuntime'
+import { AVAILABLE_PROVIDERS, beginRedirectLink, linkWebdav, REDIRECT_PROVIDERS, setUpAutoBackup, type ReturnNotice } from '../../lib/autoBackupRuntime'
+import { checkConnection, type ConnectionCheck } from '../../lib/cloud/webdavProvider'
 import type { AutoBackupState } from '../../db/types'
 import { format, useLanguage, useTranslation } from '../../i18n'
 import { ModalSheet } from '../ui/ModalSheet'
@@ -38,10 +39,26 @@ export function AutoBackupWizard({ onClose, returned }: { onClose: () => void; r
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [sent, setSent] = useState<boolean | null>(returned ? returned === 'sent' : null)
+  const [server, setServer] = useState({ url: '', user: '', password: '' })
+  const [check, setCheck] = useState<ConnectionCheck | null>(null)
+  const [testing, setTesting] = useState(false)
   const redirects = provider !== null && REDIRECT_PROVIDERS.includes(provider)
 
   // The trial provider only shows in development, the three real ones always (not yet usable).
   const rows = ROWS.filter((r) => r.id !== 'memory' || AVAILABLE_PROVIDERS.includes('memory'))
+
+  /** Tries the server's address and credentials; says what it found. */
+  async function test(): Promise<boolean> {
+    setTesting(true)
+    setCheck(null)
+    try {
+      const result = await checkConnection(server)
+      setCheck(result)
+      return result.ok
+    } finally {
+      setTesting(false)
+    }
+  }
 
   async function start() {
     if (password.length < MIN_PASSWORD_LENGTH) return setError(w.tooShort)
@@ -49,6 +66,11 @@ export function AutoBackupWizard({ onClose, returned }: { onClose: () => void; r
     if (!provider) return
     setError(null)
     setBusy(true)
+    if (provider === 'webdav') {
+      // The server is tried before anything is kept: a link that cannot work is not made.
+      if (!(await test())) return setBusy(false)
+      await linkWebdav(server)
+    }
     if (redirects) {
       try {
         await beginRedirectLink(provider, password)
@@ -120,6 +142,19 @@ export function AutoBackupWizard({ onClose, returned }: { onClose: () => void; r
 
       {step === 2 && provider && (
         <>
+          {provider === 'webdav' && (
+            <ServerForm
+              value={server}
+              onChange={(v) => {
+                setServer(v)
+                setCheck(null)
+              }}
+              check={check}
+              testing={testing}
+              disabled={busy}
+              onTest={() => void test()}
+            />
+          )}
           <div>
             <h3 className="text-body font-semibold">{w.passwordTitle}</h3>
             <p className="text-caption mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
@@ -211,5 +246,131 @@ export function AutoBackupWizard({ onClose, returned }: { onClose: () => void; r
         </>
       )}
     </ModalSheet>
+  )
+}
+
+function ServerForm({
+  value,
+  onChange,
+  check,
+  testing,
+  disabled,
+  onTest,
+}: {
+  value: { url: string; user: string; password: string }
+  onChange: (v: { url: string; user: string; password: string }) => void
+  check: ConnectionCheck | null
+  testing: boolean
+  disabled: boolean
+  onTest: () => void
+}) {
+  const w = useTranslation().autoBackup.wizard.server
+  const language = useLanguage()
+  const field = 'w-full rounded-xl px-3.5 py-2.5 text-body outline-none'
+  return (
+    <div className="flex flex-col gap-2">
+      <div>
+        <h3 className="text-body font-semibold">{w.title}</h3>
+        <p className="text-caption mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
+          {w.text}
+        </p>
+      </div>
+      <input
+        type="url"
+        inputMode="url"
+        value={value.url}
+        onChange={(e) => onChange({ ...value, url: e.target.value })}
+        aria-label={w.urlLabel}
+        placeholder={w.urlPlaceholder}
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
+        className={field}
+        style={FIELD}
+      />
+      <input
+        type="text"
+        value={value.user}
+        onChange={(e) => onChange({ ...value, user: e.target.value })}
+        aria-label={w.userLabel}
+        placeholder={w.userLabel}
+        autoComplete="off"
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
+        className={field}
+        style={FIELD}
+      />
+      <input
+        type="password"
+        value={value.password}
+        onChange={(e) => onChange({ ...value, password: e.target.value })}
+        aria-label={w.passwordLabel}
+        placeholder={w.passwordLabel}
+        autoComplete="off"
+        className={field}
+        style={FIELD}
+      />
+      <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+        {w.passwordNote}
+      </p>
+      <button
+        type="button"
+        onClick={onTest}
+        disabled={testing || disabled}
+        className="w-full min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold disabled:opacity-60"
+        style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+      >
+        {testing ? w.testing : w.test}
+      </button>
+      {check && (
+        <p role="status" className="text-caption font-medium break-words" style={{ color: 'var(--color-ink)' }}>
+          {check.ok ? w.ok : format(w.problems[check.problem], { detail: check.detail ?? '' }, language).trim()}
+        </p>
+      )}
+      <ServerHelp />
+    </div>
+  )
+}
+
+/** The permissions a server has to give, as text to copy. Starting points, not guarantees. */
+function ServerHelp() {
+  const w = useTranslation().autoBackup.wizard.server
+  const language = useLanguage()
+  const origin = location.origin
+  const methods = 'GET, PUT, DELETE, PROPFIND, MKCOL, OPTIONS'
+  const headers = 'Authorization, Content-Type, Depth'
+  const apache = [
+    `Header always set Access-Control-Allow-Origin "${origin}"`,
+    `Header always set Access-Control-Allow-Methods "${methods}"`,
+    `Header always set Access-Control-Allow-Headers "${headers}"`,
+    'RewriteEngine On',
+    'RewriteCond %{REQUEST_METHOD} OPTIONS',
+    'RewriteRule ^ - [R=204,L]',
+  ].join('\n')
+  const nginx = [
+    `add_header Access-Control-Allow-Origin "${origin}" always;`,
+    `add_header Access-Control-Allow-Methods "${methods}" always;`,
+    `add_header Access-Control-Allow-Headers "${headers}" always;`,
+    'if ($request_method = OPTIONS) { return 204; }',
+  ].join('\n')
+  const code = 'rounded-xl p-3 text-caption overflow-x-auto select-text whitespace-pre'
+  return (
+    <details className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+      <summary className="min-h-11 inline-flex items-center cursor-pointer underline">{w.helpTitle}</summary>
+      <div className="flex flex-col gap-2 pb-2">
+        <p>{format(w.helpIntro, { origin }, language)}</p>
+        <p>{format(w.helpSteps, { origin }, language)}</p>
+        <p className="font-medium">{w.helpApache}</p>
+        <pre className={code} style={FIELD}>
+          {apache}
+        </pre>
+        <p className="font-medium">{w.helpNginx}</p>
+        <pre className={code} style={FIELD}>
+          {nginx}
+        </pre>
+        <p>{w.helpNote}</p>
+      </div>
+    </details>
   )
 }

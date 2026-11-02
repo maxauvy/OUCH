@@ -11,13 +11,15 @@ import { clearBackupKey, loadBackupKey, saveBackupKey } from './backupKeyStore'
 import { memoryProvider } from './cloud/memoryProvider'
 import type { BackupProvider } from './cloud/provider'
 import { dropboxProvider } from './cloud/dropboxProvider'
+import { webdavProvider, type WebdavConfig } from './cloud/webdavProvider'
+import { clearWebdavConfig, getWebdavConfig, saveWebdavConfig } from './cloud/webdavLink'
 import { cleanReturnAddress, finishDropboxLink, forgetPendingDropboxLink, getDropboxToken, readDropboxReturn, startDropboxLink, unlinkDropbox } from './cloud/dropboxLink'
 
 type ProviderId = AutoBackupState['provider']
 
 /** Providers that can be chosen today, in the order they are listed. The
  * trial one (in memory, lost at reload) only exists in development. */
-export const AVAILABLE_PROVIDERS: ProviderId[] = import.meta.env.DEV ? ['dropbox', 'memory'] : ['dropbox']
+export const AVAILABLE_PROVIDERS: ProviderId[] = import.meta.env.DEV ? ['dropbox', 'webdav', 'memory'] : ['dropbox', 'webdav']
 
 /** Providers that send the person away to agree, and bring them back to the app. */
 export const REDIRECT_PROVIDERS: ProviderId[] = ['dropbox']
@@ -28,6 +30,7 @@ let trial: BackupProvider | null = null
 export function providerFor(id: ProviderId): BackupProvider | null {
   if (id === 'memory') return (trial ??= memoryProvider())
   if (id === 'dropbox') return dropboxProvider(getDropboxToken)
+  if (id === 'webdav') return webdavProvider(getWebdavConfig)
   return null
 }
 
@@ -66,6 +69,9 @@ export async function backupNow(): Promise<BackupOutcome | null> {
     running = false
   }
 }
+
+/** Keeps the address and the app password of the person's server, for `setUpAutoBackup` to use. */
+export const linkWebdav = (config: WebdavConfig) => saveWebdavConfig(config)
 
 /** Links `provider`, keeps the key made from `password`, and sends a first copy. */
 export async function setUpAutoBackup(provider: ProviderId, password: string): Promise<BackupOutcome | null> {
@@ -134,6 +140,7 @@ export function clearReturnNotice(): void {
 export async function stopAutoBackup(): Promise<void> {
   const state = (await getSettings()).autoBackup
   if (state?.provider === 'dropbox') await unlinkDropbox()
+  if (state?.provider === 'webdav') await clearWebdavConfig()
   await clearBackupKey()
   await updateSettings({ autoBackup: undefined })
 }
