@@ -15,8 +15,8 @@ test('no declared illness: nothing to propose, no banner', () => {
   assert.deepEqual(invitableIndicators({ illnesses: [], enabledFactors: ELEVEN }, true), [])
 })
 
-test('without early access nothing new is on offer: no banner for someone who follows all eleven', () => {
-  assert.equal(show(existing(), { earlyAccess: false }), false)
+test('the invitation does not depend on early access: someone who follows the eleven is invited either way', () => {
+  assert.equal(show(existing(), { earlyAccess: false }), true)
   assert.equal(show(existing(), { earlyAccess: true }), true)
 })
 

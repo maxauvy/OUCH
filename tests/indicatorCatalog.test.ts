@@ -80,31 +80,34 @@ test('indicators not built yet are ignored, whatever the early access', () => {
   }
 })
 
-test('without early access, only what a clinician has read is offered', () => {
+test('every indicator has been read, so all are offered without early access', () => {
+  assert.ok(INDICATORS.every((d) => d.reviewed))
   const plan = planForIllnesses(['arthrite'], { implemented: INDICATORS.map((d) => d.key) })
-  const unreviewed = new Set(INDICATORS.filter((d) => !d.reviewed).map((d) => d.key))
-  const all = [...plan.recommended, ...plan.suggested, ...plan.others]
-  assert.ok(all.every((k) => !unreviewed.has(k)))
-  assert.ok(all.length > 0)
+  assert.equal([...plan.recommended, ...plan.suggested, ...plan.others].length, INDICATORS.length)
+})
+
+test('the gate still works for an indicator not yet read: left out without early access, there with it', () => {
+  const unread = INDICATORS.map((d) => (d.key === 'morningStiffness' ? { ...d, reviewed: false } : d))
+  const options = { implemented: INDICATORS.map((d) => d.key), catalog: unread }
+  const without = planForIllnesses(['arthrite'], options)
+  assert.ok(![...without.recommended, ...without.suggested, ...without.others].includes('morningStiffness'))
+  assert.ok(planForIllnesses(['arthrite'], { ...options, earlyAccess: true }).recommended.includes('morningStiffness'))
 })
 
 const ORIGINAL = ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes']
 
-test('the eleven original indicators are reviewed, and always offered', () => {
-  for (const key of ORIGINAL) {
-    assert.ok(INDICATORS.find((d) => d.key === key)?.reviewed, key)
-    assert.ok(isOffered(key, false), key)
-  }
-  assert.deepEqual(offeredFactors(false), ORIGINAL)
+test('the original indicators come first, and every indicator is offered with or without early access', () => {
+  for (const key of ORIGINAL) assert.ok(isOffered(key, false), key)
+  assert.deepEqual([...offeredFactors(false)].slice(0, ORIGINAL.length), ORIGINAL)
+  assert.deepEqual(offeredFactors(false), [...ALL_FACTORS])
+  assert.deepEqual(offeredFactors(true), [...ALL_FACTORS])
 })
 
-test('a new indicator is offered only with early access; an unknown key never is', () => {
-  assert.equal(isOffered('morningStiffness', false), false)
+test('an indicator of the later list is offered to everyone; an unknown key never is', () => {
+  assert.equal(isOffered('morningStiffness', false), true)
   assert.equal(isOffered('morningStiffness', true), true)
   assert.equal(isOffered('cycle', true), false)
   assert.equal(isOffered('whatever', true), false)
-  assert.ok(offeredFactors(true).includes('morningStiffness'))
-  assert.ok(!offeredFactors(false).includes('morningStiffness'))
 })
 
 test('the catalogue is consistent: every factor is in it, every detail has a parent', () => {
@@ -112,23 +115,22 @@ test('the catalogue is consistent: every factor is in it, every detail has a par
   for (const d of INDICATORS.filter((d) => d.kind === 'detail')) assert.ok(d.parent && INDICATORS.some((p) => p.key === d.parent), `${d.key} has a parent`)
 })
 
-test('without early access an entry is shown without what the new indicators wrote; the journal keeps it', () => {
+test('an entry is shown whole, with or without early access: nothing a person wrote is hidden', () => {
   const entry = { date: '2026-10-01', createdAt: 1, updatedAt: 1, painLevel: 5, fatigueLevel: 3, morningStiffness: 'lt30', morningStiffnessSeverity: 4, nightWakings: 2, dailyInterference: 6 } as const
-  assert.deepEqual(withoutUnoffered(entry, false), { date: '2026-10-01', createdAt: 1, updatedAt: 1, painLevel: 5, fatigueLevel: 3 })
+  assert.equal(withoutUnoffered(entry, false), entry)
   assert.equal(withoutUnoffered(entry, true), entry)
-  assert.equal(entry.nightWakings, 2)
 })
 
 test('the options inside sleep are listed under it, and leave the list of rows', () => {
   assert.deepEqual(detailsOf('sleep', true), ['nightWaking', 'unrefreshedWaking'])
-  assert.deepEqual(detailsOf('sleep', false), [])
+  assert.deepEqual(detailsOf('sleep', false), ['nightWaking', 'unrefreshedWaking'])
   assert.deepEqual(detailsOf('fatigue', true), [])
   assert.deepEqual(withoutDetails(['fatigue', 'sleep', 'nightWaking', 'mood']), ['fatigue', 'sleep', 'mood'])
 })
 
 test('the setup pre-selects the recommended ones in place of the defaults, and starts the cycle only when asked', () => {
   const fibro = planSettingsPatch(planForIllnesses(['fibromyalgie']))
-  assert.deepEqual(fibro.enabledFactors, ['fatigue', 'sleep', 'brainFog', 'mood', 'painLocations', 'medications', 'positiveActions', 'notes'])
+  assert.deepEqual(fibro.enabledFactors, ['fatigue', 'sleep', 'morningStiffness', 'brainFog', 'mood', 'nightWaking', 'unrefreshedWaking', 'painLocations', 'medications', 'positiveActions', 'notes'])
   assert.equal('cycleTrackingEnabled' in fibro, false)
   assert.equal(planSettingsPatch(planForIllnesses(['endometriose'])).cycleTrackingEnabled, true)
   // With no illness: the base profile, not the eleven defaults.
@@ -150,7 +152,7 @@ test('after an illness change, what became recommended is shown as added, not ti
 test('the done step counts the followed indicators, not the options inside them', () => {
   assert.equal(countFollowed(['fatigue', 'sleep', 'nightWaking', 'notes'], true), 3)
   assert.equal(countFollowed(['fatigue', 'sleep', 'nightWaking', 'notes'], false), 3)
-  assert.equal(countFollowed(['fatigue', 'morningStiffness'], false), 1)
+  assert.equal(countFollowed(['fatigue', 'morningStiffness'], false), 2)
 })
 
 test('psoriatic arthritis is the union of rheumatoid arthritis and spondyloarthritis, the stronger tier of the two', () => {

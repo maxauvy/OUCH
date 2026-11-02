@@ -32,7 +32,7 @@ export interface IndicatorDef {
   priority: 0 | 1 | 2
   /** The indicator that defines an illness (the migraine episode, the period): over the cap it stays before the shared ones, which other illnesses recommend too. */
   specific?: true
-  /** False until a clinician has read it: shown only with early access. */
+  /** False until health professionals have read it, even quickly (not a validation): then shown only with early access. */
   reviewed: boolean
   tiers: Partial<Record<Illness, Tier>>
 }
@@ -48,31 +48,31 @@ const S = 'suggested' as const
 const RAW_INDICATORS: readonly IndicatorDef[] = [
   { key: 'fatigue', kind: 'measure', priority: 0, reviewed: true, tiers: { fibromyalgie: R, arthrite: R, spondylarthrite: R, endometriose: R, sep: R, autre: R, lombalgie: S, myofasciale: S } },
   { key: 'sleep', kind: 'measure', priority: 0, reviewed: true, tiers: { fibromyalgie: R, arthrite: R, spondylarthrite: R, endometriose: R, migraine: R, lombalgie: R, sep: R, myofasciale: R, autre: R } },
-  { key: 'morningStiffness', kind: 'measure', priority: 0, reviewed: false, tiers: { fibromyalgie: R, arthrite: R, spondylarthrite: R, lombalgie: R } },
-  { key: 'dailyInterference', kind: 'measure', priority: 0, reviewed: false, tiers: { arthrite: R, lombalgie: R, sep: R, myofasciale: R, spondylarthrite: S, endometriose: S, fibromyalgie: S } },
+  { key: 'morningStiffness', kind: 'measure', priority: 0, reviewed: true, tiers: { fibromyalgie: R, arthrite: R, spondylarthrite: R, lombalgie: R } },
+  { key: 'dailyInterference', kind: 'measure', priority: 0, reviewed: true, tiers: { arthrite: R, lombalgie: R, sep: R, myofasciale: R, spondylarthrite: S, endometriose: S, fibromyalgie: S } },
   { key: 'brainFog', kind: 'measure', priority: 0, reviewed: true, tiers: { fibromyalgie: R, sep: R, autre: S } },
   { key: 'mood', kind: 'measure', priority: 0, reviewed: true, tiers: { fibromyalgie: R, sep: R, autre: R, arthrite: S, spondylarthrite: S, endometriose: S, migraine: S, lombalgie: S, myofasciale: S } },
   { key: 'stress', kind: 'measure', priority: 0, reviewed: true, tiers: { migraine: R, myofasciale: R, fibromyalgie: S, endometriose: S, autre: S } },
   { key: 'activity', kind: 'measure', priority: 0, reviewed: true, tiers: { lombalgie: R, myofasciale: R, fibromyalgie: S, arthrite: S, spondylarthrite: S, autre: S } },
-  { key: 'periodFlow', kind: 'measure', priority: 1, specific: true, reviewed: false, tiers: { endometriose: R } },
-  { key: 'bowelBladder', kind: 'measure', priority: 1, specific: true, reviewed: false, tiers: { endometriose: R } },
-  { key: 'headacheEpisode', kind: 'measure', priority: 1, specific: true, reviewed: false, tiers: { migraine: R } },
-  { key: 'legPain', kind: 'measure', priority: 2, specific: true, reviewed: false, tiers: { lombalgie: R } },
-  { key: 'spasms', kind: 'measure', priority: 2, specific: true, reviewed: false, tiers: { sep: R } },
-  { key: 'sensorySensitivity', kind: 'measure', priority: 2, reviewed: false, tiers: { fibromyalgie: S } },
+  { key: 'periodFlow', kind: 'measure', priority: 1, specific: true, reviewed: true, tiers: { endometriose: R } },
+  { key: 'bowelBladder', kind: 'measure', priority: 1, specific: true, reviewed: true, tiers: { endometriose: R } },
+  { key: 'headacheEpisode', kind: 'measure', priority: 1, specific: true, reviewed: true, tiers: { migraine: R } },
+  { key: 'legPain', kind: 'measure', priority: 2, specific: true, reviewed: true, tiers: { lombalgie: R } },
+  { key: 'spasms', kind: 'measure', priority: 2, specific: true, reviewed: true, tiers: { sep: R } },
+  { key: 'sensorySensitivity', kind: 'measure', priority: 2, reviewed: true, tiers: { fibromyalgie: S } },
 
-  { key: 'nightWaking', kind: 'detail', parent: 'sleep', priority: 0, reviewed: false, tiers: { fibromyalgie: R, spondylarthrite: R, lombalgie: R, myofasciale: R } },
-  { key: 'unrefreshedWaking', kind: 'detail', parent: 'sleep', priority: 1, reviewed: false, tiers: { fibromyalgie: R } },
+  { key: 'nightWaking', kind: 'detail', parent: 'sleep', priority: 0, reviewed: true, tiers: { fibromyalgie: R, spondylarthrite: R, lombalgie: R, myofasciale: R } },
+  { key: 'unrefreshedWaking', kind: 'detail', parent: 'sleep', priority: 1, reviewed: true, tiers: { fibromyalgie: R } },
 
   { key: 'painLocations', kind: 'block', priority: 0, reviewed: true, tiers: { fibromyalgie: R, arthrite: R, spondylarthrite: R, endometriose: R, lombalgie: R, myofasciale: R, autre: R } },
   { key: 'medications', kind: 'block', priority: 0, reviewed: true, tiers: { fibromyalgie: R, arthrite: R, spondylarthrite: R, endometriose: R, migraine: R, sep: R, autre: R, lombalgie: S } },
   { key: 'positiveActions', kind: 'block', priority: 0, reviewed: true, tiers: { fibromyalgie: R, spondylarthrite: R, myofasciale: S } },
   { key: 'notes', kind: 'block', priority: 0, reviewed: true, tiers: { fibromyalgie: R, arthrite: R, endometriose: R, migraine: R, myofasciale: R, autre: R } },
   { key: 'weather', kind: 'block', priority: 0, reviewed: true, tiers: { fibromyalgie: S, arthrite: S, migraine: S, sep: S, autre: S } },
-  { key: 'swollenJoints', kind: 'block', priority: 1, reviewed: false, tiers: { arthrite: R, spondylarthrite: R } },
-  { key: 'symptomTags', kind: 'block', priority: 2, reviewed: false, tiers: { sep: R } },
-  { key: 'feverInfection', kind: 'block', priority: 2, reviewed: false, tiers: { arthrite: R, sep: R } },
-  { key: 'newSymptomMarker', kind: 'block', priority: 2, reviewed: false, tiers: { sep: S } },
+  { key: 'swollenJoints', kind: 'block', priority: 1, reviewed: true, tiers: { arthrite: R, spondylarthrite: R } },
+  { key: 'symptomTags', kind: 'block', priority: 2, reviewed: true, tiers: { sep: R } },
+  { key: 'feverInfection', kind: 'block', priority: 2, reviewed: true, tiers: { arthrite: R, sep: R } },
+  { key: 'newSymptomMarker', kind: 'block', priority: 2, reviewed: true, tiers: { sep: S } },
 ]
 
 const RANK: Record<Tier, number> = { recommended: 2, suggested: 1 }
