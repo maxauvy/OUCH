@@ -113,7 +113,7 @@ const fr: Translations = {
       },
       private: {
         title: '100 % privé',
-        body: "Tout reste sur ton appareil. Rien n'est envoyé sans que tu le décides.",
+        body: "Ton journal reste sur ton appareil. Rien n'est envoyé sans que tu le décides, à part un signal anonyme par semaine (« actif cette semaine ») que tu peux couper dans Réglages.",
       },
     },
     note: "Pas de pression : les jours difficiles, une seule info suffit (ta douleur). OUCH n’est pas un dispositif médical et ne remplace pas un avis médical ; les tendances sont des pistes à explorer, pas des preuves.",
@@ -1558,7 +1558,17 @@ const fr: Translations = {
     ],
     suggestionsPrivacy: 'Tes notes restent sur ton appareil : les pistes sont calculées ici, sans rien envoyer.',
     audienceTitle: 'Mesure d’audience anonyme',
-    audienceHelper: 'Une fois par semaine, OUCH envoie un signal anonyme (« actif cette semaine ») pour que je sache combien d’installations sont utilisées. Aucune donnée de santé, aucun identifiant.',
+    audienceHelper: 'Une fois par semaine, OUCH envoie un signal anonyme (« actif cette semaine ») pour que je sache combien d’installations sont utilisées. Aucune donnée de santé, aucun identifiant. Le détail est dans « À propos ».',
+    audienceDetail: {
+      title: 'Mesure d’audience anonyme, en détail',
+      items: [
+        'Ce qui est envoyé : une fois par semaine, un signal « actif cette semaine » avec le numéro de la semaine, et si OUCH est ouvert comme application installée ou dans un navigateur. Rien d’autre : ni page, ni version, ni langue, ni donnée de santé, ni identifiant.',
+        'Qui le reçoit : GoatCounter (goatcounter.com, exploité par Martin Tournoij, en Irlande ; données hébergées en Finlande et en Allemagne). Comme tout service sur Internet, il voit l’adresse IP de la requête ; elle n’est ni enregistrée ni utilisée pour des statistiques.',
+        'Sur ton appareil : OUCH retient seulement la dernière semaine envoyée, pour ne pas la renvoyer. Ce repère ne contient aucun identifiant et n’est pas dans tes sauvegardes.',
+        'Pour ne rien envoyer : décoche « Mesure d’audience anonyme » dans Réglages, ou active le signal « Do Not Track » ou « Global Privacy Control » de ton navigateur.',
+        'Pourquoi : savoir combien d’installations sont utilisées. C’est une mesure d’audience anonyme, fondée sur l’intérêt légitime et dispensée de consentement ; les chiffres donnent un ordre de grandeur, pas un décompte exact.',
+      ],
+    },
     lightFormTitle: 'Écran allégé les jours difficiles',
     lightFormHelper:
       'Pendant une poussée, l’écran du jour demande d’abord la douleur, puis propose le reste. Tu peux toujours afficher le formulaire complet.',
@@ -1614,7 +1624,7 @@ const fr: Translations = {
     summaryReminderOff: 'Pas de rappel',
     summaryMessages: '{{n}} sur 3 actifs',
     privacyNote:
-      "OUCH garde toutes tes données sur cet appareil, dans son stockage local : aucune donnée de santé n'en sort. Seule la météo automatique contacte des services extérieurs, avec ta position et jamais ton journal. Le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
+      "OUCH garde toutes tes données sur cet appareil, dans son stockage local : aucune donnée de santé n'en sort. Seules la météo automatique, avec ta position et jamais ton journal, et la mesure d'audience anonyme (un signal par semaine, que tu peux couper dans Réglages) contactent des services extérieurs. Le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
     notMedicalDevice:
       'OUCH n’est pas un dispositif médical : il ne pose aucun diagnostic, ne recommande aucun traitement et ne remplace pas un avis médical. Les tendances sont des pistes à explorer, pas des preuves.',
   },

@@ -111,7 +111,7 @@ const en: Translations = {
       },
       private: {
         title: '100% private',
-        body: "Everything stays on your device. Nothing is sent unless you decide to.",
+        body: "Your diary stays on your device. Nothing is sent unless you decide to, apart from one anonymous signal a week (“active this week”) that you can turn off in Settings.",
       },
     },
     note: "No pressure: on hard days, a single entry is enough (your pain). OUCH is not a medical device and doesn't replace medical advice; trends are leads to explore, not proof.",
@@ -1553,7 +1553,17 @@ const en: Translations = {
     ],
     suggestionsPrivacy: 'Your notes stay on your device: leads are worked out here, nothing is sent.',
     audienceTitle: 'Anonymous audience count',
-    audienceHelper: 'Once a week, OUCH sends an anonymous signal (“active this week”) so I know how many installations are in use. No health data, no identifier.',
+    audienceHelper: 'Once a week, OUCH sends an anonymous signal (“active this week”) so I know how many installations are in use. No health data, no identifier. The detail is in “About”.',
+    audienceDetail: {
+      title: 'Anonymous audience count, in detail',
+      items: [
+        'What is sent: once a week, an “active this week” signal with the week number, and whether OUCH is opened as an installed app or in a browser. Nothing else: no page, no version, no language, no health data, no identifier.',
+        'Who receives it: GoatCounter (goatcounter.com, run by Martin Tournoij, in Ireland; data hosted in Finland and Germany). Like any service on the Internet, it sees the IP address of the request; it is neither stored nor used for statistics.',
+        'On your device: OUCH keeps only the last week sent, so as not to send it again. That marker holds no identifier and is not in your backups.',
+        'To send nothing: untick “Anonymous audience count” in Settings, or turn on your browser’s “Do Not Track” or “Global Privacy Control” signal.',
+        'Why: to know how many installations are in use. It is an anonymous audience count, based on legitimate interest and exempt from consent; the numbers are an order of magnitude, not an exact count.',
+      ],
+    },
     lightFormTitle: 'Lighter screen on hard days',
     lightFormHelper:
       'During a flare, the day’s screen asks for your pain first, then offers the rest. You can always show the full form.',
@@ -1609,7 +1619,7 @@ const en: Translations = {
     summaryReminderOff: 'No reminder',
     summaryMessages: '{{n}} of 3 on',
     privacyNote:
-      "OUCH keeps all your data on this device, in local storage: no health data ever leaves it. Only automatic weather contacts outside services, with your position and never your journal. Sharing your weather and making backups is always something you choose to do.",
+      "OUCH keeps all your data on this device, in local storage: no health data ever leaves it. Only automatic weather, with your position and never your journal, and the anonymous audience count (one signal a week, which you can turn off in Settings) contact outside services. Sharing your weather and making backups is always something you choose to do.",
     notMedicalDevice:
       'OUCH is not a medical device: it makes no diagnosis, recommends no treatment and does not replace medical advice. Trends are leads to explore, not proof.',
   },

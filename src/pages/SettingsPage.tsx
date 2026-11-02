@@ -406,8 +406,6 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           </button>
         </Card>
 
-        <SensitiveZoneCard />
-
         <SettingToggle
           icon={IconChartBar}
           title={t.settings.audienceTitle}
@@ -418,6 +416,8 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
             void updateSettings({ audienceMeasurementEnabled: on })
           }}
         />
+
+        <SensitiveZoneCard />
           </>
         )}
       </SettingsGroup>
@@ -459,6 +459,15 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
             </button>
           </Card>
         )}
+
+        <Card>
+          <SectionTitle icon={IconChartBar}>{t.settings.audienceDetail.title}</SectionTitle>
+          <ul className="flex flex-col gap-2 text-caption leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.settings.audienceDetail.items.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </Card>
 
         <SourcesCard />
 

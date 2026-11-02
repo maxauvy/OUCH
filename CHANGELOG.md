@@ -6,6 +6,12 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Une mesure d'audience anonyme, une fois par semaine.** Pour savoir combien d'installations sont utilisées, OUCH envoie, au plus une fois par semaine, un signal « actif cette semaine » (le numéro de la semaine, et si l'app est installée ou ouverte dans un navigateur) à GoatCounter. Aucune donnée de santé, aucun identifiant, aucun cookie, aucun script tiers : c'est l'app elle-même qui émet la requête. Elle est active par défaut et se coupe dans Réglages (« Mesure d'audience anonyme ») ; elle ne part pas non plus si le navigateur envoie Do Not Track ou Global Privacy Control, en démo, ni hors du site officiel. Le détail est dans « À propos » et dans `PRIVACY.md`.
+
+### Modifié
+- **La présentation de la vie privée tient compte de ce signal** (accueil, Réglages, `PRIVACY.md`, README, cadre réglementaire, dictionnaire des données). Le journal, lui, ne quitte toujours l'appareil que par un geste de la personne.
+
 ## [0.7.2] - 2026-10-30
 
 Une version qui reconnaît ce qui a été fait, en douceur (des mots, sans score ni série), et qui refait le haut de Tendances pour la consultation. Aucune saisie n'est touchée et aucun réglage ne change de sens.
