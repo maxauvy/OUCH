@@ -7,7 +7,8 @@ import { mkdirSync } from 'node:fs'
 
 const out = join(dirname(fileURLToPath(import.meta.url)), 'apercus')
 mkdirSync(out, { recursive: true })
-const b = await chromium.launch()
+// Playwright's own Chromium if it was downloaded, else the Chrome installed on the machine (build.py needs it anyway).
+const b = await chromium.launch().catch(() => chromium.launch({ channel: 'chrome' }))
 const p = await b.newPage({ deviceScaleFactor: 1.6, viewport: { width: 900, height: 1200 } })
 for (const f of process.argv.slice(2)) {
   await p.goto(pathToFileURL(f).href, { waitUntil: 'networkidle' })
