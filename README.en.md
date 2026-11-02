@@ -10,13 +10,27 @@ OUCH is a pain diary for fibromyalgia and other chronic pain. You log your day i
 
 Existing pain trackers (Pain Diary, MyPainDiary…) are either closed or a chore to use on the days when you have nothing left. OUCH takes the opposite approach: big buttons, almost nothing to fill in, and no data leaving your device unless you decide it should.
 
+## Why install it
+
+**Track, in under a minute.** Pain alone is enough for a day to count; the rest (sleep, where it hurts, treatments, weather) is optional, and on the hardest days the screen gets lighter. Installed on your home screen, the app opens in one tap and works offline. No account: the diary stays on your phone.
+
+**Understand, without promising anything.** Over time your notes start to tell you things: what comes before a flare, what comes back on the good days. OUCH shows associations, never causes: you keep what speaks to you and set the rest aside. You walk into your appointment with a report that says what happened, instead of digging through memory.
+
+**Ease it, with the gestures that work for you.** You note what helped (a short walk, a hot bath, stretching…). You can try one of those actions for a week and put your days with and without side by side. When a flare ends, the app tells you how many days it took for your pain to get back to its usual level. No score, no streak, nothing to lose.
+
+OUCH is free software and free of charge, and it is a diary, not medical advice: it makes no diagnosis and recommends no treatment.
+
 ## What you can do
 
 ### Log your day
 
 Pain alone, on a scale from 0 to 10, is enough for a day to count. You can add fatigue, sleep, stress, brain fog, mood, activity, where it hurts, the day's weather (from your location or entered by hand) and, if you want, your cycle. You can also note what helped: a short walk, a hot bath, some meditation… Anything you don't use can be switched off in the settings.
 
-The first time you open the app, a setup guide offers to get things ready: the conditions you track, your first name, your treatments, a daily reminder. Everything is optional, you can skip it at any point and run it again from the settings.
+“Where does it hurt?” is entered on a body outline, front and back: you tap a large region, then pick the part and the side, left or right (24 zones, including the 19 regions doctors know).
+
+The first time you open the app, a setup guide offers to get things ready: the conditions you track, your first name, your treatments, a daily reminder. Depending on the conditions you give, it sorts the indicators into three tiers (recommended, also useful, all the others); new indicators (morning stiffness, night waking, difficulty with daily movements, headache…) are offered in early access, unvalidated. Everything is optional, you can skip it at any point and run it again from the settings.
+
+On flare days the screen gets lighter and the app suggests nothing: only a kind word. On other days, whatever is waiting for you (a lead, a trial under way, a recap) fits in one quiet line, “2 small things for you”, which opens a sheet.
 
 ### Keep track of your treatments
 
@@ -30,7 +44,7 @@ The day's measures are boiled down to a single picture, from clear skies to a st
 
 The journal is a monthly calendar, colored by each day's weather. You can go back and fix any day.
 
-Trends shows your pain curve over 7, 30 or 90 days, or since the beginning, with its 7-day average. It also shows which days of the week tend to go best and worst, what your notes let you see (“what your notes say”: sleep, stress, the day before's activity and what helped, one lead at a time, with the two averages and the number of days), and how you use your treatments. These are associations found in your own data, not proof, and the app says so. You can keep a lead for your appointment, set it aside, or try for a week an action you noted yourself; the app can also bring a lead to the day's page, sum up your week in a sentence on Sundays, or do it quietly with a dot on the tab (each can be turned off in Settings, and none of it shows during a flare).
+Trends opens with a “For my appointment” block (average pain, flares, most reported zone, latest treatment change). Then come the pain curve over 7, 30 or 90 days, or since the beginning, with its 7-day average and toggleable layers (flares, treatments, trials), a “What happened” timeline, cards on painful zones (where, during flares, week by week) and a calm recap of the month that just ended. It also shows which days of the week tend to go best and worst, what your notes let you see (“what your notes say”: sleep, stress, the day before's activity and what helped, one lead at a time, with the two averages and the number of days), and how you use your treatments. These are associations found in your own data, not proof, and the app says so. You can keep a lead for your appointment, set it aside, or try for a week an action you noted yourself; the app can also bring a lead to the day's page, sum up your week in a sentence on Sundays, or do it quietly with a dot on the tab (all of it is turned off by a single “Suggestions” setting, and none of it shows during a flare). When a trial or a flare ends, the app acknowledges it in one gentle sentence.
 
 ### A report for your doctor
 
@@ -40,14 +54,15 @@ The report describes the data without interpreting it, and its thresholds cite t
 
 ### Explain it to your child
 
-The Kids tab is made to be shown to a child. It tells the day's weather in simple words ("today, Mom's sky is a bit cloudy"), suggests ways to help, and explains the condition (fibromyalgia, rheumatoid arthritis, spondyloarthritis, endometriosis, migraine, low back pain, multiple sclerosis, myofascial pain) for three age groups: 4–7, 8–12 and 13–17. You choose mom or dad.
+The Kids tab is made to be shown to a child. It tells the day's weather in simple words ("today, Mom's sky is a bit cloudy"), suggests ways to help, and explains the condition (fibromyalgia, rheumatoid arthritis, spondyloarthritis, psoriatic arthritis, endometriosis, migraine, low back pain, multiple sclerosis, myofascial pain) for three age groups: 4–7, 8–12 and 13–17. You choose mom or dad.
 
 ### And also
 
 - French and English, chosen when you first open the app and changeable at any time.
-- Two designs (Health, the default, and Classic), and a dark mode.
+- A bright look (which can be switched off in Settings) and a dark mode.
+- An optional four-digit code lock that hides the screen.
 - The app installs on your home screen (phone or computer) and works offline after the first visit. Text follows the font size set on your phone.
-- Your data stays in the browser (IndexedDB). To back up or switch devices, you export a file encrypted with a password of your choice (AES-256-GCM, in the browser) and import it back later; a CSV export (two plain files: the journal and the intakes) is for analysis, not for restoring. The app reminds you to back up when there is something to lose, and asks the browser not to erase your data.
+- Your data stays in the browser (IndexedDB). To back up or switch devices, you export a file encrypted with a password of your choice (AES-256-GCM, in the browser) and import it back later; a CSV export (two plain files: the journal and the intakes) is for analysis, not for restoring. The app reminds you to back up when there is something to lose, and asks the browser not to erase your data. In early access, automatic backup sends that same encrypted file to a Dropbox or to a WebDAV server of your own (Nextcloud, ownCloud, NAS).
 
 ## Try it with demo data
 
@@ -103,7 +118,7 @@ tests/           tests for backups, trends, the report and the pain weather
 - Journal data is stored **unencrypted** in the browser. Anyone with access to the unlocked device, or to the browser profile, can read it. An optional code lock hides the screen (it encrypts nothing). Only exported backup files are encrypted (AES-GCM 256, key derived from the password with PBKDF2). Without the password, a backup is lost.
 - A browser can erase a site's data on its own when the device runs low on space, and Safari also does it after a week without use for a site that isn't installed. So OUCH asks the browser to keep the data as soon as the first day is logged, and the settings show whether it agreed. The browser is free to refuse: only an exported backup truly keeps your data safe.
 - At the bottom of Settings, after 15 days of diary, the "Support OUCH" card is a plain link to the developer's donation page: nothing is loaded from that site or sent until you tap the link, and nothing is unlocked in return.
-- Automatic weather calls [Open-Meteo](https://open-meteo.com/) straight from the browser, with no key or account. Each time, Open-Meteo receives the device's **coordinates** (latitude and longitude) and inevitably sees its IP address. To show the town name, the app also queries [Nominatim](https://nominatim.openstreetmap.org/) (OpenStreetMap), only when you update your position: it receives a position **rounded to about 1 km** and also sees the IP address, and the place data is © OpenStreetMap contributors. Those two calls only happen if automatic weather is on. Once a week the app also sends an anonymous “active this week” signal to [GoatCounter](https://www.goatcounter.com/) (an audience count with no identifier, cookie or health data, which the Settings switch turns off; it is not sent either if the browser sends Do Not Track or Global Privacy Control: see [`docs/mesure-audience.md`](docs/mesure-audience.md), in French). In early access and off by default, automatic backup to Dropbox adds one more (an already-encrypted file, in a folder reserved for OUCH: see [`PRIVACY.md`](PRIVACY.md)). A Content Security Policy (CSP) also restricts the production build's outgoing requests to these services.
+- Automatic weather calls [Open-Meteo](https://open-meteo.com/) straight from the browser, with no key or account. Each time, Open-Meteo receives the device's **coordinates** (latitude and longitude) and inevitably sees its IP address. To show the town name, the app also queries [Nominatim](https://nominatim.openstreetmap.org/) (OpenStreetMap), only when you update your position: it receives a position **rounded to about 1 km** and also sees the IP address, and the place data is © OpenStreetMap contributors. Those two calls only happen if automatic weather is on. Once a week the app also sends an anonymous “active this week” signal to [GoatCounter](https://www.goatcounter.com/) (an audience count with no identifier, cookie or health data, which the Settings switch turns off; it is not sent either if the browser sends Do Not Track or Global Privacy Control: see [`docs/mesure-audience.md`](docs/mesure-audience.md), in French). In early access and off by default, automatic backup to Dropbox or to a WebDAV server of the person's own adds one more (an already-encrypted file, in a folder reserved for OUCH for Dropbox: see [`PRIVACY.md`](PRIVACY.md)). A Content Security Policy (CSP) also restricts the production build's outgoing requests to these services.
 - The daily reminder uses the browser's Notification API. There is deliberately no push server: the reminder shows up when the app is open or has been used recently, not when it is fully closed.
 
 The detailed version, with what each outside service receives, is in [`PRIVACY.md`](PRIVACY.md) (French, with an English summary). To report a security vulnerability, see [`SECURITY.md`](SECURITY.md) (it has an English summary).
