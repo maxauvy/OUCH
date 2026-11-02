@@ -4,6 +4,7 @@ import { useIsDark } from './hooks/useIsDark'
 import { AppLockGate } from './components/lock/AppLockGate'
 import { handleProviderReturn } from './lib/autoBackupRuntime'
 import { useAutoBackup } from './hooks/useAutoBackup'
+import { useAudiencePing } from './hooks/useAudiencePing'
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
 import { DemoPill } from './components/demo/DemoPill'
@@ -101,6 +102,7 @@ function AppShell() {
   }, [settings.onboardingDone])
   useAppliedLook(settings.theme)
   useAutoBackup()
+  useAudiencePing()
   // Set when the data was just deleted from Settings: said once at the start.
   const [wiped] = useState(wipedNotice)
   useEffect(() => {
