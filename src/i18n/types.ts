@@ -1409,6 +1409,8 @@ export interface Translations {
     suggestionsPrivacy: string
     kidsTabTitle: string
     kidsTabHelper: string
+    audienceTitle: string
+    audienceHelper: string
     lightFormTitle: string
     lightFormHelper: string
     appearanceTitle: string

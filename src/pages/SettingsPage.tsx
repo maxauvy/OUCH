@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { IconBell, IconCalendarHeart, IconDatabaseExport, IconHeart, IconHeartHandshake, IconHeartbeat, IconId, IconInfoCircle, IconLanguage, IconLayoutList, IconListCheck, IconMapPin, IconMoodKid, IconPalette, IconPill, IconPlayerPlay, IconRefresh, IconShieldLock, IconSparkles, IconStethoscope, IconUser, IconUsers } from '@tabler/icons-react'
+import { IconBell, IconCalendarHeart, IconChartBar, IconDatabaseExport, IconHeart, IconHeartHandshake, IconHeartbeat, IconId, IconInfoCircle, IconLanguage, IconLayoutList, IconListCheck, IconMapPin, IconMoodKid, IconPalette, IconPill, IconPlayerPlay, IconRefresh, IconShieldLock, IconSparkles, IconStethoscope, IconUser, IconUsers } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
+import { clearAudienceFlag } from '../lib/audience'
 import { type ParentGender, type ThemePref } from '../db/types'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
@@ -406,6 +407,17 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         </Card>
 
         <SensitiveZoneCard />
+
+        <SettingToggle
+          icon={IconChartBar}
+          title={t.settings.audienceTitle}
+          helper={t.settings.audienceHelper}
+          checked={settings.audienceMeasurementEnabled !== false}
+          onChange={(on) => {
+            if (!on) clearAudienceFlag()
+            void updateSettings({ audienceMeasurementEnabled: on })
+          }}
+        />
           </>
         )}
       </SettingsGroup>

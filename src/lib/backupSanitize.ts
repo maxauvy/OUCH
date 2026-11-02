@@ -345,6 +345,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     trialsEnabled: bool(raw.trialsEnabled),
     morningStiffnessSeverityEnabled: bool(raw.morningStiffnessSeverityEnabled),
     indicatorInviteDone: bool(raw.indicatorInviteDone),
+    audienceMeasurementEnabled: bool(raw.audienceMeasurementEnabled),
     indicatorInviteSnoozeUntil: isISODate(raw.indicatorInviteSnoozeUntil) ? raw.indicatorInviteSnoozeUntil : undefined,
     indicatorInviteDismissCount: typeof raw.indicatorInviteDismissCount === 'number' && Number.isInteger(raw.indicatorInviteDismissCount) ? num(raw.indicatorInviteDismissCount, 0, 2) : undefined,
     leadTrial: leadTrial(raw.leadTrial),

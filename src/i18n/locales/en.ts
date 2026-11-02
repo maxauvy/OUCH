@@ -1552,6 +1552,8 @@ const en: Translations = {
       'One-week trials of an action that goes with gentler days',
     ],
     suggestionsPrivacy: 'Your notes stay on your device: leads are worked out here, nothing is sent.',
+    audienceTitle: 'Anonymous audience count',
+    audienceHelper: 'Once a week, OUCH sends an anonymous signal (“active this week”) so I know how many installations are in use. No health data, no identifier.',
     lightFormTitle: 'Lighter screen on hard days',
     lightFormHelper:
       'During a flare, the day’s screen asks for your pain first, then offers the rest. You can always show the full form.',

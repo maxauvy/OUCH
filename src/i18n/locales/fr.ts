@@ -1557,6 +1557,8 @@ const fr: Translations = {
       'Des essais d’une semaine pour une action qui accompagne les jours plus doux',
     ],
     suggestionsPrivacy: 'Tes notes restent sur ton appareil : les pistes sont calculées ici, sans rien envoyer.',
+    audienceTitle: 'Mesure d’audience anonyme',
+    audienceHelper: 'Une fois par semaine, OUCH envoie un signal anonyme (« actif cette semaine ») pour que je sache combien d’installations sont utilisées. Aucune donnée de santé, aucun identifiant.',
     lightFormTitle: 'Écran allégé les jours difficiles',
     lightFormHelper:
       'Pendant une poussée, l’écran du jour demande d’abord la douleur, puis propose le reste. Tu peux toujours afficher le formulaire complet.',
