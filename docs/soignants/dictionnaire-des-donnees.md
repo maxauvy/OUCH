@@ -1,6 +1,6 @@
 # Dictionnaire des données d'OUCH
 
-*Décrit d'après le code de `main` au 9 octobre 2026 : la v0.3.0, plus deux corrections fusionnées le même jour (douleur facultative, variation de pression), complété jusqu'à la v0.5.0 le 14 octobre 2026 (état local de la sauvegarde automatique, verrou par code), puis jusqu'à la v0.6.0 le 15 octobre 2026 (pistes de Tendances, essais d'une semaine) (`src/db/types.ts`, `src/lib/backupSanitize.ts`, `src/lib/loggedEntries.ts`, les écrans de saisie). À mettre à jour quand un champ change.*
+*Décrit d'après le code de `main` au 9 octobre 2026 : la v0.3.0, plus deux corrections fusionnées le même jour (douleur facultative, variation de pression), complété jusqu'à la v0.5.0 le 14 octobre 2026 (état local de la sauvegarde automatique, verrou par code), puis jusqu'à la v0.6.0 le 15 octobre 2026 (pistes de Tendances, essais d'une semaine) (`src/db/types.ts`, `src/lib/backupSanitize.ts`, `src/lib/loggedEntries.ts`, les écrans de saisie). À mettre à jour quand un champ change. Complété jusqu'à la v0.9.0 le 2 novembre 2026 (nouveaux indicateurs proposés à tous, réglage « Suggestions » unique, invitation aux indicateurs)*
 
 Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'est enregistré, et ce que cela signifie. Il sert à lire un rapport, à comparer avec vos propres outils, ou à relire une sauvegarde.
 
@@ -26,22 +26,22 @@ Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'
 | `brainFog` | **Brouillard mental** : « Esprit clair » à « Confusion » | entier 0 à 10 | ↑ = plus gêné |
 | `moodLevel` | **Humeur** : « Difficile » à « Très bonne » | entier 0 à 10 | ↑ = meilleure |
 | `activityLevel` | **Activité physique** : « Repos total » à « Intense » | entier 0 à 10 | ↑ = plus actif |
-| `morningStiffness` | **Raideur au réveil** : combien de temps pour se « dérouiller » | une tranche : `none` (aucune), `lt30` (moins de 30 min), `30to60`, `1to2h`, `gt2h` (plus de 2 h) | Échelle non validée. Accès anticipé. « Aucune » est une réponse ; un jour sans réponse n'est pas un jour sans raideur |
-| `nightWakings` | **Réveils à cause de la douleur**, dans la ligne du sommeil | entier 0, 1, 2 ou 3 (3 = « 3 fois ou plus ») | Échelle non validée. Accès anticipé. 0 est une réponse |
-| `dailyInterference` | **Gêne dans mes gestes du jour** : « Aucune gêne » à « Presque rien possible » | entier 0 à 10 | Échelle non validée. Accès anticipé. ↑ = plus gêné(e) |
-| `wakingRefreshed` | **Réveil reposé ?**, dans la ligne du sommeil | `yes`, `fairly`, `little` ou `no` | Échelle non validée. Accès anticipé |
-| `jointsFelt` | **Articulations douloureuses ou gonflées (ressenti)** : oui ou non, puis lesquelles | `{ yes: vrai/faux, joints: [...] }`, joints parmi poignet, main, coude, genou, cheville, pied, côté gauche ou droit (ex. `leftWrist`) | Ce que la personne ressent, jamais un comptage par un examinateur. Accès anticipé. Les articulations ne sont gardées qu'avec « oui » |
-| `periodFlow` | **Abondance des règles** | `none`, `spotting`, `light` ou `heavy` | N'apparaît que si le suivi du cycle est activé. Accès anticipé |
-| `offCycleBleeding` | **Saignements hors règles** | vrai / faux | Avec `periodFlow`. Accès anticipé |
-| `bowelPain`, `urinary` | **Douleur à la selle**, **troubles urinaires** | vrai / faux chacun | Pour voir ce qui revient avec le cycle. Données sensibles ; facultatives, décochables d'un tap. Accès anticipé |
-| `headache` | **Mal de tête** : `today` (vrai/faux), puis `duration` (`lt4h`, `4to24h`, `gt24h`), `aura`, `nausea`, `sensitivity` (lumière ou bruit), `triggers` (étiquettes), `acuteMed` (traitement de crise pris) | objet ; les détails ne sont gardés qu'avec `today` vrai | Pour une maladie qui vient par crises. Accès anticipé |
-| `legPain` | **Douleur dans la jambe** | `none`, `toKnee` (jusqu'au genou) ou `belowKnee` (sous le genou) | Échelle non validée. Accès anticipé |
-| `symptomTags` | **Symptômes du jour** cochés | liste parmi `tingling`, `numbness`, `burning`, `shocks`, `blurredVision`, `urgency`, `dizziness` ; une liste vide est une réponse (aucun) | Pour la SEP et les douleurs nerveuses. Accès anticipé |
-| `spasms` | **Raideur ou spasmes (jambes)** | entier 0 à 10 | Échelle non validée. Accès anticipé |
-| `feverInfection` | **Fièvre ou infection en ce moment** | vrai / faux | Du contexte : rien n'en est déduit. Accès anticipé |
-| `newSymptom` | **Nouveau symptôme depuis plus de 24 h**, coché par la personne | vrai / faux | Une déclaration : aucun algorithme ne la lit, elle n'est ni une poussée ni un diagnostic. Accès anticipé |
-| `sensorySensitivity` | **Sensibilité** (bruit, lumière, odeurs, toucher) | entier 0 à 10 | Échelle non validée. Accès anticipé |
-| `morningStiffnessSeverity` | **Intensité de la raideur** (facultative, activée dans Réglages) | entier 0 à 10 | Échelle non validée. Accès anticipé |
+| `morningStiffness` | **Raideur au réveil** : combien de temps pour se « dérouiller » | une tranche : `none` (aucune), `lt30` (moins de 30 min), `30to60`, `1to2h`, `gt2h` (plus de 2 h) | Échelle non validée. « Aucune » est une réponse ; un jour sans réponse n'est pas un jour sans raideur |
+| `nightWakings` | **Réveils à cause de la douleur**, dans la ligne du sommeil | entier 0, 1, 2 ou 3 (3 = « 3 fois ou plus ») | Échelle non validée. 0 est une réponse |
+| `dailyInterference` | **Gêne dans mes gestes du jour** : « Aucune gêne » à « Presque rien possible » | entier 0 à 10 | Échelle non validée. ↑ = plus gêné(e) |
+| `wakingRefreshed` | **Réveil reposé ?**, dans la ligne du sommeil | `yes`, `fairly`, `little` ou `no` | Échelle non validée |
+| `jointsFelt` | **Articulations douloureuses ou gonflées (ressenti)** : oui ou non, puis lesquelles | `{ yes: vrai/faux, joints: [...] }`, joints parmi poignet, main, coude, genou, cheville, pied, côté gauche ou droit (ex. `leftWrist`) | Ce que la personne ressent, jamais un comptage par un examinateur. Les articulations ne sont gardées qu'avec « oui » |
+| `periodFlow` | **Abondance des règles** | `none`, `spotting`, `light` ou `heavy` | N'apparaît que si le suivi du cycle est activé |
+| `offCycleBleeding` | **Saignements hors règles** | vrai / faux | Avec `periodFlow` |
+| `bowelPain`, `urinary` | **Douleur à la selle**, **troubles urinaires** | vrai / faux chacun | Pour voir ce qui revient avec le cycle. Données sensibles ; facultatives, décochables d'un tap |
+| `headache` | **Mal de tête** : `today` (vrai/faux), puis `duration` (`lt4h`, `4to24h`, `gt24h`), `aura`, `nausea`, `sensitivity` (lumière ou bruit), `triggers` (étiquettes), `acuteMed` (traitement de crise pris) | objet ; les détails ne sont gardés qu'avec `today` vrai | Pour une maladie qui vient par crises |
+| `legPain` | **Douleur dans la jambe** | `none`, `toKnee` (jusqu'au genou) ou `belowKnee` (sous le genou) | Échelle non validée |
+| `symptomTags` | **Symptômes du jour** cochés | liste parmi `tingling`, `numbness`, `burning`, `shocks`, `blurredVision`, `urgency`, `dizziness` ; une liste vide est une réponse (aucun) | Pour la SEP et les douleurs nerveuses |
+| `spasms` | **Raideur ou spasmes (jambes)** | entier 0 à 10 | Échelle non validée |
+| `feverInfection` | **Fièvre ou infection en ce moment** | vrai / faux | Du contexte : rien n'en est déduit |
+| `newSymptom` | **Nouveau symptôme depuis plus de 24 h**, coché par la personne | vrai / faux | Une déclaration : aucun algorithme ne la lit, elle n'est ni une poussée ni un diagnostic |
+| `sensorySensitivity` | **Sensibilité** (bruit, lumière, odeurs, toucher) | entier 0 à 10 | Échelle non validée |
+| `morningStiffnessSeverity` | **Intensité de la raideur** (facultative, activée dans Réglages) | entier 0 à 10 | Échelle non validée |
 | `painLocations` | **Où as-tu mal ?** | liste parmi 25 zones précises, plus des zones d'anciennes versions | Au milieu : `head` Tête, `neck` Cou, `chest` Poitrine, `stomach` Ventre, `pelvis` Bas-ventre / pelvis (de face, et au bas du dos de dos), `upperBack` Haut du dos, `lowerBack` Bas du dos. Avec un côté (`left` ou `right` devant le nom, par ex. `leftShoulder`) : `jaw` Mâchoire, `shoulder` Épaule, `upperArm` Haut du bras, `lowerArm` Avant-bras, `hand` Main, `hip` Hanche / fesse, `upperLeg` Cuisse, `lowerLeg` Jambe, `foot` Pied. Les 19 régions de l'index de douleur diffuse (WPI) sont reprises, côtés distingués ; tête, main, pied et pelvis s'y ajoutent (le pelvis n'est pas une zone de l'index : il ne change aucun décompte WPI). `generalized` Généralisée : « douleur partout », sans cocher chaque zone. Anciennes saisies, gardées telles quelles car elles ne disent pas le côté : `shoulders` Épaules, `arms` Bras, `hands` Mains, `hips` Hanches, `legs` Jambes, `feet` Pieds |
 | `weather` | **Météo extérieure** (facultative) | objet, voir ci-dessous | Automatique ou à la main |
 | `intakes` | **Médicaments pris** | liste d'objets, voir ci-dessous | Liés au registre des traitements |

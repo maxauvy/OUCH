@@ -26,9 +26,9 @@ OUCH is free software and free of charge, and it is a diary, not medical advice:
 
 Pain alone, on a scale from 0 to 10, is enough for a day to count. You can add fatigue, sleep, stress, brain fog, mood, activity, where it hurts, the day's weather (from your location or entered by hand) and, if you want, your cycle. You can also note what helped: a short walk, a hot bath, some meditation… Anything you don't use can be switched off in the settings.
 
-“Where does it hurt?” is entered on a body outline, front and back: you tap a large region, then pick the part and the side, left or right (24 zones, including the 19 regions doctors know).
+“Where does it hurt?” is entered on a body outline, front and back: you tap a large region, then pick the part and the side, left or right (25 zones, including the 19 regions doctors know).
 
-The first time you open the app, a setup guide offers to get things ready: the conditions you track, your first name, your treatments, a daily reminder. Depending on the conditions you give, it sorts the indicators into three tiers (recommended, also useful, all the others); new indicators (morning stiffness, night waking, difficulty with daily movements, headache…) are offered in early access, unvalidated. Everything is optional, you can skip it at any point and run it again from the settings.
+The first time you open the app, a setup guide offers to get things ready: the conditions you track, your first name, your treatments, a daily reminder. Depending on the conditions you give, it sorts the indicators into three tiers (recommended, also useful, all the others); fourteen newer indicators come with it (morning stiffness, night waking because of pain, difficulty with daily movements, joints, periods, headache, leg, spasms…). Quickly reviewed in October 2026 by a physiotherapist, a psychologist specialised in pain and a GP, they remain simple scales or answers, **not validated**, with no score or threshold. Everything is optional, you can skip it at any point and run it again from the settings.
 
 On flare days the screen gets lighter and the app suggests nothing: only a kind word. On other days, whatever is waiting for you (a lead, a trial under way, a recap) fits in one quiet line, “2 small things for you”, which opens a sheet.
 
@@ -127,7 +127,7 @@ The detailed version, with what each outside service receives, is in [`PRIVACY.m
 
 OUCH is not a medical device: it describes what the person logs, makes no diagnosis, recommends no treatment, and does not replace medical advice.
 
-A two-page brochure ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.8.0/OUCH-plaquette-soignants-v0.8.0.pdf)), a methodology note detailing every calculation, threshold and source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.8.0/OUCH-note-methodologique-v0.8.0.pdf)), and a clinical feedback form are gathered in [`docs/soignants/`](docs/soignants/README.md) (all in French).
+A two-page brochure ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.9.0/OUCH-plaquette-soignants-v0.9.0.pdf)), a methodology note detailing every calculation, threshold and source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.9.0/OUCH-note-methodologique-v0.9.0.pdf)), and a clinical feedback form are gathered in [`docs/soignants/`](docs/soignants/README.md) (all in French).
 
 ## Contributing
 
@@ -135,7 +135,7 @@ Contributions are welcome from clinicians and patients as much as from developer
 
 ## Ideas for what's next
 
-- Review of the new indicators by clinicians, to bring them out of early access.
+- A deeper review of the new indicators by clinicians (wording, bands), after the quick review of October 2026.
 - A real push reminder (it would need a small server).
 - Several profiles on the same device.
 - Comparing two periods directly in Trends.

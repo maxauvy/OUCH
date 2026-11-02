@@ -6,6 +6,18 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.9.0] - 2026-11-02
+
+Les quatorze indicateurs de la 0.7.0 (jusqu'ici en accès anticipé) s'ouvrent à tout le monde : l'accueil, les Réglages, l'invitation, le rapport et Tendances les proposent selon les maladies indiquées. Ils ont été relus rapidement en octobre 2026 par un kinésithérapeute, une psychologue spécialisée dans la douleur et une médecin généraliste. Ce n'est pas une validation : ce sont toujours des échelles ou des réponses simples, sans score ni seuil, et l'app le dit. Aucune saisie n'est touchée.
+
+### Modifié
+- **Les nouveaux indicateurs ne demandent plus l'accès anticipé.** La raideur au réveil, les réveils à cause de la douleur, le réveil reposé, la gêne dans les gestes, les articulations douloureuses ou gonflées, l'abondance des règles, la douleur à la selle et les troubles urinaires, le mal de tête, la douleur dans la jambe, la raideur ou les spasmes, les symptômes du jour, la fièvre ou l'infection, le « nouveau symptôme depuis plus de 24 h » et la sensibilité sont proposés à toute nouvelle personne à l'accueil, rangés selon ses maladies : un point de départ recommandé (coché une seule fois, avec six mesures au plus), puis ce qui peut aussi aider, puis tous les autres. Les valeurs déjà saisies avec l'accès anticipé restent, et s'affichent pour tous.
+- **Les personnes qui utilisent déjà l'application** reçoivent l'invitation de la 0.7.0 (un bandeau discret, sans rien cocher d'office, jamais pendant une poussée, qui ne revient plus après deux « plus tard »), pour les indicateurs qui conviennent aux maladies indiquées et qu'elles ne suivent pas encore.
+- **Une phrase le dit** à l'accueil et dans Réglages : les indicateurs les plus récents ne sont pas des questionnaires validés, ils décrivent ce que la personne ressent, sans score.
+- **Le rapport et Tendances décrivent ces indicateurs pour tout le monde**, avec les mêmes phrases, sans seuil ni comparaison (jours notés, jours avec un oui, tranche la plus fréquente). Un jour non renseigné n'est jamais compté comme « non ».
+- **Le rhumatisme psoriasique reste en accès anticipé** (aucune source propre n'a été lue pour son profil) ; la sauvegarde automatique aussi.
+- **La documentation est à jour** : le README dit où en est la relecture (« Idées pour la suite » parle maintenant d'une relecture plus approfondie), la plaquette pour les soignants a une ligne sur ces indicateurs (et un titre qui tient sur une ligne), la note méthodologique, le statut de validation, le cadre réglementaire, le dictionnaire des données et la note sur les questionnaires validés ne parlent plus d'accès anticipé pour eux. Le nombre de zones est partout 25.
+
 ## [0.8.0] - 2026-11-02
 
 Une version qui dit pourquoi installer OUCH (suivre, comprendre, soulager par les gestes qui vont bien), avec une documentation et des captures remises à jour, et une mesure d'audience anonyme, une fois par semaine. Aucune saisie n'est touchée et aucun réglage ne change de sens.

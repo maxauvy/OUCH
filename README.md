@@ -26,9 +26,9 @@ OUCH est libre et gratuit, et c'est un carnet, pas un avis médical : il ne pose
 
 Seule la douleur, de 0 à 10, suffit pour qu'une journée compte. On peut y ajouter la fatigue, le sommeil, le stress, le brouillard mental, l'humeur, l'activité, les zones douloureuses, la météo du jour (par géolocalisation ou à la main) et, si on le souhaite, le cycle. On note aussi ce qui a aidé : une marche courte, un bain chaud, de la méditation… Tout ce dont on ne se sert pas peut être désactivé dans les réglages.
 
-« Où as-tu mal ? » se saisit sur une silhouette, de face et de dos : on touche une grande région, puis on précise la partie et le côté, gauche ou droite (24 zones, dont les 19 régions que le médecin connaît).
+« Où as-tu mal ? » se saisit sur une silhouette, de face et de dos : on touche une grande région, puis on précise la partie et le côté, gauche ou droite (25 zones, dont les 19 régions que le médecin connaît).
 
-À la première ouverture, un assistant propose de préparer le suivi : maladies suivies, prénom, traitements, rappel quotidien. Selon les maladies indiquées, il range les indicateurs en trois niveaux (recommandés, utiles aussi, tous les autres) ; de nouveaux indicateurs (raideur au réveil, réveils nocturnes, gêne dans les gestes, mal de tête…) sont proposés en accès anticipé, non validés. Tout est facultatif, on peut passer à tout moment et le relancer depuis les réglages.
+À la première ouverture, un assistant propose de préparer le suivi : maladies suivies, prénom, traitements, rappel quotidien. Selon les maladies indiquées, il range les indicateurs en trois niveaux (recommandés, utiles aussi, tous les autres) ; quatorze indicateurs plus récents s'y ajoutent (raideur au réveil, réveils à cause de la douleur, gêne dans les gestes, articulations, règles, mal de tête, jambe, spasmes…). Relus rapidement en octobre 2026 par un kinésithérapeute, une psychologue spécialisée dans la douleur et une médecin généraliste, ils restent des échelles ou des réponses simples **non validées**, sans score ni seuil. Tout est facultatif, on peut passer à tout moment et le relancer depuis les réglages.
 
 Les jours de poussée, l'écran s'allège et l'app ne propose rien : seulement un mot bienveillant. Ce qui attend la personne les autres jours (une piste, un essai en cours, un bilan) tient en une ligne discrète, « 2 petites choses pour toi », qui ouvre une feuille.
 
@@ -129,7 +129,7 @@ La version détaillée, avec ce que chaque service extérieur reçoit, est dans 
 
 OUCH n'est pas un dispositif médical : il décrit ce que la personne note, sans poser de diagnostic ni recommander de traitement, et ne remplace pas un avis médical.
 
-Une plaquette de deux pages ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.8.0/OUCH-plaquette-soignants-v0.8.0.pdf)), une note méthodologique qui détaille chaque calcul, seuil et source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.8.0/OUCH-note-methodologique-v0.8.0.pdf)), et un formulaire de retour clinique sont rassemblés dans [`docs/soignants/`](docs/soignants/README.md).
+Une plaquette de deux pages ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.9.0/OUCH-plaquette-soignants-v0.9.0.pdf)), une note méthodologique qui détaille chaque calcul, seuil et source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.9.0/OUCH-note-methodologique-v0.9.0.pdf)), et un formulaire de retour clinique sont rassemblés dans [`docs/soignants/`](docs/soignants/README.md).
 
 ## Contribuer
 
@@ -137,7 +137,7 @@ Les contributions sont bienvenues, de soignants et de patients comme de dévelop
 
 ## Idées pour la suite
 
-- Relecture des nouveaux indicateurs par des cliniciens, pour les sortir de l'accès anticipé.
+- Une relecture plus approfondie des nouveaux indicateurs par des cliniciens (libellés, tranches), après la revue rapide d'octobre 2026.
 - Un vrai rappel push (il demanderait un petit serveur).
 - Plusieurs profils sur le même appareil.
 - Comparer deux périodes directement dans Tendances.

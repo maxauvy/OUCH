@@ -53,7 +53,7 @@ const fr: Translations = {
       recommendedTitle: 'Recommandé pour toi',
       recommendedHelper: 'D’après les maladies que tu as indiquées, voici un point de départ. Tu peux tout modifier maintenant ou plus tard dans Réglages.',
       baseHelper: 'Un point de départ simple. Indique tes maladies à l’étape précédente pour une proposition plus adaptée.',
-      optional: 'Rien n’est obligatoire : chaque indicateur se décoche d’un tap.',
+      optional: 'Rien n’est obligatoire : chaque indicateur se décoche d’un tap. Les plus récents (raideur, réveils, gêne…) ne sont pas des questionnaires validés : ils décrivent ce que tu ressens, sans score.',
       suggestedTitle: 'Peut aussi t’être utile',
       addedNote: 'Ajouté suite à ton changement de maladie.',
       othersSummary: 'Voir tous les indicateurs',
@@ -1545,7 +1545,7 @@ const fr: Translations = {
     firstNameHelper: 'Utilisé sur la carte météo que tu partages ("Météo santé de {{name}}")',
     firstNamePlaceholder: 'Ton prénom',
     factorsTitle: 'Facteurs suivis',
-    factorsHelper: "Choisis ce qui apparaît dans ta saisie quotidienne. Tu peux changer d'avis à tout moment.",
+    factorsHelper: "Choisis ce qui apparaît dans ta saisie quotidienne. Tu peux changer d'avis à tout moment. Les indicateurs les plus récents ne sont pas des questionnaires validés : ils décrivent ce que tu ressens, sans score.",
     indicators: {
       recommendedTitle: 'Souvent suivi avec ce que tu as indiqué',
       recommendedHelper: 'Un repère d’après tes maladies. Rien n’est coché ni décoché à ta place.',

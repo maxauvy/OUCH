@@ -51,7 +51,7 @@ const en: Translations = {
       recommendedTitle: 'Recommended for you',
       recommendedHelper: 'Based on the illnesses you told us about, here is a starting point. You can change everything now or later in Settings.',
       baseHelper: 'A simple starting point. Tell us your illnesses on the previous step for a more suitable proposal.',
-      optional: 'Nothing is compulsory: each indicator can be unticked with a tap.',
+      optional: 'Nothing is compulsory: each indicator can be unticked with a tap. The newest ones (stiffness, night waking, interference…) are not validated questionnaires: they describe what you feel, with no score.',
       suggestedTitle: 'May also help',
       addedNote: 'Added because you changed your illnesses.',
       othersSummary: 'See all indicators',
@@ -1540,7 +1540,7 @@ const en: Translations = {
     firstNameHelper: 'Used on the weather card you share ("{{name}}\'s health weather")',
     firstNamePlaceholder: 'Your first name',
     factorsTitle: 'Tracked factors',
-    factorsHelper: "Choose what appears in your daily entry. You can change your mind anytime.",
+    factorsHelper: "Choose what appears in your daily entry. You can change your mind anytime. The newest indicators are not validated questionnaires: they describe what you feel, with no score.",
     indicators: {
       recommendedTitle: 'Often tracked with what you told us',
       recommendedHelper: 'A starting point based on your illnesses. Nothing is ticked or unticked for you.',
