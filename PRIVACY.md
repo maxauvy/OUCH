@@ -12,7 +12,7 @@ Le journal reste sur l'appareil de la personne, sans compte et sans serveur. Seu
 
 Dans le navigateur de l'appareil (base IndexedDB du site, plus quelques clés de `localStorage`, dont celle du rappel et celle de la mesure d'audience) :
 
-- le journal : douleur, zones, fatigue, sommeil, brouillard mental, stress, humeur, activité, actions qui ont aidé, notes, jour de règles si la personne l'active ;
+- le journal : douleur, zones, fatigue, sommeil, brouillard mental, stress, humeur, activité, actions qui ont aidé, notes, jour de règles si la personne l'active, et, pour celles qui suivent les indicateurs proposés selon les maladies, des données plus intimes (abondance des règles et saignements hors règles, douleur à la selle, troubles urinaires, fièvre ou infection, mal de tête, symptômes du jour, raideur, réveils…). Elles sont facultatives, décochables d'un tap, et ne quittent pas l'appareil : elles sont dans la sauvegarde chiffrée et dans l'export CSV (non chiffré) ;
 - les traitements : nom, type, doses, périodes, prises, soulagement, effets indésirables ;
 - les réglages : prénom, langue, maladies déclarées, heure du rappel, et, si la météo automatique est activée, la **position exacte** de l'appareil ;
 - le dernier numéro de semaine pour lequel le signal de mesure d'audience a été envoyé (`ouch.audience.lastWeek`, dans `localStorage`) : un repère par installation, sans identifiant, qui n'est ni dans la sauvegarde ni dans l'export CSV et que la case de Réglages efface ;
