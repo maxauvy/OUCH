@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { IconBell, IconCalendarHeart, IconDatabaseExport, IconHeart, IconHeartHandshake, IconHeartbeat, IconId, IconInfoCircle, IconLanguage, IconLayoutList, IconListCheck, IconMapPin, IconMoodKid, IconPalette, IconPill, IconPlayerPlay, IconRefresh, IconShieldLock, IconSparkles, IconStethoscope, IconUser, IconUsers } from '@tabler/icons-react'
+import { IconBell, IconCalendarHeart, IconChartBar, IconDatabaseExport, IconHeart, IconHeartHandshake, IconHeartbeat, IconId, IconInfoCircle, IconLanguage, IconLayoutList, IconListCheck, IconMapPin, IconMoodKid, IconPalette, IconPill, IconPlayerPlay, IconRefresh, IconShieldLock, IconSparkles, IconStethoscope, IconUser, IconUsers } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
+import { clearAudienceFlag } from '../lib/audience'
 import { type ParentGender, type ThemePref } from '../db/types'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Toggle } from '../components/ui/Toggle'
@@ -405,6 +406,17 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           </button>
         </Card>
 
+        <SettingToggle
+          icon={IconChartBar}
+          title={t.settings.audienceTitle}
+          helper={t.settings.audienceHelper}
+          checked={settings.audienceMeasurementEnabled !== false}
+          onChange={(on) => {
+            if (!on) clearAudienceFlag()
+            void updateSettings({ audienceMeasurementEnabled: on })
+          }}
+        />
+
         <SensitiveZoneCard />
           </>
         )}
@@ -447,6 +459,15 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
             </button>
           </Card>
         )}
+
+        <Card>
+          <SectionTitle icon={IconChartBar}>{t.settings.audienceDetail.title}</SectionTitle>
+          <ul className="flex flex-col gap-2 text-caption leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.settings.audienceDetail.items.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </Card>
 
         <SourcesCard />
 

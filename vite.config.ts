@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
 import { execSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 
@@ -51,30 +51,43 @@ function versionFile(commit: string, date: string, tagged: boolean): Plugin {
 
 // Content-Security-Policy, as a <meta> because GitHub Pages sets no headers.
 // Everything is same-origin except the Open-Meteo calls, the Nominatim
-// (OpenStreetMap) place-name lookup and, for the optional encrypted backup, Dropbox. `data:` and `blob:`
+// (OpenStreetMap) place-name lookup, for the optional encrypted backup Dropbox
+// and, in the official deployment only, the anonymous weekly audience signal
+// (its host is added when VITE_AUDIENCE_URL is set). `data:` and `blob:`
 // are for the weather card and report images (html-to-image), which are
 // built in the page and re-read with fetch(). Inline styles are React
 // `style` attributes. `frame-ancestors` cannot be set from a <meta>.
-const CONTENT_SECURITY_POLICY = [
-  "default-src 'self'",
-  "script-src 'self'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
-  "font-src 'self' data:",
-  "connect-src 'self' data: blob: https://api.open-meteo.com https://archive-api.open-meteo.com https://nominatim.openstreetmap.org https://api.dropboxapi.com https://content.dropboxapi.com",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'none'",
-].join('; ')
+function contentSecurityPolicy(audienceUrl: string | undefined): string {
+  // Only the origin of the audience endpoint: a fork or a local build, which
+  // has none, keeps a policy without it.
+  let audienceOrigin = ''
+  try {
+    if (audienceUrl) audienceOrigin = ` ${new URL(audienceUrl).origin}`
+  } catch {
+    // An unusable address disables the measurement (see lib/audience.ts) and opens nothing.
+  }
+  return [
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "font-src 'self' data:",
+    `connect-src 'self' data: blob: https://api.open-meteo.com https://archive-api.open-meteo.com https://nominatim.openstreetmap.org https://api.dropboxapi.com https://content.dropboxapi.com${audienceOrigin}`,
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'none'",
+  ].join('; ')
+}
 
 // https://vite.dev/config/
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command, mode }) => {
   const base = command === 'build' ? '/OUCH/' : '/'
 
   const commit = command === 'build' ? commitSha() : 'dev'
   const date = new Date().toISOString().slice(0, 10)
   const { version } = JSON.parse(readFileSync('./package.json', 'utf8')) as { version: string }
   const tagged = command === 'build' && isTaggedRelease(version)
+  const policy = contentSecurityPolicy(loadEnv(mode, process.cwd(), 'VITE_').VITE_AUDIENCE_URL)
 
   return {
     base,
@@ -99,7 +112,7 @@ export default defineConfig(({ command }) => {
         transformIndexHtml: () => [
           {
             tag: 'meta',
-            attrs: { 'http-equiv': 'Content-Security-Policy', content: CONTENT_SECURITY_POLICY },
+            attrs: { 'http-equiv': 'Content-Security-Policy', content: policy },
             injectTo: 'head-prepend',
           },
         ],

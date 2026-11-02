@@ -96,6 +96,7 @@ Un changement de dose ferme la période en cours la veille et en ouvre une nouve
 | `illnessYear` | par maladie : année du diagnostic (entier de 1900 à l'année en cours), facultatif | Oui. Seulement pour une maladie déclarée « diagnostiquée » ; effacée si le statut change ou si la maladie est décochée. Reprise dans le rapport : « fibromyalgie (diagnostiquée en 2019) » |
 | `otherIllnessName` | texte libre, 60 caractères au plus | Oui. Le nom saisi pour « autre », repris tel quel dans l'en-tête du rapport, jamais dans l'onglet Enfants |
 | `kidsTabEnabled` | vrai / faux | Oui. L'onglet Enfants est masqué tant que la personne n'a pas répondu oui à la question de l'assistant (ou activé l'interrupteur de Réglages) |
+| `audienceMeasurementEnabled` | vrai / faux (vrai tant que la personne n'a rien dit) | Oui. Le signal anonyme hebdomadaire « actif cette semaine » (voir [`PRIVACY.md`](../../PRIVACY.md)). Le repère local de la dernière semaine envoyée (`ouch.audience.lastWeek`) n'est pas un réglage de la base, ni une donnée de santé : il n'est jamais sauvegardé ni exporté |
 | `enabledFactors` | parmi : fatigue, sommeil, stress, brouillard mental, humeur, activité, météo, médicaments, actions positives, zones douloureuses, notes | Oui |
 | `cycleTrackingEnabled` | vrai / faux | Oui |
 | `autoWeatherEnabled`, `autoWeatherLat`, `autoWeatherLon`, `autoWeatherLabel` | booléen, **latitude et longitude exactes**, nom de la ville | Oui : une sauvegarde contient donc la position exacte, si elle a été enregistrée |

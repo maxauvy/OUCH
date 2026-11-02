@@ -1409,6 +1409,10 @@ export interface Translations {
     suggestionsPrivacy: string
     kidsTabTitle: string
     kidsTabHelper: string
+    audienceTitle: string
+    audienceHelper: string
+    /** The detail of the weekly signal, in About: one sentence per point. */
+    audienceDetail: { title: string; items: readonly string[] }
     lightFormTitle: string
     lightFormHelper: string
     appearanceTitle: string

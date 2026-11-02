@@ -285,6 +285,13 @@ test('the lighter-form switch is restored from a backup, the day the full form w
   assert.deepEqual(sanitizeSettings({ kidsTabEnabled: 'no' }), {})
 })
 
+test('the audience measurement switch is restored from a backup, and only when it is a boolean', () => {
+  assert.deepEqual(sanitizeSettings({ audienceMeasurementEnabled: false }), { audienceMeasurementEnabled: false })
+  assert.deepEqual(sanitizeSettings({ audienceMeasurementEnabled: true }), { audienceMeasurementEnabled: true })
+  assert.deepEqual(sanitizeSettings({ audienceMeasurementEnabled: 'no' }), {})
+  assert.deepEqual(sanitizeSettings({ theme: 'light' }), { theme: 'light' })
+})
+
 test('a whole backup: bad items are counted, good ones survive', () => {
   const out = sanitizeBackup({
     entries: [entry, { ...entry, date: 'nope' }, 3],

@@ -413,6 +413,8 @@ export interface Settings {
   indicatorInviteDismissCount?: number
   /** The notice about the new body zones was seen on this device (shown once, to a journal that holds zones of the first versions). Per device. */
   zonesNoticeSeen?: boolean
+  /** The weekly anonymous "active this week" signal (see lib/audience.ts). On unless it is `false`, so a journal from before the setting counts as on. A preference, restored from a backup. */
+  audienceMeasurementEnabled?: boolean
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness
@@ -450,6 +452,7 @@ export const DEFAULT_SETTINGS: Settings = {
   kidsTabEnabled: false,
   morningStiffnessSeverityEnabled: false,
   indicatorInviteDone: false,
+  audienceMeasurementEnabled: true,
 }
 
 export type PainWeatherLevel = 1 | 2 | 3 | 4 | 5
