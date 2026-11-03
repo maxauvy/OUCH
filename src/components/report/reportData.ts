@@ -18,6 +18,8 @@ interface ReportOptions {
   language: Language
   /** Date of the last consultation: start of the reported period */
   consultation: string
+  /** That date is the one of the last appointment noted in the app: the period is labelled "since the last appointment" */
+  sinceConsultation?: boolean
   /** Last day covered (today) */
   end: string
   patientName: string

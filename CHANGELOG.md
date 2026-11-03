@@ -6,6 +6,11 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Préparer un rendez-vous.** Une feuille réunit la date du rendez-vous, tes questions et ce dont tu veux parler en priorité, et, après le rendez-vous, une note sur ce que le médecin a dit. On y accède depuis une carte douce sur la page du jour (14 jours avant, puis le jour même et les 14 jours qui suivent), depuis Tendances et depuis les Réglages. La carte se ferme, sans insister. Les questions et la note sont gardées dans les sauvegardes.
+- **Le rapport reprend la préparation.** La liste « Ce que tu veux aborder » se remplit d'après tes questions et ta priorité, et le rapport démarre à la date de ton dernier rendez-vous (modifiable, comme avant).
+- **La première page du rapport pour le médecin traitant se lit plus vite.** Une rangée de chiffres vient en haut (douleur moyenne, jours sévères, poussées et, si tu la suis, la raideur au réveil), chacun comparé à la période d'avant quand c'est possible. Ce que tu veux aborder passe juste sous la courbe, avant les points à retenir, et la période s'appelle « Depuis la dernière consultation » quand elle part de ton dernier rendez-vous.
+
 ## [0.9.0] - 2026-11-02
 
 Les quatorze indicateurs de la 0.7.0 (jusqu'ici en accès anticipé) s'ouvrent à tout le monde : l'accueil, les Réglages, l'invitation, le rapport et Tendances les proposent selon les maladies indiquées. Ils ont été relus rapidement en octobre 2026 par un kinésithérapeute, une psychologue spécialisée dans la douleur et une médecin généraliste. Ce n'est pas une validation : ce sont toujours des échelles ou des réponses simples, sans score ni seuil, et l'app le dit. Aucune saisie n'est touchée.

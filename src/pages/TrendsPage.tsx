@@ -3,6 +3,7 @@ import { IconChevronRight, IconFileText } from '@tabler/icons-react'
 
 import { Footer } from '../components/layout/Footer'
 import { ConsultationCard } from '../components/trends/ConsultationCard'
+import { PrepareLink } from '../components/consultation/PrepareLink'
 import { TimelineCard } from '../components/trends/TimelineCard'
 import { TrialsCard } from '../components/trends/TrialsCard'
 import { LeadsCard } from '../components/trends/LeadsCard'
@@ -175,6 +176,7 @@ export function TrendsPage() {
           zonesTracked={zonesTracked}
           lastTreatment={lastTreatmentEvent(events, today)}
           action={
+        <>
         <button
           ref={reportButtonRef}
           data-tour="report"
@@ -202,6 +204,8 @@ export function TrendsPage() {
           </span>
           <IconChevronRight size={20} aria-hidden style={{ color: t.inkMuted }} />
         </button>
+        <PrepareLink onSeeReport={() => setReporting(true)} />
+        </>
           }
         />
       )}

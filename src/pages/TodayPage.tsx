@@ -11,6 +11,7 @@ import { useSettings } from '../hooks/useSettings'
 import { useTranslation } from '../i18n'
 import { IconShare } from '@tabler/icons-react'
 import { BackupReminderCard } from '../components/backup/BackupReminderCard'
+import { AppointmentCard } from '../components/consultation/AppointmentCard'
 import { TodayList } from '../components/today/TodayList'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { todayISO } from '../lib/dates'
@@ -32,6 +33,7 @@ export function TodayPage({ onGoToBackup, onGoToTab }: { onGoToBackup: () => voi
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       {!IS_DEMO && <BackupReminderCard onBackup={onGoToBackup} />}
+      <AppointmentCard />
       <DailyEntryForm
         date={date}
         onGoToBackup={IS_DEMO ? undefined : onGoToBackup}

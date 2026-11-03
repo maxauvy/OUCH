@@ -574,3 +574,13 @@
   font-size: 10px;
   padding: 4px 0;
 }
+
+/* The row of figures at the top of the GP report, above the dashboard. */
+.report .r-first-tiles {
+  margin-top: 12px;
+}
+.report .r-first-tiles .r-tile .r-big small {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--r-navy);
+}

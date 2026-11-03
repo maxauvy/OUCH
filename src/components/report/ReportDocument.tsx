@@ -142,6 +142,7 @@ function gpPages(d: ReportData): Block[][] {
   return [
     [
       <Header d={d} />,
+      <GpTiles d={d} />,
       <div className="r-dash">
         <div className="r-card r-chart">
           <H level={2}>{f.t.painChart}</H>
@@ -154,6 +155,7 @@ function gpPages(d: ReportData): Block[][] {
         <GpFigures d={d} />
         <DayMix d={d} />
       </div>,
+      <Agenda d={d} />,
       rowsBlock(keyPoints.length, (from, to, continued) => (
         <div className="r-card r-after-dash">
           <H level={2}>
@@ -163,7 +165,6 @@ function gpPages(d: ReportData): Block[][] {
           <KeyPointList items={keyPoints} from={from} to={to} />
         </div>
       )),
-      <Agenda d={d} />,
     ],
     [
       d.meds.length > 0 &&
@@ -461,7 +462,7 @@ function Header({ d }: { d: ReportData }) {
           )}
         </div>
         <div>
-          <div className="r-k">{f.t.period}</div>
+          <div className="r-k">{options.sinceConsultation ? f.t.periodSince : f.t.period}</div>
           <div className="r-v num">
             {f.fullDate(p.start)} → {f.fullDate(p.end)} <small>· {f.format(f.t.periodDays, { n: p.periodDays })}</small>
           </div>
@@ -658,26 +659,49 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
 
 /** The GP dashboard's figures: mean pain, then sleep when it is logged, or
  * else the median. */
+/** The figures a doctor reads first, in a row on the GP report's first page: mean pain, severe days, flares and, when followed, morning stiffness. A figure with nothing behind it is left out. */
+function GpTiles({ d }: { d: ReportData }) {
+  const { f, pain, painPrev, flares } = d
+  if (!pain) return null
+  const before = (v: string) => (painPrev ? f.format(f.t.before, { v }) : undefined)
+  const severeN = Math.round(pain.severe * pain.n)
+  const stiff = d.options.includeStiffness ? summarizeMorningStiffness(d.current) : null
+  const tiles: ReactNode[] = [
+    <Tile
+      key="mean"
+      label={f.t.tileMeanPain}
+      value={
+        <>
+          {f.nf(pain.mean)}
+          <small> /10</small>
+        </>
+      }
+      compare={painPrev && painPrev.mean > 0 ? `${before(f.nf(painPrev.mean))} · ${f.signedPct((pain.mean - painPrev.mean) / painPrev.mean)}` : undefined}
+    />,
+    <Tile key="severe" label={f.t.tileSevere} value={severeN} compare={painPrev ? before(String(Math.round(painPrev.severe * painPrev.n))) : undefined} />,
+  ]
+  if (flares.detectable)
+    tiles.push(
+      <Tile
+        key="flares"
+        label={f.t.flaresTitle}
+        value={flares.current.length}
+        compare={flares.current.length ? f.format(f.t.flareDays, { n: flares.currentDays }) : undefined}
+      />
+    )
+  if (stiff?.commonest)
+    tiles.push(<Tile key="stiffness" label={f.t.stiffness.title} value={<small>{f.t.stiffness.bands[stiff.commonest]}</small>} compare={f.format(f.t.stiffness.noted, { n: stiff.noted })} />)
+  return <div className="r-tiles r-first-tiles">{tiles}</div>
+}
+
 function GpFigures({ d }: { d: ReportData }) {
-  const { f, pain, painPrev } = d
+  const { f, pain } = d
   if (!pain) return null
   const sleep = meanOf(d.current, 'sleepHours')
   const sleepPrev = meanOf(d.previous, 'sleepHours')
   const quality = meanOf(d.current, 'sleepQuality')
   return (
     <div className="r-card tint">
-      <div className="r-kpi">
-        <div className="r-k">{f.t.tileMeanPain}</div>
-        <div className="r-big num">
-          {f.nf(pain.mean)}
-          <small> /10</small>
-        </div>
-        {painPrev && painPrev.mean > 0 && (
-          <div className="r-cmp">
-            {f.format(f.t.before, { v: f.nf(painPrev.mean) })} · {f.signedPct((pain.mean - painPrev.mean) / painPrev.mean)}
-          </div>
-        )}
-      </div>
       {sleep ? (
         <div className="r-kpi">
           <div className="r-k">{f.t.tileSleep}</div>
