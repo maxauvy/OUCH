@@ -19,6 +19,7 @@ import { withCut, type Cut } from '../components/report/pagination'
 import { isOffered, withoutUnoffered } from '../lib/indicatorCatalog'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { shiftISO, todayISO } from '../lib/dates'
+import { agendaLines, reportStart } from '../lib/consultation'
 
 /** A4 width in CSS pixels (210 mm at 96 dpi): the preview is scaled from it. */
 const PAGE_WIDTH = 794
@@ -66,13 +67,17 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
 
   const today = todayISO()
   const [variant, setVariant] = useState<ReportVariant>('gp')
-  const [consultation, setConsultation] = useState(shiftISO(today, -90))
+  // null until edited: the report starts at the last appointment once the settings are read, else 90 days back.
+  const [consultationInput, setConsultation] = useState<string | null>(null)
+  const consultation = consultationInput ?? reportStart(settings, today, shiftISO(today, -90))
   const [language, setLanguage] = useState<Language>(appLanguage)
   // null until edited: settings load asynchronously, so the defaults follow them.
   const [nameInput, setPatientName] = useState<string | null>(null)
   const patientName = nameInput ?? settings.displayName
   const [birthDate, setBirthDate] = useState('')
-  const [agenda, setAgenda] = useState('')
+  // null until edited: filled from the appointment prepared in the app, if any.
+  const [agendaInput, setAgenda] = useState<string | null>(null)
+  const agenda = agendaInput ?? agendaLines(settings.consultation, t.consultation.goalPrefix).join('\n')
   const [includeNotes, setIncludeNotes] = useState(true)
   const [cycleChoice, setIncludeCycle] = useState<boolean | null>(null)
   const includeCycle = cycleChoice ?? settings.cycleTrackingEnabled
@@ -91,6 +96,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             variant,
             language,
             consultation,
+            sinceConsultation: settings.lastConsultation?.date === consultation,
             end: today,
             patientName: patientName.trim(),
             birthDate: birthDate || undefined,
@@ -107,7 +113,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             demo: IS_DEMO,
           })
         : null,
-    [entries, medications, variant, language, consultation, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, earlyAccess, settings.leadTrialHistory, settings.leadTrial, agenda, includeNotes, includeCycle]
+    [entries, medications, variant, language, consultation, settings.lastConsultation?.date, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, earlyAccess, settings.leadTrialHistory, settings.leadTrial, agenda, includeNotes, includeCycle]
   )
 
   // Browsers name the saved PDF after the page title.
@@ -299,6 +305,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
         />
         <p id={`${ids}-agenda-help`} className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
           {t.doctorReport.agendaHelper}
+          {agendaInput === null && settings.consultation && ` ${t.consultation.reportFilled}`}
         </p>
       </Card>
 

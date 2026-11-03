@@ -37,12 +37,15 @@ import type {
   NightWakings,
   ReliefLevel,
   Settings,
+  Consultation,
+  LastConsultation,
   WeatherInfo,
 } from '../db/types.ts'
 import { cleanZones } from './bodyZones.ts'
 import { cleanOtherName, FIRST_DIAGNOSIS_YEAR } from './illnessStatus.ts'
 import type { LeadChoices } from './leads.ts'
 import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
+import { cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
 
 /** Far above any real journal (a hundred years is ~36 500 days). */
 const MAX_ENTRIES = 40_000
@@ -307,6 +310,20 @@ function leadTrialHistory(v: unknown): LeadTrial[] | undefined {
   return v.length > 0 && weeks.length === 0 ? undefined : weeks
 }
 
+/** An appointment being prepared: a real day, and the questions kept as clean lines. */
+function consultation(v: unknown): Consultation | undefined {
+  if (!isRecord(v) || !isISODate(v.date)) return undefined
+  const questions = (strings(v.questions, MAX_QUESTION_LENGTH) ?? []).map((q) => cleanLine(q)).filter(Boolean).slice(0, MAX_QUESTIONS)
+  const goal = typeof v.goal === 'string' ? cleanLine(v.goal, MAX_GOAL_LENGTH) : ''
+  return goal ? { date: v.date, questions, goal } : { date: v.date, questions }
+}
+
+function lastConsultation(v: unknown): LastConsultation | undefined {
+  if (!isRecord(v) || !isISODate(v.date)) return undefined
+  const notes = typeof v.notes === 'string' ? v.notes.trim().slice(0, MAX_NOTES_LENGTH) : ''
+  return notes ? { date: v.date, notes } : { date: v.date }
+}
+
 /** Only what is valid is kept, and nothing is filled in: a setting the file
  * does not (validly) hold stays as it is on this device. */
 export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
@@ -350,6 +367,8 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     indicatorInviteDismissCount: typeof raw.indicatorInviteDismissCount === 'number' && Number.isInteger(raw.indicatorInviteDismissCount) ? num(raw.indicatorInviteDismissCount, 0, 2) : undefined,
     leadTrial: leadTrial(raw.leadTrial),
     leadTrialHistory: leadTrialHistory(raw.leadTrialHistory),
+    consultation: consultation(raw.consultation),
+    lastConsultation: lastConsultation(raw.lastConsultation),
   })
 }
 

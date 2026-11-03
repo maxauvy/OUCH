@@ -699,6 +699,8 @@ export interface Translations {
     declaredIllness: string
     declaredIllnesses: string
     period: string
+    /** The period's label when it starts at the last appointment */
+    periodSince: string
     periodDays: string
     comparedTo: string
     logged: string
@@ -1245,6 +1247,48 @@ export interface Translations {
     weeklySee: string
   }
   /** The quiet line under the title of the day's page, and the sheet it opens. */
+  consultation: {
+    /** Card on the day's page, a few days before: `{{date}}` and `{{n}} {{n:day|days}}` */
+    cardLabel: string
+    cardSoon: string
+    cardAfter: string
+    prepare: string
+    note: string
+    later: string
+    sheetTitle: string
+    close: string
+    dateLabel: string
+    questionsTitle: string
+    questionPlaceholder: string
+    addQuestion: string
+    /** `{{q}}` is the question */
+    removeQuestion: string
+    noQuestions: string
+    goalTitle: string
+    goalPlaceholder: string
+    /** `{{date}}`: the day of the last appointment */
+    sinceTitle: string
+    /** `{{now}}` and `{{before}}`: mean pain since, and over the same length before */
+    sinceBody: string
+    sinceBodyNoPrev: string
+    seeReport: string
+    afterTitle: string
+    afterHint: string
+    happened: string
+    notesPlaceholder: string
+    save: string
+    remove: string
+    /** Prefix of the goal line in the report's list */
+    goalPrefix: string
+    /** Trends and Settings entry points; `{{date}}` is the appointment day */
+    trendsPrepare: string
+    trendsPrepareNew: string
+    settingsTitle: string
+    settingsNone: string
+    settingsNext: string
+    /** Report form: the list is filled from the preparation */
+    reportFilled: string
+  }
   todayList: {
     /** `{{n}} {{n:thing|things}}`: how many things wait. */
     line: string

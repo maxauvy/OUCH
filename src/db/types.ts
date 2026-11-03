@@ -351,6 +351,22 @@ export interface AutoBackupState {
   lastFailureDetail?: string
 }
 
+/** An appointment being prepared: what the person wants to ask and say. */
+export interface Consultation {
+  /** The day of the appointment (ISO). */
+  date: string
+  questions: string[]
+  /** What the person most wants to say, in a sentence. */
+  goal?: string
+}
+
+/** The appointment that took place last: its day starts the next report. */
+export interface LastConsultation {
+  date: string
+  /** What was said and what changes, as the person wrote it. */
+  notes?: string
+}
+
 export interface Settings {
   id: 1
   enabledFactors: FactorKey[]
@@ -415,6 +431,12 @@ export interface Settings {
   zonesNoticeSeen?: boolean
   /** The weekly anonymous "active this week" signal (see lib/audience.ts). On unless it is `false`, so a journal from before the setting counts as on. A preference, restored from a backup. */
   audienceMeasurementEnabled?: boolean
+  /** The appointment being prepared, if any. Restored from a backup. */
+  consultation?: Consultation
+  /** The last appointment, once it has taken place. Restored from a backup. */
+  lastConsultation?: LastConsultation
+  /** The card on the day's page was closed for this appointment (and this stage of it). Per device. */
+  consultationCardClosed?: { date: string; kind: 'soon' | 'after' }
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness
