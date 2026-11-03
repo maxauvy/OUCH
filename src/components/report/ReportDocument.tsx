@@ -26,6 +26,7 @@ import type { FlareEpisode } from '../../lib/flares'
 import { actionInSentence, type Lead } from '../../lib/leads'
 import type { ReportTrial } from '../../lib/leadTrial'
 import type { TreatmentReview } from '../../lib/treatmentReview'
+import { shiftISO } from '../../lib/dates'
 import { CONTEXT_KEYS, type ContextKey, type TreatmentEvent } from '../../lib/flareContext'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
 import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
@@ -179,6 +180,7 @@ function gpPages(d: ReportData): Block[][] {
         )),
       d.reviews.length > 0 && reviewBlock(d),
       d.marked.length > 0 && markedBlock(d),
+      d.compare && <CompareBlock d={d} />,
       <div className="r-grid2 wide-left">
         <div>
           <H level={2}>{f.t.symptoms}</H>
@@ -275,6 +277,7 @@ function painClinicPages(d: ReportData): Block[][] {
           </>
         )),
       d.marked.length > 0 && markedBlock(d),
+      d.compare && <CompareBlock d={d} />,
       hasFlareContext(d) &&
         rowsBlock(d.flares.current.length, (from, to, continued) => (
           <>
@@ -1038,6 +1041,54 @@ function markedBlock(d: ReportData) {
       {to === d.marked.length && <p className="r-small">{f.t.markedNote}</p>}
     </>
   ))
+}
+
+/** The previous period and the reported one side by side, with how much two periods of that length usually differ for this patient, so that the gap can be read against it. */
+function CompareBlock({ d }: { d: ReportData }) {
+  const { f, compare: c, p } = d
+  if (!c) return null
+  const t = f.t
+  const range = (from: string, to: string) => f.format(t.flareRange, { start: f.dayMonth(from), end: f.dayMonth(to) })
+  const prevEnd = shiftISO(p.start, -1)
+  const signed = (v: number) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v)}`
+  const bands = t.stiffness.bands
+  const rows: [string, string, string, string][] = [
+    [t.tileMeanPain, c.a.pain === null ? '—' : f.nf(c.a.pain), c.b.pain === null ? '—' : f.nf(c.b.pain), c.diff === null ? '—' : `${c.diff > 0 ? '+' : c.diff < 0 ? '−' : ''}${f.nf(Math.abs(c.diff))}`],
+    [t.tileSevere, String(c.a.severe), String(c.b.severe), signed(c.b.severe - c.a.severe)],
+    ...(c.a.flareDays !== null && c.b.flareDays !== null ? [[t.colReviewFlares, String(c.a.flareDays), String(c.b.flareDays), signed(c.b.flareDays - c.a.flareDays)] as [string, string, string, string]] : []),
+    ...(d.options.includeStiffness ? [[t.stiffness.title, c.a.stiffness ? bands[c.a.stiffness] : '—', c.b.stiffness ? bands[c.b.stiffness] : '—', ''] as [string, string, string, string]] : []),
+    [t.colReviewDays, `${c.a.logged} / ${c.a.days}`, `${c.b.logged} / ${c.b.days}`, ''],
+  ]
+  const diff = c.diff === null || Math.abs(c.diff) < 0.05 ? null : Math.abs(c.diff)
+  return (
+    <>
+      <H level={2}>{t.compareTitle}</H>
+      <table className="r-reviews">
+        <thead>
+          <tr>
+            <th scope="col" />
+            <th scope="col" className="r">{range(p.prevStart, prevEnd)}</th>
+            <th scope="col" className="r">{range(p.start, p.end)}</th>
+            <th scope="col" className="r">{t.colCompareGap}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([label, a, b, gap]) => (
+            <tr key={label} data-row>
+              <th scope="row">{label}</th>
+              <td className="r">{a}</td>
+              <td className="r">{b}</td>
+              <td className="r">{gap}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="r-small">
+        {diff === null ? t.compareDiffSame : f.format(c.diff! < 0 ? t.compareDiffLower : t.compareDiffHigher, { diff: f.nf(diff), n: diff })}{' '}
+        {c.gap === null ? t.compareNoUsual : f.format(c.within ? t.compareWithin : t.compareOutside, { gap: f.nf(c.gap), n: c.gap, days: c.windowDays })} {t.compareNote}
+      </p>
+    </>
+  )
 }
 
 /** Measures with at least one figure before some flare: one that is not
