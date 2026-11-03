@@ -32,6 +32,8 @@ The first time you open the app, a setup guide offers to get things ready: the c
 
 On flare days the screen gets lighter and the app suggests nothing: only a kind word. On other days, whatever is waiting for you (a lead, a trial under way, a recap) fits in one quiet line, “2 small things for you”, which opens a sheet.
 
+When a stretch is harder, you can note it yourself under the day's pain: when it began, what may have played a part, a few words. The screen then gets lighter, as for a detected flare, but the two stay apart: OUCH does not mix what you live with what the pain levels show.
+
 ### Keep track of your treatments
 
 You enter each treatment once: regular or as-needed, the dose, dose changes, when you stopped. After that, regular treatments are ticked for you every day. For as-needed ones, you log how many doses you took, how much relief you got and any side effects. Dose changes show up right on the pain curve.
@@ -46,11 +48,19 @@ The journal is a monthly calendar, colored by each day's weather. You can go bac
 
 Trends opens with a “For my appointment” block (average pain, flares, most reported zone, latest treatment change). Then come the pain curve over 7, 30 or 90 days, or since the beginning, with its 7-day average and toggleable layers (flares, treatments, trials), a “What happened” timeline, cards on painful zones (where, during flares, week by week) and a calm recap of the month that just ended. It also shows which days of the week tend to go best and worst, what your notes let you see (“what your notes say”: sleep, stress, the day before's activity and what helped, one lead at a time, with the two averages and the number of days), and how you use your treatments. These are associations found in your own data, not proof, and the app says so. You can keep a lead for your appointment, set it aside, or try for a week an action you noted yourself; the app can also bring a lead to the day's page, sum up your week in a sentence on Sundays, or do it quietly with a dot on the tab (all of it is turned off by a single “Suggestions” setting, and none of it shows during a flare). When a trial or a flare ends, the app acknowledges it in one gentle sentence.
 
+Two more cards: “Compare two periods” puts the same measures side by side (the last 30 days, since your last appointment, or two periods you choose) and reads the pain gap beside what is usual for you; “After your active days” looks, from 30 days logged with the activity, at whether the days after your most active ones were harder than usual, and sets it beside what chance would give. Neither says why: they are descriptions, not proof. The day after a day you gave a lot, a quiet word suggests taking it in small steps, never during a harder stretch.
+
+### Get ready for an appointment
+
+You note the date, your questions and what you most want to talk about; a soft card on the day's page recalls it fifteen days ahead. After the appointment you write what the doctor said and, if a prescription was given, its length: OUCH reminds you a week before it ends (or two, as you choose), without working anything out from your intakes. The sheet also recalls what happened since your last appointment. All of it stays on the device.
+
 ### A report for your doctor
 
 From Trends, you can generate a report to print or save as a PDF. It covers the time since your last appointment and compares it with the same length of time just before. It comes in two versions: a 2-page summary for your GP, and a detailed 5-page report for a pain clinic (a CETD in France), with painkiller use and associated factors. It can be read in French or English, lists the conditions you declared and, under “What the patient noticed”, carries the leads you kept and your one-week trials.
 
 The report describes the data without interpreting it, and its thresholds cite their sources (IMMPACT, the French health authority HAS, and other published work), summarised in Settings → About → Scientific sources. It is built on your device; the name and date of birth you type into it are not saved.
+
+The report carries the preparation: the patient's questions and priority at the top, their note after the last appointment (which can be left out), the difficult periods they noted (apart from the detected flares) and a comparison of two periods, by default the report's period and the one before it, or two periods of your choice.
 
 ### Explain it to your child
 
@@ -63,6 +73,8 @@ The Kids tab is made to be shown to a child. It tells the day's weather in simpl
 - An optional four-digit code lock that hides the screen.
 - The app installs on your home screen (phone or computer) and works offline after the first visit. Text follows the font size set on your phone.
 - Your data stays in the browser (IndexedDB). To back up or switch devices, you export a file encrypted with a password of your choice (AES-256-GCM, in the browser) and import it back later; a CSV export (two plain files: the journal and the intakes) is for analysis, not for restoring. The app reminds you to back up when there is something to lose, and asks the browser not to erase your data. In early access, automatic backup sends that same encrypted file to a Dropbox.
+
+- On a phone, “Save to Files” opens the share sheet to keep the encrypted backup in iCloud Drive or elsewhere, instead of a download to move by hand.
 
 ## Try it with demo data
 
@@ -127,7 +139,7 @@ The detailed version, with what each outside service receives, is in [`PRIVACY.m
 
 OUCH is not a medical device: it describes what the person logs, makes no diagnosis, recommends no treatment, and does not replace medical advice.
 
-A two-page brochure ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.9.0/OUCH-plaquette-soignants-v0.9.0.pdf)), a methodology note detailing every calculation, threshold and source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.9.0/OUCH-note-methodologique-v0.9.0.pdf)), and a clinical feedback form are gathered in [`docs/soignants/`](docs/soignants/README.md) (all in French).
+A two-page brochure ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.10.0/OUCH-plaquette-soignants-v0.10.0.pdf)), a methodology note detailing every calculation, threshold and source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.10.0/OUCH-note-methodologique-v0.10.0.pdf)), and a clinical feedback form are gathered in [`docs/soignants/`](docs/soignants/README.md) (all in French).
 
 ## Contributing
 
@@ -138,7 +150,6 @@ Contributions are welcome from clinicians and patients as much as from developer
 - A deeper review of the new indicators by clinicians (wording, bands), after the quick review of October 2026.
 - A real push reminder (it would need a small server).
 - Several profiles on the same device.
-- Comparing two periods directly in Trends.
 - iOS and Android widgets (this would mean going native or using Capacitor).
 
 ## License

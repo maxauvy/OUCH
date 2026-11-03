@@ -839,7 +839,7 @@ const fr: Translations = {
     declaredIllnesses: 'Maladies déclarées par le patient : {{list}}',
     period: 'Période analysée',
     periodSince: 'Depuis la dernière consultation',
-    periodDays: '{{n}} j',
+    periodDays: '{{n}} j',
     comparedTo: 'comparée aux {{n}} jours précédents',
     logged: 'Jours renseignés',
     loggedPrev: 'période précédente : {{n}} / {{days}}',

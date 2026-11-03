@@ -6,6 +6,10 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.10.0] - 2026-11-03
+
+Une version pour préparer un rendez-vous médical et le prolonger : ses questions et sa note, l'ordonnance à renouveler, les périodes plus difficiles que la personne note elle-même, deux périodes mises côte à côte, un regard doux sur le rythme, et une sauvegarde plus simple sur téléphone. Tout est ouvert à tous ; rien n'est un diagnostic ni un conseil de traitement. Les textes sur le rythme sont à faire relire par un professionnel de santé.
+
 ### Ajouté
 - **Préparer un rendez-vous.** Une feuille réunit la date du rendez-vous, tes questions et ce dont tu veux parler en priorité, et, après le rendez-vous, une note sur ce que le médecin a dit. On y accède depuis une carte douce sur la page du jour (14 jours avant, puis le jour même et les 14 jours qui suivent), depuis Tendances et depuis les Réglages. La carte se ferme, sans insister. Les questions et la note sont gardées dans les sauvegardes. La feuille rappelle, depuis la dernière consultation, la douleur moyenne, les périodes difficiles, les changements de traitement et ta note ; cette note peut figurer dans le rapport (une option la décoche).
 - **Le rythme, en douceur.** Deux petites choses pour qui note son activité, sans série, sans objectif ni reproche. Dans Tendances, « Après tes jours actifs » regarde, parmi tes jours les plus actifs, combien ont été suivis d'un jour plus difficile que d'habitude, et le met à côté de ce que le hasard donnerait (une fourchette, pas un verdict) ; elle n'apparaît qu'à partir de 30 jours notés avec l'activité et dit qu'elle ne montre pas de cause. Sur la page du jour, le lendemain d'un jour où tu as été particulièrement actif (par rapport à toi), un petit mot discret dans la liste « Pour toi » : « Hier, tu as beaucoup donné. Aujourd'hui, tu peux y aller par petites étapes, si tu en as envie. » Jamais pendant une période difficile, une seule fois par jour, et les suggestions se coupent d'un réglage. Les textes sont à faire relire par un professionnel de santé.
@@ -295,7 +299,10 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.7.2...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/maxauvy/OUCH/compare/v0.9.0...v0.10.0
+[0.9.0]: https://github.com/maxauvy/OUCH/compare/v0.8.0...v0.9.0
+[0.8.0]: https://github.com/maxauvy/OUCH/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/maxauvy/OUCH/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/maxauvy/OUCH/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/maxauvy/OUCH/compare/v0.6.2...v0.7.0

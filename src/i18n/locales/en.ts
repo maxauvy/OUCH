@@ -834,7 +834,7 @@ const en: Translations = {
     declaredIllnesses: 'Conditions reported by the patient: {{list}}',
     period: 'Period covered',
     periodSince: 'Since the last appointment',
-    periodDays: '{{n}} d',
+    periodDays: '{{n}} d',
     comparedTo: 'compared with the previous {{n}} days',
     logged: 'Days logged',
     loggedPrev: 'previous period: {{n}} / {{days}}',
