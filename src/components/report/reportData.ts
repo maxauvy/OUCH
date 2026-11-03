@@ -11,6 +11,7 @@ import { weekdayProfile, type WeekdayProfile } from '../../lib/weekdays'
 import { reportFormat, type ReportFormat } from './reportFormat'
 import { shiftISO } from '../../lib/dates'
 import { markedOverlapping, type ResolvedFlare } from '../../lib/markedFlares'
+import { comparePeriods, type Comparison } from '../../lib/periodComparison'
 
 export type ReportVariant = 'gp' | 'painClinic'
 
@@ -77,6 +78,8 @@ export interface ReportData {
   flares: FlareSummary
   /** The periods the patient marked themselves that touch the reported period, oldest first: apart from the detected flares */
   marked: ResolvedFlare[]
+  /** The previous period set against the reported one, with the patient's usual gap; null until both have enough logged days */
+  compare: Comparison | null
   /** Changes of background treatment in the period, or in the 5 weeks before
    * it (their second half is inside it), with what the diary shows around each */
   reviews: TreatmentReview[]
@@ -114,6 +117,7 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
   const currentFlares = startingIn(p.start, p.end)
   const detectable = applies && canDetectFlares(entries)
   const { settleDays, windowDays } = DEFAULT_REVIEW_OPTIONS
+  const compared = comparePeriods(entries, { from: p.prevStart, to: shiftISO(p.start, -1) }, { from: p.start, to: p.end }, detectable ? flareDays : null, options.end)
   const reviewFrom = shiftISO(p.start, -(settleDays + windowDays))
   return {
     options,
@@ -135,6 +139,7 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
       previousDays: flareDayCount(episodes, p.prevStart, shiftISO(p.start, -1)),
     },
     marked: markedOverlapping(options.markedFlares, p.start, p.end, options.end),
+    compare: compared.enough ? compared : null,
     weekdays: weekdayProfile(current),
     noticed: keptLeads(findLeads([...previous, ...current], options.leadFactors), options.leadChoices),
     trials: reportTrials(options.leadTrials?.history, options.leadTrials?.current, entries, p.prevStart, p.end),

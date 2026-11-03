@@ -732,6 +732,16 @@ export interface Translations {
     markedFactors: Record<FlareFactor, string>
     /** In the flares tile: `{{n}} {{n:thing|things}}` marked by the patient */
     tileMarked: string
+    compareTitle: string
+    compareDiffLower: string
+    compareDiffHigher: string
+    compareDiffSame: string
+    /** `{{gap}}` is the usual gap, `{{days}}` the length of the windows */
+    compareWithin: string
+    compareOutside: string
+    compareNoUsual: string
+    compareNote: string
+    colCompareGap: string
     flaresTitle: string
     flaresTableNote: string
     flareContextTitle: string
@@ -1364,6 +1374,35 @@ export interface Translations {
     timelineFactors: string
     /** Under the curve of Trends, the helper line about the periods marked */
     helper: string
+  }
+  compare: {
+    title: string
+    helper: string
+    presetDays30: string
+    presetSinceVisit: string
+    presetFree: string
+    periodA: string
+    periodB: string
+    from: string
+    to: string
+    colPain: string
+    colSevere: string
+    colFlares: string
+    colStiffness: string
+    colLogged: string
+    /** `{{from}}` to `{{to}}`, as "3 sept. – 2 oct." */
+    range: string
+    overlap: string
+    /** `{{a}}` and `{{b}}`: the logged days on each side */
+    tooFew: string
+    /** `{{diff}}`: the gap in points; `{{gap}}`: the usual one */
+    lower: string
+    higher: string
+    same: string
+    within: string
+    outside: string
+    noUsual: string
+    note: string
   }
   todayList: {
     /** `{{n}} {{n:thing|things}}`: how many things wait. */

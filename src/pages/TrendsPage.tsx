@@ -4,6 +4,7 @@ import { IconChevronRight, IconFileText } from '@tabler/icons-react'
 import { Footer } from '../components/layout/Footer'
 import { ConsultationCard } from '../components/trends/ConsultationCard'
 import { PrepareLink } from '../components/consultation/PrepareLink'
+import { CompareCard } from '../components/trends/CompareCard'
 import { TimelineCard } from '../components/trends/TimelineCard'
 import { TrialsCard } from '../components/trends/TrialsCard'
 import { LeadsCard } from '../components/trends/LeadsCard'
@@ -285,6 +286,16 @@ export function TrendsPage() {
           )}
 
           <IndicatorsCard entries={filtered} />
+
+          {entries.length >= 14 && (
+            <CompareCard
+              entries={entries}
+              today={today}
+              lastVisit={settings.lastConsultation?.date}
+              flareDays={flares?.detectable ? flareDaySet(flares.episodes) : null}
+              stiffnessTracked={settings.enabledFactors.includes('morningStiffness')}
+            />
+          )}
 
           {medicationsTracked && medications && (
             <>
