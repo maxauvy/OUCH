@@ -1215,6 +1215,14 @@ const fr: Translations = {
     fileTooLarge: 'Ce fichier est trop volumineux pour être une sauvegarde OUCH.',
     lastBackup: 'Dernière sauvegarde : {{date}}',
     neverBackedUp: 'Aucune sauvegarde pour l’instant.',
+    shareButton: 'Enregistrer dans Fichiers',
+    shareHelper: 'La feuille de partage de ton téléphone s’ouvre : choisis « Enregistrer dans Fichiers » (dans iCloud Drive, par exemple) ou une autre application.',
+    shareSuccess: 'Sauvegarde envoyée. Garde le mot de passe en lieu sûr : sans lui, ce fichier est illisible.',
+    whereTitle: 'Où garder ta copie ?',
+    whereFiles: 'Fichiers ou iCloud Drive : la feuille de partage de ton téléphone te laisse choisir le dossier.',
+    whereFolder: 'Un dossier que ton ordinateur synchronise déjà (iCloud Drive, Google Drive, OneDrive, Nextcloud…) : enregistre le fichier dedans et ta copie le suit.',
+    whereDropbox: 'Dropbox, en copie automatique : en accès anticipé, dans la carte au-dessus.',
+    whereAlways: 'Dans tous les cas, la copie est chiffrée avec ton mot de passe.',
   },
 
   lock: {

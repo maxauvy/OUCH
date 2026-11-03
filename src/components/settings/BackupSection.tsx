@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react'
 import { IconFileCheck, IconFileImport, IconX } from '@tabler/icons-react'
 import { exportEncryptedBackup, downloadBlob, importEncryptedBackup } from '../../lib/backup'
+import { canShareFiles, shareOrDownload, type ShareEnv } from '../../lib/shareFile'
+import { useEarlyAccess } from '../../lib/earlyAccess'
 import { format, useLocale, useTranslation } from '../../i18n'
 import { useSettings } from '../../hooks/useSettings'
 import { updateSettings } from '../../db'
@@ -8,10 +10,21 @@ import { StorageProtection } from './StorageProtection'
 
 const MIN_EXPORT_PASSWORD_LENGTH = 10
 
+/** The browser's own share sheet and download, handed to `lib/shareFile`. */
+const shareEnv: ShareEnv = {
+  phone: typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches,
+  canShare: (data) => !!navigator.canShare?.(data),
+  share: (data) => navigator.share(data),
+  download: downloadBlob,
+}
+const fileName = () => `ouch-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`
+const canShareBackup = canShareFiles(shareEnv, new File(['{}'], fileName(), { type: 'application/json' }))
+
 export function BackupSection() {
   const t = useTranslation()
   const { intlLocale } = useLocale()
   const { lastBackupAt } = useSettings()
+  const earlyAccess = useEarlyAccess()
   const [exportPassword, setExportPassword] = useState('')
   const [exportBusy, setExportBusy] = useState(false)
   const [exportMsg, setExportMsg] = useState<string | null>(null)
@@ -37,9 +50,11 @@ export function BackupSection() {
     setExportMsg(null)
     try {
       const blob = await exportEncryptedBackup(exportPassword)
-      downloadBlob(blob, `ouch-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`)
+      // On a phone the share sheet is how the file reaches Files or iCloud Drive; a person who closes it kept nothing.
+      const result = await shareOrDownload(blob, fileName(), t.backup.exportTitle, shareEnv)
+      if (result === 'cancelled') return
       await updateSettings({ lastBackupAt: Date.now(), backupReminderSnoozedUntil: undefined })
-      setExportMsg(t.backup.exportSuccess)
+      setExportMsg(result === 'shared' ? t.backup.shareSuccess : t.backup.exportSuccess)
     } catch {
       setExportMsg(t.backup.exportError)
     } finally {
@@ -77,6 +92,18 @@ export function BackupSection() {
       <StorageProtection />
 
       <div style={{ borderTop: '1px solid var(--color-hairline)' }} className="pt-5">
+        <p className="font-medium text-body mb-1">{t.backup.whereTitle}</p>
+        <ul className="text-caption flex flex-col gap-1.5 list-disc pl-5" style={{ color: 'var(--color-ink-muted)' }}>
+          {canShareBackup && <li>{t.backup.whereFiles}</li>}
+          <li>{t.backup.whereFolder}</li>
+          {earlyAccess && <li>{t.backup.whereDropbox}</li>}
+        </ul>
+        <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.backup.whereAlways}
+        </p>
+      </div>
+
+      <div style={{ borderTop: '1px solid var(--color-hairline)' }} className="pt-5">
         <p className="font-medium text-body mb-1">{t.backup.exportTitle}</p>
         <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
           {t.backup.exportHelper}
@@ -102,8 +129,13 @@ export function BackupSection() {
           className="w-full rounded-[var(--radius-control)] py-3 text-body font-semibold text-[var(--color-on-brand)]"
           style={{ background: 'var(--color-brand)' }}
         >
-          {exportBusy ? t.backup.exporting : t.backup.exportButton}
+          {exportBusy ? t.backup.exporting : canShareBackup ? t.backup.shareButton : t.backup.exportButton}
         </button>
+        {canShareBackup && (
+          <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.backup.shareHelper}
+          </p>
+        )}
         {exportMsg && (
           <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
             {exportMsg}
