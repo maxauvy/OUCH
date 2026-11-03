@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import {
-  addQuestion, agendaLines, consultationCard, finishConsultation, MAX_QUESTIONS, newConsultation, removeQuestion, reportStart, sinceLast, withGoal,
+  addQuestion, agendaLines, consultationCard, finishConsultation, MAX_QUESTIONS, newConsultation, removeQuestion, reportStart, sinceFacts, sinceLast, withGoal,
 } from '../src/lib/consultation.ts'
 import { sanitizeSettings } from '../src/lib/backupSanitize.ts'
 import { DEFAULT_SETTINGS } from '../src/db/types.ts'
@@ -99,4 +99,18 @@ test('since the last appointment: too few days, nothing is quoted', () => {
   const three = [...entries, { date: '2026-10-13', painLevel: 4 }]
   assert.deepEqual(sinceLast(three, '2026-10-10', '2026-10-20'), { now: 4, before: null })
   assert.equal(sinceLast(three, '2026-10-20', '2026-10-20'), null)
+})
+
+test('since the last appointment: the flares and marked periods that touch it, the treatment events inside it', () => {
+  const flare = (start: string, end: string) => ({ start, end }) as never
+  const marked = (start: string, last: string) => ({ start, last }) as never
+  const event = (date: string) => ({ date }) as never
+  const r = sinceFacts({
+    from: '2026-10-01',
+    to: '2026-11-03',
+    flares: [flare('2026-09-25', '2026-09-30'), flare('2026-09-29', '2026-10-02'), flare('2026-10-16', '2026-10-20')],
+    marked: [marked('2026-10-30', '2026-11-02'), marked('2026-08-01', '2026-08-03')],
+    events: [event('2026-09-30'), event('2026-10-03'), event('2026-11-03'), event('2026-11-04')],
+  })
+  assert.deepEqual([r.detected, r.marked, r.treatments.length], [2, 1, 2])
 })

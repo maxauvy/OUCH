@@ -1,13 +1,15 @@
+import { useState } from 'react'
 import { format as formatDate } from 'date-fns'
 import type { TimelineItem } from '../../lib/trendsTimeline'
-import { formatPosology } from '../../lib/medicationFormat'
+import { treatmentEventText } from './treatmentEventText'
 import { usePalette } from '../../hooks/usePalette'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { Card, SectionTitle } from '../ui/Card'
 
 /** What happened in the chosen range, newest first, under the pain curve: the flares, the changes of treatment
  * and the one-week trials. A dated list, nothing counted and nothing concluded. */
-export function TimelineCard({ items }: { items: TimelineItem[] }) {
+export function TimelineCard({ items, onRemoveMarked }: { items: TimelineItem[]; onRemoveMarked?: (start: string) => void }) {
+  const [asking, setAsking] = useState<string | null>(null)
   const i18n = useTranslation()
   const t = i18n.trends
   const language = useLanguage()
@@ -44,20 +46,8 @@ export function TimelineCard({ items }: { items: TimelineItem[] }) {
             .join(' · '),
         }
       }
-      case 'treatment': {
-        const { med, kind, period } = item.event
-        const name = med.name
-        return {
-          dot: palette.brand,
-          text:
-            kind === 'started'
-              ? format(t.timelineStarted, { name }, language)
-              : kind === 'stopped'
-                ? format(t.timelineStopped, { name }, language)
-                : format(t.timelineDose, { name, dose: formatPosology(i18n, med.regimen, period, intlLocale) }, language),
-          note: day(item.date),
-        }
-      }
+      case 'treatment':
+        return { dot: palette.brand, text: treatmentEventText(item.event, i18n, language, intlLocale), note: day(item.date) }
       case 'trial':
         return {
           dot: palette.weather[2].color,
@@ -82,6 +72,25 @@ export function TimelineCard({ items }: { items: TimelineItem[] }) {
                 <p className="text-caption" style={{ color: palette.inkMuted }}>
                   {note}
                 </p>
+                {item.kind === 'marked' && onRemoveMarked && (
+                  <p className="text-caption">
+                    {asking === item.flare.start ? (
+                      <>
+                        <span style={{ color: palette.inkMuted }}>{i18n.markedFlare.removePrompt}</span>{' '}
+                        <button type="button" className="min-h-11 px-1 font-semibold underline underline-offset-4" style={{ color: palette.brand }} onClick={() => { onRemoveMarked(item.flare.start); setAsking(null) }}>
+                          {i18n.markedFlare.removeYes}
+                        </button>{' '}
+                        <button type="button" className="min-h-11 px-1 underline underline-offset-4" style={{ color: palette.inkMuted }} onClick={() => setAsking(null)}>
+                          {i18n.markedFlare.removeNo}
+                        </button>
+                      </>
+                    ) : (
+                      <button type="button" className="min-h-11 underline underline-offset-4" style={{ color: palette.inkMuted }} onClick={() => setAsking(item.flare.start)}>
+                        {i18n.markedFlare.remove}
+                      </button>
+                    )}
+                  </p>
+                )}
               </div>
             </li>
           )

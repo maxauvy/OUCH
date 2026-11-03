@@ -659,6 +659,10 @@ export interface Translations {
     recipients: Record<'gp' | 'painClinic', { label: string; helper: string }>
     consultationTitle: string
     consultationHelper: string
+    compareTitle: string
+    compareDefault: string
+    compareCustom: string
+    compareInvalid: string
     periodSummary: string
     fewDaysWarning: string
     noData: string
@@ -942,6 +946,8 @@ export interface Translations {
     /** `{{n}}`, with a plural */
     zonesOld: string
     agenda: string
+    /** `{{date}}`: the day of the last appointment */
+    lastNoteTitle: string
     noticed: string
     noticedNote: string
     /** `{{name}}`, then each side: `{{a}}` pain with `{{aLabel}}`, `{{aN}}` days; `{{b}}`… the other side */
@@ -1300,6 +1306,11 @@ export interface Translations {
     /** `{{now}}` and `{{before}}`: mean pain since, and over the same length before */
     sinceBody: string
     sinceBodyNoPrev: string
+    /** `{{n}} {{n:thing|things}}` since the last appointment */
+    sinceDetected: string
+    sinceMarked: string
+    sinceNote: string
+    reportNoteToggle: string
     seeReport: string
     afterTitle: string
     afterHint: string
@@ -1364,6 +1375,10 @@ export interface Translations {
     ongoing: string
     finished: string
     remove: string
+    /** Removing a period already closed, from the Trends list: asked once */
+    removePrompt: string
+    removeYes: string
+    removeNo: string
     sheetTitle: string
     close: string
     startedTitle: string

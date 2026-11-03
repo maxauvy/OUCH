@@ -8,6 +8,7 @@ import { shouldShowInvite } from '../lib/indicatorInvite'
 import { NO_LEADS_SEEN, trialToRepeat } from '../lib/leadHints'
 import { triedKeys } from '../lib/leadTrial'
 import { monthSummary } from '../lib/monthSummary'
+import { ongoingMarked } from '../lib/markedFlares'
 import { bigDayBefore } from '../lib/pacing'
 import { recentReturn, todayMessages, type TodayMessages } from '../lib/todayMessages'
 import { weeklyFinding } from '../lib/weeklySentence'
@@ -27,7 +28,8 @@ export function useTodayMessages(): TodayMessages | null {
 
   return useMemo(() => {
     if (!logged || !leadList) return null
-    const flare = flaresApply(settings.illnesses) && flareUnderWay(logged, today)
+    // A stretch the person marked counts like a detected one: nothing is brought.
+    const flare = (flaresApply(settings.illnesses) && flareUnderWay(logged, today)) || !!ongoingMarked(settings.markedFlares, today)
     const trialsOn = settings.suggestionsEnabled && settings.enabledFactors.includes('positiveActions')
     return todayMessages({
       today,
