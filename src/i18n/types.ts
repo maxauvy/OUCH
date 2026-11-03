@@ -1054,6 +1054,15 @@ export interface Translations {
     fileTooLarge: string
     lastBackup: string
     neverBackedUp: string
+    /** On a phone: the button opens the share sheet */
+    shareButton: string
+    shareHelper: string
+    shareSuccess: string
+    whereTitle: string
+    whereFiles: string
+    whereFolder: string
+    whereDropbox: string
+    whereAlways: string
   }
 
   lock: {
