@@ -5,6 +5,7 @@ import { Footer } from '../components/layout/Footer'
 import { ConsultationCard } from '../components/trends/ConsultationCard'
 import { PrepareLink } from '../components/consultation/PrepareLink'
 import { CompareCard } from '../components/trends/CompareCard'
+import { PacingCard } from '../components/trends/PacingCard'
 import { TimelineCard } from '../components/trends/TimelineCard'
 import { TrialsCard } from '../components/trends/TrialsCard'
 import { LeadsCard } from '../components/trends/LeadsCard'
@@ -303,6 +304,8 @@ export function TrendsPage() {
               <TreatmentReviewCard entries={entries} medications={medications} episodes={flares?.detectable ? flares.episodes : null} today={today} />
             </>
           )}
+
+          {settings.enabledFactors.includes('activity') && <PacingCard entries={entries} />}
 
           {weekdays ? (
             <WeekdayCard profile={weekdays} />

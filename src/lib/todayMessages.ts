@@ -48,6 +48,7 @@ export type TodayMessage =
   | { kind: 'lead'; key: string; lead: Lead }
   | { kind: 'repeat'; key: string; trial: LeadTrial }
   | { kind: 'invite'; key: 'invite' }
+  | { kind: 'rest'; key: string }
   | { kind: 'calm'; key: string; episode: FlareEpisode }
   | { kind: 'month'; key: string; summary: MonthSummary }
   | { kind: 'trial'; key: 'trial'; trial: LeadTrial }
@@ -65,7 +66,7 @@ export interface TodayMessagesInput {
   quiet: boolean
   later: MessageLaterMap | undefined
   /** Which suggestions the person lets through. */
-  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean; month: boolean }
+  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean; month: boolean; rest?: boolean }
   /** The leads Trends shows by default (`LeadList.shown`). */
   leads: Lead[]
   leadChoices: LeadChoices | undefined
@@ -81,6 +82,8 @@ export interface TodayMessagesInput {
   calm: FlareEpisode | null
   /** The summary of the month that just ended (`monthSummary`). */
   month: MonthSummary | null
+  /** Yesterday was a big day for this person (`bigDayBefore`): a soft word for today only. */
+  rest?: boolean
   /** The trial under way, or just over and waiting to be closed. */
   trial: LeadTrial | undefined
 }
@@ -99,11 +102,13 @@ export function recentReturn(episodes: readonly FlareEpisode[], today: string): 
 }
 
 export function todayMessages(input: TodayMessagesInput): TodayMessages {
-  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, trial } = input
+  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, trial } = input
   if (quiet) return { items: [], count: 0 }
   const waiting = (key: string) => !isAway(later?.[key], today)
 
   const items: TodayMessage[] = []
+  // Today only: the key carries the day, so tomorrow it is gone whatever was answered.
+  if (allow.rest && rest && waiting(`rest:${today}`)) items.push({ kind: 'rest', key: `rest:${today}` })
   if (allow.weekly && weekly && waiting(`weekly:${today}`)) items.push({ kind: 'weekly', key: `weekly:${today}`, finding: weekly })
   if (allow.leads) {
     for (const lead of leads) {

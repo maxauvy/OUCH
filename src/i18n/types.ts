@@ -1413,6 +1413,20 @@ export interface Translations {
     noUsual: string
     note: string
   }
+  pacing: {
+    title: string
+    /** `{{k}}` busy days, `{{x}}` of them followed by a harder day, `{{e}}` what chance gives, `{{lo}}` and `{{hi}}` its band */
+    within: string
+    above: string
+    below: string
+    chartLabel: string
+    chance: string
+    you: string
+    note: string
+    restLabel: string
+    restText: string
+    restThanks: string
+  }
   todayList: {
     /** `{{n}} {{n:thing|things}}`: how many things wait. */
     line: string
