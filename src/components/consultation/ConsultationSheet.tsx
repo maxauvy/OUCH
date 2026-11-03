@@ -3,8 +3,13 @@ import { format as formatDate } from 'date-fns'
 import { updateSettings } from '../../db'
 import type { Consultation, Settings } from '../../db/types'
 import { useLoggedEntries } from '../../hooks/useEntries'
+import { useFlares } from '../../hooks/useFlares'
+import { useMedications } from '../../hooks/useMedications'
+import { treatmentEvents } from '../../lib/treatmentEvents'
+import { markedOverlapping } from '../../lib/markedFlares'
+import { treatmentEventText } from '../trends/treatmentEventText'
 import {
-  addQuestion, daysUntil, finishConsultation, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTION_LENGTH, newConsultation, removeQuestion, sinceLast, withGoal,
+  addQuestion, daysUntil, finishConsultation, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTION_LENGTH, newConsultation, removeQuestion, sinceFacts, sinceLast, withGoal,
 } from '../../lib/consultation'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { ModalSheet } from '../ui/ModalSheet'
@@ -40,20 +45,32 @@ export function ConsultationSheet({
   const t = i18n.consultation
   const tp = i18n.prescription
   const language = useLanguage()
-  const { dateFnsLocale } = useLocale()
+  const { dateFnsLocale, intlLocale } = useLocale()
   const ids = useId()
   const entries = useLoggedEntries()
+  const flares = useFlares()
+  const medications = useMedications()
   const c = settings.consultation
   const [question, setQuestion] = useState('')
   const [afterOpen, setAfterOpen] = useState(startAfter)
   const [notes, setNotes] = useState('')
   // Nothing is chosen by default: a prescription is only noted if the person picks a length.
   const [rx, setRx] = useState<PrescriptionDraft>({ months: null, start: c?.date ?? today, remindDays: 7, label: '' })
+  const nf = new Intl.NumberFormat(intlLocale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
   const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMMM', { locale: dateFnsLocale })
 
   const save = (next: Consultation) => void updateSettings({ consultation: next })
   const last = settings.lastConsultation
   const since = last && entries ? sinceLast(entries, last.date, today) : null
+  const facts = last
+    ? sinceFacts({
+        from: last.date,
+        to: today,
+        flares: flares?.detectable ? flares.episodes : [],
+        marked: markedOverlapping(settings.markedFlares, last.date, today, today),
+        events: settings.enabledFactors.includes('medications') && medications ? treatmentEvents(medications) : [],
+      })
+    : null
   const happened = c ? daysUntil(c, today) <= 0 : false
 
   function setDate(date: string) {
@@ -165,9 +182,28 @@ export function ConsultationSheet({
           {since && (
             <p className="text-body">
               {since.before === null
-                ? format(t.sinceBodyNoPrev, { now: since.now.toFixed(1) }, language)
-                : format(t.sinceBody, { now: since.now.toFixed(1), before: since.before.toFixed(1) }, language)}
+                ? format(t.sinceBodyNoPrev, { now: nf.format(since.now) }, language)
+                : format(t.sinceBody, { now: nf.format(since.now), before: nf.format(since.before) }, language)}
             </p>
+          )}
+          {facts && (facts.detected > 0 || facts.marked > 0 || facts.treatments.length > 0) && (
+            <ul className="text-body mt-1 flex flex-col gap-0.5">
+              {facts.detected > 0 && <li>{format(t.sinceDetected, { n: facts.detected }, language)}</li>}
+              {facts.marked > 0 && <li>{format(t.sinceMarked, { n: facts.marked }, language)}</li>}
+              {facts.treatments.slice(-3).map((e, i) => (
+                <li key={i}>
+                  {treatmentEventText(e, i18n, language, intlLocale)} ({day(e.date)}).
+                </li>
+              ))}
+            </ul>
+          )}
+          {last.notes && (
+            <div className="mt-2">
+              <p className="text-control" style={{ color: 'var(--color-ink-muted)' }}>
+                {t.sinceNote}
+              </p>
+              <p className="text-body whitespace-pre-line">{last.notes}</p>
+            </div>
           )}
           {onSeeReport && (
             <button type="button" onClick={onSeeReport} className={linkClass} style={{ color: 'var(--color-brand)' }}>

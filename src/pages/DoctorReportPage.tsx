@@ -20,6 +20,7 @@ import { isOffered, withoutUnoffered } from '../lib/indicatorCatalog'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { shiftISO, todayISO } from '../lib/dates'
 import { agendaLines, reportStart } from '../lib/consultation'
+import { validSpans, type Span } from '../lib/periodComparison'
 
 /** A4 width in CSS pixels (210 mm at 96 dpi): the preview is scaled from it. */
 const PAGE_WIDTH = 794
@@ -79,6 +80,12 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
   const [agendaInput, setAgenda] = useState<string | null>(null)
   const agenda = agendaInput ?? agendaLines(settings.consultation, t.consultation.goalPrefix).join('\n')
   const [includeNotes, setIncludeNotes] = useState(true)
+  const [includeLastNote, setIncludeLastNote] = useState(true)
+  // The two periods compared: by default the report's and the one before it; the person can choose two of their own.
+  const [customCompare, setCustomCompare] = useState(false)
+  const [spanA, setSpanA] = useState<Span>({ from: shiftISO(today, -59), to: shiftISO(today, -30) })
+  const [spanB, setSpanB] = useState<Span>({ from: shiftISO(today, -29), to: today })
+  const compareValid = validSpans(spanA, spanB, today)
   const [cycleChoice, setIncludeCycle] = useState<boolean | null>(null)
   const includeCycle = cycleChoice ?? settings.cycleTrackingEnabled
 
@@ -88,6 +95,10 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
     window.scrollTo(0, 0)
     headingRef.current?.focus()
   }, [])
+
+  // What the patient noted after the last appointment: only when the report starts at that appointment.
+  const lastNoteText = settings.lastConsultation?.date === consultation ? settings.lastConsultation.notes : undefined
+  const lastNote = useMemo(() => (lastNoteText ? { date: consultation, text: lastNoteText } : undefined), [lastNoteText, consultation])
 
   const data = useMemo(
     () =>
@@ -104,6 +115,8 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             illnessDetails: { status: settings.illnessStatus, otherName: settings.otherIllnessName, year: settings.illnessYear },
             agenda: agenda.split('\n'),
             markedFlares: settings.markedFlares,
+            compareSpans: customCompare && compareValid ? { a: spanA, b: spanB } : undefined,
+            lastNote: lastNote && includeLastNote ? lastNote : undefined,
             leadChoices: settings.leadChoices,
             leadFactors: leadFactors(settings.enabledFactors),
             leadTrials: { history: settings.leadTrialHistory, current: settings.leadTrial },
@@ -114,7 +127,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             demo: IS_DEMO,
           })
         : null,
-    [entries, medications, variant, language, consultation, settings.lastConsultation?.date, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, earlyAccess, settings.leadTrialHistory, settings.leadTrial, settings.markedFlares, agenda, includeNotes, includeCycle]
+    [entries, medications, variant, language, consultation, settings.lastConsultation?.date, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, earlyAccess, settings.leadTrialHistory, settings.leadTrial, settings.markedFlares, lastNote, includeLastNote, customCompare, compareValid, spanA, spanB, agenda, includeNotes, includeCycle]
   )
 
   // Browsers name the saved PDF after the page title.
@@ -293,6 +306,45 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
       </Card>
 
       <Card>
+        <SectionTitle>{t.doctorReport.compareTitle}</SectionTitle>
+        <div className="flex flex-col gap-2" {...radioGroupProps(t.doctorReport.compareTitle)}>
+          {([false, true] as const).map((custom) => (
+            <button
+              key={String(custom)}
+              type="button"
+              {...radioProps(customCompare === custom)}
+              onClick={() => setCustomCompare(custom)}
+              className="text-left rounded-[var(--radius-control)] px-3.5 py-2.5 text-control"
+              style={{
+                background: customCompare === custom ? 'var(--color-brand-soft)' : 'var(--color-surface)',
+                boxShadow: `inset 0 0 0 1px ${customCompare === custom ? 'var(--color-brand)' : 'var(--color-hairline)'}`,
+              }}
+            >
+              {custom ? t.doctorReport.compareCustom : t.doctorReport.compareDefault}
+            </button>
+          ))}
+        </div>
+        {customCompare && (
+          <div className="flex flex-col gap-2 mt-3">
+            {([[t.compare.periodA, spanA, setSpanA], [t.compare.periodB, spanB, setSpanB]] as const).map(([label, span, set]) => (
+              <div key={label} className="flex items-center gap-2 flex-wrap">
+                <span className="text-caption font-semibold w-full">{label}</span>
+                <span className="text-caption">{t.compare.from}</span>
+                <input type="date" aria-label={`${label} ${t.compare.from}`} value={span.from} max={today} onChange={(e) => e.target.value && set({ ...span, from: e.target.value })} className="rounded-xl px-2.5 py-2 text-control outline-none min-w-0 flex-1" style={inputStyle} />
+                <span className="text-caption">{t.compare.to}</span>
+                <input type="date" aria-label={`${label} ${t.compare.to}`} value={span.to} max={today} onChange={(e) => e.target.value && set({ ...span, to: e.target.value })} className="rounded-xl px-2.5 py-2 text-control outline-none min-w-0 flex-1" style={inputStyle} />
+              </div>
+            ))}
+            {!compareValid && (
+              <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }} aria-live="polite">
+                {t.doctorReport.compareInvalid}
+              </p>
+            )}
+          </div>
+        )}
+      </Card>
+
+      <Card>
         <SectionTitle>{t.doctorReport.agendaTitle}</SectionTitle>
         <textarea
           aria-label={t.doctorReport.agendaTitle}
@@ -333,6 +385,12 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
               ))}
             </div>
           </div>
+          {lastNote && (
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-control font-medium">{t.consultation.reportNoteToggle}</p>
+              <Toggle checked={includeLastNote} onChange={setIncludeLastNote} label={t.consultation.reportNoteToggle} />
+            </div>
+          )}
           {notesTracked && (
             <div className="flex items-center justify-between gap-3">
               <p className="text-control font-medium">{t.doctorReport.includeNotes}</p>

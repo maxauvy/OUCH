@@ -4,6 +4,9 @@
 // do: the page only keeps what the person writes, and the report repeats it.
 
 import type { Consultation, LastConsultation, Settings } from '../db/types.ts'
+import type { FlareEpisode } from './flares.ts'
+import type { ResolvedFlare } from './markedFlares.ts'
+import type { TreatmentEvent } from './treatmentEvents.ts'
 import { daysBetween } from './dates.ts'
 
 export const MAX_QUESTIONS = 20
@@ -108,4 +111,23 @@ export function sinceLast(entries: readonly { date: string; painLevel: number }[
   if (now.length < MIN_SINCE_DAYS) return null
   const prev = entries.filter((e) => daysBetween(e.date, lastDate) > 0 && daysBetween(e.date, lastDate) <= length)
   return { now: mean(now), before: prev.length >= MIN_SINCE_DAYS ? mean(prev) : null }
+}
+
+export interface SinceFacts {
+  /** Flares OUCH detected that touch the stretch. */
+  detected: number
+  /** Periods the person marked that touch it. */
+  marked: number
+  /** Starts, dose changes and stops of a treatment inside it, oldest first. */
+  treatments: TreatmentEvent[]
+}
+
+/** What happened since the last appointment, as a few counts and dated events: no reading, nothing to compare. */
+export function sinceFacts(input: { from: string; to: string; flares: readonly FlareEpisode[]; marked: readonly ResolvedFlare[]; events: readonly TreatmentEvent[] }): SinceFacts {
+  const { from, to } = input
+  return {
+    detected: input.flares.filter((e) => e.end >= from && e.start <= to).length,
+    marked: input.marked.filter((m) => m.last >= from && m.start <= to).length,
+    treatments: input.events.filter((e) => e.date >= from && e.date <= to),
+  }
 }

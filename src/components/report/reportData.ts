@@ -11,7 +11,7 @@ import { weekdayProfile, type WeekdayProfile } from '../../lib/weekdays'
 import { reportFormat, type ReportFormat } from './reportFormat'
 import { shiftISO } from '../../lib/dates'
 import { markedOverlapping, type ResolvedFlare } from '../../lib/markedFlares'
-import { comparePeriods, type Comparison } from '../../lib/periodComparison'
+import { comparePeriods, validSpans, type Comparison, type Span } from '../../lib/periodComparison'
 
 export type ReportVariant = 'gp' | 'painClinic'
 
@@ -31,6 +31,10 @@ interface ReportOptions {
   /** The statuses and the name typed for "autre", as declared */
   illnessDetails?: IllnessDetails
   agenda: string[]
+  /** Two periods the patient chose to compare; without them, the one before the reported period and the reported one */
+  compareSpans?: { a: Span; b: Span }
+  /** What the patient noted after the last appointment, and its day: shown when the period starts at that appointment */
+  lastNote?: { date: string; text: string }
   /** The difficult periods the patient marked themselves, as stored */
   markedFlares?: MarkedFlare[]
   /** What the patient answered to the leads on Trends; the kept ones go on the report */
@@ -80,6 +84,8 @@ export interface ReportData {
   marked: ResolvedFlare[]
   /** The previous period set against the reported one, with the patient's usual gap; null until both have enough logged days */
   compare: Comparison | null
+  /** The two periods that `compare` sets side by side */
+  compareSpans: { a: Span; b: Span }
   /** Changes of background treatment in the period, or in the 5 weeks before
    * it (their second half is inside it), with what the diary shows around each */
   reviews: TreatmentReview[]
@@ -117,7 +123,9 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
   const currentFlares = startingIn(p.start, p.end)
   const detectable = applies && canDetectFlares(entries)
   const { settleDays, windowDays } = DEFAULT_REVIEW_OPTIONS
-  const compared = comparePeriods(entries, { from: p.prevStart, to: shiftISO(p.start, -1) }, { from: p.start, to: p.end }, detectable ? flareDays : null, options.end)
+  const given = options.compareSpans
+  const spans = given && validSpans(given.a, given.b, options.end) ? given : { a: { from: p.prevStart, to: shiftISO(p.start, -1) }, b: { from: p.start, to: p.end } }
+  const compared = comparePeriods(entries, spans.a, spans.b, detectable ? flareDays : null, options.end)
   const reviewFrom = shiftISO(p.start, -(settleDays + windowDays))
   return {
     options,
@@ -140,6 +148,7 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     },
     marked: markedOverlapping(options.markedFlares, p.start, p.end, options.end),
     compare: compared.enough ? compared : null,
+    compareSpans: spans,
     weekdays: weekdayProfile(current),
     noticed: keptLeads(findLeads([...previous, ...current], options.leadFactors), options.leadChoices),
     trials: reportTrials(options.leadTrials?.history, options.leadTrials?.current, entries, p.prevStart, p.end),

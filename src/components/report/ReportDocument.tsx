@@ -26,7 +26,6 @@ import type { FlareEpisode } from '../../lib/flares'
 import { actionInSentence, type Lead } from '../../lib/leads'
 import type { ReportTrial } from '../../lib/leadTrial'
 import type { TreatmentReview } from '../../lib/treatmentReview'
-import { shiftISO } from '../../lib/dates'
 import { CONTEXT_KEYS, type ContextKey, type TreatmentEvent } from '../../lib/flareContext'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
 import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
@@ -348,7 +347,7 @@ function painClinicPages(d: ReportData): Block[][] {
     ],
     // Everything on this page is optional: with no agenda, no medication and
     // no positive action, it would print blank but for its header and footer.
-    ...(agendaItems(d).length || d.meds.length || nonDrugShares(d).length
+    ...(agendaItems(d).length || d.options.lastNote || d.meds.length || nonDrugShares(d).length
       ? [
           [
             <Agenda d={d} />,
@@ -1045,11 +1044,10 @@ function markedBlock(d: ReportData) {
 
 /** The previous period and the reported one side by side, with how much two periods of that length usually differ for this patient, so that the gap can be read against it. */
 function CompareBlock({ d }: { d: ReportData }) {
-  const { f, compare: c, p } = d
+  const { f, compare: c, compareSpans: spans } = d
   if (!c) return null
   const t = f.t
   const range = (from: string, to: string) => f.format(t.flareRange, { start: f.dayMonth(from), end: f.dayMonth(to) })
-  const prevEnd = shiftISO(p.start, -1)
   const signed = (v: number) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v)}`
   const bands = t.stiffness.bands
   const rows: [string, string, string, string][] = [
@@ -1067,8 +1065,8 @@ function CompareBlock({ d }: { d: ReportData }) {
         <thead>
           <tr>
             <th scope="col" />
-            <th scope="col" className="r">{range(p.prevStart, prevEnd)}</th>
-            <th scope="col" className="r">{range(p.start, p.end)}</th>
+            <th scope="col" className="r">{range(spans.a.from, spans.a.to)}</th>
+            <th scope="col" className="r">{range(spans.b.from, spans.b.to)}</th>
             <th scope="col" className="r">{t.colCompareGap}</th>
           </tr>
         </thead>
@@ -1618,17 +1616,30 @@ function Noticed({ d }: { d: ReportData }) {
 
 function Agenda({ d }: { d: ReportData }) {
   const items = agendaItems(d)
-  if (!items.length) return null
+  const note = d.options.lastNote
+  if (!items.length && !note) return null
   return (
     <>
-      <H level={2}>{d.f.t.agenda}</H>
-      <div className="r-quote">
-        <ul>
-          {items.map((a, i) => (
-            <li key={i}>{a}</li>
-          ))}
-        </ul>
-      </div>
+      {items.length > 0 && (
+        <>
+          <H level={2}>{d.f.t.agenda}</H>
+          <div className="r-quote">
+            <ul>
+              {items.map((a, i) => (
+                <li key={i}>{a}</li>
+              ))}
+            </ul>
+          </div>
+        </>
+      )}
+      {note && (
+        <>
+          <H level={items.length > 0 ? 3 : 2}>{d.f.format(d.f.t.lastNoteTitle, { date: d.f.fullDate(note.date) })}</H>
+          <div className="r-quote">
+            <p style={{ whiteSpace: 'pre-line' }}>{note.text}</p>
+          </div>
+        </>
+      )}
     </>
   )
 }

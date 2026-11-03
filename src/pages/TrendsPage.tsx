@@ -25,7 +25,7 @@ import { usePalette } from '../hooks/usePalette'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
 import { flareDaySet, flaresOverlapping } from '../lib/flares'
-import { markedOverlapping } from '../lib/markedFlares'
+import { markedOverlapping, removeMarked } from '../lib/markedFlares'
 import { remember } from '../lib/leadHints'
 import { restartTrial, startTrial, type LeadTrial } from '../lib/leadTrial'
 import { arrangeLeads, choiceFor, findLeads, leadFactors, PATTERN_MIN_DAYS, type Lead, type LeadChoice } from '../lib/leads'
@@ -276,7 +276,7 @@ export function TrendsPage() {
             )}
           </Card>
 
-          {timeline.length > 0 && <TimelineCard items={timeline} />}
+          {timeline.length > 0 && <TimelineCard items={timeline} onRemoveMarked={(start) => void updateSettings({ markedFlares: removeMarked(settings.markedFlares, start) })} />}
 
           {zonesTracked && (
             <>
