@@ -367,6 +367,16 @@ export interface LastConsultation {
   notes?: string
 }
 
+/** A prescription as the person gave it: its day, its length in months, how many days before the end to be reminded. */
+export interface Prescription {
+  /** The day it was written (ISO). */
+  start: string
+  months: number
+  remindDays: 7 | 14
+  /** What it is for, in a few words (e.g. "Traitement de fond"). */
+  label?: string
+}
+
 export interface Settings {
   id: 1
   enabledFactors: FactorKey[]
@@ -437,6 +447,10 @@ export interface Settings {
   lastConsultation?: LastConsultation
   /** The card on the day's page was closed for this appointment (and this stage of it). Per device. */
   consultationCardClosed?: { date: string; kind: 'soon' | 'after' }
+  /** The prescription the person noted, if any. Restored from a backup. */
+  prescription?: Prescription
+  /** The reminder card was closed, or put off, for this prescription (by its start). Per device. */
+  prescriptionCardState?: { start: string; closed?: boolean; snoozeUntil?: string }
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness

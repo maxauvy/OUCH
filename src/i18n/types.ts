@@ -1289,6 +1289,46 @@ export interface Translations {
     /** Report form: the list is filled from the preparation */
     reportFilled: string
   }
+  prescription: {
+    cardLabel: string
+    /** `{{date}}`: the day it ends */
+    cardSoon: string
+    cardEnded: string
+    done: string
+    later: string
+    sheetTitle: string
+    close: string
+    durationTitle: string
+    /** `{{n}} {{n:month|months}}` */
+    months: string
+    other: string
+    otherMonths: string
+    startLabel: string
+    remindTitle: string
+    remind7: string
+    remind14: string
+    labelLabel: string
+    labelPlaceholder: string
+    /** `{{end}}` and `{{remind}}`: the day it ends and the day the reminder comes */
+    summary: string
+    renewableHint: string
+    save: string
+    remove: string
+    settingsTitle: string
+    settingsNone: string
+    /** `{{end}}` */
+    settingsCurrent: string
+    settingsAdd: string
+    settingsEdit: string
+    /** In the appointment sheet: what to remember, and the prescription given at it */
+    prepTitle: string
+    prepNone: string
+    prepCurrent: string
+    prepAsk: string
+    prepAskQuestion: string
+    afterTitle: string
+    afterHint: string
+  }
   todayList: {
     /** `{{n}} {{n:thing|things}}`: how many things wait. */
     line: string

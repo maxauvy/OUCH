@@ -18,6 +18,7 @@ import { IS_DEMO } from '../lib/demoMode'
 import { exitDemo, startDemo } from '../lib/demoSession'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { setLuminous, useLuminous } from '../lib/look'
+import { PrescriptionSettingsCard } from '../components/prescription/PrescriptionSettingsCard'
 import { PrepareLink } from '../components/consultation/PrepareLink'
 import { LockCard } from '../components/settings/LockCard'
 import { AutoBackupCard } from '../components/settings/AutoBackupCard'
@@ -177,6 +178,8 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           </p>
           <PrepareLink />
         </Card>
+
+        <PrescriptionSettingsCard />
 
         <Card>
           <SectionTitle icon={IconStethoscope}>{t.settings.illnessesTitle}</SectionTitle>

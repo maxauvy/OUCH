@@ -8,6 +8,8 @@ import {
 } from '../../lib/consultation'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { ModalSheet } from '../ui/ModalSheet'
+import { PrescriptionFields } from '../prescription/PrescriptionFields'
+import { draftPrescription, prescriptionEnd, type PrescriptionDraft } from '../../lib/prescription'
 
 const field = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 const fieldClass = 'w-full rounded-xl px-3.5 py-2.5 text-body outline-none'
@@ -34,7 +36,9 @@ export function ConsultationSheet({
   onSeeReport?: () => void
   onClose: () => void
 }) {
-  const t = useTranslation().consultation
+  const i18n = useTranslation()
+  const t = i18n.consultation
+  const tp = i18n.prescription
   const language = useLanguage()
   const { dateFnsLocale } = useLocale()
   const ids = useId()
@@ -43,6 +47,8 @@ export function ConsultationSheet({
   const [question, setQuestion] = useState('')
   const [afterOpen, setAfterOpen] = useState(startAfter)
   const [notes, setNotes] = useState('')
+  // Nothing is chosen by default: a prescription is only noted if the person picks a length.
+  const [rx, setRx] = useState<PrescriptionDraft>({ months: null, start: c?.date ?? today, remindDays: 7, label: '' })
   const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMMM', { locale: dateFnsLocale })
 
   const save = (next: Consultation) => void updateSettings({ consultation: next })
@@ -60,7 +66,8 @@ export function ConsultationSheet({
     setQuestion('')
   }
   function finish() {
-    void updateSettings(finishConsultation(settings, notes))
+    const prescription = draftPrescription(rx)
+    void updateSettings({ ...finishConsultation(settings, notes), ...(prescription ? { prescription, prescriptionCardState: undefined } : {}) })
     onClose()
   }
   function remove() {
@@ -140,6 +147,18 @@ export function ConsultationSheet({
         </>
       )}
 
+      {c && (
+        <div>
+          <h3 className="text-caption font-semibold mb-1">{tp.prepTitle}</h3>
+          <p className="text-body">
+            {settings.prescription ? format(tp.prepCurrent, { end: day(prescriptionEnd(settings.prescription)) }, language) : tp.prepNone}
+          </p>
+          <button type="button" onClick={() => save(addQuestion(c, tp.prepAskQuestion))} className={linkClass} style={{ color: 'var(--color-brand)' }}>
+            {tp.prepAsk}
+          </button>
+        </div>
+      )}
+
       {last && (
         <div>
           <h3 className="text-caption font-semibold mb-1">{format(t.sinceTitle, { date: day(last.date) }, language)}</h3>
@@ -173,6 +192,13 @@ export function ConsultationSheet({
                 className={fieldClass}
                 style={field}
               />
+              <div className="mt-4">
+                <h4 className="text-caption font-semibold mb-0.5">{tp.afterTitle}</h4>
+                <p className="text-control mb-2" style={{ color: 'var(--color-ink-muted)' }}>
+                  {tp.afterHint}
+                </p>
+                <PrescriptionFields draft={rx} onChange={(patch) => setRx((d) => ({ ...d, ...patch }))} withLabel={false} />
+              </div>
               <button
                 type="button"
                 onClick={finish}
