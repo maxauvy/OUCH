@@ -93,7 +93,7 @@ export function CompareCard({
             <table className="w-full text-control">
               <thead>
                 <tr style={{ color: 'var(--color-ink-muted)' }}>
-                  <th scope="col" className="text-left font-normal py-1" />
+                  <td className="py-1" />
                   <th scope="col" className="text-right font-normal py-1">{range(spans.a)}</th>
                   <th scope="col" className="text-right font-normal py-1">{range(spans.b)}</th>
                 </tr>

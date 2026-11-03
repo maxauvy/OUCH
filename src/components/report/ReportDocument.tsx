@@ -1064,7 +1064,7 @@ function CompareBlock({ d }: { d: ReportData }) {
       <table className="r-reviews">
         <thead>
           <tr>
-            <th scope="col" />
+            <td />
             <th scope="col" className="r">{range(spans.a.from, spans.a.to)}</th>
             <th scope="col" className="r">{range(spans.b.from, spans.b.to)}</th>
             <th scope="col" className="r">{t.colCompareGap}</th>
