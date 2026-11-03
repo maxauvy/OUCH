@@ -32,6 +32,8 @@ Seule la douleur, de 0 à 10, suffit pour qu'une journée compte. On peut y ajou
 
 Les jours de poussée, l'écran s'allège et l'app ne propose rien : seulement un mot bienveillant. Ce qui attend la personne les autres jours (une piste, un essai en cours, un bilan) tient en une ligne discrète, « 2 petites choses pour toi », qui ouvre une feuille.
 
+Quand une période est plus difficile, on peut la noter soi-même, sous la douleur du jour : quand elle a commencé, ce qui a pu y contribuer, un mot. L'écran s'allège alors, comme pour une poussée repérée, mais les deux restent à part : OUCH ne mélange pas ce qu'on vit et ce que montrent les niveaux de douleur.
+
 ### Suivre ses traitements
 
 On déclare ses traitements une fois : de fond ou pris au besoin, la dose, les changements de posologie, les arrêts. Ensuite, les traitements de fond sont cochés d'office chaque jour. Pour ceux pris au besoin, on note le nombre de prises, le soulagement obtenu et les éventuels effets indésirables. Les changements de dose apparaissent directement sur la courbe de douleur.
@@ -46,11 +48,19 @@ Le journal est un calendrier du mois, coloré selon la météo de chaque jour. O
 
 Tendances commence par un bloc « Pour ma consultation » (douleur moyenne, poussées, zone la plus signalée, dernier changement de traitement). Viennent ensuite la courbe de douleur sur 7, 30 ou 90 jours, ou depuis le début, avec sa moyenne sur 7 jours et des calques (poussées, traitements, essais), une frise « Ce qui s'est passé », des cartes sur les zones douloureuses (où, pendant les poussées, semaine par semaine) et un bilan calme du mois qui vient de finir. On y voit aussi les jours de la semaine où ça va le mieux ou le moins bien, ce que ses notes laissent voir (« ce que tes notes racontent » : le sommeil, le stress, l'activité de la veille et ce qui a aidé, une piste à la fois, avec les deux moyennes et le nombre de jours), et l'usage des traitements. Ce sont des associations relevées dans ses propres données, pas des preuves : l'app le dit. La personne peut garder une piste pour sa consultation, l'écarter, ou essayer pendant une semaine une action qu'elle a elle-même notée ; l'app peut aussi lui amener une piste sur la page du jour, la résumer le dimanche en une phrase, ou le faire discrètement par un point sur l'onglet (tout cela se coupe d'un seul réglage, « Suggestions », et rien n'apparaît pendant une poussée). Quand un essai ou une poussée se termine, l'app le reconnaît en une phrase douce.
 
+Deux cartes de plus : « Comparer deux périodes » met les mêmes mesures côte à côte (les 30 derniers jours, depuis la dernière consultation, ou deux périodes au choix) et lit l'écart de douleur à côté de ce qui est habituel pour la personne ; « Après tes jours actifs » regarde, à partir de 30 jours notés avec l'activité, si les lendemains des jours les plus actifs ont été plus difficiles que d'habitude, et le met à côté de ce que le hasard donnerait. Ni l'une ni l'autre ne dit pourquoi : ce sont des descriptions, pas des preuves. Le lendemain d'un jour où l'on a beaucoup donné, un mot discret propose d'y aller par petites étapes, jamais pendant une période difficile.
+
+### Préparer sa consultation
+
+On note la date de son rendez-vous, ses questions et ce dont on veut parler en priorité ; une carte douce de la page du jour le rappelle quinze jours avant. Après le rendez-vous, on écrit ce que le médecin a dit, et, si une ordonnance a été remise, sa durée : OUCH prévient une semaine avant la fin (ou deux, au choix), sans rien calculer à partir des prises. La feuille rappelle aussi ce qui s'est passé depuis la dernière consultation. Tout reste sur l'appareil.
+
 ### Un rapport pour le médecin
 
 Depuis Tendances, on génère un rapport à imprimer ou à enregistrer en PDF. Il couvre la période depuis la dernière consultation et la compare à la même durée juste avant. Il existe en deux versions : une synthèse de 2 pages pour le médecin traitant, et un rapport détaillé de 5 pages pour un centre douleur (CETD), avec la consommation d'antalgiques et les facteurs associés. Il se lit en français ou en anglais, mentionne les maladies déclarées et reprend, dans « Ce que le patient a remarqué », les pistes gardées et les essais d'une semaine du patient.
 
 Le rapport décrit les données sans les interpréter, et ses seuils citent leurs sources (IMMPACT, HAS, et d'autres travaux publiés), résumées dans Réglages → À propos → Sources scientifiques. Il est fabriqué sur l'appareil ; le nom et la date de naissance qu'on y saisit ne sont pas enregistrés.
+
+Le rapport reprend la préparation : les questions et la priorité du patient en tête de page, sa note après la dernière consultation (qu'on peut laisser de côté), les périodes difficiles qu'il a notées (à part des poussées repérées) et une comparaison de deux périodes, par défaut la période du rapport et celle d'avant, ou deux périodes au choix.
 
 ### Expliquer à son enfant
 
@@ -63,6 +73,8 @@ L'onglet Enfants est fait pour être montré à un enfant. Il raconte la météo
 - Un verrou par code à quatre chiffres, facultatif, qui cache l'écran.
 - L'app s'installe sur l'écran d'accueil (mobile ou ordinateur) et marche hors connexion après la première ouverture. Le texte suit la taille de police réglée sur le téléphone.
 - Les données restent dans le navigateur (IndexedDB). Pour sauvegarder ou changer d'appareil, on exporte un fichier chiffré avec un mot de passe de son choix (AES-256-GCM, dans le navigateur), qu'on réimporte ensuite ; un export CSV (deux fichiers en clair : le journal et les prises) sert à l'analyse, pas à la restauration. L'app rappelle de faire une sauvegarde quand il y a quelque chose à perdre, et demande au navigateur de ne pas effacer les données. En accès anticipé, une sauvegarde automatique envoie ce même fichier chiffré vers un Dropbox.
+
+- Sur téléphone, « Enregistrer dans Fichiers » ouvre la feuille de partage pour ranger la sauvegarde chiffrée dans iCloud Drive ou ailleurs, au lieu d'un téléchargement à déplacer à la main.
 
 ## Essayer avec des données de démo
 
@@ -129,7 +141,7 @@ La version détaillée, avec ce que chaque service extérieur reçoit, est dans 
 
 OUCH n'est pas un dispositif médical : il décrit ce que la personne note, sans poser de diagnostic ni recommander de traitement, et ne remplace pas un avis médical.
 
-Une plaquette de deux pages ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.9.0/OUCH-plaquette-soignants-v0.9.0.pdf)), une note méthodologique qui détaille chaque calcul, seuil et source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.9.0/OUCH-note-methodologique-v0.9.0.pdf)), et un formulaire de retour clinique sont rassemblés dans [`docs/soignants/`](docs/soignants/README.md).
+Une plaquette de deux pages ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.10.0/OUCH-plaquette-soignants-v0.10.0.pdf)), une note méthodologique qui détaille chaque calcul, seuil et source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.10.0/OUCH-note-methodologique-v0.10.0.pdf)), et un formulaire de retour clinique sont rassemblés dans [`docs/soignants/`](docs/soignants/README.md).
 
 ## Contribuer
 
@@ -140,7 +152,6 @@ Les contributions sont bienvenues, de soignants et de patients comme de dévelop
 - Une relecture plus approfondie des nouveaux indicateurs par des cliniciens (libellés, tranches), après la revue rapide d'octobre 2026.
 - Un vrai rappel push (il demanderait un petit serveur).
 - Plusieurs profils sur le même appareil.
-- Comparer deux périodes directement dans Tendances.
 - Des widgets iOS et Android (il faudrait passer à une app native ou à Capacitor).
 
 ## Licence
