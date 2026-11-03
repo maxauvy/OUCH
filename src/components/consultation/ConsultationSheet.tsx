@@ -114,7 +114,7 @@ export function ConsultationSheet({
                 {c.questions.map((q, i) => (
                   <li key={q} className="flex items-start justify-between gap-3 py-2 border-t first:border-t-0" style={{ borderColor: 'var(--color-hairline)' }}>
                     <span className="text-body">{q}</span>
-                    <button type="button" onClick={() => save(removeQuestion(c, i))} aria-label={format(t.removeQuestion, { q }, language)} className="min-h-11 px-1 text-control shrink-0" style={{ color: 'var(--color-ink-muted)' }}>
+                    <button type="button" onClick={() => save(removeQuestion(c, i))} aria-label={format(t.removeQuestion, { q }, language)} className="min-h-11 min-w-11 text-control shrink-0" style={{ color: 'var(--color-ink-muted)' }}>
                       ✕
                     </button>
                   </li>

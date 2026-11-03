@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import type { Icon } from '@tabler/icons-react'
 import { IconBone, IconBrain, IconClock } from '@tabler/icons-react'
 import { HEADACHE_DURATIONS, JOINT_REGIONS, type DailyEntry, type JointKey } from '../../db/types'
@@ -92,15 +93,17 @@ export function ChoiceRow({
   value: string | undefined
   onChange: (v: string | undefined) => void
 }) {
+  // An id with spaces is read as several ids by aria-labelledby, so the group had no name.
+  const labelId = useId()
   return (
     <div className="px-4 pt-3.5 pb-3" style={{ borderTop: '1px solid var(--color-hairline)' }}>
       <div className="flex items-center gap-2.5">
         <CategoryIcon icon={icon} cat={cat} />
-        <span id={`choice-${cat}-${label}`} className="flex-1 text-body font-medium">
+        <span id={labelId} className="flex-1 text-body font-medium">
           {label}
         </span>
       </div>
-      <div role="group" aria-labelledby={`choice-${cat}-${label}`} className="flex flex-wrap gap-2 mt-3">
+      <div role="group" aria-labelledby={labelId} className="flex flex-wrap gap-2 mt-3">
         {options.map((o) => (
           <Chip key={o.value} label={o.label} selected={value === o.value} onClick={() => onChange(value === o.value ? undefined : o.value)} />
         ))}

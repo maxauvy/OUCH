@@ -330,9 +330,9 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
               <div key={label} className="flex items-center gap-2 flex-wrap">
                 <span className="text-caption font-semibold w-full">{label}</span>
                 <span className="text-caption">{t.compare.from}</span>
-                <input type="date" aria-label={`${label} ${t.compare.from}`} value={span.from} max={today} onChange={(e) => e.target.value && set({ ...span, from: e.target.value })} className="rounded-xl px-2.5 py-2 text-control outline-none min-w-0 flex-1" style={inputStyle} />
+                <input type="date" aria-label={`${label} ${t.compare.from}`} value={span.from} max={today} onChange={(e) => e.target.value && set({ ...span, from: e.target.value })} className="rounded-xl px-2.5 py-2 text-control outline-none flex-1" style={{ ...inputStyle, minWidth: '9.5rem' }} />
                 <span className="text-caption">{t.compare.to}</span>
-                <input type="date" aria-label={`${label} ${t.compare.to}`} value={span.to} max={today} onChange={(e) => e.target.value && set({ ...span, to: e.target.value })} className="rounded-xl px-2.5 py-2 text-control outline-none min-w-0 flex-1" style={inputStyle} />
+                <input type="date" aria-label={`${label} ${t.compare.to}`} value={span.to} max={today} onChange={(e) => e.target.value && set({ ...span, to: e.target.value })} className="rounded-xl px-2.5 py-2 text-control outline-none flex-1" style={{ ...inputStyle, minWidth: '9.5rem' }} />
               </div>
             ))}
             {!compareValid && (

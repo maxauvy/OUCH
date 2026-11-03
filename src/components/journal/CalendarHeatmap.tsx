@@ -162,7 +162,7 @@ function FlareBar({ color, className = '' }: { color: string; className?: string
 
 /** A day of a period the person marked: the same bar, hollow, so the two are told apart by shape and not by colour. */
 function MarkedBar({ color, className = '' }: { color: string; className?: string }) {
-  return <span className={`block w-4 h-[4px] rounded-full box-border ${className}`} style={{ border: `1.5px solid ${color}` }} aria-hidden />
+  return <span className={`block w-4 h-[6px] rounded-full box-border ${className}`} style={{ border: `2px solid ${color}` }} aria-hidden />
 }
 
 /** A day with something noted but no pain level: the weather's dot, left
