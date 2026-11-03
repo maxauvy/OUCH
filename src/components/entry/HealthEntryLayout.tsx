@@ -23,6 +23,7 @@ import { Card, GroupCaption } from '../ui/Card'
 import { BodyMap } from './BodyMap'
 import { Slider } from '../ui/Slider'
 import { FlarePainScale } from './FlarePainScale'
+import { MarkedFlareLine } from '../flare/MarkedFlareLine'
 import { Toggle } from '../ui/Toggle'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { TagInput } from './TagInput'
@@ -393,6 +394,7 @@ export function HealthEntryLayout({
           </>
         )}
 
+        {isToday && <MarkedFlareLine />}
       </Card>
 
       {/* The one new indicator the lighter form keeps: a single row of five choices, under the pain, optional. */}

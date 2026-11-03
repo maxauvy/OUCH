@@ -6,14 +6,16 @@
 
 import type { FlareEpisode } from './flares.ts'
 import type { LeadTrial } from './leadTrial.ts'
+import type { ResolvedFlare } from './markedFlares.ts'
 import type { TreatmentEvent } from './treatmentEvents.ts'
 
 export type TimelineItem =
   | { kind: 'flare'; date: string; episode: FlareEpisode }
+  | { kind: 'marked'; date: string; flare: ResolvedFlare }
   | { kind: 'treatment'; date: string; event: TreatmentEvent }
   | { kind: 'trial'; date: string; trial: LeadTrial; running: boolean }
 
-const ORDER: Record<TimelineItem['kind'], number> = { flare: 0, trial: 1, treatment: 2 }
+const ORDER: Record<TimelineItem['kind'], number> = { flare: 0, marked: 1, trial: 2, treatment: 3 }
 
 export interface TimelineInput {
   /** First and last day of the range (ISO dates, inclusive). */
@@ -21,6 +23,8 @@ export interface TimelineInput {
   to: string
   /** Whether the flare reading applies and a flare can be found at all. */
   flares: FlareEpisode[]
+  /** The periods the person marked themselves, as they stand today. */
+  marked?: ResolvedFlare[]
   /** Every start, change and stop of the registry (`treatmentEvents`), or none when medications are not followed. */
   events: TreatmentEvent[]
   /** Trials, past and under way. */
@@ -29,10 +33,11 @@ export interface TimelineInput {
   today: string
 }
 
-/** What touches the range, newest first (by the day it began); on the same day a flare comes before a trial, a trial before a treatment. */
-export function timelineItems({ from, to, flares, events, history, current, today }: TimelineInput): TimelineItem[] {
+/** What touches the range, newest first (by the day it began); on the same day a flare comes before a period the person marked, that before a trial, a trial before a treatment. */
+export function timelineItems({ from, to, flares, marked = [], events, history, current, today }: TimelineInput): TimelineItem[] {
   const items: TimelineItem[] = []
   for (const episode of flares) if (episode.end >= from && episode.start <= to) items.push({ kind: 'flare', date: episode.start, episode })
+  for (const flare of marked) if (flare.last >= from && flare.start <= to) items.push({ kind: 'marked', date: flare.start, flare })
   for (const event of events) if (event.date >= from && event.date <= to) items.push({ kind: 'treatment', date: event.date, event })
   const trials = current ? [...history.filter((t) => t.start !== current.start || t.key !== current.key), current] : history
   for (const trial of trials) {
@@ -45,6 +50,11 @@ export function timelineItems({ from, to, flares, events, history, current, toda
 /** The trials to draw as a band under the curve: the same ones, as stretches of days. */
 export function trialSpans(items: readonly TimelineItem[]): { from: string; to: string }[] {
   return items.flatMap((i) => (i.kind === 'trial' ? [{ from: i.trial.start, to: i.trial.end }] : []))
+}
+
+/** The periods the person marked, as stretches of days for the curve. */
+export function markedSpans(items: readonly TimelineItem[]): { from: string; to: string }[] {
+  return items.flatMap((i) => (i.kind === 'marked' ? [{ from: i.flare.start, to: i.flare.last }] : []))
 }
 
 /** The last change of treatment up to today, of any kind; undefined when there is none. */

@@ -367,6 +367,20 @@ export interface LastConsultation {
   notes?: string
 }
 
+/** What the person thinks may have played in a difficult period; they only suggest, nothing is measured. */
+export const FLARE_FACTORS = ['sleep', 'stress', 'effort', 'weather', 'period', 'infection', 'treatment'] as const
+export type FlareFactor = (typeof FLARE_FACTORS)[number]
+
+/** A difficult period the person marked themselves, whatever the app detected. */
+export interface MarkedFlare {
+  /** First day (ISO). */
+  start: string
+  /** Last day, once the person says it is over; without it the period closes by itself after two weeks. */
+  end?: string
+  factors: FlareFactor[]
+  note?: string
+}
+
 /** A prescription as the person gave it: its day, its length in months, how many days before the end to be reminded. */
 export interface Prescription {
   /** The day it was written (ISO). */
@@ -451,6 +465,8 @@ export interface Settings {
   prescription?: Prescription
   /** The reminder card was closed, or put off, for this prescription (by its start). Per device. */
   prescriptionCardState?: { start: string; closed?: boolean; snoozeUntil?: string }
+  /** The difficult periods the person marked, newest first. Restored from a backup. */
+  markedFlares?: MarkedFlare[]
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness

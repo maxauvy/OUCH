@@ -103,6 +103,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             illnesses: settings.illnesses,
             illnessDetails: { status: settings.illnessStatus, otherName: settings.otherIllnessName, year: settings.illnessYear },
             agenda: agenda.split('\n'),
+            markedFlares: settings.markedFlares,
             leadChoices: settings.leadChoices,
             leadFactors: leadFactors(settings.enabledFactors),
             leadTrials: { history: settings.leadTrialHistory, current: settings.leadTrial },
@@ -113,7 +114,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             demo: IS_DEMO,
           })
         : null,
-    [entries, medications, variant, language, consultation, settings.lastConsultation?.date, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, earlyAccess, settings.leadTrialHistory, settings.leadTrial, agenda, includeNotes, includeCycle]
+    [entries, medications, variant, language, consultation, settings.lastConsultation?.date, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, earlyAccess, settings.leadTrialHistory, settings.leadTrial, settings.markedFlares, agenda, includeNotes, includeCycle]
   )
 
   // Browsers name the saved PDF after the page title.

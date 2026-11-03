@@ -96,6 +96,7 @@ export function PainTrendChart({
   periodMeansLabel,
   setApart,
   trialSpans = [],
+  marked = [],
 }: {
   /** Every entry: the mean of the range's first days reaches back before it. */
   entries: DailyEntry[]
@@ -114,6 +115,8 @@ export function PainTrendChart({
   setApart?: ChartSpan
   /** One-week trials, drawn as a thin band along the bottom */
   trialSpans?: { from: string; to: string }[]
+  /** Periods the person marked themselves: an outlined band, apart from the detected flares */
+  marked?: { from: string; to: string }[]
 }) {
   const t = usePalette()
   const i18n = useTranslation()
@@ -182,6 +185,19 @@ export function PainTrendChart({
                 fill={t.brand}
                 fillOpacity={0.14}
                 stroke="none"
+                ifOverflow="hidden"
+              />
+            ))}
+            {marked.map((m) => (
+              <ReferenceArea
+                key={`marked-${m.from}`}
+                x1={daysBetween(from, m.from) - 0.5}
+                x2={daysBetween(from, m.to) + 0.5}
+                fill={t.brand}
+                fillOpacity={0.05}
+                stroke={t.brand}
+                strokeOpacity={0.7}
+                strokeDasharray="4 3"
                 ifOverflow="hidden"
               />
             ))}
@@ -281,6 +297,12 @@ export function PainTrendChart({
           <li className="flex items-center gap-1.5">
             <span className="w-4 h-3 rounded-[3px]" style={{ background: t.brand, opacity: 0.14 }} aria-hidden />
             {i18n.trends.flareBand}
+          </li>
+        )}
+        {marked.length > 0 && (
+          <li className="flex items-center gap-1.5">
+            <span className="w-4 h-3 rounded-[3px] border border-dashed" style={{ borderColor: t.brand, background: 'transparent' }} aria-hidden />
+            {i18n.markedFlare.legend}
           </li>
         )}
         {trialSpans.length > 0 && (
