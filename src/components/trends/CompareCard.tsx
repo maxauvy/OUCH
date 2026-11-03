@@ -46,7 +46,7 @@ export function CompareCard({
   const pain = (v: number | null) => (v === null ? '—' : nf.format(v))
   const stiff = (b: string | null) => (b ? i18n.entryForm.morningStiffnessBands[b as keyof typeof i18n.entryForm.morningStiffnessBands] : '—')
   const dateInput = (label: string, value: string, set: (v: string) => void) => (
-    <input type="date" aria-label={label} value={value} max={today} onChange={(e) => e.target.value && set(e.target.value)} className={fieldClass} style={field} />
+    <input type="date" aria-label={label} value={value} max={today} onChange={(e) => e.target.value && set(e.target.value)} className={fieldClass} style={{ ...field, minWidth: '9.5rem' }} />
   )
 
   return (
@@ -84,45 +84,48 @@ export function CompareCard({
         </div>
       )}
 
-      {spans && !valid && <p className="text-control">{t.overlap}</p>}
-      {result && !result.enough && <p className="text-control">{format(t.tooFew, { a: result.a.logged, b: result.b.logged }, language)}</p>}
-      {spans && result?.enough && (
-        <>
-          <table className="w-full text-control">
-            <thead>
-              <tr style={{ color: 'var(--color-ink-muted)' }}>
-                <th scope="col" className="text-left font-normal py-1" />
-                <th scope="col" className="text-right font-normal py-1">{range(spans.a)}</th>
-                <th scope="col" className="text-right font-normal py-1">{range(spans.b)}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                [t.colPain, pain(result.a.pain), pain(result.b.pain)],
-                [t.colSevere, String(result.a.severe), String(result.b.severe)],
-                ...(result.a.flareDays !== null && result.b.flareDays !== null ? [[t.colFlares, String(result.a.flareDays), String(result.b.flareDays)]] : []),
-                ...(stiffnessTracked ? [[t.colStiffness, stiff(result.a.stiffness), stiff(result.b.stiffness)]] : []),
-                [t.colLogged, `${result.a.logged} / ${result.a.days}`, `${result.b.logged} / ${result.b.days}`],
-              ].map(([label, a, b]) => (
-                <tr key={label} className="border-t" style={{ borderColor: 'var(--color-hairline)' }}>
-                  <th scope="row" className="text-left font-normal py-1.5 pr-2">{label}</th>
-                  <td className="text-right tabular-nums py-1.5">{a}</td>
-                  <td className="text-right tabular-nums py-1.5 font-semibold">{b}</td>
+      {/* The reading changes when a choice changes: said to a screen reader without moving focus. */}
+      <div aria-live="polite">
+        {spans && !valid && <p className="text-control">{t.overlap}</p>}
+        {result && !result.enough && <p className="text-control">{format(t.tooFew, { a: result.a.logged, b: result.b.logged }, language)}</p>}
+        {spans && result?.enough && (
+          <>
+            <table className="w-full text-control">
+              <thead>
+                <tr style={{ color: 'var(--color-ink-muted)' }}>
+                  <th scope="col" className="text-left font-normal py-1" />
+                  <th scope="col" className="text-right font-normal py-1">{range(spans.a)}</th>
+                  <th scope="col" className="text-right font-normal py-1">{range(spans.b)}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <p className="text-body mt-3">
-            {result.diff === null || Math.abs(result.diff) < 0.05
-              ? t.same
-              : format(result.diff < 0 ? t.lower : t.higher, { diff: nf.format(Math.abs(result.diff)) }, language)}{' '}
-            {result.gap === null ? t.noUsual : format(result.within ? t.within : t.outside, { gap: nf.format(result.gap) }, language)}
-          </p>
-          <p className="text-caption mt-1" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.note}
-          </p>
-        </>
-      )}
+              </thead>
+              <tbody>
+                {[
+                  [t.colPain, pain(result.a.pain), pain(result.b.pain)],
+                  [t.colSevere, String(result.a.severe), String(result.b.severe)],
+                  ...(result.a.flareDays !== null && result.b.flareDays !== null ? [[t.colFlares, String(result.a.flareDays), String(result.b.flareDays)]] : []),
+                  ...(stiffnessTracked ? [[t.colStiffness, stiff(result.a.stiffness), stiff(result.b.stiffness)]] : []),
+                  [t.colLogged, `${result.a.logged} / ${result.a.days}`, `${result.b.logged} / ${result.b.days}`],
+                ].map(([label, a, b]) => (
+                  <tr key={label} className="border-t" style={{ borderColor: 'var(--color-hairline)' }}>
+                    <th scope="row" className="text-left font-normal py-1.5 pr-2">{label}</th>
+                    <td className="text-right tabular-nums py-1.5">{a}</td>
+                    <td className="text-right tabular-nums py-1.5 font-semibold">{b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="text-body mt-3">
+              {result.diff === null || Math.abs(result.diff) < 0.05
+                ? t.same
+                : format(result.diff < 0 ? t.lower : t.higher, { diff: nf.format(Math.abs(result.diff)) }, language)}{' '}
+              {result.gap === null ? t.noUsual : format(result.within ? t.within : t.outside, { gap: nf.format(result.gap) }, language)}
+            </p>
+            <p className="text-caption mt-1" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.note}
+            </p>
+          </>
+        )}
+      </div>
     </Card>
   )
 }

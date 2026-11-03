@@ -21,7 +21,7 @@ const LIGHT = {
   surface: '#ffffff',
   surfaceRaised: '#f8fafb',
   ink: '#14212b',
-  inkMuted: '#5b6b76',
+  inkMuted: '#566772',
   hairline: '#e1e7eb',
   brand: '#0d5c8c',
   brandSoft: '#e3eef6',
