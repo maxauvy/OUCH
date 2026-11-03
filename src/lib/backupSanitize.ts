@@ -39,12 +39,14 @@ import type {
   Settings,
   Consultation,
   LastConsultation,
+  Prescription,
   WeatherInfo,
 } from '../db/types.ts'
 import { cleanZones } from './bodyZones.ts'
 import { cleanOtherName, FIRST_DIAGNOSIS_YEAR } from './illnessStatus.ts'
 import type { LeadChoices } from './leads.ts'
 import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
+import { makePrescription } from './prescription.ts'
 import { cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
 
 /** Far above any real journal (a hundred years is ~36 500 days). */
@@ -324,6 +326,11 @@ function lastConsultation(v: unknown): LastConsultation | undefined {
   return notes ? { date: v.date, notes } : { date: v.date }
 }
 
+function prescription(v: unknown): Prescription | undefined {
+  if (!isRecord(v) || !isISODate(v.start) || typeof v.months !== 'number' || typeof v.remindDays !== 'number') return undefined
+  return makePrescription(v.start, v.months, v.remindDays, typeof v.label === 'string' ? v.label : undefined) ?? undefined
+}
+
 /** Only what is valid is kept, and nothing is filled in: a setting the file
  * does not (validly) hold stays as it is on this device. */
 export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
@@ -369,6 +376,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     leadTrialHistory: leadTrialHistory(raw.leadTrialHistory),
     consultation: consultation(raw.consultation),
     lastConsultation: lastConsultation(raw.lastConsultation),
+    prescription: prescription(raw.prescription),
   })
 }
 
