@@ -179,6 +179,12 @@ export function TodayList({
             <p className="text-body mt-0.5">{format(t.indicatorInvite.banner, { list: formatIllnessList(language, settings.illnesses) })}</p>
           </ListCard>
         )
+      case 'rest':
+        return (
+          <ListCard key={m.key} icon={IconLeaf} label={t.pacing.restLabel} actions={[{ label: t.pacing.restThanks, primary: true, onClick: () => done(m.key) }]}>
+            <p className="text-body mt-0.5">{t.pacing.restText}</p>
+          </ListCard>
+        )
       case 'calm': {
         const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMM', { locale: dateFnsLocale })
         return (

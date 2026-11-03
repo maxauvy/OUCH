@@ -8,6 +8,7 @@ import { shouldShowInvite } from '../lib/indicatorInvite'
 import { NO_LEADS_SEEN, trialToRepeat } from '../lib/leadHints'
 import { triedKeys } from '../lib/leadTrial'
 import { monthSummary } from '../lib/monthSummary'
+import { bigDayBefore } from '../lib/pacing'
 import { recentReturn, todayMessages, type TodayMessages } from '../lib/todayMessages'
 import { weeklyFinding } from '../lib/weeklySentence'
 import { useFlares } from './useFlares'
@@ -32,7 +33,7 @@ export function useTodayMessages(): TodayMessages | null {
       today,
       quiet: flare,
       later: settings.leadsSeen?.later,
-      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled, month: settings.suggestionsEnabled },
+      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled, month: settings.suggestionsEnabled, rest: settings.suggestionsEnabled && settings.enabledFactors.includes('activity') },
       leads: leadList.shown,
       leadChoices: settings.leadChoices,
       tried: triedKeys(settings.leadTrial, settings.leadTrialHistory),
@@ -49,6 +50,7 @@ export function useTodayMessages(): TodayMessages | null {
       invite: !IS_DEMO && shouldShowInvite(settings, { earlyAccess, today, quiet: flare }),
       calm: recentReturn(flares?.episodes ?? [], today),
       month: monthSummary({ today, entries: logged, history: settings.leadTrialHistory ?? [], episodes: flares?.episodes ?? [] }),
+      rest: bigDayBefore(logged, today),
       trial: settings.leadTrial,
     })
   }, [logged, leadList, settings, earlyAccess, today, flares])

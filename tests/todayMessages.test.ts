@@ -145,3 +145,15 @@ test('the summary of the month is listed once, away when thanked, and not brough
   assert.deepEqual(kinds(todayMessages({ ...base, month, allow: { ...base.allow, month: false } })), [])
   assert.deepEqual(kinds(todayMessages({ ...base, month, quiet: true })), [])
 })
+
+test('the day after a big day brings one soft word, for that day only, never on a hard day', () => {
+  const on = { ...base, allow: { ...base.allow, rest: true }, rest: true }
+  assert.deepEqual(kinds(todayMessages(on)), [`rest:${TODAY}`])
+  assert.equal(todayMessages(on).count, 1)
+  assert.deepEqual(todayMessages({ ...on, quiet: true }), { items: [], count: 0 })
+  assert.deepEqual(todayMessages({ ...on, allow: { ...base.allow, rest: false } }), { items: [], count: 0 })
+  assert.deepEqual(todayMessages({ ...base, rest: true }), { items: [], count: 0 })
+  // answered, it stays away; tomorrow it is another key
+  assert.deepEqual(todayMessages({ ...on, later: markDone(undefined, `rest:${TODAY}`) }), { items: [], count: 0 })
+  assert.deepEqual(kinds(todayMessages({ ...on, today: shiftISO(TODAY, 1), later: markDone(undefined, `rest:${TODAY}`) })), [`rest:${shiftISO(TODAY, 1)}`])
+})
