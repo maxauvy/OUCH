@@ -1,4 +1,4 @@
-import type { DailyEntry, LoggedEntry, Illness, IllnessDetails, Medication } from '../../db/types'
+import type { DailyEntry, LoggedEntry, Illness, IllnessDetails, MarkedFlare, Medication } from '../../db/types'
 import type { Language } from '../../i18n'
 import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresApply, type FlareEpisode } from '../../lib/flares'
 import { flareContext, type FlareContext } from '../../lib/flareContext'
@@ -10,6 +10,7 @@ import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '
 import { weekdayProfile, type WeekdayProfile } from '../../lib/weekdays'
 import { reportFormat, type ReportFormat } from './reportFormat'
 import { shiftISO } from '../../lib/dates'
+import { markedOverlapping, type ResolvedFlare } from '../../lib/markedFlares'
 
 export type ReportVariant = 'gp' | 'painClinic'
 
@@ -29,6 +30,8 @@ interface ReportOptions {
   /** The statuses and the name typed for "autre", as declared */
   illnessDetails?: IllnessDetails
   agenda: string[]
+  /** The difficult periods the patient marked themselves, as stored */
+  markedFlares?: MarkedFlare[]
   /** What the patient answered to the leads on Trends; the kept ones go on the report */
   leadChoices?: LeadChoices
   /** Which factors the patient tracks: a kept lead on one they no longer track stays off the report, as it is off Trends */
@@ -72,6 +75,8 @@ export interface ReportData {
   meds: MedicationReport[]
   medications: Medication[]
   flares: FlareSummary
+  /** The periods the patient marked themselves that touch the reported period, oldest first: apart from the detected flares */
+  marked: ResolvedFlare[]
   /** Changes of background treatment in the period, or in the 5 weeks before
    * it (their second half is inside it), with what the diary shows around each */
   reviews: TreatmentReview[]
@@ -129,6 +134,7 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
       currentDays: flareDayCount(episodes, p.start, p.end),
       previousDays: flareDayCount(episodes, p.prevStart, shiftISO(p.start, -1)),
     },
+    marked: markedOverlapping(options.markedFlares, p.start, p.end, options.end),
     weekdays: weekdayProfile(current),
     noticed: keptLeads(findLeads([...previous, ...current], options.leadFactors), options.leadChoices),
     trials: reportTrials(options.leadTrials?.history, options.leadTrials?.current, entries, p.prevStart, p.end),

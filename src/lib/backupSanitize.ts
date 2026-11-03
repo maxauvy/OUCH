@@ -40,6 +40,7 @@ import type {
   Consultation,
   LastConsultation,
   Prescription,
+  MarkedFlare,
   WeatherInfo,
 } from '../db/types.ts'
 import { cleanZones } from './bodyZones.ts'
@@ -47,6 +48,7 @@ import { cleanOtherName, FIRST_DIAGNOSIS_YEAR } from './illnessStatus.ts'
 import type { LeadChoices } from './leads.ts'
 import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
 import { makePrescription } from './prescription.ts'
+import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
 import { cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
 
 /** Far above any real journal (a hundred years is ~36 500 days). */
@@ -331,6 +333,20 @@ function prescription(v: unknown): Prescription | undefined {
   return makePrescription(v.start, v.months, v.remindDays, typeof v.label === 'string' ? v.label : undefined) ?? undefined
 }
 
+/** The marked periods: a real first day, an end that does not come before it, the factors the app knows, a short note. */
+function markedFlares(v: unknown): MarkedFlare[] | undefined {
+  if (!Array.isArray(v)) return undefined
+  const list = v.slice(0, MAX_MARKED).flatMap((f): MarkedFlare[] => {
+    if (!isRecord(f) || !isISODate(f.start)) return []
+    const end = isISODate(f.end) && f.end >= f.start ? f.end : undefined
+    if (f.end !== undefined && !end) return []
+    const note = typeof f.note === 'string' ? cleanNote(f.note) : undefined
+    return [{ start: f.start, ...(end ? { end } : {}), factors: cleanFactors(strings(f.factors)), ...(note ? { note } : {}) }]
+  })
+  // Nothing in the file was usable: keep what this device holds, rather than clearing it.
+  return v.length > 0 && list.length === 0 ? undefined : list
+}
+
 /** Only what is valid is kept, and nothing is filled in: a setting the file
  * does not (validly) hold stays as it is on this device. */
 export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
@@ -377,6 +393,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     consultation: consultation(raw.consultation),
     lastConsultation: lastConsultation(raw.lastConsultation),
     prescription: prescription(raw.prescription),
+    markedFlares: markedFlares(raw.markedFlares),
   })
 }
 

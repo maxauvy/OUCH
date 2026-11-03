@@ -33,6 +33,17 @@ export function TimelineCard({ items }: { items: TimelineItem[] }) {
             .join(' · '),
         }
       }
+      case 'marked': {
+        const m = item.flare
+        const factors = m.factors.map((f) => i18n.markedFlare.factors[f].toLocaleLowerCase(language))
+        return {
+          dot: palette.brand,
+          text: format(i18n.markedFlare.timeline, { n: m.days }, language),
+          note: [range(m.start, m.last), factors.length ? format(i18n.markedFlare.timelineFactors, { list: new Intl.ListFormat(language, { type: 'conjunction' }).format(factors) }, language) : null, m.note]
+            .filter(Boolean)
+            .join(' · '),
+        }
+      }
       case 'treatment': {
         const { med, kind, period } = item.event
         const name = med.name
@@ -76,6 +87,11 @@ export function TimelineCard({ items }: { items: TimelineItem[] }) {
           )
         })}
       </ul>
+      {items.some((i) => i.kind === 'marked') && (
+        <p className="text-caption mt-2" style={{ color: palette.inkMuted }}>
+          {i18n.markedFlare.helper}
+        </p>
+      )}
       {items.some((i) => i.kind === 'flare') && (
         <p className="text-caption mt-2" style={{ color: palette.inkMuted }}>
           {t.flaresHelper}

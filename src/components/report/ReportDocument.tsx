@@ -178,6 +178,7 @@ function gpPages(d: ReportData): Block[][] {
           </>
         )),
       d.reviews.length > 0 && reviewBlock(d),
+      d.marked.length > 0 && markedBlock(d),
       <div className="r-grid2 wide-left">
         <div>
           <H level={2}>{f.t.symptoms}</H>
@@ -273,6 +274,7 @@ function painClinicPages(d: ReportData): Block[][] {
             {to === d.flares.current.length && <p className="r-small">{f.t.flaresTableNote}</p>}
           </>
         )),
+      d.marked.length > 0 && markedBlock(d),
       hasFlareContext(d) &&
         rowsBlock(d.flares.current.length, (from, to, continued) => (
           <>
@@ -680,15 +682,18 @@ function GpTiles({ d }: { d: ReportData }) {
     />,
     <Tile key="severe" label={f.t.tileSevere} value={severeN} compare={painPrev ? before(String(Math.round(painPrev.severe * painPrev.n))) : undefined} />,
   ]
-  if (flares.detectable)
+  if (flares.detectable || d.marked.length > 0) {
+    const marked = d.marked.length ? f.format(f.t.tileMarked, { n: d.marked.length }) : null
+    const detected = flares.detectable && flares.current.length ? f.format(f.t.flareDays, { n: flares.currentDays }) : null
     tiles.push(
       <Tile
         key="flares"
         label={f.t.flaresTitle}
-        value={flares.current.length}
-        compare={flares.current.length ? f.format(f.t.flareDays, { n: flares.currentDays }) : undefined}
+        value={flares.detectable ? flares.current.length : d.marked.length}
+        compare={flares.detectable ? [detected, marked && `+ ${marked}`].filter(Boolean).join(' · ') || undefined : (marked ?? undefined)}
       />
     )
+  }
   if (stiff?.commonest)
     tiles.push(<Tile key="stiffness" label={f.t.stiffness.title} value={<small>{f.t.stiffness.bands[stiff.commonest]}</small>} compare={f.format(f.t.stiffness.noted, { n: stiff.noted })} />)
   return <div className="r-tiles r-first-tiles">{tiles}</div>
@@ -996,6 +1001,43 @@ function FlaresTable({ d, from, to }: { d: ReportData; from: number; to: number 
       </tbody>
     </table>
   )
+}
+
+/** The periods the patient marked, in a table of their own: their dates and length, what the patient says may have played a part, and their note. */
+function markedBlock(d: ReportData) {
+  const { f } = d
+  return rowsBlock(d.marked.length, (from, to, continued) => (
+    <>
+      <H level={3}>
+        {f.t.markedTitle}
+        <Continued f={f} on={continued} />
+      </H>
+      <table className="r-flares">
+        <thead>
+          <tr>
+            <th scope="col">{f.t.colMarkedDates}</th>
+            <th scope="col" className="r">{f.t.colMarkedLength}</th>
+            <th scope="col">{f.t.colMarkedFactors}</th>
+            <th scope="col">{f.t.colMarkedNote}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {d.marked.slice(from, to).map((m) => (
+            <tr key={m.start} data-row>
+              <th scope="row" className="num">
+                {f.format(f.t.flareRange, { start: f.dayMonth(m.start), end: f.dayMonth(m.last) })}
+                {m.ongoing && ` (${f.t.markedOngoing})`}
+              </th>
+              <td className="r">{f.format(f.t.flareDays, { n: m.days })}</td>
+              <td>{m.factors.map((k) => f.t.markedFactors[k]).join(', ') || '—'}</td>
+              <td>{m.note ?? '—'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {to === d.marked.length && <p className="r-small">{f.t.markedNote}</p>}
+    </>
+  ))
 }
 
 /** Measures with at least one figure before some flare: one that is not

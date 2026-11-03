@@ -9,8 +9,9 @@ import { hasPain } from '../lib/loggedEntries'
 import { useSettings } from '../hooks/useSettings'
 import { useFlares } from '../hooks/useFlares'
 import { flareDaySet } from '../lib/flares'
-import { useTranslation } from '../i18n'
+import { markedDaySet } from '../lib/markedFlares'
 import { todayISO } from '../lib/dates'
+import { useTranslation } from '../i18n'
 
 export function JournalPage() {
   const entries = useAllEntries()
@@ -21,13 +22,14 @@ export function JournalPage() {
   const selectedEntry = useEntry(selected ?? '__none__')
   const flares = useFlares()
   const flareDays = useMemo(() => flareDaySet(flares?.episodes ?? []), [flares])
+  const markedDays = useMemo(() => markedDaySet(settings.markedFlares, todayISO()), [settings.markedFlares])
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       <h1 className="text-title font-semibold px-1">{t.journal.title}</h1>
 
       <Card>
-        <CalendarHeatmap entries={entries ?? []} onSelectDate={setSelected} selectedDate={selected ?? undefined} flareDays={flareDays} />
+        <CalendarHeatmap entries={entries ?? []} onSelectDate={setSelected} selectedDate={selected ?? undefined} flareDays={flareDays} markedDays={markedDays} />
       </Card>
 
       {entries && entries.length === 0 && (

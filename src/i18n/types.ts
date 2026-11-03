@@ -2,7 +2,7 @@
 // here means adding it to *every* locale file — TypeScript will point at
 // each one that's missing it.
 
-import type { BodyZone, COARSE_ZONES, HeadacheDuration, JointKey, JointRegion, LegPain, MorningStiffness, PeriodFlow, Refreshed, SymptomTag } from '../db/types'
+import type { BodyZone, COARSE_ZONES, FlareFactor, HeadacheDuration, JointKey, JointRegion, LegPain, MorningStiffness, PeriodFlow, Refreshed, SymptomTag } from '../db/types'
 import type { BodyGroupId, BodyRegion } from '../lib/bodyZones'
 import type { ChildTone } from '../lib/childView'
 
@@ -722,6 +722,16 @@ export interface Translations {
     flaresPrev: string
     flareLongest: string
     flareOngoing: string
+    markedTitle: string
+    markedNote: string
+    colMarkedDates: string
+    colMarkedLength: string
+    colMarkedFactors: string
+    colMarkedNote: string
+    markedOngoing: string
+    markedFactors: Record<FlareFactor, string>
+    /** In the flares tile: `{{n}} {{n:thing|things}}` marked by the patient */
+    tileMarked: string
     flaresTitle: string
     flaresTableNote: string
     flareContextTitle: string
@@ -1328,6 +1338,32 @@ export interface Translations {
     prepAskQuestion: string
     afterTitle: string
     afterHint: string
+  }
+  markedFlare: {
+    link: string
+    /** `{{date}}`: the day it began, as "10 nov." */
+    ongoing: string
+    finished: string
+    remove: string
+    sheetTitle: string
+    close: string
+    startedTitle: string
+    today: string
+    yesterday: string
+    otherDay: string
+    factorsTitle: string
+    factors: Record<FlareFactor, string>
+    notePlaceholder: string
+    save: string
+    hint: string
+    /** On the calendar and the pain curve: what the mark stands for */
+    dayLabel: string
+    legend: string
+    /** Trends timeline: `{{n}} {{n:day|days}}` */
+    timeline: string
+    timelineFactors: string
+    /** Under the curve of Trends, the helper line about the periods marked */
+    helper: string
   }
   todayList: {
     /** `{{n}} {{n:thing|things}}`: how many things wait. */

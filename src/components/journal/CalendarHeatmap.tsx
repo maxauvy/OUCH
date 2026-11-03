@@ -22,12 +22,15 @@ export function CalendarHeatmap({
   onSelectDate,
   selectedDate,
   flareDays,
+  markedDays,
 }: {
   entries: DailyEntry[]
   onSelectDate: (date: string) => void
   selectedDate?: string
   /** Days inside a flare, marked by a short bar under the number */
   flareDays?: Set<string>
+  /** Days of a period the person marked themselves: a hollow bar, apart from the detected ones */
+  markedDays?: Set<string>
 }) {
   const [cursor, setCursor] = useState(() => new Date())
   const t = usePalette()
@@ -96,8 +99,9 @@ export function CalendarHeatmap({
           const today = isToday(day)
           const dayLabel = format(day, 'd MMMM yyyy', { locale: dateFnsLocale })
           const inFlare = !!flareDays?.has(key)
+          const inMarked = !!markedDays?.has(key)
           const noPain = !weather && withNoPain(day)
-          const label = [dayLabel, weather ? i18n.painWeatherLevels[weather.level] : null, noPain ? i18n.calendar.noPain : null, inFlare ? i18n.calendar.flareDay : null]
+          const label = [dayLabel, weather ? i18n.painWeatherLevels[weather.level] : null, noPain ? i18n.calendar.noPain : null, inFlare ? i18n.calendar.flareDay : null, inMarked ? i18n.markedFlare.dayLabel : null]
             .filter(Boolean)
             .join(', ')
 
@@ -139,12 +143,13 @@ export function CalendarHeatmap({
               )}
               {noPain && <NoPainRing color={inMonth ? 'var(--color-ink-muted)' : 'var(--color-hairline)'} className="mt-0.5" />}
               {inFlare && <FlareBar color={tinted ? tinted.ink : 'var(--color-ink-muted)'} className={`absolute ${weather ? 'bottom-[2px]' : 'bottom-1.5'}`} />}
+              {inMarked && <MarkedBar color={tinted ? tinted.ink : 'var(--color-ink-muted)'} className={`absolute ${weather ? 'bottom-[2px]' : 'bottom-1.5'} ${inFlare ? 'translate-y-[-5px]' : ''}`} />}
             </button>
           )
         })}
       </div>
 
-      <WeatherLegend withFlare={!!flareDays?.size} withNoPain={anyNoPain} />
+      <WeatherLegend withFlare={!!flareDays?.size} withMarked={!!markedDays?.size} withNoPain={anyNoPain} />
     </div>
   )
 }
@@ -153,6 +158,11 @@ export function CalendarHeatmap({
  * day's own ink, which already contrasts with the tint. */
 function FlareBar({ color, className = '' }: { color: string; className?: string }) {
   return <span className={`block w-4 h-[2.5px] rounded-full ${className}`} style={{ background: color }} aria-hidden />
+}
+
+/** A day of a period the person marked: the same bar, hollow, so the two are told apart by shape and not by colour. */
+function MarkedBar({ color, className = '' }: { color: string; className?: string }) {
+  return <span className={`block w-4 h-[4px] rounded-full box-border ${className}`} style={{ border: `1.5px solid ${color}` }} aria-hidden />
 }
 
 /** A day with something noted but no pain level: the weather's dot, left
@@ -164,7 +174,7 @@ function NoPainRing({ color, className = '' }: { color: string; className?: stri
 const LEVELS: PainWeatherLevel[] = [1, 2, 3, 4, 5]
 
 /** The five weathers, easiest day first, so the calendar's colors can be read. */
-function WeatherLegend({ withFlare, withNoPain }: { withFlare: boolean; withNoPain: boolean }) {
+function WeatherLegend({ withFlare, withMarked, withNoPain }: { withFlare: boolean; withMarked: boolean; withNoPain: boolean }) {
   const i18n = useTranslation()
   const id = useId()
   return (
@@ -199,6 +209,16 @@ function WeatherLegend({ withFlare, withNoPain }: { withFlare: boolean; withNoPa
             </span>
             <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
               {i18n.calendar.noPain.charAt(0).toLocaleUpperCase() + i18n.calendar.noPain.slice(1)}
+            </span>
+          </li>
+        )}
+        {withMarked && (
+          <li className="flex items-center gap-1.5">
+            <span className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-brand-soft)' }} aria-hidden>
+              <MarkedBar color="var(--color-ink-muted)" />
+            </span>
+            <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              {i18n.markedFlare.legend}
             </span>
           </li>
         )}

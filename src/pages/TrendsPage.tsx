@@ -23,13 +23,14 @@ import { usePalette } from '../hooks/usePalette'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
 import { flareDaySet, flaresOverlapping } from '../lib/flares'
+import { markedOverlapping } from '../lib/markedFlares'
 import { remember } from '../lib/leadHints'
 import { restartTrial, startTrial, type LeadTrial } from '../lib/leadTrial'
 import { arrangeLeads, choiceFor, findLeads, leadFactors, PATTERN_MIN_DAYS, type Lead, type LeadChoice } from '../lib/leads'
 import { updateLeadsSeen } from '../lib/leadsSeenStore'
 import { formatPosology } from '../lib/medicationFormat'
 import { treatmentEvents } from '../lib/treatmentEvents'
-import { lastTreatmentEvent, timelineItems, trialSpans } from '../lib/trendsTimeline'
+import { lastTreatmentEvent, markedSpans, timelineItems, trialSpans } from '../lib/trendsTimeline'
 import { weekdayProfile } from '../lib/weekdays'
 import { format, useLocale, useTranslation } from '../i18n'
 import { IndicatorsCard } from '../components/trends/IndicatorsCard'
@@ -119,12 +120,13 @@ export function TrendsPage() {
         from: rangeFrom,
         to: today,
         flares: flares?.detectable ? flares.episodes : [],
+        marked: markedOverlapping(settings.markedFlares, rangeFrom, today, today),
         events,
         history: settings.leadTrialHistory ?? [],
         current: settings.leadTrial,
         today,
       }),
-    [rangeFrom, today, flares, events, settings.leadTrialHistory, settings.leadTrial]
+    [rangeFrom, today, flares, events, settings.leadTrialHistory, settings.leadTrial, settings.markedFlares]
   )
   const doseMarkers: ChartMarker[] = medicationsTracked
     ? (medications ?? []).flatMap((m) =>
@@ -141,7 +143,7 @@ export function TrendsPage() {
   // The chips only offer what there is to show in this range.
   const layerChips = (
     [
-      ['flares', i18n.trends.layerFlares, timeline.some((i) => i.kind === 'flare')],
+      ['flares', i18n.trends.layerFlares, timeline.some((i) => i.kind === 'flare' || i.kind === 'marked')],
       ['treatment', i18n.trends.layerTreatment, doseMarkers.length > 0],
       ['trials', i18n.trends.layerTrials, timeline.some((i) => i.kind === 'trial')],
     ] as const
@@ -250,6 +252,7 @@ export function TrendsPage() {
               to={today}
               markers={layers.treatment ? doseMarkers : []}
               flares={layers.flares ? flares?.episodes : undefined}
+              marked={layers.flares ? markedSpans(timeline) : []}
               trialSpans={layers.trials ? trialSpans(timeline) : []}
               showMean={rangeDays !== 7}
             />
