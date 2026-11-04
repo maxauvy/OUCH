@@ -6,6 +6,13 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- **Les deux rapports aux couleurs d'OUCH.** Le logo de l'application en en-tête de chaque page et à côté du titre, la bande dégradée or, lavande et indigo de la plaquette en haut de chaque page, un liseré de couleur sur les chiffres clés et les titres de section.
+- **Une flèche de tendance sur les chiffres clés.** Douleur moyenne, jours sévères, poussées et sommeil (rapport du médecin traitant), et les chiffres de « Intensité douloureuse » (rapport du centre douleur) portent une flèche : le sens du changement depuis la période précédente, en vert quand c'est le sens d'une amélioration, en orange dans l'autre sens, en gris quand il est trop petit pour compter. La méthode dit ce que la flèche ne dit pas : l'ampleur, et si le changement dépasse la variation habituelle du patient.
+
+### Corrigé
+- **Rapport du centre douleur, « Facteurs associés à la douleur » :** le nom du facteur et sa précision (« co-symptôme, pas un facteur ») étaient collés sur une seule ligne, dans tout le tableau. La précision passe maintenant sous le nom.
+
 ## [0.10.0] - 2026-11-03
 
 Une version pour préparer un rendez-vous médical et le prolonger : ses questions et sa note, l'ordonnance à renouveler, les périodes plus difficiles que la personne note elle-même, deux périodes mises côte à côte, un regard doux sur le rythme, et une sauvegarde plus simple sur téléphone. Tout est ouvert à tous ; rien n'est un diagnostic ni un conseil de traitement. Les textes sur le rythme sont à faire relire par un professionnel de santé.

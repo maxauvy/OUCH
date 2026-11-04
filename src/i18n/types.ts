@@ -746,6 +746,11 @@ export interface Translations {
     compareNoUsual: string
     compareNote: string
     colCompareGap: string
+    trendUp: string
+    trendDown: string
+    trendFlat: string
+    /** In the method: what the arrows say */
+    trendNote: string
     flaresTitle: string
     flaresTableNote: string
     flareContextTitle: string

@@ -875,6 +875,10 @@ const en: Translations = {
     compareNoUsual: 'The history is too short to say what is usual for this patient.',
     compareNote: 'These figures describe the diary; they do not show any effect of a treatment.',
     colCompareGap: 'Gap',
+    trendUp: 'up',
+    trendDown: 'down',
+    trendFlat: 'stable',
+    trendNote: 'The arrows on the key figures give the direction of change since the previous period: green when it is the way of an improvement, orange the other way, grey when the change is under 0.2 point (3 percentage points for a share of days, 0.25 h for sleep). They say neither how large the change is nor whether it goes beyond the patient’s usual variation.',
     flaresTitle: 'Flares',
     flaresTableNote:
       'Usual: median of the previous 28 days, flares left out. Back: days from the last flare day to the first day back at the usual level. Rescue medication: days with at least one as-needed intake, out of the episode’s logged days.',

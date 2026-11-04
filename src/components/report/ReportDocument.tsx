@@ -34,6 +34,8 @@ import type { ReportFormat } from './reportFormat'
 import { REFERENCES } from '../../lib/references'
 import { buildSheets, findCut, rowsBlock, type Block, type Cut } from './pagination'
 import { summarizeMorningStiffness } from '../../lib/stiffnessSummary'
+import { FLAT_BELOW, trend, type Trend } from '../../lib/trend'
+import { AppLogo } from '../ui/AppLogo'
 import { summarizeNightWakings } from '../../lib/nightWakings'
 import { otherIndicatorLines } from '../../lib/indicatorLines'
 import { summarizeHeadaches } from '../../lib/indicatorSummaries'
@@ -92,7 +94,8 @@ export function ReportDocument({
           }}
         >
           <div className="r-running">
-            <span>
+            <span className="r-brand">
+              <AppLogo size={15} className="r-logo" />
               OUCH · {running}
               {options.patientName && (
                 <>
@@ -201,6 +204,7 @@ function gpPages(d: ReportData): Block[][] {
         <H level={2}>{f.t.method}</H>
         <div className="r-method">
           <p>{f.t.methodGp}</p>
+          <p>{f.t.trendNote}</p>
         </div>
       </>,
       <References numbers={gpReferences(d)} title={f.t.references} />,
@@ -425,6 +429,7 @@ function painClinicPages(d: ReportData): Block[][] {
               </p>
             )
           })}
+          <p>{f.t.trendNote}</p>
         </div>
       </>,
       <References numbers={REFERENCES.map((_, i) => i + 1)} title={f.t.references} uses={f.t} />,
@@ -448,8 +453,13 @@ function Header({ d }: { d: ReportData }) {
   const { f, p, options } = d
   return (
     <>
-      <H level={1}>{options.variant === 'gp' ? f.t.titleGp : f.t.titlePainClinic}</H>
-      <div className="r-sub">{f.t.subtitle}</div>
+      <div className="r-titlebar">
+        <AppLogo size={44} className="r-logo r-logo-big" />
+        <div>
+          <H level={1}>{options.variant === 'gp' ? f.t.titleGp : f.t.titlePainClinic}</H>
+          <div className="r-sub">{f.t.subtitle}</div>
+        </div>
+      </div>
       <div className="r-id">
         <div>
           <div className="r-k">{f.t.patient}</div>
@@ -592,11 +602,28 @@ function KeyPointList({ items, from, to }: { items: string[]; from: number; to: 
   )
 }
 
-function Tile({ label, value, compare }: { label: string; value: ReactNode; compare?: string }) {
+/** The arrow beside a figure: the direction since the period before, green when that is the way things get better, orange when it is not, grey when flat. */
+function TrendArrow({ trend: t, f, inline = false }: { trend: Trend; f: ReportFormat; inline?: boolean }) {
+  const label = t.direction === 'up' ? f.t.trendUp : t.direction === 'down' ? f.t.trendDown : f.t.trendFlat
+  const color = t.tone === 'better' ? R.good : t.tone === 'worse' ? R.worse : R.prev
+  return (
+    <svg className={inline ? 'r-trend inline' : 'r-trend'} viewBox="0 0 16 16" width={16} height={16} role="img" aria-label={label}>
+      <title>{label}</title>
+      {t.direction === 'up' && <path d="M8 2 15 13H1Z" fill={color} />}
+      {t.direction === 'down' && <path d="M8 14 1 3h14Z" fill={color} />}
+      {t.direction === 'flat' && <rect x="1" y="6" width="14" height="4" rx="2" fill={color} />}
+    </svg>
+  )
+}
+
+function Tile({ label, value, compare, trend: tr, f }: { label: string; value: ReactNode; compare?: string; trend?: Trend | null; f?: ReportFormat }) {
   return (
     <div className="r-tile">
       <div className="r-k">{label}</div>
-      <div className="r-big">{value}</div>
+      <div className="r-big r-bigrow">
+        <span>{value}</span>
+        {tr && f && <TrendArrow trend={tr} f={f} inline />}
+      </div>
       {compare && <div className="r-cmp">{compare}</div>}
     </div>
   )
@@ -620,9 +647,11 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
         </>
       }
       compare={painPrev && painPrev.mean > 0 ? `${before(f.nf(painPrev.mean))} · ${f.signedPct((pain.mean - painPrev.mean) / painPrev.mean)}` : undefined}
+      trend={painPrev ? trend(pain.mean, painPrev.mean, 'lower', FLAT_BELOW.score) : null}
+      f={f}
     />,
-    <Tile key="severe" label={f.t.tileSevere} value={f.pct(pain.severe)} compare={painPrev ? before(f.pct(painPrev.severe)) : undefined} />,
-    <Tile key="mild" label={f.t.tileMild} value={f.pct(pain.mild)} compare={painPrev ? before(f.pct(painPrev.mild)) : undefined} />,
+    <Tile key="severe" label={f.t.tileSevere} value={f.pct(pain.severe)} compare={painPrev ? before(f.pct(painPrev.severe)) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
+    <Tile key="mild" label={f.t.tileMild} value={f.pct(pain.mild)} compare={painPrev ? before(f.pct(painPrev.mild)) : undefined} trend={painPrev ? trend(pain.mild, painPrev.mild, 'higher', FLAT_BELOW.share) : null} f={f} />,
   ]
   if (sleep)
     tiles.push(
@@ -638,6 +667,8 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
         compare={[sleepPrev && before(f.format(f.t.hours, { v: f.nf(sleepPrev.mean) })), quality && f.format(f.t.sleepQuality, { v: f.nf(quality.mean) })]
           .filter(Boolean)
           .join(' · ')}
+        trend={sleep && sleepPrev ? trend(sleep.mean, sleepPrev.mean, 'higher', FLAT_BELOW.hours) : null}
+        f={f}
       />
     )
   if (detailed)
@@ -656,7 +687,7 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
         }
         compare={f.format(f.t.range, { min: pain.min, max: pain.max })}
       />,
-      <Tile key="sd" label={f.t.tileVariability} value={f.nf(pain.sd)} compare={painPrev ? before(f.nf(painPrev.sd)) : undefined} />
+      <Tile key="sd" label={f.t.tileVariability} value={f.nf(pain.sd)} compare={painPrev ? before(f.nf(painPrev.sd)) : undefined} trend={painPrev ? trend(pain.sd, painPrev.sd, 'lower', FLAT_BELOW.score) : null} f={f} />
     )
   return <div className={`r-tiles${detailed ? ' six' : ''}`}>{tiles}</div>
 }
@@ -681,8 +712,10 @@ function GpTiles({ d }: { d: ReportData }) {
         </>
       }
       compare={painPrev && painPrev.mean > 0 ? `${before(f.nf(painPrev.mean))} · ${f.signedPct((pain.mean - painPrev.mean) / painPrev.mean)}` : undefined}
+      trend={painPrev ? trend(pain.mean, painPrev.mean, 'lower', FLAT_BELOW.score) : null}
+      f={f}
     />,
-    <Tile key="severe" label={f.t.tileSevere} value={severeN} compare={painPrev ? before(String(Math.round(painPrev.severe * painPrev.n))) : undefined} />,
+    <Tile key="severe" label={f.t.tileSevere} value={severeN} compare={painPrev ? before(String(Math.round(painPrev.severe * painPrev.n))) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
   ]
   if (flares.detectable || d.marked.length > 0) {
     const marked = d.marked.length ? f.format(f.t.tileMarked, { n: d.marked.length }) : null
@@ -693,6 +726,8 @@ function GpTiles({ d }: { d: ReportData }) {
         label={f.t.flaresTitle}
         value={flares.detectable ? flares.current.length : d.marked.length}
         compare={flares.detectable ? [detected, marked && `+ ${marked}`].filter(Boolean).join(' · ') || undefined : (marked ?? undefined)}
+        trend={flares.detectable && painPrev ? trend(flares.currentDays / d.p.periodDays, flares.previousDays / d.p.periodDays, 'lower', FLAT_BELOW.share) : null}
+        f={f}
       />
     )
   }
@@ -711,6 +746,7 @@ function GpFigures({ d }: { d: ReportData }) {
     <div className="r-card tint">
       {sleep ? (
         <div className="r-kpi">
+          {sleepPrev && <TrendArrow trend={trend(sleep.mean, sleepPrev.mean, 'higher', FLAT_BELOW.hours)} f={f} />}
           <div className="r-k">{f.t.tileSleep}</div>
           <div className="r-big num">
             {f.nf(sleep.mean)}
