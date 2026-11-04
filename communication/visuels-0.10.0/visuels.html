@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Visuels OUCH 0.10.0</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0&display=block">
+
+<style>
+/* Posts for OUCH 0.10 (patients): one image for the post (#post) and a carousel of eight slides (.s1 to .s8), 1080x1350 each.
+   Render with `node render.mjs`; the PDF of the carousel is what LinkedIn takes as a "document". */
+/* Posts for OUCH 0.9.0: one image for the post (#post) and a carousel of seven slides (.s1 to .s7), 1080x1350 each.
+   Render with `node render.mjs`; the PDF of the carousel is what LinkedIn takes as a "document". */
+:root{--ink:#2b2245;--gold:#f0b94f;--gold2:#f7d78e;--cream:#fff6e0;--lav:#d9cdef;--ind:#574a7a;--blue:#0d5c8c;--soft:#e3eef6;--mint:#cdeee1;--night:#1d1830;--rose:#f6c9c4;
+  --display:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;--serif:"Instrument Serif",Georgia,serif;--body:"Public Sans",system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#888;font-family:var(--body);color:var(--ink)}
+@page{size:1080px 1350px;margin:0}
+.post{position:relative;width:1080px;height:1350px;overflow:hidden;break-after:page;page-break-after:always}
+.ms{font-family:"Material Symbols Rounded";font-weight:500;font-style:normal;line-height:1;display:inline-block;white-space:nowrap;font-feature-settings:"liga"}
+.bar{z-index:5;position:absolute;left:0;top:0;right:0;height:22px;background:linear-gradient(90deg,#e3a73b,#a894c9 55%,#574a7a)}
+.logo{position:absolute;left:72px;top:70px;width:96px;height:96px}
+.tag{position:absolute;background:var(--ink);color:#fff;border-radius:999px;padding:12px 28px;font-weight:700;font-size:30px;letter-spacing:.03em;transform:rotate(-3deg)}
+.display{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:.93;margin:0}
+.serif{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.02em;line-height:.9;margin:0}
+.lead{font-size:38px;line-height:1.36;margin:0}
+.pager{position:absolute;right:72px;bottom:56px;font-size:26px;font-weight:700;opacity:.7;display:flex;gap:10px;align-items:center}
+.handle{position:absolute;left:72px;bottom:56px;font-size:27px;font-weight:700}
+.phone{position:absolute;background:#0f1b24;border-radius:84px;padding:20px;box-shadow:0 34px 80px rgba(20,16,40,.32)}
+.phone .scr{border-radius:66px;overflow:hidden;height:100%;background:#f3f6f8}
+.phone img{display:block;width:100%}
+.chip{display:flex;gap:16px;align-items:center;background:#fff;border-radius:26px;padding:18px 26px;font-size:32px;font-weight:700;line-height:1.15;color:var(--ink);box-shadow:0 6px 0 rgba(43,34,69,.12)}
+.chip .ms{font-size:46px;color:var(--ind);flex:none}
+.under{background:linear-gradient(transparent 62%,rgba(255,255,255,.7) 62%);padding:0 6px}
+
+
+.sticker{position:absolute;background:var(--mint);border-radius:30px;padding:22px 30px;font-size:32px;font-weight:700;line-height:1.2;transform:rotate(-2deg)}
+.card{position:absolute;background:#fff;border-radius:44px;overflow:hidden;box-shadow:0 30px 70px rgba(20,16,40,.28)}
+.card img{display:block;width:100%}
+
+/* single post */
+#post{background:var(--gold)}
+#post .sun{position:absolute;width:1000px;height:1000px;border-radius:50%;background:var(--gold2);right:-380px;top:-300px}
+#post .sun:after{content:"";position:absolute;inset:160px;border-radius:50%;background:#fbe6b4}
+#post h1{position:absolute;left:72px;top:200px;width:620px}
+#post h1 .serif{font-size:96px;display:block;white-space:nowrap}
+#post h1 .display{font-size:134px;display:block;margin-top:14px}
+#post .lead{position:absolute;left:72px;top:690px;width:520px;font-size:36px}
+#post .chips{position:absolute;left:72px;bottom:130px;width:560px;display:flex;flex-direction:column;gap:16px}
+#post .phone{right:-40px;top:300px;width:470px;height:960px;transform:rotate(4deg)}
+#post .tag{right:80px;top:96px}
+
+/* carousel */
+.s1{background:var(--gold)}.s1 .sun{position:absolute;width:1100px;height:1100px;border-radius:50%;background:var(--gold2);left:200px;top:-420px}.s1 .sun:after{content:"";position:absolute;inset:170px;border-radius:50%;background:#fbe6b4}
+.s1 h1{position:absolute;left:72px;top:360px;width:960px}.s1 h1 .serif{font-size:150px;display:block;white-space:nowrap}.s1 h1 .display{font-size:150px;display:block;margin-top:18px;white-space:nowrap}
+.s1 .lead{position:absolute;left:72px;top:760px;width:860px;font-size:40px}
+.s1 .tag{right:72px;top:92px}
+.s1 .swipe{position:absolute;left:72px;bottom:56px;font-size:34px;font-weight:700;display:flex;gap:12px;align-items:center}.s1 .swipe .ms{font-size:44px}
+.s2{background:var(--cream)}
+.s2 h2,.s3 h2,.s4 h2{position:absolute;left:72px;top:200px;width:560px}
+.s2 h2 .serif,.s3 h2 .serif,.s4 h2 .serif{font-size:130px;display:block;white-space:nowrap}
+.s4 h2 .serif{font-size:96px}
+.s2 h2 .display,.s3 h2 .display,.s4 h2 .display{font-size:108px;display:block;margin-top:8px}
+.s2 .lead,.s3 .lead,.s4 .lead{position:absolute;left:72px;top:640px;width:450px}
+.s2 .phone{right:-50px;top:250px;width:470px;height:1000px;transform:rotate(3deg)}
+.s2 .sticker{left:72px;bottom:150px;width:440px}
+.s3{background:var(--lav)}
+.s3 .phone{right:-50px;top:200px;width:480px;height:1050px;transform:rotate(-3deg)}
+.s3 .sticker{left:72px;bottom:150px;width:440px;background:var(--gold2)}
+.s4{background:var(--soft)}
+.s4 .phone{right:-50px;top:230px;width:470px;height:1000px;transform:rotate(3deg)}
+.s4 .sticker{left:72px;bottom:130px;width:450px}
+.s5{background:var(--night);color:#fff}
+.s5 h2{position:absolute;left:72px;top:190px;width:900px}.s5 h2 .serif{font-size:100px;display:block;color:var(--gold);white-space:nowrap}.s5 h2 .display{font-size:118px;display:block;margin-top:6px}
+.s5 .lead{position:absolute;left:72px;top:600px;width:420px;font-size:36px;color:#e5def5}
+.s5 .phone{right:-50px;top:470px;width:470px;height:880px;transform:rotate(3deg)}
+.s5 .sticker{left:72px;bottom:150px;width:420px;background:var(--gold);color:var(--ink)}
+.s6{background:var(--gold)}
+.s6 h2{position:absolute;left:72px;top:190px;width:900px}.s6 h2 .serif{font-size:130px;display:block}.s6 h2 .display{font-size:124px;display:block;margin-top:6px}
+.s6 .lead{position:absolute;left:72px;top:600px;width:420px;font-size:36px}
+.s6 .card{right:56px;top:470px;width:520px;transform:rotate(3deg)}
+.s6 .sticker{left:72px;bottom:150px;width:420px;background:var(--ink);color:#fff}
+.s7{background:var(--cream)}
+.s7 h2{position:absolute;left:72px;top:190px;width:900px}.s7 h2 .serif{font-size:130px;display:block}.s7 h2 .display{font-size:124px;display:block;margin-top:6px}
+.s7 .lead{position:absolute;left:72px;top:560px;width:560px;font-size:34px}
+.s7 .card{left:72px;top:740px;width:840px;border-radius:28px;transform:rotate(-2deg)}
+.s7 .sticker{right:72px;top:560px;width:330px;background:var(--mint);transform:rotate(2deg);font-size:30px}
+.s8{background:var(--ind);color:#fff}
+.s8 h2{position:absolute;left:72px;top:190px;width:930px}.s8 h2 .serif{font-size:150px;display:block;color:var(--gold2)}.s8 h2 .display{font-size:132px;display:block;margin-top:8px}
+.s8 .lead{position:absolute;left:72px;top:640px;width:900px;font-size:38px;color:#ece7f8}
+.s8 .qr{position:absolute;left:72px;top:850px;width:270px;height:270px;background:#fff;border-radius:34px;padding:22px}
+.s8 .qr img{width:100%;height:100%;display:block}
+.s8 .cta{position:absolute;left:390px;top:860px;right:72px}
+.s8 .cta .url{font-family:var(--display);font-weight:800;font-size:48px;letter-spacing:-.02em;color:var(--gold2)}
+.s8 .cta p{font-size:32px;line-height:1.35;margin:14px 0 0;color:#ece7f8}
+.s8 .fine{position:absolute;left:72px;right:72px;bottom:130px;font-size:28px;font-weight:600;display:flex;gap:14px;flex-wrap:wrap}
+.s8 .fine span{background:rgba(255,255,255,.14);border-radius:999px;padding:10px 24px}
+.s5 .pager,.s8 .pager{color:#fff}
+</style></head><body>
+
+<!-- Image du post -->
+<section class="post" id="post"><div class="bar"></div><div class="sun"></div><img class="logo" src="assets/logo.svg" alt="">
+<div class="tag">Nouveau · v0.10</div>
+<h1><span class="serif">Ton rendez-vous,</span><span class="display">mieux préparé.</span></h1>
+<p class="lead">Tes questions, ton ordonnance, ce qui s’est passé depuis la dernière fois : tout sous la main.</p>
+<div class="chips"><div class="chip"><span class="ms">edit_note</span>Tes questions, notées</div><div class="chip"><span class="ms">medication</span>L’ordonnance à renouveler</div><div class="chip"><span class="ms">description</span>Un rapport pour ton médecin</div></div>
+<div class="phone"><div class="scr"><img src="assets/feuille.png" alt=""></div></div>
+<div class="handle">maxauvy.github.io/OUCH</div></section>
+
+<!-- Carrousel -->
+<section class="post s1"><div class="bar"></div><div class="sun"></div><img class="logo" src="assets/logo.svg" alt="">
+<div class="tag">Nouveau · v0.10</div>
+<h1><span class="serif">Ton rendez-vous,</span><span class="display">mieux préparé.</span></h1>
+<p class="lead">Tes questions, ton ordonnance, ton rapport : OUCH t’aide à arriver avec tout sous la main.</p>
+<div class="swipe">Glisse <span class="ms">arrow_forward</span></div><div class="pager">1 / 8</div></section>
+
+<section class="post s2"><div class="bar"></div>
+<h2><span class="serif">Note</span><span class="display">tes questions.</span></h2>
+<p class="lead">Quand tu y penses, pas dans le cabinet. Tu dis avec qui (médecin traitant ou centre douleur), et une carte douce te le rappelle quinze jours avant.</p>
+<div class="sticker">Tout reste sur ton téléphone.</div>
+<div class="phone"><div class="scr"><img src="assets/feuille.png" alt=""></div></div>
+<div class="pager">2 / 8</div></section>
+
+<section class="post s3"><div class="bar"></div>
+<h2><span class="serif">Après,</span><span class="display">garde une trace.</span></h2>
+<p class="lead">Ce que le médecin a dit, ce qui change. Et, si on t’a remis une ordonnance, sa durée.</p>
+<div class="sticker">Un mot suffit, tu écris comme tu veux.</div>
+<div class="phone"><div class="scr"><img src="assets/apres.png" alt=""></div></div>
+<div class="pager">3 / 8</div></section>
+
+<section class="post s4"><div class="bar"></div>
+<h2><span class="serif">Ton ordonnance,</span><span class="display">sans y penser.</span></h2>
+<p class="lead">OUCH te prévient une semaine avant la fin, d’après la durée que tu as donnée. Rien n’est calculé à partir de tes prises.</p>
+<div class="sticker">Ni compte, ni notification : la carte attend que tu ouvres l’app.</div>
+<div class="phone"><div class="scr"><img src="assets/cartes.png" alt=""></div></div>
+<div class="pager">4 / 8</div></section>
+
+<section class="post s5"><div class="bar"></div>
+<h2><span class="serif">Quand c’est plus dur,</span><span class="display">tu le dis.</span></h2>
+<p class="lead">Tu notes toi-même le début, ce qui a pu jouer, un mot. C’est à part de ce que l’app repère.</p>
+<div class="sticker">Ce que tu vis compte autant que les chiffres.</div>
+<div class="phone"><div class="scr"><img src="assets/periode.png" alt=""></div></div>
+<div class="pager">5 / 8</div></section>
+
+<section class="post s6"><div class="bar"></div>
+<h2><span class="serif">Deux périodes,</span><span class="display">côte à côte.</span></h2>
+<p class="lead">Les 30 derniers jours, depuis ta dernière consultation, ou deux périodes que tu choisis.</p>
+<div class="sticker">Ça décrit, ça ne dit pas pourquoi.</div>
+<div class="card"><img src="assets/comparer.png" alt=""></div>
+<div class="pager">6 / 8</div></section>
+
+<section class="post s7"><div class="bar"></div>
+<h2><span class="serif">Un rapport</span><span class="display">qui reprend tout.</span></h2>
+<p class="lead">Une version pour le médecin traitant, une pour le centre douleur, avec une flèche de tendance.</p>
+<div class="card"><img src="assets/rapport.png" alt=""></div>
+<div class="sticker">Tu peux laisser ta note de côté.</div>
+<div class="pager">7 / 8</div></section>
+
+<section class="post s8"><div class="bar"></div>
+<h2><span class="serif">Essaie,</span><span class="display">sans rien saisir.</span></h2>
+<p class="lead">Choisis « Découvrir avec un exemple » : 90 jours fictifs et une visite guidée.</p>
+<div class="qr"><img src="assets/qr.svg" alt=""></div>
+<div class="cta"><div class="url">maxauvy.github.io/OUCH</div><p>Ouvre le lien, rien à installer, rien à créer.</p></div>
+<div class="fine"><span>Gratuit</span><span>Libre</span><span>Sans compte</span><span>Données sur ton téléphone</span></div>
+<div class="pager">8 / 8</div></section>
+</body></html>

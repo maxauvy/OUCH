@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>OUCH, présentation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0&display=block">
+
+<style>
+/* OUCH, presentation carousel (patients, "tu"), not tied to a release: cover (#post) + seven slides (.s1 to .s7), 1080x1350 each. Render with `node render.mjs`. */
+:root{--ink:#2b2245;--gold:#f0b94f;--gold2:#f7d78e;--cream:#fff6e0;--lav:#d9cdef;--ind:#574a7a;--blue:#0d5c8c;--soft:#e3eef6;--mint:#cdeee1;--night:#1d1830;--rose:#f6c9c4;
+  --display:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;--serif:"Instrument Serif",Georgia,serif;--body:"Public Sans",system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#888;font-family:var(--body);color:var(--ink)}
+@page{size:1080px 1350px;margin:0}
+.post{position:relative;width:1080px;height:1350px;overflow:hidden;break-after:page;page-break-after:always}
+.ms{font-family:"Material Symbols Rounded";font-weight:500;font-style:normal;line-height:1;display:inline-block;white-space:nowrap;font-feature-settings:"liga"}
+.bar{z-index:5;position:absolute;left:0;top:0;right:0;height:22px;background:linear-gradient(90deg,#e3a73b,#a894c9 55%,#574a7a)}
+.logo{position:absolute;left:72px;top:70px;width:96px;height:96px}
+.tag{position:absolute;background:var(--ink);color:#fff;border-radius:999px;padding:12px 28px;font-weight:700;font-size:30px;letter-spacing:.03em;transform:rotate(-3deg)}
+.display{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:.93;margin:0}
+.serif{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.02em;line-height:.9;margin:0}
+.lead{font-size:38px;line-height:1.36;margin:0}
+.pager{position:absolute;right:72px;bottom:56px;font-size:26px;font-weight:700;opacity:.7;display:flex;gap:10px;align-items:center}
+.handle{position:absolute;left:72px;bottom:56px;font-size:27px;font-weight:700}
+.phone{position:absolute;background:#0f1b24;border-radius:84px;padding:20px;box-shadow:0 34px 80px rgba(20,16,40,.32)}
+.phone .scr{border-radius:66px;overflow:hidden;height:100%;background:#f3f6f8}
+.phone img{display:block;width:100%}
+.chip{display:flex;gap:16px;align-items:center;background:#fff;border-radius:26px;padding:18px 26px;font-size:32px;font-weight:700;line-height:1.15;color:var(--ink);box-shadow:0 6px 0 rgba(43,34,69,.12)}
+.chip .ms{font-size:46px;color:var(--ind);flex:none}
+.under{background:linear-gradient(transparent 62%,rgba(255,255,255,.7) 62%);padding:0 6px}
+
+
+.sticker{position:absolute;background:var(--mint);border-radius:30px;padding:22px 30px;font-size:32px;font-weight:700;line-height:1.2;transform:rotate(-2deg)}
+.card{position:absolute;background:#fff;border-radius:44px;overflow:hidden;box-shadow:0 30px 70px rgba(20,16,40,.28)}
+.card img{display:block;width:100%}
+
+
+#post{background:var(--ind);color:#fff}
+#post .sun{position:absolute;width:1000px;height:1000px;border-radius:50%;background:rgba(255,255,255,.07);right:-380px;top:-300px}
+#post h1{position:absolute;left:72px;top:210px;width:930px}
+#post h1 .serif{font-size:140px;display:block;color:var(--gold2)}
+#post h1 .display{font-size:118px;display:block;margin-top:10px}
+#post .lead{position:absolute;left:72px;top:600px;width:520px;font-size:34px;color:#ece7f8}
+#post .tag{right:72px;top:96px;background:var(--gold);color:var(--ink)}
+#post .phone{right:-40px;top:640px;width:470px;height:900px;transform:rotate(-4deg)}
+#post .chips{position:absolute;left:72px;bottom:110px;width:500px;display:flex;flex-direction:column;gap:14px}
+#post .chip{font-size:29px;padding:14px 22px}
+.s1{background:var(--cream)}.s2{background:var(--lav)}.s3{background:var(--soft)}.s4{background:var(--gold)}.s5{background:var(--night);color:#fff}.s6{background:var(--cream)}.s7{background:var(--ind);color:#fff}
+.post h2.t{position:absolute;left:72px;top:190px;width:940px}
+.post h2.t .serif{font-size:120px;display:block}.post h2.t .display{font-size:108px;display:block;margin-top:8px}
+.s5 h2.t .serif,.s7 h2.t .serif{color:var(--gold2)}
+.post .lead.l{position:absolute;left:72px;top:520px;width:460px;font-size:34px}
+.s1 .phone,.s2 .phone{right:-50px;top:360px;width:470px;height:860px;transform:rotate(-3deg)}
+.s2 .phone{top:440px;height:770px}
+.s1 .sticker{left:72px;bottom:150px;width:420px;background:var(--mint)}
+.s2 .sticker{left:72px;bottom:150px;width:420px;background:var(--gold2)}
+.s3 .card{right:56px;top:480px;width:490px;height:740px;transform:rotate(3deg)}.s3 .card img{width:100%}
+.s3 .sticker{left:72px;bottom:150px;width:400px;background:var(--ink);color:#fff}
+.s4 .steps{position:absolute;left:72px;right:72px;top:500px;display:flex;flex-direction:column;gap:20px}
+.s4 .step{display:flex;gap:26px;align-items:center;background:#fff;border-radius:30px;padding:26px 32px;box-shadow:0 6px 0 rgba(43,34,69,.12)}
+.s4 .step .ms{flex:none;width:76px;height:76px;border-radius:50%;background:var(--ink);color:#fff;font-size:44px;display:flex;align-items:center;justify-content:center}
+.s4 .step p{margin:0;font-size:33px;line-height:1.26;font-weight:600}
+.s5 .card{left:210px;top:760px;width:660px;transform:rotate(-2deg)}
+.s5 .sticker{left:72px;bottom:150px;width:420px;background:var(--gold);color:var(--ink)}
+.s6 .chips{position:absolute;left:72px;right:72px;top:520px;display:flex;flex-direction:column;gap:20px}
+.s6 .chip{font-size:35px}
+.s7 .lead{position:absolute;left:72px;top:540px;width:900px;font-size:36px;color:#ece7f8}
+.s7 .qr{position:absolute;left:72px;top:800px;width:260px;height:260px;background:#fff;border-radius:34px;padding:22px}
+.s7 .qr img{width:100%;height:100%;display:block}
+.s7 .cta{position:absolute;left:380px;top:810px;right:72px}
+.s7 .cta .url{font-family:var(--display);font-weight:800;font-size:46px;letter-spacing:-.02em;color:var(--gold2)}
+.s7 .cta p{font-size:30px;line-height:1.35;margin:14px 0 0;color:#ece7f8}
+.s7 .fine{position:absolute;left:72px;right:72px;bottom:130px;font-size:28px;font-weight:600;display:flex;gap:14px;flex-wrap:wrap}
+.s7 .fine span{background:rgba(255,255,255,.14);border-radius:999px;padding:10px 24px}
+.s7 .note{position:absolute;left:72px;right:72px;bottom:60px;font-size:24px;opacity:.75;margin:0}
+.s1 .pager,.s2 .pager,.s3 .pager,.s4 .pager,.s6 .pager{color:var(--ink)}.s5 .pager,.s7 .pager{color:#fff}
+</style></head><body>
+
+<section class="post" id="post"><div class="bar"></div><div class="sun"></div><img class="logo" src="assets/logo.svg" alt="">
+<div class="tag">Gratuit · libre · sans compte</div>
+<h1><span class="serif">Ce qui l’aggrave,</span><span class="display">ce qui l’apaise.</span></h1>
+<p class="lead">OUCH, le carnet de douleur pour la fibromyalgie et les autres douleurs chroniques. Puis tu agis.</p>
+<div class="chips"><div class="chip"><span class="ms">edit_note</span>Une minute par jour</div><div class="chip"><span class="ms">insights</span>Des pistes tirées de tes notes</div><div class="chip"><span class="ms">lock</span>Tout reste sur ton téléphone</div></div>
+<div class="phone"><div class="scr"><img src="assets/today.png" alt=""></div></div></section>
+
+<section class="post s1"><div class="bar"></div>
+<h2 class="t"><span class="serif">Une minute</span><span class="display">par jour.</span></h2>
+<p class="lead l">Un chiffre de 0 à 10 suffit pour qu’une journée compte. Le reste (sommeil, zones, traitements, météo) est facultatif.</p>
+<div class="sticker">Gros boutons, presque rien à remplir.</div>
+<div class="phone"><div class="scr"><img src="assets/today.png" alt=""></div></div><div class="pager">1 / 7</div></section>
+
+<section class="post s2"><div class="bar"></div>
+<h2 class="t"><span class="serif">Les jours durs,</span><span class="display">l’écran s’allège.</span></h2>
+<p class="lead l">Quand ça va mal, il ne reste que la douleur et un mot bienveillant. Le suivi tient quand même.</p>
+<div class="sticker">Rien à prouver, rien à perdre.</div>
+<div class="phone"><div class="scr"><img src="assets/allege.png" alt=""></div></div><div class="pager">2 / 7</div></section>
+
+<section class="post s3"><div class="bar"></div>
+<h2 class="t"><span class="serif">Ce que tes notes</span><span class="display">racontent.</span></h2>
+<p class="lead l" style="width:440px">Avec les semaines, OUCH met côte à côte tes jours avec et sans : sommeil, stress, activité, ce qui a aidé.</p>
+<div class="sticker">Une piste, pas une preuve.</div>
+<div class="card"><img src="assets/piste.png" alt=""></div><div class="pager">3 / 7</div></section>
+
+<section class="post s4"><div class="bar"></div>
+<h2 class="t"><span class="serif">Puis tu agis,</span><span class="display">à ton rythme.</span></h2>
+<div class="steps">
+<div class="step"><span class="ms">bookmark</span><p>Garde les pistes qui te parlent, écarte le reste.</p></div>
+<div class="step"><span class="ms">event_repeat</span><p>Essaie-en une pendant une semaine : tes jours avec et sans, côte à côte.</p></div>
+<div class="step"><span class="ms">trending_down</span><p>Quand une poussée se termine, OUCH dit en combien de jours la douleur est revenue à son niveau habituel.</p></div>
+<div class="step"><span class="ms">favorite</span><p>Pas de score, pas de série : rien à perdre.</p></div>
+</div><div class="pager">4 / 7</div></section>
+
+<section class="post s5"><div class="bar"></div>
+<h2 class="t"><span class="serif">Pour ton médecin,</span><span class="display">un vrai rapport.</span></h2>
+<p class="lead l" style="color:#e5def5;width:900px">Ce qui s’est passé depuis la dernière consultation, ta courbe, tes traitements et tes questions. Il décrit, il ne conclut pas, et c’est toi qui décides de ce que tu partages.</p>
+<div class="card"><img src="assets/rapport.png" alt=""></div><div class="pager">5 / 7</div></section>
+
+<section class="post s6"><div class="bar"></div>
+<h2 class="t"><span class="serif">Ça reste</span><span class="display">chez toi.</span></h2>
+<div class="chips">
+<div class="chip"><span class="ms">person_off</span>Pas de compte à créer</div>
+<div class="chip"><span class="ms">phone_iphone</span>Tes notes restent sur ton téléphone</div>
+<div class="chip"><span class="ms">key</span>Sauvegarde chiffrée, avec un mot de passe à toi</div>
+<div class="chip"><span class="ms">lock</span>Un verrou par code, si tu veux</div>
+<div class="chip"><span class="ms">code</span>Libre : le code est ouvert à tous</div>
+</div><div class="pager">6 / 7</div></section>
+
+<section class="post s7"><div class="bar"></div>
+<h2 class="t"><span class="serif" style="font-size:150px">Essaie,</span><span class="display" style="font-size:132px">sans rien saisir.</span></h2>
+<p class="lead">Choisis « Découvrir avec un exemple » : 90 jours fictifs, rien à installer.</p>
+<div class="qr"><img src="assets/qr.svg" alt=""></div>
+<div class="cta"><div class="url">maxauvy.github.io/OUCH</div><p>Ouvre le lien dans ton navigateur, puis « Ajouter à l’écran d’accueil » si tu veux.</p></div>
+<div class="fine"><span>Gratuit</span><span>Libre</span><span>Français et anglais</span><span>Sans compte</span></div>
+<p class="note">OUCH est un carnet, pas un avis médical.</p>
+<div class="pager">7 / 7</div></section>
+</body></html>
