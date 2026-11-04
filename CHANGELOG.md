@@ -7,16 +7,13 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Modifié
-<<<<<<< HEAD
-- **La courbe « Évolution de la douleur » reprend les couleurs de « Ce qui s'est passé ».** Les poussées sont teintées en indigo, les essais en or, les changements de traitement en bleu, comme les pastilles de la liste juste dessous ; la légende et les boutons de calques portent les mêmes couleurs. Les essais qui s'enchaînent ne forment plus une seule barre : chacun a la sienne, avec un petit espace et une teinte qui alterne.
-- **La préparation du rendez-vous montre ce que tu as gardé pour ta consultation** dans « Ce que tes notes racontent » (les pistes gardées vont déjà dans le rapport), ou dit où le faire quand rien n'est gardé.
-=======
 - **Les deux rapports aux couleurs d'OUCH.** Le logo de l'application en en-tête de chaque page et à côté du titre, la bande dégradée or, lavande et indigo de la plaquette en haut de chaque page, un liseré de couleur sur les chiffres clés et les titres de section.
 - **Une flèche de tendance sur les chiffres clés.** Douleur moyenne, jours sévères, poussées et sommeil (rapport du médecin traitant), et les chiffres de « Intensité douloureuse » (rapport du centre douleur) portent une flèche : le sens du changement depuis la période précédente, en vert quand c'est le sens d'une amélioration, en orange dans l'autre sens, en gris quand il est trop petit pour compter. La méthode dit ce que la flèche ne dit pas : l'ampleur, et si le changement dépasse la variation habituelle du patient.
+- **La courbe « Évolution de la douleur » reprend les couleurs de « Ce qui s'est passé ».** Les poussées sont teintées en indigo, les essais en or, les changements de traitement en bleu, comme les pastilles de la liste juste dessous ; la légende et les boutons de calques portent les mêmes couleurs. Les essais qui s'enchaînent ne forment plus une seule barre : chacun a la sienne, avec un petit espace et une teinte qui alterne.
+- **La préparation du rendez-vous montre ce que tu as gardé pour ta consultation** dans « Ce que tes notes racontent » (les pistes gardées vont déjà dans le rapport), ou dit où le faire quand rien n'est gardé.
 
 ### Corrigé
 - **Rapport du centre douleur, « Facteurs associés à la douleur » :** le nom du facteur et sa précision (« co-symptôme, pas un facteur ») étaient collés sur une seule ligne, dans tout le tableau. La précision passe maintenant sous le nom.
->>>>>>> origin/main
 
 ## [0.10.0] - 2026-11-03
 
