@@ -751,6 +751,8 @@ export interface Translations {
     trendFlat: string
     /** In the method: what the arrows say */
     trendNote: string
+    /** The count before, when the period before is not as long as the period: `{{v}}` days out of `{{days}}` */
+    beforeOfDays: string
     flaresTitle: string
     flaresTableNote: string
     flareContextTitle: string
@@ -1335,6 +1337,14 @@ export interface Translations {
     settingsNext: string
     /** Report form: the list is filled from the preparation */
     reportFilled: string
+    kindTitle: string
+    kindGp: string
+    kindCetd: string
+    doctorLabel: string
+    doctorPlaceholder: string
+    /** Card on the day's page, with the professional's name: `{{name}}` */
+    cardSoonWith: string
+    cardAfterWith: string
   }
   prescription: {
     cardLabel: string

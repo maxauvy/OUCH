@@ -58,7 +58,7 @@ On note la date de son rendez-vous, ses questions et ce dont on veut parler en p
 
 Depuis Tendances, on génère un rapport à imprimer ou à enregistrer en PDF. Il couvre la période depuis la dernière consultation et la compare à la même durée juste avant. Il existe en deux versions : une synthèse de 2 pages pour le médecin traitant, et un rapport détaillé de 5 pages pour un centre douleur (CETD), avec la consommation d'antalgiques et les facteurs associés. Il se lit en français ou en anglais, mentionne les maladies déclarées et reprend, dans « Ce que le patient a remarqué », les pistes gardées et les essais d'une semaine du patient.
 
-Le rapport décrit les données sans les interpréter, et ses seuils citent leurs sources (IMMPACT, HAS, et d'autres travaux publiés), résumées dans Réglages → À propos → Sources scientifiques. Il est fabriqué sur l'appareil ; le nom et la date de naissance qu'on y saisit ne sont pas enregistrés.
+Le rapport décrit les données sans les interpréter, et ses seuils citent leurs sources (IMMPACT, HAS, et d'autres travaux publiés), résumées dans Réglages → À propos → Sources scientifiques. Il est fabriqué sur l'appareil ; le nom qu'on y saisit n'est pas enregistré, mais la date de naissance et la date de la dernière consultation restent sur l'appareil pour ne pas les retaper.
 
 Le rapport reprend la préparation : les questions et la priorité du patient en tête de page, sa note après la dernière consultation (qu'on peut laisser de côté), les périodes difficiles qu'il a notées (à part des poussées repérées) et une comparaison de deux périodes, par défaut la période du rapport et celle d'avant, ou deux périodes au choix.
 

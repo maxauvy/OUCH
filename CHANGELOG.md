@@ -6,6 +6,11 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Médecin traitant ou centre douleur, pour chaque rendez-vous.** La feuille du rendez-vous demande avec qui il est (médecin traitant ou centre douleur) et, si tu veux, le nom du soignant, repris dans la carte de la page du jour (« Ton rendez-vous avec Dr Martin… »). Chaque type garde ses propres rendez-vous passés : le rapport du médecin traitant part de la date du dernier rendez-vous chez le médecin traitant, celui du centre douleur de la date du dernier rendez-vous au centre douleur, et le rapport proposé d'office est celui du prochain rendez-vous noté.
+- **Les dates sont conservées.** Les rendez-vous passés restent dans l'application (30 au plus, avec leur type, le nom du soignant et ta note) ; la date de la dernière consultation tapée dans le rapport est gardée comme un rendez-vous du type choisi ; la date de naissance tapée pour le rapport reste sur l'appareil. Le nom saisi pour le rapport, lui, n'est toujours pas enregistré.
+- **La période comparée est l'intervalle entre les deux derniers rendez-vous du même type**, quand on le connaît (entre 7 jours et un an) ; sinon, la même durée juste avant, comme avant. Quand les deux périodes n'ont pas la même durée, le rapport le dit (« avant : 6 sur 45 j »).
+
 ### Modifié
 - **Les deux rapports aux couleurs d'OUCH.** Le logo de l'application en en-tête de chaque page et à côté du titre, la bande dégradée or, lavande et indigo de la plaquette en haut de chaque page, un liseré de couleur sur les chiffres clés et les titres de section.
 - **Une flèche de tendance sur les chiffres clés.** Douleur moyenne, jours sévères, poussées et sommeil (rapport du médecin traitant), et les chiffres de « Intensité douloureuse » (rapport du centre douleur) portent une flèche : le sens du changement depuis la période précédente, en vert quand c'est le sens d'une amélioration, en orange dans l'autre sens, en gris quand il est trop petit pour compter. La méthode dit ce que la flèche ne dit pas : l'ampleur, et si le changement dépasse la variation habituelle du patient.

@@ -11,8 +11,10 @@ import { mean, median, quantile, sd, spearman } from './stats.ts'
 // Periods
 
 export interface ReportPeriods {
-  /** First day of the comparison period (same length, right before) */
+  /** First day of the comparison period: the day of the appointment before the last one when it is known, else the same length as the period, right before */
   prevStart: string
+  /** Days of the comparison period: those of the period itself unless it starts at the appointment before the last one */
+  prevDays: number
   /** Last consultation: first day of the reported period */
   start: string
   /** Last day of the reported period (today) */
@@ -24,15 +26,23 @@ export interface ReportPeriods {
   dayIndex: (date: string) => number
 }
 
-export function reportPeriods(consultation: string, end: string): ReportPeriods {
+/** The comparison period may be as short as a week and as long as a year. */
+export const MIN_PREV_DAYS = 7
+export const MAX_PREV_DAYS = 366
+
+/** `previousStart`, the day of the appointment before the one the period starts at, makes the comparison period the interval between the two; it is ignored when it is not before the start, or leaves less than a week or more than a year. */
+export function reportPeriods(consultation: string, end: string, previousStart?: string): ReportPeriods {
   const periodDays = daysBetween(consultation, end) + 1
-  const prevStart = shiftISO(consultation, -periodDays)
+  const between = previousStart ? daysBetween(previousStart, consultation) : 0
+  const prevDays = between >= MIN_PREV_DAYS && between <= MAX_PREV_DAYS ? between : periodDays
+  const prevStart = shiftISO(consultation, -prevDays)
   return {
     prevStart,
+    prevDays,
     start: consultation,
     end,
     periodDays,
-    totalDays: periodDays * 2,
+    totalDays: prevDays + periodDays,
     dayIndex: (date) => daysBetween(prevStart, date),
   }
 }

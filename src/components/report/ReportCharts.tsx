@@ -18,7 +18,7 @@ const RIGHT = 12
 function frame(p: ReportPeriods, w = W) {
   const x = (i: number) => LEFT + (i * (w - LEFT - RIGHT)) / Math.max(1, p.totalDays - 1)
   // Where the previous period ends and the reported one begins.
-  const split = (x(p.periodDays - 1) + x(p.periodDays)) / 2
+  const split = (x(p.prevDays - 1) + x(p.prevDays)) / 2
   return { x, split }
 }
 

@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import {
-  addQuestion, agendaLines, consultationCard, finishConsultation, MAX_QUESTIONS, newConsultation, removeQuestion, reportStart, sinceFacts, sinceLast, withGoal,
+  addQuestion, agendaLines, consultationCard, finishConsultation, kindOf, lastOf, MAX_PAST, MAX_QUESTIONS, newConsultation, pastConsultations, previousOf, removeQuestion, reportStart, sinceFacts, sinceLast, withGoal, withPast,
 } from '../src/lib/consultation.ts'
 import { sanitizeSettings } from '../src/lib/backupSanitize.ts'
 import { DEFAULT_SETTINGS } from '../src/db/types.ts'
@@ -51,14 +51,42 @@ test('the goal is one clean line, and a blank one removes it', () => {
   assert.equal('goal' in withGoal(c, '  '), false)
 })
 
-test('after the appointment it becomes the last one, with the note, and nothing is planned', () => {
+test('after the appointment it joins the past ones, with its kind, name and note, and nothing is planned', () => {
   const s = withC('2026-11-17', { consultationCardClosed: { date: '2026-11-17', kind: 'after' } })
+  s.consultation = { ...s.consultation!, kind: 'cetd', doctor: 'Dr Martin' }
   const patch = finishConsultation(s, '  Dose à 60 mg  ')
-  assert.deepEqual(patch.lastConsultation, { date: '2026-11-17', notes: 'Dose à 60 mg' })
+  assert.deepEqual(patch.pastConsultations, [{ date: '2026-11-17', kind: 'cetd', doctor: 'Dr Martin', notes: 'Dose à 60 mg' }])
   assert.equal(patch.consultation, undefined)
   assert.equal('consultation' in patch, true)
-  assert.deepEqual(finishConsultation(s, '  ').lastConsultation, { date: '2026-11-17' })
+  assert.deepEqual(finishConsultation(withC('2026-11-17'), '  ').pastConsultations, [{ date: '2026-11-17', kind: 'gp' }])
   assert.deepEqual(finishConsultation(DEFAULT_SETTINGS, 'x'), {})
+})
+
+test('an appointment with no kind is a family doctor\'s', () => {
+  assert.equal(kindOf(undefined), 'gp')
+  assert.equal(kindOf({ kind: 'cetd' }), 'cetd')
+})
+
+test('the past appointments, newest first, with the single last appointment of the first version read as a family doctor\'s', () => {
+  const s = { pastConsultations: [{ date: '2026-10-01', kind: 'cetd' as const }, { date: '2026-06-01', kind: 'gp' as const }], lastConsultation: { date: '2026-09-03', notes: 'n' } }
+  assert.deepEqual(pastConsultations(s).map((p) => [p.date, p.kind]), [['2026-10-01', 'cetd'], ['2026-09-03', 'gp'], ['2026-06-01', 'gp']])
+  assert.equal(lastOf(s, 'gp')?.date, '2026-09-03')
+  assert.equal(lastOf(s, 'cetd')?.date, '2026-10-01')
+  assert.equal(lastOf(s)?.date, '2026-10-01')
+  assert.equal(previousOf(s, 'gp', '2026-09-03')?.date, '2026-06-01')
+  assert.equal(previousOf(s, 'gp', '2026-06-01'), undefined)
+  assert.equal(previousOf(s, 'cetd', '2026-10-01'), undefined)
+})
+
+test('keeping an appointment: once for a day and kind, the new one winning, the first version\'s folded in, capped', () => {
+  const s = { pastConsultations: [{ date: '2026-10-01', kind: 'gp' as const, notes: 'old' }], lastConsultation: { date: '2026-09-03' } }
+  const patch = withPast(s, { date: '2026-10-01', kind: 'gp', doctor: '  Dr  Martin ', notes: ' new ' })
+  assert.deepEqual(patch.pastConsultations, [{ date: '2026-10-01', kind: 'gp', doctor: 'Dr Martin', notes: 'new' }, { date: '2026-09-03', kind: 'gp' }])
+  assert.equal('lastConsultation' in patch && patch.lastConsultation === undefined, true)
+  // the same day for another kind is another appointment
+  assert.equal(withPast(s, { date: '2026-10-01', kind: 'cetd' }).pastConsultations!.length, 3)
+  const many = { pastConsultations: Array.from({ length: MAX_PAST }, (_, i) => ({ date: `2025-01-${String(i + 1).padStart(2, '0')}`.replace('-3', '-2'), kind: 'gp' as const })) }
+  assert.equal(withPast(many, { date: '2026-10-01', kind: 'gp' }).pastConsultations!.length, MAX_PAST)
 })
 
 test('the report agenda holds the questions, then the goal', () => {
@@ -67,10 +95,12 @@ test('the report agenda holds the questions, then the goal', () => {
   assert.deepEqual(agendaLines(undefined, 'Objectif :'), [])
 })
 
-test('the report starts at the last appointment, else at the fallback', () => {
-  assert.equal(reportStart({ lastConsultation: { date: '2026-09-03' } }, '2026-11-03', '2026-08-05'), '2026-09-03')
-  assert.equal(reportStart({}, '2026-11-03', '2026-08-05'), '2026-08-05')
-  assert.equal(reportStart({ lastConsultation: { date: '2027-01-01' } }, '2026-11-03', '2026-08-05'), '2026-08-05')
+test('the report of a kind starts at the last appointment of that kind, else at the fallback', () => {
+  const s = { pastConsultations: [{ date: '2026-10-01', kind: 'cetd' as const }], lastConsultation: { date: '2026-09-03' } }
+  assert.equal(reportStart(s, '2026-11-03', '2026-08-05', 'gp'), '2026-09-03')
+  assert.equal(reportStart(s, '2026-11-03', '2026-08-05', 'cetd'), '2026-10-01')
+  assert.equal(reportStart({}, '2026-11-03', '2026-08-05', 'gp'), '2026-08-05')
+  assert.equal(reportStart({ pastConsultations: [{ date: '2027-01-01', kind: 'gp' }] }, '2026-11-03', '2026-08-05', 'gp'), '2026-08-05')
 })
 
 test('a backup brings the appointment back clean, and ignores what is not valid', () => {
@@ -83,6 +113,21 @@ test('a backup brings the appointment back clean, and ignores what is not valid'
   const bad = sanitizeSettings({ consultation: { date: '2026-13-40', questions: ['A'] }, lastConsultation: 'nope' })
   assert.equal(bad?.consultation, undefined)
   assert.equal(bad?.lastConsultation, undefined)
+})
+
+test('a backup brings back the kind and the name, the past appointments newest first, and the date of birth, and ignores what is not valid', () => {
+  const s = sanitizeSettings({
+    consultation: { date: '2026-11-17', kind: 'cetd', doctor: '  Dr   Martin ', questions: [] },
+    pastConsultations: [{ date: '2026-06-01', kind: 'nope', notes: ' a ' }, { date: '2026-10-01', kind: 'cetd', doctor: 'D' }, { date: 'bad', kind: 'gp' }],
+    birthDate: '1980-02-03',
+  })
+  assert.deepEqual(s?.consultation, { date: '2026-11-17', kind: 'cetd', doctor: 'Dr Martin', questions: [] })
+  assert.deepEqual(s?.pastConsultations, [{ date: '2026-10-01', kind: 'cetd', doctor: 'D' }, { date: '2026-06-01', kind: 'gp', notes: 'a' }])
+  assert.equal(s?.birthDate, '1980-02-03')
+  const bad = sanitizeSettings({ consultation: { date: '2026-11-17', kind: 'x', questions: [] }, pastConsultations: 'x', birthDate: '1700-01-01' })
+  assert.equal(bad?.consultation?.kind, undefined)
+  assert.equal(bad?.pastConsultations, undefined)
+  assert.equal(bad?.birthDate, undefined)
 })
 
 test('since the last appointment: two means, the stretch before as long as the one since', () => {
