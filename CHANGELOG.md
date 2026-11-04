@@ -18,6 +18,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - **La préparation du rendez-vous montre ce que tu as gardé pour ta consultation** dans « Ce que tes notes racontent » (les pistes gardées vont déjà dans le rapport), ou dit où le faire quand rien n'est gardé.
 
 ### Corrigé
+- **« Ton mois d'octobre ».** Le titre du bilan du mois disait « Ton mois de octobre » (et « de avril », « de août ») : il met maintenant « d' » devant une voyelle.
 - **Rapport du centre douleur, « Facteurs associés à la douleur » :** le nom du facteur et sa précision (« co-symptôme, pas un facteur ») étaient collés sur une seule ligne, dans tout le tableau. La précision passe maintenant sous le nom.
 
 ## [0.10.0] - 2026-11-03
