@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Visuels OUCH 0.10.0 — soignants</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0&display=block">
+
+<style>
+/* Posts for OUCH 0.10 (health professionals, "vous"): one image for the post (#post) and a carousel of seven slides (.s1 to .s7), 1080x1350 each.
+   Render with `node render.mjs soignants`; the PDF of the carousel is what LinkedIn takes as a "document". */
+/* Posts for OUCH 0.9.0: one image for the post (#post) and a carousel of seven slides (.s1 to .s7), 1080x1350 each.
+   Render with `node render.mjs`; the PDF of the carousel is what LinkedIn takes as a "document". */
+:root{--ink:#2b2245;--gold:#f0b94f;--gold2:#f7d78e;--cream:#fff6e0;--lav:#d9cdef;--ind:#574a7a;--blue:#0d5c8c;--soft:#e3eef6;--mint:#cdeee1;--night:#1d1830;--rose:#f6c9c4;
+  --display:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;--serif:"Instrument Serif",Georgia,serif;--body:"Public Sans",system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#888;font-family:var(--body);color:var(--ink)}
+@page{size:1080px 1350px;margin:0}
+.post{position:relative;width:1080px;height:1350px;overflow:hidden;break-after:page;page-break-after:always}
+.ms{font-family:"Material Symbols Rounded";font-weight:500;font-style:normal;line-height:1;display:inline-block;white-space:nowrap;font-feature-settings:"liga"}
+.bar{z-index:5;position:absolute;left:0;top:0;right:0;height:22px;background:linear-gradient(90deg,#e3a73b,#a894c9 55%,#574a7a)}
+.logo{position:absolute;left:72px;top:70px;width:96px;height:96px}
+.tag{position:absolute;background:var(--ink);color:#fff;border-radius:999px;padding:12px 28px;font-weight:700;font-size:30px;letter-spacing:.03em;transform:rotate(-3deg)}
+.display{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:.93;margin:0}
+.serif{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.02em;line-height:.9;margin:0}
+.lead{font-size:38px;line-height:1.36;margin:0}
+.pager{position:absolute;right:72px;bottom:56px;font-size:26px;font-weight:700;opacity:.7;display:flex;gap:10px;align-items:center}
+.handle{position:absolute;left:72px;bottom:56px;font-size:27px;font-weight:700}
+.phone{position:absolute;background:#0f1b24;border-radius:84px;padding:20px;box-shadow:0 34px 80px rgba(20,16,40,.32)}
+.phone .scr{border-radius:66px;overflow:hidden;height:100%;background:#f3f6f8}
+.phone img{display:block;width:100%}
+.chip{display:flex;gap:16px;align-items:center;background:#fff;border-radius:26px;padding:18px 26px;font-size:32px;font-weight:700;line-height:1.15;color:var(--ink);box-shadow:0 6px 0 rgba(43,34,69,.12)}
+.chip .ms{font-size:46px;color:var(--ind);flex:none}
+.under{background:linear-gradient(transparent 62%,rgba(255,255,255,.7) 62%);padding:0 6px}
+
+
+.sticker{position:absolute;background:var(--mint);border-radius:30px;padding:22px 30px;font-size:32px;font-weight:700;line-height:1.2;transform:rotate(-2deg)}
+.card{position:absolute;background:#fff;border-radius:44px;overflow:hidden;box-shadow:0 30px 70px rgba(20,16,40,.28)}
+.card img{display:block;width:100%}
+
+/* single post */
+#post{background:var(--ind);color:#fff}
+#post .sun{position:absolute;width:1000px;height:1000px;border-radius:50%;background:rgba(255,255,255,.07);right:-380px;top:-300px}
+#post h1{position:absolute;left:72px;top:200px;width:900px}
+#post h1 .serif{font-size:150px;display:block;color:var(--gold2)}
+#post h1 .display{font-size:116px;display:block;margin-top:10px}
+#post .lead{position:absolute;left:72px;top:500px;width:900px;font-size:36px;color:#ece7f8}
+#post .chips{position:absolute;left:72px;bottom:130px;width:470px;display:flex;flex-direction:column;gap:16px}
+#post .chips .chip{font-size:30px}
+#post .card{right:-90px;top:640px;width:600px;border-radius:30px;transform:rotate(-4deg)}
+#post .tag{right:80px;top:96px;background:var(--gold);color:var(--ink)}
+#post .handle{color:#fff}
+
+/* carousel */
+.s1{background:var(--ind);color:#fff}.s1 .sun{position:absolute;width:1100px;height:1100px;border-radius:50%;background:rgba(255,255,255,.07);left:200px;top:-420px}
+.s1 h1{position:absolute;left:72px;top:300px;width:960px}.s1 h1 .serif{font-size:170px;display:block;color:var(--gold2)}.s1 h1 .display{font-size:140px;display:block;margin-top:18px}
+.s1 .lead{position:absolute;left:72px;top:900px;width:880px;font-size:38px;color:#ece7f8}
+.s1 .tag{right:72px;top:92px;background:var(--gold);color:var(--ink)}
+.s1 .swipe{position:absolute;left:72px;bottom:56px;font-size:34px;font-weight:700;display:flex;gap:12px;align-items:center}.s1 .swipe .ms{font-size:44px}
+.s2{background:var(--cream)}
+.s2 h2,.s3 h2,.s4 h2{position:absolute;left:72px;top:190px;width:940px}
+.s2 h2 .serif,.s3 h2 .serif,.s4 h2 .serif{font-size:125px;display:block}
+.s2 h2 .display,.s3 h2 .display,.s4 h2 .display{font-size:112px;display:block;margin-top:8px}
+.s2 .lead{position:absolute;left:72px;top:500px;width:900px;font-size:36px}
+.s2 .card{left:72px;top:690px;width:800px;border-radius:28px;transform:rotate(-2deg)}
+.s2 .cap{position:absolute;left:72px;bottom:56px;font-size:26px;font-weight:600;opacity:.7}
+.s3{background:var(--lav)}
+.s3 h2{width:520px}.s3 h2 .display{font-size:100px}.s3 h2 .serif{font-size:112px}
+.s3 .lead{position:absolute;left:72px;top:640px;width:450px;font-size:35px}
+.s3 .phone{right:-50px;top:200px;width:480px;height:1050px;transform:rotate(-3deg)}
+.s3 .sticker{left:72px;bottom:150px;width:420px;background:var(--gold2)}
+.s4{background:var(--soft)}
+.s4 .lead{position:absolute;left:72px;top:540px;width:430px;font-size:34px}
+.s4 h2{width:960px}
+.s4 .card{right:56px;top:470px;width:520px;transform:rotate(3deg)}
+.s4 .sticker{left:72px;bottom:150px;width:420px;background:var(--ink);color:#fff}
+.s5{background:var(--night);color:#fff}
+.s5 h2{position:absolute;left:72px;top:190px;width:900px}.s5 h2 .serif{font-size:130px;display:block;color:var(--gold)}.s5 h2 .display{font-size:124px;display:block;margin-top:6px}
+.s5 .lead{position:absolute;left:72px;top:560px;width:440px;font-size:34px;color:#e5def5}
+.s5 .phone{right:-50px;top:470px;width:470px;height:880px;transform:rotate(3deg)}
+.s5 .sticker{left:72px;bottom:150px;width:420px;background:var(--gold);color:var(--ink)}
+.s6{background:var(--gold)}
+.s6 h2{position:absolute;left:72px;top:190px;width:940px}.s6 h2 .serif{font-size:130px;display:block}.s6 h2 .display{font-size:116px;display:block;margin-top:6px}
+.s6 .steps{position:absolute;left:72px;right:72px;top:520px;display:flex;flex-direction:column;gap:20px}
+.s6 .step{display:flex;gap:26px;align-items:center;background:#fff;border-radius:30px;padding:28px 32px;box-shadow:0 6px 0 rgba(43,34,69,.12)}
+.s6 .step .ms{flex:none;width:76px;height:76px;border-radius:50%;background:var(--ink);color:#fff;font-size:44px;display:flex;align-items:center;justify-content:center}
+.s6 .step p{margin:0;font-size:35px;line-height:1.28;font-weight:600}
+.s7{background:var(--ind);color:#fff}
+.s7 h2{position:absolute;left:72px;top:190px;width:930px}.s7 h2 .serif{font-size:150px;display:block;color:var(--gold2)}.s7 h2 .display{font-size:132px;display:block;margin-top:8px}
+.s7 .lead{position:absolute;left:72px;top:560px;width:900px;font-size:36px;color:#ece7f8}
+.s7 .qr{position:absolute;left:72px;top:880px;width:260px;height:260px;background:#fff;border-radius:34px;padding:22px}
+.s7 .qr img{width:100%;height:100%;display:block}
+.s7 .cta{position:absolute;left:380px;top:890px;right:72px}
+.s7 .cta .url{font-family:var(--display);font-weight:800;font-size:46px;letter-spacing:-.02em;color:var(--gold2)}
+.s7 .cta p{font-size:30px;line-height:1.35;margin:14px 0 0;color:#ece7f8}
+.s7 .fine{position:absolute;left:72px;right:72px;bottom:130px;font-size:28px;font-weight:600;display:flex;gap:14px;flex-wrap:wrap}
+.s7 .fine span{background:rgba(255,255,255,.14);border-radius:999px;padding:10px 24px}
+.s5 .pager,.s7 .pager,.s1 .pager{color:#fff}
+</style></head><body>
+
+<!-- Image du post -->
+<section class="post" id="post"><div class="bar"></div><div class="sun"></div><img class="logo" src="assets/logo.svg" alt="">
+<div class="tag">Pour les soignants · v0.10</div>
+<h1><span class="serif">Le carnet</span><span class="display">de vos patients.</span></h1>
+<p class="lead">Une première page lisible en deux minutes : chiffres clés, courbe, et les questions du patient.</p>
+<div class="chips"><div class="chip"><span class="ms">fact_check</span>Descriptif, jamais interprété</div><div class="chip"><span class="ms">menu_book</span>Chaque seuil cité, chaque limite dite</div><div class="chip"><span class="ms">rate_review</span>Votre relecture est bienvenue</div></div>
+<div class="card"><img src="assets/rapport.png" alt=""></div>
+<div class="handle">maxauvy.github.io/OUCH</div></section>
+
+<!-- Carrousel -->
+<section class="post s1"><div class="bar"></div><div class="sun"></div><img class="logo" src="assets/logo.svg" alt="">
+<div class="tag">Pour les soignants · v0.10</div>
+<h1><span class="serif">Le patient arrive</span><span class="display">avec ses questions.</span></h1>
+<p class="lead">Ce que le carnet OUCH lui permet d’apporter, et ce que vous y lisez : descriptif, sourcé, vérifiable.</p>
+<div class="swipe">Glissez <span class="ms">arrow_forward</span></div><div class="pager">1 / 7</div></section>
+
+<section class="post s2"><div class="bar"></div>
+<h2><span class="serif">Sa première page,</span><span class="display">en deux minutes.</span></h2>
+<p class="lead">Douleur moyenne, jours sévères, poussées, raideur au réveil, la courbe : chaque chiffre est placé à côté de la période d’avant, avec une flèche de tendance.</p>
+<div class="card"><img src="assets/rapport.png" alt=""></div>
+<div class="cap">Données fictives · version « médecin traitant »</div>
+<div class="pager">2 / 7</div></section>
+
+<section class="post s3"><div class="bar"></div>
+<h2><span class="serif">Ses questions,</span><span class="display">en tête.</span></h2>
+<p class="lead">Il note ce qu’il veut vous demander et ce dont il veut parler en priorité. Vous les lisez avant de commencer, avec sa note du dernier rendez-vous s’il le souhaite. Version médecin traitant ou centre douleur.</p>
+<div class="sticker">Texte libre, repris tel quel.</div>
+<div class="phone"><div class="scr"><img src="assets/feuille.png" alt=""></div></div>
+<div class="pager">3 / 7</div></section>
+
+<section class="post s4"><div class="bar"></div>
+<h2><span class="serif">Un écart</span><span class="display">à sa mesure.</span></h2>
+<p class="lead">Deux périodes côte à côte, avec l’écart de douleur lu contre ce qui est habituel pour ce patient : l’écart que 8 paires de périodes consécutives sur 10 ne dépassent pas.</p>
+<div class="sticker">Descriptif : rien ne dit pourquoi.</div>
+<div class="card"><img src="assets/comparer.png" alt=""></div>
+<div class="pager">4 / 7</div></section>
+
+<section class="post s5"><div class="bar"></div>
+<h2><span class="serif">Ses mots,</span><span class="display">à part.</span></h2>
+<p class="lead">Les périodes difficiles qu’il note lui-même, avec ce qu’il pense avoir joué, restent séparées des poussées repérées par l’appli. Rien n’est additionné.</p>
+<div class="sticker">Des facteurs évoqués, pas mesurés.</div>
+<div class="phone"><div class="scr"><img src="assets/periode.png" alt=""></div></div>
+<div class="pager">5 / 7</div></section>
+
+<section class="post s6"><div class="bar"></div>
+<h2><span class="serif">Rien</span><span class="display">n’est interprété.</span></h2>
+<div class="steps">
+ <div class="step"><span class="ms">block</span><p>Ni diagnostic, ni conseil de traitement : le rapport décrit.</p></div>
+ <div class="step"><span class="ms">menu_book</span><p>Chaque seuil cite sa source, et dit quand il est extrapolé.</p></div>
+ <div class="step"><span class="ms">person</span><p>Données auto-déclarées par le patient, non vérifiées.</p></div>
+ <div class="step"><span class="ms">rule</span><p>Indicateurs récents relus rapidement, pas validés. Les textes sur le rythme attendent une relecture.</p></div>
+</div>
+<div class="pager">6 / 7</div></section>
+
+<section class="post s7"><div class="bar"></div>
+<h2><span class="serif">Dites-moi</span><span class="display">ce qui cloche.</span></h2>
+<p class="lead">La plaquette (2 pages) et la note méthodologique (12 pages : chaque formule, chaque seuil) sont sur la page de la release. Libellés, seuils, textes : j’attends vos relectures.</p>
+<div class="qr"><img src="assets/qr.svg" alt=""></div>
+<div class="cta"><div class="url">maxauvy.github.io/OUCH</div><p>Mode démo : 90 jours fictifs, sans rien saisir.</p></div>
+<div class="fine"><span>Libre (CeCILL v2.1)</span><span>Sans compte</span><span>Données sur l’appareil</span></div>
+<div class="pager">7 / 7</div></section>
+</body></html>

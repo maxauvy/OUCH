@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>OUCH, Un rapport OUCH, mode d’emploi. (A4)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&display=block">
+<style>
+:root{--ink:#2b2245;--gold:#f0b94f;--gold2:#f7d78e;--cream:#fff6e0;--ind:#574a7a;--soft:#e3eef6;--display:"Bricolage Grotesque","Public Sans",sans-serif;--serif:"Instrument Serif",Georgia,serif}
+@page{size:A4;margin:0}*{box-sizing:border-box}html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:"Public Sans",sans-serif;color:var(--ink);font-size:8.8pt;line-height:1.38}
+.page{position:relative;width:210mm;height:296.5mm;overflow:hidden;background:var(--cream)}
+@media screen{body{background:#888}.page{margin:0 auto}}
+.bar{position:absolute;left:0;top:0;right:0;height:3.5mm;background:linear-gradient(90deg,#e3a73b,#a894c9 55%,#574a7a);z-index:3}
+.hd{position:relative;background:var(--ind);color:#fff;height:80mm;padding:10mm 13mm 0}
+.hd:before{content:"";position:absolute;right:-35mm;top:-40mm;width:120mm;height:120mm;border-radius:50%;background:rgba(255,255,255,.07)}
+.logo{width:14mm;height:14mm;display:block}
+.tag{position:absolute;right:13mm;top:9mm;background:var(--gold);color:var(--ink);border-radius:99px;padding:1.5mm 4.5mm;font-weight:700;font-size:8.5pt;transform:rotate(-3deg)}
+h1{margin:5mm 0 0;font-weight:400}
+.s{display:block;font-family:var(--serif);font-style:italic;font-size:32pt;line-height:.92;color:var(--gold2);letter-spacing:-.02em}
+.d{display:block;font-family:var(--display);font-weight:800;font-size:30pt;line-height:.95;letter-spacing:-.03em;margin-top:1.5mm}
+.lead{width:90mm;margin:3.5mm 0 0;font-size:8.6pt;line-height:1.4;color:#ece7f8}
+.shot{position:absolute;right:10mm;top:24mm;width:78mm;background:#fff;border-radius:3mm;overflow:hidden;border:.3mm solid rgba(43,34,69,.35);transform:rotate(2.5deg);z-index:2}.shot img{display:block;width:100%}
+.bd{padding:4mm 13mm 0}.bd>*+*{margin-top:3.4mm}
+h2{font-size:7.6pt;letter-spacing:.14em;text-transform:uppercase;color:var(--ind);margin:0 0 2mm;font-weight:700}
+.read{display:flex;gap:7mm;align-items:flex-start}
+.cardimg{position:relative;flex:none;width:52mm;margin-top:1mm;background:#fff;border-radius:2.4mm;border:.3mm solid rgba(43,34,69,.3);transform:rotate(-1.5deg)}.cardimg img{display:block;width:100%;border-radius:2.4mm}
+.cardimg i{position:absolute;left:-3.4mm;width:6.4mm;height:6.4mm;border-radius:50%;background:var(--gold);color:var(--ink);font-style:normal;font-weight:800;font-size:9pt;text-align:center;line-height:6.4mm;border:.25mm solid rgba(43,34,69,.3)}
+ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.2mm;flex:1}
+ol li{display:flex;gap:3mm;font-size:8.2pt;line-height:1.33}ol b{display:block;font-size:9pt;margin-bottom:.3mm}
+ol i{flex:none;width:6.2mm;height:6.2mm;border-radius:50%;background:var(--ink);color:#fff;font-style:normal;font-weight:800;font-size:8.6pt;text-align:center;line-height:6.2mm}
+.ar{display:flex;align-items:center;gap:2.4mm;font-size:8.4pt;font-weight:600;flex-wrap:wrap;margin-top:3mm}
+.p{display:inline-flex;align-items:center;gap:1.3mm;background:#fff;border-radius:99px;padding:.9mm 2.6mm}
+.t{display:inline-block;width:0;height:0;border-left:1.4mm solid transparent;border-right:1.4mm solid transparent}
+.t.g{border-top:2.5mm solid #1f7a45}.t.o{border-bottom:2.5mm solid #b45309}.t.f{width:2.8mm;height:.65mm;border:0;background:#8a99a3}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+.fl{display:flex;gap:2.4mm}.fl div{flex:1;background:#fff;border-radius:2.6mm;padding:2.2mm 2.6mm;border:.25mm solid rgba(43,34,69,.14)}
+.fl b{display:block;font-family:var(--display);font-weight:800;font-size:17pt;letter-spacing:-.03em;line-height:1}.fl span{display:block;margin-top:.8mm;font-size:7.4pt;line-height:1.25;font-weight:600}
+.note{font-size:7.6pt;line-height:1.35;color:#4a4163;margin:2mm 0 0}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.v{background:#fff;border-radius:3mm;padding:2.4mm 3.4mm;border:.25mm solid rgba(43,34,69,.14)}
+.v small{font-size:6.8pt;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ind)}
+.v h3{font-family:var(--display);font-weight:800;font-size:12.5pt;margin:.4mm 0 .8mm;line-height:1.05}.v p{margin:0;font-size:7.8pt;line-height:1.3}
+.add{background:var(--gold2);border-radius:3mm;padding:3mm 3.6mm}.add h2{color:var(--ink)}.add p{margin:0;font-size:8.2pt;line-height:1.35}
+.lim{background:var(--ink);color:#fff;border-radius:3.4mm;padding:3.2mm 4.4mm}.lim h2{color:var(--gold2);margin-bottom:1.4mm}
+.lim ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:1mm 6mm;font-size:8.2pt}.lim li:before{content:"•";color:var(--gold2);margin-right:1.8mm}
+.ft{position:absolute;left:13mm;right:13mm;bottom:7mm;display:flex;gap:5mm;align-items:center}
+.qr{flex:none;width:23mm;height:23mm;background:#fff;border-radius:2.6mm;padding:1.5mm}.qr img{width:100%;height:100%;display:block}
+.ft b.u{font-family:var(--display);font-size:12.5pt;letter-spacing:-.01em;display:block}
+.ft ul{margin:.8mm 0;padding:0;list-style:none;font-size:7.8pt;line-height:1.35}.ft li span{color:#4a4163}
+.ft .n{font-size:6.9pt;line-height:1.3;color:#4a4163;margin:0}
+.fine{position:absolute;left:13mm;right:13mm;bottom:2.6mm;font-size:6pt;color:#6b6385;line-height:1.2}
+</style></head><body><div class="page"><div class="bar"></div>
+<div class="hd"><img class="logo" src="logo.svg" alt=""><div class="tag">Pour les professionnels de santé</div>
+<h1><span class="s">Un rapport OUCH,</span><span class="d">mode d’emploi.</span></h1><p class="lead">Votre patient tient un carnet de douleur dans OUCH, libre et gratuit, pour la fibromyalgie et les autres douleurs chroniques : une minute par jour, sans compte, ses données restent sur son téléphone. Voici le rapport qu’il en a tiré pour votre consultation, et comment le lire.</p>
+<div class="shot"><img src="rapport.png" alt=""></div></div>
+<div class="bd">
+<div><h2>La première page, dans l’ordre</h2><div class="read"><div class="cardimg"><img src="rapport-page1.png" alt=""><i style="top:12%">1</i><i style="top:25%">2</i><i style="top:42%">3</i><i style="top:66%">4</i></div>
+<div style="flex:1"><ol><li><i>1</i><span><b>Le bandeau</b>La période couverte (depuis le dernier rendez-vous du même type), celle d’avant à laquelle elle est comparée, et la part de jours renseignés. Les jours manquants ne sont jamais comblés.</span></li><li><i>2</i><span><b>Les chiffres clés et leur flèche</b>La flèche donne le sens du changement depuis la période d’avant, pas son ampleur ni si l’écart dépasse la variation habituelle (voir « À retenir »).</span></li><li><i>3</i><span><b>La courbe</b>Points : douleur de chaque jour. Ligne : moyenne glissante sur 7 jours. Bandes ombrées : jours « plus difficiles » (poussées). Tirets : seuil de douleur sévère (7).</span></li><li><i>4</i><span><b>« À retenir »</b>Quelques phrases chiffrées : moyenne et médiane, comparaison, seuil de 30 % habituellement retenu comme cliniquement pertinent, jours sévères, poussées, changements de traitement et effets signalés.</span></li></ol>
+<div class="ar">La flèche donne le sens : <span class="p"><i class="t g"></i>favorable</span><span class="p"><i class="t o"></i>l’inverse</span><span class="p"><i class="t f"></i>trop petit</span></div></div></div></div>
+<div class="row2"><div><h2>Une poussée, selon OUCH</h2><div class="fl"><div><b>3 j</b><span>de suite, au moins</span></div><div><b>+2</b><span>points ou 30 % au-dessus du niveau habituel</span></div><div><b>4/10</b><span>au moins, au pic</span></div></div><p class="note">Définition propre à OUCH, sans consensus : pas un critère diagnostique. Les périodes que le patient marque lui-même sont à part.</p></div><div class="add"><h2>Ce que le patient ajoute</h2><p>Ses questions, sa note après le rendez-vous, ses périodes difficiles et les pistes qu’il a gardées : dans ses mots, non mesurés. Des rapprochements entre jours, jamais des causes.</p><p style='margin-top:2mm'>Ses questions figurent en tête du rapport ; sa note n’y est que s’il le souhaite.</p></div></div>
+<div><h2>Deux versions</h2><div class="vs"><div class="v"><small>2 à 4 pages</small><h3>Médecin traitant</h3><p>Chiffres clés, courbe, répartition des jours, points clés, traitements, ce que le patient veut aborder.</p></div><div class="v"><small>5 à 9 pages</small><h3>Centre douleur</h3><p>S’y ajoutent statistiques détaillées, poussées et leurs 3 jours précédents, chaque symptôme, antalgiques semaine par semaine, facteurs associés.</p></div></div></div>
+<div class="lim"><h2>À garder en tête</h2><ul><li>Données auto-déclarées, non vérifiées.</li><li>Échelles de fatigue, sommeil et humeur non validées.</li><li>Un rapprochement entre jours n’est jamais une cause.</li><li>OUCH décrit : ni diagnostic, ni conseil de traitement.</li></ul></div>
+</div>
+<div class="ft"><div class="qr"><img src="qr.svg" alt=""></div><div><b class="u">maxauvy.github.io/OUCH</b><ul><li><b>Lire un rapport OUCH</b> <span>1 page</span></li><li><b>Plaquette pour les soignants</b> <span>2 pages</span></li><li><b>Note méthodologique</b> <span>12 pages : formules, seuils, sources</span></li></ul><p class="n">À télécharger dans l’app (« Vous êtes soignant ? » au premier écran) ou sur la page de la release. Mode démo : 90 jours fictifs.</p></div></div>
+<div class="fine">Captures : données fictives. OUCH n’est ni un dispositif médical ni un avis médical ; données auto-déclarées par le patient, non vérifiées. Logiciel libre, CeCILL v2.1.</div>
+</div></body></html>
