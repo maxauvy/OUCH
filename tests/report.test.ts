@@ -369,3 +369,17 @@ test('collapseDoublePeriod: an abbreviated month before a closing period prints 
   assert.equal(collapseDoublePeriod('Début le 3 oct.. (efficace)'), 'Début le 3 oct. (efficace)')
   assert.equal(collapseDoublePeriod('Arrêt le 5 mai.'), 'Arrêt le 5 mai.')
 })
+
+test('the comparison period is the interval between the two last appointments when it is known and sensible', () => {
+  const p = reportPeriods('2026-09-15', '2026-09-28', '2026-07-31')
+  assert.equal(p.periodDays, 14)
+  assert.equal(p.prevStart, '2026-07-31')
+  assert.equal(p.prevDays, 46)
+  assert.equal(p.totalDays, 60)
+  assert.equal(p.dayIndex('2026-09-15'), 46)
+  // an interval under a week or over a year, or one that does not come before, leaves the same length as the period
+  for (const previous of ['2026-09-10', '2025-01-01', '2026-09-15', '2026-10-01']) {
+    const q = reportPeriods('2026-09-15', '2026-09-28', previous)
+    assert.deepEqual([q.prevDays, q.prevStart, q.totalDays], [14, '2026-09-01', 28])
+  }
+})

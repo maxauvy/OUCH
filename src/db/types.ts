@@ -351,18 +351,35 @@ export interface AutoBackupState {
   lastFailureDetail?: string
 }
 
+/** Who the appointment is with: the family doctor ("médecin traitant") or a pain clinic (CETD). Each has its own report and its own dates. */
+export const CONSULTATION_KINDS = ['gp', 'cetd'] as const
+export type ConsultationKind = (typeof CONSULTATION_KINDS)[number]
+
 /** An appointment being prepared: what the person wants to ask and say. */
 export interface Consultation {
   /** The day of the appointment (ISO). */
   date: string
+  /** With a family doctor or a pain clinic; the family doctor when absent (appointments noted before the kinds existed). */
+  kind?: ConsultationKind
+  /** The name of the professional, as the person writes it. */
+  doctor?: string
   questions: string[]
   /** What the person most wants to say, in a sentence. */
   goal?: string
 }
 
-/** The appointment that took place last: its day starts the next report. */
+/** The appointment that took place last, before the kinds existed: read as a family doctor's. */
 export interface LastConsultation {
   date: string
+  /** What was said and what changes, as the person wrote it. */
+  notes?: string
+}
+
+/** An appointment that took place: its day starts the next report of its kind, and the one before it bounds the period compared. */
+export interface PastConsultation {
+  date: string
+  kind: ConsultationKind
+  doctor?: string
   /** What was said and what changes, as the person wrote it. */
   notes?: string
 }
@@ -457,8 +474,12 @@ export interface Settings {
   audienceMeasurementEnabled?: boolean
   /** The appointment being prepared, if any. Restored from a backup. */
   consultation?: Consultation
-  /** The last appointment, once it has taken place. Restored from a backup. */
+  /** The last appointment, once it has taken place, as noted before the kinds existed: read by `pastConsultations`, which folds it in. Restored from a backup. */
   lastConsultation?: LastConsultation
+  /** The appointments that took place, newest first. Restored from a backup. */
+  pastConsultations?: PastConsultation[]
+  /** The date of birth the person typed for the report, kept on the device so it need not be typed again. Restored from a backup. */
+  birthDate?: string
   /** The card on the day's page was closed for this appointment (and this stage of it). Per device. */
   consultationCardClosed?: { date: string; kind: 'soon' | 'after' }
   /** The prescription the person noted, if any. Restored from a backup. */

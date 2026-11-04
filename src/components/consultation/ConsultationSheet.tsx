@@ -1,7 +1,7 @@
 import { useId, useState } from 'react'
 import { format as formatDate } from 'date-fns'
 import { updateSettings } from '../../db'
-import type { Consultation, Settings } from '../../db/types'
+import { CONSULTATION_KINDS, type Consultation, type ConsultationKind, type Settings } from '../../db/types'
 import { useLoggedEntries } from '../../hooks/useEntries'
 import { useFlares } from '../../hooks/useFlares'
 import { useMedications } from '../../hooks/useMedications'
@@ -9,9 +9,10 @@ import { treatmentEvents } from '../../lib/treatmentEvents'
 import { markedOverlapping } from '../../lib/markedFlares'
 import { treatmentEventText } from '../trends/treatmentEventText'
 import {
-  addQuestion, daysUntil, finishConsultation, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTION_LENGTH, newConsultation, removeQuestion, sinceFacts, sinceLast, withGoal,
+  addQuestion, cleanDoctor, daysUntil, kindOf, lastOf, MAX_DOCTOR_LENGTH, finishConsultation, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTION_LENGTH, newConsultation, removeQuestion, sinceFacts, sinceLast, withGoal,
 } from '../../lib/consultation'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
+import { Chip } from '../ui/Chip'
 import { ModalSheet } from '../ui/ModalSheet'
 import { PrescriptionFields } from '../prescription/PrescriptionFields'
 import { draftPrescription, prescriptionEnd, type PrescriptionDraft } from '../../lib/prescription'
@@ -52,6 +53,8 @@ export function ConsultationSheet({
   const medications = useMedications()
   const c = settings.consultation
   const [question, setQuestion] = useState('')
+  // With a family doctor or a pain clinic: chosen before the date is, so it is kept apart until the appointment exists.
+  const [kindChoice, setKindChoice] = useState<ConsultationKind>(kindOf(c))
   const [afterOpen, setAfterOpen] = useState(startAfter)
   const [notes, setNotes] = useState('')
   // Nothing is chosen by default: a prescription is only noted if the person picks a length.
@@ -60,7 +63,8 @@ export function ConsultationSheet({
   const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMMM', { locale: dateFnsLocale })
 
   const save = (next: Consultation) => void updateSettings({ consultation: next })
-  const last = settings.lastConsultation
+  // The last appointment of the same kind: the one the recap is since.
+  const last = lastOf(settings, kindChoice)
   const since = last && entries ? sinceLast(entries, last.date, today) : null
   const facts = last
     ? sinceFacts({
@@ -75,7 +79,7 @@ export function ConsultationSheet({
 
   function setDate(date: string) {
     if (!date) return
-    save(c ? { ...c, date } : newConsultation(date))
+    save(c ? { ...c, date } : { ...newConsultation(date), kind: kindChoice })
   }
   function add() {
     if (!c) return
@@ -100,6 +104,47 @@ export function ConsultationSheet({
         </label>
         <input id={`${ids}-date`} type="date" value={c?.date ?? ''} onChange={(e) => setDate(e.target.value)} className={fieldClass} style={field} />
       </div>
+
+      <div role="group" aria-label={t.kindTitle}>
+        <p className="text-caption font-semibold mb-1.5">{t.kindTitle}</p>
+        <div className="flex flex-wrap gap-2">
+          {CONSULTATION_KINDS.map((k) => (
+            <Chip
+              key={k}
+              label={k === 'gp' ? t.kindGp : t.kindCetd}
+              selected={kindChoice === k}
+              onClick={() => {
+                setKindChoice(k)
+                if (c) save({ ...c, kind: k })
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {c && (
+        <div>
+          <label htmlFor={`${ids}-doctor`} className="text-caption font-semibold block mb-1">
+            {t.doctorLabel}
+          </label>
+          <input
+            id={`${ids}-doctor`}
+            key={c.doctor ?? ''}
+            defaultValue={c.doctor ?? ''}
+            maxLength={MAX_DOCTOR_LENGTH}
+            placeholder={t.doctorPlaceholder}
+            onBlur={(e) => {
+              const doctor = cleanDoctor(e.target.value)
+              if (doctor !== c.doctor) {
+                const { doctor: _old, ...rest } = c
+                save(doctor ? { ...rest, doctor } : rest)
+              }
+            }}
+            className={fieldClass}
+            style={field}
+          />
+        </div>
+      )}
 
       {c && (
         <>
