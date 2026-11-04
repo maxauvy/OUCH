@@ -1598,6 +1598,40 @@ const en: Translations = {
     lightNote: 'A note',
   },
 
+  clinician: {
+    link: 'Are you a healthcare professional?',
+    title: 'For healthcare professionals',
+    back: 'Back',
+    intro:
+      'OUCH is a free, open-source pain diary for fibromyalgia and other chronic pain. Your patient logs their day in under a minute, with no account; their data stays on their phone. They build a report from it for your appointment.',
+    points: {
+      report: {
+        title: 'A report for the appointment',
+        body: 'Pain since the last appointment, compared with the period before, the days clearly harder than usual, treatments and their reported effects, and the patient’s questions.',
+      },
+      describes: {
+        title: 'It describes, it does not interpret',
+        body: 'No diagnosis and no treatment advice. The data is self-reported and unverified; a link between two days is never presented as a cause.',
+      },
+      sources: {
+        title: 'Every threshold is sourced',
+        body: 'The report cites the source of each threshold and says when it is extrapolated. The code is open to all.',
+      },
+    },
+    docsTitle: 'Documentation to download',
+    docsHelper: 'PDFs, to read or to print.',
+    docs: {
+      guide: { title: 'Reading an OUCH report', meta: '1 page · read this first' },
+      leaflet: { title: 'Leaflet for professionals', meta: '2 pages' },
+      note: { title: 'Methodology note', meta: '12 pages · formulas, thresholds, sources' },
+    },
+    otherLanguage: 'Also in French:',
+    demoTitle: 'See an example report',
+    demoText: '90 made-up days, in a space of their own: nothing of yours is saved.',
+    demoButton: 'Open the demo',
+    note: 'OUCH is neither a medical device nor medical advice.',
+  },
+
   demo: {
     pill: 'Demo mode · made-up data',
     exit: 'Leave',
