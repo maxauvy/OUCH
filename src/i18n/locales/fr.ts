@@ -880,6 +880,10 @@ const fr: Translations = {
     compareNoUsual: 'L’historique est trop court pour dire ce qui est habituel chez ce patient.',
     compareNote: 'Ces chiffres décrivent le journal ; ils ne démontrent aucun effet d’un traitement.',
     colCompareGap: 'Écart',
+    trendUp: 'en hausse',
+    trendDown: 'en baisse',
+    trendFlat: 'stable',
+    trendNote: 'Les flèches des chiffres clés donnent le sens du changement depuis la période précédente : vert si c’est le sens d’une amélioration, orange dans l’autre sens, gris si le changement est inférieur à 0,2 point (3 points de pourcentage pour une part de jours, 0,25 h pour le sommeil). Elles ne disent ni l’ampleur ni si le changement dépasse la variation habituelle du patient.',
     flaresTitle: 'Poussées',
     flaresTableNote:
       'Habituel : médiane des 28 jours précédents, hors poussées. Retour : jours entre le dernier jour de poussée et le premier jour revenu au niveau habituel. Prises de secours : jours avec au moins une prise au besoin, sur les jours renseignés de l’épisode.',
