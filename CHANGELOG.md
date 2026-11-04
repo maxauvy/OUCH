@@ -6,6 +6,10 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.10.1] - 2026-11-04
+
+Une version de suites à la 0.10.0, après usage sur un téléphone : chaque rendez-vous a son type (médecin traitant ou centre douleur), les dates sont conservées et la comparaison se fait entre les deux derniers rendez-vous du même type ; les deux rapports prennent les couleurs d'OUCH avec une flèche de tendance sur les chiffres clés ; et une page pour les soignants, avec leur documentation, s'ouvre dès le premier écran.
+
 ### Ajouté
 - **Une page pour les soignants, dès le premier écran.** Sous « Essayer d'abord avec des données d'exemple », le lien « Vous êtes soignant ? » ouvre une page qui dit ce qu'est OUCH et propose de télécharger la fiche « Lire un rapport OUCH » (1 page), la plaquette (2 pages) et la note méthodologique (12 pages), en français et en anglais, ainsi que la démo. Les PDF sont servis par l'application elle-même (`public/soignants/`, refaits par `scripts/build-clinician-docs.sh`) et ne sont pas mis en cache hors ligne.
 - **Médecin traitant ou centre douleur, pour chaque rendez-vous.** La feuille du rendez-vous demande avec qui il est (médecin traitant ou centre douleur) et, si tu veux, le nom du soignant, repris dans la carte de la page du jour (« Ton rendez-vous avec Dr Martin… »). Chaque type garde ses propres rendez-vous passés : le rapport du médecin traitant part de la date du dernier rendez-vous chez le médecin traitant, celui du centre douleur de la date du dernier rendez-vous au centre douleur, et le rapport proposé d'office est celui du prochain rendez-vous noté.
@@ -17,6 +21,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - **Une flèche de tendance sur les chiffres clés.** Douleur moyenne, jours sévères, poussées et sommeil (rapport du médecin traitant), et les chiffres de « Intensité douloureuse » (rapport du centre douleur) portent une flèche : le sens du changement depuis la période précédente, en vert quand c'est le sens d'une amélioration, en orange dans l'autre sens, en gris quand il est trop petit pour compter. La méthode dit ce que la flèche ne dit pas : l'ampleur, et si le changement dépasse la variation habituelle du patient.
 - **La courbe « Évolution de la douleur » reprend les couleurs de « Ce qui s'est passé ».** Les poussées sont teintées en indigo, les essais en or, les changements de traitement en bleu, comme les pastilles de la liste juste dessous ; la légende et les boutons de calques portent les mêmes couleurs. Les essais qui s'enchaînent ne forment plus une seule barre : chacun a la sienne, avec un petit espace et une teinte qui alterne.
 - **La préparation du rendez-vous montre ce que tu as gardé pour ta consultation** dans « Ce que tes notes racontent » (les pistes gardées vont déjà dans le rapport), ou dit où le faire quand rien n'est gardé.
+- **La documentation soignants à jour.** Plaquette, note méthodologique (la période de comparaison) et nouvelle fiche « Lire un rapport OUCH » (1 page, avec un flyer A5), en français et en anglais.
 
 ### Corrigé
 - **« Ton mois d'octobre ».** Le titre du bilan du mois disait « Ton mois de octobre » (et « de avril », « de août ») : il met maintenant « d' » devant une voyelle.
@@ -315,7 +320,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.10.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.10.1...HEAD
+[0.10.1]: https://github.com/maxauvy/OUCH/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/maxauvy/OUCH/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/maxauvy/OUCH/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/maxauvy/OUCH/compare/v0.7.2...v0.8.0
