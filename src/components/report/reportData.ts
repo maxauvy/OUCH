@@ -22,6 +22,8 @@ interface ReportOptions {
   consultation: string
   /** That date is the one of the last appointment noted in the app: the period is labelled "since the last appointment" */
   sinceConsultation?: boolean
+  /** The day of the appointment before it, of the same kind: the comparison period is the interval between the two */
+  previousStart?: string
   /** Last day covered (today) */
   end: string
   patientName: string
@@ -114,7 +116,7 @@ interface FlareSummary {
 export function buildReportData(allEntries: DailyEntry[], medications: Medication[], options: ReportOptions): ReportData {
   // A day without a pain level is not a day of no pain: left out of the report.
   const entries = loggedEntries(allEntries)
-  const p = reportPeriods(options.consultation, options.end)
+  const p = reportPeriods(options.consultation, options.end, options.previousStart)
   const { current, previous } = splitEntries(entries, p)
   const applies = flaresApply(options.illnesses)
   const episodes = applies ? detectFlares(entries, { asOf: options.end }) : []

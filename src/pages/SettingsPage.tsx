@@ -11,6 +11,7 @@ import { AboutCard } from '../components/about/AboutCard'
 import { SourcesCard } from '../components/about/SourcesCard'
 import { ZonesNotice } from '../components/about/ZonesNotice'
 import { useAllEntries } from '../hooks/useEntries'
+import { kindOf } from '../lib/consultation'
 import { oldZonesUsed } from '../lib/bodyZones'
 import { SupportCard } from '../components/about/SupportCard'
 import { BackupSection } from '../components/settings/BackupSection'
@@ -173,7 +174,13 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           <SectionTitle icon={IconCalendarHeart}>{t.consultation.settingsTitle}</SectionTitle>
           <p className="text-caption mb-1" style={{ color: 'var(--color-ink-muted)' }}>
             {settings.consultation
-              ? format(t.consultation.settingsNext, { date: new Date(settings.consultation.date + 'T00:00:00').toLocaleDateString(intlLocale, { day: 'numeric', month: 'long' }) })
+              ? [
+                  format(t.consultation.settingsNext, { date: new Date(settings.consultation.date + 'T00:00:00').toLocaleDateString(intlLocale, { day: 'numeric', month: 'long' }) }),
+                  kindOf(settings.consultation) === 'cetd' ? t.consultation.kindCetd : t.consultation.kindGp,
+                  settings.consultation.doctor,
+                ]
+                  .filter(Boolean)
+                  .join(' · ')
               : t.consultation.settingsNone}
           </p>
           <PrepareLink />

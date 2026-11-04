@@ -3,7 +3,7 @@
 // said. Nothing here is computed from the journal and nothing says what to
 // do: the page only keeps what the person writes, and the report repeats it.
 
-import type { Consultation, LastConsultation, Settings } from '../db/types.ts'
+import type { Consultation, ConsultationKind, PastConsultation, Settings } from '../db/types.ts'
 import type { FlareEpisode } from './flares.ts'
 import type { ResolvedFlare } from './markedFlares.ts'
 import type { TreatmentEvent } from './treatmentEvents.ts'
@@ -13,6 +13,9 @@ export const MAX_QUESTIONS = 20
 export const MAX_QUESTION_LENGTH = 200
 export const MAX_GOAL_LENGTH = 300
 export const MAX_NOTES_LENGTH = 2_000
+export const MAX_DOCTOR_LENGTH = 60
+/** How many past appointments are kept. */
+export const MAX_PAST = 30
 
 /** The card on the day's page appears this many days before the appointment. */
 export const CARD_WINDOW_DAYS = 14
@@ -67,14 +70,54 @@ export function withGoal(c: Consultation, text: string): Consultation {
   return goal ? { ...rest, goal } : rest
 }
 
-/** What the appointment became: remembered as the last one (its date starts
- * the next report), with the person's note, and nothing planned any more. */
+/** The kind of an appointment: the family doctor's when it was noted before the kinds existed. */
+export function kindOf(c: Pick<Consultation, 'kind'> | undefined): ConsultationKind {
+  return c?.kind ?? 'gp'
+}
+
+/** The name of the professional, as a clean line (empty if blank). */
+export function cleanDoctor(s: string | undefined): string | undefined {
+  const name = s ? cleanLine(s, MAX_DOCTOR_LENGTH) : ''
+  return name || undefined
+}
+
+/** The appointments that took place, newest first: the list, plus the single "last appointment" of the first version when it is not in it (read as a family doctor's). */
+export function pastConsultations(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>): PastConsultation[] {
+  const list = [...(settings.pastConsultations ?? [])]
+  const legacy = settings.lastConsultation
+  if (legacy && !list.some((p) => p.date === legacy.date && p.kind === 'gp')) {
+    list.push({ date: legacy.date, kind: 'gp', ...(legacy.notes ? { notes: legacy.notes } : {}) })
+  }
+  return list.sort((a, b) => b.date.localeCompare(a.date))
+}
+
+/** The last appointment that took place, of a kind (or of any kind). */
+export function lastOf(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>, kind?: ConsultationKind): PastConsultation | undefined {
+  return pastConsultations(settings).find((p) => !kind || p.kind === kind)
+}
+
+/** The appointment of a kind just before a day: the one that bounds the period compared with the one starting on it. */
+export function previousOf(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>, kind: ConsultationKind, before: string): PastConsultation | undefined {
+  return pastConsultations(settings).find((p) => p.kind === kind && p.date < before)
+}
+
+/** An appointment that took place, kept (the same day and kind is kept once, the new one winning), newest first, within the cap. */
+export function withPast(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>, entry: PastConsultation): Partial<Settings> {
+  const doctor = cleanDoctor(entry.doctor)
+  const notes = entry.notes?.trim().slice(0, MAX_NOTES_LENGTH)
+  const clean: PastConsultation = { date: entry.date, kind: entry.kind, ...(doctor ? { doctor } : {}), ...(notes ? { notes } : {}) }
+  const rest = pastConsultations(settings).filter((p) => !(p.date === clean.date && p.kind === clean.kind))
+  const merged = [clean, ...rest].sort((a, b) => b.date.localeCompare(a.date)).slice(0, MAX_PAST)
+  // The single "last appointment" of the first version is in the list now.
+  return { pastConsultations: merged, lastConsultation: undefined }
+}
+
+/** What the appointment became: remembered among the past ones (its date starts the next report of its kind), with the person's note, and nothing planned any more. */
 export function finishConsultation(settings: Settings, notes: string): Partial<Settings> {
   const c = settings.consultation
   if (!c) return {}
-  const note = notes.trim().slice(0, MAX_NOTES_LENGTH)
-  const last: LastConsultation = note ? { date: c.date, notes: note } : { date: c.date }
-  return { lastConsultation: last, consultation: undefined, consultationCardClosed: undefined }
+  const entry: PastConsultation = { date: c.date, kind: kindOf(c), ...(c.doctor ? { doctor: c.doctor } : {}), ...(notes.trim() ? { notes } : {}) }
+  return { ...withPast(settings, entry), consultation: undefined, consultationCardClosed: undefined }
 }
 
 /** The report's "what I want to bring up" lines, filled from what was prepared:
@@ -84,10 +127,9 @@ export function agendaLines(c: Consultation | undefined, goalPrefix: string): st
   return [...c.questions, ...(c.goal ? [`${goalPrefix} ${c.goal}`] : [])]
 }
 
-/** The day the next report starts from by default: the last appointment, if
- * there was one; otherwise `fallback`. */
-export function reportStart(settings: Pick<Settings, 'lastConsultation'>, today: string, fallback: string): string {
-  const last = settings.lastConsultation?.date
+/** The day the next report of a kind starts from by default: the last appointment of that kind, if there was one; otherwise `fallback`. */
+export function reportStart(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>, today: string, fallback: string, kind: ConsultationKind): string {
+  const last = lastOf(settings, kind)?.date
   return last && last <= today ? last : fallback
 }
 

@@ -26,6 +26,7 @@ import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
 import { flareDaySet, flaresOverlapping } from '../lib/flares'
 import { markedOverlapping, removeMarked } from '../lib/markedFlares'
+import { lastOf } from '../lib/consultation'
 import { remember } from '../lib/leadHints'
 import { restartTrial, startTrial, type LeadTrial } from '../lib/leadTrial'
 import { arrangeLeads, choiceFor, findLeads, leadFactors, PATTERN_MIN_DAYS, type Lead, type LeadChoice } from '../lib/leads'
@@ -302,7 +303,7 @@ export function TrendsPage() {
             <CompareCard
               entries={entries}
               today={today}
-              lastVisit={settings.lastConsultation?.date}
+              lastVisit={lastOf(settings)?.date}
               flareDays={flares?.detectable ? flareDaySet(flares.episodes) : null}
               stiffnessTracked={settings.enabledFactors.includes('morningStiffness')}
             />

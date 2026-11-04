@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { format as formatDate } from 'date-fns'
 import { updateSettings } from '../../db'
 import { useSettings } from '../../hooks/useSettings'
-import { consultationCard, daysUntil } from '../../lib/consultation'
+import { consultationCard, daysUntil, kindOf } from '../../lib/consultation'
 import { todayISO } from '../../lib/dates'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { Card } from '../ui/Card'
@@ -20,17 +20,20 @@ export function AppointmentCard() {
   const c = settings.consultation
   if (!kind || !c) return null
 
+  const date = formatDate(new Date(c.date + 'T00:00:00'), 'd MMMM', { locale: dateFnsLocale })
   const text =
     kind === 'soon'
-      ? format(t.cardSoon, { date: formatDate(new Date(c.date + 'T00:00:00'), 'd MMMM', { locale: dateFnsLocale }), n: daysUntil(c, today) }, language)
-      : t.cardAfter
+      ? format(c.doctor ? t.cardSoonWith : t.cardSoon, { date, n: daysUntil(c, today), name: c.doctor ?? '' }, language)
+      : c.doctor
+        ? format(t.cardAfterWith, { name: c.doctor }, language)
+        : t.cardAfter
 
   return (
     <>
       <Card>
         <section aria-label={t.cardLabel}>
           <p className="text-caption font-semibold uppercase tracking-[0.06em] mb-1" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.cardLabel}
+            {t.cardLabel} · {kindOf(c) === 'cetd' ? t.kindCetd : t.kindGp}
           </p>
           <p className="text-body mb-2">{text}</p>
           <div className="flex gap-4">
