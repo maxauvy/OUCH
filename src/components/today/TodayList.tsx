@@ -7,6 +7,7 @@ import { useLeadList } from '../../hooks/useLeadList'
 import { daysBetween } from '../../lib/dates'
 import { formatIllnessList } from '../../lib/childView'
 import { snoozeInvite } from '../../lib/indicatorInvite'
+import { frenchOfMonth } from '../../lib/monthName'
 import { actionInSentence } from '../../lib/leads'
 import { restartTrial } from '../../lib/leadTrial'
 import { updateLeadsSeen } from '../../lib/leadsSeenStore'
@@ -200,7 +201,7 @@ export function TodayList({
         const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMM', { locale: dateFnsLocale })
         const month = formatDate(new Date(s.first + 'T00:00:00'), 'LLLL', { locale: dateFnsLocale })
         return (
-          <ListCard key={m.key} icon={IconCalendarMonth} label={format(lh.monthLabel, { month }, language)} actions={[{ label: lh.monthThanks, primary: true, onClick: () => done(m.key) }]}>
+          <ListCard key={m.key} icon={IconCalendarMonth} label={format(lh.monthLabel, { month: language === 'fr' ? frenchOfMonth(month) : month }, language)} actions={[{ label: lh.monthThanks, primary: true, onClick: () => done(m.key) }]}>
             <p className="text-body mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
               {lh.monthIntro}
             </p>
