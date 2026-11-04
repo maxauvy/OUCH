@@ -6,6 +6,10 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- **La courbe « Évolution de la douleur » reprend les couleurs de « Ce qui s'est passé ».** Les poussées sont teintées en indigo, les essais en or, les changements de traitement en bleu, comme les pastilles de la liste juste dessous ; la légende et les boutons de calques portent les mêmes couleurs. Les essais qui s'enchaînent ne forment plus une seule barre : chacun a la sienne, avec un petit espace et une teinte qui alterne.
+- **La préparation du rendez-vous montre ce que tu as gardé pour ta consultation** dans « Ce que tes notes racontent » (les pistes gardées vont déjà dans le rapport), ou dit où le faire quand rien n'est gardé.
+
 ## [0.10.0] - 2026-11-03
 
 Une version pour préparer un rendez-vous médical et le prolonger : ses questions et sa note, l'ordonnance à renouveler, les périodes plus difficiles que la personne note elle-même, deux périodes mises côte à côte, un regard doux sur le rythme, et une sauvegarde plus simple sur téléphone. Tout est ouvert à tous ; rien n'est un diagnostic ni un conseil de traitement. Les textes sur le rythme sont à faire relire par un professionnel de santé.

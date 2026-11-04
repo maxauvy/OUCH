@@ -1450,6 +1450,8 @@ const fr: Translations = {
     sinceTitle: 'Depuis ta dernière consultation ({{date}})',
     sinceBody: 'Douleur moyenne : {{now}} (avant : {{before}}).',
     sinceBodyNoPrev: 'Douleur moyenne : {{now}}.',
+    keptTitle: 'Ce que tu as gardé pour ta consultation',
+    keptNone: 'Rien pour l’instant. Dans Tendances, « Ce que tes notes racontent », tu peux garder ce qui te parle : ça ira dans le rapport.',
     sinceDetected: '{{n}} {{n:période difficile repérée|périodes difficiles repérées}} par OUCH.',
     sinceMarked: '{{n}} {{n:période difficile notée|périodes difficiles notées}} par toi.',
     sinceNote: 'Ce que tu avais noté après ce rendez-vous :',
