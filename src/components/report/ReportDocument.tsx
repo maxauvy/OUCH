@@ -480,14 +480,14 @@ function Header({ d }: { d: ReportData }) {
           <div className="r-v num">
             {f.fullDate(p.start)} → {f.fullDate(p.end)} <small>· {f.format(f.t.periodDays, { n: p.periodDays })}</small>
           </div>
-          <div className="r-note">{f.format(f.t.comparedTo, { n: p.periodDays })}</div>
+          <div className="r-note">{f.format(f.t.comparedTo, { n: p.prevDays })}</div>
         </div>
         <div>
           <div className="r-k">{f.t.logged}</div>
           <div className="r-v num">
             {d.current.length} / {p.periodDays} <small>· {f.pct(d.current.length / p.periodDays)}</small>
           </div>
-          <div className="r-note">{f.format(f.t.loggedPrev, { n: d.previous.length, days: p.periodDays })}</div>
+          <div className="r-note">{f.format(f.t.loggedPrev, { n: d.previous.length, days: p.prevDays })}</div>
         </div>
       </div>
       <div className="r-caveat">{f.t.caveat}</div>
@@ -715,7 +715,7 @@ function GpTiles({ d }: { d: ReportData }) {
       trend={painPrev ? trend(pain.mean, painPrev.mean, 'lower', FLAT_BELOW.score) : null}
       f={f}
     />,
-    <Tile key="severe" label={f.t.tileSevere} value={severeN} compare={painPrev ? before(String(Math.round(painPrev.severe * painPrev.n))) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
+    <Tile key="severe" label={f.t.tileSevere} value={severeN} compare={painPrev ? (d.p.prevDays === d.p.periodDays ? before(String(Math.round(painPrev.severe * painPrev.n))) : f.format(f.t.beforeOfDays, { v: Math.round(painPrev.severe * painPrev.n), days: d.p.prevDays })) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
   ]
   if (flares.detectable || d.marked.length > 0) {
     const marked = d.marked.length ? f.format(f.t.tileMarked, { n: d.marked.length }) : null
@@ -726,7 +726,7 @@ function GpTiles({ d }: { d: ReportData }) {
         label={f.t.flaresTitle}
         value={flares.detectable ? flares.current.length : d.marked.length}
         compare={flares.detectable ? [detected, marked && `+ ${marked}`].filter(Boolean).join(' · ') || undefined : (marked ?? undefined)}
-        trend={flares.detectable && painPrev ? trend(flares.currentDays / d.p.periodDays, flares.previousDays / d.p.periodDays, 'lower', FLAT_BELOW.share) : null}
+        trend={flares.detectable && painPrev ? trend(flares.currentDays / d.p.periodDays, flares.previousDays / d.p.prevDays, 'lower', FLAT_BELOW.share) : null}
         f={f}
       />
     )

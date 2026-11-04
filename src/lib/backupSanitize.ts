@@ -10,6 +10,7 @@
 
 import {
   ALL_FACTORS,
+  CONSULTATION_KINDS,
   DOSE_UNITS,
   ILLNESSES,
   HEADACHE_DURATIONS,
@@ -39,6 +40,7 @@ import type {
   Settings,
   Consultation,
   LastConsultation,
+  PastConsultation,
   Prescription,
   MarkedFlare,
   WeatherInfo,
@@ -49,7 +51,7 @@ import type { LeadChoices } from './leads.ts'
 import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
 import { makePrescription } from './prescription.ts'
 import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
-import { cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
+import { cleanDoctor, cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_PAST, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
 
 /** Far above any real journal (a hundred years is ~36 500 days). */
 const MAX_ENTRIES = 40_000
@@ -319,7 +321,24 @@ function consultation(v: unknown): Consultation | undefined {
   if (!isRecord(v) || !isISODate(v.date)) return undefined
   const questions = (strings(v.questions, MAX_QUESTION_LENGTH) ?? []).map((q) => cleanLine(q)).filter(Boolean).slice(0, MAX_QUESTIONS)
   const goal = typeof v.goal === 'string' ? cleanLine(v.goal, MAX_GOAL_LENGTH) : ''
-  return goal ? { date: v.date, questions, goal } : { date: v.date, questions }
+  const kind = oneOf(v.kind, CONSULTATION_KINDS)
+  const doctor = typeof v.doctor === 'string' ? cleanDoctor(v.doctor) : undefined
+  return { date: v.date, ...(kind ? { kind } : {}), ...(doctor ? { doctor } : {}), questions, ...(goal ? { goal } : {}) }
+}
+
+/** The appointments that took place: a real day, a known kind (the family doctor's when unsaid), a clean name and note, newest first. */
+function pastConsultationList(v: unknown): PastConsultation[] | undefined {
+  if (!Array.isArray(v)) return undefined
+  const list = v.slice(0, MAX_PAST).flatMap((p): PastConsultation[] => {
+    if (!isRecord(p) || !isISODate(p.date)) return []
+    const kind = oneOf(p.kind, CONSULTATION_KINDS) ?? 'gp'
+    const doctor = typeof p.doctor === 'string' ? cleanDoctor(p.doctor) : undefined
+    const notes = typeof p.notes === 'string' ? p.notes.trim().slice(0, MAX_NOTES_LENGTH) : ''
+    return [{ date: p.date, kind, ...(doctor ? { doctor } : {}), ...(notes ? { notes } : {}) }]
+  })
+  // Nothing in the file was usable: keep what this device holds, rather than clearing it.
+  if (v.length > 0 && list.length === 0) return undefined
+  return list.sort((a, b) => b.date.localeCompare(a.date))
 }
 
 function lastConsultation(v: unknown): LastConsultation | undefined {
@@ -392,6 +411,8 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     leadTrialHistory: leadTrialHistory(raw.leadTrialHistory),
     consultation: consultation(raw.consultation),
     lastConsultation: lastConsultation(raw.lastConsultation),
+    pastConsultations: pastConsultationList(raw.pastConsultations),
+    birthDate: isISODate(raw.birthDate) && raw.birthDate >= '1900-01-01' && raw.birthDate <= '2100-01-01' ? raw.birthDate : undefined,
     prescription: prescription(raw.prescription),
     markedFlares: markedFlares(raw.markedFlares),
   })

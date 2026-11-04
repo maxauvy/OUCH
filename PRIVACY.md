@@ -22,7 +22,7 @@ Dans le navigateur de l'appareil (base IndexedDB du site, plus quelques clés de
 
 Ces données sont stockées **en clair** : quiconque a accès à l'appareil déverrouillé ou au profil du navigateur peut les lire. Le verrou par code (voir plus bas) cache l'écran, il ne les chiffre pas. Seules les sauvegardes exportées sont chiffrées (voir plus bas).
 
-Le nom et la date de naissance saisis pour générer un rapport ne sont **pas** enregistrés : ils servent à fabriquer le PDF, puis disparaissent.
+Le nom saisi pour générer un rapport n'est **pas** enregistré : il sert à fabriquer le PDF, puis disparaît. La date de naissance et la date de la dernière consultation, elles, restent sur l'appareil (dans les réglages, donc aussi dans une sauvegarde), pour ne pas être retapées à chaque rapport. Les rendez-vous notés dans l'application (date, type — médecin traitant ou centre douleur —, nom du soignant si la personne l'écrit, questions, note) sont du texte libre de la personne, gardé de la même façon.
 
 ## Ce qui quitte l'appareil
 

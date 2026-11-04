@@ -19,7 +19,9 @@ import { withCut, type Cut } from '../components/report/pagination'
 import { isOffered, withoutUnoffered } from '../lib/indicatorCatalog'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { shiftISO, todayISO } from '../lib/dates'
-import { agendaLines, reportStart } from '../lib/consultation'
+import { agendaLines, kindOf, lastOf, pastConsultations, previousOf, reportStart, withPast } from '../lib/consultation'
+import { updateSettings } from '../db'
+import type { ConsultationKind } from '../db/types'
 import { validSpans, type Span } from '../lib/periodComparison'
 
 /** A4 width in CSS pixels (210 mm at 96 dpi): the preview is scaled from it. */
@@ -67,18 +69,26 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
   const [exportFailed, setExportFailed] = useState(false)
 
   const today = todayISO()
-  const [variant, setVariant] = useState<ReportVariant>('gp')
-  // null until edited: the report starts at the last appointment once the settings are read, else 90 days back.
-  const [consultationInput, setConsultation] = useState<string | null>(null)
-  const consultation = consultationInput ?? reportStart(settings, today, shiftISO(today, -90))
+  // null until chosen: the report for whom the next appointment is with, once the settings are read.
+  const [variantInput, setVariant] = useState<ReportVariant | null>(null)
+  const variant: ReportVariant = variantInput ?? (kindOf(settings.consultation) === 'cetd' ? 'painClinic' : 'gp')
+  const kind: ConsultationKind = variant === 'gp' ? 'gp' : 'cetd'
+  // By kind, until edited: a report starts at the last appointment of its kind, else 90 days back.
+  const [dates, setDates] = useState<Partial<Record<ConsultationKind, string>>>({})
+  const consultation = dates[kind] ?? reportStart(settings, today, shiftISO(today, -90), kind)
+  const lastOfKind = lastOf(settings, kind)
+  // The appointment of this kind before the one the report starts at: the comparison period is the interval between the two.
+  const previousStart = previousOf(settings, kind, consultation)?.date
   const [language, setLanguage] = useState<Language>(appLanguage)
   // null until edited: settings load asynchronously, so the defaults follow them.
   const [nameInput, setPatientName] = useState<string | null>(null)
   const patientName = nameInput ?? settings.displayName
-  const [birthDate, setBirthDate] = useState('')
+  // null until edited: kept on the device once typed.
+  const [birthInput, setBirthDate] = useState<string | null>(null)
+  const birthDate = birthInput ?? settings.birthDate ?? ''
   // null until edited: filled from the appointment prepared in the app, if any.
   const [agendaInput, setAgenda] = useState<string | null>(null)
-  const agenda = agendaInput ?? agendaLines(settings.consultation, t.consultation.goalPrefix).join('\n')
+  const agenda = agendaInput ?? agendaLines(kindOf(settings.consultation) === kind ? settings.consultation : undefined, t.consultation.goalPrefix).join('\n')
   const [includeNotes, setIncludeNotes] = useState(true)
   const [includeLastNote, setIncludeLastNote] = useState(true)
   // The two periods compared: by default the report's and the one before it; the person can choose two of their own.
@@ -97,7 +107,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
   }, [])
 
   // What the patient noted after the last appointment: only when the report starts at that appointment.
-  const lastNoteText = settings.lastConsultation?.date === consultation ? settings.lastConsultation.notes : undefined
+  const lastNoteText = lastOfKind?.date === consultation ? lastOfKind.notes : undefined
   const lastNote = useMemo(() => (lastNoteText ? { date: consultation, text: lastNoteText } : undefined), [lastNoteText, consultation])
 
   const data = useMemo(
@@ -107,7 +117,8 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             variant,
             language,
             consultation,
-            sinceConsultation: settings.lastConsultation?.date === consultation,
+            sinceConsultation: lastOfKind?.date === consultation,
+            previousStart,
             end: today,
             patientName: patientName.trim(),
             birthDate: birthDate || undefined,
@@ -127,7 +138,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             demo: IS_DEMO,
           })
         : null,
-    [entries, medications, variant, language, consultation, settings.lastConsultation?.date, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, earlyAccess, settings.leadTrialHistory, settings.leadTrial, settings.markedFlares, lastNote, includeLastNote, customCompare, compareValid, spanA, spanB, agenda, includeNotes, includeCycle]
+    [entries, medications, variant, language, consultation, lastOfKind?.date, previousStart, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, earlyAccess, settings.leadTrialHistory, settings.leadTrial, settings.markedFlares, lastNote, includeLastNote, customCompare, compareValid, spanA, spanB, agenda, includeNotes, includeCycle]
   )
 
   // Browsers name the saved PDF after the page title.
@@ -246,7 +257,11 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
           type="date"
           value={consultation}
           max={shiftISO(today, -1)}
-          onChange={(e) => e.target.value && e.target.value < today && setConsultation(e.target.value)}
+          onChange={(e) => e.target.value && e.target.value < today && setDates((d) => ({ ...d, [kind]: e.target.value }))}
+          // Kept once the field is left, as an appointment of this kind: it need not be typed again.
+          onBlur={() => {
+            if (consultation < today && !pastConsultations(settings).some((p) => p.kind === kind && p.date === consultation)) void updateSettings(withPast(settings, { date: consultation, kind }))
+          }}
           aria-describedby={`${ids}-consultation-help ${ids}-period`}
           className={inputClass}
           style={inputStyle}
@@ -294,6 +309,10 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
               value={birthDate}
               max={today}
               onChange={(e) => setBirthDate(e.target.value)}
+              onBlur={() => {
+                const v = birthDate >= '1900-01-01' && birthDate <= today ? birthDate : undefined
+                if (v !== settings.birthDate) void updateSettings({ birthDate: v })
+              }}
               autoComplete="bday"
               className={inputClass}
               style={inputStyle}
