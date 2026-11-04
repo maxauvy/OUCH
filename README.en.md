@@ -4,7 +4,7 @@
 
 **[maxauvy.github.io/OUCH](https://maxauvy.github.io/OUCH/)** · License [CeCILL v2.1](#license) · French and English · [Changelog](CHANGELOG.md) (in French) · [Version française](README.md)
 
-https://github.com/user-attachments/assets/04b8f85d-a8e9-4876-8865-e094f8330791
+![OUCH: the pain diary, with the Today screen, a lead drawn from the notes and the report for the doctor](docs/images/ouch-readme.en.png)
 
 OUCH is a pain diary for fibromyalgia and other chronic pain. You log your day in under a minute, everything stays on your phone, and you always decide what to share, and with whom.
 

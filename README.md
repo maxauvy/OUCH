@@ -4,7 +4,7 @@
 
 **[maxauvy.github.io/OUCH](https://maxauvy.github.io/OUCH/)** · Licence [CeCILL v2.1](#licence) · Français et anglais · [Changelog](CHANGELOG.md) · [English version](README.en.md)
 
-https://github.com/user-attachments/assets/36824d23-e5ff-4257-9254-b0164c30e334
+![OUCH : le carnet de douleur, avec l’écran Aujourd’hui, une piste tirée des notes et le rapport pour le médecin](docs/images/ouch-readme.fr.png)
 
 OUCH est un carnet de douleur pour la fibromyalgie et les autres douleurs chroniques. On y note sa journée en moins d'une minute, tout reste sur son téléphone, et c'est toujours soi qui décide de ce qu'on partage, et avec qui.
 
