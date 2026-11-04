@@ -268,6 +268,7 @@
 .report .r-weekly tbody th[scope='row'] {
   white-space: nowrap;
 }
+.report th .sm,
 .report td .sm {
   display: block;
   color: var(--r-muted);
@@ -583,4 +584,87 @@
   font-size: 14px;
   font-weight: 700;
   color: var(--r-navy);
+}
+
+/* The arrow beside a key figure: direction since the period before. */
+.report .r-tile,
+.report .r-kpi {
+  position: relative;
+}
+.report .r-trend {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 16px;
+  height: 16px;
+}
+.report .r-kpi .r-trend {
+  top: 2px;
+  right: 0;
+}
+
+/* OUCH identity: the app's gradient (gold, lavender, indigo) as a strip at the top of every page, the icon beside the running title
+   and the title, a colour accent on the figures and the section headings. */
+.report .r-running {
+  background: linear-gradient(90deg, #e3a73b, #a894c9 55%, #574a7a) top / 100% 4px no-repeat, var(--r-navy);
+  padding-top: 11px;
+}
+.report .r-running .r-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.report .r-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.report .r-titlebar > div {
+  min-width: 0;
+}
+.report .r-tiles .r-tile {
+  border-top: 3px solid #e3a73b;
+}
+.report .r-tiles .r-tile:nth-child(4n + 2) {
+  border-top-color: #a894c9;
+}
+.report .r-tiles .r-tile:nth-child(4n + 3) {
+  border-top-color: var(--r-brand);
+}
+.report .r-tiles .r-tile:nth-child(4n) {
+  border-top-color: #574a7a;
+}
+.report .r-card.tint {
+  border-top: 3px solid #a894c9;
+}
+.report .r-h2::before {
+  content: '';
+  flex: none;
+  align-self: center;
+  width: 4px;
+  height: 14px;
+  border-radius: 2px;
+  background: linear-gradient(#e3a73b, #a894c9);
+}
+
+.report .r-logo {
+  flex: none;
+  width: 15px;
+  height: 15px;
+}
+.report .r-logo.r-logo-big {
+  width: 44px;
+  height: 44px;
+}
+
+/* In a tile, the arrow sits at the end of the figure's line, clear of the label. */
+.report .r-bigrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.report .r-trend.inline {
+  position: static;
+  flex: none;
 }

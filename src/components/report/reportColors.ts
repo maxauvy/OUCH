@@ -20,6 +20,9 @@ export const R = {
   orange: '#eb6834',
   severe: '#9a5b00',
   prev: '#8a939c',
+  /** Arrows: the way things get better (4.9:1 on the tint), the other way, and flat is `prev`. */
+  good: '#1f7a45',
+  worse: '#a8480a',
 } as const
 
 /** The days-by-intensity bar: mild, moderate, severe. Light to dark, so the
