@@ -5,6 +5,7 @@ import type { ParentGender } from '../../db/types'
 import { countFollowed, planForIllnesses, planSettingsPatch, type IndicatorKey } from '../../lib/indicatorCatalog'
 import { useEarlyAccess } from '../../lib/earlyAccess'
 import { TrackingStep } from './TrackingStep'
+import { ClinicianPage } from './ClinicianPage'
 import { useSettings } from '../../hooks/useSettings'
 import { useMedications } from '../../hooks/useMedications'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -43,6 +44,9 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
   const tracksMedications = settings.enabledFactors.includes('medications')
   const steps: Step[] = ['welcome', 'illness', 'profile', 'tracking', ...(tracksMedications ? (['medications'] as const) : []), 'reminder', 'done']
   const [step, setStep] = useState<Step>('welcome')
+  // A page for healthcare professionals, over the setup (reached from the welcome screen).
+  const [clinician, setClinician] = useState(false)
+  const clinicianLinkRef = useRef<HTMLButtonElement>(null)
   // Run again from Settings by someone who already logs: no "first day".
   const hasEntries = !!useLiveQuery(() => db.entries.count(), [])
   const index = Math.max(0, steps.indexOf(step))
@@ -82,6 +86,17 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
       {text}
     </h1>
   )
+
+  if (clinician) {
+    return (
+      <ClinicianPage
+        onBack={() => {
+          setClinician(false)
+          requestAnimationFrame(() => clinicianLinkRef.current?.focus())
+        }}
+      />
+    )
+  }
 
   return (
     <div
@@ -218,6 +233,17 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
                 style={{ color: 'var(--color-brand)' }}
               >
                 {t.demo.startLink}
+              </button>
+            )}
+            {step === 'welcome' && (
+              <button
+                type="button"
+                ref={clinicianLinkRef}
+                onClick={() => setClinician(true)}
+                className="min-h-11 text-control font-semibold underline underline-offset-4"
+                style={{ color: 'var(--color-brand)' }}
+              >
+                {t.clinician.link}
               </button>
             )}
           </div>

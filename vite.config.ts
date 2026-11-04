@@ -150,6 +150,8 @@ export default defineConfig(({ command, mode }) => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+          // The PDFs for professionals are not cached: opening one must reach the file, not the app shell.
+          navigateFallbackDenylist: [/\.pdf$/],
           // A new release takes over as soon as it is installed; the open page
           // is left alone (see main.tsx).
           skipWaiting: true,

@@ -1603,6 +1603,40 @@ const fr: Translations = {
     lightNote: 'Une note',
   },
 
+  clinician: {
+    link: 'Vous êtes soignant ?',
+    title: 'Pour les soignants',
+    back: 'Retour',
+    intro:
+      'OUCH est un carnet de douleur libre et gratuit, pour la fibromyalgie et les autres douleurs chroniques. Votre patient y note sa journée en moins d’une minute, sans compte ; ses données restent sur son téléphone. Il en tire un rapport pour votre consultation.',
+    points: {
+      report: {
+        title: 'Un rapport pour la consultation',
+        body: 'La douleur depuis le dernier rendez-vous, comparée à la période d’avant, les jours nettement plus difficiles que d’habitude, les traitements et leurs effets déclarés, et les questions du patient.',
+      },
+      describes: {
+        title: 'Il décrit, il n’interprète pas',
+        body: 'Ni diagnostic ni conseil de traitement. Les données sont auto-déclarées et non vérifiées ; un rapprochement entre deux jours n’est jamais présenté comme une cause.',
+      },
+      sources: {
+        title: 'Chaque seuil est sourcé',
+        body: 'Le rapport cite la source de chaque seuil et dit quand il est extrapolé. Le code est ouvert à tous.',
+      },
+    },
+    docsTitle: 'Documentation à télécharger',
+    docsHelper: 'Des PDF, à lire ou à imprimer.',
+    docs: {
+      guide: { title: 'Lire un rapport OUCH', meta: '1 page · à lire en premier' },
+      leaflet: { title: 'Plaquette pour les soignants', meta: '2 pages' },
+      note: { title: 'Note méthodologique', meta: '12 pages · formules, seuils, sources' },
+    },
+    otherLanguage: 'Aussi en anglais :',
+    demoTitle: 'Voir un rapport d’exemple',
+    demoText: '90 jours fictifs, dans un espace à part : rien n’est enregistré de vous.',
+    demoButton: 'Ouvrir la démo',
+    note: 'OUCH n’est ni un dispositif médical ni un avis médical.',
+  },
+
   demo: {
     pill: 'Mode démo · données fictives',
     exit: 'Quitter',

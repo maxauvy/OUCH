@@ -1484,6 +1484,32 @@ export interface Translations {
     lightNote: string
   }
 
+  clinician: {
+    /** Link under the setup's main button, and title of the page it opens */
+    link: string
+    title: string
+    back: string
+    intro: string
+    points: {
+      report: { title: string; body: string }
+      describes: { title: string; body: string }
+      sources: { title: string; body: string }
+    }
+    docsTitle: string
+    docsHelper: string
+    docs: {
+      guide: { title: string; meta: string }
+      leaflet: { title: string; meta: string }
+      note: { title: string; meta: string }
+    }
+    /** "Also in English:" */
+    otherLanguage: string
+    demoTitle: string
+    demoText: string
+    demoButton: string
+    note: string
+  }
+
   demo: {
     /** The floating pill */
     pill: string
