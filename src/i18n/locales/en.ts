@@ -1449,6 +1449,8 @@ const en: Translations = {
     sinceTitle: 'Since your last appointment ({{date}})',
     sinceBody: 'Mean pain: {{now}} (before: {{before}}).',
     sinceBodyNoPrev: 'Mean pain: {{now}}.',
+    keptTitle: 'What you kept for your appointment',
+    keptNone: 'Nothing yet. In Trends, “What your notes say”, you can keep what speaks to you: it will go in the report.',
     sinceDetected: '{{n}} harder {{n:stretch|stretches}} spotted by OUCH.',
     sinceMarked: '{{n}} harder {{n:stretch|stretches}} noted by you.',
     sinceNote: 'What you noted after that appointment:',

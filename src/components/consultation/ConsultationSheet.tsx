@@ -4,6 +4,9 @@ import { updateSettings } from '../../db'
 import type { Consultation, Settings } from '../../db/types'
 import { useLoggedEntries } from '../../hooks/useEntries'
 import { useFlares } from '../../hooks/useFlares'
+import { useLeadList } from '../../hooks/useLeadList'
+import { keptLeads } from '../../lib/leads'
+import { leadSentence } from '../trends/leadTexts'
 import { useMedications } from '../../hooks/useMedications'
 import { treatmentEvents } from '../../lib/treatmentEvents'
 import { markedOverlapping } from '../../lib/markedFlares'
@@ -49,6 +52,7 @@ export function ConsultationSheet({
   const ids = useId()
   const entries = useLoggedEntries()
   const flares = useFlares()
+  const leadList = useLeadList()
   const medications = useMedications()
   const c = settings.consultation
   const [question, setQuestion] = useState('')
@@ -72,6 +76,7 @@ export function ConsultationSheet({
       })
     : null
   const happened = c ? daysUntil(c, today) <= 0 : false
+  const kept = leadList ? keptLeads([...leadList.shown, ...leadList.dismissed], settings.leadChoices) : []
 
   function setDate(date: string) {
     if (!date) return
@@ -173,6 +178,25 @@ export function ConsultationSheet({
           <button type="button" onClick={() => save(addQuestion(c, tp.prepAskQuestion))} className={linkClass} style={{ color: 'var(--color-brand)' }}>
             {tp.prepAsk}
           </button>
+        </div>
+      )}
+
+      {c && (
+        <div>
+          <h3 className="text-caption font-semibold mb-1">{t.keptTitle}</h3>
+          {kept.length > 0 ? (
+            <ul className="flex flex-col gap-1.5">
+              {kept.map((lead) => (
+                <li key={lead.key} className="text-body">
+                  {leadSentence(lead, i18n.trends, nf, language, 'trends')}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-control" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.keptNone}
+            </p>
+          )}
         </div>
       )}
 

@@ -1312,6 +1312,8 @@ export interface Translations {
     sinceBody: string
     sinceBodyNoPrev: string
     /** `{{n}} {{n:thing|things}}` since the last appointment */
+    keptTitle: string
+    keptNone: string
     sinceDetected: string
     sinceMarked: string
     sinceNote: string

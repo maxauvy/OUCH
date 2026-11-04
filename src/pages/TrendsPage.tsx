@@ -38,6 +38,13 @@ import { format, useLocale, useTranslation } from '../i18n'
 import { IndicatorsCard } from '../components/trends/IndicatorsCard'
 import { shiftISO, todayISO } from '../lib/dates'
 
+/** The colour of each layer of the pain curve, the same as its dot in the "what happened" list below it. */
+const LAYER_COLOR = {
+  flares: (t: ReturnType<typeof usePalette>) => t.weather[5].color,
+  treatment: (t: ReturnType<typeof usePalette>) => t.brand,
+  trials: (t: ReturnType<typeof usePalette>) => t.weather[2].color,
+} as const
+
 export function TrendsPage() {
   const entries = useLoggedEntries()
   const settings = useSettings()
@@ -269,6 +276,9 @@ export function TrendsPage() {
                     className="rounded-[var(--radius-control)] px-3.5 py-1.5 text-caption font-semibold"
                     style={{ background: layers[key] ? t.brand : t.brandSoft, color: layers[key] ? 'var(--color-on-brand)' : t.brand }}
                   >
+                    <span aria-hidden className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-white mr-1.5 align-middle">
+                      <span className="w-2.5 h-2.5 rounded-full" style={{ background: LAYER_COLOR[key](t) }} />
+                    </span>
                     {label}
                   </button>
                 ))}

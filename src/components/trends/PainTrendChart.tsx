@@ -24,6 +24,9 @@ interface Point {
 
 const nf = (v: number) => v.toFixed(1)
 
+/** Days left clear on each side of a trial's bar. */
+const TRIAL_GAP = 0.12
+
 function CustomTooltip({
   active,
   payload,
@@ -182,8 +185,8 @@ export function PainTrendChart({
                 key={e.start}
                 x1={daysBetween(from, e.start) - 0.5}
                 x2={daysBetween(from, e.end) + 0.5}
-                fill={t.brand}
-                fillOpacity={0.14}
+                fill={t.weather[5].color}
+                fillOpacity={0.2}
                 stroke="none"
                 ifOverflow="hidden"
               />
@@ -211,15 +214,16 @@ export function PainTrendChart({
                 ifOverflow="hidden"
               />
             )}
-            {trialSpans.map((s) => (
+            {/* Each trial is its own bar, with a small gap on each side and a shade that alternates, so trials that follow one another do not run into one. */}
+            {trialSpans.map((s, i) => (
               <ReferenceArea
                 key={s.from}
-                x1={daysBetween(from, s.from) - 0.5}
-                x2={daysBetween(from, s.to) + 0.5}
+                x1={daysBetween(from, s.from) - 0.5 + TRIAL_GAP}
+                x2={daysBetween(from, s.to) + 0.5 - TRIAL_GAP}
                 y1={0}
-                y2={0.5}
-                fill={t.brand}
-                fillOpacity={0.55}
+                y2={0.7}
+                fill={t.weather[2].color}
+                fillOpacity={i % 2 === 0 ? 0.95 : 0.55}
                 stroke="none"
                 ifOverflow="hidden"
               />
@@ -248,9 +252,9 @@ export function PainTrendChart({
                   <ReferenceLine
                     key={`${m.date}-${m.label}`}
                     x={day}
-                    stroke={t.inkMuted}
+                    stroke={t.brand}
                     strokeDasharray="3 3"
-                    label={{ value: m.label, position: toLeft ? 'insideTopRight' : 'insideTopLeft', fontSize: 12, fill: t.inkMuted }}
+                    label={{ value: m.label, position: toLeft ? 'insideTopRight' : 'insideTopLeft', fontSize: 12, fill: t.brand }}
                   />
                 )
               })}
@@ -295,8 +299,14 @@ export function PainTrendChart({
         )}
         {shown.length > 0 && (
           <li className="flex items-center gap-1.5">
-            <span className="w-4 h-3 rounded-[3px]" style={{ background: t.brand, opacity: 0.14 }} aria-hidden />
+            <span className="w-4 h-3 rounded-[3px]" style={{ background: t.weather[5].color, opacity: 0.35 }} aria-hidden />
             {i18n.trends.flareBand}
+          </li>
+        )}
+        {markers.some((m) => m.date >= from && m.date <= to) && (
+          <li className="flex items-center gap-1.5">
+            <span className="w-3 h-3 border-l-[1.5px] border-dashed" style={{ borderColor: t.brand }} aria-hidden />
+            {i18n.trends.layerTreatment}
           </li>
         )}
         {marked.length > 0 && (
@@ -307,7 +317,7 @@ export function PainTrendChart({
         )}
         {trialSpans.length > 0 && (
           <li className="flex items-center gap-1.5">
-            <span className="w-4 h-[3px] rounded-full" style={{ background: t.brand, opacity: 0.55 }} aria-hidden />
+            <span className="w-4 h-[4px] rounded-full" style={{ background: t.weather[2].color }} aria-hidden />
             {i18n.trends.trialBand}
           </li>
         )}
