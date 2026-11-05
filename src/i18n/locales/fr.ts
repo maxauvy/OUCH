@@ -1710,7 +1710,7 @@ const fr: Translations = {
     docs: {
       guide: { title: 'Lire un rapport OUCH', meta: '1 page · à lire en premier' },
       leaflet: { title: 'Plaquette pour les soignants', meta: '2 pages' },
-      note: { title: 'Note méthodologique', meta: '12 pages · formules, seuils, sources' },
+      note: { title: 'Note méthodologique', meta: '13 pages · formules, seuils, sources' },
     },
     otherLanguage: 'Aussi en anglais :',
     demoTitle: 'Voir un rapport d’exemple',
