@@ -853,6 +853,8 @@ export interface Translations {
     tocTitle: string
     tocPage: string
     partSummary: string
+    partOne: string
+    partRange: string
     partPain: string
     partPainHint: string
     partTreatments: string

@@ -12,7 +12,7 @@ Ce document décrit comment tester OUCH avec des professionnels de santé : ce q
 1. Quelles données saisies par le patient sont utiles en consultation, lesquelles sont superflues, lesquelles manquent ?
 2. La définition d'une poussée (au moins 3 jours à plus de 2 points ou 30 % au-dessus de la médiane des 28 jours précédents) a-t-elle un sens clinique ? Que faudrait-il à la place ?
 3. Les catégories de douleur (≤ 3, 4–6, ≥ 7), la comparaison avant et après un changement de traitement et les corrélations aident-ils ou risquent-ils d'être sur-interprétés ?
-4. La différence entre la version « Médecin traitant » (2 pages) et « Centre douleur » (environ 5 pages) est-elle la bonne ?
+4. La différence entre la version « Médecin traitant » (3 à 5 pages) et « Centre douleur » (6 à 10 pages) est-elle la bonne ?
 5. Quel effort le journal demande-t-il aux patients, en particulier les jours difficiles ?
 6. Le tableau « Douleur selon le jour de la semaine » (écart à la moyenne et bande que le hasard suffit à produire), présent dans les deux versions du rapport, est-il lisible ? Risque-t-il d'être lu comme un effet réel alors que les journées ne sont pas indépendantes ?
 7. Le statut des maladies (« diagnostiquée en 2019 », « suspectée »), tel que le patient le déclare et tel que le rapport le reprend, aide-t-il à lire le reste, ou risque-t-il d'être pris pour un diagnostic établi ?

@@ -56,7 +56,7 @@ You note the date, your questions and what you most want to talk about; a soft c
 
 ### A report for your doctor
 
-From Trends, you can generate a report to print or save as a PDF. It covers the time since your last appointment and compares it with the same length of time just before. It comes in two versions: a 2-page summary for your GP, and a detailed 5-page report for a pain clinic (a CETD in France), with painkiller use and associated factors. It can be read in French or English, lists the conditions you declared and, under “What the patient noticed”, carries the leads you kept and your one-week trials.
+From the Consultation tab, you can generate a report to print or save as a PDF. It covers the time since your last appointment and compares it with the same length of time just before. It comes in two versions: a 3 to 5-page summary for your GP, and a detailed 6 to 10-page report, in numbered parts, for a pain clinic (a CETD in France), with painkiller use and associated factors. It can be read in French or English, lists the conditions you declared and, under “What the patient noticed”, carries the leads you kept and your one-week trials.
 
 The report describes the data without interpreting it, and its thresholds cite their sources (IMMPACT, the French health authority HAS, and other published work), summarised in Settings → About → Scientific sources. It is built on your device; the name you type into it is not saved, but the date of birth and the date of the last appointment stay on the device so they need not be retyped.
 
@@ -118,8 +118,8 @@ src/
   hooks/         React hooks (entries, settings, theme)
   components/    the UI, grouped by area (entry, weather, journal, trends,
                  report, kids, settings, setup, ui)
-  pages/         the five tabs (Today, Journal, Trends, Kids, Settings)
-                 and the doctor report
+  pages/         the four tabs (Today, Journal, Trends, Consultation), the
+                 Settings, the kids' page and the doctor report
 scripts/         demo history, icons, videos
 tests/           tests for backups, trends, the report and the pain weather
 ```
