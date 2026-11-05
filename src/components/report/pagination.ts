@@ -60,8 +60,9 @@ interface Sheet {
 
 /** Planned pages start a new sheet, except after a page that overflowed:
  * once off plan, the next page follows on the continuation sheet rather than
- * leaving most of it blank. */
-export function buildSheets(pages: Block[][], cuts: Cut[]): Sheet[] {
+ * leaving most of it blank. With `hardBreaks`, every planned page starts its
+ * own sheet whatever came before (the numbered parts of a report). */
+export function buildSheets(pages: Block[][], cuts: Cut[], hardBreaks = false): Sheet[] {
   const sheets: Sheet[] = []
   let parts: Part[] = []
   const flush = () => {
@@ -70,7 +71,7 @@ export function buildSheets(pages: Block[][], cuts: Cut[]): Sheet[] {
   }
   pages.forEach((blocks, page) => {
     const pageCuts = cuts.filter((c) => c.page === page).sort((a, b) => a.block - b.block || a.row - b.row)
-    if (page === 0 || !cuts.some((c) => c.page === page - 1)) flush()
+    if (hardBreaks || page === 0 || !cuts.some((c) => c.page === page - 1)) flush()
     const part = (block: number, from: number, to: number) => {
       const b = blocks[block]
       parts.push({ page, block, from, to, splittable: isRows(b), node: isRows(b) ? b.render(from, to, from > 0) : b })

@@ -852,6 +852,19 @@ export interface Translations {
     briefAnd: string
     tocTitle: string
     tocPage: string
+    partSummary: string
+    partPain: string
+    partPainHint: string
+    partTreatments: string
+    partTreatmentsHint: string
+    partSymptoms: string
+    partSymptomsHint: string
+    partContext: string
+    partContextHint: string
+    partNotes: string
+    partNotesHint: string
+    partMethod: string
+    partMethodHint: string
     mixThis: string
     mixPts: string
     tileMedian: string

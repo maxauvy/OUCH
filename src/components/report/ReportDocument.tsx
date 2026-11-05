@@ -128,9 +128,10 @@ export function ReportDocument({
   onCut?: (cut: Cut) => void
 }) {
   const { options, f, p } = data
-  const pages = options.variant === 'gp' ? gpPages(data) : painClinicPages(data)
+  const layout = options.variant === 'gp' ? { pages: gpPages(data), labels: undefined } : painClinicLayout(data)
+  const pages = layout.pages
   const running = options.variant === 'gp' ? f.t.runningGp : f.t.runningPainClinic
-  const sheets = buildSheets(pages, cuts)
+  const sheets = buildSheets(pages, cuts, !!layout.labels)
   const sectionRefs = useRef<HTMLElement[]>([])
   // Where each section of the contents line starts.
   const tocPages = tocPagesOf(pages, sheets)
@@ -161,6 +162,7 @@ export function ReportDocument({
                   <span className="r-who">{options.patientName}</span>
                 </>
               )}
+              {layout.labels?.[sheet.parts[0]?.page ?? 0] && <span className="r-part-name"> · {layout.labels[sheet.parts[0]?.page ?? 0]}</span>}
             </span>
             <span className="num">
               {f.fullDate(p.start)} → {f.fullDate(p.end)}
@@ -296,230 +298,275 @@ function gpPages(d: ReportData): Block[][] {
   ]
 }
 
-function painClinicPages(d: ReportData): Block[][] {
+/** The pain clinic report: a summary page, then the detail in numbered parts, each starting its own page, named in the running band and in the contents on page 1. */
+function painClinicLayout(d: ReportData): { pages: Block[][]; labels: string[] } {
   const { f, p } = d
   const symptoms = SYMPTOMS.filter((s) => meanOf(d.current, s.key))
   const keyPoints = keyPointItems(d)
   const weeks = weeklyRows(d.current, p)
   const notes = noteItems(d, true)
-  return [
-    [
-      <Header d={d} />,
-      <Brief d={d} />,
-      <Completeness d={d} />,
-      rowsBlock(keyPoints.length, (from, to, continued) => (
-        <>
-          <H level={2} kind="keyPoints">
-            {f.t.keyPoints}
-            <Continued f={f} on={continued} />
-          </H>
-          <KeyPointList items={keyPoints} from={from} to={to} />
-        </>
-      )),
-      <>
-        <H level={2} kind="pain">{f.t.intensity}</H>
-        <Tiles d={d} detailed />
-      </>,
-      <>
-        <H level={3}>{f.t.distribution}</H>
-        <div className="r-legend">
-          {d.painPrev && (
-            <span>
-              <i style={{ background: 'var(--r-prev)' }} />
-              {f.format(f.t.distPrev, { n: d.painPrev.n })}
-            </span>
-          )}
-          <span>
-            <i style={{ background: 'var(--r-blue)' }} />
-            {f.format(f.t.distCur, { n: d.pain?.n ?? 0 })}
-          </span>
-        </div>
-        <PainHistogram prev={d.painPrev?.distribution ?? null} cur={d.pain?.distribution ?? []} f={f} />
-      </>,
-      <>
-        <PainStatsTable d={d} />
-        <p className="r-small">{f.t.categoriesNote}</p>
-      </>,
-    ],
-    [
-      <>
-        <H level={2} kind="pain">
-          {f.t.evolution}{' '}
-          <span className="r-hint">
-            {f.t.chartHint}
-            {chartFlares(d).length > 0 && f.t.chartHintFlares}
-          </span>
-        </H>
-        <H level={3}>{f.t.painChart}</H>
-        <PainChart entries={d.all} p={p} f={f} height={170} summary={painSummary(d)} flares={chartFlares(d)} />
-      </>,
-      d.flares.current.length > 0 &&
-        rowsBlock(d.flares.current.length, (from, to, continued) => (
+  const timeline = reportTimelineItems(d)
+  const hasAgenda = agendaItems(d).length > 0 || !!d.options.lastNote
+  const hasNotes = d.options.includeNotes && notes.length > 0
+
+  const parts: { title: string; hint: string; blocks: Block[] }[] = [
+    {
+      title: f.t.partPain,
+      hint: f.t.partPainHint,
+      blocks: [
+        rowsBlock(keyPoints.length, (from, to, continued) => (
           <>
-            <H level={3} kind="flares">
-              {f.t.flaresTitle}
+            <H level={2} kind="keyPoints">
+              {f.t.keyPoints}
               <Continued f={f} on={continued} />
             </H>
-            <FlaresTable d={d} from={from} to={to} />
-            {to === d.flares.current.length && <p className="r-small">{f.t.flaresTableNote}</p>}
+            <KeyPointList items={keyPoints} from={from} to={to} />
           </>
         )),
-      d.marked.length > 0 && markedBlock(d),
-      d.compare && <CompareBlock d={d} />,
-      hasFlareContext(d) &&
-        rowsBlock(d.flares.current.length, (from, to, continued) => (
-          <>
-            <H level={3} kind="flares">
-              {f.t.flareContextTitle}
-              <Continued f={f} on={continued} />
-            </H>
-            <FlareContextTable d={d} from={from} to={to} />
-            {to === d.flares.current.length && <p className="r-small">{f.t.flareContextNote}</p>}
-          </>
-        )),
-      d.meds.length > 0 ? (
+        timeline.length > 0 && rowsBlock(timeline.length, (from, to, continued) => <ReportTimeline d={d} items={timeline} from={from} to={to} continued={continued} />),
         <>
-          <H level={3} kind="treatments">{f.t.treatments}</H>
+          <H level={3}>{f.t.distribution}</H>
           <div className="r-legend">
+            {d.painPrev && (
+              <span>
+                <i style={{ background: 'var(--r-prev)' }} />
+                {f.format(f.t.distPrev, { n: d.painPrev.n })}
+              </span>
+            )}
             <span>
               <i style={{ background: 'var(--r-blue)' }} />
-              {f.t.timelineScheduled}
+              {f.format(f.t.distCur, { n: d.pain?.n ?? 0 })}
+            </span>
+          </div>
+          <PainHistogram prev={d.painPrev?.distribution ?? null} cur={d.pain?.distribution ?? []} f={f} />
+        </>,
+        <>
+          <PainStatsTable d={d} />
+          <p className="r-small">{f.t.categoriesNote}</p>
+        </>,
+        <>
+          <H level={2} kind="pain">
+            {f.t.evolution}{' '}
+            <span className="r-hint">
+              {f.t.chartHint}
+              {chartFlares(d).length > 0 && f.t.chartHintFlares}
+            </span>
+          </H>
+          <H level={3}>{f.t.painChart}</H>
+          <PainChart entries={d.all} p={p} f={f} height={170} summary={painSummary(d)} flares={chartFlares(d)} />
+        </>,
+        d.flares.current.length > 0 &&
+          rowsBlock(d.flares.current.length, (from, to, continued) => (
+            <>
+              <H level={3} kind="flares">
+                {f.t.flaresTitle}
+                <Continued f={f} on={continued} />
+              </H>
+              <FlaresTable d={d} from={from} to={to} />
+              {to === d.flares.current.length && <p className="r-small">{f.t.flaresTableNote}</p>}
+            </>
+          )),
+        d.marked.length > 0 && markedBlock(d),
+        d.compare && <CompareBlock d={d} />,
+        hasFlareContext(d) &&
+          rowsBlock(d.flares.current.length, (from, to, continued) => (
+            <>
+              <H level={3} kind="flares">
+                {f.t.flareContextTitle}
+                <Continued f={f} on={continued} />
+              </H>
+              <FlareContextTable d={d} from={from} to={to} />
+              {to === d.flares.current.length && <p className="r-small">{f.t.flareContextNote}</p>}
+            </>
+          )),
+      ],
+    },
+    {
+      title: f.t.partTreatments,
+      hint: f.t.partTreatmentsHint,
+      blocks: [
+        d.meds.length > 0 ? (
+          <>
+            <H level={3} kind="treatments">{f.t.treatments}</H>
+            <div className="r-legend">
+              <span>
+                <i style={{ background: 'var(--r-blue)' }} />
+                {f.t.timelineScheduled}
+              </span>
+              <span>
+                <i style={{ background: 'var(--r-orange)' }} />
+                {f.t.timelineAsNeeded}
+              </span>
+            </div>
+            <TreatmentTimeline entries={d.all} meds={medicationReports(d.all, d.medications, p)} p={p} f={f} />
+          </>
+        ) : (
+          <>
+            <H level={3} kind="treatments">{f.t.treatments}</H>
+            <p className="r-small">{f.t.noTreatments}</p>
+          </>
+        ),
+        d.reviews.length > 0 && reviewBlock(d),
+        d.meds.length > 0 &&
+          rowsBlock(d.meds.length, (from, to, continued) => (
+            <>
+              <H level={2} kind="treatments">
+                {f.t.treatments} <span className="r-hint">{f.t.treatmentsSince}</span>
+                <Continued f={f} on={continued} />
+              </H>
+              <TreatmentsTable d={d} detailed from={from} to={to} />
+            </>
+          )),
+        d.meds.length > 0 &&
+          rowsBlock(weeks.length, (from, to, continued) => (
+            <>
+              <H level={3} kind="treatments">
+                {f.t.weekly}
+                <Continued f={f} on={continued} />
+              </H>
+              <WeeklyTable d={d} weeks={weeks} from={from} to={to} />
+            </>
+          )),
+      ],
+    },
+    {
+      title: f.t.partSymptoms,
+      hint: f.t.partSymptomsHint,
+      blocks: [
+        symptoms.length > 0 &&
+          rowsBlock(symptoms.length, (from, to, continued) => (
+            <>
+              <H level={3} kind="symptoms">
+                {f.t.symptoms}
+                <Continued f={f} on={continued} />
+              </H>
+              {symptoms.slice(from, to).map((s, i) => {
+                const [label, hint] = f.t.symptomLabels[s.key]
+                const cur = meanOf(d.current, s.key)!
+                const prev = meanOf(d.previous, s.key)
+                const summary = prev ? `${f.format(f.t.before, { v: f.nf(prev.mean) })} → ${f.nf(cur.mean)}` : f.nf(cur.mean)
+                return (
+                  <div key={s.key} data-row>
+                    <SmallMultiple
+                      entries={d.all}
+                      get={(e) => e[s.key]}
+                      label={label}
+                      hint={hint}
+                      max={s.max}
+                      summary={summary}
+                      // The date axis goes under the last chart of each sheet.
+                      last={from + i === to - 1}
+                      p={p}
+                      f={f}
+                    />
+                  </div>
+                )
+              })}
+            </>
+          )),
+        d.options.includeStiffness && <StiffnessBlock d={d} />,
+        d.options.includeNightWakings && <NightWakingsBlock d={d} />,
+        <OtherIndicatorsBlock d={d} />,
+      ],
+    },
+    {
+      title: f.t.partContext,
+      hint: f.t.partContextHint,
+      blocks: [
+        <NonDrug d={d} />,
+        <>
+          <H level={2} kind="calendar">{f.t.calendar}</H>
+          <PainCalendar entries={d.all} p={p} f={f} />
+          <div className="r-legend" style={{ marginTop: 4 }}>
+            0
+            {[0, 2, 4, 6, 8, 10].map((v) => (
+              <i key={v} style={{ background: rampColor(v), marginRight: 0, boxShadow: v <= 3 ? 'inset 0 0 0 0.5px var(--r-prev)' : undefined }} />
+            ))}
+            10 ·
+            <span>
+              <i style={{ border: '1px dashed var(--r-axis)', background: 'none' }} />
+              {f.t.notLogged}
             </span>
             <span>
-              <i style={{ background: 'var(--r-orange)' }} />
-              {f.t.timelineAsNeeded}
+              <i style={{ border: '1.5px solid var(--r-ink)', background: 'none' }} />
+              {f.t.consultation}
             </span>
           </div>
-          <TreatmentTimeline entries={d.all} meds={medicationReports(d.all, d.medications, p)} p={p} f={f} />
-        </>
-      ) : (
+        </>,
         <>
-          <H level={3} kind="treatments">{f.t.treatments}</H>
-          <p className="r-small">{f.t.noTreatments}</p>
-        </>
-      ),
-      d.reviews.length > 0 && reviewBlock(d),
-      symptoms.length > 0 &&
-        rowsBlock(symptoms.length, (from, to, continued) => (
-          <>
-            <H level={3} kind="symptoms">
-              {f.t.symptoms}
-              <Continued f={f} on={continued} />
-            </H>
-            {symptoms.slice(from, to).map((s, i) => {
-              const [label, hint] = f.t.symptomLabels[s.key]
-              const cur = meanOf(d.current, s.key)!
-              const prev = meanOf(d.previous, s.key)
-              const summary = prev ? `${f.format(f.t.before, { v: f.nf(prev.mean) })} → ${f.nf(cur.mean)}` : f.nf(cur.mean)
-              return (
-                <div key={s.key} data-row>
-                  <SmallMultiple
-                    entries={d.all}
-                    get={(e) => e[s.key]}
-                    label={label}
-                    hint={hint}
-                    max={s.max}
-                    summary={summary}
-                    // The date axis goes under the last chart of each sheet.
-                    last={from + i === to - 1}
-                    p={p}
-                    f={f}
-                  />
-                </div>
-              )
-            })}
-          </>
-        )),
-      d.options.includeStiffness && <StiffnessBlock d={d} />,
-      d.options.includeNightWakings && <NightWakingsBlock d={d} />,
-      <OtherIndicatorsBlock d={d} />,
-    ],
-    // Everything on this page is optional: with no agenda, no medication and
-    // no positive action, it would print blank but for its header and footer.
-    ...(agendaItems(d).length || d.options.lastNote || d.meds.length || nonDrugShares(d).length
+          <H level={2} kind="zones">{f.t.zones}</H>
+          <div className="r-grid2">
+            <ZoneFigure d={d} />
+            <div>
+              <ZoneBars d={d} limit={10} />
+              <ZoneFacts d={d} full />
+            </div>
+          </div>
+          <p className="r-small">{f.t.zonesWpi}</p>
+        </>,
+        d.weekdays && <WeekdaysBlock d={d} />,
+        (d.noticed.length > 0 || d.trials.length > 0) && <Noticed d={d} />,
+        <Associations d={d} />,
+      ],
+    },
+    // The patient's questions and notes: left out when there are none.
+    ...(hasAgenda || hasNotes
       ? [
-          [
-            <Agenda d={d} />,
-            d.meds.length > 0 &&
-              rowsBlock(d.meds.length, (from, to, continued) => (
-                <>
-                  <H level={2} kind="treatments">
-                    {f.t.treatments} <span className="r-hint">{f.t.treatmentsSince}</span>
-                    <Continued f={f} on={continued} />
-                  </H>
-                  <TreatmentsTable d={d} detailed from={from} to={to} />
-                </>
-              )),
-            d.meds.length > 0 &&
-              rowsBlock(weeks.length, (from, to, continued) => (
-                <>
-                  <H level={3} kind="treatments">
-                    {f.t.weekly}
-                    <Continued f={f} on={continued} />
-                  </H>
-                  <WeeklyTable d={d} weeks={weeks} from={from} to={to} />
-                </>
-              )),
-            <NonDrug d={d} />,
-          ],
+          {
+            title: f.t.partNotes,
+            hint: f.t.partNotesHint,
+            blocks: [
+              hasAgenda && <Agenda d={d} />,
+              hasNotes && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all list={notes} from={from} to={to} continued={continued} />),
+            ] as Block[],
+          },
         ]
       : []),
-    [
-      <>
-        <H level={2} kind="calendar">{f.t.calendar}</H>
-        <PainCalendar entries={d.all} p={p} f={f} />
-        <div className="r-legend" style={{ marginTop: 4 }}>
-          0
-          {[0, 2, 4, 6, 8, 10].map((v) => (
-            <i key={v} style={{ background: rampColor(v), marginRight: 0, boxShadow: v <= 3 ? 'inset 0 0 0 0.5px var(--r-prev)' : undefined }} />
-          ))}
-          10 ·
-          <span>
-            <i style={{ border: '1px dashed var(--r-axis)', background: 'none' }} />
-            {f.t.notLogged}
-          </span>
-          <span>
-            <i style={{ border: '1.5px solid var(--r-ink)', background: 'none' }} />
-            {f.t.consultation}
-          </span>
-        </div>
-      </>,
-      <>
-        <H level={2} kind="zones">{f.t.zones}</H>
-        <div className="r-grid2">
-          <ZoneFigure d={d} />
-          <div>
-            <ZoneBars d={d} limit={10} />
-            <ZoneFacts d={d} full />
+    {
+      title: f.t.partMethod,
+      hint: f.t.partMethodHint,
+      blocks: [
+        <>
+          <H level={2} kind="method">{f.t.method}</H>
+          <div className="r-method">
+            {[f.t.methodCollect, f.t.methodCalc, f.t.methodLimits].map((text) => {
+              // "Collection. Daily diary…": the first word is a run-in heading.
+              const cut = text.indexOf('. ') + 1
+              return (
+                <p key={cut + text.slice(0, 12)}>
+                  <b>{text.slice(0, cut)}</b>
+                  {text.slice(cut)}
+                </p>
+              )
+            })}
+            <p>{f.t.trendNote}</p>
           </div>
-        </div>
-        <p className="r-small">{f.t.zonesWpi}</p>
-      </>,
-      d.weekdays && <WeekdaysBlock d={d} />,
-      (d.noticed.length > 0 || d.trials.length > 0) && <Noticed d={d} />,
-      <Associations d={d} />,
-    ],
-    [
-      d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all list={notes} from={from} to={to} continued={continued} />),
-      <>
-        <H level={2} kind="method">{f.t.method}</H>
-        <div className="r-method">
-          {[f.t.methodCollect, f.t.methodCalc, f.t.methodLimits].map((text) => {
-            // "Collection. Daily diary…": the first word is a run-in heading.
-            const cut = text.indexOf('. ') + 1
-            return (
-              <p key={cut + text.slice(0, 12)}>
-                <b>{text.slice(0, cut)}</b>
-                {text.slice(cut)}
-              </p>
-            )
-          })}
-          <p>{f.t.trendNote}</p>
-        </div>
-      </>,
-      <References numbers={REFERENCES.map((_, i) => i + 1)} title={f.t.references} uses={f.t} />,
-    ],
+        </>,
+        <References numbers={REFERENCES.map((_, i) => i + 1)} title={f.t.references} uses={f.t} />,
+      ],
+    },
   ]
+
+  const summary: Block[] = [
+    <Header d={d} />,
+    <Brief d={d} />,
+    <>
+      <H level={2} kind="pain">{f.t.intensity}</H>
+      <Tiles d={d} detailed />
+    </>,
+    <DayMix d={d} />,
+    <Completeness d={d} />,
+    <PartsToc parts={parts.map((part, i) => ({ id: `part-${i + 1}`, n: i + 1, title: part.title, hint: part.hint }))} f={f} />,
+  ]
+  return {
+    pages: [summary, ...parts.map((part, i) => [
+        <TocBlock id={`part-${i + 1}`}>
+          <PartTitle n={i + 1} title={part.title} hint={part.hint} />
+        </TocBlock>,
+        ...part.blocks,
+      ])],
+    labels: [f.t.partSummary, ...parts.map((part, i) => `${i + 1} · ${part.title}`)],
+  }
 }
 
 /* oxlint-enable react/jsx-key */
@@ -816,6 +863,43 @@ function tocPagesOf(pages: Block[][], sheets: ReturnType<typeof buildSheets>): R
     }
   })
   return found
+}
+
+/** The title band that opens each numbered part of the pain clinic report, on its own page. */
+function PartTitle({ n, title, hint }: { n: number; title: string; hint: string }) {
+  return (
+    <div className="r-partband">
+      <b className="r-partn">{n}</b>
+      <span className="r-parttitle">{title}</span>
+      <em className="r-parthint">{hint}</em>
+    </div>
+  )
+}
+
+/** The contents of the pain clinic report: the numbered parts, what each holds and the page it starts on (measured from the laid-out sheets). */
+function PartsToc({ parts, f }: { parts: { id: string; n: number; title: string; hint: string }[]; f: ReportFormat }) {
+  const pages = useContext(TocPages)
+  return (
+    <div className="r-card r-partstoc">
+      <H level={2} kind="keyPoints">
+        {f.t.tocTitle}
+      </H>
+      <div className="r-partslist">
+        {parts.map((part) => (
+          <div key={part.id}>
+            <b className="r-partn">{part.n}</b>
+            <span>
+              <b>
+                {part.title}
+                {pages[part.id] ? <span className="r-tocpage"> · {f.format(f.t.tocPage, { n: pages[part.id]! })}</span> : null}
+              </b>
+              <small>{part.hint}</small>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 function Toc({ entries, f }: { entries: TocEntry[]; f: ReportFormat }) {
