@@ -38,6 +38,7 @@ const loadSettings = () => import('./pages/SettingsPage').then((m) => ({ default
 const loadKids = () => import('./pages/ChildViewPage').then((m) => ({ default: m.ChildViewPage }))
 const TrendsPage = lazy(loadTrends)
 const SettingsPage = lazy(loadSettings)
+const ConsultationPage = lazy(() => import('./pages/ConsultationPage').then((m) => ({ default: m.ConsultationPage })))
 const ChildViewPage = lazy(loadKids)
 const SetupWizard = lazy(() => import('./components/setup/SetupWizard').then((m) => ({ default: m.SetupWizard })))
 const DemoTour = lazy(() => import('./components/demo/DemoTour').then((m) => ({ default: m.DemoTour })))
@@ -202,6 +203,7 @@ function AppShell() {
         )}
         {screen === null && tab === 'journal' && <JournalPage />}
         {screen === null && tab === 'trends' && <TrendsPage />}
+        {screen === null && tab === 'consultation' && <ConsultationPage />}
         </Suspense>
       </main>
       <TabBar
