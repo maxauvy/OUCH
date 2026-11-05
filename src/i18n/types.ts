@@ -838,6 +838,15 @@ export interface Translations {
     tileSevere: string
     tileMild: string
     tileSleep: string
+    briefTitle: string
+    briefMean: string
+    briefDown: string
+    briefUp: string
+    briefFlat: string
+    briefSevere: string
+    briefNoSevere: string
+    briefFlares: string
+    briefAnd: string
     tileMedian: string
     tileVariability: string
     dayMix: string

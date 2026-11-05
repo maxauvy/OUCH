@@ -7,6 +7,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Modifié
+- **Le rapport médecin reprend l'esprit de l'appli.** La première page s'ouvre sur une phrase « En bref » (douleur moyenne et son évolution, jours sévères, poussées), construite à partir des mêmes chiffres que les tuiles juste dessous. Les tuiles prennent la couleur de leur mesure (douleur, jours sévères, poussées, sommeil, raideur) avec une pastille ronde, et les titres de la première page ont leur pastille, comme dans l'appli. Les teintes sont très claires : à l'impression en noir et blanc elles restent des gris pâles, et chaque chiffre est écrit.
 - **Sensibilité : on coche ce qui gêne, au lieu de noter une intensité.** Bruit, lumière, odeurs, toucher : quatre puces à toucher, à la place du curseur de 0 à 10. Le rapport et la page « Mes habitudes » disent sur combien de jours chaque chose a gêné, sans intensité ni seuil. Les jours déjà notés avec l'ancien curseur restent dans le journal, la sauvegarde et le CSV (colonne `sensory_sensitivity`) ; les nouvelles réponses vont dans une colonne `sensory_stimuli` (valeurs séparées par `|`).
 
 ## [0.10.1] - 2026-11-04
