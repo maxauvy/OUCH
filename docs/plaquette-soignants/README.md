@@ -2,7 +2,7 @@
 
 Source HTML de la plaquette recto-verso (A4, français ; la version anglaise est `index.en.html`, avec ses captures dans `img-en/`) qui présente OUCH à un soignant : ce que le patient saisit, pourquoi c'est utile, ce que contient le rapport, et ses limites. Décrite d’après la branche principale après la 0.10.1 (types de rendez-vous, dates conservées, flèches de tendance). Les références numérotées sont celles de la [note méthodologique](../note-methodologique/).
 
-Les captures de `img/` viennent de l'application lancée sur l'historique de démonstration (`node scripts/generate-demo-history.mjs`, importé avec le mot de passe `demo`) : les données sont fictives, et la plaquette le dit. À refaire quand un écran change.
+Les captures de `img/` (français) et `img-en/` (anglais) viennent du mode démo de l'application (données fictives, la plaquette le dit) : `node scripts/capture-docs.mjs` les refait toutes, avec celles des autres documents, quand un écran change. Aucune n'a de fond sombre, d'ombre ni de cadre autour.
 
 La police Public Sans est lue dans `node_modules` (`npm install`). Pour obtenir le PDF :
 

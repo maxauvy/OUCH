@@ -12,4 +12,4 @@ Les PDF sont produits par `scripts/build-clinician-docs.sh` (fiche A4, plaquette
 
 Les polices viennent de `node_modules` (Public Sans) et de Google Fonts (flyer : connexion nécessaire). Les pages sont explicites : si un texte s'allonge, vérifier qu'il tient avant d'imprimer.
 
-Les flyers n'ont pas d'ombre portée (Chrome les imprime en voiles gris) : un fin liseré tient lieu de relief. Les captures du rapport (`rapport*.png`) viennent de la démo (données fictives).
+Les flyers n'ont pas d'ombre portée (Chrome les imprime en voiles gris) : un fin liseré tient lieu de relief. Les captures du rapport (`rapport*.png`) viennent de la démo (données fictives) : `node scripts/capture-docs.mjs` les refait (la période est fixée à un mois pour que les comparaisons s'affichent). Les repères numérotés du flyer A4 sont placés en pourcentage de la hauteur de `rapport-page1*.png` : à replacer si la page 1 change.

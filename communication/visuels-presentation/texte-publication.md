@@ -41,7 +41,7 @@ OUCH : le carnet de douleur de vos patients, libre et gratuit 🌤️
 Pour la fibromyalgie et les autres douleurs chroniques : une minute par jour pour le patient, deux minutes de lecture pour vous.
 
 ➜ Le patient note sa douleur de 0 à 10, et si besoin fatigue, sommeil, zones douloureuses, traitements. Les jours difficiles, une seule saisie suffit.
-➜ Vous recevez un rapport (2 à 4 pages pour le médecin traitant, 5 à 9 pour un centre douleur) : la période depuis le dernier rendez-vous comparée à celle d'avant, chiffres clés avec une flèche de tendance, courbe, traitements déclarés, et ses questions.
+➜ Vous recevez un rapport (3 à 5 pages pour le médecin traitant, 6 à 10 pour un centre douleur) : la période depuis le dernier rendez-vous comparée à celle d'avant, chiffres clés avec une flèche de tendance, courbe, traitements déclarés, et ses questions.
 ➜ Rien n'est interprété : ni diagnostic ni conseil de traitement, chaque seuil cite sa source, données auto-déclarées et non vérifiées.
 
 La plaquette, la note méthodologique (12 pages) et une fiche « Lire un rapport OUCH » sont dans l'app, sous « Vous êtes soignant ? » au premier écran. Vos relectures sont les bienvenues.
