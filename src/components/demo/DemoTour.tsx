@@ -7,7 +7,7 @@ import { format, useLanguage, useTranslation } from '../../i18n'
 const STEPS: { tab: Tab; target: string }[] = [
   { tab: 'today', target: 'pain' },
   { tab: 'trends', target: 'trends-chart' },
-  { tab: 'trends', target: 'report' },
+  { tab: 'consultation', target: 'report' },
 ]
 
 /**

@@ -1,13 +1,13 @@
-import { lazy, Suspense, useRef, useState, useEffect, type ReactNode } from 'react'
+import { lazy, Suspense, useRef, useState, useEffect } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconCalendarHeart, IconChevronRight, IconFileText, IconMessageQuestion, IconNotes, IconPill, type Icon } from '@tabler/icons-react'
+import { IconCalendarHeart, IconFileText, IconMessageQuestion, IconNotes, IconPill } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
 import { consultationCard, daysUntil, kindOf } from '../lib/consultation'
 import { prescriptionEnd } from '../lib/prescription'
 import { todayISO } from '../lib/dates'
 import { format, useLanguage, useLocale, useTranslation } from '../i18n'
 import { Card } from '../components/ui/Card'
-import { RoundIcon } from '../components/ui/RoundIcon'
+import { LinkRow } from '../components/ui/LinkRow'
 import { Footer } from '../components/layout/Footer'
 import { ConsultationSheet } from '../components/consultation/ConsultationSheet'
 import { PrescriptionSheet } from '../components/prescription/PrescriptionSheet'
@@ -95,14 +95,14 @@ export function ConsultationPage() {
 
       <Card>
         <div className="flex flex-col">
-          <Line
+          <LinkRow
             icon={c ? IconMessageQuestion : IconCalendarHeart}
             title={c ? t.questionsRow : t.addAppointment}
             hint={c ? (c.questions.length ? format(t.questionsCount, { n: c.questions.length }, language) : t.questionsNone) : undefined}
             onClick={() => setSheet('appointment')}
           />
-          {afterKind && <Line icon={IconNotes} title={t.afterRow} hint={t.afterRowHint} onClick={() => setSheet('after')} />}
-          <Line
+          {afterKind && <LinkRow icon={IconNotes} title={t.afterRow} hint={t.afterRowHint} onClick={() => setSheet('after')} />}
+          <LinkRow
             icon={IconPill}
             title={t.prescriptionRow}
             hint={p ? [format(i18n.prescription.settingsCurrent, { end: day(prescriptionEnd(p)) }, language), p.label].filter(Boolean).join(' · ') : i18n.prescription.settingsNone}
@@ -121,23 +121,5 @@ export function ConsultationPage() {
       )}
       {sheet === 'prescription' && <PrescriptionSheet settings={settings} today={today} onClose={() => setSheet(null)} />}
     </div>
-  )
-}
-
-/** A row that opens something: a round icon, a title, a line under it, a chevron. */
-function Line({ icon, title, hint, onClick }: { icon: Icon; title: string; hint?: ReactNode; onClick: () => void }) {
-  return (
-    <button type="button" onClick={onClick} className="flex items-center gap-3 py-3 text-left border-t first:border-t-0 min-h-11" style={{ borderColor: 'var(--color-hairline)' }}>
-      <RoundIcon icon={icon} />
-      <span className="flex-1 min-w-0">
-        <span className="block text-body font-semibold">{title}</span>
-        {hint && (
-          <span className="block text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-            {hint}
-          </span>
-        )}
-      </span>
-      <IconChevronRight size={20} aria-hidden style={{ color: 'var(--color-ink-muted)' }} />
-    </button>
   )
 }

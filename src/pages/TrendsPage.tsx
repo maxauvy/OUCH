@@ -1,9 +1,9 @@
-import { lazy, Suspense, useEffect, useId, useMemo, useRef, useState } from 'react'
-import { IconChevronRight, IconFileText } from '@tabler/icons-react'
+import { useEffect, useMemo, useState } from 'react'
+import { IconChartDots, IconChartLine, IconPill, IconUser, IconBodyScan } from '@tabler/icons-react'
 
 import { Footer } from '../components/layout/Footer'
-import { ConsultationCard } from '../components/trends/ConsultationCard'
-import { PrepareLink } from '../components/consultation/PrepareLink'
+import { LinkRow } from '../components/ui/LinkRow'
+import { PageBack } from '../components/layout/PageBack'
 import { CompareCard } from '../components/trends/CompareCard'
 import { PacingCard } from '../components/trends/PacingCard'
 import { TimelineCard } from '../components/trends/TimelineCard'
@@ -14,10 +14,9 @@ import { PainTrendChart, type ChartMarker } from '../components/trends/PainTrend
 import { TreatmentReviewCard } from '../components/trends/TreatmentReviewCard'
 import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
 import { ZonesFlaresCard, ZonesMapCard, ZonesWeeksCard } from '../components/trends/ZonesCards'
-import { Card, SectionTitle } from '../components/ui/Card'
+import { Card, GroupCaption, SectionTitle } from '../components/ui/Card'
 import { Segmented } from '../components/ui/Segmented'
 // The report, its charts and the page capture are fetched when it is opened.
-const DoctorReportPage = lazy(() => import('./DoctorReportPage').then((m) => ({ default: m.DoctorReportPage })))
 import { useLoggedEntries } from '../hooks/useEntries'
 import { useFlares } from '../hooks/useFlares'
 import { useLeadList } from '../hooks/useLeadList'
@@ -25,7 +24,7 @@ import { useMedications } from '../hooks/useMedications'
 import { usePalette } from '../hooks/usePalette'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
-import { flareDaySet, flaresOverlapping } from '../lib/flares'
+import { flareDayCount, flareDaySet, flaresOverlapping } from '../lib/flares'
 import { markedOverlapping, removeMarked } from '../lib/markedFlares'
 import { lastOf } from '../lib/consultation'
 import { remember } from '../lib/leadHints'
@@ -34,7 +33,7 @@ import { arrangeLeads, choiceFor, findLeads, leadFactors, PATTERN_MIN_DAYS, type
 import { updateLeadsSeen } from '../lib/leadsSeenStore'
 import { formatPosology } from '../lib/medicationFormat'
 import { treatmentEvents } from '../lib/treatmentEvents'
-import { lastTreatmentEvent, markedSpans, timelineItems, trialSpans } from '../lib/trendsTimeline'
+import { markedSpans, timelineItems, trialSpans } from '../lib/trendsTimeline'
 import { weekdayProfile } from '../lib/weekdays'
 import { format, useLocale, useTranslation } from '../i18n'
 import { IndicatorsCard } from '../components/trends/IndicatorsCard'
@@ -47,6 +46,8 @@ const LAYER_COLOR = {
   trials: (t: ReturnType<typeof usePalette>) => t.weather[2].color,
 } as const
 
+type Detail = 'zones' | 'treatments' | 'habits' | 'compare'
+
 export function TrendsPage() {
   const entries = useLoggedEntries()
   const settings = useSettings()
@@ -56,19 +57,10 @@ export function TrendsPage() {
   const medications = useMedications()
   const flares = useFlares()
   const { intlLocale, language } = useLocale()
-  const [reporting, setReporting] = useState(false)
+  // The detail pages the summary opens (zones, treatments, habits, comparison); null is the summary itself.
+  const [detail, setDetail] = useState<Detail | null>(null)
   // What the curve shows besides the pain itself; a convenience of this visit, not a setting.
   const [layers, setLayers] = useState({ flares: true, treatment: true, trials: true })
-  const reportIds = useId()
-  const reportButtonRef = useRef<HTMLButtonElement>(null)
-  const returningFromReport = useRef(false)
-
-  // Coming back from the report: focus returns to the button that opened it.
-  useEffect(() => {
-    if (reporting || !returningFromReport.current) return
-    returningFromReport.current = false
-    reportButtonRef.current?.focus()
-  }, [reporting])
 
   const RANGES = [
     { label: i18n.trends.range7, days: 7 },
@@ -160,75 +152,109 @@ export function TrendsPage() {
     ] as const
   ).flatMap(([key, label, there]) => (there ? [[key, label] as const] : []))
 
-  if (reporting) {
-    return (
-      <Suspense fallback={null}>
-        <DoctorReportPage
-          onBack={() => {
-            returningFromReport.current = true
-            setReporting(false)
-          }}
-        />
-      </Suspense>
-    )
+  if (!entries) return null
+
+  const meanPain = filtered.length ? filtered.reduce((sum, e) => sum + e.painLevel, 0) / filtered.length : null
+  const rangeEpisodes = flaresOverlapping(flares?.episodes ?? [], rangeFrom, today)
+  const rangeFlareDays = flareDayCount(rangeEpisodes, rangeFrom, today)
+  const nf = new Intl.NumberFormat(intlLocale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+  const brief = [
+    meanPain !== null ? format(i18n.trends.briefMean, { v: nf.format(meanPain) }) : null,
+    flares?.detectable && rangeEpisodes.length > 0 ? format(i18n.trends.briefFlares, { n: rangeEpisodes.length, days: rangeFlareDays }) : null,
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  const hasTreatments = (medicationsTracked && !!medications) || (settings.leadTrialHistory?.length ?? 0) > 0
+  const rangePicker = (
+    <Segmented label={i18n.trends.rangeLabel} options={RANGES.map((r, i) => ({ value: i, label: r.label }))} value={rangeIdx} onChange={setRangeIdx} />
+  )
+
+  const DETAIL_TITLES: Record<Detail, string> = {
+    zones: i18n.trends.moreZones,
+    treatments: i18n.trends.moreTreatments,
+    habits: i18n.trends.moreHabits,
+    compare: i18n.trends.moreCompare,
   }
 
-  if (!entries) return null
+  if (detail) {
+    return (
+      <PageBack label={i18n.trends.title} onBack={() => setDetail(null)}>
+        <div className="flex flex-col gap-4 px-4 pt-2 pb-28">
+          <h1 className="text-title font-semibold px-1">{DETAIL_TITLES[detail]}</h1>
+          {detail !== 'compare' && rangePicker}
+
+          {detail === 'zones' && zonesTracked && (
+            <>
+              <ZonesMapCard entries={filtered} />
+              {flares?.detectable && <ZonesFlaresCard entries={entries} flareDays={flareDays} />}
+              <ZonesWeeksCard entries={entries} today={today} flareDays={flareDays} />
+            </>
+          )}
+
+          {detail === 'treatments' && (
+            <>
+              {medicationsTracked && medications && (
+                <>
+                  <MedicationsCard entries={filtered} medications={medications} from={rangeFrom} to={today} />
+                  <TreatmentReviewCard entries={entries} medications={medications} episodes={flares?.detectable ? flares.episodes : null} today={today} />
+                </>
+              )}
+              {settings.leadTrialHistory && settings.leadTrialHistory.length > 0 && (
+                <TrialsCard history={settings.leadTrialHistory} entries={entries} today={today} running={!!settings.leadTrial} onAgain={againTrial} />
+              )}
+            </>
+          )}
+
+          {detail === 'habits' && (
+            <>
+              {entries.length < PATTERN_MIN_DAYS && (
+                <Card>
+                  <p className="text-control" style={{ color: t.inkMuted }}>
+                    {format(i18n.trends.emptyEarly, { n: entries.length }, language)}
+                  </p>
+                </Card>
+              )}
+              <IndicatorsCard entries={filtered} />
+              {settings.enabledFactors.includes('activity') && <PacingCard entries={entries} />}
+              {weekdays ? <WeekdayCard profile={weekdays} /> : entries.length >= PATTERN_MIN_DAYS && <WeekdayWaiting />}
+              {entries.length >= PATTERN_MIN_DAYS && (
+                <LeadsCard
+                  shown={leadList.shown}
+                  dismissed={leadList.dismissed}
+                  choices={settings.leadChoices}
+                  onAnswer={answerLead}
+                  onUndo={clearLead}
+                  trial={settings.leadTrial}
+                  trialsEnabled={settings.suggestionsEnabled}
+                  declined={settings.leadsSeen?.declined ?? []}
+                  onStartTrial={beginTrial}
+                  onDeclineTrial={declineTrial}
+                />
+              )}
+            </>
+          )}
+
+          {detail === 'compare' && (
+            <CompareCard
+              entries={entries}
+              today={today}
+              lastVisit={lastOf(settings)?.date}
+              flareDays={flares?.detectable ? flareDaySet(flares.episodes) : null}
+              stiffnessTracked={settings.enabledFactors.includes('morningStiffness')}
+            />
+          )}
+          <Footer />
+        </div>
+      </PageBack>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       <h1 className="text-title font-semibold px-1">{i18n.trends.title}</h1>
 
-      {entries.length > 0 && (
-        <ConsultationCard
-          entries={filtered}
-          from={rangeFrom}
-          to={today}
-          episodes={flaresOverlapping(flares?.episodes ?? [], rangeFrom, today)}
-          flaresApply={!!flares?.detectable}
-          zonesTracked={zonesTracked}
-          lastTreatment={lastTreatmentEvent(events, today)}
-          action={
-        <>
-        <button
-          ref={reportButtonRef}
-          data-tour="report"
-          type="button"
-          onClick={() => setReporting(true)}
-          aria-labelledby={`${reportIds}-title`}
-          aria-describedby={`${reportIds}-help`}
-          className="text-left rounded-[var(--radius-card)] p-4 flex items-center gap-3"
-          style={{ background: 'var(--color-surface)', border: '1px solid var(--color-hairline)', boxShadow: 'var(--card-shadow)' }}
-        >
-          <span
-            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
-            aria-hidden
-          >
-            <IconFileText size={22} />
-          </span>
-          <span className="flex-1">
-            <span id={`${reportIds}-title`} className="block text-body font-semibold">
-              {i18n.doctorReport.entryTitle}
-            </span>
-            <span id={`${reportIds}-help`} className="block text-caption" style={{ color: t.inkMuted }}>
-              {i18n.doctorReport.entryHelper}
-            </span>
-          </span>
-          <IconChevronRight size={20} aria-hidden style={{ color: t.inkMuted }} />
-        </button>
-        <PrepareLink onSeeReport={() => setReporting(true)} />
-        </>
-          }
-        />
-      )}
-
-      <Segmented
-        label={i18n.trends.rangeLabel}
-        options={RANGES.map((r, i) => ({ value: i, label: r.label }))}
-        value={rangeIdx}
-        onChange={setRangeIdx}
-      />
+      {rangePicker}
 
       {filtered.length === 0 ? (
         <Card>
@@ -247,7 +273,12 @@ export function TrendsPage() {
           )}
 
           <Card tour="trends-chart">
-            <SectionTitle>{i18n.trends.painEvolution}</SectionTitle>
+            <SectionTitle icon={IconChartLine}>{i18n.trends.painEvolution}</SectionTitle>
+            {brief && (
+              <p className="text-body font-medium mb-3" style={{ color: 'var(--color-ink)' }}>
+                {brief}
+              </p>
+            )}
             <PainTrendChart
               entries={entries ?? []}
               from={rangeFrom}
@@ -283,66 +314,23 @@ export function TrendsPage() {
 
           {timeline.length > 0 && <TimelineCard items={timeline} onRemoveMarked={(start) => void updateSettings({ markedFlares: removeMarked(settings.markedFlares, start) })} />}
 
-          {zonesTracked && (
-            <>
-              <ZonesMapCard entries={filtered} />
-              {flares?.detectable && <ZonesFlaresCard entries={entries} flareDays={flareDays} />}
-              <ZonesWeeksCard entries={entries} today={today} flareDays={flareDays} />
-            </>
-          )}
-
-          <IndicatorsCard entries={filtered} />
-
-          {entries.length >= 14 && (
-            <CompareCard
-              entries={entries}
-              today={today}
-              lastVisit={lastOf(settings)?.date}
-              flareDays={flares?.detectable ? flareDaySet(flares.episodes) : null}
-              stiffnessTracked={settings.enabledFactors.includes('morningStiffness')}
-            />
-          )}
-
-          {medicationsTracked && medications && (
-            <>
-              <MedicationsCard entries={filtered} medications={medications} from={rangeFrom} to={today} />
-              <TreatmentReviewCard entries={entries} medications={medications} episodes={flares?.detectable ? flares.episodes : null} today={today} />
-            </>
-          )}
-
-          {settings.enabledFactors.includes('activity') && <PacingCard entries={entries} />}
-
-          {weekdays ? (
-            <WeekdayCard profile={weekdays} />
-          ) : (
-            // Under PATTERN_MIN_DAYS the card above already says that patterns need time.
-            entries.length >= PATTERN_MIN_DAYS && <WeekdayWaiting />
-          )}
-
-          {entries.length >= PATTERN_MIN_DAYS && (
-            <LeadsCard
-              shown={leadList.shown}
-              dismissed={leadList.dismissed}
-              choices={settings.leadChoices}
-              onAnswer={answerLead}
-              onUndo={clearLead}
-              trial={settings.leadTrial}
-              trialsEnabled={settings.suggestionsEnabled}
-              declined={settings.leadsSeen?.declined ?? []}
-              onStartTrial={beginTrial}
-              onDeclineTrial={declineTrial}
-            />
-          )}
-
-          {settings.leadTrialHistory && settings.leadTrialHistory.length > 0 && (
-            <TrialsCard
-              history={settings.leadTrialHistory}
-              entries={entries}
-              today={today}
-              running={!!settings.leadTrial}
-              onAgain={againTrial}
-            />
-          )}
+          <section aria-labelledby="trends-more" className="flex flex-col gap-2">
+            <GroupCaption>
+              <span id="trends-more">{i18n.trends.moreTitle}</span>
+            </GroupCaption>
+            <Card>
+              {zonesTracked && <LinkRow icon={IconBodyScan} title={i18n.trends.moreZones} hint={i18n.trends.moreZonesHint} onClick={() => setDetail('zones')} />}
+              {hasTreatments && <LinkRow icon={IconPill} title={i18n.trends.moreTreatments} hint={i18n.trends.moreTreatmentsHint} onClick={() => setDetail('treatments')} />}
+              <LinkRow
+                icon={IconUser}
+                title={i18n.trends.moreHabits}
+                hint={i18n.trends.moreHabitsHint}
+                badge={entries.length >= PATTERN_MIN_DAYS && leadList.shown.length > 0 ? i18n.tabs.trendsNew : undefined}
+                onClick={() => setDetail('habits')}
+              />
+              {entries.length >= 14 && <LinkRow icon={IconChartDots} title={i18n.trends.moreCompare} hint={i18n.trends.moreCompareHint} onClick={() => setDetail('compare')} />}
+            </Card>
+          </section>
         </>
       )}
       <Footer />
