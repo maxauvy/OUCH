@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import {
-  addQuestion, agendaLines, consultationCard, finishConsultation, kindOf, lastOf, MAX_PAST, MAX_QUESTIONS, newConsultation, pastConsultations, previousOf, removeQuestion, reportStart, sinceFacts, sinceLast, withGoal, withPast,
+  addQuestion, agendaLines, consultationCard, finishConsultation, kindOf, lastOf, MAX_PAST_BY_KIND, capPast, withPastNote, withoutPast, MAX_QUESTIONS, newConsultation, pastConsultations, previousOf, removeQuestion, reportStart, sinceFacts, sinceLast, withGoal, withPast,
 } from '../src/lib/consultation.ts'
 import { sanitizeSettings } from '../src/lib/backupSanitize.ts'
 import { DEFAULT_SETTINGS } from '../src/db/types.ts'
@@ -85,8 +85,8 @@ test('keeping an appointment: once for a day and kind, the new one winning, the 
   assert.equal('lastConsultation' in patch && patch.lastConsultation === undefined, true)
   // the same day for another kind is another appointment
   assert.equal(withPast(s, { date: '2026-10-01', kind: 'cetd' }).pastConsultations!.length, 3)
-  const many = { pastConsultations: Array.from({ length: MAX_PAST }, (_, i) => ({ date: `2025-01-${String(i + 1).padStart(2, '0')}`.replace('-3', '-2'), kind: 'gp' as const })) }
-  assert.equal(withPast(many, { date: '2026-10-01', kind: 'gp' }).pastConsultations!.length, MAX_PAST)
+  const many = { pastConsultations: Array.from({ length: MAX_PAST_BY_KIND.gp }, (_, i) => ({ date: `2025-01-${String(i + 1).padStart(2, '0')}`, kind: 'gp' as const })) }
+  assert.equal(withPast(many, { date: '2026-10-01', kind: 'gp' }).pastConsultations!.length, MAX_PAST_BY_KIND.gp)
 })
 
 test('the report agenda holds the questions, then the goal', () => {
@@ -158,4 +158,45 @@ test('since the last appointment: the flares and marked periods that touch it, t
     events: [event('2026-09-30'), event('2026-10-03'), event('2026-11-03'), event('2026-11-04')],
   })
   assert.deepEqual([r.detected, r.marked, r.treatments.length], [2, 1, 2])
+})
+
+test('the history keeps the last 6 appointments with the family doctor and the last 2 at the pain clinic, each kind apart', () => {
+  assert.deepEqual(MAX_PAST_BY_KIND, { gp: 6, cetd: 2 })
+  const gps = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({ date: `2025-${String(n).padStart(2, '0')}-01`, kind: 'gp' as const }))
+  const cetd = [1, 2, 3].map((n) => ({ date: `2025-${String(n).padStart(2, '0')}-15`, kind: 'cetd' as const }))
+  const out = capPast([...gps, ...cetd])
+  assert.equal(out.filter((p) => p.kind === 'gp').length, 6)
+  assert.deepEqual(out.filter((p) => p.kind === 'cetd').map((p) => p.date), ['2025-03-15', '2025-02-15'])
+  // the oldest of each kind is the one that goes
+  assert.equal(out.some((p) => p.date === '2025-01-01' || p.date === '2025-02-01'), false)
+})
+
+test('an appointment keeps its questions and its priority with its note', () => {
+  const s = withC('2026-11-17')
+  s.consultation = { ...s.consultation!, questions: ['Changer la dose ?', 'Kiné ?'], goal: 'Reprendre la marche' }
+  const patch = finishConsultation(s, 'Dose à 60 mg')
+  assert.deepEqual(patch.pastConsultations, [{ date: '2026-11-17', kind: 'gp', notes: 'Dose à 60 mg', questions: ['Changer la dose ?', 'Kiné ?'], goal: 'Reprendre la marche' }])
+})
+
+test('a past appointment\'s note can be changed or cleared, and the appointment forgotten', () => {
+  const s = { pastConsultations: [{ date: '2026-10-01', kind: 'gp' as const, doctor: 'Dr M', notes: 'old', questions: ['Q'] }] }
+  assert.deepEqual(withPastNote(s, '2026-10-01', 'gp', ' new ').pastConsultations, [{ date: '2026-10-01', kind: 'gp', doctor: 'Dr M', notes: 'new', questions: ['Q'] }])
+  assert.deepEqual(withPastNote(s, '2026-10-01', 'gp', '  ').pastConsultations, [{ date: '2026-10-01', kind: 'gp', doctor: 'Dr M', questions: ['Q'] }])
+  assert.deepEqual(withPastNote(s, '2020-01-01', 'gp', 'x'), {})
+  assert.deepEqual(withoutPast(s, '2026-10-01', 'gp').pastConsultations, [])
+  assert.equal(withoutPast(s, '2026-10-01', 'cetd').pastConsultations!.length, 1)
+})
+
+test('a backup restores the history within the caps, with the questions kept clean', () => {
+  const raw = {
+    pastConsultations: [
+      ...[1, 2, 3, 4, 5, 6, 7].map((n) => ({ date: `2025-0${n}-01`, kind: 'gp' })),
+      ...[1, 2, 3].map((n) => ({ date: `2025-0${n}-15`, kind: 'cetd', questions: ['  Une   question ', '', 4], goal: ' Marcher ' })),
+    ],
+  }
+  const out = sanitizeSettings(raw)?.pastConsultations ?? []
+  assert.equal(out.filter((p) => p.kind === 'gp').length, 6)
+  const cetd = out.filter((p) => p.kind === 'cetd')
+  assert.equal(cetd.length, 2)
+  assert.deepEqual(cetd[0], { date: '2025-03-15', kind: 'cetd', questions: ['Une question'], goal: 'Marcher' })
 })

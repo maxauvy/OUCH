@@ -52,7 +52,7 @@ import type { LeadChoices } from './leads.ts'
 import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
 import { makePrescription } from './prescription.ts'
 import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
-import { cleanDoctor, cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_PAST, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
+import { capPast, cleanDoctor, cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
 
 /** Far above any real journal (a hundred years is ~36 500 days). */
 const MAX_ENTRIES = 40_000
@@ -334,16 +334,18 @@ function consultation(v: unknown): Consultation | undefined {
 /** The appointments that took place: a real day, a known kind (the family doctor's when unsaid), a clean name and note, newest first. */
 function pastConsultationList(v: unknown): PastConsultation[] | undefined {
   if (!Array.isArray(v)) return undefined
-  const list = v.slice(0, MAX_PAST).flatMap((p): PastConsultation[] => {
+  const list = v.flatMap((p): PastConsultation[] => {
     if (!isRecord(p) || !isISODate(p.date)) return []
     const kind = oneOf(p.kind, CONSULTATION_KINDS) ?? 'gp'
     const doctor = typeof p.doctor === 'string' ? cleanDoctor(p.doctor) : undefined
     const notes = typeof p.notes === 'string' ? p.notes.trim().slice(0, MAX_NOTES_LENGTH) : ''
-    return [{ date: p.date, kind, ...(doctor ? { doctor } : {}), ...(notes ? { notes } : {}) }]
+    const questions = (strings(p.questions, MAX_QUESTION_LENGTH) ?? []).map((q) => cleanLine(q)).filter(Boolean).slice(0, MAX_QUESTIONS)
+    const goal = typeof p.goal === 'string' ? cleanLine(p.goal, MAX_GOAL_LENGTH) : ''
+    return [{ date: p.date, kind, ...(doctor ? { doctor } : {}), ...(notes ? { notes } : {}), ...(questions.length ? { questions } : {}), ...(goal ? { goal } : {}) }]
   })
   // Nothing in the file was usable: keep what this device holds, rather than clearing it.
   if (v.length > 0 && list.length === 0) return undefined
-  return list.sort((a, b) => b.date.localeCompare(a.date))
+  return capPast(list)
 }
 
 function lastConsultation(v: unknown): LastConsultation | undefined {

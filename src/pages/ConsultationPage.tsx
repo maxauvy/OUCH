@@ -1,8 +1,8 @@
 import { lazy, Suspense, useRef, useState, useEffect } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconCalendarHeart, IconFileText, IconMessageQuestion, IconNotes, IconPill } from '@tabler/icons-react'
+import { IconCalendarCheck, IconCalendarHeart, IconFileText, IconMessageQuestion, IconNotes, IconPill } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
-import { consultationCard, daysUntil, kindOf } from '../lib/consultation'
+import { consultationCard, daysUntil, kindOf, pastConsultations } from '../lib/consultation'
 import { prescriptionEnd } from '../lib/prescription'
 import { todayISO } from '../lib/dates'
 import { format, useLanguage, useLocale, useTranslation } from '../i18n'
@@ -11,6 +11,9 @@ import { LinkRow } from '../components/ui/LinkRow'
 import { Footer } from '../components/layout/Footer'
 import { ConsultationSheet } from '../components/consultation/ConsultationSheet'
 import { PrescriptionSheet } from '../components/prescription/PrescriptionSheet'
+import { PastConsultationSheet } from '../components/consultation/PastConsultationSheet'
+import { GroupCaption } from '../components/ui/Card'
+import type { PastConsultation } from '../db/types'
 
 const DoctorReportPage = lazy(() => import('./DoctorReportPage').then((m) => ({ default: m.DoctorReportPage })))
 
@@ -24,6 +27,7 @@ export function ConsultationPage() {
   const today = todayISO()
   const [sheet, setSheet] = useState<'appointment' | 'after' | 'prescription' | null>(null)
   const [reporting, setReporting] = useState(false)
+  const [openPast, setOpenPast] = useState<PastConsultation | null>(null)
   const reportButton = useRef<HTMLButtonElement>(null)
   const returning = useRef(false)
 
@@ -53,6 +57,7 @@ export function ConsultationPage() {
   const n = c ? daysUntil(c, today) : 0
   const when = !c ? '' : n > 0 ? format(t.inDays, { n }, language) : n === 0 ? t.todayLabel : t.passedLabel
   const afterKind = consultationCard(settings, today) === 'after'
+  const past = pastConsultations(settings)
   const who = c ? [kindOf(c) === 'cetd' ? t.kindCetd : t.kindGp, c.doctor].filter(Boolean).join(' · ') : ''
 
   return (
@@ -111,6 +116,30 @@ export function ConsultationPage() {
         </div>
       </Card>
 
+      {past.length > 0 && (
+        <section aria-labelledby="past-title" className="flex flex-col gap-2">
+          <GroupCaption>
+            <span id="past-title">{t.pastTitle}</span>
+          </GroupCaption>
+          <Card>
+            <div className="flex flex-col">
+              {past.map((p) => (
+                <LinkRow
+                  key={`${p.date}-${p.kind}`}
+                  icon={IconCalendarCheck}
+                  title={`${day(p.date)} ${p.date.slice(0, 4)}`}
+                  hint={[p.kind === 'cetd' ? t.kindCetd : t.kindGp, p.doctor, p.notes && p.notes.length > 60 ? `${p.notes.slice(0, 60)}…` : p.notes].filter(Boolean).join(' · ')}
+                  onClick={() => setOpenPast(p)}
+                />
+              ))}
+            </div>
+          </Card>
+          <p className="text-caption px-1" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.pastHint}
+          </p>
+        </section>
+      )}
+
       <p className="text-caption px-1" style={{ color: 'var(--color-ink-muted)' }}>
         {t.reportNote}
       </p>
@@ -119,6 +148,7 @@ export function ConsultationPage() {
       {(sheet === 'appointment' || sheet === 'after') && (
         <ConsultationSheet settings={settings} today={today} startAfter={sheet === 'after'} onSeeReport={() => { setSheet(null); setReporting(true) }} onClose={() => setSheet(null)} />
       )}
+      {openPast && <PastConsultationSheet settings={settings} past={openPast} onClose={() => setOpenPast(null)} />}
       {sheet === 'prescription' && <PrescriptionSheet settings={settings} today={today} onClose={() => setSheet(null)} />}
     </div>
   )
