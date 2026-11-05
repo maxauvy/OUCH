@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { format as formatDate } from 'date-fns'
+import type { PastConsultation } from '../../db/types'
 import type { TimelineItem } from '../../lib/trendsTimeline'
 import { treatmentEventText } from './treatmentEventText'
 import { usePalette } from '../../hooks/usePalette'
@@ -8,7 +9,7 @@ import { Card, SectionTitle } from '../ui/Card'
 
 /** What happened in the chosen range, newest first, under the pain curve: the flares, the changes of treatment
  * and the one-week trials. A dated list, nothing counted and nothing concluded. */
-export function TimelineCard({ items, onRemoveMarked }: { items: TimelineItem[]; onRemoveMarked?: (start: string) => void }) {
+export function TimelineCard({ items, onRemoveMarked, onOpenAppointment }: { items: TimelineItem[]; onRemoveMarked?: (start: string) => void; onOpenAppointment?: (appointment: PastConsultation) => void }) {
   const [asking, setAsking] = useState<string | null>(null)
   const i18n = useTranslation()
   const t = i18n.trends
@@ -48,6 +49,15 @@ export function TimelineCard({ items, onRemoveMarked }: { items: TimelineItem[];
       }
       case 'treatment':
         return { dot: palette.brand, text: treatmentEventText(item.event, i18n, language, intlLocale), note: day(item.date) }
+      case 'appointment': {
+        // Only the day, the kind and the name: the note stays in the appointment's own sheet.
+        const a = item.appointment
+        return {
+          dot: 'var(--cat-activity)',
+          text: a.kind === 'cetd' ? t.timelineAppointmentCetd : t.timelineAppointmentGp,
+          note: [day(item.date), a.doctor].filter(Boolean).join(' · '),
+        }
+      }
       case 'trial':
         return {
           dot: palette.weather[2].color,
@@ -72,6 +82,11 @@ export function TimelineCard({ items, onRemoveMarked }: { items: TimelineItem[];
                 <p className="text-caption" style={{ color: palette.inkMuted }}>
                   {note}
                 </p>
+                {item.kind === 'appointment' && onOpenAppointment && (
+                  <button type="button" className="min-h-11 text-control font-semibold underline underline-offset-4" style={{ color: palette.brand }} onClick={() => onOpenAppointment(item.appointment)}>
+                    {t.timelineAppointmentOpen}
+                  </button>
+                )}
                 {item.kind === 'marked' && onRemoveMarked && (
                   <p className="text-caption">
                     {asking === item.flare.start ? (
