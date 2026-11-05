@@ -199,7 +199,7 @@ export function HealthChildView({
           <div className="rounded-[var(--radius-card)] overflow-hidden" style={card}>
             <Sky weather={weather} />
             <div className="px-5 pt-4 pb-5 text-center">
-              <div className="text-heading font-bold leading-snug">{copy.headline}</div>
+              <div className="text-title font-bold leading-snug">{copy.headline}</div>
               <div className="text-body mt-2 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
                 {copy.body}
               </div>
@@ -209,25 +209,22 @@ export function HealthChildView({
             </div>
           </div>
 
-          <p
-            className="text-caption font-semibold uppercase tracking-[0.06em] px-1 -mb-1 mt-1"
-            style={{ color: 'var(--color-ink-muted)' }}
-          >
-            {t.childView.howToHelp}
-          </p>
-          <div className="grid grid-cols-2 gap-2">
+          <h2 className="text-heading font-bold text-center mt-3">{t.childView.howToHelp}</h2>
+          <div className="grid grid-cols-2 gap-3">
             {copy.help.map((text, i) => {
               const { icon: I, label } = splitHelp(text)
               const hue = HELP_HUES[i % HELP_HUES.length]
               return (
                 <div
                   key={text}
-                  className="rounded-[var(--radius-card)] px-3 pt-3 pb-3.5 flex flex-col gap-2"
+                  className="rounded-[20px] px-3 pt-4 pb-4 flex flex-col items-center text-center gap-2.5"
                   style={{ background: `var(--cat-${hue}-soft)` }}
                 >
-                  <I size={26} stroke={1.8} style={{ color: `var(--cat-${hue})` }} aria-hidden />
+                  <span className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--color-surface)' }} aria-hidden>
+                    <I size={28} stroke={1.8} style={{ color: `var(--cat-${hue})` }} />
+                  </span>
                   <span
-                    className="text-control font-semibold leading-snug hyphens-auto"
+                    className="text-body font-semibold leading-snug hyphens-auto"
                     style={{ color: `color-mix(in srgb, var(--cat-${hue}) 65%, var(--color-ink))` }}
                   >
                     {label}
