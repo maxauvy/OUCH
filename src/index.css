@@ -116,6 +116,9 @@
   --cat-meds-soft: #e4f4ea;
   --cat-cycle: #a3245f;
   --cat-cycle-soft: #fbe7f0;
+  /* The page for the children: a lilac of its own, between the blue and the violet of the look. */
+  --kids: #6b4fa8;
+  --kids-soft: #ece4f8;
 }
 
 /* Dark-mode token overrides: reassigning the same --color-* custom
@@ -167,6 +170,8 @@
     --cat-meds-soft: #173327;
     --cat-cycle: #f08cbc;
     --cat-cycle-soft: #3b1c2b;
+    --kids: #c3b1f0;
+    --kids-soft: #2a2547;
   }
 }
 
@@ -211,6 +216,8 @@
   --cat-meds-soft: #173327;
   --cat-cycle: #f08cbc;
   --cat-cycle-soft: #3b1c2b;
+  --kids: #c3b1f0;
+  --kids-soft: #2a2547;
 }
 
 html {

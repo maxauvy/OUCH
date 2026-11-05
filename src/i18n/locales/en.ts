@@ -38,7 +38,7 @@ const en: Translations = {
     checkNoIllness: 'Illness not specified yet',
     profileTitle: 'What should we call you?',
     kidsTitle: 'A page to explain your illness to a child?',
-    kidsHelper: 'The Kids tab puts simple words on what you live with. You can change this in Settings.',
+    kidsHelper: 'The “My kids” page puts simple words on what you live with. You can change this in Settings.',
     kidsYes: 'Yes',
     kidsNo: 'No, not for me',
     profileIntro: 'Your first name appears on the daily weather you share, and prefills the report for your doctor.',
@@ -71,7 +71,7 @@ const en: Translations = {
     doneIntro: 'Here is where things stand. Nothing is required: you can complete all of this later in Settings.',
     checkName: 'First name: {{name}}',
     checkNoName: 'No first name (the report will ask for it)',
-    checkParent: 'Kids tab: “{{parent}}”',
+    checkParent: '“My kids” page: “{{parent}}”',
     checkFactors: 'Pain and {{n}} other factors tracked',
     checkMedications: 'Medications described: {{n}}',
     checkNoMedications: 'No medication described yet',
@@ -255,6 +255,13 @@ const en: Translations = {
 
   today: {
     share: "Share today's weather",
+    openSettings: 'Open settings',
+    backToToday: 'Today',
+    shareTitle: 'Share',
+    shareWeather: "Today's weather",
+    shareWeatherHint: 'An image to send',
+    kidsTile: 'My kids',
+    kidsTileHint: 'To explain it to them',
   },
 
   indicatorInvite: {
@@ -1786,8 +1793,8 @@ const en: Translations = {
     reminderHelper: "A notification if you haven't filled in your weather yet",
     reminderNote:
       "This reminder works while the app is open or recently used. Without a server (by choice, to stay 100% local), it can't trigger while the app is fully closed.",
-    kidsTabTitle: 'Kids tab',
-    kidsTabHelper: 'A page that explains your illness to a child in simple words. You can hide it if it does not concern you: nothing is lost, and you can bring it back here.',
+    kidsTabTitle: '“My kids” tile',
+    kidsTabHelper: 'A page, opened from Today, that explains your illness to a child in simple words. You can hide it if it does not concern you: nothing is lost, and you can bring it back here.',
     hardDaysTitle: 'A note on hard days',
     hardDaysHelper: 'A kind message, shown once, when the last few days were harder than usual.',
     suggestionsTitle: 'Suggestions',
@@ -1824,7 +1831,7 @@ const en: Translations = {
     languageTitle: 'Language',
     languageHelper: "Choose the app's language.",
     parentGenderTitle: 'How to refer to you with your child',
-    parentGenderHelper: 'Used in the sentences on the "Explain to my child" page (Kids tab).',
+    parentGenderHelper: 'Used in the sentences on the "Explain to my child" page (“My kids” tile).',
     parentGenderMaman: 'Mom',
     parentGenderPapa: 'Dad',
     illnessesTitle: 'Your illnesses',
@@ -1850,7 +1857,7 @@ const en: Translations = {
     otherNameLabel: 'Name of the illness',
     otherNamePlaceholder: 'For example: psoriatic arthritis',
     otherNameHelper: 'Used as typed on the report for your doctor, never on the Kids page.',
-    illnessesHelper: 'What you track with OUCH; you can pick several. It appears on the report for your doctor and is explained on the "Explain to my child" page (Kids tab).',
+    illnessesHelper: 'What you track with OUCH; you can pick several. It appears on the report for your doctor and is explained on the "Explain to my child" page (“My kids” tile).',
     backupTitle: 'Backup & sync',
     groups: {
       profile: 'My profile',

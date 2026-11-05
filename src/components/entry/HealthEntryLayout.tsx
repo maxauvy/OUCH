@@ -10,6 +10,7 @@ import {
   IconMapPin,
   IconPencil,
   IconPill,
+  IconSettings,
   IconSunrise,
   IconCloud,
 } from '@tabler/icons-react'
@@ -139,15 +140,6 @@ function WeatherHero({ weather }: { weather: PainWeather | null }) {
   )
 }
 
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0]!.toUpperCase())
-    .join('')
-}
-
 export function HealthEntryLayout({
   date,
   local,
@@ -159,6 +151,7 @@ export function HealthEntryLayout({
   medications,
   knownPositiveActions,
   onGoToBackup,
+  onOpenSettings,
   afterHeader,
 }: {
   date: string
@@ -173,6 +166,8 @@ export function HealthEntryLayout({
   knownPositiveActions: string[]
   /** Opens the backup section; the last-backup line under the title uses it */
   onGoToBackup?: () => void
+  /** On today's page: the gear in the corner that opens the settings. */
+  onOpenSettings?: () => void
   /** Under the title, on the day's page: the line that says what waits. */
   afterHeader?: ReactNode
 }) {
@@ -289,14 +284,16 @@ export function HealthEntryLayout({
           <h1 className="text-title font-bold leading-tight">{isToday ? t.tabs.today : longDateCap}</h1>
           {isToday && onGoToBackup && <LastBackupLine onClick={onGoToBackup} />}
         </div>
-        {isToday && settings.displayName && (
-          <span
-            className="w-9 h-9 rounded-full flex items-center justify-center text-caption font-semibold"
+        {isToday && onOpenSettings && (
+          <button
+            type="button"
+            onClick={onOpenSettings}
+            aria-label={t.today.openSettings}
+            className="w-11 h-11 -mr-1 rounded-full flex items-center justify-center shrink-0"
             style={{ background: 'var(--avatar-bg, var(--color-brand-soft))', color: 'var(--color-brand)' }}
-            aria-hidden
           >
-            {initials(settings.displayName)}
-          </span>
+            <IconSettings size={22} stroke={1.8} aria-hidden />
+          </button>
         )}
       </div>
   )
