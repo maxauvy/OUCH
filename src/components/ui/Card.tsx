@@ -29,26 +29,12 @@ export function Card({ children, className = '', tour }: PropsWithChildren<{ cla
   )
 }
 
-/** The title of a card. In a settings group it is the section's title: a round icon, then the title in bold. */
+/** The title of a card: the title in bold, after a round icon when it has one. The small grey capitals are for naming a group of cards (see GroupCaption), never one card. */
 export function SectionTitle({ children, action, icon }: PropsWithChildren<{ action?: ReactNode; icon?: Icon }>) {
-  const flat = useContext(FlatCardContext)
-  if (flat) {
-    return (
-      <div className="flex items-center gap-3 mb-3">
-        {icon && <RoundIcon icon={icon} />}
-        <h2 className="flex-1 min-w-0 text-body font-semibold">{children}</h2>
-        {action}
-      </div>
-    )
-  }
   return (
-    <div className="flex items-center justify-between mb-3">
-      <h2
-        className="text-caption font-semibold uppercase tracking-[0.06em]"
-        style={{ color: 'var(--color-ink-muted)' }}
-      >
-        {children}
-      </h2>
+    <div className="flex items-center gap-3 mb-3">
+      {icon && <RoundIcon icon={icon} />}
+      <h2 className="flex-1 min-w-0 text-body font-semibold">{children}</h2>
       {action}
     </div>
   )

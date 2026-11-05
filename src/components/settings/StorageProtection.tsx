@@ -30,8 +30,7 @@ export function StorageProtection() {
         <button
           type="button"
           onClick={async () => setRefused((await request()) !== true)}
-          className="w-full rounded-[var(--radius-control)] py-3 text-body font-semibold text-[var(--color-on-brand)]"
-          style={{ background: 'var(--color-brand)' }}
+          className="btn-primary w-full"
         >
           {t.storage.request}
         </button>

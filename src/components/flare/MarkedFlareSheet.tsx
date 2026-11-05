@@ -57,7 +57,7 @@ export function MarkedFlareSheet({ settings, today, onClose }: { settings: Setti
         </div>
       </div>
       <input value={note} maxLength={MAX_NOTE_LENGTH} onChange={(e) => setNote(e.target.value)} placeholder={t.notePlaceholder} aria-label={t.notePlaceholder} className={fieldClass} style={field} />
-      <button type="button" onClick={save} className="rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)]" style={{ background: 'var(--color-brand)' }}>
+      <button type="button" onClick={save} className="btn-primary">
         {t.save}
       </button>
       <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>

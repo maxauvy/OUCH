@@ -15,6 +15,7 @@ import { TreatmentReviewCard } from '../components/trends/TreatmentReviewCard'
 import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
 import { ZonesFlaresCard, ZonesMapCard, ZonesWeeksCard } from '../components/trends/ZonesCards'
 import { Card, SectionTitle } from '../components/ui/Card'
+import { Segmented } from '../components/ui/Segmented'
 // The report, its charts and the page capture are fetched when it is opened.
 const DoctorReportPage = lazy(() => import('./DoctorReportPage').then((m) => ({ default: m.DoctorReportPage })))
 import { useLoggedEntries } from '../hooks/useEntries'
@@ -222,21 +223,12 @@ export function TrendsPage() {
         />
       )}
 
-      <div className="flex gap-2 px-1">
-        {RANGES.map((r, i) => (
-          <button
-            key={r.label}
-            onClick={() => setRangeIdx(i)}
-            className="rounded-[var(--radius-control)] px-3.5 py-1.5 text-caption font-semibold"
-            style={{
-              background: i === rangeIdx ? t.brand : t.brandSoft,
-              color: i === rangeIdx ? 'var(--color-on-brand)' : t.brand,
-            }}
-          >
-            {r.label}
-          </button>
-        ))}
-      </div>
+      <Segmented
+        label={i18n.trends.rangeLabel}
+        options={RANGES.map((r, i) => ({ value: i, label: r.label }))}
+        value={rangeIdx}
+        onChange={setRangeIdx}
+      />
 
       {filtered.length === 0 ? (
         <Card>
@@ -274,12 +266,14 @@ export function TrendsPage() {
                     type="button"
                     aria-pressed={layers[key]}
                     onClick={() => setLayers((l) => ({ ...l, [key]: !l[key] }))}
-                    className="rounded-[var(--radius-control)] px-3.5 py-1.5 text-caption font-semibold"
-                    style={{ background: layers[key] ? t.brand : t.brandSoft, color: layers[key] ? 'var(--color-on-brand)' : t.brand }}
+                    className="rounded-[var(--radius-control)] px-3 py-1.5 text-control font-medium inline-flex items-center gap-2"
+                    style={{
+                      background: layers[key] ? 'var(--color-brand-soft)' : 'var(--color-surface)',
+                      color: layers[key] ? 'var(--color-brand)' : 'var(--color-ink)',
+                      boxShadow: `inset 0 0 0 1px ${layers[key] ? 'var(--color-brand)' : 'var(--color-hairline)'}`,
+                    }}
                   >
-                    <span aria-hidden className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-white mr-1.5 align-middle">
-                      <span className="w-2.5 h-2.5 rounded-full" style={{ background: LAYER_COLOR[key](t) }} />
-                    </span>
+                    <span aria-hidden className="w-2.5 h-2.5 rounded-full" style={{ background: LAYER_COLOR[key](t) }} />
                     {label}
                   </button>
                 ))}

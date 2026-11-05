@@ -431,3 +431,31 @@ html[data-look='luminous'] body::before {
   z-index: -1;
   background: var(--look-bg);
 }
+
+/* Buttons. One main button per screen (`btn-primary`: the gradient of the luminous look, solid brand otherwise),
+   and a soft one for what comes second (`btn-secondary`). Tertiary actions are plain underlined links. */
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 20px;
+  border-radius: var(--radius-control);
+  font-size: var(--text-body);
+  font-weight: 600;
+  text-align: center;
+}
+.btn-primary {
+  background: var(--cta-bg, var(--color-brand));
+  color: var(--color-on-brand);
+}
+.btn-secondary {
+  background: var(--color-brand-soft);
+  color: var(--color-brand);
+}
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.4;
+}

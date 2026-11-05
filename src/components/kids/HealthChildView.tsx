@@ -32,7 +32,8 @@ import { CHILD_TONES, type ChildTone } from '../../lib/childView'
 import { painWeatherByLevel } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { format, useTranslation } from '../../i18n'
-import { radioGroupProps, radioProps, splitLeadingEmoji } from '../../lib/a11y'
+import { splitLeadingEmoji } from '../../lib/a11y'
+import { Segmented } from '../ui/Segmented'
 
 // The help texts open with an emoji, which is swapped for a line icon here.
 const HELP_ICONS: Record<string, Icon> = {
@@ -156,25 +157,12 @@ function WeatherScale({ level }: { level: PainWeatherLevel }) {
 function AgeControl({ tone, onChange }: { tone: ChildTone; onChange: (tone: ChildTone) => void }) {
   const t = useTranslation()
   return (
-    <div {...radioGroupProps(t.childView.ageToggleLabel)} className="flex gap-1 rounded-[var(--radius-control)] p-1" style={{ background: 'var(--color-brand-soft)' }}>
-      {CHILD_TONES.map((value) => {
-        const active = tone === value
-        return (
-          <button
-            key={value}
-            {...radioProps(active)}
-            onClick={() => onChange(value)}
-            className="flex-1 rounded-[calc(var(--radius-control)-2px)] py-2 text-control font-semibold"
-            style={{
-              background: active ? 'var(--color-brand)' : 'transparent',
-              color: active ? 'var(--color-on-brand)' : 'var(--color-brand)',
-            }}
-          >
-            {t.childView.ages[value]}
-          </button>
-        )
-      })}
-    </div>
+    <Segmented
+      label={t.childView.ageToggleLabel}
+      options={CHILD_TONES.map((value) => ({ value, label: t.childView.ages[value] }))}
+      value={tone}
+      onChange={onChange}
+    />
   )
 }
 

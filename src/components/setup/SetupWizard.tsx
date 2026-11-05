@@ -209,8 +209,7 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
               <button
                 type="button"
                 onClick={() => go(-1)}
-                className="rounded-[var(--radius-control)] px-5 py-3.5 text-body font-semibold"
-                style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+                className="btn-secondary"
               >
                 {t.setup.back}
               </button>
@@ -218,8 +217,7 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
             <button
               type="button"
               onClick={isLast ? onDone : () => go(1)}
-              className="flex-1 rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)]"
-              style={{ background: 'var(--color-brand)' }}
+              className="btn-primary flex-1"
             >
               {step === 'welcome' ? t.setup.begin : isLast ? (hasEntries ? t.setup.finishRerun : t.setup.finish) : t.setup.next}
             </button>

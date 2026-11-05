@@ -25,8 +25,7 @@ export function BackupReminderCard({ onBackup }: { onBackup: () => void }) {
           <button
             type="button"
             onClick={onBackup}
-            className="flex-1 rounded-[var(--radius-control)] py-3 text-body font-semibold text-[var(--color-on-brand)]"
-            style={{ background: 'var(--color-brand)' }}
+            className="btn-primary flex-1"
           >
             {t.backupReminder.backup}
           </button>
