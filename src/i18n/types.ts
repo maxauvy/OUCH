@@ -850,6 +850,10 @@ export interface Translations {
     briefNoSevere: string
     briefFlares: string
     briefAnd: string
+    tocTitle: string
+    tocPage: string
+    mixThis: string
+    mixPts: string
     tileMedian: string
     tileVariability: string
     dayMix: string

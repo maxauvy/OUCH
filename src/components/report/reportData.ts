@@ -1,4 +1,4 @@
-import type { DailyEntry, LoggedEntry, Illness, IllnessDetails, MarkedFlare, Medication } from '../../db/types'
+import type { DailyEntry, LoggedEntry, Illness, IllnessDetails, MarkedFlare, Medication, PastConsultation } from '../../db/types'
 import type { Language } from '../../i18n'
 import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresApply, type FlareEpisode } from '../../lib/flares'
 import { flareContext, type FlareContext } from '../../lib/flareContext'
@@ -43,6 +43,8 @@ interface ReportOptions {
   leadChoices?: LeadChoices
   /** Which factors the patient tracks: a kept lead on one they no longer track stays off the report, as it is off Trends */
   leadFactors?: LeadFactors
+  /** The appointments that took place (family doctor or pain clinic), for the list of what happened in the period */
+  appointments?: PastConsultation[]
   /** The one-week trials: the weeks closed, and the one under way (kept if it is over) */
   leadTrials?: { history?: LeadTrial[]; current?: LeadTrial }
   /** The patient follows the morning stiffness (and it is offered): its description goes on the report */
