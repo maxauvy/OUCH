@@ -177,6 +177,17 @@ export interface Translations {
   trends: {
     title: string
     rangeLabel: string
+    briefMean: string
+    briefFlares: string
+    moreTitle: string
+    moreZones: string
+    moreZonesHint: string
+    moreTreatments: string
+    moreTreatmentsHint: string
+    moreHabits: string
+    moreHabitsHint: string
+    moreCompare: string
+    moreCompareHint: string
     range7: string
     range30: string
     range90: string
