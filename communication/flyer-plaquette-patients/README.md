@@ -4,7 +4,7 @@ Un flyer A5 (1 page) et une plaquette A4 (2 pages) qui présentent OUCH aux util
 
 - `flyer.fr.html`, `flyer.en.html`, `plaquette.fr.html`, `plaquette.en.html` : textes et mise en page.
 - `base.css` : styles communs (A5, A4, mise en page des captures).
-- `assets/` : logo, QR code (vers `maxauvy.github.io/OUCH`), police Public Sans, captures de l'app en mode démo (français : `today.png`, `piste.png`, `allege.png` ; anglais : `en-*.png`). Les données sont fictives, les documents le disent. À refaire quand un écran change.
+- `assets/` : logo, QR code (vers `maxauvy.github.io/OUCH`), police Public Sans, captures de l'app en mode démo (français : `today.png`, `piste.png`, `allege.png` ; anglais : `en-*.png`). Les données sont fictives, les documents le disent. À refaire quand un écran change : `node scripts/capture-docs.mjs`. Les captures n'ont ni ombre portée, ni dalle sombre, ni cadre noir derrière elles : un liseré clair les sépare du fond.
 - `build.py` : fabrique `build/` (un HTML par palette) et `pdf/` (les 8 PDF). `--previews` ajoute des PNG dans `apercus/`.
 
 ```bash

@@ -10,7 +10,7 @@ body{font-family:"Public Sans",system-ui,sans-serif;-webkit-font-smoothing:antia
 .a4{width:210mm;height:297mm}
 .abs{position:absolute}
 /* phone: set width inline; height crops the screenshot to its top */
-.phone{position:absolute;background:#0f1b24;border-radius:6.5mm;padding:1mm;box-shadow:0 0 0 .3mm rgba(255,255,255,.14)}
+.phone{position:absolute;background:#fff;border-radius:6.5mm;padding:1mm;box-shadow:0 0 0 .3mm rgba(18,48,58,.28)}
 .phone .scr{border-radius:5.6mm;overflow:hidden;background:#f3f6f8}
 .phone img{display:block;width:100%}
 .shot{position:absolute;border-radius:3mm;overflow:hidden;box-shadow:0 0 0 .25mm rgba(20,33,43,.12);background:#fff}
