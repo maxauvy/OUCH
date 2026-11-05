@@ -151,6 +151,10 @@ export type LegPain = (typeof LEG_PAIN_LEVELS)[number]
 export const SYMPTOM_TAGS = ['tingling', 'numbness', 'burning', 'shocks', 'blurredVision', 'urgency', 'dizziness'] as const
 export type SymptomTag = (typeof SYMPTOM_TAGS)[number]
 
+/** What bothers the person on a day of heightened sensitivity: which stimuli, not how much. The ticks are a feeling, not a measure. */
+export const SENSORY_STIMULI = ['noise', 'light', 'smells', 'touch'] as const
+export type SensoryStimulus = (typeof SENSORY_STIMULI)[number]
+
 export interface DailyEntry {
   id?: number
   /** ISO date 'YYYY-MM-DD', one entry per day, unique index */
@@ -198,8 +202,10 @@ export interface DailyEntry {
   feverInfection?: boolean
   /** Said by the person: a new or worse symptom for over 24 hours. A declaration, no algorithm reads it. */
   newSymptom?: boolean
-  /** 0–10, not validated: sensitivity to noise, light, smells, touch. */
+  /** 0–10, not validated: sensitivity to noise, light, smells, touch. Asked as a slider until v0.11, now replaced by `sensoryStimuli`; kept so that earlier days still read. */
   sensorySensitivity?: number
+  /** The stimuli that bothered on the day. An empty list is an answer (none), unlike a day left blank. */
+  sensoryStimuli?: SensoryStimulus[]
 
   weather?: WeatherInfo
   /** What was taken that day, pointing at the Medication registry. */

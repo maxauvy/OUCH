@@ -20,6 +20,7 @@ import {
   NIGHT_WAKINGS,
   PERIOD_FLOWS,
   REFRESHED_LEVELS,
+  SENSORY_STIMULI,
   SYMPTOM_TAGS,
   type DailyEntry,
   type FactorKey,
@@ -245,15 +246,26 @@ const ROWS: EntryRow[] = [
     options: (t) => LEG_PAIN_LEVELS.map((l) => ({ value: l, label: t.entryForm.legPainOptions[l] })),
   }),
   slider({ key: 'spasms', needs: ['spasms'], field: 'spasms', icon: IconWalk, cat: 'activity', label: (t) => t.factors.spasms.label, ends: (t) => [t.entryForm.spasmsEndNone, t.entryForm.spasmsEndStrong] }),
-  slider({
+  {
+    // Which stimuli bothered, not how much: the ticks are a feeling, counted in days.
     key: 'sensorySensitivity',
     needs: ['sensorySensitivity'],
-    field: 'sensorySensitivity',
-    icon: IconBolt,
-    cat: 'stress',
-    label: (t) => t.factors.sensorySensitivity.label,
-    ends: (t) => [t.entryForm.sensoryEndNone, t.entryForm.sensoryEndStrong],
-  }),
+    render: ({ t, local, setField }) => {
+      const ticked = local.sensoryStimuli ?? []
+      return (
+        <FlagRow
+          icon={IconBolt}
+          cat="stress"
+          label={t.factors.sensorySensitivity.label}
+          flags={SENSORY_STIMULI.map((stimulus) => ({
+            label: t.entryForm.sensoryStimulusLabels[stimulus],
+            value: ticked.includes(stimulus) ? true : undefined,
+            onChange: (v) => setField('sensoryStimuli', v ? [...ticked, stimulus] : ticked.filter((x) => x !== stimulus)),
+          }))}
+        />
+      )
+    },
+  },
   {
     key: 'symptomTags',
     needs: ['symptomTags'],

@@ -2,7 +2,7 @@
 // here means adding it to *every* locale file — TypeScript will point at
 // each one that's missing it.
 
-import type { BodyZone, COARSE_ZONES, FlareFactor, HeadacheDuration, JointKey, JointRegion, LegPain, MorningStiffness, PeriodFlow, Refreshed, SymptomTag } from '../db/types'
+import type { BodyZone, COARSE_ZONES, FlareFactor, HeadacheDuration, JointKey, JointRegion, LegPain, MorningStiffness, PeriodFlow, Refreshed, SensoryStimulus, SymptomTag } from '../db/types'
 import type { BodyGroupId, BodyRegion } from '../lib/bodyZones'
 import type { ChildTone } from '../lib/childView'
 
@@ -562,6 +562,7 @@ export interface Translations {
     periodFlowOptions: Record<PeriodFlow, string>
     legPainOptions: Record<LegPain, string>
     symptomTagLabels: Record<SymptomTag, string>
+    sensoryStimulusLabels: Record<SensoryStimulus, string>
     spasmsEndNone: string
     spasmsEndStrong: string
     sensoryEndNone: string
@@ -950,6 +951,9 @@ export interface Translations {
       leg: string
       tagLabels: Record<SymptomTag, string>
       /** `{{n}}` days with a sign, `{{k}}` days noted */
+      stimuliLine: string
+      stimuliTop: string
+      stimulusLabels: Record<SensoryStimulus, string>
       tagsLine: string
       /** `{{list}}` */
       tagsTop: string

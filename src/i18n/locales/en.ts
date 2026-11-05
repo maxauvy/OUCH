@@ -514,7 +514,7 @@ const en: Translations = {
     spasms: { label: 'Stiffness or spasms (legs)', helper: 'Cramps, legs that tighten' },
     feverInfection: { label: 'Fever or infection right now', helper: 'To keep the context of the day' },
     newSymptomMarker: { label: 'New symptom for over 24 hours', helper: 'A box you tick, nothing is calculated' },
-    sensorySensitivity: { label: 'Sensitivity (noise, light, smells, touch)', helper: 'How strong everything feels' },
+    sensorySensitivity: { label: 'Sensitivity: what bothers', helper: 'Noise, light, smells, touch: what bothered you today' },
   },
 
   bodyZones: {
@@ -672,6 +672,7 @@ const en: Translations = {
     },
     periodFlowOptions: { none: 'None', spotting: 'Spotting', light: 'Light', heavy: 'Heavy' },
     legPainOptions: { none: 'None', toKnee: 'Down to the knee', belowKnee: 'Below the knee' },
+    sensoryStimulusLabels: { noise: 'Noise', light: 'Light', smells: 'Smells', touch: 'Touch' },
     symptomTagLabels: { tingling: 'Tingling', numbness: 'Numbness', burning: 'Burning', shocks: 'Shocks', blurredVision: 'Blurred vision', urgency: 'Urinary urgency', dizziness: 'Dizziness' },
     spasmsEndNone: 'None',
     spasmsEndStrong: 'Very strong',
@@ -1065,6 +1066,9 @@ const en: Translations = {
       legPainLevels: { none: 'none', toKnee: 'down to the knee', belowKnee: 'below the knee' },
       leg: 'Leg pain: {{list}}.',
       tagLabels: { tingling: 'tingling', numbness: 'numbness', burning: 'burning', shocks: 'shocks', blurredVision: 'blurred vision', urgency: 'urinary urgency', dizziness: 'dizziness' },
+      stimuliLine: 'Days of sensitivity (noise, light, smells, touch): {{n}} {{n:day|days}} out of {{k}} noted.',
+      stimuliTop: 'What bothered, in days: {{list}}.',
+      stimulusLabels: { noise: 'noise', light: 'light', smells: 'smells', touch: 'touch' },
       tagsLine: 'Signs of the day ticked: {{n}} {{n:day|days}} out of {{k}} noted.',
       tagsTop: 'Most often ticked: {{list}}.',
       feverInfection: 'Fever or infection',

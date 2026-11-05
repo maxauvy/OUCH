@@ -7,7 +7,7 @@
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
 import type { DailyEntry } from '../db/types.ts'
-import { summarizeCycleSymptoms, summarizeHeadaches, summarizeJoints, summarizeNerveSigns, summarizeRefreshed } from './indicatorSummaries.ts'
+import { summarizeCycleSymptoms, summarizeHeadaches, summarizeJoints, summarizeNerveSigns, summarizeRefreshed, summarizeSensory } from './indicatorSummaries.ts'
 import { summarizeMorningStiffness } from './stiffnessSummary.ts'
 import { summarizeNightWakings } from './nightWakings.ts'
 
@@ -44,6 +44,9 @@ export interface IndicatorWording {
     tagLabels: Record<string, string>
     tagsLine: string
     tagsTop: string
+    stimuliLine: string
+    stimuliTop: string
+    stimulusLabels: Record<string, string>
     feverInfection: string
     newSymptom: string
   }
@@ -98,6 +101,12 @@ export function otherIndicatorLines(entries: readonly DailyEntry[], t: Indicator
   }
   if (nerve.feverNoted > 0) lines.push(format(w.yesDays, { label: w.feverInfection, n: nerve.feverDays, k: nerve.feverNoted }))
   if (nerve.newSymptomNoted > 0) lines.push(format(w.yesDays, { label: w.newSymptom, n: nerve.newSymptomDays, k: nerve.newSymptomNoted }))
+
+  const sensory = summarizeSensory(entries)
+  if (sensory.noted > 0) {
+    lines.push(format(w.stimuliLine, { n: sensory.days, k: sensory.noted }))
+    if (sensory.stimuli.length) lines.push(format(w.stimuliTop, { list: sensory.stimuli.map((x) => item(w.stimulusLabels[x.stimulus]!, x.days)).join(', ') }))
+  }
 
   const headache = summarizeHeadaches(entries)
   if (headache.noted > 0) {

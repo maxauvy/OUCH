@@ -94,6 +94,12 @@ test('the P2 indicators survive a backup as they were written, an empty list of 
   assert.deepEqual(sanitizeEntry({ ...entry, symptomTags: [] })?.symptomTags, [])
 })
 
+test('the stimuli that bothered survive a backup, an empty list included; an unknown one or a repeat is left out', () => {
+  assert.deepEqual(sanitizeEntry({ ...entry, sensoryStimuli: ['noise', 'touch'] })?.sensoryStimuli, ['noise', 'touch'])
+  assert.deepEqual(sanitizeEntry({ ...entry, sensoryStimuli: [] })?.sensoryStimuli, [])
+  assert.deepEqual(sanitizeEntry({ ...entry, sensoryStimuli: ['noise', 'noise', 'cold', 3] })?.sensoryStimuli, ['noise'])
+})
+
 test('bad P2 values are dropped, an unknown sign or a repeat is left out', () => {
   const out = sanitizeEntry({ ...entry, legPain: 'hip', symptomTags: ['tingling', 'tingling', 'fever', 4], spasms: 11, feverInfection: 'yes', newSymptom: 1, sensorySensitivity: -1 })
   assert.equal(out?.legPain, undefined)

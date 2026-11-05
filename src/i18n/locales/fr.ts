@@ -516,7 +516,7 @@ const fr: Translations = {
     spasms: { label: 'Raideur ou spasmes (jambes)', helper: 'Crampes, jambes qui se raidissent' },
     feverInfection: { label: 'Fièvre ou infection en ce moment', helper: 'Pour garder le contexte de la journée' },
     newSymptomMarker: { label: 'Nouveau symptôme depuis plus de 24 h', helper: 'Une case à cocher par toi, rien n’est calculé' },
-    sensorySensitivity: { label: 'Sensibilité (bruit, lumière, odeurs, toucher)', helper: 'À quel point tout paraît fort' },
+    sensorySensitivity: { label: 'Sensibilité : ce qui gêne', helper: 'Bruit, lumière, odeurs, toucher : ce qui t’a gêné aujourd’hui' },
   },
 
   bodyZones: {
@@ -674,6 +674,7 @@ const fr: Translations = {
     },
     periodFlowOptions: { none: 'Aucune', spotting: 'Traces', light: 'Légères', heavy: 'Abondantes' },
     legPainOptions: { none: 'Aucune', toKnee: 'Jusqu’au genou', belowKnee: 'Sous le genou' },
+    sensoryStimulusLabels: { noise: 'Bruit', light: 'Lumière', smells: 'Odeurs', touch: 'Toucher' },
     symptomTagLabels: { tingling: 'Fourmillements', numbness: 'Engourdissements', burning: 'Brûlures', shocks: 'Décharges', blurredVision: 'Vision floue', urgency: 'Urgence urinaire', dizziness: 'Vertiges' },
     spasmsEndNone: 'Aucun',
     spasmsEndStrong: 'Très forts',
@@ -1070,6 +1071,9 @@ const fr: Translations = {
       legPainLevels: { none: 'aucune', toKnee: 'jusqu’au genou', belowKnee: 'sous le genou' },
       leg: 'Douleur dans la jambe : {{list}}.',
       tagLabels: { tingling: 'fourmillements', numbness: 'engourdissements', burning: 'brûlures', shocks: 'décharges', blurredVision: 'vision floue', urgency: 'urgence urinaire', dizziness: 'vertiges' },
+      stimuliLine: 'Jours de sensibilité (bruit, lumière, odeurs, toucher) : {{n}} {{n:jour|jours}} sur {{k}} {{k:jour noté|jours notés}}.',
+      stimuliTop: 'Ce qui a gêné, par jours : {{list}}.',
+      stimulusLabels: { noise: 'bruit', light: 'lumière', smells: 'odeurs', touch: 'toucher' },
       tagsLine: 'Symptômes du jour cochés : {{n}} {{n:jour|jours}} sur {{k}} {{k:jour noté|jours notés}}.',
       tagsTop: 'Les plus cochés : {{list}}.',
       feverInfection: 'Fièvre ou infection',

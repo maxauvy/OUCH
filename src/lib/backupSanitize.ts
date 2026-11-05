@@ -22,6 +22,7 @@ import {
   PERIOD_FLOWS,
   REFRESHED_LEVELS,
   SYMPTOM_TAGS,
+  SENSORY_STIMULI,
   MEDICATION_REGIMENS,
   MEDICATION_STOP_REASONS,
 } from '../db/types.ts'
@@ -222,6 +223,10 @@ export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry 
     feverInfection: bool(raw.feverInfection),
     newSymptom: bool(raw.newSymptom),
     sensorySensitivity: num(raw.sensorySensitivity, 0, 10),
+    sensoryStimuli: (() => {
+      const list = strings(raw.sensoryStimuli)
+      return list && ([...new Set(list.filter((s) => (SENSORY_STIMULI as readonly string[]).includes(s)))] as DailyEntry['sensoryStimuli'])
+    })(),
     weather: weather(raw.weather),
     intakes: intakes(raw.intakes),
     // Free-text medication names of backups from before the registry existed.
