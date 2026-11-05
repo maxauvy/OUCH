@@ -1,5 +1,5 @@
 import { createContext, createElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
-import { IconActivityHeartbeat, IconChartDots, IconChartLine, IconCloudStorm, IconListCheck, IconMoodSmile, IconMoon, IconRuler2, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
+import { IconActivityHeartbeat, IconBodyScan, IconBook2, IconBulb, IconCalendar, IconCalendarWeek, IconChartDots, IconChartLine, IconCloudStorm, IconHeartbeat, IconInfoCircle, IconLeaf, IconListCheck, IconListDetails, IconMessageQuestion, IconMoodSmile, IconMoon, IconNotes, IconPill, IconRuler2, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
 import { periodDayOf } from '../../lib/periodDay'
 import './report.css'
 import type { LoggedEntry } from '../../db/types'
@@ -60,6 +60,7 @@ const TONES = {
   flare: { bg: '#ece4f8', ink: '#574a7a' },
   sleep: { bg: '#e8e9fb', ink: '#3b3fa6' },
   body: { bg: '#ddf3f0', ink: '#0f766e' },
+  meds: { bg: '#e4f4ea', ink: '#1c7a4a' },
   brand: { bg: '#e3eef6', ink: '#0d5c8c' },
 } as const
 type Tone = keyof typeof TONES
@@ -72,12 +73,37 @@ function Pastille({ tone, icon: I, size = 26 }: { tone: Tone; icon: TablerIcon; 
   )
 }
 
-function H({ level, children, icon, tone = 'brand' }: { level: 1 | 2 | 3; children: ReactNode; icon?: TablerIcon; tone?: Tone }) {
+/** What every section of the report is about, and so which pastille opens its title: the same for the same subject on every page and in both variants. */
+const KINDS = {
+  pain: { icon: IconChartLine, tone: 'pain' },
+  calendar: { icon: IconCalendar, tone: 'pain' },
+  zones: { icon: IconBodyScan, tone: 'pain' },
+  flares: { icon: IconCloudStorm, tone: 'flare' },
+  treatments: { icon: IconPill, tone: 'meds' },
+  habits: { icon: IconLeaf, tone: 'meds' },
+  symptoms: { icon: IconHeartbeat, tone: 'body' },
+  stiffness: { icon: IconSunrise, tone: 'body' },
+  indicators: { icon: IconListDetails, tone: 'body' },
+  sleep: { icon: IconMoon, tone: 'sleep' },
+  keyPoints: { icon: IconListCheck, tone: 'brand' },
+  compare: { icon: IconChartDots, tone: 'brand' },
+  weekdays: { icon: IconCalendarWeek, tone: 'brand' },
+  noticed: { icon: IconBulb, tone: 'brand' },
+  agenda: { icon: IconMessageQuestion, tone: 'brand' },
+  notes: { icon: IconNotes, tone: 'brand' },
+  method: { icon: IconInfoCircle, tone: 'brand' },
+  references: { icon: IconBook2, tone: 'brand' },
+} as const satisfies Record<string, { icon: TablerIcon; tone: Tone }>
+type Kind = keyof typeof KINDS
+
+/** A title of the report. With a `kind` it opens with its pastille; without one it is a plain sub-heading. */
+function H({ level, children, kind }: { level: 1 | 2 | 3; children: ReactNode; kind?: Kind }) {
   const offset = useContext(HeadingOffset)
+  const k = kind ? KINDS[kind] : null
   return createElement(
     `h${Math.min(6, level + offset)}`,
-    { className: `r-h${level}${icon ? ' has-icon' : ''}` },
-    icon ? <Pastille tone={tone} icon={icon} /> : null,
+    { className: `r-h${level}${k ? ' has-icon' : ''}` },
+    k ? <Pastille tone={k.tone} icon={k.icon} size={level === 2 ? 26 : 22} /> : null,
     children
   )
 }
@@ -174,7 +200,7 @@ function gpPages(d: ReportData): Block[][] {
       <GpTiles d={d} />,
       <div className="r-dash">
         <div className="r-card r-chart">
-          <H level={2} icon={IconChartLine} tone="pain">
+          <H level={2} kind="pain">
             {f.t.painChart}
           </H>
           <p className="r-small" style={{ marginTop: -4 }}>
@@ -189,7 +215,7 @@ function gpPages(d: ReportData): Block[][] {
       <Agenda d={d} />,
       rowsBlock(keyPoints.length, (from, to, continued) => (
         <div className="r-card r-after-dash">
-          <H level={2} icon={IconListCheck}>
+          <H level={2} kind="keyPoints">
             {f.t.keyPoints}
             <Continued f={f} on={continued} />
           </H>
@@ -201,7 +227,7 @@ function gpPages(d: ReportData): Block[][] {
       d.meds.length > 0 &&
         rowsBlock(d.meds.length, (from, to, continued) => (
           <>
-            <H level={2}>
+            <H level={2} kind="treatments">
               {f.t.treatments}
               <Continued f={f} on={continued} />
             </H>
@@ -213,11 +239,11 @@ function gpPages(d: ReportData): Block[][] {
       d.compare && <CompareBlock d={d} />,
       <div className="r-grid2 wide-left">
         <div>
-          <H level={2}>{f.t.symptoms}</H>
+          <H level={2} kind="symptoms">{f.t.symptoms}</H>
           <SymptomsTable d={d} />
         </div>
         <div>
-          <H level={2}>{f.t.zones}</H>
+          <H level={2} kind="zones">{f.t.zones}</H>
           <ZoneBars d={d} limit={6} />
           <ZoneFacts d={d} full={false} />
         </div>
@@ -229,7 +255,7 @@ function gpPages(d: ReportData): Block[][] {
       (d.noticed.length > 0 || d.trials.length > 0) && <Noticed d={d} />,
       d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all={false} list={notes} from={from} to={to} continued={continued} />),
       <>
-        <H level={2}>{f.t.method}</H>
+        <H level={2} kind="method">{f.t.method}</H>
         <div className="r-method">
           <p>{f.t.methodGp}</p>
           <p>{f.t.trendNote}</p>
@@ -253,7 +279,7 @@ function painClinicPages(d: ReportData): Block[][] {
       <Completeness d={d} />,
       rowsBlock(keyPoints.length, (from, to, continued) => (
         <>
-          <H level={2}>
+          <H level={2} kind="keyPoints">
             {f.t.keyPoints}
             <Continued f={f} on={continued} />
           </H>
@@ -261,7 +287,7 @@ function painClinicPages(d: ReportData): Block[][] {
         </>
       )),
       <>
-        <H level={2}>{f.t.intensity}</H>
+        <H level={2} kind="pain">{f.t.intensity}</H>
         <Tiles d={d} detailed />
       </>,
       <>
@@ -287,7 +313,7 @@ function painClinicPages(d: ReportData): Block[][] {
     ],
     [
       <>
-        <H level={2}>
+        <H level={2} kind="pain">
           {f.t.evolution}{' '}
           <span className="r-hint">
             {f.t.chartHint}
@@ -300,7 +326,7 @@ function painClinicPages(d: ReportData): Block[][] {
       d.flares.current.length > 0 &&
         rowsBlock(d.flares.current.length, (from, to, continued) => (
           <>
-            <H level={3}>
+            <H level={3} kind="flares">
               {f.t.flaresTitle}
               <Continued f={f} on={continued} />
             </H>
@@ -313,7 +339,7 @@ function painClinicPages(d: ReportData): Block[][] {
       hasFlareContext(d) &&
         rowsBlock(d.flares.current.length, (from, to, continued) => (
           <>
-            <H level={3}>
+            <H level={3} kind="flares">
               {f.t.flareContextTitle}
               <Continued f={f} on={continued} />
             </H>
@@ -323,7 +349,7 @@ function painClinicPages(d: ReportData): Block[][] {
         )),
       d.meds.length > 0 ? (
         <>
-          <H level={3}>{f.t.treatments}</H>
+          <H level={3} kind="treatments">{f.t.treatments}</H>
           <div className="r-legend">
             <span>
               <i style={{ background: 'var(--r-blue)' }} />
@@ -338,7 +364,7 @@ function painClinicPages(d: ReportData): Block[][] {
         </>
       ) : (
         <>
-          <H level={3}>{f.t.treatments}</H>
+          <H level={3} kind="treatments">{f.t.treatments}</H>
           <p className="r-small">{f.t.noTreatments}</p>
         </>
       ),
@@ -346,7 +372,7 @@ function painClinicPages(d: ReportData): Block[][] {
       symptoms.length > 0 &&
         rowsBlock(symptoms.length, (from, to, continued) => (
           <>
-            <H level={3}>
+            <H level={3} kind="symptoms">
               {f.t.symptoms}
               <Continued f={f} on={continued} />
             </H>
@@ -387,7 +413,7 @@ function painClinicPages(d: ReportData): Block[][] {
             d.meds.length > 0 &&
               rowsBlock(d.meds.length, (from, to, continued) => (
                 <>
-                  <H level={2}>
+                  <H level={2} kind="treatments">
                     {f.t.treatments} <span className="r-hint">{f.t.treatmentsSince}</span>
                     <Continued f={f} on={continued} />
                   </H>
@@ -397,7 +423,7 @@ function painClinicPages(d: ReportData): Block[][] {
             d.meds.length > 0 &&
               rowsBlock(weeks.length, (from, to, continued) => (
                 <>
-                  <H level={3}>
+                  <H level={3} kind="treatments">
                     {f.t.weekly}
                     <Continued f={f} on={continued} />
                   </H>
@@ -410,7 +436,7 @@ function painClinicPages(d: ReportData): Block[][] {
       : []),
     [
       <>
-        <H level={2}>{f.t.calendar}</H>
+        <H level={2} kind="calendar">{f.t.calendar}</H>
         <PainCalendar entries={d.all} p={p} f={f} />
         <div className="r-legend" style={{ marginTop: 4 }}>
           0
@@ -429,7 +455,7 @@ function painClinicPages(d: ReportData): Block[][] {
         </div>
       </>,
       <>
-        <H level={2}>{f.t.zones}</H>
+        <H level={2} kind="zones">{f.t.zones}</H>
         <div className="r-grid2">
           <ZoneFigure d={d} />
           <div>
@@ -446,7 +472,7 @@ function painClinicPages(d: ReportData): Block[][] {
     [
       d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all list={notes} from={from} to={to} continued={continued} />),
       <>
-        <H level={2}>{f.t.method}</H>
+        <H level={2} kind="method">{f.t.method}</H>
         <div className="r-method">
           {[f.t.methodCollect, f.t.methodCalc, f.t.methodLimits].map((text) => {
             // "Collection. Daily diary…": the first word is a run-in heading.
@@ -817,11 +843,14 @@ function GpFigures({ d }: { d: ReportData }) {
   const sleepPrev = meanOf(d.previous, 'sleepHours')
   const quality = meanOf(d.current, 'sleepQuality')
   return (
-    <div className="r-card tint">
+    <div className="r-card r-toned" data-tone={sleep ? 'sleep' : 'brand'}>
       {sleep ? (
         <div className="r-kpi">
           {sleepPrev && <TrendArrow trend={trend(sleep.mean, sleepPrev.mean, 'higher', FLAT_BELOW.hours)} f={f} />}
-          <div className="r-k">{f.t.tileSleep}</div>
+          <div className="r-k r-tilehead">
+            <Pastille tone="sleep" icon={IconMoon} size={20} />
+            {f.t.tileSleep}
+          </div>
           <div className="r-big num">
             {f.nf(sleep.mean)}
             <small> h</small>
@@ -834,7 +863,10 @@ function GpFigures({ d }: { d: ReportData }) {
         </div>
       ) : (
         <div className="r-kpi">
-          <div className="r-k">{f.t.tileMedian}</div>
+          <div className="r-k r-tilehead">
+            <Pastille tone="brand" icon={IconRuler2} size={20} />
+            {f.t.tileMedian}
+          </div>
           <div className="r-big num">
             {f.nfx(pain.median)}
             <small>
@@ -859,7 +891,10 @@ function DayMix({ d }: { d: ReportData }) {
   ] as const
   return (
     <div className="r-card">
-      <div className="r-k">{f.t.dayMix}</div>
+      <div className="r-k r-tilehead r-cardtitle">
+        <Pastille tone="pain" icon={IconChartLine} size={20} />
+        {f.t.dayMix}
+      </div>
       <div className="r-mix" aria-hidden>
         {rows.map(([label, share], i) => (
           <span key={label} style={{ flex: share, background: MIX_COLORS[i] }} />
@@ -1120,7 +1155,7 @@ function markedBlock(d: ReportData) {
   const { f } = d
   return rowsBlock(d.marked.length, (from, to, continued) => (
     <>
-      <H level={3}>
+      <H level={3} kind="flares">
         {f.t.markedTitle}
         <Continued f={f} on={continued} />
       </H>
@@ -1170,7 +1205,7 @@ function CompareBlock({ d }: { d: ReportData }) {
   const diff = c.diff === null || Math.abs(c.diff) < 0.05 ? null : Math.abs(c.diff)
   return (
     <>
-      <H level={2}>{t.compareTitle}</H>
+      <H level={2} kind="compare">{t.compareTitle}</H>
       <table className="r-reviews">
         <thead>
           <tr>
@@ -1222,7 +1257,7 @@ function WeekdaysBlock({ d }: { d: ReportData }) {
   const px = (points: number) => (points / reach) * (mid - 4)
   return (
     <>
-      <H level={3}>{f.t.weekdaysTitle}</H>
+      <H level={3} kind="weekdays">{f.t.weekdaysTitle}</H>
       <table className="r-weekdays">
         <thead>
           <tr>
@@ -1273,7 +1308,7 @@ function reviewBlock(d: ReportData) {
   const { f } = d
   return rowsBlock(d.reviews.length, (from, to, continued) => (
     <>
-      <H level={3}>
+      <H level={3} kind="treatments">
         {f.t.reviewTitle}
         <Continued f={f} on={continued} />
       </H>
@@ -1448,7 +1483,7 @@ function StiffnessBlock({ d }: { d: ReportData }) {
   const t = f.t.stiffness
   return (
     <>
-      <H level={2}>{t.title}</H>
+      <H level={2} kind="stiffness">{t.title}</H>
       <p>
         {f.format(t.noted, { n: s.noted })}
         {s.commonest && ` ${f.format(t.commonest, { band: t.bands[s.commonest] })}`}
@@ -1474,7 +1509,7 @@ function NightWakingsBlock({ d }: { d: ReportData }) {
   const t = f.t.nightWakings
   return (
     <>
-      <H level={2}>{t.title}</H>
+      <H level={2} kind="sleep">{t.title}</H>
       <p>
         {f.format(t.noted, { n: s.noted, w: s.withWaking })} {f.format(t.mean, { v: f.nf(s.mean ?? 0) })}
       </p>
@@ -1493,7 +1528,7 @@ function OtherIndicatorsBlock({ d }: { d: ReportData }) {
   if (lines.length === 0) return null
   return (
     <>
-      <H level={2}>{t.title}</H>
+      <H level={2} kind="indicators">{t.title}</H>
       <ul>
         {lines.map((line) => (
           <li key={line}>{line}</li>
@@ -1642,7 +1677,7 @@ function NonDrug({ d }: { d: ReportData }) {
   if (!shares.length) return null
   return (
     <>
-      <H level={2}>
+      <H level={2} kind="habits">
         {f.t.nonDrug} <span className="r-hint">{f.t.nonDrugHint}</span>
       </H>
       <div className="r-bars wide">
@@ -1705,7 +1740,7 @@ function Noticed({ d }: { d: ReportData }) {
   if (!noticed.length && !trials.length) return null
   return (
     <>
-      <H level={2}>{f.t.noticed}</H>
+      <H level={2} kind="noticed">{f.t.noticed}</H>
       <div className="r-quote">
         <ul>
           {noticed.map((lead) => (
@@ -1732,7 +1767,7 @@ function Agenda({ d }: { d: ReportData }) {
     <>
       {items.length > 0 && (
         <>
-          <H level={2}>{d.f.t.agenda}</H>
+          <H level={2} kind="agenda">{d.f.t.agenda}</H>
           <div className="r-quote">
             <ul>
               {items.map((a, i) => (
@@ -1744,7 +1779,7 @@ function Agenda({ d }: { d: ReportData }) {
       )}
       {note && (
         <>
-          <H level={items.length > 0 ? 3 : 2}>{d.f.format(d.f.t.lastNoteTitle, { date: d.f.fullDate(note.date) })}</H>
+          <H level={items.length > 0 ? 3 : 2} kind="notes">{d.f.format(d.f.t.lastNoteTitle, { date: d.f.fullDate(note.date) })}</H>
           <div className="r-quote">
             <p style={{ whiteSpace: 'pre-line' }}>{note.text}</p>
           </div>
@@ -1765,7 +1800,7 @@ function Notes({ d, all, list, from, to, continued }: { d: ReportData; all: bool
   const { f } = d
   return (
     <>
-      <H level={2}>
+      <H level={2} kind="notes">
         {f.t.notes} <span className="r-hint">{all ? f.t.notesHintAll : f.t.notesHintGp}</span>
         <Continued f={f} on={continued} />
       </H>
@@ -1812,7 +1847,7 @@ function Associations({ d }: { d: ReportData }) {
   )
   return (
     <>
-      <H level={2}>{t.associations}</H>
+      <H level={2} kind="compare">{t.associations}</H>
       {rows.length > 0 && (
         <table>
           <thead>
@@ -1899,7 +1934,7 @@ function References({
 }) {
   return (
     <>
-      <H level={3}>{title}</H>
+      <H level={3} kind="references">{title}</H>
       <ol className="r-refs">
       {numbers.map((n) => (
           <li key={n} value={n}>

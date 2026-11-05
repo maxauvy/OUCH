@@ -751,3 +751,44 @@
   line-height: 1.4;
   color: var(--r-navy);
 }
+
+/* Titles of every level that carry a pastille, and the cards that are not tiles. */
+.report .r-h3.has-icon {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.report .r-h3.has-icon::before {
+  display: none;
+}
+.report .r-card.r-toned {
+  border: 0;
+  border-top: 0;
+}
+.report .r-card.r-toned[data-tone='sleep'] {
+  background: #e8e9fb;
+}
+.report .r-card.r-toned[data-tone='brand'] {
+  background: #e3eef6;
+}
+.report .r-card.r-toned .r-k {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--r-ink);
+}
+.report .r-card.r-toned .r-pastille {
+  background: #fff !important;
+}
+.report .r-cardtitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--r-ink);
+}
