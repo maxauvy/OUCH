@@ -1,12 +1,13 @@
-import { IconCalendar, IconChartLine, IconHeartbeat, type Icon } from '@tabler/icons-react'
+import { IconCalendar, IconChartLine, IconHeartbeat, IconStethoscope, type Icon } from '@tabler/icons-react'
 import { useTranslation } from '../../i18n'
 
-export type Tab = 'today' | 'journal' | 'trends'
+export type Tab = 'today' | 'journal' | 'trends' | 'consultation'
 
 const TAB_ICONS: Record<Tab, Icon> = {
   today: IconHeartbeat,
   journal: IconCalendar,
   trends: IconChartLine,
+  consultation: IconStethoscope,
 }
 
 /** `badged` tabs carry a small dot, named for screen readers: something new is there, without a number. */
@@ -24,6 +25,7 @@ export function TabBar({
     { id: 'today', label: t.tabs.today },
     { id: 'journal', label: t.tabs.journal },
     { id: 'trends', label: t.tabs.trends },
+    { id: 'consultation', label: t.tabs.consultation },
   ]
   const TABS = ALL
   return (

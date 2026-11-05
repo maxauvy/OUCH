@@ -12,7 +12,6 @@ import { AboutCard } from '../components/about/AboutCard'
 import { SourcesCard } from '../components/about/SourcesCard'
 import { ZonesNotice } from '../components/about/ZonesNotice'
 import { useAllEntries } from '../hooks/useEntries'
-import { kindOf } from '../lib/consultation'
 import { oldZonesUsed } from '../lib/bodyZones'
 import { SupportCard } from '../components/about/SupportCard'
 import { BackupSection } from '../components/settings/BackupSection'
@@ -20,8 +19,6 @@ import { IS_DEMO } from '../lib/demoMode'
 import { exitDemo, startDemo } from '../lib/demoSession'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { setLuminous, useLuminous } from '../lib/look'
-import { PrescriptionSettingsCard } from '../components/prescription/PrescriptionSettingsCard'
-import { PrepareLink } from '../components/consultation/PrepareLink'
 import { LockCard } from '../components/settings/LockCard'
 import { AutoBackupCard } from '../components/settings/AutoBackupCard'
 import { SensitiveZoneCard } from '../components/settings/SensitiveZoneCard'
@@ -159,24 +156,6 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
             />
           </Card>
         )}
-
-        <Card>
-          <SectionTitle icon={IconCalendarHeart}>{t.consultation.settingsTitle}</SectionTitle>
-          <p className="text-caption mb-1" style={{ color: 'var(--color-ink-muted)' }}>
-            {settings.consultation
-              ? [
-                  format(t.consultation.settingsNext, { date: new Date(settings.consultation.date + 'T00:00:00').toLocaleDateString(intlLocale, { day: 'numeric', month: 'long' }) }),
-                  kindOf(settings.consultation) === 'cetd' ? t.consultation.kindCetd : t.consultation.kindGp,
-                  settings.consultation.doctor,
-                ]
-                  .filter(Boolean)
-                  .join(' · ')
-              : t.consultation.settingsNone}
-          </p>
-          <PrepareLink />
-        </Card>
-
-        <PrescriptionSettingsCard />
 
         <Card>
           <SectionTitle icon={IconStethoscope}>{t.settings.illnessesTitle}</SectionTitle>

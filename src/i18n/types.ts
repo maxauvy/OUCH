@@ -27,6 +27,7 @@ export interface Translations {
     trendsNew: string
     kids: string
     settings: string
+    consultation: string
   }
 
   welcome: {
@@ -1340,6 +1341,23 @@ export interface Translations {
     /** Trends and Settings entry points; `{{date}}` is the appointment day */
     trendsPrepare: string
     trendsPrepareNew: string
+    pageKicker: string
+    nextTitle: string
+    noneTitle: string
+    noneHint: string
+    inDays: string
+    todayLabel: string
+    passedLabel: string
+    prepareReport: string
+    addAppointment: string
+    changeAppointment: string
+    questionsRow: string
+    questionsCount: string
+    questionsNone: string
+    afterRow: string
+    afterRowHint: string
+    prescriptionRow: string
+    reportNote: string
     settingsTitle: string
     settingsNone: string
     settingsNext: string
