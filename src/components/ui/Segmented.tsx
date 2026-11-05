@@ -7,6 +7,7 @@ export function Segmented<T extends string | number>({
   value,
   onChange,
   label,
+  pill = false,
   className = '',
 }: {
   options: readonly { value: T; label: string }[]
@@ -15,12 +16,14 @@ export function Segmented<T extends string | number>({
   onChange: (value: T) => void
   /** Names the group for screen readers. */
   label: string
+  /** Fully rounded and as wide as its content, for a page that may be softer than the rest of the app. */
+  pill?: boolean
   className?: string
 }) {
   return (
     <div
       {...radioGroupProps(label)}
-      className={`flex gap-1 rounded-[var(--radius-control)] p-1 ${className}`}
+      className={`gap-1 p-1 ${pill ? 'inline-flex self-center rounded-full' : 'flex rounded-[var(--radius-control)]'} ${className}`}
       style={{ background: 'var(--color-brand-soft)', boxShadow: 'inset 0 0 0 1px var(--color-hairline)' }}
     >
       {options.map((opt, i) => {
@@ -33,7 +36,7 @@ export function Segmented<T extends string | number>({
             // With nothing chosen yet, the first option is the way into the group.
             tabIndex={active || (value === undefined && i === 0) ? 0 : -1}
             onClick={() => onChange(opt.value)}
-            className={`flex-1 min-h-10 rounded-[calc(var(--radius-control)-2px)] px-2 text-control ${active ? 'font-semibold' : 'font-medium'}`}
+            className={`${pill ? 'rounded-full px-4 whitespace-nowrap' : 'flex-1 rounded-[calc(var(--radius-control)-2px)] px-2'} min-h-10 text-control ${active ? 'font-semibold' : 'font-medium'}`}
             style={{
               background: active ? 'var(--color-surface)' : 'transparent',
               color: 'var(--color-brand)',

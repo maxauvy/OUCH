@@ -31,6 +31,7 @@ import type { PainWeather, PainWeatherLevel } from '../../db/types'
 import { CHILD_TONES, type ChildTone } from '../../lib/childView'
 import { painWeatherByLevel } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
+import { WeatherFriend } from './WeatherFriend'
 import { format, useTranslation } from '../../i18n'
 import { splitLeadingEmoji } from '../../lib/a11y'
 import { Segmented } from '../ui/Segmented'
@@ -77,38 +78,6 @@ const LEVELS: PainWeatherLevel[] = [1, 2, 3, 4, 5]
 const card: CSSProperties = {
   background: 'var(--color-surface)',
   border: '1px solid var(--color-hairline)',
-}
-
-function Puff({ style }: { style: CSSProperties }) {
-  return <span className="absolute rounded-full" style={{ background: 'var(--color-surface)', ...style }} />
-}
-
-/** Flat illustrated sky behind the day's weather icon. The sun hides and the
- * sky greys as the day gets harder. */
-function Sky({ weather }: { weather: PainWeather }) {
-  const sky =
-    weather.level <= 2
-      ? 'var(--color-brand-soft)'
-      : `color-mix(in srgb, var(--color-brand-soft) ${weather.level === 3 ? 85 : 65}%, ${weather.color})`
-  return (
-    <div className="relative h-[112px] overflow-hidden" style={{ background: sky }} aria-hidden>
-      {weather.level <= 3 && (
-        <span
-          className="absolute rounded-full w-11 h-11 left-6 top-4"
-          style={{ background: 'color-mix(in srgb, var(--color-weather-1) 55%, var(--color-surface))' }}
-        />
-      )}
-      <Puff style={{ right: 22, top: 44, width: 60, height: 20 }} />
-      <Puff style={{ right: 44, top: 32, width: 26, height: 26 }} />
-      {weather.level >= 3 && <Puff style={{ left: 18, top: 72, width: 44, height: 14 }} />}
-      <span
-        className="absolute left-1/2 top-[18px] -translate-x-1/2 w-[76px] h-[76px] rounded-full flex items-center justify-center"
-        style={{ background: 'var(--color-surface)', color: weather.text }}
-      >
-        <WeatherIcon name={weather.icon as never} size={46} />
-      </span>
-    </div>
-  )
 }
 
 /** The five weathers as a rule: today's segment is full and thicker, with a
@@ -162,6 +131,7 @@ function AgeControl({ tone, onChange }: { tone: ChildTone; onChange: (tone: Chil
       options={CHILD_TONES.map((value) => ({ value, label: t.childView.ages[value] }))}
       value={tone}
       onChange={onChange}
+      pill
     />
   )
 }
@@ -185,8 +155,9 @@ export function HealthChildView({
   const { icon: ClosingIcon, label: closingText } = splitHelp(closing)
 
   return (
-    <div className="flex flex-col gap-3 px-4 pt-4 pb-28">
-      <h1 className="text-title font-bold leading-tight px-1">{t.childView.pageTitle}</h1>
+    <div className="flex flex-col gap-3 px-4 pt-2 pb-28">
+      <div className="kids-backdrop" aria-hidden />
+      <h1 className="text-title font-bold leading-tight text-center">{t.childView.pageTitle}</h1>
 
       {!weather || !copy ? (
         <p className="text-control text-center mt-10 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
@@ -196,15 +167,24 @@ export function HealthChildView({
         <>
           <AgeControl tone={tone} onChange={onToneChange} />
 
-          <div className="rounded-[var(--radius-card)] overflow-hidden" style={card}>
-            <Sky weather={weather} />
-            <div className="px-5 pt-4 pb-5 text-center">
-              <div className="text-title font-bold leading-snug">{copy.headline}</div>
-              <div className="text-body mt-2 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
-                {copy.body}
-              </div>
+          <div className="mt-2">
+            <WeatherFriend level={weather.level} />
+          </div>
+          {/* Words in a bubble, as if the weather were speaking. */}
+          <div
+            className="relative rounded-[22px] px-5 py-5 text-center mt-3"
+            style={{ background: 'var(--color-surface)', boxShadow: '0 4px 14px rgba(90, 80, 150, 0.14)' }}
+          >
+            <span
+              aria-hidden
+              className="absolute -top-2 left-1/2 -ml-2 w-4 h-4 rotate-45 rounded-[3px]"
+              style={{ background: 'var(--color-surface)' }}
+            />
+            <div className="text-title font-bold leading-snug">{copy.headline}</div>
+            <div className="text-body mt-2 leading-relaxed" style={{ color: 'var(--color-ink-muted)' }}>
+              {copy.body}
             </div>
-            <div className="px-5 pt-4 pb-4" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+            <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--color-hairline)' }}>
               <WeatherScale level={weather.level} />
             </div>
           </div>
