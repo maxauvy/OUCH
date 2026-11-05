@@ -14,8 +14,8 @@ export const MAX_QUESTION_LENGTH = 200
 export const MAX_GOAL_LENGTH = 300
 export const MAX_NOTES_LENGTH = 2_000
 export const MAX_DOCTOR_LENGTH = 60
-/** How many past appointments are kept. */
-export const MAX_PAST = 30
+/** How many past appointments are kept, by kind: a family doctor is seen more often than a pain clinic, whose last two visits are what a report is compared with. */
+export const MAX_PAST_BY_KIND: Record<ConsultationKind, number> = { gp: 6, cetd: 2 }
 
 /** The card on the day's page appears this many days before the appointment. */
 export const CARD_WINDOW_DAYS = 14
@@ -82,6 +82,14 @@ export function cleanDoctor(s: string | undefined): string | undefined {
 }
 
 /** The appointments that took place, newest first: the list, plus the single "last appointment" of the first version when it is not in it (read as a family doctor's). */
+/** The past appointments newest first, within the cap of each kind. */
+export function capPast(list: readonly PastConsultation[]): PastConsultation[] {
+  const seen: Record<ConsultationKind, number> = { gp: 0, cetd: 0 }
+  return [...list]
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .filter((p) => ++seen[p.kind] <= MAX_PAST_BY_KIND[p.kind])
+}
+
 export function pastConsultations(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>): PastConsultation[] {
   const list = [...(settings.pastConsultations ?? [])]
   const legacy = settings.lastConsultation
@@ -105,9 +113,18 @@ export function previousOf(settings: Pick<Settings, 'pastConsultations' | 'lastC
 export function withPast(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>, entry: PastConsultation): Partial<Settings> {
   const doctor = cleanDoctor(entry.doctor)
   const notes = entry.notes?.trim().slice(0, MAX_NOTES_LENGTH)
-  const clean: PastConsultation = { date: entry.date, kind: entry.kind, ...(doctor ? { doctor } : {}), ...(notes ? { notes } : {}) }
+  const questions = (entry.questions ?? []).map((q) => cleanLine(q)).filter(Boolean).slice(0, MAX_QUESTIONS)
+  const goal = cleanLine(entry.goal ?? '', MAX_GOAL_LENGTH)
+  const clean: PastConsultation = {
+    date: entry.date,
+    kind: entry.kind,
+    ...(doctor ? { doctor } : {}),
+    ...(notes ? { notes } : {}),
+    ...(questions.length ? { questions } : {}),
+    ...(goal ? { goal } : {}),
+  }
   const rest = pastConsultations(settings).filter((p) => !(p.date === clean.date && p.kind === clean.kind))
-  const merged = [clean, ...rest].sort((a, b) => b.date.localeCompare(a.date)).slice(0, MAX_PAST)
+  const merged = capPast([clean, ...rest])
   // The single "last appointment" of the first version is in the list now.
   return { pastConsultations: merged, lastConsultation: undefined }
 }
@@ -116,7 +133,7 @@ export function withPast(settings: Pick<Settings, 'pastConsultations' | 'lastCon
 export function finishConsultation(settings: Settings, notes: string): Partial<Settings> {
   const c = settings.consultation
   if (!c) return {}
-  const entry: PastConsultation = { date: c.date, kind: kindOf(c), ...(c.doctor ? { doctor: c.doctor } : {}), ...(notes.trim() ? { notes } : {}) }
+  const entry: PastConsultation = { date: c.date, kind: kindOf(c), ...(c.doctor ? { doctor: c.doctor } : {}), ...(notes.trim() ? { notes } : {}), questions: c.questions, ...(c.goal ? { goal: c.goal } : {}) }
   return { ...withPast(settings, entry), consultation: undefined, consultationCardClosed: undefined }
 }
 
@@ -172,4 +189,17 @@ export function sinceFacts(input: { from: string; to: string; flares: readonly F
     marked: input.marked.filter((m) => m.last >= from && m.start <= to).length,
     treatments: input.events.filter((e) => e.date >= from && e.date <= to),
   }
+}
+
+/** An appointment that took place, with its note changed (or cleared): the same one, kept in place. */
+export function withPastNote(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>, date: string, kind: ConsultationKind, notes: string): Partial<Settings> {
+  const found = pastConsultations(settings).find((p) => p.date === date && p.kind === kind)
+  if (!found) return {}
+  const { notes: _old, ...rest } = found
+  return withPast(settings, { ...rest, ...(notes.trim() ? { notes } : {}) })
+}
+
+/** An appointment that took place, forgotten. */
+export function withoutPast(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>, date: string, kind: ConsultationKind): Partial<Settings> {
+  return { pastConsultations: pastConsultations(settings).filter((p) => !(p.date === date && p.kind === kind)), lastConsultation: undefined }
 }

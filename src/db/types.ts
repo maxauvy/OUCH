@@ -388,6 +388,9 @@ export interface PastConsultation {
   doctor?: string
   /** What was said and what changes, as the person wrote it. */
   notes?: string
+  /** What the person had prepared to ask and to say first, kept with the appointment. */
+  questions?: string[]
+  goal?: string
 }
 
 /** What the person thinks may have played in a difficult period; they only suggest, nothing is measured. */

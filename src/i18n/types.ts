@@ -1366,6 +1366,16 @@ export interface Translations {
     trendsPrepare: string
     trendsPrepareNew: string
     pageKicker: string
+    pastTitle: string
+    pastHint: string
+    pastSheetTitle: string
+    pastQuestions: string
+    pastGoal: string
+    pastNote: string
+    pastNoNote: string
+    pastDelete: string
+    pastDeleteConfirm: string
+    pastSave: string
     nextTitle: string
     noneTitle: string
     noneHint: string
