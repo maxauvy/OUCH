@@ -40,7 +40,7 @@ const fr: Translations = {
     checkNoIllness: 'Maladie pas encore précisée',
     profileTitle: 'Comment t’appeler ?',
     kidsTitle: 'Une page pour expliquer ta maladie à un enfant ?',
-    kidsHelper: 'L’onglet Enfants met des mots simples sur ce que tu vis. Tu pourras le changer dans Réglages.',
+    kidsHelper: 'La page « Mes enfants » met des mots simples sur ce que tu vis. Tu pourras le changer dans Réglages.',
     kidsYes: 'Oui',
     kidsNo: 'Non, pas pour moi',
     profileIntro: 'Ton prénom apparaît sur la météo du jour que tu partages, et pré-remplit le rapport pour ton médecin.',
@@ -73,7 +73,7 @@ const fr: Translations = {
     doneIntro: 'Voici où tu en es. Rien n’est obligatoire : tu peux compléter tout ça plus tard dans Réglages.',
     checkName: 'Prénom : {{name}}',
     checkNoName: 'Pas de prénom (le rapport te le demandera)',
-    checkParent: 'Onglet Enfants : « {{parent}} »',
+    checkParent: 'Page « Mes enfants » : « {{parent}} »',
     checkFactors: 'La douleur et {{n}} autres facteurs suivis',
     checkMedications: 'Traitements décrits : {{n}}',
     checkNoMedications: 'Aucun traitement décrit pour l’instant',
@@ -257,6 +257,13 @@ const fr: Translations = {
 
   today: {
     share: 'Partager ma météo du jour',
+    openSettings: 'Ouvrir les réglages',
+    backToToday: 'Aujourd’hui',
+    shareTitle: 'Partager',
+    shareWeather: 'Météo du jour',
+    shareWeatherHint: 'Une image à envoyer',
+    kidsTile: 'Mes enfants',
+    kidsTileHint: 'Pour leur expliquer',
   },
 
   indicatorInvite: {
@@ -1791,8 +1798,8 @@ const fr: Translations = {
     reminderHelper: "Une notification si tu n'as pas encore rempli ta météo",
     reminderNote:
       "Ce rappel fonctionne quand l'app est ouverte ou récemment utilisée. Sans serveur (par choix, pour rester 100% local), il ne peut pas se déclencher app totalement fermée.",
-    kidsTabTitle: 'Onglet Enfants',
-    kidsTabHelper: 'Une page pour expliquer ta maladie à un enfant avec des mots simples. Tu peux la masquer si elle ne te concerne pas : rien n’est perdu, tu peux la réafficher ici.',
+    kidsTabTitle: 'Tuile « Mes enfants »',
+    kidsTabHelper: 'Une page, ouverte depuis Aujourd’hui, pour expliquer ta maladie à un enfant avec des mots simples. Tu peux la masquer si elle ne te concerne pas : rien n’est perdu, tu peux la réafficher ici.',
     hardDaysTitle: 'Un mot les jours difficiles',
     hardDaysHelper: 'Un message bienveillant, une seule fois, quand les derniers jours ont été plus durs que d’habitude.',
     suggestionsTitle: 'Des suggestions',
@@ -1829,7 +1836,7 @@ const fr: Translations = {
     languageTitle: 'Langue',
     languageHelper: "Choisis la langue de l'application.",
     parentGenderTitle: 'Comment te désigner auprès de ton enfant',
-    parentGenderHelper: 'Utilisé dans les phrases de la page « Expliquer à mon enfant » (onglet Enfants).',
+    parentGenderHelper: 'Utilisé dans les phrases de la page « Expliquer à mon enfant » (tuile « Mes enfants »).',
     parentGenderMaman: 'Maman',
     parentGenderPapa: 'Papa',
     illnessesTitle: 'Tes maladies',
@@ -1855,7 +1862,7 @@ const fr: Translations = {
     otherNameLabel: 'Nom de la maladie',
     otherNamePlaceholder: 'Par exemple : rhumatisme psoriasique',
     otherNameHelper: 'Repris tel quel sur le rapport pour ton médecin, jamais sur la page Enfants.',
-    illnessesHelper: 'Ce que tu suis avec OUCH, plusieurs choix possibles. C’est indiqué sur le rapport pour ton médecin et expliqué sur la page « Expliquer à mon enfant » (onglet Enfants).',
+    illnessesHelper: 'Ce que tu suis avec OUCH, plusieurs choix possibles. C’est indiqué sur le rapport pour ton médecin et expliqué sur la page « Expliquer à mon enfant » (tuile « Mes enfants »).',
     backupTitle: 'Sauvegarde & synchro',
     groups: {
       profile: 'Mon profil',

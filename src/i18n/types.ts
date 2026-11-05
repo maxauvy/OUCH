@@ -136,6 +136,13 @@ export interface Translations {
 
   today: {
     share: string
+    openSettings: string
+    backToToday: string
+    shareTitle: string
+    shareWeather: string
+    shareWeatherHint: string
+    kidsTile: string
+    kidsTileHint: string
   }
 
   /** The invitation to follow new indicators, for someone who already uses the app. */

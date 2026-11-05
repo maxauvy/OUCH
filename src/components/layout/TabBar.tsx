@@ -1,26 +1,22 @@
-import { IconCalendar, IconChartLine, IconHeartbeat, IconMoodKid, IconSettings, type Icon } from '@tabler/icons-react'
+import { IconCalendar, IconChartLine, IconHeartbeat, type Icon } from '@tabler/icons-react'
 import { useTranslation } from '../../i18n'
 
-export type Tab = 'today' | 'journal' | 'trends' | 'kids' | 'settings'
+export type Tab = 'today' | 'journal' | 'trends'
 
 const TAB_ICONS: Record<Tab, Icon> = {
   today: IconHeartbeat,
   journal: IconCalendar,
   trends: IconChartLine,
-  kids: IconMoodKid,
-  settings: IconSettings,
 }
 
 /** `badged` tabs carry a small dot, named for screen readers: something new is there, without a number. */
 export function TabBar({
   active,
   onChange,
-  hidden = [],
   badged = [],
 }: {
   active: Tab
   onChange: (t: Tab) => void
-  hidden?: Tab[]
   badged?: Tab[]
 }) {
   const t = useTranslation()
@@ -28,10 +24,8 @@ export function TabBar({
     { id: 'today', label: t.tabs.today },
     { id: 'journal', label: t.tabs.journal },
     { id: 'trends', label: t.tabs.trends },
-    { id: 'kids', label: t.tabs.kids },
-    { id: 'settings', label: t.tabs.settings },
   ]
-  const TABS = ALL.filter((tab) => !hidden.includes(tab.id))
+  const TABS = ALL
   return (
     <nav
       className="fixed bottom-0 inset-x-0 z-40"

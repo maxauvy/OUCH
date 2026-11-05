@@ -7,6 +7,7 @@ import { useAutoBackup } from './hooks/useAutoBackup'
 import { useAudiencePing } from './hooks/useAudiencePing'
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
+import { PageBack } from './components/layout/PageBack'
 import { DemoPill } from './components/demo/DemoPill'
 import { IS_DEMO } from './lib/demoMode'
 import { finishTour, tourPending } from './lib/demoSession'
@@ -76,7 +77,13 @@ function useAppliedLanguage(language: Language) {
 }
 
 function AppShell() {
-  const [tab, setTab] = useState<Tab>('today')
+  const [tab, setTabOnly] = useState<Tab>('today')
+  // Settings and the kids' page open from the day's page, as pages of their own: the tab bar stays, with Today lit.
+  const [screen, setScreen] = useState<'settings' | 'kids' | null>(null)
+  const setTab = (next: Tab) => {
+    setScreen(null)
+    setTabOnly(next)
+  }
   const [tourOpen, setTourOpen] = useState(() => IS_DEMO && tourPending())
   const settings = useSettings()
   const settingsLoaded = useSettingsLoaded()
@@ -130,16 +137,21 @@ function AppShell() {
   useEffect(() => {
     void handleProviderReturn().then((notice) => {
       if (notice) {
-        setTab('settings')
+        setScreen('settings')
         setBackupRequested(true)
       }
     })
   }, [])
   function goToBackup() {
     setBackupRequested(true)
-    setTab('settings')
+    setScreen('settings')
     requestAnimationFrame(() => document.getElementById('backup')?.scrollIntoView({ block: 'start' }))
   }
+
+  // A page opened from Today starts at its top.
+  useEffect(() => {
+    if (screen) window.scrollTo(0, 0)
+  }, [screen])
 
   // Wait for the stored settings, or the setup would flash on every launch.
   if (!settingsLoaded) return null
@@ -164,24 +176,36 @@ function AppShell() {
     <>
       <main className="flex-1">
         <Suspense fallback={null}>
-        {tab === 'today' && (
+        {screen === 'settings' && (
+          <PageBack onBack={() => setScreen(null)}>
+            <SettingsPage openBackup={backupRequested} onReplayTour={() => setTourOpen(true)} />
+          </PageBack>
+        )}
+        {screen === 'kids' && settings.kidsTabEnabled && (
+          <PageBack onBack={() => setScreen(null)}>
+            <ChildViewPage />
+          </PageBack>
+        )}
+        {screen === null && tab === 'today' && (
           <TodayPage
             onGoToBackup={goToBackup}
+            onOpenSettings={() => {
+              setBackupRequested(false)
+              setScreen('settings')
+            }}
+            onOpenKids={settings.kidsTabEnabled ? () => setScreen('kids') : undefined}
             onGoToTab={(next) => {
               setBackupRequested(false)
               setTab(next)
             }}
           />
         )}
-        {tab === 'journal' && <JournalPage />}
-        {tab === 'trends' && <TrendsPage />}
-        {tab === 'kids' && settings.kidsTabEnabled && <ChildViewPage />}
-        {tab === 'settings' && <SettingsPage openBackup={backupRequested} onReplayTour={() => setTourOpen(true)} />}
+        {screen === null && tab === 'journal' && <JournalPage />}
+        {screen === null && tab === 'trends' && <TrendsPage />}
         </Suspense>
       </main>
       <TabBar
         active={tab}
-        hidden={settings.kidsTabEnabled ? [] : ['kids']}
         badged={tab !== 'trends' && trendsDot({ shown: leadList?.shown ?? [], seen: settings.leadsSeen, enabled: settings.suggestionsEnabled, announced }) ? ['trends'] : []}
         onChange={(next) => {
           setBackupRequested(false)
