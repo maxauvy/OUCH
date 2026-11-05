@@ -58,3 +58,13 @@ test('the last change of treatment is the latest one up to today', () => {
   assert.equal(lastTreatmentEvent(events, '2026-10-30')?.date, '2026-09-17')
   assert.equal(lastTreatmentEvent([], '2026-10-30'), undefined)
 })
+
+test('the appointments that took place join the list, within the range, after a treatment of the same day', () => {
+  const appointments = [
+    { date: '2026-10-12', kind: 'gp' as const, doctor: 'Dr M' },
+    { date: '2026-09-20', kind: 'cetd' as const },
+  ]
+  const r = timelineItems({ ...base, events: [event('2026-10-12')], appointments })
+  assert.deepEqual(kinds(r), ['treatment:2026-10-12', 'appointment:2026-10-12'])
+  assert.equal(timelineItems({ ...base, appointments: [] }).length, 0)
+})

@@ -26,7 +26,9 @@ import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
 import { flareDayCount, flareDaySet, flaresOverlapping } from '../lib/flares'
 import { markedOverlapping, removeMarked } from '../lib/markedFlares'
-import { lastOf } from '../lib/consultation'
+import { lastOf, pastConsultations } from '../lib/consultation'
+import { PastConsultationSheet } from '../components/consultation/PastConsultationSheet'
+import type { PastConsultation } from '../db/types'
 import { remember } from '../lib/leadHints'
 import { restartTrial, startTrial, type LeadTrial } from '../lib/leadTrial'
 import { arrangeLeads, choiceFor, findLeads, leadFactors, PATTERN_MIN_DAYS, type Lead, type LeadChoice } from '../lib/leads'
@@ -59,6 +61,7 @@ export function TrendsPage() {
   const { intlLocale, language } = useLocale()
   // The detail pages the summary opens (zones, treatments, habits, comparison); null is the summary itself.
   const [detail, setDetail] = useState<Detail | null>(null)
+  const [openAppointment, setOpenAppointment] = useState<PastConsultation | null>(null)
   // What the curve shows besides the pain itself; a convenience of this visit, not a setting.
   const [layers, setLayers] = useState({ flares: true, treatment: true, trials: true })
 
@@ -117,6 +120,10 @@ export function TrendsPage() {
   const zonesTracked = settings.enabledFactors.includes('painLocations')
   const flareDays = useMemo(() => flareDaySet(flares?.detectable ? flares.episodes : []), [flares])
   const events = useMemo(() => (medicationsTracked && medications ? treatmentEvents(medications) : []), [medicationsTracked, medications])
+  const appointments = useMemo(
+    () => pastConsultations({ pastConsultations: settings.pastConsultations, lastConsultation: settings.lastConsultation }),
+    [settings.pastConsultations, settings.lastConsultation]
+  )
   const timeline = useMemo(
     () =>
       timelineItems({
@@ -125,11 +132,12 @@ export function TrendsPage() {
         flares: flares?.detectable ? flares.episodes : [],
         marked: markedOverlapping(settings.markedFlares, rangeFrom, today, today),
         events,
+        appointments,
         history: settings.leadTrialHistory ?? [],
         current: settings.leadTrial,
         today,
       }),
-    [rangeFrom, today, flares, events, settings.leadTrialHistory, settings.leadTrial, settings.markedFlares]
+    [rangeFrom, today, flares, events, settings.leadTrialHistory, settings.leadTrial, settings.markedFlares, appointments]
   )
   const doseMarkers: ChartMarker[] = medicationsTracked
     ? (medications ?? []).flatMap((m) =>
@@ -312,7 +320,14 @@ export function TrendsPage() {
             )}
           </Card>
 
-          {timeline.length > 0 && <TimelineCard items={timeline} onRemoveMarked={(start) => void updateSettings({ markedFlares: removeMarked(settings.markedFlares, start) })} />}
+          {timeline.length > 0 && (
+            <TimelineCard
+              items={timeline}
+              onRemoveMarked={(start) => void updateSettings({ markedFlares: removeMarked(settings.markedFlares, start) })}
+              onOpenAppointment={setOpenAppointment}
+            />
+          )}
+          {openAppointment && <PastConsultationSheet settings={settings} past={openAppointment} onClose={() => setOpenAppointment(null)} />}
 
           <section aria-labelledby="trends-more" className="flex flex-col gap-2">
             <GroupCaption>

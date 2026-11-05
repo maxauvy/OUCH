@@ -1,9 +1,10 @@
 // What happened in the chosen range, as one list under the pain curve: the
-// flares, the changes of treatment and the one-week trials, newest first.
+// flares, the changes of treatment, the one-week trials and the appointments that took place, newest first.
 // Pure (no React, no Dexie), so it can be tested with plain Node.
 //
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
+import type { PastConsultation } from '../db/types.ts'
 import type { FlareEpisode } from './flares.ts'
 import type { LeadTrial } from './leadTrial.ts'
 import type { ResolvedFlare } from './markedFlares.ts'
@@ -14,8 +15,9 @@ export type TimelineItem =
   | { kind: 'marked'; date: string; flare: ResolvedFlare }
   | { kind: 'treatment'; date: string; event: TreatmentEvent }
   | { kind: 'trial'; date: string; trial: LeadTrial; running: boolean }
+  | { kind: 'appointment'; date: string; appointment: PastConsultation }
 
-const ORDER: Record<TimelineItem['kind'], number> = { flare: 0, marked: 1, trial: 2, treatment: 3 }
+const ORDER: Record<TimelineItem['kind'], number> = { flare: 0, marked: 1, trial: 2, treatment: 3, appointment: 4 }
 
 export interface TimelineInput {
   /** First and last day of the range (ISO dates, inclusive). */
@@ -27,18 +29,21 @@ export interface TimelineInput {
   marked?: ResolvedFlare[]
   /** Every start, change and stop of the registry (`treatmentEvents`), or none when medications are not followed. */
   events: TreatmentEvent[]
+  /** The appointments that took place (`pastConsultations`), or none. */
+  appointments?: PastConsultation[]
   /** Trials, past and under way. */
   history: LeadTrial[]
   current: LeadTrial | undefined
   today: string
 }
 
-/** What touches the range, newest first (by the day it began); on the same day a flare comes before a period the person marked, that before a trial, a trial before a treatment. */
-export function timelineItems({ from, to, flares, marked = [], events, history, current, today }: TimelineInput): TimelineItem[] {
+/** What touches the range, newest first (by the day it began); on the same day a flare comes before a period the person marked, that before a trial, a trial before a treatment, a treatment before the appointment (read top down, the change comes first, then the visit that may have decided it). */
+export function timelineItems({ from, to, flares, marked = [], events, appointments = [], history, current, today }: TimelineInput): TimelineItem[] {
   const items: TimelineItem[] = []
   for (const episode of flares) if (episode.end >= from && episode.start <= to) items.push({ kind: 'flare', date: episode.start, episode })
   for (const flare of marked) if (flare.last >= from && flare.start <= to) items.push({ kind: 'marked', date: flare.start, flare })
   for (const event of events) if (event.date >= from && event.date <= to) items.push({ kind: 'treatment', date: event.date, event })
+  for (const appointment of appointments) if (appointment.date >= from && appointment.date <= to) items.push({ kind: 'appointment', date: appointment.date, appointment })
   const trials = current ? [...history.filter((t) => t.start !== current.start || t.key !== current.key), current] : history
   for (const trial of trials) {
     if (trial.end < from || trial.start > to) continue

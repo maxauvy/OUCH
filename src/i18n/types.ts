@@ -247,6 +247,9 @@ export interface Translations {
     timelineTrial: string
     timelineTrialRunning: string
     timelineTrialDone: string
+    timelineAppointmentGp: string
+    timelineAppointmentCetd: string
+    timelineAppointmentOpen: string
     zonesTitle: string
     zonesLess: string
     zonesMore: string
