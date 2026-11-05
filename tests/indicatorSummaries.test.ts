@@ -1,7 +1,7 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { summarizeCycleSymptoms, summarizeHeadaches, summarizeJoints, summarizeNerveSigns, summarizeRefreshed } from '../src/lib/indicatorSummaries.ts'
+import { summarizeCycleSymptoms, summarizeHeadaches, summarizeJoints, summarizeNerveSigns, summarizeRefreshed, summarizeSensory } from '../src/lib/indicatorSummaries.ts'
 import type { DailyEntry } from '../src/db/types.ts'
 
 const day = (date: string, extra: Partial<DailyEntry>): DailyEntry => ({ date, createdAt: 1, updatedAt: 1, ...extra })
@@ -70,4 +70,19 @@ test('nerve signs: the leg by level, the signs by days, an empty list is a day a
   assert.deepEqual([s.legNoted, s.tagsNoted, s.tagDays], [2, 3, 2])
   assert.deepEqual(s.tags, [{ tag: 'tingling', days: 2 }, { tag: 'shocks', days: 1 }])
   assert.deepEqual([s.feverNoted, s.feverDays, s.newSymptomNoted, s.newSymptomDays], [2, 1, 2, 1])
+})
+
+test('sensitivity: the stimuli that bothered, in days, an empty list being an answer', () => {
+  const s = summarizeSensory([
+    day('2026-10-01', { sensoryStimuli: ['noise', 'light'] }),
+    day('2026-10-02', { sensoryStimuli: [] }),
+    day('2026-10-03', { sensoryStimuli: ['noise'] }),
+    day('2026-10-04', { sensorySensitivity: 6 }),
+    day('2026-10-05', {}),
+  ])
+  assert.deepEqual([s.noted, s.days], [3, 2])
+  assert.deepEqual(s.stimuli, [
+    { stimulus: 'noise', days: 2 },
+    { stimulus: 'light', days: 1 },
+  ])
 })

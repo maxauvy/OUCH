@@ -4,7 +4,7 @@
 //
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
-import { HEADACHE_DURATIONS, LEG_PAIN_LEVELS, PERIOD_FLOWS, REFRESHED_LEVELS, SYMPTOM_TAGS } from '../db/types.ts'
+import { HEADACHE_DURATIONS, LEG_PAIN_LEVELS, PERIOD_FLOWS, REFRESHED_LEVELS, SENSORY_STIMULI, SYMPTOM_TAGS, type SensoryStimulus } from '../db/types.ts'
 import type { DailyEntry, HeadacheDuration, JointKey, LegPain, PeriodFlow, Refreshed, SymptomTag } from '../db/types.ts'
 
 const countBy = <T extends string>(all: readonly T[], values: readonly T[]) => Object.fromEntries(all.map((k) => [k, values.filter((v) => v === k).length])) as Record<T, number>
@@ -132,5 +132,26 @@ export function summarizeNerveSigns(entries: readonly DailyEntry[]): NerveSummar
     feverDays: fever.yes,
     newSymptomNoted: fresh.noted,
     newSymptomDays: fresh.yes,
+  }
+}
+
+export interface SensorySummary {
+  /** Days the list was answered (an empty list is an answer). */
+  noted: number
+  /** Days with at least one stimulus ticked. */
+  days: number
+  /** How many days each stimulus bothered, the most often first; the ones never ticked are left out. */
+  stimuli: { stimulus: SensoryStimulus; days: number }[]
+}
+
+/** The stimuli that bothered: counted in days, not scored. */
+export function summarizeSensory(entries: readonly DailyEntry[]): SensorySummary {
+  const lists = entries.flatMap((e) => (e.sensoryStimuli ? [e.sensoryStimuli] : []))
+  return {
+    noted: lists.length,
+    days: lists.filter((l) => l.length > 0).length,
+    stimuli: SENSORY_STIMULI.map((stimulus) => ({ stimulus, days: lists.filter((l) => l.includes(stimulus)).length }))
+      .filter((x) => x.days > 0)
+      .sort((a, b) => b.days - a.days),
   }
 }

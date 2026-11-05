@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- **Sensibilité : on coche ce qui gêne, au lieu de noter une intensité.** Bruit, lumière, odeurs, toucher : quatre puces à toucher, à la place du curseur de 0 à 10. Le rapport et la page « Mes habitudes » disent sur combien de jours chaque chose a gêné, sans intensité ni seuil. Les jours déjà notés avec l'ancien curseur restent dans le journal, la sauvegarde et le CSV (colonne `sensory_sensitivity`) ; les nouvelles réponses vont dans une colonne `sensory_stimuli` (valeurs séparées par `|`).
+
 ## [0.10.1] - 2026-11-04
 
 Une version de suites à la 0.10.0, après usage sur un téléphone : chaque rendez-vous a son type (médecin traitant ou centre douleur), les dates sont conservées et la comparaison se fait entre les deux derniers rendez-vous du même type ; les deux rapports prennent les couleurs d'OUCH avec une flèche de tendance sur les chiffres clés ; et une page pour les soignants, avec leur documentation, s'ouvre dès le premier écran.

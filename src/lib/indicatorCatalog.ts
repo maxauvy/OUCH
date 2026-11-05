@@ -188,7 +188,7 @@ const ENTRY_FIELDS: Partial<Record<IndicatorKey, readonly (keyof DailyEntry)[]>>
   spasms: ['spasms'],
   feverInfection: ['feverInfection'],
   newSymptomMarker: ['newSymptom'],
-  sensorySensitivity: ['sensorySensitivity'],
+  sensorySensitivity: ['sensorySensitivity', 'sensoryStimuli'],
 }
 
 /** The entry as the screens show it: what an indicator not offered (no early
