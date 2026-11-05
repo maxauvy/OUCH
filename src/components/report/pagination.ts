@@ -15,13 +15,20 @@ interface RowsBlock {
   rows: number
   /** Rows `from` to `to` (exclusive); `continued` when earlier rows are on a previous sheet. */
   render: (from: number, to: number, continued: boolean) => ReactNode
+  /** The contents line points to this block under this name. */
+  toc?: string
 }
 
 /** A block of a page: moved whole, or split between rows. */
 export type Block = ReactNode | RowsBlock
 
-export function rowsBlock(rows: number, render: RowsBlock['render']): RowsBlock {
-  return { rows, render }
+export function rowsBlock(rows: number, render: RowsBlock['render'], toc?: string): RowsBlock {
+  return { rows, render, ...(toc ? { toc } : {}) }
+}
+
+/** The name a block carries for the contents line, if it has one (a list or table block; any other is named by `tocOf`). */
+export function rowsToc(block: Block): string | undefined {
+  return isRows(block) ? block.toc : undefined
 }
 
 function isRows(block: Block): block is RowsBlock {

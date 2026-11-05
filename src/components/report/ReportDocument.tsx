@@ -1,6 +1,10 @@
-import { createContext, createElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
-import { IconActivityHeartbeat, IconBodyScan, IconBook2, IconBulb, IconCalendar, IconCalendarWeek, IconChartDots, IconChartLine, IconCloudStorm, IconHeartbeat, IconInfoCircle, IconLeaf, IconListCheck, IconListDetails, IconMessageQuestion, IconMoodSmile, IconMoon, IconNotes, IconPill, IconRuler2, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
+import { createContext, createElement, isValidElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
+import { IconActivityHeartbeat, IconBodyScan, IconBook2, IconBulb, IconCalendar, IconCalendarWeek, IconChartDots, IconChartLine, IconCloudStorm, IconHeart, IconHeartbeat, IconInfoCircle, IconLeaf, IconListCheck, IconListDetails, IconMessageQuestion, IconMoodSmile, IconMoon, IconNotes, IconPill, IconRuler2, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
 import { periodDayOf } from '../../lib/periodDay'
+import { dayMix, type MixDirection } from '../../lib/dayMix'
+import { timelineItems, type TimelineItem } from '../../lib/trendsTimeline'
+import { treatmentEvents } from '../../lib/treatmentEvents'
+import { treatmentEventText } from '../trends/treatmentEventText'
 import './report.css'
 import type { LoggedEntry } from '../../db/types'
 import { DRAW_ORDER, pieces, type View } from '../../lib/bodyOutlines'
@@ -33,7 +37,7 @@ import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
 import { SYMPTOMS, type ReportData } from './reportData'
 import type { ReportFormat } from './reportFormat'
 import { REFERENCES } from '../../lib/references'
-import { buildSheets, findCut, rowsBlock, type Block, type Cut } from './pagination'
+import { buildSheets, findCut, rowsBlock, rowsToc, type Block, type Cut } from './pagination'
 import { summarizeMorningStiffness } from '../../lib/stiffnessSummary'
 import { FLAT_BELOW, trend, type Trend } from '../../lib/trend'
 import { AppLogo } from '../ui/AppLogo'
@@ -128,6 +132,8 @@ export function ReportDocument({
   const running = options.variant === 'gp' ? f.t.runningGp : f.t.runningPainClinic
   const sheets = buildSheets(pages, cuts)
   const sectionRefs = useRef<HTMLElement[]>([])
+  // Where each section of the contents line starts.
+  const tocPages = tocPagesOf(pages, sheets)
   useLayoutEffect(() => {
     if (!onCut) return
     const cut = findCut(sectionRefs.current, sheets, cuts)
@@ -136,9 +142,10 @@ export function ReportDocument({
 
   return (
     <HeadingOffset.Provider value={headingOffset}>
+      <TocPages.Provider value={tocPages}>
       {sheets.map((sheet, i) => (
         <section
-          className="report-page"
+          className={`report-page${options.variant === 'gp' ? ' gp' : ''}`}
           key={i}
           ref={(el) => {
             if (el) sectionRefs.current[i] = el
@@ -173,6 +180,7 @@ export function ReportDocument({
           </div>
         </section>
       ))}
+      </TocPages.Provider>
     </HeadingOffset.Provider>
   )
 }
@@ -193,37 +201,43 @@ function gpPages(d: ReportData): Block[][] {
   const { f } = d
   const keyPoints = keyPointItems(d)
   const notes = noteItems(d, false)
+  const timeline = reportTimelineItems(d)
+  const hasAgenda = agendaItems(d).length > 0 || !!d.options.lastNote
+  const toc: TocEntry[] = [
+    ...(timeline.length > 0 ? [{ id: 'timeline', label: f.all.trends.timelineTitle }] : []),
+    ...(hasAgenda ? [{ id: 'agenda', label: f.t.agenda }] : []),
+    ...(d.meds.length > 0 ? [{ id: 'treatments', label: f.t.treatments }] : []),
+    { id: 'symptoms', label: `${f.t.symptoms} · ${f.t.zones}` },
+    ...(d.options.includeNotes && notes.length > 0 ? [{ id: 'notes', label: f.t.notes }] : []),
+    { id: 'method', label: f.t.method },
+  ]
   return [
+    // Page 1: who, in a sentence, the figures, the curve, the days by intensity, and where the rest is.
     [
       <Header d={d} />,
       <Brief d={d} />,
       <GpTiles d={d} />,
-      <div className="r-dash">
-        <div className="r-card r-chart">
-          <H level={2} kind="pain">
-            {f.t.painChart}
-          </H>
-          <p className="r-small" style={{ marginTop: -4 }}>
-            {f.t.chartHint}
-            {chartFlares(d).length > 0 && f.t.chartHintFlares}
-          </p>
-          <PainChart entries={d.all} p={d.p} f={f} width={DASH_CHART_WIDTH} height={250} summary={painSummary(d)} flares={chartFlares(d)} />
-        </div>
-        <GpFigures d={d} />
-        <DayMix d={d} />
+      <div className="r-card r-chart">
+        <H level={2} kind="pain">
+          {f.t.painChart}
+        </H>
+        <p className="r-small" style={{ marginTop: -4 }}>
+          {f.t.chartHint}
+          {chartFlares(d).length > 0 && f.t.chartHintFlares}
+        </p>
+        <PainChart entries={d.all} p={d.p} f={f} width={DASH_CHART_WIDTH * 1.45} height={185} summary={painSummary(d)} flares={chartFlares(d)} />
       </div>,
-      <Agenda d={d} />,
-      rowsBlock(keyPoints.length, (from, to, continued) => (
-        <div className="r-card r-after-dash">
-          <H level={2} kind="keyPoints">
-            {f.t.keyPoints}
-            <Continued f={f} on={continued} />
-          </H>
-          <KeyPointList items={keyPoints} from={from} to={to} />
-        </div>
-      )),
+      <DayMix d={d} />,
+      <Toc entries={toc} f={f} />,
     ],
+    // Page 2: what happened, what the patient wants to bring up, the treatments, the symptoms and the zones.
     [
+      timeline.length > 0 && rowsBlock(timeline.length, (from, to, continued) => <ReportTimeline d={d} items={timeline} from={from} to={to} continued={continued} />, 'timeline'),
+      hasAgenda && (
+        <TocBlock id="agenda">
+          <Agenda d={d} />
+        </TocBlock>
+      ),
       d.meds.length > 0 &&
         rowsBlock(d.meds.length, (from, to, continued) => (
           <>
@@ -233,34 +247,50 @@ function gpPages(d: ReportData): Block[][] {
             </H>
             <TreatmentsTable d={d} detailed={false} from={from} to={to} />
           </>
-        )),
+        ), 'treatments'),
       d.reviews.length > 0 && reviewBlock(d),
       d.marked.length > 0 && markedBlock(d),
+      <TocBlock id="symptoms">
+        <div className="r-grid2 wide-left">
+          <div>
+            <H level={2} kind="symptoms">{f.t.symptoms}</H>
+            <SymptomsTable d={d} />
+          </div>
+          <div>
+            <H level={2} kind="zones">{f.t.zones}</H>
+            <ZoneBars d={d} limit={6} />
+            <ZoneFacts d={d} full={false} />
+          </div>
+        </div>
+      </TocBlock>,
+    ],
+    // Page 3: the key points, the habits, the comparison and the notes, then the method.
+    [
+      rowsBlock(keyPoints.length, (from, to, continued) => (
+        <div className="r-card">
+          <H level={2} kind="keyPoints">
+            {f.t.keyPoints}
+            <Continued f={f} on={continued} />
+          </H>
+          <KeyPointList items={keyPoints} from={from} to={to} />
+        </div>
+      )),
       d.compare && <CompareBlock d={d} />,
-      <div className="r-grid2 wide-left">
-        <div>
-          <H level={2} kind="symptoms">{f.t.symptoms}</H>
-          <SymptomsTable d={d} />
-        </div>
-        <div>
-          <H level={2} kind="zones">{f.t.zones}</H>
-          <ZoneBars d={d} limit={6} />
-          <ZoneFacts d={d} full={false} />
-        </div>
-      </div>,
       d.options.includeStiffness && <StiffnessBlock d={d} />,
       d.options.includeNightWakings && <NightWakingsBlock d={d} />,
       <OtherIndicatorsBlock d={d} />,
       d.weekdays && <WeekdaysBlock d={d} />,
       (d.noticed.length > 0 || d.trials.length > 0) && <Noticed d={d} />,
-      d.options.includeNotes && notes.length > 0 && rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all={false} list={notes} from={from} to={to} continued={continued} />),
-      <>
+      d.options.includeNotes &&
+        notes.length > 0 &&
+        rowsBlock(notes.length, (from, to, continued) => <Notes d={d} all={false} list={notes} from={from} to={to} continued={continued} />, 'notes'),
+      <TocBlock id="method">
         <H level={2} kind="method">{f.t.method}</H>
         <div className="r-method">
           <p>{f.t.methodGp}</p>
           <p>{f.t.trendNote}</p>
         </div>
-      </>,
+      </TocBlock>,
       <References numbers={gpReferences(d)} title={f.t.references} />,
     ],
   ]
@@ -509,7 +539,7 @@ function Header({ d }: { d: ReportData }) {
   return (
     <>
       <div className="r-titlebar">
-        <AppLogo size={44} className="r-logo r-logo-big" />
+        <Pastille tone="pain" icon={IconHeart} size={44} />
         <div>
           <H level={1}>{options.variant === 'gp' ? f.t.titleGp : f.t.titlePainClinic}</H>
           <div className="r-sub">{f.t.subtitle}</div>
@@ -758,6 +788,116 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
 
 /** The GP dashboard's figures: mean pain, then sleep when it is logged, or
  * else the median. */
+// ---------------------------------------------------------------------------
+// The contents line of page 1 and the list of what happened
+
+/** A section the contents line points to; its title or its first block carries a `TocMark` with the same id. */
+interface TocEntry {
+  id: string
+  label: string
+}
+
+/** On which sheet each section of the contents line starts, from the sheets as they are laid out (a section can move to a continuation sheet). */
+const TocPages = createContext<Record<string, number>>({})
+
+/** A block of a page the contents line points to; it draws what it holds. */
+function TocBlock({ children }: { id: string; children: ReactNode }) {
+  return <>{children}</>
+}
+
+/** The sheet number (from 1) each named block starts on: its first part, whatever the cuts. */
+function tocPagesOf(pages: Block[][], sheets: ReturnType<typeof buildSheets>): Record<string, number> {
+  const found: Record<string, number> = {}
+  sheets.forEach((sheet, i) => {
+    for (const part of sheet.parts) {
+      const block = pages[part.page]?.[part.block]
+      const id = block !== undefined && isValidElement(block) && block.type === TocBlock ? (block.props as { id: string }).id : block !== undefined ? rowsToc(block) : undefined
+      if (id && part.from === 0) found[id] ??= i + 1
+    }
+  })
+  return found
+}
+
+function Toc({ entries, f }: { entries: TocEntry[]; f: ReportFormat }) {
+  const pages = useContext(TocPages)
+  return (
+    <div className="r-card r-toc">
+      <span className="r-toctitle">{f.t.tocTitle}</span>
+      {entries.map((e) => (
+        <span className="r-tocitem" key={e.id}>
+          {e.label}
+          {pages[e.id] ? <> · {f.format(f.t.tocPage, { n: pages[e.id]! })}</> : null}
+        </span>
+      ))}
+    </div>
+  )
+}
+
+/** What happened in the reported period, newest first, as on the Trends screen: the flares, the periods the patient marked, the treatment changes, the one-week trials and the appointments. A dated list, nothing concluded. */
+function reportTimelineItems(d: ReportData): TimelineItem[] {
+  return timelineItems({
+    from: d.p.start,
+    to: d.p.end,
+    flares: d.flares.detectable ? d.flares.current : [],
+    marked: d.marked,
+    events: d.medications.length ? treatmentEvents(d.medications) : [],
+    appointments: d.options.appointments ?? [],
+    history: d.options.leadTrials?.history ?? [],
+    current: d.options.leadTrials?.current,
+    today: d.options.end,
+  })
+}
+
+const DOT = { flare: '#574a7a', marked: '#574a7a', treatment: '#0d5c8c', trial: '#c7ab68', appointment: '#0f766e' } as const
+
+function ReportTimeline({ d, items, from, to, continued }: { d: ReportData; items: TimelineItem[]; from: number; to: number; continued: boolean }) {
+  const { f } = d
+  const t = f.all.trends
+  const range = (start: string, end: string) => f.format(t.flareRange, { start: f.dayMonth(start), end: f.dayMonth(end) })
+  const locale = d.options.language === 'fr' ? 'fr-FR' : 'en-US'
+  function describe(item: TimelineItem): { text: string; note: string } {
+    switch (item.kind) {
+      case 'flare': {
+        const e = item.episode
+        return {
+          text: f.format(t.timelineFlare, { n: e.days }),
+          note: [range(e.start, e.end), f.format(t.timelineFlarePeak, { peak: e.peak, usual: f.nfx(e.baseline) }), e.ongoing ? t.flareOngoing : e.recoveryDays !== null ? f.format(t.flareBack, { n: e.recoveryDays }) : null].filter(Boolean).join(' · '),
+        }
+      }
+      case 'marked':
+        return { text: f.format(f.all.markedFlare.timeline, { n: item.flare.days }), note: range(item.flare.start, item.flare.last) }
+      case 'treatment':
+        return { text: treatmentEventText(item.event, f.all, d.options.language, locale), note: f.dayMonth(item.date) }
+      case 'trial':
+        return { text: f.format(t.timelineTrial, { action: item.trial.action }), note: `${range(item.trial.start, item.trial.end)} · ${item.running ? t.timelineTrialRunning : t.timelineTrialDone}` }
+      case 'appointment':
+        return { text: item.appointment.kind === 'cetd' ? t.timelineAppointmentCetd : t.timelineAppointmentGp, note: [f.dayMonth(item.date), item.appointment.doctor].filter(Boolean).join(' · ') }
+    }
+  }
+  return (
+    <div className="r-card">
+      <H level={2} kind="flares">
+        {t.timelineTitle}
+        <Continued f={f} on={continued} />
+      </H>
+      <ul className="r-tl">
+        {items.slice(from, to).map((item, i) => {
+          const { text, note } = describe(item)
+          return (
+            <li key={`${item.kind}-${item.date}-${from + i}`} data-row>
+              <i style={{ background: DOT[item.kind] }} aria-hidden />
+              <div>
+                <b>{text}</b>
+                <div className="r-small">{note}</div>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
 /** The one sentence a doctor reads first. Built from the same figures as the tiles under it (same mean, same count of severe days, same flares), so it cannot say something else. Nothing without pain logged. */
 function briefSentence(d: ReportData): string {
   const { f, pain, painPrev, flares } = d
@@ -831,89 +971,85 @@ function GpTiles({ d }: { d: ReportData }) {
       />
     )
   }
-  if (stiff?.commonest)
+  const sleep = meanOf(d.current, 'sleepHours')
+  if (sleep) {
+    const sleepPrev = meanOf(d.previous, 'sleepHours')
+    const quality = meanOf(d.current, 'sleepQuality')
+    tiles.push(
+      <Tile
+        key="sleep"
+        tone="sleep"
+        icon={IconMoon}
+        label={f.t.tileSleep}
+        value={
+          <>
+            {f.nf(sleep.mean)}
+            <small> h</small>
+          </>
+        }
+        compare={[sleepPrev && before(f.format(f.t.hours, { v: f.nf(sleepPrev.mean) })), quality && f.format(f.t.sleepQuality, { v: f.nf(quality.mean) })].filter(Boolean).join(' · ')}
+        trend={sleepPrev ? trend(sleep.mean, sleepPrev.mean, 'higher', FLAT_BELOW.hours) : null}
+        f={f}
+      />
+    )
+  } else if (stiff?.commonest)
     tiles.push(<Tile key="stiffness" tone="body" icon={IconSunrise} label={f.t.stiffness.title} value={<small>{f.t.stiffness.bands[stiff.commonest]}</small>} compare={f.format(f.t.stiffness.noted, { n: stiff.noted })} />)
   return <div className="r-tiles r-first-tiles">{tiles}</div>
 }
 
-function GpFigures({ d }: { d: ReportData }) {
-  const { f, pain } = d
-  if (!pain) return null
-  const sleep = meanOf(d.current, 'sleepHours')
-  const sleepPrev = meanOf(d.previous, 'sleepHours')
-  const quality = meanOf(d.current, 'sleepQuality')
-  return (
-    <div className="r-card r-toned" data-tone={sleep ? 'sleep' : 'brand'}>
-      {sleep ? (
-        <div className="r-kpi">
-          {sleepPrev && <TrendArrow trend={trend(sleep.mean, sleepPrev.mean, 'higher', FLAT_BELOW.hours)} f={f} />}
-          <div className="r-k r-tilehead">
-            <Pastille tone="sleep" icon={IconMoon} size={20} />
-            {f.t.tileSleep}
-          </div>
-          <div className="r-big num">
-            {f.nf(sleep.mean)}
-            <small> h</small>
-          </div>
-          <div className="r-cmp">
-            {[sleepPrev && f.format(f.t.before, { v: f.format(f.t.hours, { v: f.nf(sleepPrev.mean) }) }), quality && f.format(f.t.sleepQuality, { v: f.nf(quality.mean) })]
-              .filter(Boolean)
-              .join(' · ')}
-          </div>
-        </div>
-      ) : (
-        <div className="r-kpi">
-          <div className="r-k r-tilehead">
-            <Pastille tone="brand" icon={IconRuler2} size={20} />
-            {f.t.tileMedian}
-          </div>
-          <div className="r-big num">
-            {f.nfx(pain.median)}
-            <small>
-              {' '}
-              [{f.nf(pain.q1)}–{f.nf(pain.q3)}]
-            </small>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
-/** Share of mild, moderate and severe days, with the previous period's. */
+/** The days of the period by intensity, with the period before it: two bars one under the other, then for each class its share, the share before and the gap in points. The arrows say which way the gap goes (green when it is the way things get better, orange when it is not, grey when flat or when the class says nothing alone); the report describes, it does not conclude. */
 function DayMix({ d }: { d: ReportData }) {
   const { f, pain, painPrev } = d
   if (!pain) return null
-  const rows = [
-    [f.t.mixMild, pain.mild, painPrev?.mild],
-    [f.t.mixModerate, pain.moderate, painPrev?.moderate],
-    [f.t.mixSevere, pain.severe, painPrev?.severe],
-  ] as const
+  const rows = dayMix(pain, painPrev)
+  const labels = [f.t.mixMild, f.t.mixModerate, f.t.mixSevere]
+  const bar = (shares: number[]) => (
+    <div className="r-mix" aria-hidden>
+      {shares.map((share, i) => (
+        <span key={i} style={{ flex: share, background: MIX_COLORS[i] }} />
+      ))}
+    </div>
+  )
+  const arrow = (direction: MixDirection | undefined, points: number | undefined) => {
+    if (direction === undefined || points === undefined) return null
+    const color = direction === 'better' ? R.good : direction === 'worse' ? R.worse : R.prev
+    const sign = points > 0 ? '+' : points < 0 ? '−' : '±'
+    const glyph = points > 0 ? '▲' : points < 0 ? '▼' : '▬'
+    return (
+      <span className="r-mixgap" style={{ color }}>
+        {glyph} {sign}
+        {f.format(f.t.mixPts, { n: Math.abs(points) })}
+      </span>
+    )
+  }
   return (
-    <div className="r-card">
-      <div className="r-k r-tilehead r-cardtitle">
-        <Pastille tone="pain" icon={IconChartLine} size={20} />
+    <div className="r-card r-mixcard">
+      <H level={2} kind="pain">
         {f.t.dayMix}
-      </div>
-      <div className="r-mix" aria-hidden>
-        {rows.map(([label, share], i) => (
-          <span key={label} style={{ flex: share, background: MIX_COLORS[i] }} />
-        ))}
-      </div>
-      <ul className="r-mix-rows">
-        {rows.map(([label, share, prev], i) => (
-          <li key={label}>
-            <span>
+      </H>
+      {painPrev ? (
+        <div className="r-mixbars">
+          <span className="r-mixlabel">{f.t.previousPeriod}</span>
+          {bar(rows.map((r) => r.prev ?? 0))}
+          <span className="r-mixlabel strong">{f.t.mixThis}</span>
+          {bar(rows.map((r) => r.share))}
+        </div>
+      ) : (
+        <div className="r-mixbars single">{bar(rows.map((r) => r.share))}</div>
+      )}
+      <div className="r-mixblocks">
+        {rows.map((r, i) => (
+          <div className="r-mixblock" key={r.key}>
+            <div className="r-mixname">
               <i style={{ background: MIX_COLORS[i] }} aria-hidden />
-              {label}
-            </span>
-            <span className="num">
-              <b>{f.pct(share)}</b>
-              {prev !== undefined && <span className="r-faint"> · {f.format(f.t.before, { v: f.pct(prev) })}</span>}
-            </span>
-          </li>
+              {labels[i]}
+            </div>
+            <div className="r-mixvalue num">{f.pct(r.share)}</div>
+            {r.prev !== undefined && <div className="r-mixprev">{f.format(f.t.before, { v: f.pct(r.prev) })}</div>}
+            {arrow(r.direction, r.points)}
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   )
 }

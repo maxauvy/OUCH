@@ -386,26 +386,6 @@
 .report .r-mix > span {
   display: block;
 }
-.report .r-mix-rows {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 11px;
-}
-.report .r-mix-rows li {
-  display: flex;
-  justify-content: space-between;
-  gap: 6px;
-  padding: 1px 0;
-}
-.report .r-mix-rows i {
-  display: inline-block;
-  width: 9px;
-  height: 9px;
-  border-radius: 2px;
-  margin-right: 5px;
-  vertical-align: -1px;
-}
 
 .report .r-grid2 {
   display: grid;
@@ -791,4 +771,141 @@
   font-size: 11.5px;
   font-weight: 600;
   color: var(--r-ink);
+}
+
+/* The general practitioner report, in three pages: a larger text (13.5 px, tables 12.5 px, small print not under 11 px) in darker greys, an A4 page
+   that reads better printed than packed. */
+.report .report-page.gp {
+  font-size: 13.5px;
+  --r-muted: #444e58;
+  --r-faint: #4f5964;
+}
+.report .report-page.gp table {
+  font-size: 12.5px;
+}
+.report .report-page.gp .r-k {
+  font-size: 11.5px;
+}
+.report .report-page.gp .r-small,
+.report .report-page.gp .r-tile .r-cmp {
+  font-size: 12px;
+}
+.report .report-page.gp .r-h2 {
+  font-size: 15px;
+}
+.report .report-page.gp .r-tile .r-big {
+  font-size: 24px;
+}
+.report .report-page.gp .r-foot {
+  font-size: 10.5px;
+}
+.report .report-page.gp .r-first-tiles .r-tile .r-big small {
+  font-size: 14px;
+}
+.report .report-page.gp .r-brief .r-sentence {
+  font-size: 16px;
+}
+
+/* The days by intensity, with the period before. */
+.report .r-mixcard .r-mix {
+  height: 16px;
+  margin: 0;
+  border-radius: 6px;
+}
+.report .r-mixbars {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  gap: 7px 10px;
+  align-items: center;
+  margin: 8px 0 10px;
+}
+.report .r-mixbars.single {
+  grid-template-columns: 1fr;
+}
+.report .r-mixlabel {
+  font-size: 12px;
+  color: var(--r-muted);
+}
+.report .r-mixlabel.strong {
+  font-weight: 700;
+  color: var(--r-ink);
+}
+.report .r-mixblocks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.report .r-mixblock {
+  background: var(--r-band);
+  border-radius: 8px;
+  padding: 7px 10px 8px;
+}
+.report .r-mixname {
+  font-size: 12px;
+  color: var(--r-muted);
+}
+.report .r-mixname i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 6px;
+}
+.report .r-mixvalue {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--r-navy);
+}
+.report .r-mixprev {
+  font-size: 12px;
+  color: var(--r-muted);
+}
+.report .r-mixgap {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+/* The contents line of page 1. */
+.report .r-toc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  margin-top: 10px;
+}
+.report .r-toctitle {
+  font-weight: 700;
+  color: var(--r-navy);
+  margin-right: 4px;
+}
+.report .r-tocitem {
+  background: var(--r-brand-soft);
+  color: var(--r-brand);
+  border-radius: 99px;
+  padding: 1px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* What happened, as a dated list. */
+.report ul.r-tl {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.report ul.r-tl li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0 0 7px;
+}
+.report ul.r-tl li > i {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  margin-top: 5px;
 }
