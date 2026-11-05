@@ -1705,7 +1705,7 @@ const en: Translations = {
     docs: {
       guide: { title: 'Reading an OUCH report', meta: '1 page · read this first' },
       leaflet: { title: 'Leaflet for professionals', meta: '2 pages' },
-      note: { title: 'Methodology note', meta: '12 pages · formulas, thresholds, sources' },
+      note: { title: 'Methodology note', meta: '13 pages · formulas, thresholds, sources' },
     },
     otherLanguage: 'Also in French:',
     demoTitle: 'See an example report',
