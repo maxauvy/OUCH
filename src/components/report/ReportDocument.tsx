@@ -131,7 +131,7 @@ export function ReportDocument({
   const layout = options.variant === 'gp' ? { pages: gpPages(data), labels: undefined } : painClinicLayout(data)
   const pages = layout.pages
   const running = options.variant === 'gp' ? f.t.runningGp : f.t.runningPainClinic
-  const sheets = buildSheets(pages, cuts, !!layout.labels)
+  const sheets = buildSheets(pages, cuts)
   const sectionRefs = useRef<HTMLElement[]>([])
   // Where each section of the contents line starts.
   const tocPages = tocPagesOf(pages, sheets)
@@ -162,7 +162,7 @@ export function ReportDocument({
                   <span className="r-who">{options.patientName}</span>
                 </>
               )}
-              {layout.labels?.[sheet.parts[0]?.page ?? 0] && <span className="r-part-name"> · {layout.labels[sheet.parts[0]?.page ?? 0]}</span>}
+              {layout.labels && <span className="r-part-name"> · {sheetLabel(layout.labels, sheet, f)}</span>}
             </span>
             <span className="num">
               {f.fullDate(p.start)} → {f.fullDate(p.end)}
@@ -980,6 +980,14 @@ function ReportTimeline({ d, items, from, to, continued }: { d: ReportData; item
       </ul>
     </div>
   )
+}
+
+/** What a sheet of the pain clinic report is about, for the running band: its part, or "Parts 3 to 4" when the end of a part and the next one share it. */
+function sheetLabel(labels: string[], sheet: { parts: { page: number }[] }, f: ReportFormat): string {
+  const pages = [...new Set(sheet.parts.map((part) => part.page))].sort((a, b) => a - b)
+  if (pages.length === 1) return labels[pages[0]!] ?? ''
+  if (pages[0] === 0) return labels[0] ?? ''
+  return f.format(f.t.partRange, { a: pages[0]!, b: pages[pages.length - 1]! })
 }
 
 /** The one sentence a doctor reads first. Built from the same figures as the tiles under it (same mean, same count of severe days, same flares), so it cannot say something else. Nothing without pain logged. */

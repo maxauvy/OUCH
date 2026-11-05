@@ -56,7 +56,7 @@ On note la date de son rendez-vous, ses questions et ce dont on veut parler en p
 
 ### Un rapport pour le médecin
 
-Depuis Tendances, on génère un rapport à imprimer ou à enregistrer en PDF. Il couvre la période depuis la dernière consultation et la compare à la même durée juste avant. Il existe en deux versions : une synthèse de 2 pages pour le médecin traitant, et un rapport détaillé de 5 pages pour un centre douleur (CETD), avec la consommation d'antalgiques et les facteurs associés. Il se lit en français ou en anglais, mentionne les maladies déclarées et reprend, dans « Ce que le patient a remarqué », les pistes gardées et les essais d'une semaine du patient.
+Depuis l'onglet Consultation, on génère un rapport à imprimer ou à enregistrer en PDF. Il couvre la période depuis la dernière consultation et la compare à la même durée juste avant. Il existe en deux versions : une synthèse de 3 à 5 pages pour le médecin traitant, et un rapport détaillé de 6 à 10 pages, en parties numérotées, pour un centre douleur (CETD), avec la consommation d'antalgiques et les facteurs associés. Il se lit en français ou en anglais, mentionne les maladies déclarées et reprend, dans « Ce que le patient a remarqué », les pistes gardées et les essais d'une semaine du patient.
 
 Le rapport décrit les données sans les interpréter, et ses seuils citent leurs sources (IMMPACT, HAS, et d'autres travaux publiés), résumées dans Réglages → À propos → Sources scientifiques. Il est fabriqué sur l'appareil ; le nom qu'on y saisit n'est pas enregistré, mais la date de naissance et la date de la dernière consultation restent sur l'appareil pour ne pas les retaper.
 
@@ -120,8 +120,9 @@ src/
   hooks/         hooks React (entrées, réglages, thème)
   components/    l'interface, rangée par domaine (entry, weather, journal,
                  trends, report, kids, settings, setup, ui)
-  pages/         les cinq onglets (Aujourd'hui, Journal, Tendances, Enfants,
-                 Réglages) et le rapport pour le médecin
+  pages/         les quatre onglets (Aujourd'hui, Journal, Tendances,
+                 Consultation), les Réglages, la page Enfants et le rapport
+                 pour le médecin
 scripts/         historique de démo, icônes, vidéos
 tests/           tests des sauvegardes, des tendances, du rapport et de la météo
 ```

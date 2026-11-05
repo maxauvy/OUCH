@@ -812,10 +812,10 @@ const fr: Translations = {
     back: 'Retour',
     recipientTitle: 'Pour qui ?',
     recipients: {
-      gp: { label: 'Médecin traitant', helper: 'Environ 2 pages : l’essentiel en deux minutes.' },
+      gp: { label: 'Médecin traitant', helper: 'De 3 à 5 pages : l’essentiel, selon la richesse de ton journal.' },
       painClinic: {
         label: 'Centre douleur (CETD)',
-        helper: 'Environ 5 pages : données détaillées, consommation d’antalgiques, facteurs associés.',
+        helper: 'De 6 à 10 pages : données détaillées, consommation d’antalgiques, facteurs associés.',
       },
     },
     consultationTitle: 'Date de ta dernière consultation',
@@ -981,6 +981,8 @@ const fr: Translations = {
     tocTitle: 'Dans ce rapport',
     tocPage: 'p. {{n}}',
     partSummary: "Résumé",
+    partOne: "Partie {{n}}",
+    partRange: "Parties {{a}} à {{b}}",
     partPain: "Douleur",
     partPainHint: "répartition, poussées, évolution, jours avant une poussée",
     partTreatments: "Traitements",
