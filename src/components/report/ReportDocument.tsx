@@ -1,5 +1,5 @@
 import { createContext, createElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
-import { IconActivityHeartbeat, IconChartLine, IconCloudStorm, IconListCheck, IconMoon, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
+import { IconActivityHeartbeat, IconChartDots, IconChartLine, IconCloudStorm, IconListCheck, IconMoodSmile, IconMoon, IconRuler2, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
 import { periodDayOf } from '../../lib/periodDay'
 import './report.css'
 import type { LoggedEntry } from '../../db/types'
@@ -685,7 +685,7 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
       f={f}
     />,
     <Tile key="severe" tone="severe" icon={IconSun} label={f.t.tileSevere} value={f.pct(pain.severe)} compare={painPrev ? before(f.pct(painPrev.severe)) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
-    <Tile key="mild" label={f.t.tileMild} value={f.pct(pain.mild)} compare={painPrev ? before(f.pct(painPrev.mild)) : undefined} trend={painPrev ? trend(pain.mild, painPrev.mild, 'higher', FLAT_BELOW.share) : null} f={f} />,
+    <Tile key="mild" tone="brand" icon={IconMoodSmile} label={f.t.tileMild} value={f.pct(pain.mild)} compare={painPrev ? before(f.pct(painPrev.mild)) : undefined} trend={painPrev ? trend(pain.mild, painPrev.mild, 'higher', FLAT_BELOW.share) : null} f={f} />,
   ]
   if (sleep)
     tiles.push(
@@ -711,6 +711,8 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
     tiles.push(
       <Tile
         key="median"
+        tone="brand"
+        icon={IconRuler2}
         label={f.t.tileMedian}
         value={
           <>
@@ -723,7 +725,7 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
         }
         compare={f.format(f.t.range, { min: pain.min, max: pain.max })}
       />,
-      <Tile key="sd" label={f.t.tileVariability} value={f.nf(pain.sd)} compare={painPrev ? before(f.nf(painPrev.sd)) : undefined} trend={painPrev ? trend(pain.sd, painPrev.sd, 'lower', FLAT_BELOW.score) : null} f={f} />
+      <Tile key="sd" tone="brand" icon={IconChartDots} label={f.t.tileVariability} value={f.nf(pain.sd)} compare={painPrev ? before(f.nf(painPrev.sd)) : undefined} trend={painPrev ? trend(pain.sd, painPrev.sd, 'lower', FLAT_BELOW.score) : null} f={f} />
     )
   return <div className={`r-tiles${detailed ? ' six' : ''}`}>{tiles}</div>
 }

@@ -689,6 +689,9 @@
 .report .r-tiles .r-tile[data-tone] {
   border-top: 0;
 }
+.report .r-tile[data-tone='brand'] {
+  background: #e3eef6;
+}
 .report .r-tile[data-tone='pain'] {
   background: #fdeaea;
 }
