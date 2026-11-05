@@ -1,4 +1,5 @@
 import { createContext, createElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
+import { IconActivityHeartbeat, IconChartLine, IconCloudStorm, IconListCheck, IconMoon, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
 import { periodDayOf } from '../../lib/periodDay'
 import './report.css'
 import type { LoggedEntry } from '../../db/types'
@@ -52,9 +53,33 @@ const DASH_CHART_WIDTH = 430
  * where it lives under the page title and the "Preview" heading. */
 const HeadingOffset = createContext(0)
 
-function H({ level, children }: { level: 1 | 2 | 3; children: ReactNode }) {
+/** The round pastille that opens a title or a figure, tinted by what it speaks of, as in the app. Always light: it prints as a pale grey. */
+const TONES = {
+  pain: { bg: '#fdeaea', ink: '#b3261e' },
+  severe: { bg: '#fff1dc', ink: '#9a5b00' },
+  flare: { bg: '#ece4f8', ink: '#574a7a' },
+  sleep: { bg: '#e8e9fb', ink: '#3b3fa6' },
+  body: { bg: '#ddf3f0', ink: '#0f766e' },
+  brand: { bg: '#e3eef6', ink: '#0d5c8c' },
+} as const
+type Tone = keyof typeof TONES
+
+function Pastille({ tone, icon: I, size = 26 }: { tone: Tone; icon: TablerIcon; size?: number }) {
+  return (
+    <span className="r-pastille" style={{ width: size, height: size, background: TONES[tone].bg, color: TONES[tone].ink }} aria-hidden>
+      <I size={Math.round(size * 0.62)} stroke={1.8} />
+    </span>
+  )
+}
+
+function H({ level, children, icon, tone = 'brand' }: { level: 1 | 2 | 3; children: ReactNode; icon?: TablerIcon; tone?: Tone }) {
   const offset = useContext(HeadingOffset)
-  return createElement(`h${Math.min(6, level + offset)}`, { className: `r-h${level}` }, children)
+  return createElement(
+    `h${Math.min(6, level + offset)}`,
+    { className: `r-h${level}${icon ? ' has-icon' : ''}` },
+    icon ? <Pastille tone={tone} icon={icon} /> : null,
+    children
+  )
 }
 
 /** The report as A4 page sections, to wrap in an element with class "report".
@@ -145,10 +170,13 @@ function gpPages(d: ReportData): Block[][] {
   return [
     [
       <Header d={d} />,
+      <Brief d={d} />,
       <GpTiles d={d} />,
       <div className="r-dash">
         <div className="r-card r-chart">
-          <H level={2}>{f.t.painChart}</H>
+          <H level={2} icon={IconChartLine} tone="pain">
+            {f.t.painChart}
+          </H>
           <p className="r-small" style={{ marginTop: -4 }}>
             {f.t.chartHint}
             {chartFlares(d).length > 0 && f.t.chartHintFlares}
@@ -161,7 +189,7 @@ function gpPages(d: ReportData): Block[][] {
       <Agenda d={d} />,
       rowsBlock(keyPoints.length, (from, to, continued) => (
         <div className="r-card r-after-dash">
-          <H level={2}>
+          <H level={2} icon={IconListCheck}>
             {f.t.keyPoints}
             <Continued f={f} on={continued} />
           </H>
@@ -221,6 +249,7 @@ function painClinicPages(d: ReportData): Block[][] {
   return [
     [
       <Header d={d} />,
+      <Brief d={d} />,
       <Completeness d={d} />,
       rowsBlock(keyPoints.length, (from, to, continued) => (
         <>
@@ -616,10 +645,13 @@ function TrendArrow({ trend: t, f, inline = false }: { trend: Trend; f: ReportFo
   )
 }
 
-function Tile({ label, value, compare, trend: tr, f }: { label: string; value: ReactNode; compare?: string; trend?: Trend | null; f?: ReportFormat }) {
+function Tile({ label, value, compare, trend: tr, f, tone, icon }: { label: string; value: ReactNode; compare?: string; trend?: Trend | null; f?: ReportFormat; tone?: Tone; icon?: TablerIcon }) {
   return (
-    <div className="r-tile">
-      <div className="r-k">{label}</div>
+    <div className="r-tile" data-tone={tone}>
+      <div className="r-k r-tilehead">
+        {tone && icon && <Pastille tone={tone} icon={icon} size={20} />}
+        {label}
+      </div>
       <div className="r-big r-bigrow">
         <span>{value}</span>
         {tr && f && <TrendArrow trend={tr} f={f} inline />}
@@ -639,6 +671,8 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
   const tiles = [
     <Tile
       key="mean"
+      tone="pain"
+      icon={IconActivityHeartbeat}
       label={f.t.tileMeanPain}
       value={
         <>
@@ -650,13 +684,15 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
       trend={painPrev ? trend(pain.mean, painPrev.mean, 'lower', FLAT_BELOW.score) : null}
       f={f}
     />,
-    <Tile key="severe" label={f.t.tileSevere} value={f.pct(pain.severe)} compare={painPrev ? before(f.pct(painPrev.severe)) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
+    <Tile key="severe" tone="severe" icon={IconSun} label={f.t.tileSevere} value={f.pct(pain.severe)} compare={painPrev ? before(f.pct(painPrev.severe)) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
     <Tile key="mild" label={f.t.tileMild} value={f.pct(pain.mild)} compare={painPrev ? before(f.pct(painPrev.mild)) : undefined} trend={painPrev ? trend(pain.mild, painPrev.mild, 'higher', FLAT_BELOW.share) : null} f={f} />,
   ]
   if (sleep)
     tiles.push(
       <Tile
         key="sleep"
+        tone="sleep"
+        icon={IconMoon}
         label={f.t.tileSleep}
         value={
           <>
@@ -694,6 +730,38 @@ function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
 
 /** The GP dashboard's figures: mean pain, then sleep when it is logged, or
  * else the median. */
+/** The one sentence a doctor reads first. Built from the same figures as the tiles under it (same mean, same count of severe days, same flares), so it cannot say something else. Nothing without pain logged. */
+function briefSentence(d: ReportData): string {
+  const { f, pain, painPrev, flares } = d
+  if (!pain) return ''
+  const mean = f.format(f.t.briefMean, { v: f.nf(pain.mean) })
+  let change = ''
+  if (painPrev && painPrev.mean > 0) {
+    const t = trend(pain.mean, painPrev.mean, 'lower', FLAT_BELOW.score)
+    const pct = f.pct(Math.abs(pain.mean - painPrev.mean) / painPrev.mean)
+    change = f.format(t.direction === 'down' ? f.t.briefDown : t.direction === 'up' ? f.t.briefUp : f.t.briefFlat, { pct })
+  }
+  const severeN = Math.round(pain.severe * pain.n)
+  const second = [
+    severeN > 0 ? f.format(f.t.briefSevere, { n: severeN }) : f.t.briefNoSevere,
+    flares.detectable && flares.current.length > 0 ? f.format(f.t.briefFlares, { n: flares.current.length, days: flares.currentDays }) : null,
+  ]
+    .filter(Boolean)
+    .join(f.t.briefAnd)
+  return `${mean}${change}. ${second.charAt(0).toLocaleUpperCase()}${second.slice(1)}.`
+}
+
+function Brief({ d }: { d: ReportData }) {
+  const text = briefSentence(d)
+  if (!text) return null
+  return (
+    <div className="r-brief">
+      <div className="r-k">{d.f.t.briefTitle}</div>
+      <p className="r-sentence">{text}</p>
+    </div>
+  )
+}
+
 /** The figures a doctor reads first, in a row on the GP report's first page: mean pain, severe days, flares and, when followed, morning stiffness. A figure with nothing behind it is left out. */
 function GpTiles({ d }: { d: ReportData }) {
   const { f, pain, painPrev, flares } = d
@@ -704,6 +772,8 @@ function GpTiles({ d }: { d: ReportData }) {
   const tiles: ReactNode[] = [
     <Tile
       key="mean"
+      tone="pain"
+      icon={IconActivityHeartbeat}
       label={f.t.tileMeanPain}
       value={
         <>
@@ -715,7 +785,7 @@ function GpTiles({ d }: { d: ReportData }) {
       trend={painPrev ? trend(pain.mean, painPrev.mean, 'lower', FLAT_BELOW.score) : null}
       f={f}
     />,
-    <Tile key="severe" label={f.t.tileSevere} value={severeN} compare={painPrev ? (d.p.prevDays === d.p.periodDays ? before(String(Math.round(painPrev.severe * painPrev.n))) : f.format(f.t.beforeOfDays, { v: Math.round(painPrev.severe * painPrev.n), days: d.p.prevDays })) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
+    <Tile key="severe" tone="severe" icon={IconSun} label={f.t.tileSevere} value={severeN} compare={painPrev ? (d.p.prevDays === d.p.periodDays ? before(String(Math.round(painPrev.severe * painPrev.n))) : f.format(f.t.beforeOfDays, { v: Math.round(painPrev.severe * painPrev.n), days: d.p.prevDays })) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
   ]
   if (flares.detectable || d.marked.length > 0) {
     const marked = d.marked.length ? f.format(f.t.tileMarked, { n: d.marked.length }) : null
@@ -723,6 +793,8 @@ function GpTiles({ d }: { d: ReportData }) {
     tiles.push(
       <Tile
         key="flares"
+        tone="flare"
+        icon={IconCloudStorm}
         label={f.t.flaresTitle}
         value={flares.detectable ? flares.current.length : d.marked.length}
         compare={flares.detectable ? [detected, marked && `+ ${marked}`].filter(Boolean).join(' · ') || undefined : (marked ?? undefined)}
@@ -732,7 +804,7 @@ function GpTiles({ d }: { d: ReportData }) {
     )
   }
   if (stiff?.commonest)
-    tiles.push(<Tile key="stiffness" label={f.t.stiffness.title} value={<small>{f.t.stiffness.bands[stiff.commonest]}</small>} compare={f.format(f.t.stiffness.noted, { n: stiff.noted })} />)
+    tiles.push(<Tile key="stiffness" tone="body" icon={IconSunrise} label={f.t.stiffness.title} value={<small>{f.t.stiffness.bands[stiff.commonest]}</small>} compare={f.format(f.t.stiffness.noted, { n: stiff.noted })} />)
   return <div className="r-tiles r-first-tiles">{tiles}</div>
 }
 
