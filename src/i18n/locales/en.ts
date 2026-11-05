@@ -280,6 +280,7 @@ const en: Translations = {
 
   trends: {
     title: 'Trends',
+    rangeLabel: 'Period shown',
     range7: '7 d',
     range30: '30 d',
     range90: '90 d',

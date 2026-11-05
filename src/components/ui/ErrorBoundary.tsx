@@ -31,8 +31,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { failed: 
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="rounded-[var(--radius-control)] py-3 text-body font-semibold text-[var(--color-on-brand)]"
-          style={{ background: 'var(--color-brand)' }}
+          className="btn-primary"
         >
           {t.reload}
         </button>

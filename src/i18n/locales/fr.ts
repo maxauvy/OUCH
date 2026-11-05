@@ -282,6 +282,7 @@ const fr: Translations = {
 
   trends: {
     title: 'Tendances',
+    rangeLabel: 'Période affichée',
     range7: '7 j',
     range30: '30 j',
     range90: '90 j',

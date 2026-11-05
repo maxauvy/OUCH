@@ -82,8 +82,7 @@ function InstallBody({ kind }: { kind: InstallKind }) {
         <button
           type="button"
           onClick={() => void promptInstall()}
-          className="w-full rounded-[var(--radius-control)] py-3 text-body font-semibold text-[var(--color-on-brand)]"
-          style={{ background: 'var(--color-brand)' }}
+          className="btn-primary w-full"
         >
           {t.install.button}
         </button>

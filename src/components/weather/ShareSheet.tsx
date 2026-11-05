@@ -192,16 +192,14 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: LoggedEntry
             <button
               onClick={handleDownload}
               disabled={busy}
-              className="flex-1 rounded-[var(--radius-control)] py-3 text-body font-semibold"
-              style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+              className="btn-secondary flex-1"
             >
               {t.shareSheet.download}
             </button>
             <button
               onClick={handleShare}
               disabled={busy}
-              className="flex-1 rounded-[var(--radius-control)] py-3 text-body font-semibold text-[var(--color-on-brand)]"
-              style={{ background: 'var(--color-brand)' }}
+              className="btn-primary flex-1"
             >
               {busy ? t.shareSheet.sending : t.shareSheet.send}
             </button>

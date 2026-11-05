@@ -5,6 +5,7 @@ import { updateSettings } from '../db'
 import { clearAudienceFlag } from '../lib/audience'
 import { type ParentGender, type ThemePref } from '../db/types'
 import { Card, SectionTitle } from '../components/ui/Card'
+import { Segmented } from '../components/ui/Segmented'
 import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
 import { AboutCard } from '../components/about/AboutCard'
@@ -33,7 +34,6 @@ import { canNotify, requestNotificationPermission } from '../lib/reminder'
 import { formatCoordinates } from '../lib/weather'
 import { saveCurrentLocation } from '../lib/weatherLocation'
 import { format, LANGUAGES, useLocale, useTranslation } from '../i18n'
-import { radioGroupProps, radioProps } from '../lib/a11y'
 import { isOffered } from '../lib/indicatorCatalog'
 import { IndicatorPicker } from '../components/settings/IndicatorPicker'
 import { TrackingStep } from '../components/setup/TrackingStep'
@@ -151,22 +151,12 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
             <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
               {t.settings.parentGenderHelper}
             </p>
-            <div className="flex gap-2" {...radioGroupProps(t.settings.parentGenderTitle)}>
-              {PARENT_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  {...radioProps(settings.parentGender === opt.value)}
-                  onClick={() => updateSettings({ parentGender: opt.value })}
-                  className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
-                  style={{
-                    background: settings.parentGender === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                    color: settings.parentGender === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
-                  }}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
+            <Segmented
+              label={t.settings.parentGenderTitle}
+              options={PARENT_OPTIONS}
+              value={settings.parentGender}
+              onChange={(parentGender) => updateSettings({ parentGender })}
+            />
           </Card>
         )}
 
@@ -330,42 +320,22 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
             {t.settings.languageHelper}
           </p>
-          <div className="flex gap-2" {...radioGroupProps(t.settings.languageTitle)}>
-            {LANGUAGES.map((lang) => (
-              <button
-                key={lang.code}
-                {...radioProps(settings.language === lang.code)}
-                onClick={() => updateSettings({ language: lang.code })}
-                className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
-                style={{
-                  background: settings.language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                  color: settings.language === lang.code ? 'var(--color-on-brand)' : 'var(--color-brand)',
-                }}
-              >
-                {lang.label}
-              </button>
-            ))}
-          </div>
+          <Segmented
+            label={t.settings.languageTitle}
+            options={LANGUAGES.map((l) => ({ value: l.code, label: l.label }))}
+            value={settings.language}
+            onChange={(language) => updateSettings({ language })}
+          />
         </Card>
 
         <Card>
           <SectionTitle icon={IconPalette}>{t.settings.appearanceTitle}</SectionTitle>
-          <div className="flex gap-2" {...radioGroupProps(t.settings.themeTitle)}>
-            {THEME_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                {...radioProps(settings.theme === opt.value)}
-                onClick={() => updateSettings({ theme: opt.value })}
-                className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
-                style={{
-                  background: settings.theme === opt.value ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                  color: settings.theme === opt.value ? 'var(--color-on-brand)' : 'var(--color-brand)',
-                }}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
+          <Segmented
+            label={t.settings.themeTitle}
+            options={THEME_OPTIONS}
+            value={settings.theme}
+            onChange={(theme) => updateSettings({ theme })}
+          />
           <div className="flex items-center gap-3 mt-4 pt-4" style={{ borderTop: '1px solid var(--color-hairline)' }}>
             <div className="flex-1 min-w-0">
               <p className="text-body font-medium">{t.settings.lookLabel}</p>

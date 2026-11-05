@@ -126,8 +126,7 @@ export function BackupSection() {
         <button
           onClick={handleExport}
           disabled={exportBusy}
-          className="w-full rounded-[var(--radius-control)] py-3 text-body font-semibold text-[var(--color-on-brand)]"
-          style={{ background: 'var(--color-brand)' }}
+          className="btn-primary w-full"
         >
           {exportBusy ? t.backup.exporting : canShareBackup ? t.backup.shareButton : t.backup.exportButton}
         </button>
@@ -184,8 +183,7 @@ export function BackupSection() {
             type="button"
             onClick={() => fileRef.current?.click()}
             disabled={importBusy}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] py-3 text-body font-semibold mb-2"
-            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+            className="btn-secondary w-full mb-2"
           >
             <IconFileImport size={20} aria-hidden />
             {t.backup.chooseFile}
@@ -202,8 +200,7 @@ export function BackupSection() {
         <button
           onClick={handleImport}
           disabled={importBusy || !importFile || !importPassword}
-          className="w-full rounded-[var(--radius-control)] py-3 text-body font-semibold text-[var(--color-on-brand)] disabled:opacity-40"
-          style={{ background: 'var(--color-brand)' }}
+          className="btn-primary w-full"
         >
           {importBusy ? t.backup.importing : t.backup.importButton}
         </button>

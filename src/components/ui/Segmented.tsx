@@ -1,0 +1,50 @@
+import { radioGroupProps, radioProps } from '../../lib/a11y'
+
+/** The one control for choosing a single option among a few short ones (a period, a language, a theme):
+ * a soft track with the chosen option raised on it. Exposed as a radio group, with the arrow keys. */
+export function Segmented<T extends string | number>({
+  options,
+  value,
+  onChange,
+  label,
+  className = '',
+}: {
+  options: readonly { value: T; label: string }[]
+  /** `undefined` when nothing is chosen yet. */
+  value: T | undefined
+  onChange: (value: T) => void
+  /** Names the group for screen readers. */
+  label: string
+  className?: string
+}) {
+  return (
+    <div
+      {...radioGroupProps(label)}
+      className={`flex gap-1 rounded-[var(--radius-control)] p-1 ${className}`}
+      style={{ background: 'var(--color-brand-soft)', boxShadow: 'inset 0 0 0 1px var(--color-hairline)' }}
+    >
+      {options.map((opt, i) => {
+        const active = opt.value === value
+        return (
+          <button
+            key={String(opt.value)}
+            type="button"
+            {...radioProps(active)}
+            // With nothing chosen yet, the first option is the way into the group.
+            tabIndex={active || (value === undefined && i === 0) ? 0 : -1}
+            onClick={() => onChange(opt.value)}
+            className={`flex-1 min-h-10 rounded-[calc(var(--radius-control)-2px)] px-2 text-control ${active ? 'font-semibold' : 'font-medium'}`}
+            style={{
+              background: active ? 'var(--color-surface)' : 'transparent',
+              color: 'var(--color-brand)',
+              // Like a chosen chip: outlined in the brand colour, so it reads in the dark theme too.
+              boxShadow: active ? 'inset 0 0 0 1.5px var(--color-brand)' : undefined,
+            }}
+          >
+            {opt.label}
+          </button>
+        )
+      })}
+    </div>
+  )
+}

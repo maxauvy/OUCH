@@ -168,6 +168,7 @@ export interface Translations {
 
   trends: {
     title: string
+    rangeLabel: string
     range7: string
     range30: string
     range90: string

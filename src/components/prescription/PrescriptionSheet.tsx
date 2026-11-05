@@ -35,8 +35,7 @@ export function PrescriptionSheet({ settings, today, initialStart, onClose }: { 
         type="button"
         onClick={save}
         disabled={!p}
-        className="rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)] disabled:opacity-40"
-        style={{ background: 'var(--color-brand)' }}
+        className="btn-primary"
       >
         {t.save}
       </button>

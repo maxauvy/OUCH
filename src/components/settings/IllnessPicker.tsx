@@ -9,6 +9,7 @@ import { format, useLanguage, useTranslation } from '../../i18n'
 import { useEarlyAccess } from '../../lib/earlyAccess'
 import { isIllnessOffered } from '../../lib/indicatorCatalog'
 import { Chip } from '../ui/Chip'
+import { Segmented } from '../ui/Segmented'
 
 /** Illnesses being tracked, several allowed, and for each one whether it is
  * diagnosed or only suspected. Used by Settings and the setup. The status is
@@ -110,23 +111,12 @@ function StatusRow({
           </p>
         </div>
       )}
-      <div role="group" aria-label={format(t.settings.illnessStatusFor, { illness: name || label })} className="flex gap-2">
-        {ILLNESS_STATUSES.map((s) => (
-          <button
-            key={s}
-            type="button"
-            aria-pressed={status === s}
-            onClick={() => onStatus(s)}
-            className="flex flex-1 min-h-11 items-center justify-center rounded-[var(--radius-control)] px-2 py-2 text-center text-control font-semibold"
-            style={{
-              background: status === s ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-              color: status === s ? 'var(--color-on-brand)' : 'var(--color-brand)',
-            }}
-          >
-            {labels[s]}
-          </button>
-        ))}
-      </div>
+      <Segmented
+        label={format(t.settings.illnessStatusFor, { illness: name || label })}
+        options={ILLNESS_STATUSES.map((s) => ({ value: s, label: labels[s] }))}
+        value={status}
+        onChange={onStatus}
+      />
       {status === 'diagnosed' && (
         <div className="mt-2">
           <label className="block text-caption font-medium mb-1" htmlFor={`illness-year-${illness}`}>

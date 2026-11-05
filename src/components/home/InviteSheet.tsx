@@ -47,8 +47,7 @@ export function InviteSheet({ settings, earlyAccess, today, onClose }: { setting
         type="button"
         onClick={add}
         disabled={chosen.length === 0}
-        className="rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)] disabled:opacity-40"
-        style={{ background: 'var(--color-brand)' }}
+        className="btn-primary"
       >
         {format(t.indicatorInvite.add, { n: chosen.length })}
       </button>

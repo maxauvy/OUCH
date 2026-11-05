@@ -12,6 +12,7 @@ import { IS_DEMO } from '../lib/demoMode'
 import { radioGroupProps, radioProps } from '../lib/a11y'
 import { format, LANGUAGES, useLanguage, useLocale, useTranslation, type Language } from '../i18n'
 import { Card, SectionTitle } from '../components/ui/Card'
+import { Segmented } from '../components/ui/Segmented'
 import { Toggle } from '../components/ui/Toggle'
 import { ReportDocument } from '../components/report/ReportDocument'
 import { buildReportData, type ReportVariant } from '../components/report/reportData'
@@ -386,23 +387,12 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
         <div className="flex flex-col gap-3.5">
           <div>
             <p className="text-control font-medium mb-2">{t.doctorReport.languageTitle}</p>
-            <div className="flex gap-2" {...radioGroupProps(t.doctorReport.languageTitle)}>
-              {LANGUAGES.map((lang) => (
-                <button
-                  key={lang.code}
-                  type="button"
-                  {...radioProps(language === lang.code)}
-                  onClick={() => setLanguage(lang.code)}
-                  className="flex-1 rounded-[var(--radius-control)] py-2 text-control font-semibold"
-                  style={{
-                    background: language === lang.code ? 'var(--color-brand)' : 'var(--color-brand-soft)',
-                    color: language === lang.code ? 'var(--color-on-brand)' : 'var(--color-brand)',
-                  }}
-                >
-                  {lang.label}
-                </button>
-              ))}
-            </div>
+            <Segmented
+              label={t.doctorReport.languageTitle}
+              options={LANGUAGES.map((l) => ({ value: l.code, label: l.label }))}
+              value={language}
+              onChange={setLanguage}
+            />
           </div>
           {lastNote && (
             <div className="flex items-center justify-between gap-3">
@@ -431,8 +421,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
           onClick={exportPdf}
           disabled={!logged || exporting}
           aria-describedby={`${ids}-export-help`}
-          className="w-full rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)] flex items-center justify-center gap-2 disabled:opacity-40"
-          style={{ background: 'var(--color-brand)' }}
+          className="btn-primary w-full"
         >
           <IconFileTypePdf size={18} aria-hidden />
           {exporting ? t.doctorReport.exporting : t.doctorReport.exportPdf}
@@ -442,8 +431,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             type="button"
             onClick={() => window.print()}
             disabled={!logged}
-            className="w-full rounded-[var(--radius-control)] py-3 text-body font-semibold flex items-center justify-center gap-2 disabled:opacity-40"
-            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+            className="btn-secondary w-full"
           >
             <IconPrinter size={18} aria-hidden />
             {t.doctorReport.print}

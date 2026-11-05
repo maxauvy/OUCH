@@ -307,8 +307,7 @@ export function ConsultationSheet({
               <button
                 type="button"
                 onClick={finish}
-                className="mt-3 w-full rounded-[var(--radius-control)] py-3.5 text-body font-semibold text-[var(--color-on-brand)]"
-                style={{ background: 'var(--color-brand)' }}
+                className="btn-primary mt-3 w-full"
               >
                 {t.save}
               </button>
