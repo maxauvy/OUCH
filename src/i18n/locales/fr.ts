@@ -1182,6 +1182,8 @@ const fr: Translations = {
       "Repère cité à côté du décompte des jours de mal de tête et de traitement de crise pris, sans calcul ni conclusion.",
     ],
     completeness: 'Complétude par dimension, sur les jours renseignés : {{list}}.',
+    lateEntries:
+      'Saisie : sur {{total}} jours renseignés, {{late}} {{late:a été noté|ont été notés}} deux jours ou plus après le jour concerné, où le rappel est moins fiable.',
     intensity: 'Intensité douloureuse',
     distribution: 'Répartition des jours par intensité (0–10)',
     distPrev: 'Période précédente ({{n}} j)',

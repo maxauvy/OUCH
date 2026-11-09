@@ -1,6 +1,7 @@
 import { createContext, createElement, isValidElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
 import { IconActivityHeartbeat, IconBodyScan, IconBook2, IconBulb, IconCalendar, IconCalendarWeek, IconChartDots, IconChartLine, IconCloudStorm, IconHeart, IconHeartbeat, IconInfoCircle, IconLeaf, IconListCheck, IconListDetails, IconMessageQuestion, IconMoodSmile, IconMoon, IconNotes, IconPill, IconRuler2, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
 import { periodDayOf } from '../../lib/periodDay'
+import { lateCount } from '../../lib/lateEntries'
 import { dayMix, type MixDirection } from '../../lib/dayMix'
 import { timelineItems, type TimelineItem } from '../../lib/trendsTimeline'
 import { treatmentEvents } from '../../lib/treatmentEvents'
@@ -290,6 +291,7 @@ function gpPages(d: ReportData): Block[][] {
         <H level={2} kind="method">{f.t.method}</H>
         <div className="r-method">
           <p>{f.t.methodGp}</p>
+          <LateEntries d={d} plain />
           <p>{f.t.trendNote}</p>
         </div>
       </TocBlock>,
@@ -556,6 +558,7 @@ function painClinicLayout(d: ReportData): { pages: Block[][]; labels: string[] }
     </>,
     <DayMix d={d} />,
     <Completeness d={d} />,
+    <LateEntries d={d} />,
     <PartsToc parts={parts.map((part, i) => ({ id: `part-${i + 1}`, n: i + 1, title: part.title, hint: part.hint }))} f={f} />,
   ]
   return {
@@ -1218,6 +1221,15 @@ function Completeness({ d }: { d: ReportData }) {
     .map(([label, share]) => `${label.toLocaleLowerCase()} ${f.pct(share)}`)
     .join(' · ')
   return list ? <p className="r-small">{f.format(f.t.completeness, { list })}</p> : null
+}
+
+/** How many logged days were written two days or more after their day, where recall is less reliable; nothing when none. */
+function LateEntries({ d, plain }: { d: ReportData; plain?: boolean }) {
+  const { f, current } = d
+  const late = lateCount(current)
+  if (late === 0) return null
+  const text = f.format(f.t.lateEntries, { total: current.length, late })
+  return plain ? <p>{text}</p> : <p className="r-small">{text}</p>
 }
 
 /** Rows `from` to `to` of the treatments table; the legend goes with the last row. */
