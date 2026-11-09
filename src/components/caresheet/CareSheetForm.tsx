@@ -67,7 +67,7 @@ export function CareSheetForm({ info, onClose }: { info: CareSheetInfo | undefin
             }}
           >
             <input value={allergy} onChange={(e) => setAllergy(e.target.value)} maxLength={MAX_ALLERGY_LENGTH} placeholder={t.allergyPlaceholder} aria-label={t.allergiesTitle} className={fieldClass} style={field} />
-            <button type="submit" disabled={!allergy.trim()} className={`${linkClass} shrink-0 disabled:opacity-40`} style={{ color: 'var(--color-brand)' }}>
+            <button type="submit" disabled={!allergy.trim()} className={`${linkClass} min-w-11 shrink-0 disabled:opacity-40`} style={{ color: 'var(--color-brand)' }}>
               {t.addAllergy}
             </button>
           </form>

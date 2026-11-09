@@ -8,9 +8,9 @@ Cette page rassemble ce qu'un soignant peut vouloir lire, essayer, ou discuter.
 
 | Document | Pour quoi faire | Où |
 |---|---|---|
-| Lire un rapport OUCH (1 page) | Comprendre en une page ce qu'est un rapport OUCH et comment le lire, la première fois qu'on en reçoit un | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.11.1/OUCH-lire-un-rapport-v0.11.1.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.11.1/OUCH-reading-an-ouch-report-v0.11.1.pdf) · [source](../lire-un-rapport/) |
-| Plaquette (2 pages) | Voir en un coup d'œil ce que le patient saisit, pourquoi c'est pertinent, et ce que contient le rapport | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.11.1/OUCH-plaquette-soignants-v0.11.1.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.11.1/OUCH-leaflet-for-professionals-v0.11.1.pdf) · [source](../plaquette-soignants/) |
-| Note méthodologique (14 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et dix questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.11.1/OUCH-note-methodologique-v0.11.1.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.11.1/OUCH-methodology-note-v0.11.1.pdf) · [source](../note-methodologique/) |
+| Lire un rapport OUCH (1 page) | Comprendre en une page ce qu'est un rapport OUCH et comment le lire, la première fois qu'on en reçoit un | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.11.2/OUCH-lire-un-rapport-v0.11.2.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.11.2/OUCH-reading-an-ouch-report-v0.11.2.pdf) · [source](../lire-un-rapport/) |
+| Plaquette (2 pages) | Voir en un coup d'œil ce que le patient saisit, pourquoi c'est pertinent, et ce que contient le rapport | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.11.2/OUCH-plaquette-soignants-v0.11.2.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.11.2/OUCH-leaflet-for-professionals-v0.11.2.pdf) · [source](../plaquette-soignants/) |
+| Note méthodologique (14 pages) | Vérifier chaque calcul : formules, seuils, sources, limites, et dix questions qui vous sont posées | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.11.2/OUCH-note-methodologique-v0.11.2.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.11.2/OUCH-methodology-note-v0.11.2.pdf) · [source](../note-methodologique/) |
 | Scores validés, note de cadrage (2 pages) | Discuter de l'ajout éventuel de questionnaires validés : ce qu'OUCH ferait et ne ferait pas, les outils envisagés maladie par maladie et leurs droits, cinq questions | [PDF](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-note-scores-valides-v0.5.0.pdf) · [English](https://github.com/maxauvy/OUCH/releases/download/v0.5.0/OUCH-validated-scores-note-v0.5.0.pdf) · [source](../note-scores-valides/) |
 | Vie privée | Savoir ce qui est enregistré, où, et ce qui quitte l'appareil | [`PRIVACY.md`](../../PRIVACY.md) |
 | Sécurité | Chiffrement des sauvegardes, signalement d'une faille | [`SECURITY.md`](../../SECURITY.md) |
@@ -22,7 +22,7 @@ Cette page rassemble ce qu'un soignant peut vouloir lire, essayer, ou discuter.
 | Sources scientifiques | Les 15 références du rapport, avec leur résumé et l'usage qu'OUCH en fait | Dans l'application : Réglages, puis À propos |
 | Journal des versions | Ce qui change d'une version à l'autre | [`CHANGELOG.md`](../../CHANGELOG.md) |
 
-Les PDF sont joints à la [release v0.11.1](https://github.com/maxauvy/OUCH/releases/tag/v0.11.1) et correspondent à cette version du code (la note sur les scores validés, inchangée, reste celle de la [v0.5.0](https://github.com/maxauvy/OUCH/releases/tag/v0.5.0)) ; les sources sont des pages HTML conçues pour s'imprimer en PDF, et chaque dossier donne la commande pour les produire.
+Les PDF sont joints à la [release v0.11.2](https://github.com/maxauvy/OUCH/releases/tag/v0.11.2) et correspondent à cette version du code (la note sur les scores validés, inchangée, reste celle de la [v0.5.0](https://github.com/maxauvy/OUCH/releases/tag/v0.5.0)) ; les sources sont des pages HTML conçues pour s'imprimer en PDF, et chaque dossier donne la commande pour les produire.
 
 ## Essayer en deux minutes
 
