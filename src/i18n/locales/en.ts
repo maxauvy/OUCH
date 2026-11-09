@@ -730,6 +730,8 @@ const en: Translations = {
     notesPlaceholder: 'A particular event, an observation…',
     measuresTitle: 'Today’s measures',
     loggedAt: 'Logged at {{time}}',
+    loggedLateDay: 'Logged {{day}} at {{time}}',
+    loggedLateDate: 'Logged on {{date}} at {{time}}',
     vsAverageBelow: '{{delta}} below your 7-day average',
     vsAverageAbove: '{{delta}} above your 7-day average',
     vsAverageSame: 'In line with your 7-day average',
@@ -1175,6 +1177,8 @@ const en: Translations = {
       "Reference point cited next to the count of headache days and attack-medication days, with no calculation or conclusion.",
     ],
     completeness: 'Completeness by measure, over logged days: {{list}}.',
+    lateEntries:
+      'Logging: of {{total}} logged days, {{late}} {{late:was|were}} written two or more days after the day itself, when recall is less reliable.',
     intensity: 'Pain intensity',
     distribution: 'Days by pain intensity (0–10)',
     distPrev: 'Previous period ({{n}} d)',

@@ -11,7 +11,7 @@ Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'
 - **Un jour ne compte que s'il a un niveau de douleur.** Un jour où le patient n'a noté qu'une zone, une note ou un traitement est enregistré, et le Journal le montre par un rond creux (« noté, sans niveau de douleur »), mais il est **exclu des statistiques** : moyennes, poussées, rapport (y compris les prises de traitement de ce jour) et tendance de la carte de la météo du jour. « Jours renseignés » veut dire, partout, « jours avec un niveau de douleur ». Le patient peut aussi désactiver un facteur dans les réglages : son absence est alors un choix, pas un oubli.
 - **Les échelles sont des entiers de 0 à 10**, sauf la durée du sommeil. Les extrémités affichées à l'écran sont données ci-dessous, car elles fixent le sens de la valeur.
 - **Les textes libres ne sont pas normalisés** (actions qui ont aidé, effets indésirables, notes, raison d'un traitement) : deux orthographes d'une même action (« Bain chaud », « bain chaud ») comptent pour deux actions dans le rapport et dans Tendances, et pour une seule dans le mot des jours difficiles.
-- Aucune heure n'est enregistrée dans la journée, hormis les horodatages de création et de modification de l'entrée.
+- Aucune heure n'est enregistrée dans la journée, hormis les horodatages de création et de modification de l'entrée. Celui de création sert à repérer une journée saisie après coup (piège 7).
 
 ## Entrée quotidienne
 
@@ -49,7 +49,7 @@ Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'
 | `positiveActions` | **Ce qui a aidé aujourd'hui** | liste de textes | Suggestions : repos / sieste, chaleur, froid, étirements doux, marche courte, méditation / respiration, bain chaud, kiné / soins, etc. ; le patient ajoute les siennes |
 | `periodDay` | **Règles aujourd'hui** | vrai / faux | N'apparaît que si le suivi du cycle est activé, et pas quand l'indicateur « abondance des règles » est suivi : le rapport lit alors le flux (léger ou abondant = jour de règles ; aucun ou traces = non) et, sans flux, cette case |
 | `notes` | **Notes** | texte libre | |
-| `createdAt`, `updatedAt` | (non affichés) | horodatages en millisecondes | Création et dernière modification de l'entrée |
+| `createdAt`, `updatedAt` | (non affichés) | horodatages en millisecondes | Création et dernière modification de l'entrée. `createdAt` sert à repérer une journée saisie après coup (piège 7) |
 
 ### Météo (`weather`)
 
@@ -144,7 +144,7 @@ Réglages, zone sensible, « Exporter en CSV, en clair » : deux fichiers en cla
 4. **Un jour non renseigné n'est pas un jour sans douleur.** Les mauvais jours sont parfois moins remplis : le rapport affiche la part de jours renseignés pour que cela se voie.
 5. **Échelles non validées** : fatigue, sommeil, brouillard mental, humeur, stress et activité sont des échelles numériques simples. Seule la douleur suit l'échelle numérique de 0 à 10 recommandée.
 6. **Les pistes gardées sont une sélection du patient.** La rubrique « Ce que le patient a remarqué » du rapport reprend ce que le patient a choisi de garder (et les essais d'une semaine qu'il a menés) : ce qui lui parle, pas tout ce que les données montrent. Les actions d'un essai sont celles que le patient a **notées lui-même** dans « Ce qui a aidé aujourd'hui » (texte libre) : OUCH n'en propose aucune. Les semaines d'essai incluent les jours de poussée qui tombent dans la semaine.
-7. **Une saisie rétroactive est possible** : une journée peut être remplie ou corrigée plus tard, donc le rappel sur 24 h n'est pas garanti pour toutes les entrées.
+7. **Une saisie rétroactive est possible** : une journée peut être remplie ou corrigée plus tard, donc le rappel sur 24 h n'est pas garanti pour toutes les entrées. L'application le signale : sur la page du jour, la ligne d'état dit quand la journée a été écrite (« Saisi jeudi à 09:12 ») ; le rapport compte les jours écrits **deux jours ou plus** après (la veille reste bien rappelée) et écrit « Saisie : sur N jours renseignés, n ont été notés… » seulement s'il y en a. Le repère est la création de l'entrée, après 4 h du matin le lendemain. Une entrée créée le jour même (une zone, un traitement) puis complétée plus tard n'est **pas** signalée ; une entrée restaurée d'une sauvegarde sans date de création est datée de midi de son jour, donc jamais signalée.
 
 ## Ce qui n'est pas recueilli
 

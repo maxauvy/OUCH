@@ -732,6 +732,8 @@ const fr: Translations = {
     notesPlaceholder: 'Un événement particulier, une observation…',
     measuresTitle: 'Mesures du jour',
     loggedAt: 'Saisi à {{time}}',
+    loggedLateDay: 'Saisi {{day}} à {{time}}',
+    loggedLateDate: 'Saisi le {{date}} à {{time}}',
     vsAverageBelow: '{{delta}} sous ta moyenne 7 j',
     vsAverageAbove: '{{delta}} au-dessus de ta moyenne 7 j',
     vsAverageSame: 'Dans ta moyenne 7 j',
@@ -1180,6 +1182,8 @@ const fr: Translations = {
       "Repère cité à côté du décompte des jours de mal de tête et de traitement de crise pris, sans calcul ni conclusion.",
     ],
     completeness: 'Complétude par dimension, sur les jours renseignés : {{list}}.',
+    lateEntries:
+      'Saisie : sur {{total}} jours renseignés, {{late}} {{late:a été noté|ont été notés}} deux jours ou plus après le jour concerné, où le rappel est moins fiable.',
     intensity: 'Intensité douloureuse',
     distribution: 'Répartition des jours par intensité (0–10)',
     distPrev: 'Période précédente ({{n}} j)',

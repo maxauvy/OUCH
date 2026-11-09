@@ -609,6 +609,10 @@ export interface Translations {
     notesPlaceholder: string
     measuresTitle: string
     loggedAt: string
+    /** Written after the day: `{{day}}` the weekday (within a week), `{{time}}` */
+    loggedLateDay: string
+    /** Same, a week or more later: `{{date}}` short date, `{{time}}` */
+    loggedLateDate: string
     vsAverageBelow: string
     vsAverageAbove: string
     vsAverageSame: string
@@ -1044,6 +1048,8 @@ export interface Translations {
     /** One per entry of REFERENCES, in the same order: how the report uses it. */
     referenceUses: string[]
     completeness: string
+    /** `{{late}}` days written two days or more after, out of `{{total}}` logged days */
+    lateEntries: string
     intensity: string
     distribution: string
     distPrev: string

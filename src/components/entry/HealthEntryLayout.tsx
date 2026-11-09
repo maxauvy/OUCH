@@ -17,6 +17,7 @@ import {
 import { MORNING_STIFFNESS_BANDS, type DailyEntry, type FactorKey, type Medication, type PainWeather, type Settings } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
 import { shiftISO } from '../../lib/dates'
+import { daysLate } from '../../lib/lateEntries'
 import { CategoryIcon, ChoiceRow } from './EntryFields'
 import { entryRows } from './entryRows'
 import { painVsRecent } from '../../lib/painTrend'
@@ -197,15 +198,22 @@ export function HealthEntryLayout({
     brainFog: local.brainFog,
   })
 
+  // "Logged at 20:14", or, for a day written down afterwards, when it was
+  // written: a plain statement, nothing to fix.
+  const loggedText = (written: Date, late: number) => {
+    const time = written.toLocaleTimeString(intlLocale, { hour: '2-digit', minute: '2-digit' })
+    if (late === 0) return format(t.entryForm.loggedAt, { time })
+    if (late < 7) return format(t.entryForm.loggedLateDay, { day: written.toLocaleDateString(intlLocale, { weekday: 'long' }), time })
+    return format(t.entryForm.loggedLateDate, { date: written.toLocaleDateString(intlLocale, { day: 'numeric', month: 'short' }), time })
+  }
+
   const statusText =
     saveState === 'saving'
       ? t.entryForm.saving
       : saveState === 'saved'
         ? t.entryForm.saved
         : local.createdAt
-          ? format(t.entryForm.loggedAt, {
-              time: new Date(local.createdAt).toLocaleTimeString(intlLocale, { hour: '2-digit', minute: '2-digit' }),
-            })
+          ? loggedText(new Date(local.createdAt), daysLate({ date, createdAt: local.createdAt }))
           : ''
 
   const metricRows = entryRows({ t, intlLocale, local, setField, settings, has, knownTriggers })

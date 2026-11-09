@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { decryptJSON, encryptJSON, isEncryptedPayload } from '../src/lib/crypto.ts'
+import { daysLate } from '../src/lib/lateEntries.ts'
 import { isISODate, sanitizeBackup, sanitizeEntry, sanitizeMedication, sanitizeSettings } from '../src/lib/backupSanitize.ts'
 
 const entry = { date: '2026-05-04', painLevel: 6, createdAt: 1, updatedAt: 2 }
@@ -172,8 +173,14 @@ test('unknown keys, including __proto__ and an id, never reach the database', ()
     '{"date":"2026-05-04","painLevel":3,"id":99,"__proto__":{"polluted":true},"constructor":{"x":1},"extra":"x"}'
   )
   const out = sanitizeEntry(raw, 5)
-  assert.deepEqual(out, { date: '2026-05-04', painLevel: 3, createdAt: 5, updatedAt: 5 })
+  assert.deepEqual(out, { date: '2026-05-04', painLevel: 3, createdAt: new Date('2026-05-04T12:00:00').getTime(), updatedAt: 5 })
   assert.equal(({} as Record<string, unknown>).polluted, undefined)
+})
+
+test('an entry restored without a creation time is not seen as written late', () => {
+  const out = sanitizeEntry({ date: '2026-05-04', painLevel: 3 }, new Date('2026-11-09T10:00:00').getTime())
+  assert.ok(out)
+  assert.equal(daysLate(out), 0)
 })
 
 test('intakes and zones are filtered item by item', () => {
