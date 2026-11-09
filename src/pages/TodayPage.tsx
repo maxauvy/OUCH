@@ -28,7 +28,7 @@ export function TodayPage({
   onOpenSettings: () => void
   /** Absent when the kids' page is turned off in the settings. */
   onOpenKids?: () => void
-  onGoToTab: (tab: Tab) => void
+  onGoToTab: (tab: Tab, date?: string) => void
 }) {
   const entry = useTodayEntry()
   const settings = useSettings()

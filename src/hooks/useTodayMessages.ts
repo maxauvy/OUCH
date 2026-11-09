@@ -10,6 +10,7 @@ import { triedKeys } from '../lib/leadTrial'
 import { monthSummary } from '../lib/monthSummary'
 import { ongoingMarked } from '../lib/markedFlares'
 import { bigDayBefore } from '../lib/pacing'
+import { missedYesterday } from '../lib/yesterdayEntry'
 import { recentReturn, todayMessages, type TodayMessages } from '../lib/todayMessages'
 import { weeklyFinding } from '../lib/weeklySentence'
 import { useFlares } from './useFlares'
@@ -53,6 +54,7 @@ export function useTodayMessages(): TodayMessages | null {
       calm: recentReturn(flares?.episodes ?? [], today),
       month: monthSummary({ today, entries: logged, history: settings.leadTrialHistory ?? [], episodes: flares?.episodes ?? [] }),
       rest: bigDayBefore(logged, today),
+      yesterday: missedYesterday(logged, today),
       trial: settings.leadTrial,
     })
   }, [logged, leadList, settings, earlyAccess, today, flares])

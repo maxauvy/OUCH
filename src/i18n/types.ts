@@ -530,6 +530,9 @@ export interface Translations {
     /** Shown in the weather banner before any pain level is set. */
     painWeatherEmpty: string
     pain: string
+    /** Under the pain title: the scale is about the whole day, not the moment. */
+    painWindowToday: string
+    painWindowPast: string
     painEndNone: string
     painEndExtreme: string
     /** Lighter form: under the empty counter */
@@ -1555,6 +1558,11 @@ export interface Translations {
     see: string
     sheetTitle: string
     close: string
+    /** The offer to write yesterday, for someone who writes most days. */
+    yesterdayLabel: string
+    yesterdayText: string
+    yesterdayDo: string
+    yesterdaySkip: string
   }
   hardDays: {
     label: string

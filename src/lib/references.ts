@@ -102,4 +102,24 @@ export const REFERENCES: Reference[] = [
       'Diener HC, Kropp P, Dresler T, et al. Management of medication overuse (MO) and medication overuse headache (MOH) S1 guideline. Neurol Res Pract. 2022;4(1):37.',
     pmid: '36031642',
   },
+  {
+    citation:
+      'Broderick JE, Schwartz JE, Schneider S, Stone AA. Can end-of-day reports replace momentary assessment of pain and fatigue? J Pain. 2009;10(3):274-281.',
+    pmid: '19070550',
+  },
+  {
+    citation:
+      'Schneider S, Stone AA, Schwartz JE, Broderick JE. Peak and end effects in patients\' daily recall of pain and fatigue: a within-subjects analysis. J Pain. 2011;12(2):228-235.',
+    pmid: '20817615',
+  },
+  {
+    citation:
+      'Marty M, Rozenberg S, Legout V, et al. Influence of time, activities, and memory on the assessment of chronic low back pain intensity. Spine. 2009;34(15):1604-1609.',
+    pmid: '19564771',
+  },
+  {
+    citation:
+      'Carlozzi NE, Schilling S, Freedman J, Kalpakjian CZ, Kratz AL. The reliability of end of day and ecological momentary assessments of pain and pain interference in individuals with spinal cord injury. Qual Life Res. 2018;27(11):3003-3012.',
+    pmid: '30073468',
+  },
 ]

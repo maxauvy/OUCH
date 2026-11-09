@@ -253,6 +253,30 @@ const fr: Translations = {
         usage:
           'Dans le rapport, à côté du nombre de jours de mal de tête et de jours de traitement de crise pris, une phrase redit ces repères, avec leur source. OUCH ne connaît pas la classe du médicament et ne calcule rien : le repère ne dit pas qu’une personne est concernée, seul un médecin peut le dire.',
       },
+      {
+        summary:
+          "Sur 105 patients suivis en rhumatologie, la note donnée le soir pour toute la journée est très proche de la moyenne de plusieurs notes prises au fil de la journée (corrélation de 0,90 à 0,92 pour la douleur, plus basse pour la fatigue). Elle peut remplacer des mesures répétées quand on s’intéresse au niveau moyen.",
+        usage:
+          "OUCH demande la douleur de la journée en une seule note, le soir : pour le niveau moyen du jour, c’est une mesure fiable, sans avoir à te solliciter plusieurs fois.",
+      },
+      {
+        summary:
+          "Quand on résume sa journée de mémoire, le moment le plus fort et la fin de la journée pèsent un peu plus que le reste. L’effet est faible pour la douleur, et absent pour la fatigue.",
+        usage:
+          "C’est pourquoi l’écran du jour précise « sur toute ta journée, pas seulement maintenant » : la note du soir tend à refléter un peu plus la fin de journée, un petit effet que la consigne limite.",
+      },
+      {
+        summary:
+          "Sur 194 patients avec une lombalgie chronique suivis 29 jours : la note donnée le soir pour la journée correspond bien à la douleur moyenne relevée dans la journée. En revanche, la douleur rappelée 24 ou 48 heures après n’est pas une mesure fiable, et celle rappelée sur 7 ou 28 jours dépend surtout de la douleur du jour où l’on répond.",
+        usage:
+          "OUCH invite à noter la journée le soir, et propose de noter hier le lendemain matin plutôt que de laisser passer des jours. Il garde la mention d’une saisie après coup, et le rapport compte les jours saisis deux jours ou plus après. Cette étude est plus réservée que celle du Pain 2008 sur le rappel de la veille.",
+      },
+      {
+        summary:
+          "Chez des personnes avec une lésion de la moelle épinière suivies 7 jours, l’heure des mesures (matin, midi ou soir) ne change pas la fiabilité estimée de la douleur. Ce qui compte pour la fiabilité, c’est le nombre de mesures.",
+        usage:
+          "Il n’y a pas d’heure idéale démontrée : OUCH te laisse choisir l’heure du rappel (20 h par défaut). Ce qui compte est de noter régulièrement, le jour même si possible.",
+      },
     ],
   },
 
@@ -648,6 +672,8 @@ const fr: Translations = {
     painWeatherOfDay: 'Météo douleur du jour',
     painWeatherEmpty: 'Note ta douleur',
     pain: 'Douleur',
+    painWindowToday: 'Sur toute ta journée, pas seulement maintenant',
+    painWindowPast: 'Sur toute cette journée-là',
     painEndNone: 'Aucune',
     painEndExtreme: 'Insupportable',
     painTouch: 'touche ta douleur',
@@ -1153,7 +1179,7 @@ const fr: Translations = {
     methodGp:
       'Douleur, fatigue, sommeil et humeur sont notés chaque jour sur une échelle numérique de 0 à 10. L’échelle numérique est la mesure de l’intensité douloureuse recommandée¹. Une variation d’environ 2 points ou de 30 % est habituellement considérée comme cliniquement pertinente¹˒². Ces seuils sont étayés aussi par des travaux sur la douleur chronique musculosquelettique et lombaire⁸˒⁹. Les autres échelles (fatigue, sommeil, humeur…) ne sont pas des instruments validés. Poussée : au moins 3 jours consécutifs où la douleur dépasse d’au moins 2 points ou 30 % son niveau habituel² (définition retenue ici, non consensuelle).',
     methodCollect:
-      'Recueil. Journal quotidien (rappel sur 24 h, qui limite le biais de mémoire des rappels plus longs⁶). La douleur est notée sur une échelle numérique de 0 à 10, mesure recommandée par IMMPACT¹ et la HAS³, et largement validée¹⁰. Les échelles de fatigue, sommeil, brouillard mental, humeur, stress et activité sont des échelles numériques simples, non validées.',
+      'Recueil. Journal quotidien (rappel sur 24 h, qui limite le biais de mémoire des rappels plus longs⁶ ; une note du soir pour toute la journée rend bien le niveau moyen du jour²⁰). La douleur est notée sur une échelle numérique de 0 à 10, mesure recommandée par IMMPACT¹ et la HAS³, et largement validée¹⁰. Les échelles de fatigue, sommeil, brouillard mental, humeur, stress et activité sont des échelles numériques simples, non validées.',
     methodCalc:
       'Calculs. Moyenne glissante sur 7 jours calendaires (au moins 4 jours renseignés). Variation relative = (moyenne de la période − moyenne précédente) / moyenne précédente ; une baisse de 30 % est considérée comme modérément pertinente, de 50 % comme importante²˒⁴˒⁸˒⁹. Les jours non renseignés sont exclus, jamais imputés. Corrélations de Spearman calculées sur les deux périodes.',
     methodLimits:
@@ -1180,6 +1206,10 @@ const fr: Translations = {
       'Même découpage ; le rapport décompte les régions signalées, sans appliquer les critères.',
       "La douleur de nuit et le soulagement par le mouvement font partie des signes décrits d’une douleur inflammatoire du dos : le rapport compte les réveils à cause de la douleur, sans classer la douleur.",
       "Repère cité à côté du décompte des jours de mal de tête et de traitement de crise pris, sans calcul ni conclusion.",
+      "Une seule note le soir pour la journée : elle rend bien le niveau moyen du jour.",
+      "Consigne « sur toute ta journée, pas seulement maintenant », pour limiter le poids du moment le plus fort ou de la fin de journée.",
+      "Raison de noter le soir ou le lendemain matin, et de compter à part les jours saisis deux jours ou plus après (étude plus réservée que la référence 6 sur la veille).",
+      "Pas d’heure idéale démontrée : l’heure du rappel est laissée au choix de la personne.",
     ],
     completeness: 'Complétude par dimension, sur les jours renseignés : {{list}}.',
     lateEntries:
@@ -1674,6 +1704,10 @@ const fr: Translations = {
     see: 'Voir',
     sheetTitle: 'Pour toi',
     close: 'Fermer',
+    yesterdayLabel: 'Hier',
+    yesterdayText: 'Hier n’est pas noté. Si tu veux, c’est le bon moment : on s’en souvient mieux le lendemain que quelques jours plus tard.',
+    yesterdayDo: 'Noter hier',
+    yesterdaySkip: 'Pas cette fois',
   },
   hardDays: {
     label: 'Un mot pour toi',
@@ -1714,7 +1748,7 @@ const fr: Translations = {
     docs: {
       guide: { title: 'Lire un rapport OUCH', meta: '1 page · à lire en premier' },
       leaflet: { title: 'Plaquette pour les soignants', meta: '2 pages' },
-      note: { title: 'Note méthodologique', meta: '13 pages · formules, seuils, sources' },
+      note: { title: 'Note méthodologique', meta: '14 pages · formules, seuils, sources' },
     },
     otherLanguage: 'Aussi en anglais :',
     demoTitle: 'Voir un rapport d’exemple',

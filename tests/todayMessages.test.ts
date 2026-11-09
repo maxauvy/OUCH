@@ -157,3 +157,12 @@ test('the day after a big day brings one soft word, for that day only, never on 
   assert.deepEqual(todayMessages({ ...on, later: markDone(undefined, `rest:${TODAY}`) }), { items: [], count: 0 })
   assert.deepEqual(kinds(todayMessages({ ...on, today: shiftISO(TODAY, 1), later: markDone(undefined, `rest:${TODAY}`) })), [`rest:${shiftISO(TODAY, 1)}`])
 })
+
+test('yesterday to write comes first, only today, and goes once answered', () => {
+  const key = 'yesterday:2026-10-28'
+  const r = todayMessages({ ...base, yesterday: '2026-10-28', leads: [lead('sleep')] })
+  assert.deepEqual(kinds(r), [key, 'lead:sleep'])
+  assert.equal(r.count, 2)
+  assert.deepEqual(kinds(todayMessages({ ...base, yesterday: '2026-10-28', later: markDone(undefined, key) })), [])
+  assert.deepEqual(todayMessages({ ...base, yesterday: '2026-10-28', quiet: true }), { items: [], count: 0 })
+})
