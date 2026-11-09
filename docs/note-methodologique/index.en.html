@@ -104,6 +104,7 @@ sup{font-size:6.6pt;line-height:0}
 <tr><td>Previous period</td><td>Between the last two appointments of the same kind if they are 7 to 366 days apart (length sometimes differs from <b>N</b>, and is flagged). Otherwise: the <b>N</b> days before the appointment. All comparisons in the report are made against this baseline.</td></tr>
 <tr><td>Days with an entry</td><td>Number of days with a pain level, shown as “x / N” with its percentage, for both periods. A day where only an area, a note or a treatment is entered is saved but not counted; a day without an entry is never counted as “no pain”.</td></tr>
 <tr><td>Completeness by dimension</td><td>For each dimension (fatigue, sleep, areas, treatments…), the share of days with an entry on which it is recorded. Dimensions never entered are not listed.</td></tr>
+<tr><td>Days written afterwards</td><td>Entry created after 04:00 the day after the day concerned. The report counts days written <b>two or more days</b> afterwards (the day before is still well recalled<sup>[6]</sup>) and writes a sentence only if there are any; they stay in every calculation.</td></tr>
 </table>
 
 <h2>3 · Pain statistics</h2>
@@ -180,8 +181,8 @@ sup{font-size:6.6pt;line-height:0}
 <p><b>Limits.</b> One comparison per change, with no test. An improvement may follow a treatment started at the bottom of a painful period (regression to the mean), the weather, the season or another change.</p>
 <h2>8 · Where the method is solid, where it is less so</h2>
 <div class="cards">
-<div class="card"><b class="t">1. Solid</b><p>Standard statistics, formulas published here and tested: 550 automated tests pass on this version, before-and-after comparisons included.</p><p>Validated 0–10 numeric scale, 24-hour recall, missing days never imputed.</p></div>
-<div class="card l"><b class="t">2. More fragile</b><p>Flare definition, extrapolated and non-consensual. Before-and-after comparisons: no test, exposed to regression to the mean. Mild, moderate, severe categories are conventional. Fatigue, sleep and mood scales (and § 11’s) not validated.</p><p>Seven correlations read without correction for multiple comparisons, on non-independent days.</p></div>
+<div class="card"><b class="t">1. Solid</b><p>Standard statistics, formulas published here and tested: 558 automated tests pass on this version, before-and-after comparisons included.</p><p>Validated 0–10 numeric scale, 24-hour recall, missing days never imputed.</p></div>
+<div class="card l"><b class="t">2. More fragile</b><p>Flare definition, extrapolated and non-consensual. Before-and-after comparisons: no test, exposed to regression to the mean. Mild, moderate, severe categories are conventional. Fatigue, sleep and mood scales (and § 11’s) not validated.</p><p>Seven correlations read without correction for multiple comparisons, on non-independent days.</p><p>Days written afterwards: recall is less reliable; they are counted in the report, never set aside.</p></div>
 <div class="card i"><b class="t">3. Missing</b><p>No clinical validation of OUCH itself: no comparison with a validated instrument (BPI, for example), and no flares confirmed by patients or clinicians.</p><p>Missing days are not necessarily random: people sometimes fill in less on bad days. Nothing is verified by a clinician.</p></div>
 </div>
 
