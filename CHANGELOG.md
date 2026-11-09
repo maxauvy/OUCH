@@ -6,8 +6,15 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.11.2] - 2026-11-09
+
+Une version qui ajoute une fiche pour un soignant qui ne connaît pas la personne : une page faite du journal et de quelques lignes tapées par elle, à montrer, imprimer ou enregistrer en PDF aux urgences ou chez un nouveau médecin. Les documents pour les professionnels de santé sont mis à jour.
+
 ### Ajouté
 - **Une fiche pour un soignant qui ne connaît pas la personne** (urgences, nouveau médecin), dans l'onglet Consultation. Une page faite avec le journal : maladies et leur statut, traitements en cours, effets indésirables notés, douleur habituelle des 90 derniers jours (la moitié centrale des jours, à partir de 14 jours notés), zones les plus signalées et ce qui a soulagé. La personne y ajoute elle-même ses allergies, une à trois personnes à joindre et un mot libre ; rien n'est deviné. Elle se lit en français ou en anglais, à l'écran (le numéro se touche pour appeler), s'imprime ou s'enregistre en PDF, fabriquée sur l'appareil. Les ajouts suivent la sauvegarde chiffrée.
+
+### Modifié
+- La plaquette pour les soignants dit que le patient peut remettre cette fiche ; le nombre de tests (584) est mis à jour dans la plaquette, la note méthodologique et le statut de validation.
 
 ## [0.11.1] - 2026-11-09
 
@@ -361,7 +368,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.11.1...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.11.2...HEAD
+[0.11.2]: https://github.com/maxauvy/OUCH/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/maxauvy/OUCH/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/maxauvy/OUCH/compare/v0.10.1...v0.11.0
 [0.10.1]: https://github.com/maxauvy/OUCH/compare/v0.10.0...v0.10.1
