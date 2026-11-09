@@ -6,6 +6,14 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Une proposition de noter hier.** Le matin, quand la veille n'a pas de douleur notée alors que l'avant-veille en a une, la liste « Pour toi » de la page du jour propose de noter hier, et ouvre ce jour dans le Journal. Elle s'écarte d'un geste (« Pas cette fois »), n'apparaît jamais pendant une poussée, et ne s'adresse pas à qui note un jour sur deux ou revient après une absence : c'est pour le jour manqué, pas un reproche. Raison : on se souvient mieux de la veille que de quelques jours plus tôt.
+- **Les jours saisis après coup sont signalés.** La ligne d'état de la page du jour dit quand la journée a été écrite (« Saisi jeudi à 09:12 »), et le rapport pour le médecin compte, dans une phrase, les jours saisis deux jours ou plus après le jour concerné. Ils restent dans tous les calculs.
+- Cinq sources de plus dans Réglages, dans la note méthodologique et dans le dictionnaire des données : rappel à 24-48 h, note du soir et moment de la journée (Broderick 2009, Schneider 2011, Marty 2009, Carlozzi 2018).
+
+### Modifié
+- Sous le titre de la douleur, une ligne précise que la note porte sur toute la journée, pas seulement sur le moment (« Sur toute ta journée, pas seulement maintenant », ou « Sur toute cette journée-là » pour un autre jour).
+
 ## [0.11.0] - 2026-11-05
 
 Une version qui range l'interface et refait les rapports. L'appli passe à quatre onglets (un onglet Consultation prend les rendez-vous, l'ordonnance et le rapport), les réglages et la page des enfants s'ouvrent depuis l'écran du jour, Tendances raconte le mois au lieu de tout empiler, et les deux rapports pour les soignants sont réécrits pour se lire plus vite. Tous les styles sont unifiés.
