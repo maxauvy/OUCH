@@ -1917,7 +1917,7 @@ const en: Translations = {
     agendaIcsTitle: 'OUCH · 2 minutes for you',
     agendaIcsDescription: 'Your day’s weather is waiting in OUCH. If you have already logged it, you can ignore this reminder.',
     reminderNote:
-      "This reminder works while the app is open or recently used. Without a server (by choice, to stay 100% local), it can't trigger while the app is fully closed.",
+      "This reminder works while the app is open or recently used. Without a server (by choice, to stay 100% local), it can't trigger while the app is fully closed: for that, use the calendar above.",
     kidsTabTitle: '“My kids” tile',
     kidsTabHelper: 'A page, opened from Today, that explains your illness to a child in simple words. You can hide it if it does not concern you: nothing is lost, and you can bring it back here.',
     hardDaysTitle: 'A note on hard days',

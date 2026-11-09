@@ -49,7 +49,8 @@ export function downloadBlob(blob: Blob, filename: string) {
   document.body.appendChild(a)
   a.click()
   a.remove()
-  URL.revokeObjectURL(url)
+  // Not at once: some mobile browsers start reading the file after the click returns.
+  setTimeout(() => URL.revokeObjectURL(url), 10_000)
 }
 
 type ImportMode = 'merge' | 'replace'

@@ -1922,7 +1922,7 @@ const fr: Translations = {
     agendaIcsTitle: 'OUCH · 2 minutes pour toi',
     agendaIcsDescription: 'Ta météo du jour t’attend dans OUCH. Si tu l’as déjà notée, tu peux ignorer ce rappel.',
     reminderNote:
-      "Ce rappel fonctionne quand l'app est ouverte ou récemment utilisée. Sans serveur (par choix, pour rester 100% local), il ne peut pas se déclencher app totalement fermée.",
+      "Ce rappel fonctionne quand l'app est ouverte ou récemment utilisée. Sans serveur (par choix, pour rester 100% local), il ne peut pas se déclencher app totalement fermée : pour cela, utilise l’agenda ci-dessus.",
     kidsTabTitle: 'Tuile « Mes enfants »',
     kidsTabHelper: 'Une page, ouverte depuis Aujourd’hui, pour expliquer ta maladie à un enfant avec des mots simples. Tu peux la masquer si elle ne te concerne pas : rien n’est perdu, tu peux la réafficher ici.',
     hardDaysTitle: 'Un mot les jours difficiles',
