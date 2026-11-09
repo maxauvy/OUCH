@@ -131,7 +131,7 @@ tests/           tests for backups, trends, the report and the pain weather
 - A browser can erase a site's data on its own when the device runs low on space, and Safari also does it after a week without use for a site that isn't installed. So OUCH asks the browser to keep the data as soon as the first day is logged, and the settings show whether it agreed. The browser is free to refuse: only an exported backup truly keeps your data safe.
 - At the bottom of Settings, after 15 days of diary, the "Support OUCH" card is a plain link to the developer's donation page: nothing is loaded from that site or sent until you tap the link, and nothing is unlocked in return.
 - Automatic weather calls [Open-Meteo](https://open-meteo.com/) straight from the browser, with no key or account. Each time, Open-Meteo receives the device's **coordinates** (latitude and longitude) and inevitably sees its IP address. To show the town name, the app also queries [Nominatim](https://nominatim.openstreetmap.org/) (OpenStreetMap), only when you update your position: it receives a position **rounded to about 1 km** and also sees the IP address, and the place data is © OpenStreetMap contributors. Those two calls only happen if automatic weather is on. Once a week the app also sends an anonymous “active this week” signal to [GoatCounter](https://www.goatcounter.com/) (an audience count with no identifier, cookie or health data, which the Settings switch turns off; it is not sent either if the browser sends Do Not Track or Global Privacy Control: see [`docs/mesure-audience.md`](docs/mesure-audience.md), in French). In early access and off by default, automatic backup to Dropbox adds one more (an already-encrypted file, in a folder reserved for OUCH: see [`PRIVACY.md`](PRIVACY.md)). A Content Security Policy (CSP) also restricts the production build's outgoing requests to these services.
-- The daily reminder uses the browser's Notification API. There is deliberately no push server: the reminder shows up when the app is open or has been used recently, not when it is fully closed.
+- The daily reminder can be a calendar event: the app builds a small `.ics` file on the device (an event that repeats every day, neutral title, alarm at the exact time) that the phone adds to its calendar. The phone's calendar is what rings, with the app closed, with no server and nothing sent. The other reminder uses the browser's Notification API. There is deliberately no push server: it shows up when the app is open or has been used recently, not when it is fully closed.
 
 The detailed version, with what each outside service receives, is in [`PRIVACY.md`](PRIVACY.md) (French, with an English summary). To report a security vulnerability, see [`SECURITY.md`](SECURITY.md) (it has an English summary).
 
@@ -148,7 +148,7 @@ Contributions are welcome from clinicians and patients as much as from developer
 ## Ideas for what's next
 
 - A deeper review of the new indicators by clinicians (wording, bands), after the quick review of October 2026.
-- A real push reminder (it would need a small server).
+- A real push reminder (it would need a small server): the calendar event stands in for it without one.
 - Several profiles on the same device.
 - iOS and Android widgets (this would mean going native or using Capacitor).
 
