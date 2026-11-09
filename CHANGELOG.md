@@ -6,14 +6,22 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.11.1] - 2026-11-09
+
+Une version qui rend le rappel du soir fiable et qui prend soin des jours écrits après coup. Le rappel peut être un événement de l'agenda du téléphone (le seul qui sonne appli fermée sans serveur), l'appli propose de noter la veille quand elle manque, dit quand une journée a été écrite après coup, et le rapport le compte pour le médecin. Quatre sources s'ajoutent à la liste.
+
 ### Ajouté
 - **Un rappel dans l'agenda du téléphone.** Dans Réglages (et à la première utilisation), « Ajouter à mon agenda » fabrique sur l'appareil un événement qui revient chaque jour, à l'heure choisie, avec une alarme et un titre neutre (« OUCH · 2 minutes pour toi »). C'est l'agenda qui sonne, même appli fermée : le seul rappel fiable sans serveur. Changer l'heure propose de mettre l'agenda à jour. Le rappel dans l'appli reste possible, avec sa limite dite. Rien n'est envoyé nulle part.
 - **Une proposition de noter hier.** Le matin, quand la veille n'a pas de douleur notée alors que l'avant-veille en a une, la liste « Pour toi » de la page du jour propose de noter hier, et ouvre ce jour dans le Journal. Elle s'écarte d'un geste (« Pas cette fois »), n'apparaît jamais pendant une poussée, se coupe avec les suggestions, et ne s'adresse pas à qui note un jour sur deux ou revient après une absence : c'est pour le jour manqué, pas un reproche. Raison : on se souvient mieux de la veille que de quelques jours plus tôt.
 - **Les jours saisis après coup sont signalés.** La ligne d'état de la page du jour dit quand la journée a été écrite (« Saisi jeudi à 09:12 »), et le rapport pour le médecin compte, dans une phrase, les jours saisis deux jours ou plus après le jour concerné. Ils restent dans tous les calculs.
-- Cinq sources de plus dans Réglages, dans la note méthodologique et dans le dictionnaire des données : rappel à 24-48 h, note du soir et moment de la journée (Broderick 2009, Schneider 2011, Marty 2009, Carlozzi 2018).
+- Quatre sources de plus dans Réglages, dans la note méthodologique et dans le dictionnaire des données : rappel à 24-48 h, note du soir et moment de la journée (Broderick 2009, Schneider 2011, Marty 2009, Carlozzi 2018).
 
 ### Modifié
 - Sous le titre de la douleur, une ligne précise que la note porte sur toute la journée, pas seulement sur le moment (« Sur toute ta journée, pas seulement maintenant », ou « Sur toute cette journée-là » pour un autre jour).
+- La note du rappel dans l'appli renvoie vers l'agenda, pour un rappel qui sonne appli fermée.
+
+### Corrigé
+- Le téléchargement d'un fichier (sauvegarde, fichier d'agenda) libérait son adresse dès le clic ; certains navigateurs de téléphone lisent le fichier après coup. Elle est maintenant libérée après 10 secondes.
 
 ## [0.11.0] - 2026-11-05
 
@@ -350,7 +358,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.11.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.11.1...HEAD
+[0.11.1]: https://github.com/maxauvy/OUCH/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/maxauvy/OUCH/compare/v0.10.1...v0.11.0
 [0.10.1]: https://github.com/maxauvy/OUCH/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/maxauvy/OUCH/compare/v0.9.0...v0.10.0
