@@ -7,7 +7,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Ajouté
-- **Une proposition de noter hier.** Le matin, quand la veille n'a pas de douleur notée alors que l'avant-veille en a une, la liste « Pour toi » de la page du jour propose de noter hier, et ouvre ce jour dans le Journal. Elle s'écarte d'un geste (« Pas cette fois »), n'apparaît jamais pendant une poussée, et ne s'adresse pas à qui note un jour sur deux ou revient après une absence : c'est pour le jour manqué, pas un reproche. Raison : on se souvient mieux de la veille que de quelques jours plus tôt.
+- **Une proposition de noter hier.** Le matin, quand la veille n'a pas de douleur notée alors que l'avant-veille en a une, la liste « Pour toi » de la page du jour propose de noter hier, et ouvre ce jour dans le Journal. Elle s'écarte d'un geste (« Pas cette fois »), n'apparaît jamais pendant une poussée, se coupe avec les suggestions, et ne s'adresse pas à qui note un jour sur deux ou revient après une absence : c'est pour le jour manqué, pas un reproche. Raison : on se souvient mieux de la veille que de quelques jours plus tôt.
 - **Les jours saisis après coup sont signalés.** La ligne d'état de la page du jour dit quand la journée a été écrite (« Saisi jeudi à 09:12 »), et le rapport pour le médecin compte, dans une phrase, les jours saisis deux jours ou plus après le jour concerné. Ils restent dans tous les calculs.
 - Cinq sources de plus dans Réglages, dans la note méthodologique et dans le dictionnaire des données : rappel à 24-48 h, note du soir et moment de la journée (Broderick 2009, Schneider 2011, Marty 2009, Carlozzi 2018).
 

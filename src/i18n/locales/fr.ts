@@ -1918,7 +1918,7 @@ const fr: Translations = {
     suggestionsHelper: 'Des pistes tirées de tes notes, une phrase le dimanche, des essais d’une semaine. Tu peux tout couper ici.',
     suggestionsDetail: 'Ce que ça comprend',
     suggestionsItems: [
-      'Une petite liste « pour toi » sur la page du jour : pistes, phrase du dimanche, invitations',
+      'Une petite liste « pour toi » sur la page du jour : pistes, phrase du dimanche, invitations, proposition de noter hier',
       'Un point sur l’onglet Tendances quand une nouvelle piste y est',
       'Des essais d’une semaine pour une action qui accompagne les jours plus doux',
     ],

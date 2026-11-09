@@ -1913,7 +1913,7 @@ const en: Translations = {
     suggestionsHelper: 'Leads from your notes, a sentence on Sundays, one-week trials. You can turn it all off here.',
     suggestionsDetail: 'What this covers',
     suggestionsItems: [
-      'A small “for you” list on the day’s page: leads, the Sunday sentence, invitations',
+      'A small “for you” list on the day’s page: leads, the Sunday sentence, invitations, an offer to log yesterday',
       'A dot on the Trends tab when a new lead is there',
       'One-week trials of an action that goes with gentler days',
     ],

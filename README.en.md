@@ -30,7 +30,7 @@ Pain alone, on a scale from 0 to 10, is enough for a day to count. You can add f
 
 The first time you open the app, a setup guide offers to get things ready: the conditions you track, your first name, your treatments, a daily reminder. Depending on the conditions you give, it sorts the indicators into three tiers (recommended, also useful, all the others); fourteen newer indicators come with it (morning stiffness, night waking because of pain, difficulty with daily movements, joints, periods, headache, leg, spasms…). Quickly reviewed in October 2026 by a physiotherapist, a psychologist specialised in pain and a GP, they remain simple scales or answers, **not validated**, with no score or threshold. Everything is optional, you can skip it at any point and run it again from the settings.
 
-On flare days the screen gets lighter and the app suggests nothing: only a kind word. On other days, whatever is waiting for you (a lead, a trial under way, a recap) fits in one quiet line, “2 small things for you”, which opens a sheet.
+On flare days the screen gets lighter and the app suggests nothing: only a kind word. On other days, whatever is waiting for you (a lead, a trial under way, a recap, yesterday to log) fits in one quiet line, “2 small things for you”, which opens a sheet.
 
 When a stretch is harder, you can note it yourself under the day's pain: when it began, what may have played a part, a few words. The screen then gets lighter, as for a detected flare, but the two stay apart: OUCH does not mix what you live with what the pain levels show.
 

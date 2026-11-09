@@ -30,7 +30,7 @@ Seule la douleur, de 0 à 10, suffit pour qu'une journée compte. On peut y ajou
 
 À la première ouverture, un assistant propose de préparer le suivi : maladies suivies, prénom, traitements, rappel quotidien. Selon les maladies indiquées, il range les indicateurs en trois niveaux (recommandés, utiles aussi, tous les autres) ; quatorze indicateurs plus récents s'y ajoutent (raideur au réveil, réveils à cause de la douleur, gêne dans les gestes, articulations, règles, mal de tête, jambe, spasmes…). Relus rapidement en octobre 2026 par un kinésithérapeute, une psychologue spécialisée dans la douleur et une médecin généraliste, ils restent des échelles ou des réponses simples **non validées**, sans score ni seuil. Tout est facultatif, on peut passer à tout moment et le relancer depuis les réglages.
 
-Les jours de poussée, l'écran s'allège et l'app ne propose rien : seulement un mot bienveillant. Ce qui attend la personne les autres jours (une piste, un essai en cours, un bilan) tient en une ligne discrète, « 2 petites choses pour toi », qui ouvre une feuille.
+Les jours de poussée, l'écran s'allège et l'app ne propose rien : seulement un mot bienveillant. Ce qui attend la personne les autres jours (une piste, un essai en cours, un bilan, hier à noter) tient en une ligne discrète, « 2 petites choses pour toi », qui ouvre une feuille.
 
 Quand une période est plus difficile, on peut la noter soi-même, sous la douleur du jour : quand elle a commencé, ce qui a pu y contribuer, un mot. L'écran s'allège alors, comme pour une poussée repérée, mais les deux restent à part : OUCH ne mélange pas ce qu'on vit et ce que montrent les niveaux de douleur.
 

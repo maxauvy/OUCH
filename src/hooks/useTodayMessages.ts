@@ -54,7 +54,7 @@ export function useTodayMessages(): TodayMessages | null {
       calm: recentReturn(flares?.episodes ?? [], today),
       month: monthSummary({ today, entries: logged, history: settings.leadTrialHistory ?? [], episodes: flares?.episodes ?? [] }),
       rest: bigDayBefore(logged, today),
-      yesterday: missedYesterday(logged, today),
+      yesterday: settings.suggestionsEnabled ? missedYesterday(logged, today) : null,
       trial: settings.leadTrial,
     })
   }, [logged, leadList, settings, earlyAccess, today, flares])
