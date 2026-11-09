@@ -54,6 +54,10 @@ Deux cartes de plus : « Comparer deux périodes » met les mêmes mesures côte
 
 On note la date de son rendez-vous, ses questions et ce dont on veut parler en priorité ; une carte douce de la page du jour le rappelle quinze jours avant. Après le rendez-vous, on écrit ce que le médecin a dit, et, si une ordonnance a été remise, sa durée : OUCH prévient une semaine avant la fin (ou deux, au choix), sans rien calculer à partir des prises. La feuille rappelle aussi ce qui s'est passé depuis la dernière consultation. Tout reste sur l'appareil.
 
+### Une fiche pour un soignant qui ne vous connaît pas
+
+Pour les urgences ou un nouveau médecin, l'onglet Consultation fabrique une page à montrer ou à imprimer : les maladies suivies et leur statut, les traitements en cours, les effets indésirables que l'on a notés, la douleur habituelle des trois derniers mois, les zones les plus signalées et ce qui soulage. On y ajoute soi-même ses allergies, des personnes à joindre et un mot libre ; rien n'est deviné. Elle se lit en français ou en anglais et se fabrique sur l'appareil.
+
 ### Un rapport pour le médecin
 
 Depuis l'onglet Consultation, on génère un rapport à imprimer ou à enregistrer en PDF. Il couvre la période depuis la dernière consultation et la compare à la même durée juste avant. Il existe en deux versions : une synthèse de 3 à 5 pages pour le médecin traitant, et un rapport détaillé de 6 à 10 pages, en parties numérotées, pour un centre douleur (CETD), avec la consommation d'antalgiques et les facteurs associés. Il se lit en français ou en anglais, mentionne les maladies déclarées et reprend, dans « Ce que le patient a remarqué », les pistes gardées et les essais d'une semaine du patient.
@@ -121,8 +125,8 @@ src/
   components/    l'interface, rangée par domaine (entry, weather, journal,
                  trends, report, kids, settings, setup, ui)
   pages/         les quatre onglets (Aujourd'hui, Journal, Tendances,
-                 Consultation), les Réglages, la page Enfants et le rapport
-                 pour le médecin
+                 Consultation), les Réglages, la page Enfants, le rapport
+                 pour le médecin et la fiche pour un soignant
 scripts/         historique de démo, icônes, vidéos
 tests/           tests des sauvegardes, des tendances, du rapport et de la météo
 ```

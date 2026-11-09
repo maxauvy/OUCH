@@ -417,6 +417,20 @@ export interface Prescription {
   label?: string
 }
 
+/** Someone to reach for the person: a name or a link ("Alex, conjoint"), and a number. */
+export interface CareSheetContact {
+  label: string
+  phone?: string
+}
+
+/** What the sheet for a health professional cannot take from the journal: typed by the person, shown as typed. */
+export interface CareSheetInfo {
+  allergies: string[]
+  contacts: CareSheetContact[]
+  /** A free word to the person reading the sheet. */
+  note?: string
+}
+
 export interface Settings {
   id: 1
   enabledFactors: FactorKey[]
@@ -493,6 +507,8 @@ export interface Settings {
   birthDate?: string
   /** The card on the day's page was closed for this appointment (and this stage of it). Per device. */
   consultationCardClosed?: { date: string; kind: 'soon' | 'after' }
+  /** What the person adds to the sheet for a health professional: allergies, people to reach, a word. Restored from a backup. */
+  careSheet?: CareSheetInfo
   /** The prescription the person noted, if any. Restored from a backup. */
   prescription?: Prescription
   /** The reminder card was closed, or put off, for this prescription (by its start). Per device. */

@@ -54,6 +54,10 @@ Two more cards: “Compare two periods” puts the same measures side by side (t
 
 You note the date, your questions and what you most want to talk about; a soft card on the day's page recalls it fifteen days ahead. After the appointment you write what the doctor said and, if a prescription was given, its length: OUCH reminds you a week before it ends (or two, as you choose), without working anything out from your intakes. The sheet also recalls what happened since your last appointment. All of it stays on the device.
 
+### A sheet for a professional who does not know you
+
+For the emergency room or a new doctor, the Consultation tab makes a page to show or print: the illnesses you track and their status, your current treatments, the side effects you noted, your usual pain over the last three months, the areas you report most and what has helped. You add your own allergies, people to contact and a free word; nothing is guessed. It reads in French or English and is made on your device.
+
 ### A report for your doctor
 
 From the Consultation tab, you can generate a report to print or save as a PDF. It covers the time since your last appointment and compares it with the same length of time just before. It comes in two versions: a 3 to 5-page summary for your GP, and a detailed 6 to 10-page report, in numbered parts, for a pain clinic (a CETD in France), with painkiller use and associated factors. It can be read in French or English, lists the conditions you declared and, under “What the patient noticed”, carries the leads you kept and your one-week trials.
@@ -119,7 +123,8 @@ src/
   components/    the UI, grouped by area (entry, weather, journal, trends,
                  report, kids, settings, setup, ui)
   pages/         the four tabs (Today, Journal, Trends, Consultation), the
-                 Settings, the kids' page and the doctor report
+                 Settings, the kids' page, the doctor report and the sheet for a
+                 health professional
 scripts/         demo history, icons, videos
 tests/           tests for backups, trends, the report and the pain weather
 ```

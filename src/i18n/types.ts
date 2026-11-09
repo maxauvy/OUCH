@@ -1438,6 +1438,73 @@ export interface Translations {
     cardSoonWith: string
     cardAfterWith: string
   }
+  careSheet: {
+    /** Row on the Consultation tab */
+    row: string
+    rowHint: string
+    title: string
+    back: string
+    intro: string
+    languageLabel: string
+    edit: string
+    exportPdf: string
+    exporting: string
+    print: string
+    exportHelper: string
+    exportFailed: string
+    /** Prompts on the preview, for what only the person can say */
+    addAllergies: string
+    addContacts: string
+    addNote: string
+    /** The form */
+    formTitle: string
+    allergiesTitle: string
+    allergyPlaceholder: string
+    /** `{{name}}` */
+    removeAllergy: string
+    addAllergy: string
+    contactsTitle: string
+    contactLabelPlaceholder: string
+    contactPhonePlaceholder: string
+    addContact: string
+    /** `{{n}}` */
+    removeContact: string
+    noteTitle: string
+    notePlaceholder: string
+    formHelper: string
+    close: string
+    /** What the sheet is made of, said to the person */
+    fromJournal: string
+    /** The sheet itself, read in the language chosen for it */
+    doc: {
+      heading: string
+      /** `{{n}}` */
+      age: string
+      /** `{{date}}` */
+      filledOn: string
+      illnesses: string
+      treatments: string
+      allergies: string
+      pain: string
+      helps: string
+      note: string
+      contacts: string
+      diagnosed: string
+      /** `{{year}}` */
+      diagnosedIn: string
+      suspected: string
+      asNeeded: string
+      /** `{{range}}` */
+      painUsual: string
+      painUsualNote: string
+      rangeTo: string
+      /** `{{list}}` */
+      painZones: string
+      sideEffects: string
+      effectStopped: string
+      disclaimer: string
+    }
+  }
   prescription: {
     cardLabel: string
     /** `{{date}}`: the day it ends */

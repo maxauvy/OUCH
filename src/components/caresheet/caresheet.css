@@ -1,0 +1,152 @@
+/* The sheet for a health professional. Always a light sheet of paper, even in
+   dark mode: it is shown to someone else, and printed. The screen version
+   follows the app's text size; the paper one is fixed, for A4. */
+.cs {
+  --cs-ink: #14212b;
+  --cs-muted: #4f606b;
+  --cs-hair: #dde4e9;
+  --cs-soft: #e3eef6;
+  --cs-mark: #cfe3f1;
+  --cs-brand: #0d5c8c;
+  color: var(--cs-ink);
+  background: #fff;
+  border: 1px solid var(--cs-hair);
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: var(--text-body);
+  line-height: 1.45;
+  text-align: left;
+}
+.cs-demo {
+  background: #f3ecd9;
+  color: #5e4f33;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  padding: 5px 0;
+}
+.cs-head {
+  background: var(--cs-soft);
+  padding: 16px 18px;
+}
+.cs-kicker {
+  margin: 0;
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cs-muted);
+}
+.cs-name {
+  margin: 2px 0 0;
+  font-size: var(--text-title);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.cs-meta {
+  margin: 2px 0 0;
+  font-size: var(--text-caption);
+  color: var(--cs-muted);
+}
+.cs-body {
+  padding: 2px 18px 8px;
+}
+.cs-rub {
+  display: grid;
+  grid-template-columns: minmax(78px, 96px) 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--cs-hair);
+}
+.cs-rub:last-child {
+  border-bottom: 0;
+}
+.cs-rub-t {
+  margin: 2px 0 0;
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--cs-muted);
+  overflow-wrap: anywhere;
+}
+.cs-line {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.cs-line + .cs-line {
+  margin-top: 4px;
+}
+.cs-sub {
+  font-size: var(--text-caption);
+  color: var(--cs-muted);
+}
+.cs-mark {
+  background: linear-gradient(transparent 55%, var(--cs-mark) 55%);
+}
+.cs-note {
+  white-space: pre-wrap;
+}
+.cs-tel {
+  color: inherit;
+  text-decoration: none;
+}
+.cs-foot {
+  margin: 0;
+  padding: 4px 18px 16px;
+  font-size: var(--text-caption);
+  color: var(--cs-muted);
+}
+/* What the person can still add: on screen only, never in the file. */
+.cs-add {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px dashed #7b8c97;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--cs-brand);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* On A4: fixed sizes, no frame. */
+.cs-paper {
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  font-size: 16px;
+  --cs-label: 160px;
+}
+.cs-paper .cs-head {
+  padding: 20px 22px;
+}
+.cs-paper .cs-kicker,
+.cs-paper .cs-meta,
+.cs-paper .cs-rub-t,
+.cs-paper .cs-sub,
+.cs-paper .cs-foot {
+  font-size: 13.5px;
+}
+.cs-paper .cs-name {
+  font-size: 32px;
+}
+.cs-paper .cs-body {
+  padding: 4px 22px 10px;
+}
+.cs-paper .cs-rub {
+  grid-template-columns: var(--cs-label) 1fr;
+  padding: 18px 0;
+}
+.cs-paper .cs-foot {
+  padding: 8px 22px 0;
+}
+
+/* A sheet of paper that is only there to be captured: out of sight, but laid out. */
+.cs-capture {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  pointer-events: none;
+}
