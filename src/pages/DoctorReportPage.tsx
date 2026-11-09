@@ -1,4 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { IconArrowLeft, IconFileTypePdf, IconPrinter } from '@tabler/icons-react'
 import { useAllEntries } from '../hooks/useEntries'
@@ -6,7 +6,9 @@ import { useMedications } from '../hooks/useMedications'
 import { useSettings } from '../hooks/useSettings'
 import { leadFactors } from '../lib/leads'
 import { formatISODate } from '../lib/medicationFormat'
-import { buildImagePdf, type PdfImage } from '../lib/pdf'
+import { buildImagePdf } from '../lib/pdf'
+import { capturePages } from '../lib/capturePages'
+import { ScaledPreview } from '../components/report/ScaledPreview'
 import { downloadBlob } from '../lib/backup'
 import { IS_DEMO } from '../lib/demoMode'
 import { radioGroupProps, radioProps } from '../lib/a11y'
@@ -25,35 +27,12 @@ import { updateSettings } from '../db'
 import type { ConsultationKind } from '../db/types'
 import { validSpans, type Span } from '../lib/periodComparison'
 
-/** A4 width in CSS pixels (210 mm at 96 dpi): the preview is scaled from it. */
-const PAGE_WIDTH = 794
-
 const inputStyle = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 const inputClass = 'w-full rounded-xl px-3.5 py-2.5 text-body outline-none'
 
 // An app installed from Safari on iPhone has no print dialog: window.print()
 // does nothing there, so only the PDF is offered.
 const canPrint = !(navigator as Navigator & { standalone?: boolean }).standalone
-
-/** The preview's pages as JPEGs, at twice the A4 size in CSS pixels (about
- * 190 dpi once printed). */
-async function capturePages(container: HTMLElement): Promise<PdfImage[]> {
-  const { toCanvas } = await import('html-to-image')
-  const images: PdfImage[] = []
-  for (const page of Array.from(container.querySelectorAll<HTMLElement>('.report-page'))) {
-    const canvas = await toCanvas(page, {
-      pixelRatio: 2,
-      backgroundColor: '#ffffff',
-      // The preview's page shadow and spacing aren't part of the page.
-      style: { boxShadow: 'none', margin: '0' },
-    })
-    const blob = await new Promise<Blob>((resolve, reject) =>
-      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('JPEG encoding failed'))), 'image/jpeg', 0.9)
-    )
-    images.push({ jpeg: new Uint8Array(await blob.arrayBuffer()), width: canvas.width, height: canvas.height })
-  }
-  return images
-}
 
 export function DoctorReportPage({ onBack }: { onBack: () => void }) {
   const t = useTranslation()
@@ -469,35 +448,6 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
           )}
         </section>
       )}
-    </div>
-  )
-}
-
-/** Shrinks the A4 pages to the screen's width, keeping their layout intact. */
-function ScaledPreview({ children }: { children: ReactNode }) {
-  const outerRef = useRef<HTMLDivElement>(null)
-  const innerRef = useRef<HTMLDivElement>(null)
-  const [box, setBox] = useState({ scale: 1, height: 0 })
-
-  useLayoutEffect(() => {
-    const outer = outerRef.current
-    const inner = innerRef.current
-    if (!outer || !inner) return
-    const update = () => {
-      const scale = Math.min(1, outer.clientWidth / PAGE_WIDTH)
-      setBox({ scale, height: inner.offsetHeight * scale })
-    }
-    const observer = new ResizeObserver(update)
-    observer.observe(outer)
-    observer.observe(inner)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <div ref={outerRef} style={{ height: box.height || undefined, overflow: 'hidden' }}>
-      <div ref={innerRef} style={{ width: PAGE_WIDTH, transform: `scale(${box.scale})`, transformOrigin: 'top left' }}>
-        {children}
-      </div>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { lazy, Suspense, useRef, useState, useEffect } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconCalendarCheck, IconCalendarHeart, IconFileText, IconMessageQuestion, IconNotes, IconPill } from '@tabler/icons-react'
+import { IconCalendarCheck, IconCalendarHeart, IconFileText, IconMessageQuestion, IconNotes, IconPill, IconStethoscope } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
 import { consultationCard, daysUntil, kindOf, pastConsultations } from '../lib/consultation'
 import { prescriptionEnd } from '../lib/prescription'
@@ -15,6 +15,7 @@ import { PastConsultationSheet } from '../components/consultation/PastConsultati
 import { GroupCaption } from '../components/ui/Card'
 import type { PastConsultation } from '../db/types'
 
+const CareSheetPage = lazy(() => import('./CareSheetPage').then((m) => ({ default: m.CareSheetPage })))
 const DoctorReportPage = lazy(() => import('./DoctorReportPage').then((m) => ({ default: m.DoctorReportPage })))
 
 /** Everything that prepares a visit to the doctor, in one place: the appointment, its questions, the report, the prescription. */
@@ -27,16 +28,20 @@ export function ConsultationPage() {
   const today = todayISO()
   const [sheet, setSheet] = useState<'appointment' | 'after' | 'prescription' | null>(null)
   const [reporting, setReporting] = useState(false)
+  const [careSheet, setCareSheet] = useState(false)
   const [openPast, setOpenPast] = useState<PastConsultation | null>(null)
   const reportButton = useRef<HTMLButtonElement>(null)
   const returning = useRef(false)
+  // Which page the focus returns to: the care sheet's row, or the report's button.
+  const careSheetFrom = useRef(false)
+  const careSheetRow = useRef<HTMLButtonElement>(null)
 
   // Back from the report: focus returns to the button that opened it.
   useEffect(() => {
-    if (reporting || !returning.current) return
+    if (reporting || careSheet || !returning.current) return
     returning.current = false
-    reportButton.current?.focus()
-  }, [reporting])
+    ;(careSheetFrom.current ? careSheetRow.current : reportButton.current)?.focus()
+  }, [reporting, careSheet])
 
   if (reporting) {
     return (
@@ -44,7 +49,22 @@ export function ConsultationPage() {
         <DoctorReportPage
           onBack={() => {
             returning.current = true
+            careSheetFrom.current = false
             setReporting(false)
+          }}
+        />
+      </Suspense>
+    )
+  }
+
+  if (careSheet) {
+    return (
+      <Suspense fallback={null}>
+        <CareSheetPage
+          onBack={() => {
+            returning.current = true
+            careSheetFrom.current = true
+            setCareSheet(false)
           }}
         />
       </Suspense>
@@ -112,6 +132,16 @@ export function ConsultationPage() {
             title={t.prescriptionRow}
             hint={p ? [format(i18n.prescription.settingsCurrent, { end: day(prescriptionEnd(p)) }, language), p.label].filter(Boolean).join(' · ') : i18n.prescription.settingsNone}
             onClick={() => setSheet('prescription')}
+          />
+          <LinkRow
+            buttonRef={careSheetRow}
+            icon={IconStethoscope}
+            title={i18n.careSheet.row}
+            hint={i18n.careSheet.rowHint}
+            onClick={() => {
+              careSheetFrom.current = true
+              setCareSheet(true)
+            }}
           />
         </div>
       </Card>

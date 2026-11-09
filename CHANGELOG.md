@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Une fiche pour un soignant qui ne connaît pas la personne** (urgences, nouveau médecin), dans l'onglet Consultation. Une page faite avec le journal : maladies et leur statut, traitements en cours, effets indésirables notés, douleur habituelle des 90 derniers jours (la moitié centrale des jours, à partir de 14 jours notés), zones les plus signalées et ce qui a soulagé. La personne y ajoute elle-même ses allergies, une à trois personnes à joindre et un mot libre ; rien n'est deviné. Elle se lit en français ou en anglais, à l'écran (le numéro se touche pour appeler), s'imprime ou s'enregistre en PDF, fabriquée sur l'appareil. Les ajouts suivent la sauvegarde chiffrée.
+
 ## [0.11.1] - 2026-11-09
 
 Une version qui rend le rappel du soir fiable et qui prend soin des jours écrits après coup. Le rappel peut être un événement de l'agenda du téléphone (le seul qui sonne appli fermée sans serveur), l'appli propose de noter la veille quand elle manque, dit quand une journée a été écrite après coup, et le rapport le compte pour le médecin. Quatre sources s'ajoutent à la liste.
