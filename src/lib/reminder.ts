@@ -15,8 +15,9 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
 /**
  * Local-only reminder: works while the app is open (or recently backgrounded
  * on some platforms). There is no push server here on purpose — that would
- * mean a backend and an account, which this app deliberately avoids — so a
- * fully reliable reminder even with the app closed isn't possible.
+ * mean a backend and an account, which this app deliberately avoids — so this
+ * notification can't fire with the app closed. The reminder that does is the
+ * calendar event (`agendaReminder.ts`), rung by the phone's own calendar.
  */
 export function maybeShowReminder(
   reminderTime: string,
