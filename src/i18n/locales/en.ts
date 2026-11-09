@@ -730,6 +730,8 @@ const en: Translations = {
     notesPlaceholder: 'A particular event, an observation…',
     measuresTitle: 'Today’s measures',
     loggedAt: 'Logged at {{time}}',
+    loggedLateDay: 'Logged {{day}} at {{time}}',
+    loggedLateDate: 'Logged on {{date}} at {{time}}',
     vsAverageBelow: '{{delta}} below your 7-day average',
     vsAverageAbove: '{{delta}} above your 7-day average',
     vsAverageSame: 'In line with your 7-day average',

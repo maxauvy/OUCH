@@ -732,6 +732,8 @@ const fr: Translations = {
     notesPlaceholder: 'Un événement particulier, une observation…',
     measuresTitle: 'Mesures du jour',
     loggedAt: 'Saisi à {{time}}',
+    loggedLateDay: 'Saisi {{day}} à {{time}}',
+    loggedLateDate: 'Saisi le {{date}} à {{time}}',
     vsAverageBelow: '{{delta}} sous ta moyenne 7 j',
     vsAverageAbove: '{{delta}} au-dessus de ta moyenne 7 j',
     vsAverageSame: 'Dans ta moyenne 7 j',

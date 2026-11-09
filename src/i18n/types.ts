@@ -609,6 +609,10 @@ export interface Translations {
     notesPlaceholder: string
     measuresTitle: string
     loggedAt: string
+    /** Written after the day: `{{day}}` the weekday (within a week), `{{time}}` */
+    loggedLateDay: string
+    /** Same, a week or more later: `{{date}}` short date, `{{time}}` */
+    loggedLateDate: string
     vsAverageBelow: string
     vsAverageAbove: string
     vsAverageSame: string
