@@ -101,7 +101,8 @@ Un changement de dose ferme la période en cours la veille et en ouvre une nouve
 | `enabledFactors` | parmi : fatigue, sommeil, stress, brouillard mental, humeur, activité, météo, médicaments, actions positives, zones douloureuses, notes | Oui |
 | `cycleTrackingEnabled` | vrai / faux | Oui |
 | `autoWeatherEnabled`, `autoWeatherLat`, `autoWeatherLon`, `autoWeatherLabel` | booléen, **latitude et longitude exactes**, nom de la ville | Oui : une sauvegarde contient donc la position exacte, si elle a été enregistrée |
-| `reminderEnabled`, `reminderTime` | booléen, `HH:MM` | Oui |
+| `reminderEnabled`, `reminderTime` | booléen, `HH:MM` | Oui. L'heure sert au rappel dans l'appli et à l'événement d'agenda |
+| `agendaReminder` | `{ heure, numéro }` ou absent | Non (propre à l'appareil). L'heure pour laquelle le fichier d'agenda a été proposé et combien de fois : l'appli ne voit pas l'agenda, cela dit ce qui a été proposé, pas ce qui a été ajouté |
 | `language`, `theme`, `onboardingDone`, `parentGender` | `fr` / `en`, `system` / `light` / `dark`, booléen, `maman` / `papa` (écran Enfants) | Oui |
 | `hardDaysCardEnabled`, `lightFormEnabled` | booléens | Oui. Le mot des jours difficiles et l'écran allégé pendant une poussée |
 | `leadChoices` | par piste de Tendances (clé `sleep`, `stress`, `activity` ou `action:` suivi de l'action en minuscules) : la réponse du patient (`kept` « à noter pour ma consultation », ou `dismissed` « pas vraiment »), la date, et l'écart de douleur et le nombre de jours sur lesquels il a répondu | Oui. Un choix du patient : il ne change aucun calcul, il décide de ce qui figure dans la rubrique « Ce que le patient a remarqué » du rapport |

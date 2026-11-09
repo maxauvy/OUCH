@@ -134,7 +134,7 @@ tests/           tests des sauvegardes, des tendances, du rapport et de la mét�
 - Un navigateur peut effacer de lui-même les données d'un site quand l'appareil manque de place, et Safari le fait aussi après une semaine sans utilisation pour un site non installé. OUCH demande donc au navigateur de garder les données dès la première journée enregistrée, et les réglages montrent s'il a accepté. Il reste libre de refuser : seule une sauvegarde exportée met vraiment les données à l'abri.
 - Tout en bas de Réglages, après 15 jours de journal, la carte « Soutenir OUCH » est un simple lien vers la page de dons du développeur : rien n'est chargé depuis ce site ni envoyé tant que tu ne touches pas le lien, et rien n'est débloqué en échange.
 - La météo automatique appelle [Open-Meteo](https://open-meteo.com/) directement depuis le navigateur, sans clé ni compte. À chaque récupération, Open-Meteo reçoit les **coordonnées** de l'appareil (latitude et longitude) et voit forcément son adresse IP. Pour afficher le nom de la ville, l'app interroge aussi [Nominatim](https://nominatim.openstreetmap.org/) (OpenStreetMap), uniquement quand tu mets à jour ta position : il ne reçoit qu'une position **arrondie à environ 1 km** et voit lui aussi l'adresse IP, et les données de lieux sont © les contributeurs d'OpenStreetMap. Ces deux appels n'ont lieu que si la météo automatique est activée. S'y ajoute, une fois par semaine, un signal anonyme « actif cette semaine » vers [GoatCounter](https://www.goatcounter.com/) (une mesure d'audience sans identifiant, sans cookie ni donnée de santé, que la case de Réglages coupe ; elle ne part pas non plus si le navigateur envoie Do Not Track ou Global Privacy Control : voir [`docs/mesure-audience.md`](docs/mesure-audience.md)). S'y ajoute encore, en accès anticipé et désactivée par défaut, la sauvegarde automatique chez Dropbox (un fichier déjà chiffré, dans un dossier réservé à OUCH : voir [`PRIVACY.md`](PRIVACY.md)). Une politique de sécurité de contenu (CSP) limite d'ailleurs les appels sortants de la version de production à ces services.
-- Le rappel quotidien utilise l'API de notification du navigateur. Il n'y a volontairement pas de serveur d'envoi : le rappel arrive quand l'app est ouverte ou a servi récemment, pas quand elle est totalement fermée.
+- Le rappel quotidien peut être un événement d'agenda : l'app fabrique sur l'appareil un petit fichier `.ics` (un événement qui revient chaque jour, titre neutre, alarme à l'heure) que le téléphone ajoute à son agenda. C'est l'agenda du téléphone qui sonne, appli fermée, sans serveur et sans rien envoyer. L'autre rappel utilise l'API de notification du navigateur : il n'y a volontairement pas de serveur d'envoi, il arrive quand l'app est ouverte ou a servi récemment, pas quand elle est totalement fermée.
 
 La version détaillée, avec ce que chaque service extérieur reçoit, est dans [`PRIVACY.md`](PRIVACY.md). Pour signaler une faille de sécurité, voir [`SECURITY.md`](SECURITY.md).
 
@@ -151,7 +151,7 @@ Les contributions sont bienvenues, de soignants et de patients comme de dévelop
 ## Idées pour la suite
 
 - Une relecture plus approfondie des nouveaux indicateurs par des cliniciens (libellés, tranches), après la revue rapide d'octobre 2026.
-- Un vrai rappel push (il demanderait un petit serveur).
+- Un vrai rappel push (il demanderait un petit serveur) : l'événement d'agenda en tient lieu sans serveur.
 - Plusieurs profils sur le même appareil.
 - Des widgets iOS et Android (il faudrait passer à une app native ou à Capacitor).
 

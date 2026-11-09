@@ -14,7 +14,7 @@ Dans le navigateur de l'appareil (base IndexedDB du site, plus quelques clés de
 
 - le journal : douleur, zones, fatigue, sommeil, brouillard mental, stress, humeur, activité, actions qui ont aidé, notes, jour de règles si la personne l'active, et, pour celles qui suivent les indicateurs proposés selon les maladies, des données plus intimes (abondance des règles et saignements hors règles, douleur à la selle, troubles urinaires, fièvre ou infection, mal de tête, symptômes du jour, raideur, réveils…). Elles sont facultatives, décochables d'un tap, et ne quittent pas l'appareil : elles sont dans la sauvegarde chiffrée et dans l'export CSV (non chiffré) ;
 - les traitements : nom, type, doses, périodes, prises, soulagement, effets indésirables ;
-- les réglages : prénom, langue, maladies déclarées, heure du rappel, et, si la météo automatique est activée, la **position exacte** de l'appareil ;
+- les réglages : prénom, langue, maladies déclarées, heure du rappel (et l'heure pour laquelle le fichier d'agenda a été proposé), et, si la météo automatique est activée, la **position exacte** de l'appareil ;
 - le dernier numéro de semaine pour lequel le signal de mesure d'audience a été envoyé (`ouch.audience.lastWeek`, dans `localStorage`) : un repère par installation, sans identifiant, qui n'est ni dans la sauvegarde ni dans l'export CSV et que la case de Réglages efface ;
 - ce que la personne a répondu aux pistes de Tendances (« à noter pour ma consultation », « pas vraiment »), les essais d'une semaine qu'elle a lancés (l'action, les dates) et ce que les cartes de pistes ont déjà montré sur l'appareil : tout se calcule sur l'appareil, rien n'est envoyé, et les deux premiers font partie d'une sauvegarde ;
 - si le verrou par code est activé : l'empreinte salée du code (jamais le code), le délai choisi, le nombre d'erreurs de suite et le moment où l'app a quitté l'écran pour la dernière fois, dans une clé de `localStorage` (voir plus bas) ;
@@ -71,6 +71,10 @@ Facultative, désactivée par défaut, et pas encore proposée à tout le monde 
 - **Ce qui est gardé sur l'appareil :** une clé dérivée du mot de passe, non extractable (la page peut l'utiliser mais pas la lire), et les jetons d'accès à Dropbox, chacun dans sa propre base IndexedDB, à part du journal. Ni l'une ni les autres ne font partie d'une sauvegarde, d'un export ou d'une copie. Le mot de passe, lui, n'est enregistré nulle part : **perdu, il rend les copies irrécupérables**, comme pour la sauvegarde exportée.
 - **Arrêter :** « Arrêter la sauvegarde automatique » supprime la clé et les jetons de l'appareil et révoque le lien chez Dropbox. Les copies déjà envoyées restent dans le Dropbox de la personne, qui peut les y supprimer.
 - **Le développeur** n'a pas accès à ces copies : elles vont au compte Dropbox de la personne, pas à OUCH. L'application Dropbox d'OUCH n'a qu'une clé d'application publique, pas de secret.
+
+## Le rappel dans l'agenda
+
+Le bouton « Ajouter à mon agenda » fabrique, **sur l'appareil**, un petit fichier `.ics` : un événement qui revient chaque jour, à l'heure choisie. Il contient un titre neutre (« OUCH · 2 minutes pour toi »), l'adresse de l'application et rien d'autre : aucune donnée de santé, aucun prénom. OUCH ne l'envoie nulle part. Une fois ajouté, l'événement appartient à l'agenda du téléphone : s'il est synchronisé avec un compte (Google, iCloud…), ce service le reçoit comme n'importe quel événement. OUCH ne peut ni voir ni supprimer cet événement ; pour l'arrêter, on le supprime dans l'agenda.
 
 ## Mode démo
 

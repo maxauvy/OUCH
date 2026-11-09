@@ -91,6 +91,7 @@ export interface Translations {
     checkMedications: string
     checkNoMedications: string
     checkReminder: string
+    checkAgenda: string
     checkNoReminder: string
     checkNotInstalled: string
     reportTitle: string
@@ -1758,6 +1759,20 @@ export interface Translations {
     reminderTitle: string
     reminderHelper: string
     reminderNote: string
+    reminderCardHelper: string
+    reminderInAppTitle: string
+    agendaTitle: string
+    agendaHelper: string
+    agendaAdd: string
+    agendaUpdate: string
+    /** `{{time}}`: the time the file was made for. */
+    agendaSent: string
+    /** `{{time}}`: the time still in the calendar. */
+    agendaStale: string
+    agendaNote: string
+    /** Neutral: it shows on the lock screen and in a shared calendar. */
+    agendaIcsTitle: string
+    agendaIcsDescription: string
     hardDaysTitle: string
     hardDaysHelper: string
     suggestionsTitle: string

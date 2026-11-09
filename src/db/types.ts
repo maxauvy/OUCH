@@ -423,6 +423,8 @@ export interface Settings {
   theme: ThemePref
   reminderEnabled: boolean
   reminderTime: string // 'HH:MM'
+  /** The calendar event the person was offered (see `agendaReminder.ts`): the time it was made for and how many times, so a new file replaces the event. The app cannot see the calendar, so this says what was offered, not what was added. Per device: not restored from a backup. */
+  agendaReminder?: { time: string; sequence: number }
   cycleTrackingEnabled: boolean
   displayName: string
   autoWeatherEnabled: boolean

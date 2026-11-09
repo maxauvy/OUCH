@@ -27,7 +27,7 @@ import { MedicationsSection } from '../components/settings/MedicationsSection'
 import { IllnessPicker } from '../components/settings/IllnessPicker'
 import { SettingsGroup } from '../components/settings/SettingsGroup'
 import { SettingToggle } from '../components/settings/SettingToggle'
-import { canNotify, requestNotificationPermission } from '../lib/reminder'
+import { ReminderSettings } from '../components/settings/ReminderSettings'
 import { formatCoordinates } from '../lib/weather'
 import { saveCurrentLocation } from '../lib/weatherLocation'
 import { format, LANGUAGES, useLocale, useTranslation } from '../i18n'
@@ -85,7 +85,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
   const messagesSummary = format(t.settings.summaryMessages, { n: messagesOn })
 
   const displaySummary = [
-    settings.reminderEnabled ? format(t.settings.summaryReminderOn, { time: settings.reminderTime }) : t.settings.summaryReminderOff,
+    settings.reminderEnabled || settings.agendaReminder ? format(t.settings.summaryReminderOn, { time: settings.reminderTime }) : t.settings.summaryReminderOff,
     THEME_OPTIONS.find((o) => o.value === settings.theme)?.label,
     LANGUAGES.find((l) => l.code === settings.language)?.label,
   ]
@@ -98,17 +98,6 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
       : format(t.backup.lastBackup, {
           date: new Date(settings.lastBackupAt).toLocaleDateString(intlLocale, { day: 'numeric', month: 'short', year: 'numeric' }),
         })
-
-  async function handleReminderToggle(v: boolean) {
-    if (v && canNotify()) {
-      const perm = await requestNotificationPermission()
-      if (perm !== 'granted') {
-        await updateSettings({ reminderEnabled: false })
-        return
-      }
-    }
-    await updateSettings({ reminderEnabled: v })
-  }
 
   async function handleSetLocation() {
     setLocating(true)
@@ -262,27 +251,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
       </SettingsGroup>
 
       <SettingsGroup icon={IconBell} title={t.settings.groups.display} summary={displaySummary}>
-        <SettingToggle
-          icon={IconBell}
-          title={t.settings.reminderTitle}
-          helper={t.settings.reminderHelper}
-          checked={settings.reminderEnabled}
-          onChange={handleReminderToggle}
-        >
-          {settings.reminderEnabled && (
-            <input
-              type="time"
-              aria-label={t.settings.reminderTitle}
-              value={settings.reminderTime}
-              onChange={(e) => updateSettings({ reminderTime: e.target.value })}
-              className="rounded-xl px-3.5 py-2.5 text-body outline-none mt-3"
-              style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
-            />
-          )}
-          <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.settings.reminderNote}
-          </p>
-        </SettingToggle>
+        <ReminderSettings />
 
         <SettingToggle
           icon={IconMoodKid}

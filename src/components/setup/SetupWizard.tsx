@@ -9,7 +9,7 @@ import { ClinicianPage } from './ClinicianPage'
 import { useSettings } from '../../hooks/useSettings'
 import { useMedications } from '../../hooks/useMedications'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { canNotify, requestNotificationPermission } from '../../lib/reminder'
+import { ReminderSettings } from '../settings/ReminderSettings'
 import { radioGroupProps, radioProps } from '../../lib/a11y'
 import { formatIllnessList } from '../../lib/childView'
 import { format, getTranslations, LANGUAGES, useLanguage, useLocale, useTranslation } from '../../i18n'
@@ -17,7 +17,6 @@ import { AboutCard } from '../about/AboutCard'
 import { Acronym } from '../about/Acronym'
 import { AppLogo } from '../ui/AppLogo'
 import { Card } from '../ui/Card'
-import { Toggle } from '../ui/Toggle'
 import { MedicationsSection } from '../settings/MedicationsSection'
 import { IllnessPicker } from '../settings/IllnessPicker'
 import { startDemo } from '../../lib/demoSession'
@@ -410,50 +409,11 @@ function IllnessStep({ heading }: { heading: ReactNode }) {
 
 function ReminderStep({ heading }: { heading: ReactNode }) {
   const t = useTranslation()
-  const settings = useSettings()
-  const [denied, setDenied] = useState(false)
-
-  async function toggle(v: boolean) {
-    setDenied(false)
-    if (v && canNotify()) {
-      const perm = await requestNotificationPermission()
-      if (perm !== 'granted') {
-        setDenied(true)
-        await updateSettings({ reminderEnabled: false })
-        return
-      }
-    }
-    await updateSettings({ reminderEnabled: v })
-  }
-
   return (
     <>
       {heading}
       <Intro>{t.setup.reminderIntro}</Intro>
-      <Card>
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <p className="text-control font-medium">{t.settings.reminderTitle}</p>
-            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-              {t.settings.reminderHelper}
-            </p>
-          </div>
-          <Toggle checked={settings.reminderEnabled} onChange={toggle} label={t.settings.reminderTitle} />
-        </div>
-        {settings.reminderEnabled && (
-          <input
-            type="time"
-            aria-label={t.setup.reminderTime}
-            value={settings.reminderTime}
-            onChange={(e) => updateSettings({ reminderTime: e.target.value })}
-            className="rounded-xl px-3.5 py-2.5 text-body outline-none mt-3"
-            style={inputStyle}
-          />
-        )}
-        <p className="text-caption mt-3" role={denied ? 'alert' : undefined} style={{ color: 'var(--color-ink-muted)' }}>
-          {denied ? t.setup.reminderDenied : t.settings.reminderNote}
-        </p>
-      </Card>
+      <ReminderSettings primary />
     </>
   )
 }
@@ -486,7 +446,7 @@ function DoneStep({ heading }: { heading: ReactNode }) {
     ...(tracksMedications
       ? [{ done: described > 0, text: described > 0 ? format(t.setup.checkMedications, { n: described }) : t.setup.checkNoMedications }]
       : []),
-    { done: settings.reminderEnabled, text: settings.reminderEnabled ? format(t.setup.checkReminder, { time: settings.reminderTime }) : t.setup.checkNoReminder },
+    { done: settings.reminderEnabled || !!settings.agendaReminder, text: settings.reminderEnabled ? format(t.setup.checkReminder, { time: settings.reminderTime }) : settings.agendaReminder ? format(t.setup.checkAgenda, { time: settings.agendaReminder.time }) : t.setup.checkNoReminder },
     ...(installKind === 'installed' ? [] : [{ done: false, text: t.setup.checkNotInstalled }]),
   ]
 
