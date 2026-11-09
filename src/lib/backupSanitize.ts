@@ -193,7 +193,9 @@ export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry 
   if (painLevel === undefined && raw.painLevel != null) return null
   return defined({
     date: raw.date,
-    createdAt: timestamp(raw.createdAt, now),
+    // Without a creation time, noon of the day itself: `now` would make every
+    // such day look written down late once restored.
+    createdAt: timestamp(raw.createdAt, new Date(`${raw.date}T12:00:00`).getTime()),
     updatedAt: timestamp(raw.updatedAt, now),
     painLevel,
     fatigueLevel: num(raw.fatigueLevel, 0, 10),
