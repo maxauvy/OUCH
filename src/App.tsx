@@ -134,6 +134,8 @@ function AppShell() {
 
   // From the backup reminder: open the settings on the backup card.
   const [backupRequested, setBackupRequested] = useState(false)
+  // A day the journal opens on when it is reached from the day's page.
+  const [journalDate, setJournalDate] = useState<string | null>(null)
   // Back from a provider's page (Dropbox): finish the link, then show the Settings, which say how it went.
   useEffect(() => {
     void handleProviderReturn().then((notice) => {
@@ -195,13 +197,14 @@ function AppShell() {
               setScreen('settings')
             }}
             onOpenKids={settings.kidsTabEnabled ? () => setScreen('kids') : undefined}
-            onGoToTab={(next) => {
+            onGoToTab={(next, date) => {
               setBackupRequested(false)
+              setJournalDate(date ?? null)
               setTab(next)
             }}
           />
         )}
-        {screen === null && tab === 'journal' && <JournalPage />}
+        {screen === null && tab === 'journal' && <JournalPage key={journalDate ?? ''} openDate={journalDate} />}
         {screen === null && tab === 'trends' && <TrendsPage />}
         {screen === null && tab === 'consultation' && <ConsultationPage />}
         </Suspense>
@@ -211,6 +214,7 @@ function AppShell() {
         badged={tab !== 'trends' && trendsDot({ shown: leadList?.shown ?? [], seen: settings.leadsSeen, enabled: settings.suggestionsEnabled, announced }) ? ['trends'] : []}
         onChange={(next) => {
           setBackupRequested(false)
+          setJournalDate(null)
           setTab(next)
         }}
       />

@@ -346,6 +346,9 @@ export function HealthEntryLayout({
             {statusText}
           </span>
         </div>
+        <p className="text-caption mt-1.5" style={{ color: 'var(--color-ink-muted)' }}>
+          {isToday ? t.entryForm.painWindowToday : t.entryForm.painWindowPast}
+        </p>
 
         {lightToday ? (
           <FlarePainScale value={local.painLevel} onChange={(v) => setField('painLevel', v)} />

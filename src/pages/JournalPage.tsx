@@ -13,11 +13,12 @@ import { markedDaySet } from '../lib/markedFlares'
 import { todayISO } from '../lib/dates'
 import { useTranslation } from '../i18n'
 
-export function JournalPage() {
+/** `openDate`: a day to open at once (the offer to write yesterday). */
+export function JournalPage({ openDate }: { openDate?: string | null }) {
   const entries = useAllEntries()
   const settings = useSettings()
   const t = useTranslation()
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<string | null>(openDate ?? null)
   const [sharing, setSharing] = useState(false)
   const selectedEntry = useEntry(selected ?? '__none__')
   const flares = useFlares()

@@ -251,6 +251,30 @@ const en: Translations = {
         usage:
           'In the report, next to the count of headache days and days with an attack medication taken, one sentence restates these reference points with their source. OUCH does not know the class of the medication and computes nothing: the reference point does not say a person is concerned, only a doctor can.',
       },
+      {
+        summary:
+          "In 105 rheumatology patients, the rating given in the evening for the whole day is very close to the mean of several ratings taken through the day (correlation 0.90 to 0.92 for pain, lower for fatigue). It can replace repeated measures when the average level is what matters.",
+        usage:
+          "OUCH asks for the day's pain as a single rating in the evening: for the day's average level this is a reliable measure, without having to prompt you several times.",
+      },
+      {
+        summary:
+          "When people sum up their day from memory, the strongest moment and the end of the day weigh slightly more than the rest. The effect is small for pain, and absent for fatigue.",
+        usage:
+          "That is why the day's screen says \"over your whole day, not just right now\": the evening rating tends to reflect the end of the day a little more, a small effect the wording limits.",
+      },
+      {
+        summary:
+          "In 194 patients with chronic low back pain followed for 29 days: the rating given in the evening for the day matches the average pain recorded during the day well. However, pain recalled 24 or 48 hours later is not a reliable measure, and pain recalled over 7 or 28 days depends mostly on the pain of the day you answer.",
+        usage:
+          "OUCH invites you to rate the day in the evening, and offers to log yesterday the next morning rather than let days pass. It keeps the mention of an entry written afterwards, and the report counts days written two or more days later. This study is more cautious than the 2008 Pain one on recalling the day before.",
+      },
+      {
+        summary:
+          "In people with a spinal cord injury followed for 7 days, the time of the measures (morning, midday or evening) did not change the estimated reliability of pain ratings. What matters for reliability is the number of measures.",
+        usage:
+          "No ideal time is demonstrated: OUCH lets you choose the reminder time (8 pm by default). What counts is rating regularly, on the day itself if possible.",
+      },
     ],
   },
 
@@ -646,6 +670,8 @@ const en: Translations = {
     painWeatherOfDay: "Today's pain weather",
     painWeatherEmpty: 'Log your pain',
     pain: 'Pain',
+    painWindowToday: 'Over your whole day, not just right now',
+    painWindowPast: 'Over that whole day',
     painEndNone: 'None',
     painEndExtreme: 'Unbearable',
     painTouch: 'touch your pain level',
@@ -1148,7 +1174,7 @@ const en: Translations = {
     methodGp:
       'Pain, fatigue, sleep and mood are rated daily on a 0–10 numeric rating scale. The numeric rating scale is the recommended measure of pain intensity¹. A change of about 2 points or 30% is usually considered clinically important¹˒². Similar thresholds are supported by work on chronic musculoskeletal and low back pain⁸˒⁹. The other scales (fatigue, sleep, mood…) are not validated instruments. Flare: at least 3 consecutive days with pain above the usual level by at least 2 points or 30%² (a definition chosen here, not a consensus one).',
     methodCollect:
-      'Collection. Daily diary (24-hour recall, which limits the recall bias of longer reporting periods⁶). Pain is rated on a 0–10 numeric rating scale, the measure recommended by IMMPACT¹ and the French HAS³, and widely validated¹⁰. The fatigue, sleep, brain fog, mood, stress and activity scales are simple numeric scales, not validated.',
+      'Collection. Daily diary (24-hour recall, which limits the recall bias of longer reporting periods⁶; one evening rating for the whole day captures the day’s average level well²⁰). Pain is rated on a 0–10 numeric rating scale, the measure recommended by IMMPACT¹ and the French HAS³, and widely validated¹⁰. The fatigue, sleep, brain fog, mood, stress and activity scales are simple numeric scales, not validated.',
     methodCalc:
       'Calculations. 7-calendar-day rolling mean (at least 4 logged days). Relative change = (period mean − previous mean) / previous mean; a 30% decrease is considered moderately important, 50% substantial²˒⁴˒⁸˒⁹. Days not logged are left out, never imputed. Spearman correlations computed over both periods.',
     methodLimits:
@@ -1175,6 +1201,10 @@ const en: Translations = {
       'The same split; the report counts the regions reported, without applying the criteria.',
       "Night pain and relief with movement are among the signs described for inflammatory back pain: the report counts wakings because of pain, without classifying the pain.",
       "Reference point cited next to the count of headache days and attack-medication days, with no calculation or conclusion.",
+      "A single evening rating for the day: it captures the day’s average level well.",
+      "The wording “over your whole day, not just right now”, to limit the weight of the strongest moment or the end of the day.",
+      "A reason to rate in the evening or the next morning, and to count separately the days written two or more days afterwards (a study more cautious than reference 6 about the day before).",
+      "No ideal time is demonstrated: the reminder time is left to the person’s choice.",
     ],
     completeness: 'Completeness by measure, over logged days: {{list}}.',
     lateEntries:
@@ -1669,6 +1699,10 @@ const en: Translations = {
     see: 'See',
     sheetTitle: 'For you',
     close: 'Close',
+    yesterdayLabel: 'Yesterday',
+    yesterdayText: 'Yesterday is not logged. If you like, now is a good time: the day before is easier to remember than a few days later.',
+    yesterdayDo: 'Log yesterday',
+    yesterdaySkip: 'Not this time',
   },
   hardDays: {
     label: 'A note for you',
@@ -1709,7 +1743,7 @@ const en: Translations = {
     docs: {
       guide: { title: 'Reading an OUCH report', meta: '1 page · read this first' },
       leaflet: { title: 'Leaflet for professionals', meta: '2 pages' },
-      note: { title: 'Methodology note', meta: '13 pages · formulas, thresholds, sources' },
+      note: { title: 'Methodology note', meta: '14 pages · formulas, thresholds, sources' },
     },
     otherLanguage: 'Also in French:',
     demoTitle: 'See an example report',
@@ -1879,7 +1913,7 @@ const en: Translations = {
     suggestionsHelper: 'Leads from your notes, a sentence on Sundays, one-week trials. You can turn it all off here.',
     suggestionsDetail: 'What this covers',
     suggestionsItems: [
-      'A small “for you” list on the day’s page: leads, the Sunday sentence, invitations',
+      'A small “for you” list on the day’s page: leads, the Sunday sentence, invitations, an offer to log yesterday',
       'A dot on the Trends tab when a new lead is there',
       'One-week trials of an action that goes with gentler days',
     ],

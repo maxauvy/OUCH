@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconAdjustmentsHorizontal, IconCalendarMonth, IconCalendarWeek, IconLeaf, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
+import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCalendarMonth, IconCalendarWeek, IconLeaf, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { LoggedEntry, Settings } from '../../db/types'
 import { useLeadList } from '../../hooks/useLeadList'
@@ -66,7 +66,8 @@ export function TodayList({
   entries: LoggedEntry[]
   today: string
   earlyAccess: boolean
-  onGoToTab: (tab: Tab) => void
+  /** `date` opens that day in the journal. */
+  onGoToTab: (tab: Tab, date?: string) => void
 }) {
   const t = useTranslation()
   const language = useLanguage()
@@ -82,6 +83,28 @@ export function TodayList({
 
   function card(m: TodayMessage): ReactNode {
     switch (m.kind) {
+      case 'yesterday':
+        return (
+          <ListCard
+            key={m.key}
+            icon={IconCalendarEvent}
+            label={t.todayList.yesterdayLabel}
+            actions={[
+              {
+                label: t.todayList.yesterdayDo,
+                primary: true,
+                onClick: () => {
+                  done(m.key)
+                  setOpen(false)
+                  onGoToTab('journal', m.date)
+                },
+              },
+              { label: t.todayList.yesterdaySkip, onClick: () => done(m.key) },
+            ]}
+          >
+            <p className="text-body mt-0.5">{t.todayList.yesterdayText}</p>
+          </ListCard>
+        )
       case 'lead': {
         const note = leadDayNote(m.lead, t.trends)
         return (

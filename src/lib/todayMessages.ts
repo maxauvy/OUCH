@@ -44,6 +44,7 @@ export interface MessageLater {
 export type MessageLaterMap = Record<string, MessageLater>
 
 export type TodayMessage =
+  | { kind: 'yesterday'; key: string; date: string }
   | { kind: 'weekly'; key: string; finding: WeeklyFinding }
   | { kind: 'lead'; key: string; lead: Lead }
   | { kind: 'repeat'; key: string; trial: LeadTrial }
@@ -82,6 +83,8 @@ export interface TodayMessagesInput {
   calm: FlareEpisode | null
   /** The summary of the month that just ended (`monthSummary`). */
   month: MonthSummary | null
+  /** Yesterday has no pain level, though the day before has (`missedYesterday`): a gentle offer to write it, today only. */
+  yesterday?: string | null
   /** Yesterday was a big day for this person (`bigDayBefore`): a soft word for today only. */
   rest?: boolean
   /** The trial under way, or just over and waiting to be closed. */
@@ -102,12 +105,13 @@ export function recentReturn(episodes: readonly FlareEpisode[], today: string): 
 }
 
 export function todayMessages(input: TodayMessagesInput): TodayMessages {
-  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, trial } = input
+  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, yesterday, trial } = input
   if (quiet) return { items: [], count: 0 }
   const waiting = (key: string) => !isAway(later?.[key], today)
 
   const items: TodayMessage[] = []
   // Today only: the key carries the day, so tomorrow it is gone whatever was answered.
+  if (yesterday && waiting(`yesterday:${yesterday}`)) items.push({ kind: 'yesterday', key: `yesterday:${yesterday}`, date: yesterday })
   if (allow.rest && rest && waiting(`rest:${today}`)) items.push({ kind: 'rest', key: `rest:${today}` })
   if (allow.weekly && weekly && waiting(`weekly:${today}`)) items.push({ kind: 'weekly', key: `weekly:${today}`, finding: weekly })
   if (allow.leads) {
