@@ -12,12 +12,25 @@ import { todayMessages } from '../src/lib/todayMessages.ts'
 import { weeklyFinding } from '../src/lib/weeklySentence.ts'
 import { reportTrials } from '../src/lib/leadTrial.ts'
 import { shiftISO } from '../src/lib/dates.ts'
+import { daysLate, lateCount } from '../src/lib/lateEntries.ts'
 
 const END = '2026-10-12'
 const logged = (h: ReturnType<typeof buildDemoHistory>) => h.entries as LoggedEntry[]
 
 test('the same day gives the same history', () => {
   assert.deepEqual(buildDemoHistory({ endDate: END, language: 'fr' }), buildDemoHistory({ endDate: END, language: 'fr' }))
+})
+
+test('a few demo days are written down afterwards, none in the future, most on time', () => {
+  const { entries } = buildDemoHistory({ endDate: END, language: 'fr' })
+  const lates = entries.map(daysLate)
+  assert.ok(lates.some((n) => n === 1), 'a day written the next morning')
+  assert.ok(lateCount(entries) >= 3, 'days the report counts as late')
+  assert.ok(lates.some((n) => n >= 6), 'a day written about a week later')
+  assert.ok(lates.filter((n) => n > 0).length < entries.length / 4, 'most days are written on time')
+  const endOfEnd = new Date(`${shiftISO(END, 1)}T04:00:00`).getTime()
+  assert.ok(entries.every((e) => e.createdAt < endOfEnd), 'nothing written after the last day')
+  assert.ok(entries.slice(-7).every((e) => daysLate(e) === 0), 'the last week is on time')
 })
 
 test('the demo notes a morning stiffness that follows the pain', () => {

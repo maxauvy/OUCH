@@ -27,6 +27,8 @@
 // - pain following sleep, stress, pressure drops, storms and periods, and
 //   "what helped" tags with clear associations (and one reverse one: rest is
 //   taken on bad days);
+// - a few days written down afterwards (the next morning, two days or six days
+//   later), for the "Saisi jeudi à 09:12" line and the report's logging line;
 // - leads already answered on Trends: the short walk and the meditation kept
 //   for the appointment, rest set aside (see src/lib/demoData.ts);
 

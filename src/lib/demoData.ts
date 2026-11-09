@@ -343,7 +343,16 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
       noteRoll < 0.2 ? (painLevel >= 6 ? pick(NOTES_HARD) : pick(NOTES_CALM)) :
       undefined)
 
-    const loggedAt = new Date(`${date}T${String(19 + Math.floor(rand() * 3)).padStart(2, '0')}:${String(Math.floor(rand() * 60)).padStart(2, '0')}:00`).getTime()
+    // Written in the evening, like most days. A few are written afterwards (the
+    // next morning, two days or six days later) so the status line and the
+    // report's "logging" line have something to show. Fixed by the day's index,
+    // never by the random stream, so the rest of the history does not move; and
+    // never in the last week, so nothing is written in the future.
+    const hour = 19 + Math.floor(rand() * 3)
+    const minute = Math.floor(rand() * 60)
+    const lateBy = i >= DAYS - 7 ? 0 : i % 37 === 20 ? 6 : i % 23 === 11 ? 2 : i % 14 === 6 ? 1 : 0
+    const at = (day: string, h: number) => new Date(`${day}T${String(h).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00`).getTime()
+    const loggedAt = lateBy ? at(shiftISO(date, lateBy), hour - 11) : at(date, hour)
 
     entries.push({
       date,
