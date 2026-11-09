@@ -100,7 +100,13 @@ function WeatherHero({ weather }: { weather: PainWeather | null }) {
         style={{ background: 'var(--color-surface)', color: weather?.text ?? 'var(--color-ink-muted)' }}
         aria-hidden
       >
-        {weather ? <WeatherIcon name={weather.icon as never} size={40} /> : <IconCloud size={36} stroke={1.5} />}
+        {weather ? (
+          <span className="weather-sway flex">
+            <WeatherIcon name={weather.icon as never} size={40} className={weather.icon === 'sun' ? 'weather-turn' : undefined} />
+          </span>
+        ) : (
+          <IconCloud size={36} stroke={1.5} />
+        )}
       </span>
       <div className="flex-1 min-w-0">
         <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>

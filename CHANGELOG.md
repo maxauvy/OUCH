@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- **Le petit personnage météo est un peu animé.** Sur la page des enfants, il flotte doucement, cligne des yeux, et les rayons du soleil, la pluie et l'éclair bougent lentement. Sur la carte « Météo douleur du jour » d'Aujourd'hui, l'icône ne fait que respirer, et le soleil tourne très lentement : rien de brusque, et aucun va-et-vient vertical. Tout s'arrête pour les personnes qui ont demandé moins de mouvement dans les réglages de leur appareil.
+
 ## [0.11.2] - 2026-11-09
 
 Une version qui ajoute une fiche pour un soignant qui ne connaît pas la personne : une page faite du journal et de quelques lignes tapées par elle, à montrer, imprimer ou enregistrer en PDF aux urgences ou chez un nouveau médecin. Les documents pour les professionnels de santé sont mis à jour.
