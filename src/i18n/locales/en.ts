@@ -1745,6 +1745,22 @@ const en: Translations = {
     settingsHelper: 'When the pressure is due to fall tomorrow and your diary shows those days were harder than chance would give, a line says so in “For you”. Nothing shows otherwise, and never during a harder period.',
     settingsPrivacy: 'The forecast is asked from Open-Meteo for your position, at most once a day: nothing else is sent.',
   },
+  activity: {
+    label: 'Moving: what studies say',
+    intro: 'For what you track, here is what studies say about exercise. It is not a prescription: a physiotherapist or a doctor can help you choose and dose it.',
+    items: {
+      fibromyalgie: 'Fibromyalgia: the European recommendations (EULAR, 2016) put exercise first, aerobic or strengthening, without knowing which is better. A Cochrane review (2017) finds that aerobic exercise probably improves quality of life and may lower pain a little.',
+      arthrite: 'Rheumatoid arthritis: the European recommendations (EULAR, 2018) make physical activity part of routine care.',
+      spondylarthrite: 'Spondyloarthritis: the ASAS-EULAR recommendations (2022) encourage regular exercise and suggest considering physiotherapy.',
+      lombalgie: 'Chronic low back pain: a Cochrane review (2021, 249 trials) finds that exercise is probably effective against pain, without being able to say which type is best.',
+      migraine: 'Migraine: a meta-analysis (2019, 6 studies) finds, with moderate-quality evidence, about 0.6 fewer migraine days a month with aerobic exercise.',
+      myofasciale: 'Myofascial pain: a review (2017, 8 trials) finds a small to moderate effect in the short term, mostly when stretching and strengthening are combined.',
+    },
+    pace: 'Go gently, at your own pace. You can also try it for a week and see what it gives for you.',
+    action: 'Short walk',
+    tryIt: 'Try a short walk for a week',
+    thanks: 'Thanks',
+  },
   regularity: {
     label: 'Your doses',
     text: 'Over the last two weeks you noted {{missed}} missed doses of {{name}}. That happens to a lot of people. If a cue would help (a reminder, a pill organiser), your doctor or pharmacist can talk it through with you.',

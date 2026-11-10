@@ -5,6 +5,7 @@ import { IS_DEMO } from '../lib/demoMode'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { flaresApply } from '../lib/flares'
 import { forecastReading, isFresh } from '../lib/forecast'
+import { activityIllnesses } from '../lib/activityEvidence'
 import { regularityReading } from '../lib/regularity'
 import { fetchPressureForecast } from '../lib/weather'
 import { flareUnderWay } from '../lib/hardDays'
@@ -61,7 +62,7 @@ export function useTodayMessages(): TodayMessages | null {
       today,
       quiet: flare,
       later: settings.leadsSeen?.later,
-      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled, month: settings.suggestionsEnabled, rest: settings.suggestionsEnabled && settings.enabledFactors.includes('activity'), weather: settings.suggestionsEnabled && forecastOn, regularity: settings.suggestionsEnabled },
+      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled, month: settings.suggestionsEnabled, rest: settings.suggestionsEnabled && settings.enabledFactors.includes('activity'), weather: settings.suggestionsEnabled && forecastOn, regularity: settings.suggestionsEnabled, activity: settings.suggestionsEnabled },
       leads: leadList.shown,
       leadChoices: settings.leadChoices,
       tried: triedKeys(settings.leadTrial, settings.leadTrialHistory),
@@ -80,6 +81,7 @@ export function useTodayMessages(): TodayMessages | null {
       month: monthSummary({ today, entries: logged, history: settings.leadTrialHistory ?? [], episodes: flares?.episodes ?? [] }),
       rest: bigDayBefore(logged, today),
       weather: forecastOn ? forecastReading(logged, settings.forecastCache, today) : null,
+      activity: activityIllnesses(settings.illnesses),
       regularity: medications ? regularityReading(logged, medications, today) : null,
       yesterday: settings.suggestionsEnabled ? missedYesterday(logged, today) : null,
       trial: settings.leadTrial,

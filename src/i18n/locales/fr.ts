@@ -1750,6 +1750,22 @@ const fr: Translations = {
     settingsHelper: 'Quand la pression doit baisser demain et que ton carnet montre que ces jours-là ont été plus difficiles que le hasard ne le donne, une ligne le dit dans « Pour toi ». Rien ne s’affiche sinon, et jamais pendant une période difficile.',
     settingsPrivacy: 'La prévision est demandée à Open-Meteo pour ta position, au plus une fois par jour : rien d’autre n’est envoyé.',
   },
+  activity: {
+    label: 'Bouger, ce que disent les études',
+    intro: 'Pour ce que tu suis, voici ce que les études disent de l’exercice. Ce n’est pas une ordonnance : un kiné ou un médecin peut t’aider à choisir et à doser.',
+    items: {
+      fibromyalgie: 'Fibromyalgie : les recommandations européennes (EULAR, 2016) placent l’exercice en premier, aérobie ou renforcement, sans savoir lequel est meilleur. Une revue Cochrane (2017) trouve que l’aérobie améliore probablement la qualité de vie et peut diminuer un peu la douleur.',
+      arthrite: 'Polyarthrite rhumatoïde : les recommandations européennes (EULAR, 2018) font de l’activité physique une partie des soins courants.',
+      spondylarthrite: 'Spondylarthrite : les recommandations ASAS-EULAR (2022) invitent à faire de l’exercice régulièrement et à envisager la kinésithérapie.',
+      lombalgie: 'Lombalgie chronique : une revue Cochrane (2021, 249 essais) trouve que l’exercice est probablement efficace contre la douleur, sans pouvoir dire quel type est le meilleur.',
+      migraine: 'Migraine : une méta-analyse (2019, 6 études) trouve, avec une preuve de qualité moyenne, environ 0,6 jour de migraine en moins par mois avec l’exercice aérobie.',
+      myofasciale: 'Douleur myofasciale : une revue (2017, 8 essais) trouve un effet petit à moyen à court terme, surtout en combinant étirements et renforcement.',
+    },
+    pace: 'Va doucement, à ton rythme. Tu peux aussi essayer une semaine et voir ce que ça donne chez toi.',
+    action: 'Marche courte',
+    tryIt: 'Essayer une marche courte une semaine',
+    thanks: 'Merci',
+  },
   regularity: {
     label: 'Tes prises',
     text: 'Ces deux dernières semaines, tu as noté {{missed}} prises oubliées pour {{name}}. Ça arrive à beaucoup de monde. Si un repère t’aiderait (un rappel, un pilulier), ton médecin ou ton pharmacien peut en parler avec toi.',

@@ -1615,6 +1615,16 @@ export interface Translations {
     settingsHelper: string
     settingsPrivacy: string
   }
+  activity: {
+    label: string
+    intro: string
+    items: Record<'fibromyalgie' | 'arthrite' | 'spondylarthrite' | 'lombalgie' | 'migraine' | 'myofasciale', string>
+    pace: string
+    /** Same wording as the matching entry of the entry form's suggestions, so ticking it counts in the trial */
+    action: string
+    tryIt: string
+    thanks: string
+  }
   regularity: {
     label: string
     text: string
