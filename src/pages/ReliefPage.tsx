@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAllEntries } from '../hooks/useEntries'
-import { useTranslation } from '../i18n'
+import { useLanguage, useTranslation } from '../i18n'
+import { updateSettings } from '../db'
+import { useSettings } from '../hooks/useSettings'
+import { Segmented } from '../components/ui/Segmented'
+import { Toggle } from '../components/ui/Toggle'
 import { format } from '../i18n/format'
 import { todayISO } from '../lib/dates'
 import { usualHelpers } from '../lib/careSheet'
-import { IN_SECONDS, OUT_SECONDS, breathAt } from '../lib/relief'
+import { DURATIONS, IN_SECONDS, OUT_SECONDS, SESSION_SECONDS, VIBRATION, breathAt, type Duration } from '../lib/relief'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { IconLeaf, IconWind } from '@tabler/icons-react'
 
@@ -90,20 +94,48 @@ function Pick({ icon, title, hint, onClick }: { icon: React.ReactNode; title: st
   )
 }
 
-/** The circle: it swells while breathing in and sinks while breathing out. The word changes quietly (not announced at each breath); only the start and the end are said to a screen reader. */
+/** Keeps the screen on while the exercise runs, where the phone allows it; gives it back when it stops. */
+function useScreenOn(on: boolean) {
+  useEffect(() => {
+    if (!on || !('wakeLock' in navigator)) return
+    let lock: WakeLockSentinel | undefined
+    let live = true
+    const take = () => navigator.wakeLock.request('screen').then((l) => (live ? (lock = l) : void l.release()), () => {})
+    void take()
+    // The phone takes the lock back when the page is hidden; ask again when it is seen again.
+    const again = () => document.visibilityState === 'visible' && void take()
+    document.addEventListener('visibilitychange', again)
+    return () => {
+      live = false
+      document.removeEventListener('visibilitychange', again)
+      void lock?.release().catch(() => {})
+    }
+  }, [on])
+}
+
+/** The level: the water rises while breathing in and falls while breathing out. The word changes quietly (not announced at each breath); only the start and the end are said to a screen reader. The phone vibrates at each change, when it can and the person asked. */
 function Breathing() {
   const t = useTranslation().relief
+  const language = useLanguage()
+  const settings = useSettings()
+  const [seconds, setSeconds] = useState<Duration>(SESSION_SECONDS)
   const [startedAt, setStartedAt] = useState<number | null>(null)
   const [now, setNow] = useState(0)
   const [finished, setFinished] = useState(false)
   const [said, setSaid] = useState('')
+  const canVibrate = typeof navigator !== 'undefined' && 'vibrate' in navigator
+  const vibrate = !!settings.reliefVibrate && canVibrate
+  const lastPhase = useRef<'in' | 'out' | null>(null)
+
+  const running = startedAt !== null
+  useScreenOn(running)
 
   useEffect(() => {
     if (startedAt === null) return
     const id = window.setInterval(() => {
       const ms = Date.now() - startedAt
       setNow(ms)
-      if (breathAt(ms).done) {
+      if (breathAt(ms, seconds).done) {
         window.clearInterval(id)
         setStartedAt(null)
         setFinished(true)
@@ -111,34 +143,75 @@ function Breathing() {
       }
     }, 250)
     return () => window.clearInterval(id)
-  }, [startedAt, t.finished])
+  }, [startedAt, seconds, t.finished])
 
-  const running = startedAt !== null
-  const b = breathAt(running ? now : 0)
+  const b = breathAt(running ? now : 0, seconds)
   const inn = running && b.phase === 'in'
   const label = !running ? t.ready : inn ? t.breatheIn : t.breatheOut
+
+  // One pulse to breathe in, two to breathe out, at each change.
+  useEffect(() => {
+    if (!running) {
+      lastPhase.current = null
+      return
+    }
+    if (lastPhase.current !== b.phase) {
+      lastPhase.current = b.phase
+      if (vibrate) navigator.vibrate(VIBRATION[b.phase])
+    }
+  }, [running, b.phase, vibrate])
 
   return (
     <Card>
       <SectionTitle>{t.breathTitle}</SectionTitle>
       <div className="flex flex-col items-center gap-3">
-        <div aria-hidden className="h-56 w-full flex items-center justify-center">
         <div
-          className="w-36 h-36 rounded-full flex flex-col items-center justify-center font-semibold"
-          style={{
-            background: 'radial-gradient(circle, var(--color-surface) 0, var(--color-brand-soft) 72%)',
-            color: 'var(--color-brand)',
-            boxShadow: '0 0 0 14px color-mix(in srgb, var(--color-brand) 14%, transparent)',
-            transform: `scale(${inn ? 1.25 : 1})`,
-            transition: `transform ${inn ? IN_SECONDS : OUT_SECONDS}s ease-in-out`,
-          }}
+          aria-hidden
+          className="relative w-full h-64 rounded-[var(--radius-card)] overflow-hidden flex flex-col items-center justify-center"
+          style={{ background: 'var(--color-brand-soft)', boxShadow: 'inset 0 0 0 1px var(--color-hairline)' }}
         >
-          <span className="text-heading">{label}</span>
-          {running && <span className="text-caption">{b.left}</span>}
+          <div
+            className="absolute inset-x-0 bottom-0"
+            style={{
+              height: inn ? '82%' : '22%',
+              background: 'color-mix(in srgb, var(--color-brand) 38%, var(--color-surface))',
+              transition: `height ${inn ? IN_SECONDS : OUT_SECONDS}s ease-in-out`,
+            }}
+          />
+          <span className="relative text-display font-bold" style={{ color: 'var(--color-ink)' }}>
+            {label}
+          </span>
+          <span className="relative text-body" style={{ color: 'var(--color-ink)' }}>
+            {running ? b.left : ' '}
+          </span>
+          <span className="relative text-caption mt-1" style={{ color: 'var(--color-ink)' }}>
+            {running ? (inn ? t.levelUp : t.levelDown) : ' '}
+          </span>
         </div>
-        </div>
+        {!running && (
+          <div className="w-full flex flex-col gap-2">
+            <Segmented
+              label={t.durationLabel}
+              value={seconds}
+              onChange={setSeconds}
+              options={DURATIONS.map((d) => ({ value: d, label: format(t.minutes, { n: d / 60 }, language) }))}
+            />
+            {canVibrate && (
+              <div className="flex items-center justify-between gap-3 min-h-11">
+                <span>
+                  <span className="block text-body font-medium">{t.vibrate}</span>
+                  <span className="block text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+                    {t.vibrateHelper}
+                  </span>
+                </span>
+                <Toggle checked={!!settings.reliefVibrate} onChange={(v) => void updateSettings({ reliefVibrate: v })} label={t.vibrate} />
+              </div>
+            )}
+          </div>
+        )}
         <p className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
           {t.breathHint}
+          {'wakeLock' in navigator ? ` ${t.screenOn}` : ''}
         </p>
         <button
           type="button"

@@ -7,8 +7,13 @@
 /** Seconds to breathe in, then out. */
 export const IN_SECONDS = 4
 export const OUT_SECONDS = 6
-/** The exercise ends by itself after this long. */
+/** The exercise ends by itself after this long, to choose among `DURATIONS`. */
 export const SESSION_SECONDS = 180
+export const DURATIONS = [60, 180, 300] as const
+export type Duration = (typeof DURATIONS)[number]
+
+/** The pattern of the vibrator for each change, in milliseconds: one short pulse to breathe in, two to breathe out. */
+export const VIBRATION: Record<'in' | 'out', number[]> = { in: [40], out: [40, 120, 40] }
 
 export type BreathPhase = 'in' | 'out'
 export interface Breath {
@@ -20,11 +25,11 @@ export interface Breath {
   done: boolean
 }
 
-/** Where the exercise is after `ms` milliseconds. */
-export function breathAt(ms: number): Breath {
+/** Where the exercise is after `ms` milliseconds, for a session of `total` seconds. */
+export function breathAt(ms: number, total: number = SESSION_SECONDS): Breath {
   const cycle = IN_SECONDS + OUT_SECONDS
   const s = Math.max(0, ms) / 1000
-  if (s >= SESSION_SECONDS) return { phase: 'out', left: 0, breaths: Math.floor(SESSION_SECONDS / cycle), done: true }
+  if (s >= total) return { phase: 'out', left: 0, breaths: Math.floor(total / cycle), done: true }
   const within = s % cycle
   const phase: BreathPhase = within < IN_SECONDS ? 'in' : 'out'
   const left = Math.ceil(phase === 'in' ? IN_SECONDS - within : cycle - within)

@@ -1637,6 +1637,13 @@ export interface Translations {
     intro: string
     breathTitle: string
     breathHint: string
+    durationLabel: string
+    minutes: string
+    vibrate: string
+    vibrateHelper: string
+    levelUp: string
+    levelDown: string
+    screenOn: string
     start: string
     stop: string
     again: string
