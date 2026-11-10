@@ -6,6 +6,7 @@ import type { HardDaysSeen } from '../lib/hardDays'
 import type { LeadChoices } from '../lib/leads'
 import type { LeadsSeen } from '../lib/leadHints'
 import type { LeadTrial } from '../lib/leadTrial'
+import type { ForecastCache } from '../lib/forecast'
 
 // Display order for the factor list in Settings. Labels/helpers live in the
 // active translation (`t.factors[key]`), not here. The one list of the
@@ -509,6 +510,10 @@ export interface Settings {
   consultationCardClosed?: { date: string; kind: 'soon' | 'after' }
   /** What the person adds to the sheet for a health professional: allergies, people to reach, a word. Restored from a backup. */
   careSheet?: CareSheetInfo
+  /** A line in the day's list when tomorrow's pressure falls and the diary shows such days were harder than chance gives (see `forecast.ts`). Off until the person says yes; a preference, restored from a backup. */
+  forecastEnabled?: boolean
+  /** The forecast fetched on this device, for the day. Per device: not restored from a backup. */
+  forecastCache?: ForecastCache
   /** The prescription the person noted, if any. Restored from a backup. */
   prescription?: Prescription
   /** The reminder card was closed, or put off, for this prescription (by its start). Per device. */

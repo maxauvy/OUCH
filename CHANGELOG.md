@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Une ligne quand la pression doit baisser demain.** Dans Réglages › Mon suivi, un interrupteur « Prévoir demain » (éteint par défaut, avec la météo automatique et une position) demande à Open-Meteo, au plus une fois par jour, la pression prévue pour demain. Si elle doit baisser d'au moins 5 hPa et que le carnet montre que, après une baisse de cette taille, la douleur a été plus haute que d'habitude plus souvent que le hasard ne le donne (bande de 10 % à 90 %, comme pour « Après tes jours actifs »), la liste « Pour toi » le dit : « Demain, la pression devrait baisser de 9 hPa. Les jours où elle a baissé d'au moins 5 hPa, ta douleur a été plus haute que d'habitude 6 fois sur 9 ; le hasard en donnerait 4 à 6. Une piste, pas une certitude. » Rien ne s'affiche sans signal, avec moins de 30 jours (avec la pression) ou moins de 5 jours de baisse, jamais pendant une période difficile ni quand « Suggestions » est coupé. La prévision reçue reste sur l'appareil pour la journée et n'est pas dans les sauvegardes ; la préférence, elle, est restaurée. Le seuil de 5 hPa est un repère d'OUCH, la ligne décrit le carnet sans rien promettre.
+
 ### Modifié
 - **Le petit personnage météo est un peu animé.** Sur la page des enfants, il flotte doucement, cligne des yeux, et les rayons du soleil, la pluie et l'éclair bougent lentement. Sur la carte « Météo douleur du jour » d'Aujourd'hui, l'icône ne fait que respirer, et le soleil tourne très lentement : rien de brusque, et aucun va-et-vient vertical. Tout s'arrête pour les personnes qui ont demandé moins de mouvement dans les réglages de leur appareil.
 

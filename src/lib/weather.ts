@@ -1,4 +1,5 @@
 import type { WeatherInfo } from '../db/types'
+import { parseForecast, type ForecastCache } from './forecast'
 
 // Open-Meteo: free, no API key, no account — fits a local-first app with no backend.
 const WMO_TO_CONDITION: Record<number, WeatherInfo['condition']> = {
@@ -91,6 +92,19 @@ export async function fetchDailyWeather(lat: number, lon: number, date: string):
     pressureHpa: Math.round(daily.pressure_msl_mean?.[0]),
     condition: conditionFromWmoCode(daily.weather_code?.[0]),
   }
+}
+
+/** The mean pressure of today, tomorrow and the day after, from the same service and for the same position as the day's weather (nothing else is sent). */
+export async function fetchPressureForecast(lat: number, lon: number): Promise<ForecastCache['days']> {
+  const url = new URL('https://api.open-meteo.com/v1/forecast')
+  url.searchParams.set('latitude', String(lat))
+  url.searchParams.set('longitude', String(lon))
+  url.searchParams.set('daily', 'pressure_msl_mean')
+  url.searchParams.set('timezone', 'auto')
+  url.searchParams.set('forecast_days', '3')
+  const res = await fetch(url.toString())
+  if (!res.ok) throw new WeatherError('weatherFetchFailed')
+  return parseForecast(await res.json())
 }
 
 /** Coordinates rounded to two decimals (about 1 km): enough to name a town, and

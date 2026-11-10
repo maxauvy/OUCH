@@ -433,6 +433,9 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     cycleTrackingEnabled: true,
     autoWeatherEnabled: autoWeather,
     ...(autoWeather ? { autoWeatherLat: 45.764, autoWeatherLon: 4.8357 } : {}),
+    // The look ahead to tomorrow is on; the in-app demo makes no network call, so a forecast is made up (a fall of 9 hPa tomorrow).
+    forecastEnabled: true,
+    ...(autoWeather ? {} : { forecastCache: { fetchedOn: endDate, days: [{ date: endDate, pressureHpa: Math.round(pressure) }, { date: shiftISO(endDate, 1), pressureHpa: Math.round(pressure) - 9 }] } }),
     autoWeatherLabel: 'Lyon',
     enabledFactors: ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes', 'morningStiffness', 'nightWaking', 'dailyInterference', 'unrefreshedWaking'],
     leadChoices,

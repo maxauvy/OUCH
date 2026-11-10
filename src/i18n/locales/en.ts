@@ -1736,6 +1736,15 @@ const en: Translations = {
     noUsual: 'More logged days are needed to say what is usual for you.',
     note: 'These figures describe your diary; they do not say why the two periods differ.',
   },
+  forecast: {
+    label: 'Tomorrow, the pressure falls',
+    text: 'Tomorrow, the pressure is expected to fall by {{fall}} hPa. On the days it fell by at least {{drop}} hPa, your pain was higher than usual {{observed}} times out of {{k}}; chance would give {{band}}. A lead, not a certainty.',
+    band: '{{low}} to {{high}}',
+    thanks: 'Thanks',
+    settingsTitle: 'Look ahead to tomorrow',
+    settingsHelper: 'When the pressure is due to fall tomorrow and your diary shows those days were harder than chance would give, a line says so in “For you”. Nothing shows otherwise, and never during a harder period.',
+    settingsPrivacy: 'The forecast is asked from Open-Meteo for your position, at most once a day: nothing else is sent.',
+  },
   pacing: {
     title: 'After your active days',
     within: 'The day after your {{k}} most active days, pain was higher than usual {{x}} {{x:time|times}}. With {{k}} days picked at random, you would see about {{e}} (between {{lo}} and {{hi}}): that is what chance gives.',

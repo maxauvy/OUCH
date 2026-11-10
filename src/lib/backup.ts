@@ -22,7 +22,7 @@ async function buildBackupBundle(): Promise<BackupBundle> {
     getSettings(),
   ])
   // Where copies go on this device is not part of what a copy holds.
-  const { autoBackup: _device, ...portable } = settings
+  const { autoBackup: _device, forecastCache: _forecast, ...portable } = settings
   return { version: 2, exportedAt: new Date().toISOString(), entries, medications, settings: portable }
 }
 

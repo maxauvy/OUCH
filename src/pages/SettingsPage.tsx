@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconBell, IconCalendarHeart, IconChartBar, IconDatabaseExport, IconHeart, IconHeartHandshake, IconHeartbeat, IconId, IconInfoCircle, IconLanguage, IconLayoutList, IconListCheck, IconMapPin, IconMoodKid, IconPalette, IconPill, IconPlayerPlay, IconRefresh, IconShieldLock, IconSparkles, IconStethoscope, IconUser, IconUsers } from '@tabler/icons-react'
+import { IconBell, IconCalendarHeart, IconChartBar, IconCloudRain, IconDatabaseExport, IconHeart, IconHeartHandshake, IconHeartbeat, IconId, IconInfoCircle, IconLanguage, IconLayoutList, IconListCheck, IconMapPin, IconMoodKid, IconPalette, IconPill, IconPlayerPlay, IconRefresh, IconShieldLock, IconSparkles, IconStethoscope, IconUser, IconUsers } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
 import { updateSettings } from '../db'
 import { clearAudienceFlag } from '../lib/audience'
@@ -209,6 +209,20 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
               {t.settings.weatherLocationCredit}
             </p>
           </Card>
+        )}
+
+        {settings.enabledFactors.includes('weather') && hasLocation && (
+          <SettingToggle
+            icon={IconCloudRain}
+            title={t.forecast.settingsTitle}
+            helper={t.forecast.settingsHelper}
+            checked={!!settings.forecastEnabled}
+            onChange={(v) => updateSettings({ forecastEnabled: v })}
+          >
+            <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.forecast.settingsPrivacy}
+            </p>
+          </SettingToggle>
         )}
       </SettingsGroup>
 

@@ -17,6 +17,7 @@
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
 import type { FlareEpisode } from './flares.ts'
+import type { ForecastReading } from './forecast.ts'
 import type { Lead, LeadChoices } from './leads.ts'
 import type { LeadTrial } from './leadTrial.ts'
 import type { MonthSummary } from './monthSummary.ts'
@@ -50,6 +51,7 @@ export type TodayMessage =
   | { kind: 'repeat'; key: string; trial: LeadTrial }
   | { kind: 'invite'; key: 'invite' }
   | { kind: 'rest'; key: string }
+  | { kind: 'weather'; key: string; reading: ForecastReading }
   | { kind: 'calm'; key: string; episode: FlareEpisode }
   | { kind: 'month'; key: string; summary: MonthSummary }
   | { kind: 'trial'; key: 'trial'; trial: LeadTrial }
@@ -67,7 +69,7 @@ export interface TodayMessagesInput {
   quiet: boolean
   later: MessageLaterMap | undefined
   /** Which suggestions the person lets through. */
-  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean; month: boolean; rest?: boolean }
+  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean; month: boolean; rest?: boolean; weather?: boolean }
   /** The leads Trends shows by default (`LeadList.shown`). */
   leads: Lead[]
   leadChoices: LeadChoices | undefined
@@ -87,6 +89,8 @@ export interface TodayMessagesInput {
   yesterday?: string | null
   /** Yesterday was a big day for this person (`bigDayBefore`): a soft word for today only. */
   rest?: boolean
+  /** Tomorrow's pressure falls and the diary shows such days were harder than chance gives (`forecastReading`): a soft word for today only. */
+  weather?: ForecastReading | null
   /** The trial under way, or just over and waiting to be closed. */
   trial: LeadTrial | undefined
 }
@@ -105,7 +109,7 @@ export function recentReturn(episodes: readonly FlareEpisode[], today: string): 
 }
 
 export function todayMessages(input: TodayMessagesInput): TodayMessages {
-  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, yesterday, trial } = input
+  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, yesterday, weather, trial } = input
   if (quiet) return { items: [], count: 0 }
   const waiting = (key: string) => !isAway(later?.[key], today)
 
@@ -113,6 +117,7 @@ export function todayMessages(input: TodayMessagesInput): TodayMessages {
   // Today only: the key carries the day, so tomorrow it is gone whatever was answered.
   if (yesterday && waiting(`yesterday:${yesterday}`)) items.push({ kind: 'yesterday', key: `yesterday:${yesterday}`, date: yesterday })
   if (allow.rest && rest && waiting(`rest:${today}`)) items.push({ kind: 'rest', key: `rest:${today}` })
+  if (allow.weather && weather && waiting(`weather:${today}`)) items.push({ kind: 'weather', key: `weather:${today}`, reading: weather })
   if (allow.weekly && weekly && waiting(`weekly:${today}`)) items.push({ kind: 'weekly', key: `weekly:${today}`, finding: weekly })
   if (allow.leads) {
     for (const lead of leads) {
