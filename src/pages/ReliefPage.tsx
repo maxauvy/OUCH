@@ -20,6 +20,8 @@ export function ReliefPage() {
   const entries = useAllEntries()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const [mode, setMode] = useState<Mode>('home')
+  // While the water moves, nothing else is on the screen.
+  const [breathing, setBreathing] = useState(false)
   const helped = entries ? usualHelpers(entries, todayISO()) : []
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export function ReliefPage() {
         <h1 ref={headingRef} tabIndex={-1} className="text-title font-bold leading-tight outline-none">
           {mode === 'home' ? t.title : mode === 'relax' ? t.relax.title : t.gentle.title}
         </h1>
-        {mode === 'home' && (
+        {mode === 'home' && !breathing && (
           <p className="text-body mt-1" style={{ color: 'var(--color-ink-muted)' }}>
             {t.intro}
           </p>
@@ -42,7 +44,8 @@ export function ReliefPage() {
 
       {mode === 'home' ? (
         <>
-          <Breathing />
+          <Breathing onRunning={setBreathing} />
+          {!breathing && (
           <Card>
             <SectionTitle>{t.otherTitle}</SectionTitle>
             <div className="flex flex-col gap-2">
@@ -50,7 +53,8 @@ export function ReliefPage() {
               <Pick icon={<IconWind size={20} stroke={1.8} aria-hidden />} title={t.gentle.title} hint={t.gentle.hint} onClick={() => setMode('gentle')} />
             </div>
           </Card>
-          {helped.length > 0 && (
+          )}
+          {!breathing && helped.length > 0 && (
             <Card>
               <SectionTitle>{t.helpedTitle}</SectionTitle>
               <ul className="flex flex-wrap gap-2">
@@ -114,7 +118,7 @@ function useScreenOn(on: boolean) {
 }
 
 /** The level: the water rises while breathing in and falls while breathing out. The word changes quietly (not announced at each breath); only the start and the end are said to a screen reader. The phone vibrates at each change, when it can and the person asked. */
-function Breathing() {
+function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
   const t = useTranslation().relief
   const language = useLanguage()
   const settings = useSettings()
@@ -129,6 +133,7 @@ function Breathing() {
 
   const running = startedAt !== null
   useScreenOn(running)
+  useEffect(() => onRunning(running), [running, onRunning])
 
   useEffect(() => {
     if (startedAt === null) return

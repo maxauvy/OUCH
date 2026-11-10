@@ -1618,7 +1618,11 @@ export interface Translations {
   activity: {
     label: string
     intro: string
-    items: Record<'fibromyalgie' | 'arthrite' | 'spondylarthrite' | 'lombalgie' | 'migraine' | 'myofasciale', string>
+    showMore: string
+    hideMore: string
+    tryHint: string
+    /** A short line per illness, and the fuller sentence with its source behind "see the detail" */
+    items: Record<'fibromyalgie' | 'arthrite' | 'spondylarthrite' | 'lombalgie' | 'migraine' | 'myofasciale', { short: string; more: string }>
     pace: string
     /** Same wording as the matching entry of the entry form's suggestions, so ticking it counts in the trial */
     action: string

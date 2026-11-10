@@ -9,7 +9,7 @@ import { useTodayMessages } from '../hooks/useTodayMessages'
 import type { Tab } from '../components/layout/TabBar'
 import { useSettings } from '../hooks/useSettings'
 import { useTranslation } from '../i18n'
-import { IconCloud, IconMoodKid, type Icon } from '@tabler/icons-react'
+import { IconCloud, IconMoodKid, IconWind, type Icon } from '@tabler/icons-react'
 import { GroupCaption } from '../components/ui/Card'
 import { BackupReminderCard } from '../components/backup/BackupReminderCard'
 import { AppointmentCard } from '../components/consultation/AppointmentCard'
@@ -59,7 +59,13 @@ export function TodayPage({
           <>
             {messages && logged && <TodayList messages={messages} settings={settings} entries={logged} today={date} earlyAccess={earlyAccess} onGoToTab={onGoToTab} />}
             {openRelief && (
-              <button type="button" onClick={openRelief} className="self-start min-h-11 px-1 text-control font-semibold underline underline-offset-2" style={{ color: 'var(--color-brand)' }}>
+              <button
+                type="button"
+                onClick={openRelief}
+                className="self-start inline-flex items-center gap-2 rounded-full px-3.5 min-h-11 text-control font-semibold"
+                style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)', boxShadow: 'inset 0 0 0 1px var(--color-hairline)' }}
+              >
+                <IconWind size={18} stroke={1.8} aria-hidden />
                 {t.relief.link}
               </button>
             )}
