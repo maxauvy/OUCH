@@ -1620,6 +1620,31 @@ export interface Translations {
     text: string
     thanks: string
   }
+  relief: {
+    link: string
+    cardButton: string
+    title: string
+    intro: string
+    breathTitle: string
+    breathHint: string
+    start: string
+    stop: string
+    again: string
+    breatheIn: string
+    breatheOut: string
+    ready: string
+    finished: string
+    startedAnnounce: string
+    otherTitle: string
+    next: string
+    previous: string
+    close: string
+    step: string
+    helpedTitle: string
+    helpedNote: string
+    relax: { title: string; hint: string; steps: string[] }
+    gentle: { title: string; hint: string; steps: string[] }
+  }
   pacing: {
     title: string
     /** `{{k}}` busy days, `{{x}}` of them followed by a harder day, `{{e}}` what chance gives, `{{lo}}` and `{{hi}}` its band */

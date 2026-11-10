@@ -16,7 +16,7 @@ Les carnets de suivi existants (Pain Diary, MyPainDiary…) sont fermés, ou pé
 
 **Comprendre, sans rien promettre.** Les notes finissent par raconter des choses : ce qui précède une poussée, ce qui revient les bons jours. OUCH montre des rapprochements, jamais des causes : la personne garde ce qui lui parle et écarte le reste. Elle arrive en consultation avec un rapport qui dit ce qui s'est passé, au lieu de chercher dans sa mémoire.
 
-**Soulager, par les gestes qui vont bien.** On note ce qui a aidé (une marche courte, un bain chaud, des étirements…). On peut essayer une de ces actions pendant une semaine et mettre côte à côte les jours avec et sans. Quand une poussée se termine, l'app dit en combien de jours la douleur est revenue à son niveau habituel. Pas de score, pas de série, rien à perdre.
+**Soulager, par les gestes qui vont bien.** On note ce qui a aidé (une marche courte, un bain chaud, des étirements…). On peut essayer une de ces actions pendant une semaine et mettre côte à côte les jours avec et sans. Quand une poussée se termine, l'app dit en combien de jours la douleur est revenue à son niveau habituel. Un écran « Un moment pour souffler » propose, hors ligne, une respiration lente et deux courts exercices de détente, sans rien noter ni compter. Pas de score, pas de série, rien à perdre.
 
 OUCH est libre et gratuit, et c'est un carnet, pas un avis médical : il ne pose pas de diagnostic et ne recommande aucun traitement.
 
