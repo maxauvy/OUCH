@@ -1615,10 +1615,52 @@ export interface Translations {
     settingsHelper: string
     settingsPrivacy: string
   }
+  activity: {
+    label: string
+    intro: string
+    items: Record<'fibromyalgie' | 'arthrite' | 'spondylarthrite' | 'lombalgie' | 'migraine' | 'myofasciale', string>
+    pace: string
+    /** Same wording as the matching entry of the entry form's suggestions, so ticking it counts in the trial */
+    action: string
+    tryIt: string
+    thanks: string
+  }
   regularity: {
     label: string
     text: string
     thanks: string
+  }
+  relief: {
+    link: string
+    cardButton: string
+    title: string
+    intro: string
+    breathTitle: string
+    breathHint: string
+    durationLabel: string
+    minutes: string
+    vibrate: string
+    vibrateHelper: string
+    levelUp: string
+    levelDown: string
+    screenOn: string
+    start: string
+    stop: string
+    again: string
+    breatheIn: string
+    breatheOut: string
+    ready: string
+    finished: string
+    startedAnnounce: string
+    otherTitle: string
+    next: string
+    previous: string
+    close: string
+    step: string
+    helpedTitle: string
+    helpedNote: string
+    relax: { title: string; hint: string; steps: string[] }
+    gentle: { title: string; hint: string; steps: string[] }
   }
   pacing: {
     title: string

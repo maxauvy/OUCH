@@ -1,15 +1,15 @@
 import { useState, type ReactNode } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconLeaf, IconPill, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
+import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconBarbell, IconLeaf, IconPill, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { LoggedEntry, Settings } from '../../db/types'
 import { useLeadList } from '../../hooks/useLeadList'
-import { daysBetween } from '../../lib/dates'
+import { daysBetween, shiftISO } from '../../lib/dates'
 import { formatIllnessList } from '../../lib/childView'
 import { snoozeInvite } from '../../lib/indicatorInvite'
 import { frenchOfMonth } from '../../lib/monthName'
-import { actionInSentence } from '../../lib/leads'
-import { restartTrial } from '../../lib/leadTrial'
+import { actionInSentence, actionKey } from '../../lib/leads'
+import { TRIAL_DAYS, restartTrial } from '../../lib/leadTrial'
 import { updateLeadsSeen } from '../../lib/leadsSeenStore'
 import { DROP_HPA } from '../../lib/forecast'
 import { markDone, postpone, type TodayMessage, type TodayMessages } from '../../lib/todayMessages'
@@ -216,6 +216,41 @@ export function TodayList({
         return (
           <ListCard key={m.key} icon={IconCloudRain} label={t.forecast.label} actions={[{ label: t.forecast.thanks, primary: true, onClick: () => done(m.key) }]}>
             <p className="text-body mt-0.5">{format(t.forecast.text, { fall: r.fall, drop: DROP_HPA, observed: r.observed, k: r.k, band }, language)}</p>
+          </ListCard>
+        )
+      }
+      case 'activity': {
+        const canTry = !settings.leadTrial && settings.enabledFactors.includes('positiveActions')
+        return (
+          <ListCard
+            key={m.key}
+            icon={IconBarbell}
+            label={t.activity.label}
+            actions={[
+              ...(canTry
+                ? [
+                    {
+                      label: t.activity.tryIt,
+                      primary: true,
+                      onClick: () => {
+                        done(m.key)
+                        void updateSettings({ leadTrial: { key: `action:${actionKey(t.activity.action)}`, action: t.activity.action, start: today, end: shiftISO(today, TRIAL_DAYS - 1) } })
+                      },
+                    },
+                  ]
+                : []),
+              { label: t.activity.thanks, primary: !canTry, onClick: () => done(m.key) },
+            ]}
+          >
+            <p className="text-body mt-0.5">{t.activity.intro}</p>
+            <ul className="text-body mt-2 flex flex-col gap-2">
+              {m.illnesses.map((i) => (
+                <li key={i}>{t.activity.items[i]}</li>
+              ))}
+            </ul>
+            <p className="text-body mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.activity.pace}
+            </p>
           </ListCard>
         )
       }

@@ -514,6 +514,8 @@ export interface Settings {
   forecastEnabled?: boolean
   /** The forecast fetched on this device, for the day. Per device: not restored from a backup. */
   forecastCache?: ForecastCache
+  /** The phone vibrates at each change of the breathing exercise. Per device (a phone may not have a vibrator): not restored from a backup. */
+  reliefVibrate?: boolean
   /** The prescription the person noted, if any. Restored from a backup. */
   prescription?: Prescription
   /** The reminder card was closed, or put off, for this prescription (by its start). Per device. */

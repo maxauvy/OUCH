@@ -17,6 +17,7 @@ import { PrescriptionCard } from '../components/prescription/PrescriptionCard'
 import { TodayList } from '../components/today/TodayList'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { todayISO } from '../lib/dates'
+import { useOpenRelief } from '../components/relief/reliefContext'
 
 export function TodayPage({
   onGoToBackup,
@@ -36,6 +37,7 @@ export function TodayPage({
   const [sharing, setSharing] = useState(false)
   const date = todayISO()
   const earlyAccess = useEarlyAccess()
+  const openRelief = useOpenRelief()
 
   // What waits for the person is one quiet line under the title, which opens a
   // list (never during a flare: the soft word of the hard days stands alone).
@@ -54,7 +56,14 @@ export function TodayPage({
         onGoToBackup={IS_DEMO ? undefined : onGoToBackup}
         onOpenSettings={onOpenSettings}
         afterHeader={
-          messages && logged ? <TodayList messages={messages} settings={settings} entries={logged} today={date} earlyAccess={earlyAccess} onGoToTab={onGoToTab} /> : undefined
+          <>
+            {messages && logged && <TodayList messages={messages} settings={settings} entries={logged} today={date} earlyAccess={earlyAccess} onGoToTab={onGoToTab} />}
+            {openRelief && (
+              <button type="button" onClick={openRelief} className="self-start min-h-11 px-1 text-control font-semibold underline underline-offset-2" style={{ color: 'var(--color-brand)' }}>
+                {t.relief.link}
+              </button>
+            )}
+          </>
         }
       />
       {(canShareWeather || onOpenKids) && (

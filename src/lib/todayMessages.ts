@@ -17,6 +17,7 @@
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
 
 import type { FlareEpisode } from './flares.ts'
+import type { ActivityIllness } from './activityEvidence.ts'
 import type { ForecastReading } from './forecast.ts'
 import type { Regularity } from './regularity.ts'
 import type { Lead, LeadChoices } from './leads.ts'
@@ -53,6 +54,7 @@ export type TodayMessage =
   | { kind: 'invite'; key: 'invite' }
   | { kind: 'rest'; key: string }
   | { kind: 'weather'; key: string; reading: ForecastReading }
+  | { kind: 'activity'; key: 'activity'; illnesses: ActivityIllness[] }
   | { kind: 'regularity'; key: string; reading: Regularity }
   | { kind: 'calm'; key: string; episode: FlareEpisode }
   | { kind: 'month'; key: string; summary: MonthSummary }
@@ -71,7 +73,7 @@ export interface TodayMessagesInput {
   quiet: boolean
   later: MessageLaterMap | undefined
   /** Which suggestions the person lets through. */
-  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean; month: boolean; rest?: boolean; weather?: boolean; regularity?: boolean }
+  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean; month: boolean; rest?: boolean; weather?: boolean; regularity?: boolean; activity?: boolean }
   /** The leads Trends shows by default (`LeadList.shown`). */
   leads: Lead[]
   leadChoices: LeadChoices | undefined
@@ -95,6 +97,8 @@ export interface TodayMessagesInput {
   weather?: ForecastReading | null
   /** Doses of a scheduled treatment noted as missed lately (`regularityReading`): a soft word, back only if a new one is missed. */
   regularity?: Regularity | null
+  /** The tracked illnesses that have a source on exercise (`activityIllnesses`): said once, in one card. */
+  activity?: ActivityIllness[]
   /** The trial under way, or just over and waiting to be closed. */
   trial: LeadTrial | undefined
 }
@@ -113,7 +117,7 @@ export function recentReturn(episodes: readonly FlareEpisode[], today: string): 
 }
 
 export function todayMessages(input: TodayMessagesInput): TodayMessages {
-  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, yesterday, weather, regularity, trial } = input
+  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, yesterday, weather, regularity, activity, trial } = input
   if (quiet) return { items: [], count: 0 }
   const waiting = (key: string) => !isAway(later?.[key], today)
 
@@ -124,6 +128,7 @@ export function todayMessages(input: TodayMessagesInput): TodayMessages {
   if (allow.weather && weather && waiting(`weather:${today}`)) items.push({ kind: 'weather', key: `weather:${today}`, reading: weather })
   const regularityKey = regularity ? `regularity:${regularity.medicationId}:${regularity.last}` : ''
   if (allow.regularity && regularity && waiting(regularityKey)) items.push({ kind: 'regularity', key: regularityKey, reading: regularity })
+  if (allow.activity && activity?.length && waiting('activity')) items.push({ kind: 'activity', key: 'activity', illnesses: activity })
   if (allow.weekly && weekly && waiting(`weekly:${today}`)) items.push({ kind: 'weekly', key: `weekly:${today}`, finding: weekly })
   if (allow.leads) {
     for (const lead of leads) {
