@@ -1745,6 +1745,11 @@ const en: Translations = {
     settingsHelper: 'When the pressure is due to fall tomorrow and your diary shows those days were harder than chance would give, a line says so in “For you”. Nothing shows otherwise, and never during a harder period.',
     settingsPrivacy: 'The forecast is asked from Open-Meteo for your position, at most once a day: nothing else is sent.',
   },
+  regularity: {
+    label: 'Your doses',
+    text: 'Over the last two weeks you noted {{missed}} missed doses of {{name}}. That happens to a lot of people. If a cue would help (a reminder, a pill organiser), your doctor or pharmacist can talk it through with you.',
+    thanks: 'Thanks',
+  },
   pacing: {
     title: 'After your active days',
     within: 'The day after your {{k}} most active days, pain was higher than usual {{x}} {{x:time|times}}. With {{k}} days picked at random, you would see about {{e}} (between {{lo}} and {{hi}}): that is what chance gives.',

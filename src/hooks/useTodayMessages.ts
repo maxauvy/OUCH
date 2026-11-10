@@ -5,6 +5,7 @@ import { IS_DEMO } from '../lib/demoMode'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { flaresApply } from '../lib/flares'
 import { forecastReading, isFresh } from '../lib/forecast'
+import { regularityReading } from '../lib/regularity'
 import { fetchPressureForecast } from '../lib/weather'
 import { flareUnderWay } from '../lib/hardDays'
 import { shouldShowInvite } from '../lib/indicatorInvite'
@@ -19,6 +20,7 @@ import { weeklyFinding } from '../lib/weeklySentence'
 import { useFlares } from './useFlares'
 import { useLeadList } from './useLeadList'
 import { useLoggedEntries } from './useEntries'
+import { useMedications } from './useMedications'
 import { useSettings } from './useSettings'
 
 /** What waits on the day's page (the line under the title and the sheet it opens), or null until the diary is read. */
@@ -28,6 +30,7 @@ export function useTodayMessages(): TodayMessages | null {
   const settings = useSettings()
   const earlyAccess = useEarlyAccess()
   const flares = useFlares()
+  const medications = useMedications()
   const today = todayISO()
 
   // The forecast for the day, asked once and kept on the device. Only when the person said yes and a position is set.
@@ -58,7 +61,7 @@ export function useTodayMessages(): TodayMessages | null {
       today,
       quiet: flare,
       later: settings.leadsSeen?.later,
-      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled, month: settings.suggestionsEnabled, rest: settings.suggestionsEnabled && settings.enabledFactors.includes('activity'), weather: settings.suggestionsEnabled && forecastOn },
+      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled, month: settings.suggestionsEnabled, rest: settings.suggestionsEnabled && settings.enabledFactors.includes('activity'), weather: settings.suggestionsEnabled && forecastOn, regularity: settings.suggestionsEnabled },
       leads: leadList.shown,
       leadChoices: settings.leadChoices,
       tried: triedKeys(settings.leadTrial, settings.leadTrialHistory),
@@ -77,8 +80,9 @@ export function useTodayMessages(): TodayMessages | null {
       month: monthSummary({ today, entries: logged, history: settings.leadTrialHistory ?? [], episodes: flares?.episodes ?? [] }),
       rest: bigDayBefore(logged, today),
       weather: forecastOn ? forecastReading(logged, settings.forecastCache, today) : null,
+      regularity: medications ? regularityReading(logged, medications, today) : null,
       yesterday: settings.suggestionsEnabled ? missedYesterday(logged, today) : null,
       trial: settings.leadTrial,
     })
-  }, [logged, leadList, settings, earlyAccess, today, flares, forecastOn])
+  }, [logged, leadList, settings, earlyAccess, today, flares, forecastOn, medications])
 }
