@@ -425,6 +425,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     birthDate: isISODate(raw.birthDate) && raw.birthDate >= '1900-01-01' && raw.birthDate <= '2100-01-01' ? raw.birthDate : undefined,
     prescription: prescription(raw.prescription),
     careSheet: careSheetFromBackup(raw.careSheet),
+    forecastEnabled: bool(raw.forecastEnabled),
     markedFlares: markedFlares(raw.markedFlares),
   })
 }

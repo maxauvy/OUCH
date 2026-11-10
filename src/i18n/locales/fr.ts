@@ -1741,6 +1741,15 @@ const fr: Translations = {
     noUsual: 'Il faut plus de jours notés pour dire ce qui est habituel chez toi.',
     note: 'Ces chiffres décrivent ton journal ; ils ne disent pas pourquoi les deux périodes diffèrent.',
   },
+  forecast: {
+    label: 'Demain, la pression baisse',
+    text: 'Demain, la pression devrait baisser de {{fall}} hPa. Les jours où elle a baissé d’au moins {{drop}} hPa, ta douleur a été plus haute que d’habitude {{observed}} fois sur {{k}} ; le hasard en donnerait {{band}}. Une piste, pas une certitude.',
+    band: '{{low}} à {{high}}',
+    thanks: 'Merci',
+    settingsTitle: 'Prévoir demain',
+    settingsHelper: 'Quand la pression doit baisser demain et que ton carnet montre que ces jours-là ont été plus difficiles que le hasard ne le donne, une ligne le dit dans « Pour toi ». Rien ne s’affiche sinon, et jamais pendant une période difficile.',
+    settingsPrivacy: 'La prévision est demandée à Open-Meteo pour ta position, au plus une fois par jour : rien d’autre n’est envoyé.',
+  },
   pacing: {
     title: 'Après tes jours actifs',
     within: 'Le lendemain de tes {{k}} jours les plus actifs, la douleur a été plus forte que d’habitude {{x}} {{x:fois|fois}}. Avec {{k}} jours pris au hasard, on en verrait environ {{e}} (entre {{lo}} et {{hi}}) : c’est ce que le hasard donne.',

@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCalendarMonth, IconCalendarWeek, IconLeaf, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
+import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconLeaf, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { LoggedEntry, Settings } from '../../db/types'
 import { useLeadList } from '../../hooks/useLeadList'
@@ -11,6 +11,7 @@ import { frenchOfMonth } from '../../lib/monthName'
 import { actionInSentence } from '../../lib/leads'
 import { restartTrial } from '../../lib/leadTrial'
 import { updateLeadsSeen } from '../../lib/leadsSeenStore'
+import { DROP_HPA } from '../../lib/forecast'
 import { markDone, postpone, type TodayMessage, type TodayMessages } from '../../lib/todayMessages'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { TrialCard } from '../entry/LeadHintCards'
@@ -209,6 +210,15 @@ export function TodayList({
             <p className="text-body mt-0.5">{t.pacing.restText}</p>
           </ListCard>
         )
+      case 'weather': {
+        const r = m.reading
+        const band = r.low === r.high ? String(r.low) : format(t.forecast.band, { low: r.low, high: r.high }, language)
+        return (
+          <ListCard key={m.key} icon={IconCloudRain} label={t.forecast.label} actions={[{ label: t.forecast.thanks, primary: true, onClick: () => done(m.key) }]}>
+            <p className="text-body mt-0.5">{format(t.forecast.text, { fall: r.fall, drop: DROP_HPA, observed: r.observed, k: r.k, band }, language)}</p>
+          </ListCard>
+        )
+      }
       case 'calm': {
         const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMM', { locale: dateFnsLocale })
         return (

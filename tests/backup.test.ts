@@ -369,3 +369,9 @@ test('the suggestions switch is read from a backup, only when it is a boolean', 
   assert.deepEqual(sanitizeSettings({ suggestionsEnabled: false }), { suggestionsEnabled: false })
   assert.deepEqual(sanitizeSettings({ suggestionsEnabled: 'no' }), {})
 })
+
+test('the look ahead to tomorrow is a preference that is restored; the forecast kept on a device is not part of a copy', () => {
+  assert.equal(sanitizeSettings({ forecastEnabled: true })?.forecastEnabled, true)
+  assert.equal(sanitizeSettings({ forecastEnabled: 'oui' })?.forecastEnabled, undefined)
+  assert.equal((sanitizeSettings({ forecastCache: { fetchedOn: '2026-11-09', days: [] } }) as Record<string, unknown> | undefined)?.forecastCache, undefined)
+})

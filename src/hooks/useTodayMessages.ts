@@ -1,8 +1,11 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import { updateSettings } from '../db'
 import { todayISO } from '../lib/dates'
 import { IS_DEMO } from '../lib/demoMode'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { flaresApply } from '../lib/flares'
+import { forecastReading, isFresh } from '../lib/forecast'
+import { fetchPressureForecast } from '../lib/weather'
 import { flareUnderWay } from '../lib/hardDays'
 import { shouldShowInvite } from '../lib/indicatorInvite'
 import { NO_LEADS_SEEN, trialToRepeat } from '../lib/leadHints'
@@ -27,6 +30,25 @@ export function useTodayMessages(): TodayMessages | null {
   const flares = useFlares()
   const today = todayISO()
 
+  // The forecast for the day, asked once and kept on the device. Only when the person said yes and a position is set.
+  const lat = settings.autoWeatherLat
+  const lon = settings.autoWeatherLon
+  const hasPlace = lat !== undefined && lon !== undefined
+  const forecastOn = !!settings.forecastEnabled && settings.enabledFactors.includes('weather') && (hasPlace || IS_DEMO)
+  const fresh = isFresh(settings.forecastCache, today)
+  useEffect(() => {
+    if (!forecastOn || IS_DEMO || fresh || lat === undefined || lon === undefined) return
+    let live = true
+    fetchPressureForecast(lat, lon)
+      .then(async (days) => {
+        if (live && days.length) await updateSettings({ forecastCache: { fetchedOn: today, days } })
+      })
+      .catch(() => {})
+    return () => {
+      live = false
+    }
+  }, [forecastOn, fresh, lat, lon, today])
+
   return useMemo(() => {
     if (!logged || !leadList) return null
     // A stretch the person marked counts like a detected one: nothing is brought.
@@ -36,7 +58,7 @@ export function useTodayMessages(): TodayMessages | null {
       today,
       quiet: flare,
       later: settings.leadsSeen?.later,
-      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled, month: settings.suggestionsEnabled, rest: settings.suggestionsEnabled && settings.enabledFactors.includes('activity') },
+      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled, month: settings.suggestionsEnabled, rest: settings.suggestionsEnabled && settings.enabledFactors.includes('activity'), weather: settings.suggestionsEnabled && forecastOn },
       leads: leadList.shown,
       leadChoices: settings.leadChoices,
       tried: triedKeys(settings.leadTrial, settings.leadTrialHistory),
@@ -54,8 +76,9 @@ export function useTodayMessages(): TodayMessages | null {
       calm: recentReturn(flares?.episodes ?? [], today),
       month: monthSummary({ today, entries: logged, history: settings.leadTrialHistory ?? [], episodes: flares?.episodes ?? [] }),
       rest: bigDayBefore(logged, today),
+      weather: forecastOn ? forecastReading(logged, settings.forecastCache, today) : null,
       yesterday: settings.suggestionsEnabled ? missedYesterday(logged, today) : null,
       trial: settings.leadTrial,
     })
-  }, [logged, leadList, settings, earlyAccess, today, flares])
+  }, [logged, leadList, settings, earlyAccess, today, flares, forecastOn])
 }

@@ -166,3 +166,17 @@ test('yesterday to write comes first, only today, and goes once answered', () =>
   assert.deepEqual(kinds(todayMessages({ ...base, yesterday: '2026-10-28', later: markDone(undefined, key) })), [])
   assert.deepEqual(todayMessages({ ...base, yesterday: '2026-10-28', quiet: true }), { items: [], count: 0 })
 })
+
+test('a fall of pressure tomorrow is a word of the day when the person lets it through; a hard day, a closed switch or an answer leave it out', () => {
+  const reading = { fall: 9, k: 8, observed: 8, low: 2, high: 5 }
+  const on = { ...base, allow: { ...base.allow, weather: true }, weather: reading }
+  assert.deepEqual(kinds(todayMessages(on)), [`weather:${TODAY}`])
+  assert.equal(todayMessages(on).count, 1)
+  assert.deepEqual(todayMessages({ ...on, quiet: true }), { items: [], count: 0 })
+  assert.deepEqual(todayMessages({ ...on, allow: { ...base.allow, weather: false } }), { items: [], count: 0 })
+  assert.deepEqual(todayMessages({ ...base, weather: reading }), { items: [], count: 0 })
+  assert.deepEqual(todayMessages({ ...on, weather: null }), { items: [], count: 0 })
+  assert.deepEqual(todayMessages({ ...on, later: markDone(undefined, `weather:${TODAY}`) }), { items: [], count: 0 })
+  // Today only: the answer of a day does not carry over to the next.
+  assert.deepEqual(kinds(todayMessages({ ...on, today: shiftISO(TODAY, 1), later: markDone(undefined, `weather:${TODAY}`) })), [`weather:${shiftISO(TODAY, 1)}`])
+})

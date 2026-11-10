@@ -40,7 +40,7 @@ export interface PacingReading {
 }
 
 /** The usual pain before a day: the median of the logged days of the 28 before, when there are enough. */
-function usualBefore(byDate: ReadonlyMap<string, number>, date: string): number | null {
+export function usualBefore(byDate: ReadonlyMap<string, number>, date: string): number | null {
   const values: number[] = []
   for (let i = 1; i <= BASELINE_DAYS; i++) {
     const v = byDate.get(shiftISO(date, -i))
@@ -50,7 +50,7 @@ function usualBefore(byDate: ReadonlyMap<string, number>, date: string): number 
 }
 
 /** Smallest j whose cumulative probability under Binomial(k, q) reaches `p`. */
-function binomialQuantile(k: number, q: number, p: number): number {
+export function binomialQuantile(k: number, q: number, p: number): number {
   if (q <= 0) return 0
   if (q >= 1) return k
   let pmf = (1 - q) ** k

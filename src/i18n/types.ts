@@ -1604,6 +1604,17 @@ export interface Translations {
     noUsual: string
     note: string
   }
+  forecast: {
+    label: string
+    /** `{{fall}}` hPa tomorrow, `{{drop}}` the threshold, `{{observed}}` of `{{k}}` falls with a harder day, `{{band}}` what chance gives */
+    text: string
+    /** `{{low}}` and `{{high}}` */
+    band: string
+    thanks: string
+    settingsTitle: string
+    settingsHelper: string
+    settingsPrivacy: string
+  }
   pacing: {
     title: string
     /** `{{k}}` busy days, `{{x}}` of them followed by a harder day, `{{e}}` what chance gives, `{{lo}}` and `{{hi}}` its band */
