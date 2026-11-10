@@ -9,6 +9,7 @@ import { formatIllnessList } from '../../lib/childView'
 import { snoozeInvite } from '../../lib/indicatorInvite'
 import { frenchOfMonth } from '../../lib/monthName'
 import { actionInSentence, actionKey } from '../../lib/leads'
+import type { ActivityIllness } from '../../lib/activityEvidence'
 import { TRIAL_DAYS, restartTrial } from '../../lib/leadTrial'
 import { updateLeadsSeen } from '../../lib/leadsSeenStore'
 import { DROP_HPA } from '../../lib/forecast'
@@ -170,11 +171,11 @@ export function TodayList({
               {
                 label: t.trends.leadTrialStart,
                 primary: true,
-                onClick: () => {
-                  done(m.key)
-                  void updateLeadsSeen((seen) => ({ ...seen, repeatShown: { ...seen.repeatShown, [m.trial.key]: today } }))
+                // One write after the other: side by side, the later one wipes the earlier on the settings.
+                onClick: () =>
                   void updateSettings({ leadTrial: restartTrial(m.trial, today) })
-                },
+                    .then(() => updateLeadsSeen((seen) => ({ ...seen, repeatShown: { ...seen.repeatShown, [m.trial.key]: today } })))
+                    .then(() => done(m.key)),
               },
               { label: t.trends.leadTrialLater, onClick: () => later(m.key) },
             ]}
@@ -232,10 +233,8 @@ export function TodayList({
                     {
                       label: t.activity.tryIt,
                       primary: true,
-                      onClick: () => {
-                        done(m.key)
-                        void updateSettings({ leadTrial: { key: `action:${actionKey(t.activity.action)}`, action: t.activity.action, start: today, end: shiftISO(today, TRIAL_DAYS - 1) } })
-                      },
+                      // The trial is written first, then the card is put away: the two writes on the settings must not run side by side, or the second wipes the first.
+                      onClick: () => void updateSettings({ leadTrial: { key: `action:${actionKey(t.activity.action)}`, action: t.activity.action, start: today, end: shiftISO(today, TRIAL_DAYS - 1) } }).then(() => done(m.key)),
                     },
                   ]
                 : []),
@@ -243,13 +242,14 @@ export function TodayList({
             ]}
           >
             <p className="text-body mt-0.5">{t.activity.intro}</p>
-            <ul className="text-body mt-2 flex flex-col gap-2">
+            <ul className="text-body mt-2 flex flex-col gap-1.5">
               {m.illnesses.map((i) => (
-                <li key={i}>{t.activity.items[i]}</li>
+                <li key={i}>{t.activity.items[i].short}</li>
               ))}
             </ul>
-            <p className="text-body mt-2" style={{ color: 'var(--color-ink-muted)' }}>
-              {t.activity.pace}
+            <ActivityDetail illnesses={m.illnesses} />
+            <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+              {canTry ? `${t.activity.pace} ${t.activity.tryHint}` : t.activity.pace}
             </p>
           </ListCard>
         )
@@ -314,5 +314,25 @@ export function TodayList({
       )}
       {inviteOpen && <InviteSheet settings={settings} earlyAccess={earlyAccess} today={today} onClose={() => setInviteOpen(false)} />}
     </>
+  )
+}
+
+/** The fuller sentences with their sources, behind one tap: the card stays short. */
+function ActivityDetail({ illnesses }: { illnesses: ActivityIllness[] }) {
+  const t = useTranslation().activity
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="mt-1">
+      <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} className="text-control font-semibold underline underline-offset-2 min-h-11" style={{ color: 'var(--color-brand)' }}>
+        {open ? t.hideMore : t.showMore}
+      </button>
+      {open && (
+        <ul className="text-caption flex flex-col gap-2" style={{ color: 'var(--color-ink-muted)' }}>
+          {illnesses.map((i) => (
+            <li key={i}>{t.items[i].more}</li>
+          ))}
+        </ul>
+      )}
+    </div>
   )
 }
