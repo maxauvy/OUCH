@@ -8,6 +8,7 @@ import { useAudiencePing } from './hooks/useAudiencePing'
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
 import { PageBack } from './components/layout/PageBack'
+import { ReliefContext } from './components/relief/reliefContext'
 import { DemoPill } from './components/demo/DemoPill'
 import { IS_DEMO } from './lib/demoMode'
 import { finishTour, tourPending } from './lib/demoSession'
@@ -40,6 +41,7 @@ const TrendsPage = lazy(loadTrends)
 const SettingsPage = lazy(loadSettings)
 const ConsultationPage = lazy(() => import('./pages/ConsultationPage').then((m) => ({ default: m.ConsultationPage })))
 const ChildViewPage = lazy(loadKids)
+const ReliefPage = lazy(() => import('./pages/ReliefPage').then((m) => ({ default: m.ReliefPage })))
 const SetupWizard = lazy(() => import('./components/setup/SetupWizard').then((m) => ({ default: m.SetupWizard })))
 const DemoTour = lazy(() => import('./components/demo/DemoTour').then((m) => ({ default: m.DemoTour })))
 
@@ -80,7 +82,7 @@ function useAppliedLanguage(language: Language) {
 function AppShell() {
   const [tab, setTabOnly] = useState<Tab>('today')
   // Settings and the kids' page open from the day's page, as pages of their own: the tab bar stays, with Today lit.
-  const [screen, setScreen] = useState<'settings' | 'kids' | null>(null)
+  const [screen, setScreen] = useState<'settings' | 'kids' | 'relief' | null>(null)
   const setTab = (next: Tab) => {
     setScreen(null)
     setTabOnly(next)
@@ -178,6 +180,7 @@ function AppShell() {
   return (
     <>
       <main className="flex-1">
+        <ReliefContext.Provider value={() => setScreen('relief')}>
         <Suspense fallback={null}>
         {screen === 'settings' && (
           <PageBack onBack={() => setScreen(null)}>
@@ -187,6 +190,11 @@ function AppShell() {
         {screen === 'kids' && settings.kidsTabEnabled && (
           <PageBack onBack={() => setScreen(null)}>
             <ChildViewPage />
+          </PageBack>
+        )}
+        {screen === 'relief' && (
+          <PageBack onBack={() => setScreen(null)}>
+            <ReliefPage />
           </PageBack>
         )}
         {screen === null && tab === 'today' && (
@@ -208,6 +216,7 @@ function AppShell() {
         {screen === null && tab === 'trends' && <TrendsPage />}
         {screen === null && tab === 'consultation' && <ConsultationPage />}
         </Suspense>
+        </ReliefContext.Provider>
       </main>
       <TabBar
         active={tab}

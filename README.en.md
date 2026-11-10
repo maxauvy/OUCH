@@ -16,7 +16,7 @@ Existing pain trackers (Pain Diary, MyPainDiary…) are either closed or a chore
 
 **Understand, without promising anything.** Over time your notes start to tell you things: what comes before a flare, what comes back on the good days. OUCH shows associations, never causes: you keep what speaks to you and set the rest aside. You walk into your appointment with a report that says what happened, instead of digging through memory.
 
-**Ease it, with the gestures that work for you.** You note what helped (a short walk, a hot bath, stretching…). You can try one of those actions for a week and put your days with and without side by side. When a flare ends, the app tells you how many days it took for your pain to get back to its usual level. No score, no streak, nothing to lose.
+**Ease it, with the gestures that work for you.** You note what helped (a short walk, a hot bath, stretching…). You can try one of those actions for a week and put your days with and without side by side. When a flare ends, the app tells you how many days it took for your pain to get back to its usual level. No score, no streak, A “A moment to breathe” screen offers, offline, a slow breathing exercise and two short relaxation exercises, with nothing noted or counted. No score, no streak, nothing to lose.
 
 OUCH is free software and free of charge, and it is a diary, not medical advice: it makes no diagnosis and recommends no treatment.
 
