@@ -1750,6 +1750,11 @@ const fr: Translations = {
     settingsHelper: 'Quand la pression doit baisser demain et que ton carnet montre que ces jours-là ont été plus difficiles que le hasard ne le donne, une ligne le dit dans « Pour toi ». Rien ne s’affiche sinon, et jamais pendant une période difficile.',
     settingsPrivacy: 'La prévision est demandée à Open-Meteo pour ta position, au plus une fois par jour : rien d’autre n’est envoyé.',
   },
+  regularity: {
+    label: 'Tes prises',
+    text: 'Ces deux dernières semaines, tu as noté {{missed}} prises oubliées pour {{name}}. Ça arrive à beaucoup de monde. Si un repère t’aiderait (un rappel, un pilulier), ton médecin ou ton pharmacien peut en parler avec toi.',
+    thanks: 'Merci',
+  },
   pacing: {
     title: 'Après tes jours actifs',
     within: 'Le lendemain de tes {{k}} jours les plus actifs, la douleur a été plus forte que d’habitude {{x}} {{x:fois|fois}}. Avec {{k}} jours pris au hasard, on en verrait environ {{e}} (entre {{lo}} et {{hi}}) : c’est ce que le hasard donne.',

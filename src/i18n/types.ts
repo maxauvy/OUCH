@@ -1615,6 +1615,11 @@ export interface Translations {
     settingsHelper: string
     settingsPrivacy: string
   }
+  regularity: {
+    label: string
+    text: string
+    thanks: string
+  }
   pacing: {
     title: string
     /** `{{k}}` busy days, `{{x}}` of them followed by a harder day, `{{e}}` what chance gives, `{{lo}}` and `{{hi}}` its band */

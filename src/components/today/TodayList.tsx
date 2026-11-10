@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconLeaf, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
+import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconLeaf, IconPill, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { LoggedEntry, Settings } from '../../db/types'
 import { useLeadList } from '../../hooks/useLeadList'
@@ -219,6 +219,12 @@ export function TodayList({
           </ListCard>
         )
       }
+      case 'regularity':
+        return (
+          <ListCard key={m.key} icon={IconPill} label={t.regularity.label} actions={[{ label: t.regularity.thanks, primary: true, onClick: () => done(m.key) }]}>
+            <p className="text-body mt-0.5">{format(t.regularity.text, { missed: m.reading.missed, name: m.reading.name }, language)}</p>
+          </ListCard>
+        )
       case 'calm': {
         const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMM', { locale: dateFnsLocale })
         return (
