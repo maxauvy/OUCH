@@ -118,7 +118,7 @@ const fr: Translations = {
         body: "Ton journal reste sur ton appareil. Rien n'est envoyé sans que tu le décides, à part un signal anonyme par semaine (« actif cette semaine ») que tu peux couper dans Réglages.",
       },
     },
-    note: "Pas de pression : les jours difficiles, une seule info suffit (ta douleur). OUCH n’est pas un dispositif médical et ne remplace pas un avis médical ; les tendances sont des pistes à explorer, pas des preuves.",
+    note: "Pas de pression : les jours difficiles, une seule info suffit (ta douleur). OUCH n’est pas un dispositif médical et ne remplace pas un avis médical ; les tendances donnent des idées à explorer, elles ne prouvent rien.",
   },
 
   support: {
@@ -436,13 +436,13 @@ const fr: Translations = {
     leadActionSentenceHigherDay:
       'Les jours avec {{action}} étaient plus difficiles ({{gap}} {{n:point|points}} de plus en moyenne). Ça ne dit pas que ça y est pour quelque chose : tu y as sans doute recours justement ces jours-là.',
     leadActionLowerDayNote: 'Peut-être aussi l’inverse : on en fait plus quand ça va mieux.',
-    leadNoteActionHigher: 'Tu y as sans doute recours justement quand tu as plus mal, donc ça ne dit pas que ça aide ou non. Un essai d’une semaine compare mieux. C’est une piste, pas une preuve.',
+    leadNoteActionHigher: 'Tu y as sans doute recours justement quand tu as plus mal, donc ça ne dit pas que ça aide ou non. Un essai d’une semaine compare mieux.',
     leadBasisScale: 'Sur {{n}} jours notés.',
     leadBasisAction: 'Sur {{n}} jours notés : {{a}} avec, {{b}} sans.',
-    leadNoteSleep: 'Une douleur forte abîme aussi le sommeil : ça va peut-être dans les deux sens. C’est une piste, pas une preuve.',
-    leadNoteStress: 'Le stress et la douleur se nourrissent l’un l’autre. C’est une piste, pas une preuve.',
-    leadNoteActivity: 'Trop comme trop peu d’activité peuvent aller avec plus de douleur. C’est une piste, pas une preuve.',
-    leadNoteAction: 'C’est peut-être aussi l’inverse : on fait plus de choses les jours où ça va mieux. C’est une piste, pas une preuve.',
+    leadNoteSleep: 'Une douleur forte abîme aussi le sommeil : ça va peut-être dans les deux sens.',
+    leadNoteStress: 'Le stress et la douleur se nourrissent l’un l’autre.',
+    leadNoteActivity: 'Trop comme trop peu d’activité peuvent aller avec plus de douleur.',
+    leadNoteAction: 'C’est peut-être aussi l’inverse : on fait plus de choses les jours où ça va mieux.',
     leadKeep: 'Oui, à noter pour ma consultation',
     leadDismiss: 'Pas vraiment',
     leadKept: 'Gardé pour ta consultation',
@@ -455,7 +455,7 @@ const fr: Translations = {
     leadTrialStart: 'Je teste',
     leadTrialLater: 'Pas maintenant',
     trialsTitle: 'Tes essais',
-    trialsCaption: 'Les semaines d’essai que tu as terminées. Sur 7 jours, c’est peu : une idée, pas une réponse.',
+    trialsCaption: 'Les semaines d’essai que tu as terminées. Sur 7 jours, c’est peu pour conclure.',
     trialsRange: '{{start}} – {{end}}',
     trialsWith: 'Avec {{action}} : {{mean}} en moyenne ({{n}} {{n:jour|jours}})',
     trialsWithout: 'Sans : {{mean}} en moyenne ({{n}} {{n:jour|jours}})',
@@ -1502,7 +1502,7 @@ const fr: Translations = {
     repeatLabel: 'Un essai à refaire ?',
     repeatBody: 'Il y a {{n}} {{n:semaine|semaines}}, tu as essayé « {{action}} » pendant une semaine. Ça te dit de le refaire ?',
     trialHarder: 'Tu y as sans doute recours justement les jours où tu as plus mal : ça ne dit pas si ça aide ou non.',
-    trialSmall: 'Sur 7 jours, c’est peu : une idée, pas une réponse.',
+    trialSmall: 'Sur 7 jours, c’est peu pour conclure.',
     trialFew: 'Il y a trop peu de jours de chaque sorte pour comparer, ce n’est pas grave : tu peux continuer une semaine.',
     trialSame: 'Ça va dans le même sens que tes jours d’avant.',
     trialOther: 'Ça ne va pas dans le même sens que tes jours d’avant : à suivre.',
@@ -1743,7 +1743,7 @@ const fr: Translations = {
   },
   forecast: {
     label: 'Demain, la pression baisse',
-    text: 'Demain, la pression devrait baisser de {{fall}} hPa. Les jours où elle a baissé d’au moins {{drop}} hPa, ta douleur a été plus haute que d’habitude {{observed}} fois sur {{k}} ; le hasard en donnerait {{band}}. Une piste, pas une certitude.',
+    text: 'Demain, la pression devrait baisser de {{fall}} hPa. Les jours où elle a baissé d’au moins {{drop}} hPa, ta douleur a été plus haute que d’habitude {{observed}} fois sur {{k}} ; le hasard en donnerait {{band}}. Ça ne dit pas ce que sera ta journée.',
     band: '{{low}} à {{high}}',
     thanks: 'Merci',
     settingsTitle: 'Prévoir demain',
@@ -2154,7 +2154,7 @@ const fr: Translations = {
     privacyNote:
       "OUCH garde toutes tes données sur cet appareil, dans son stockage local : aucune donnée de santé n'en sort. Seules la météo automatique, avec ta position et jamais ton journal, et la mesure d'audience anonyme (un signal par semaine, que tu peux couper dans Réglages) contactent des services extérieurs. Le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
     notMedicalDevice:
-      'OUCH n’est pas un dispositif médical : il ne pose aucun diagnostic, ne recommande aucun traitement et ne remplace pas un avis médical. Les tendances sont des pistes à explorer, pas des preuves.',
+      'OUCH n’est pas un dispositif médical : il ne pose aucun diagnostic, ne recommande aucun traitement et ne remplace pas un avis médical. Les tendances donnent des idées à explorer, elles ne prouvent rien.',
   },
 
   childView: {
