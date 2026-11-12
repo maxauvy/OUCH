@@ -78,6 +78,14 @@ function str(v: unknown, max = MAX_SHORT_TEXT): string | undefined {
   return typeof v === 'string' ? v.slice(0, max) : undefined
 }
 
+/** An identifier kept as a key or looked up in a map: never one of the names that mean something to JavaScript objects. */
+const RESERVED_IDS: readonly string[] = ['__proto__', 'constructor', 'prototype']
+
+function identifier(v: unknown): string | undefined {
+  const id = str(v, 100)
+  return id && !RESERVED_IDS.includes(id) ? id : undefined
+}
+
 function oneOf<T extends string>(v: unknown, allowed: readonly T[]): T | undefined {
   return typeof v === 'string' && (allowed as readonly string[]).includes(v) ? (v as T) : undefined
 }
@@ -146,7 +154,7 @@ function intakes(v: unknown): MedicationIntake[] | undefined {
   const out: MedicationIntake[] = []
   for (const raw of v.slice(0, MAX_LIST)) {
     if (!isRecord(raw)) continue
-    const medicationId = str(raw.medicationId, 100)
+    const medicationId = identifier(raw.medicationId)
     if (!medicationId) continue
     out.push(
       defined({
@@ -275,7 +283,7 @@ function periods(v: unknown): MedicationPeriod[] {
 /** Null when the medication has no id or name. */
 export function sanitizeMedication(raw: unknown, now = Date.now()): Medication | null {
   if (!isRecord(raw)) return null
-  const id = str(raw.id, 100)
+  const id = identifier(raw.id)
   const name = str(raw.name)?.trim()
   if (!id || !name) return null
   return defined({
