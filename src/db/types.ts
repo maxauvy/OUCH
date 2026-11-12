@@ -432,6 +432,24 @@ export interface CareSheetInfo {
   note?: string
 }
 
+/** "Mon plan des jours difficiles": what the person wrote in a calm moment for a hard day (see lib/hardDaysPlan.ts). */
+export interface HardDaysPlan {
+  /** What I allow myself. */
+  allow?: string
+  /** What helps me. */
+  helps?: string
+  /** Who to tell. */
+  who?: string
+  /** What not to forget. */
+  remember?: string
+}
+
+/** One of "Mes gestes": what the person does to feel better, with the time they chose for it. */
+export interface ReliefGesture {
+  name: string
+  minutes: number
+}
+
 export interface Settings {
   id: 1
   enabledFactors: FactorKey[]
@@ -514,6 +532,10 @@ export interface Settings {
   forecastEnabled?: boolean
   /** The forecast fetched on this device, for the day. Per device: not restored from a backup. */
   forecastCache?: ForecastCache
+  /** The plan for hard days, written by the person. Restored from a backup. */
+  hardDaysPlan?: HardDaysPlan
+  /** "Mes gestes": a few kept by the person, with the time they chose (see lib/gestures.ts). Restored from a backup. */
+  reliefGestures?: ReliefGesture[]
   /** The phone vibrates at each change of the breathing exercise. Per device (a phone may not have a vibrator): not restored from a backup. */
   reliefVibrate?: boolean
   /** A soft sound plays during the breathing exercise. Per device, off until the person says yes; not restored from a backup. */

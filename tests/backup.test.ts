@@ -383,6 +383,16 @@ test('what the breathing screen keeps for this phone (vibration, sound, auto pau
   assert.equal(read?.reliefAuto, undefined)
 })
 
+test('the plan for hard days is restored from a copy, cleaned like a typed one', () => {
+  assert.deepEqual(sanitizeSettings({ hardDaysPlan: { allow: ' Noter ', helps: 7, who: 'Léa' } })?.hardDaysPlan, { allow: 'Noter', who: 'Léa' })
+  assert.equal(sanitizeSettings({ hardDaysPlan: 'texte' })?.hardDaysPlan, undefined)
+})
+
+test('"Mes gestes" are restored from a copy, cleaned like typed ones', () => {
+  assert.deepEqual(sanitizeSettings({ reliefGestures: [{ name: ' Bain chaud ', minutes: 15 }, { name: 'bain chaud', minutes: 20 }, { name: 'Marche', minutes: 9999 }] })?.reliefGestures, [{ name: 'Bain chaud', minutes: 15 }, { name: 'Marche', minutes: 120 }])
+  assert.equal(sanitizeSettings({ reliefGestures: 'x' })?.reliefGestures, undefined)
+})
+
 test('identifiers that are names JavaScript gives meaning to are refused', () => {
   for (const id of ['__proto__', 'constructor', 'prototype']) {
     assert.equal(sanitizeMedication({ id, name: 'x' }), null, id)

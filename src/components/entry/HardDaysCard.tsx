@@ -4,6 +4,8 @@ import { db, updateSettings } from '../../db'
 import type { HardDaysCard as Card } from '../../lib/hardDays'
 import { useLanguage, useTranslation } from '../../i18n'
 import { useOpenRelief } from '../relief/reliefContext'
+import { useSettings } from '../../hooks/useSettings'
+import { hasPlan } from '../../lib/hardDaysPlan'
 
 // What the person wrote down as helping reads in their own words ("Bain
 // chaud"), so it goes in the middle of a sentence in lower case, unless it
@@ -23,6 +25,8 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
   const t = useTranslation().hardDays
   const tr = useTranslation().relief
   const openRelief = useOpenRelief()
+  const tp = useTranslation().plan
+  const plan = useSettings().hardDaysPlan
   const language = useLanguage()
   const start = card?.episode.start
 
@@ -72,14 +76,16 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
           </p>
         )}
         {openRelief && (
-          <button
-            type="button"
-            onClick={openRelief}
-            className="mt-3 block text-control font-semibold underline underline-offset-2 text-left min-h-11"
-            style={{ color: 'var(--color-brand)' }}
-          >
-            {tr.cardButton}
-          </button>
+          <div className="flex flex-col items-start mt-2">
+            {hasPlan(plan) && (
+              <button type="button" onClick={() => openRelief('plan')} className="block text-control font-semibold underline underline-offset-2 text-left min-h-11" style={{ color: 'var(--color-brand)' }}>
+                {tp.open}
+              </button>
+            )}
+            <button type="button" onClick={() => openRelief('breath')} className="block text-control font-semibold underline underline-offset-2 text-left min-h-11" style={{ color: 'var(--color-brand)' }}>
+              {tr.cardButton}
+            </button>
+          </div>
         )}
         {light && (
           <button

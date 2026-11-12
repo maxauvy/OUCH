@@ -52,6 +52,8 @@ import type { LeadChoices } from './leads.ts'
 import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
 import { makePrescription } from './prescription.ts'
 import { careSheetFromBackup } from './careSheet.ts'
+import { cleanGestures } from './gestures.ts'
+import { planFromBackup } from './hardDaysPlan.ts'
 import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
 import { capPast, cleanDoctor, cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
 
@@ -433,6 +435,8 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     birthDate: isISODate(raw.birthDate) && raw.birthDate >= '1900-01-01' && raw.birthDate <= '2100-01-01' ? raw.birthDate : undefined,
     prescription: prescription(raw.prescription),
     careSheet: careSheetFromBackup(raw.careSheet),
+    hardDaysPlan: planFromBackup(raw.hardDaysPlan),
+    reliefGestures: cleanGestures(raw.reliefGestures),
     forecastEnabled: bool(raw.forecastEnabled),
     markedFlares: markedFlares(raw.markedFlares),
   })

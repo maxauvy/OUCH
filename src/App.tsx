@@ -9,6 +9,8 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
 import { PageBack } from './components/layout/PageBack'
 import { ReliefContext } from './components/relief/reliefContext'
+import type { SoulagerView } from './pages/SoulagerPage'
+import { launchTarget } from './lib/launchTarget'
 import { DemoPill } from './components/demo/DemoPill'
 import { IS_DEMO } from './lib/demoMode'
 import { finishTour, tourPending } from './lib/demoSession'
@@ -41,7 +43,7 @@ const TrendsPage = lazy(loadTrends)
 const SettingsPage = lazy(loadSettings)
 const ConsultationPage = lazy(() => import('./pages/ConsultationPage').then((m) => ({ default: m.ConsultationPage })))
 const ChildViewPage = lazy(loadKids)
-const ReliefPage = lazy(() => import('./pages/ReliefPage').then((m) => ({ default: m.ReliefPage })))
+const SoulagerPage = lazy(() => import('./pages/SoulagerPage').then((m) => ({ default: m.SoulagerPage })))
 const SetupWizard = lazy(() => import('./components/setup/SetupWizard').then((m) => ({ default: m.SetupWizard })))
 const DemoTour = lazy(() => import('./components/demo/DemoTour').then((m) => ({ default: m.DemoTour })))
 
@@ -80,9 +82,13 @@ function useAppliedLanguage(language: Language) {
 }
 
 function AppShell() {
-  const [tab, setTabOnly] = useState<Tab>('today')
+  // Opened from a shortcut of the icon: the breathing screen, or the day's page (the default).
+  const [launch] = useState(() => launchTarget(window.location.search))
+  const [tab, setTabOnly] = useState<Tab>(launch === 'souffler' ? 'soulager' : 'today')
   // Settings and the kids' page open from the day's page, as pages of their own: the tab bar stays, with Today lit.
-  const [screen, setScreen] = useState<'settings' | 'kids' | 'relief' | null>(null)
+  const [screen, setScreen] = useState<'settings' | 'kids' | null>(null)
+  // A screen of the Soulager tab asked for from elsewhere (the soft word of a hard day); `key` makes each ask a fresh start.
+  const [soulagerRequest, setSoulagerRequest] = useState<{ view: SoulagerView; key: number } | null>(launch === 'souffler' ? { view: 'breath', key: 0 } : null)
   const setTab = (next: Tab) => {
     setScreen(null)
     setTabOnly(next)
@@ -153,6 +159,11 @@ function AppShell() {
     requestAnimationFrame(() => document.getElementById('backup')?.scrollIntoView({ block: 'start' }))
   }
 
+  // The word of the shortcut is spent: a reload or a bookmark opens the app as usual.
+  useEffect(() => {
+    if (launch) window.history.replaceState(null, '', window.location.pathname + window.location.hash)
+  }, [launch])
+
   // A page opened from Today starts at its top.
   useEffect(() => {
     if (screen) window.scrollTo(0, 0)
@@ -180,7 +191,12 @@ function AppShell() {
   return (
     <>
       <main className="flex-1">
-        <ReliefContext.Provider value={() => setScreen('relief')}>
+        <ReliefContext.Provider
+          value={(view) => {
+            setSoulagerRequest({ view, key: Date.now() })
+            setTab('soulager')
+          }}
+        >
         <Suspense fallback={null}>
         {screen === 'settings' && (
           <PageBack onBack={() => setScreen(null)}>
@@ -190,11 +206,6 @@ function AppShell() {
         {screen === 'kids' && settings.kidsTabEnabled && (
           <PageBack onBack={() => setScreen(null)}>
             <ChildViewPage />
-          </PageBack>
-        )}
-        {screen === 'relief' && (
-          <PageBack onBack={() => setScreen(null)}>
-            <ReliefPage />
           </PageBack>
         )}
         {screen === null && tab === 'today' && (
@@ -214,6 +225,16 @@ function AppShell() {
         )}
         {screen === null && tab === 'journal' && <JournalPage key={journalDate ?? ''} openDate={journalDate} />}
         {screen === null && tab === 'trends' && <TrendsPage />}
+        {screen === null && tab === 'soulager' && (
+          <SoulagerPage
+            key={soulagerRequest?.key ?? 'tab'}
+            request={soulagerRequest?.view}
+            onExit={() => {
+              setSoulagerRequest(null)
+              setTab('today')
+            }}
+          />
+        )}
         {screen === null && tab === 'consultation' && <ConsultationPage />}
         </Suspense>
         </ReliefContext.Provider>
@@ -224,6 +245,7 @@ function AppShell() {
         onChange={(next) => {
           setBackupRequested(false)
           setJournalDate(null)
+          setSoulagerRequest(null)
           setTab(next)
         }}
       />

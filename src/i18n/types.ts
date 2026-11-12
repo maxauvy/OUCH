@@ -27,6 +27,7 @@ export interface Translations {
     trendsNew: string
     kids: string
     settings: string
+    soulager: string
     consultation: string
   }
 
@@ -1633,6 +1634,58 @@ export interface Translations {
     label: string
     text: string
     thanks: string
+  }
+  soulager: {
+    kicker: string
+    title: string
+    group: string
+    breathHint: string
+  }
+  gestures: {
+    title: string
+    none: string
+    choose: string
+    chooseFirst: string
+    minutes: string
+    intro: string
+    empty: string
+    noted: string
+    keep: string
+    unkeep: string
+    length: string
+    shorter: string
+    longer: string
+    add: string
+    addPlaceholder: string
+    full: string
+    note: string
+    calm: string
+    finished: string
+    outOf: string
+    over: string
+    started: string
+    start: string
+    stop: string
+    again: string
+    addHelped: string
+    added: string
+    nothingAdded: string
+    screenOn: string
+  }
+  plan: {
+    title: string
+    shortTitle: string
+    cardEmpty: string
+    open: string
+    write: string
+    edit: string
+    intro: string
+    empty: string
+    formTitle: string
+    formIntro: string
+    save: string
+    cancel: string
+    fields: Record<'allow' | 'helps' | 'who' | 'remember', { label: string; placeholder: string }>
   }
   relief: {
     link: string
