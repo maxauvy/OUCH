@@ -21,14 +21,16 @@ OUCH se présente comme un **carnet** que le patient tient, et un **résumé des
 
 ## 2. Là où le raisonnement est le plus exposé
 
-OUCH ne se contente pas de stocker : il **calcule**. Six fonctions peuvent se lire comme du suivi de maladie ou une aide à la décision, ce qui est le critère à discuter :
+OUCH ne se contente pas de stocker : il **calcule**. Sept fonctions peuvent se lire comme du suivi de maladie ou une aide à la décision, ce qui est le critère à discuter :
 
 1. **Le repérage des poussées** : un algorithme qualifie des périodes comme « poussée » à partir des notes du patient.
 2. **La comparaison avant et après un changement de traitement**, présenté au soignant : même descriptif et accompagné de réserves, il porte sur l'effet apparent d'un traitement.
 3. **Le rapport destiné au médecin**, lu pour informer une prise en charge, par un tiers qui n'est pas l'utilisateur.
 4. **Le mot des jours difficiles et l'écran allégé**, qui se déclenchent quand l'algorithme repère une poussée en cours : l'application adapte son comportement à l'état supposé du patient, même sans lui donner de conseil.
 5. **Les pistes de Tendances**, et les cartes qui les amènent (page du jour, point sur l'onglet, phrase du dimanche) : l'application relève des associations dans les notes et les met en avant, avec des mots qui évitent la cause (« ça va peut-être dans les deux sens ») mais qui orientent le regard du patient.
-6. **L'essai d'une semaine** : l'application invite le patient à reprendre pendant sept jours une action qu'il a lui-même notée, puis compare ses jours avec et sans. L'action vient du patient et le résultat est décrit sans conclure, mais le geste ressemble à une intervention : c'est la raison des garde-fous du [protocole de test](protocole-de-test.md) (pas de suggestion d'action, rien pendant une poussée, texte libre qui peut contenir une modification de traitement).
+6. **L'essai d'une semaine** : l'application invite le patient à reprendre pendant sept jours une action qu'il a lui-même notée, puis compare ses jours avec et sans. L'action vient du patient et le résultat est décrit sans conclure, mais le geste ressemble à une intervention : c'est la raison des garde-fous du [protocole de test](protocole-de-test.md) (pas de suggestion d'action, rien pendant une poussée, texte libre qui peut contenir une modification de traitement). **Écart à signaler :** depuis la carte « Bouger, ce que disent les études » (point 7), l'essai peut aussi partir d'une action proposée par l'application (une marche courte), ce qui s'écarte du principe « l'action vient du patient ».
+
+7. **Trois cartes d'information de la page du jour** : « Bouger, ce que disent les études » (pour chaque maladie suivie qui a une source lue, ce que disent des recommandations et des revues sur l'exercice, avec un renvoi au kiné ou au médecin), « Tes prises » (au moins trois prises oubliées notées en deux semaines sur un traitement de fond) et la ligne de la prévision de pression (voir plus haut). Elles décrivent, citent leurs sources (Réglages › Sources scientifiques) et ne prescrivent ni dose ni geste ; mais « Bouger » parle d'exercice à des personnes douloureuses et propose un essai, ce qui est exactement ce qu'un expert regardera. Rien n'est affiché pendant une poussée, et tout se coupe avec « Suggestions ».
 
 Ce sont ces points qu'un expert réglementaire regardera d'abord, et c'est la **destination prévue** (ce que le fabricant dit, écrit et promet) qui comptera, davantage que la sobriété des textes. Si une qualification de dispositif médical était retenue, elle imposerait un tout autre cadre (système de qualité, évaluation clinique, marquage CE, classification selon la règle applicable aux logiciels).
 
