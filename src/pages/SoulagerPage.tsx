@@ -13,16 +13,19 @@ import { usualHelpers } from '../lib/careSheet'
 import { DURATIONS, IN_SECONDS, OUT_SECONDS, SESSION_SECONDS, VIBRATION, breathAt, type Duration } from '../lib/relief'
 import { ReliefIllustration } from '../components/relief/ReliefIllustration'
 import { Card, SectionTitle } from '../components/ui/Card'
-import { IconLeaf, IconWind } from '@tabler/icons-react'
+import { PageBack } from '../components/layout/PageBack'
+import { IconLeaf, IconWind, IconYoga } from '@tabler/icons-react'
 
-type Mode = 'home' | 'relax' | 'gentle'
+export type SoulagerView = 'home' | 'breath' | 'relax' | 'gentle'
 
-/** "Un moment pour souffler": a breathing circle first, two other short exercises a tap away, and what has helped before. Nothing is noted or counted, and it works offline. */
-export function ReliefPage() {
+/** The Soulager tab: what to do to feel a little better, a tap away. The home lists the exercises; each one opens on its own screen, with a way back. `request` is a screen asked for from elsewhere (the soft word of a hard day): going back from it leaves for where it came from. Nothing here is noted or counted, and it works offline. */
+export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onExit: () => void }) {
   const t = useTranslation().relief
+  const s = useTranslation().soulager
+  const today = useTranslation().today
   const entries = useAllEntries()
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const [mode, setMode] = useState<Mode>('home')
+  const [view, setView] = useState<SoulagerView>(request ?? 'home')
   // While the water moves, nothing else is on the screen.
   const [breathing, setBreathing] = useState(false)
   const helped = entries ? usualHelpers(entries, todayISO()) : []
@@ -30,53 +33,73 @@ export function ReliefPage() {
   useEffect(() => {
     window.scrollTo(0, 0)
     headingRef.current?.focus()
-  }, [mode])
+  }, [view])
+
+  // Back goes to the home of the tab, or, from the screen that was asked for, to where the request came from.
+  const leaves = request !== undefined && view === request
+  const back = () => (leaves ? onExit() : setView('home'))
+
+  const heading = view === 'home' ? s.title : view === 'breath' ? t.title : view === 'relax' ? t.relax.title : t.gentle.title
 
   return (
-    <div className="flex flex-col gap-4 px-4 pt-2 pb-28">
-      <div className="px-1">
-        <h1 ref={headingRef} tabIndex={-1} className="text-title font-bold leading-tight outline-none">
-          {mode === 'home' ? t.title : mode === 'relax' ? t.relax.title : t.gentle.title}
-        </h1>
-        {mode === 'home' && !breathing && (
-          <p className="text-body mt-1" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.intro}
-          </p>
-        )}
-      </div>
+    <>
+      {view !== 'home' && (
+        <PageBack onBack={back} label={leaves ? today.backToToday : s.title} />
+      )}
+      <div className={`flex flex-col gap-4 px-4 ${view === 'home' ? 'pt-4' : 'pt-2'} pb-28`}>
+        <div className="px-1">
+          {view === 'home' && (
+            <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              {s.kicker}
+            </p>
+          )}
+          <h1 ref={headingRef} tabIndex={-1} className="text-title font-bold leading-tight outline-none">
+            {heading}
+          </h1>
+          {view === 'breath' && !breathing && (
+            <p className="text-body mt-1" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.intro}
+            </p>
+          )}
+        </div>
 
-      {mode === 'home' ? (
-        <>
-          <Breathing onRunning={setBreathing} />
-          {!breathing && (
+        {view === 'home' && (
           <Card>
-            <SectionTitle>{t.otherTitle}</SectionTitle>
+            <SectionTitle icon={IconWind}>{s.group}</SectionTitle>
             <div className="flex flex-col gap-2">
-              <Pick icon={<IconLeaf size={20} stroke={1.8} aria-hidden />} title={t.relax.title} hint={t.relax.hint} onClick={() => setMode('relax')} />
-              <Pick icon={<IconWind size={20} stroke={1.8} aria-hidden />} title={t.gentle.title} hint={t.gentle.hint} onClick={() => setMode('gentle')} />
+              <Pick icon={<IconWind size={20} stroke={1.8} aria-hidden />} title={t.breathTitle} hint={s.breathHint} onClick={() => setView('breath')} />
+              <Pick icon={<IconLeaf size={20} stroke={1.8} aria-hidden />} title={t.relax.title} hint={t.relax.hint} onClick={() => setView('relax')} />
+              <Pick icon={<IconYoga size={20} stroke={1.8} aria-hidden />} title={t.gentle.title} hint={t.gentle.hint} onClick={() => setView('gentle')} />
             </div>
           </Card>
-          )}
-          {!breathing && helped.length > 0 && (
-            <Card>
-              <SectionTitle>{t.helpedTitle}</SectionTitle>
-              <ul className="flex flex-wrap gap-2">
-                {helped.map((h) => (
-                  <li key={h} className="rounded-full px-3 py-1 text-body" style={{ background: 'var(--color-brand-soft)' }}>
-                    {h}
-                  </li>
-                ))}
-              </ul>
-              <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
-                {t.helpedNote}
-              </p>
-            </Card>
-          )}
-        </>
-      ) : (
-        <Steps steps={mode === 'relax' ? t.relax.steps : t.gentle.steps} illustrated set={mode} onDone={() => setMode('home')} />
-      )}
-    </div>
+        )}
+
+        {view === 'breath' && (
+          <>
+            <Breathing onRunning={setBreathing} />
+            {!breathing && helped.length > 0 && (
+              <Card>
+                <SectionTitle>{t.helpedTitle}</SectionTitle>
+                <ul className="flex flex-wrap gap-2">
+                  {helped.map((h) => (
+                    <li key={h} className="rounded-full px-3 py-1 text-body" style={{ background: 'var(--color-brand-soft)' }}>
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+                  {t.helpedNote}
+                </p>
+              </Card>
+            )}
+          </>
+        )}
+
+        {(view === 'relax' || view === 'gentle') && (
+          <Steps steps={view === 'relax' ? t.relax.steps : t.gentle.steps} illustrated set={view} onDone={() => setView('home')} />
+        )}
+      </div>
+    </>
   )
 }
 

@@ -27,6 +27,7 @@ export interface Translations {
     trendsNew: string
     kids: string
     settings: string
+    soulager: string
     consultation: string
   }
 
@@ -1633,6 +1634,12 @@ export interface Translations {
     label: string
     text: string
     thanks: string
+  }
+  soulager: {
+    kicker: string
+    title: string
+    group: string
+    breathHint: string
   }
   relief: {
     link: string
