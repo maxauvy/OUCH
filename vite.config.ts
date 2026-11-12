@@ -137,6 +137,11 @@ export default defineConfig(({ command, mode }) => {
           start_url: base,
           scope: base,
           lang: 'fr',
+          // A long press on the icon (Android, some browsers): straight to the breathing screen, or to the day's page.
+          shortcuts: [
+            { name: 'Souffler', short_name: 'Souffler', url: `${base}?go=souffler`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' }] },
+            { name: 'Noter ma douleur', short_name: 'Ma douleur', url: `${base}?go=douleur`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' }] },
+          ],
           icons: [
             { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
             { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },

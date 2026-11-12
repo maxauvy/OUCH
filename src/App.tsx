@@ -10,6 +10,7 @@ import { TabBar, type Tab } from './components/layout/TabBar'
 import { PageBack } from './components/layout/PageBack'
 import { ReliefContext } from './components/relief/reliefContext'
 import type { SoulagerView } from './pages/SoulagerPage'
+import { launchTarget } from './lib/launchTarget'
 import { DemoPill } from './components/demo/DemoPill'
 import { IS_DEMO } from './lib/demoMode'
 import { finishTour, tourPending } from './lib/demoSession'
@@ -81,11 +82,13 @@ function useAppliedLanguage(language: Language) {
 }
 
 function AppShell() {
-  const [tab, setTabOnly] = useState<Tab>('today')
+  // Opened from a shortcut of the icon: the breathing screen, or the day's page (the default).
+  const [launch] = useState(() => launchTarget(window.location.search))
+  const [tab, setTabOnly] = useState<Tab>(launch === 'souffler' ? 'soulager' : 'today')
   // Settings and the kids' page open from the day's page, as pages of their own: the tab bar stays, with Today lit.
   const [screen, setScreen] = useState<'settings' | 'kids' | null>(null)
   // A screen of the Soulager tab asked for from elsewhere (the soft word of a hard day); `key` makes each ask a fresh start.
-  const [soulagerRequest, setSoulagerRequest] = useState<{ view: SoulagerView; key: number } | null>(null)
+  const [soulagerRequest, setSoulagerRequest] = useState<{ view: SoulagerView; key: number } | null>(launch === 'souffler' ? { view: 'breath', key: 0 } : null)
   const setTab = (next: Tab) => {
     setScreen(null)
     setTabOnly(next)
@@ -155,6 +158,11 @@ function AppShell() {
     setScreen('settings')
     requestAnimationFrame(() => document.getElementById('backup')?.scrollIntoView({ block: 'start' }))
   }
+
+  // The word of the shortcut is spent: a reload or a bookmark opens the app as usual.
+  useEffect(() => {
+    if (launch) window.history.replaceState(null, '', window.location.pathname + window.location.hash)
+  }, [launch])
 
   // A page opened from Today starts at its top.
   useEffect(() => {
