@@ -1807,7 +1807,7 @@ const en: Translations = {
     close: 'Done',
     step: 'Step {{n}} of {{total}}',
     helpedTitle: 'What has helped you',
-    helpedNote: 'From what you noted. A lead, not a promise.',
+    helpedNote: 'From what you noted.',
     relax: {
       title: 'Let the body go, zone by zone',
       hint: '5 steps, at your own pace.',
@@ -1823,10 +1823,10 @@ const en: Translations = {
       title: 'A gentle move for neck and shoulders',
       hint: '4 slow moves. If it hurts, you stop.',
       steps: [
-        'Sitting, back supported. Lift your shoulders towards your ears as you breathe in, then let them drop as you breathe out. Two or three times.',
-        'Roll your shoulders slowly backwards, three small circles. Stay within what is comfortable.',
-        'Gently tilt your ear towards your shoulder, without helping with your hand. Breathe, then come back to the centre. Then the other side.',
-        'Rest your hands on your belly. Three slow breaths. If a move hurt, do not repeat it.',
+        { title: 'Lift and let go', text: 'Sitting, back supported. Lift your shoulders towards your ears as you breathe in, then let them drop as you breathe out. Two or three times.', cue: 'Breathe in as you lift, out as you let go.' },
+        { title: 'Roll the shoulders', text: 'Roll your shoulders slowly backwards, three small circles. Stay within what is comfortable.', cue: 'Breathe normally.' },
+        { title: 'Tilt the head', text: 'Gently tilt your ear towards your shoulder, without helping with your hand. Breathe, then come back to the centre. Then the other side.', cue: 'Breathe out as you tilt.' },
+        { title: 'Hands on the belly', text: 'Rest your hands on your belly. Three slow breaths. If a move hurt, do not repeat it.', cue: 'Three slow breaths.' },
       ],
     },
   },

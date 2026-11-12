@@ -32,14 +32,14 @@ function Friend({ cx, cy, r, eyes, mouth, children }: { cx: number; cy: number; 
   )
 }
 
-/** Step 0 to 4: settle, jaw, shoulders, hands, belly. */
-export function ReliefIllustration({ step }: { step: number }) {
+/** The relaxing exercise, step 0 to 4 (settle, jaw, shoulders, hands, belly), or the gentle moves, step 0 to 3 (lift, roll, tilt, hands on the belly). */
+export function ReliefIllustration({ step, set = 'relax' }: { step: number; set?: 'relax' | 'gentle' }) {
   return (
     <svg viewBox="0 0 200 150" width="100%" aria-hidden focusable="false" className="block rounded-[var(--radius-card)]" style={{ background: 'var(--color-brand-soft)' }}>
       <circle cx="30" cy="30" r="2" fill={SPARK} opacity={0.8} />
       <circle cx="170" cy="40" r="2.5" fill={SPARK} opacity={0.8} />
       <circle cx="160" cy="120" r="2" fill={SPARK} opacity={0.7} />
-      {step === 0 && (
+      {set === 'relax' && step === 0 && (
         <>
           <rect x="40" y="96" width="120" height="30" rx="15" fill={LAV} />
           <Friend cx={100} cy={78} r={30} eyes="closed" mouth="smile" />
@@ -48,28 +48,53 @@ export function ReliefIllustration({ step }: { step: number }) {
           </text>
         </>
       )}
-      {step === 1 && (
+      {set === 'relax' && step === 1 && (
         <Friend cx={100} cy={76} r={36} eyes="closed" mouth="o">
           <path d="M146 62 q10 -4 14 4 M150 50 q8 -3 12 3" stroke={SKY} strokeWidth={2.5} fill="none" strokeLinecap="round" />
         </Friend>
       )}
-      {step === 2 && (
+      {set === 'relax' && step === 2 && (
         <Friend cx={100} cy={78} r={34} eyes="closed" mouth="calm">
           <path d="M58 100 q-2 -12 4 -16 M142 100 q2 -12 -4 -16" stroke="#0d5c8c" strokeWidth={3} fill="none" strokeLinecap="round" />
           <path d="M52 76 v18 m-5 -6 l5 7 l5 -7 M148 76 v18 m-5 -6 l5 7 l5 -7" stroke={SKY} strokeWidth={2.5} fill="none" strokeLinecap="round" strokeLinejoin="round" />
         </Friend>
       )}
-      {step === 3 && (
+      {set === 'relax' && step === 3 && (
         <Friend cx={100} cy={70} r={30} eyes="open" mouth="smile">
           <circle cx="58" cy="108" r="12" fill="#fff" />
           <circle cx="142" cy="108" r="12" fill="#fff" />
           <path d="M52 104 l-5 -6 M58 102 v-8 M64 104 l5 -6 M136 104 l-5 -6 M142 102 v-8 M148 104 l5 -6" stroke={INK} strokeWidth={2} strokeLinecap="round" />
         </Friend>
       )}
-      {step === 4 && (
+      {set === 'relax' && step === 4 && (
         <Friend cx={100} cy={70} r={32} eyes="closed" mouth="smile">
           <circle cx="100" cy="100" r="13" fill={CHEEK} opacity={0.7} />
           <path d="M92 100 q8 -6 16 0" stroke="#fff" strokeWidth={2} fill="none" strokeLinecap="round" />
+        </Friend>
+      )}
+      {set === 'gentle' && step === 0 && (
+        <Friend cx={100} cy={84} r={32} eyes="open" mouth="smile">
+          <path d="M60 96 q-4 -10 2 -16 M140 96 q4 -10 -2 -16" stroke="#0d5c8c" strokeWidth={3} fill="none" strokeLinecap="round" />
+          <path d="M52 86 v-18 m-5 6 l5 -7 l5 7 M148 86 v-18 m-5 6 l5 -7 l5 7" stroke={SKY} strokeWidth={2.5} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        </Friend>
+      )}
+      {set === 'gentle' && step === 1 && (
+        <Friend cx={100} cy={78} r={32} eyes="open" mouth="smile">
+          <path d="M46 92 a16 16 0 1 1 6 -14 m-1 -7 l1 8 l8 -3 M154 92 a16 16 0 1 0 -6 -14 m1 -7 l-1 8 l-8 -3" stroke={SKY} strokeWidth={2.5} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        </Friend>
+      )}
+      {set === 'gentle' && step === 2 && (
+        <g transform="rotate(12 100 112)">
+          <Friend cx={100} cy={76} r={34} eyes="closed" mouth="calm">
+            <path d="M144 56 q8 8 4 20" stroke={SKY} strokeWidth={2.5} fill="none" strokeLinecap="round" strokeDasharray="1 6" />
+          </Friend>
+        </g>
+      )}
+      {set === 'gentle' && step === 3 && (
+        <Friend cx={100} cy={70} r={32} eyes="closed" mouth="smile">
+          <circle cx="86" cy="104" r="11" fill="#fff" />
+          <circle cx="114" cy="104" r="11" fill="#fff" />
+          <path d="M80 100 q6 -5 12 0 M108 100 q6 -5 12 0" stroke={INK} strokeWidth={2} fill="none" strokeLinecap="round" />
         </Friend>
       )}
     </svg>

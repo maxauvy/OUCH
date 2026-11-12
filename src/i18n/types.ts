@@ -1674,7 +1674,7 @@ export interface Translations {
     helpedTitle: string
     helpedNote: string
     relax: { title: string; hint: string; steps: { title: string; text: string; cue: string }[] }
-    gentle: { title: string; hint: string; steps: string[] }
+    gentle: { title: string; hint: string; steps: { title: string; text: string; cue: string }[] }
   }
   pacing: {
     title: string
