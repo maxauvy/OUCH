@@ -14,14 +14,19 @@ import { DURATIONS, IN_SECONDS, OUT_SECONDS, SESSION_SECONDS, VIBRATION, breathA
 import { ReliefIllustration } from '../components/relief/ReliefIllustration'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { PageBack } from '../components/layout/PageBack'
-import { IconLeaf, IconWind, IconYoga } from '@tabler/icons-react'
+import { PlanForm, PlanView } from '../components/relief/PlanScreens'
+import { BUTTON, SECONDARY } from '../components/today/cardStyles'
+import { hasPlan, planGlimpse } from '../lib/hardDaysPlan'
+import { IconLeaf, IconMessageHeart, IconWind, IconYoga } from '@tabler/icons-react'
 
-export type SoulagerView = 'home' | 'breath' | 'relax' | 'gentle'
+export type SoulagerView = 'home' | 'breath' | 'relax' | 'gentle' | 'plan' | 'planedit'
 
 /** The Soulager tab: what to do to feel a little better, a tap away. The home lists the exercises; each one opens on its own screen, with a way back. `request` is a screen asked for from elsewhere (the soft word of a hard day): going back from it leaves for where it came from. Nothing here is noted or counted, and it works offline. */
 export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onExit: () => void }) {
   const t = useTranslation().relief
   const s = useTranslation().soulager
+  const p = useTranslation().plan
+  const settings = useSettings()
   const today = useTranslation().today
   const entries = useAllEntries()
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -37,14 +42,14 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
 
   // Back goes to the home of the tab, or, from the screen that was asked for, to where the request came from.
   const leaves = request !== undefined && view === request
-  const back = () => (leaves ? onExit() : setView('home'))
+  const back = () => (leaves ? onExit() : setView(view === 'planedit' ? 'plan' : 'home'))
 
-  const heading = view === 'home' ? s.title : view === 'breath' ? t.title : view === 'relax' ? t.relax.title : t.gentle.title
+  const heading = view === 'home' ? s.title : view === 'breath' ? t.title : view === 'relax' ? t.relax.title : view === 'gentle' ? t.gentle.title : view === 'plan' ? p.title : p.formTitle
 
   return (
     <>
       {view !== 'home' && (
-        <PageBack onBack={back} label={leaves ? today.backToToday : s.title} />
+        <PageBack onBack={back} label={leaves ? today.backToToday : view === 'planedit' ? p.shortTitle : s.title} />
       )}
       <div className={`flex flex-col gap-4 px-4 ${view === 'home' ? 'pt-4' : 'pt-2'} pb-28`}>
         <div className="px-1">
@@ -62,6 +67,23 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
             </p>
           )}
         </div>
+
+        {view === 'home' && (
+          <section aria-label={p.title} className="flex gap-3 rounded-[var(--radius-card)] py-3.5 px-3.5" style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}>
+            <span className="w-9 h-9 shrink-0 rounded-full flex items-center justify-center" style={{ background: 'var(--color-surface)', color: 'var(--color-brand)' }} aria-hidden>
+              <IconMessageHeart size={20} stroke={1.8} />
+            </span>
+            <div className="min-w-0">
+              <p className="text-body font-semibold">{p.title}</p>
+              <p className="text-body" style={{ color: 'var(--color-ink-muted)' }}>
+                {hasPlan(settings.hardDaysPlan) ? planGlimpse(settings.hardDaysPlan) : p.cardEmpty}
+              </p>
+              <button type="button" onClick={() => setView(hasPlan(settings.hardDaysPlan) ? 'plan' : 'planedit')} className={`${BUTTON} mt-2`} style={SECONDARY}>
+                {hasPlan(settings.hardDaysPlan) ? p.open : p.write}
+              </button>
+            </div>
+          </section>
+        )}
 
         {view === 'home' && (
           <Card>
@@ -94,6 +116,9 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
             )}
           </>
         )}
+
+        {view === 'plan' && <PlanView plan={settings.hardDaysPlan} onEdit={() => setView('planedit')} onBreathe={() => setView('breath')} />}
+        {view === 'planedit' && <PlanForm plan={settings.hardDaysPlan} onDone={() => setView('plan')} />}
 
         {(view === 'relax' || view === 'gentle') && (
           <Steps steps={view === 'relax' ? t.relax.steps : t.gentle.steps} illustrated set={view} onDone={() => setView('home')} />
