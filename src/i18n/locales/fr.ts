@@ -134,11 +134,11 @@ const fr: Translations = {
     title: "Sources scientifiques",
     toggle: "Voir les {{n}} références",
     intro:
-      "Les repères utilisés par OUCH s’appuient sur ces travaux publiés. Chaque résumé reprend la conclusion principale de l’étude, d’après son résumé officiel (PubMed). Ces études portent sur des groupes de patients : elles n’établissent rien de certain pour toi.",
+      "Les repères utilisés par OUCH, et les cartes qui parlent d’exercice, s’appuient sur ces travaux publiés. Chaque résumé reprend la conclusion principale de l’étude, d’après son résumé officiel (PubMed). Ces études portent sur des groupes de patients : elles n’établissent rien de certain pour toi.",
     inOuch: "Dans OUCH :",
     pubmed: "Voir sur PubMed",
     note:
-      "Les numéros sont ceux des notes du rapport pour le médecin. OUCH ne remplace pas un avis médical.",
+      "Les numéros sont ceux des notes du rapport pour le médecin ; les derniers, qui ne servent qu’aux cartes de l’app, n’y figurent pas. OUCH ne remplace pas un avis médical.",
     items: [
       {
         summary:
@@ -277,6 +277,54 @@ const fr: Translations = {
           "Chez des personnes avec une lésion de la moelle épinière suivies 7 jours, l’heure des mesures (matin, midi ou soir) ne change pas la fiabilité estimée de la douleur. Ce qui compte pour la fiabilité, c’est le nombre de mesures.",
         usage:
           "Il n’y a pas d’heure idéale démontrée : OUCH te laisse choisir l’heure du rappel (20 h par défaut). Ce qui compte est de noter régulièrement, le jour même si possible.",
+      },
+      {
+        summary:
+          "Recommandations d’un groupe de 12 pays, fondées sur 107 revues et méta-analyses : le seul traitement non médicamenteux classé « fort pour » est l’exercice, et la prise en charge commence par l’éducation et les approches non médicamenteuses.",
+        usage:
+          "Source de la carte « Bouger, ce que disent les études » pour la fibromyalgie. Pas dans le rapport.",
+      },
+      {
+        summary:
+          "Revue Cochrane sur l’exercice aérobie dans la fibromyalgie : il améliore probablement la qualité de vie (preuve de qualité modérée) et peut diminuer un peu la douleur (preuve de faible qualité) ; peu de différence à long terme sur la douleur ; sécurité mal connue.",
+        usage:
+          "Source de la carte « Bouger » pour la fibromyalgie. Pas dans le rapport.",
+      },
+      {
+        summary:
+          "Revue Cochrane sur l’exercice dans la lombalgie chronique non spécifique : preuve de certitude modérée qu’il est probablement efficace contre la douleur, comparé à l’absence de traitement, aux soins habituels ou au placebo ; effet faible sur les limitations fonctionnelles.",
+        usage:
+          "Source de la carte « Bouger » pour la lombalgie chronique. Pas dans le rapport.",
+      },
+      {
+        summary:
+          "Recommandations EULAR sur l’activité physique dans la polyarthrite rhumatoïde, la spondyloarthrite et l’arthrose de la hanche et du genou : 4 principes et 10 recommandations ; l’activité physique fait partie intégrante des soins courants, vu son efficacité, sa faisabilité et sa sécurité.",
+        usage:
+          "Source de la carte « Bouger » pour la polyarthrite et la spondylarthrite. Pas dans le rapport.",
+      },
+      {
+        summary:
+          "Revue systématique qui a servi de base à la mise à jour 2022 des recommandations ASAS-EULAR (ce n’est pas le texte des recommandations) : l’éducation, l’exercice et les anti-inflammatoires sont confirmés efficaces dans la spondyloarthrite axiale ; l’exercice a des effets modérés à élevés sur l’activité de la maladie, la fonction et la mobilité.",
+        usage:
+          "Source de la carte « Bouger » pour la spondylarthrite. Pas dans le rapport.",
+      },
+      {
+        summary:
+          "Méta-analyse de 6 études : l’exercice aérobie réduit le nombre de jours de migraine d’environ 0,6 jour par mois en moyenne (preuve de qualité moyenne) ; les autres mesures sont trop différentes pour être regroupées.",
+        usage:
+          "Source de la carte « Bouger » pour la migraine. Pas dans le rapport.",
+      },
+      {
+        summary:
+          "Revue systématique de l’exercice dans la douleur myofasciale : effets petits à modérés sur l’intensité de la douleur à court terme, sur un nombre limité d’essais ; la combinaison d’étirements et de renforcement semble donner de meilleurs effets ; ces estimations peuvent changer.",
+        usage:
+          "Source de la carte « Bouger » pour la douleur myofasciale. Pas dans le rapport.",
+      },
+      {
+        summary:
+          "Revue systématique de la relaxation dans le syndrome de fatigue chronique et la fibromyalgie : preuve modérée d’un effet immédiat de l’imagerie guidée sur la douleur ; pas de preuve concluante pour la relaxation musculaire ou l’entraînement autogène.",
+        usage:
+          "Explique pourquoi « Un moment pour souffler » ne promet rien sur la douleur : pour la fibromyalgie, la relaxation musculaire n’a pas de preuve concluante. Pas dans le rapport.",
       },
     ],
   },
@@ -1757,12 +1805,12 @@ const fr: Translations = {
     hideMore: 'Masquer le détail',
     tryHint: 'Pour l’essai, coche « Marche courte » dans le journal les jours où tu marches.',
     items: {
-      fibromyalgie: { short: 'Fibromyalgie : l’exercice est la piste la mieux soutenue (EULAR, 2016).', more: 'Fibromyalgie : les recommandations européennes (EULAR, 2016) placent l’exercice en premier, aérobie ou renforcement, sans savoir lequel est meilleur. Une revue Cochrane (2017) trouve que l’aérobie améliore probablement la qualité de vie et peut diminuer un peu la douleur.' },
+      fibromyalgie: { short: 'Fibromyalgie : l’exercice est la piste la mieux soutenue (EULAR, 2016).', more: 'Fibromyalgie : dans les recommandations européennes (EULAR, 2016), l’exercice est la seule recommandation « forte » fondée sur des méta-analyses. Une revue Cochrane (2017) trouve que l’aérobie améliore probablement la qualité de vie et peut diminuer un peu la douleur.' },
       arthrite: { short: 'Polyarthrite : l’activité physique fait partie des soins courants (EULAR, 2018).', more: 'Polyarthrite rhumatoïde : les recommandations européennes (EULAR, 2018) font de l’activité physique une partie des soins courants.' },
-      spondylarthrite: { short: 'Spondylarthrite : exercice régulier recommandé, kiné à envisager (ASAS-EULAR, 2022).', more: 'Spondylarthrite : les recommandations ASAS-EULAR (2022) invitent à faire de l’exercice régulièrement et à envisager la kinésithérapie.' },
-      lombalgie: { short: 'Lombalgie chronique : l’exercice soulage probablement la douleur (Cochrane, 2021).', more: 'Lombalgie chronique : une revue Cochrane (2021, 249 essais) trouve que l’exercice est probablement efficace contre la douleur, sans pouvoir dire quel type est le meilleur.' },
+      spondylarthrite: { short: 'Spondylarthrite : l’activité physique fait partie des soins courants (EULAR, 2018) et l’exercice est efficace (revue ASAS-EULAR, 2022).', more: 'Spondylarthrite : les recommandations européennes (EULAR, 2018) font de l’activité physique une partie des soins courants, et une revue systématique de la mise à jour 2022 des recommandations ASAS-EULAR confirme l’efficacité de l’exercice.' },
+      lombalgie: { short: 'Lombalgie chronique : l’exercice soulage probablement la douleur (Cochrane, 2021).', more: 'Lombalgie chronique : une revue Cochrane (2021) trouve que l’exercice est probablement efficace contre la douleur, comparé à l’absence de traitement, aux soins habituels ou au placebo.' },
       migraine: { short: 'Migraine : l’aérobie réduit un peu les jours de migraine (méta-analyse, 2019).', more: 'Migraine : une méta-analyse (2019, 6 études) trouve, avec une preuve de qualité moyenne, environ 0,6 jour de migraine en moins par mois avec l’exercice aérobie.' },
-      myofasciale: { short: 'Douleur myofasciale : l’exercice aide un peu à court terme (revue, 2017).', more: 'Douleur myofasciale : une revue (2017, 8 essais) trouve un effet petit à moyen à court terme, surtout en combinant étirements et renforcement.' },
+      myofasciale: { short: 'Douleur myofasciale : l’exercice aide un peu à court terme (revue, 2017).', more: 'Douleur myofasciale : une revue (2017) trouve un effet petit à moyen à court terme, surtout en combinant étirements et renforcement.' },
     },
     pace: 'Va doucement, à ton rythme.',
     action: 'Marche courte',

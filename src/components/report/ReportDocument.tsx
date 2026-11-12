@@ -544,7 +544,7 @@ function painClinicLayout(d: ReportData): { pages: Block[][]; labels: string[] }
             <p>{f.t.trendNote}</p>
           </div>
         </>,
-        <References numbers={REFERENCES.map((_, i) => i + 1)} title={f.t.references} uses={f.t} />,
+        <References numbers={REFERENCES.flatMap((r, i) => (r.appOnly ? [] : [i + 1]))} title={f.t.references} uses={f.t} />,
       ],
     },
   ]
