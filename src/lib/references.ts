@@ -3,6 +3,8 @@
 // bibliography would be. Append only: footnote numbers refer to the position.
 interface Reference {
   citation: string
+  /** Listed in Settings only, behind a card of the app: not in the doctor's report, whose notes number only the others. */
+  appOnly?: boolean
   /** PubMed identifier; absent for the HAS guideline, which is not indexed. */
   pmid?: string
 }
@@ -121,5 +123,53 @@ export const REFERENCES: Reference[] = [
     citation:
       'Carlozzi NE, Schilling S, Freedman J, Kalpakjian CZ, Kratz AL. The reliability of end of day and ecological momentary assessments of pain and pain interference in individuals with spinal cord injury. Qual Life Res. 2018;27(11):3003-3012.',
     pmid: '30073468',
+  },
+  {
+    citation:
+      'Macfarlane GJ, Kronisch C, Dean LE, et al. EULAR revised recommendations for the management of fibromyalgia. Ann Rheum Dis. 2017;76(2):318-328 (en ligne en 2016).',
+    pmid: '27377815',
+    appOnly: true,
+  },
+  {
+    citation:
+      'Bidonde J, Busch AJ, Schachter CL, et al. Aerobic exercise training for adults with fibromyalgia. Cochrane Database Syst Rev. 2017;6(6):CD012700.',
+    pmid: '28636204',
+    appOnly: true,
+  },
+  {
+    citation:
+      'Hayden JA, Ellis J, Ogilvie R, Malmivaara A, van Tulder MW. Exercise therapy for chronic low back pain. Cochrane Database Syst Rev. 2021;9(9):CD009790.',
+    pmid: '34580864',
+    appOnly: true,
+  },
+  {
+    citation:
+      'Rausch Osthoff AK, Niedermann K, Braun J, et al. 2018 EULAR recommendations for physical activity in people with inflammatory arthritis and osteoarthritis. Ann Rheum Dis. 2018;77(9):1251-1260.',
+    pmid: '29997112',
+    appOnly: true,
+  },
+  {
+    citation:
+      'Ortolan A, Webers C, Sepriano A, et al. Efficacy and safety of non-pharmacological and non-biological interventions: a systematic literature review informing the 2022 update of the ASAS/EULAR recommendations for the management of axial spondyloarthritis. Ann Rheum Dis. 2023;82(1):142-152.',
+    pmid: '36261247',
+    appOnly: true,
+  },
+  {
+    citation:
+      'Lemmens J, De Pauw J, Van Soom T, et al. The effect of aerobic exercise on the number of migraine days, duration and pain intensity in migraine: a systematic literature review and meta-analysis. J Headache Pain. 2019;20(1):16.',
+    pmid: '30764753',
+    appOnly: true,
+  },
+  {
+    citation:
+      'Mata Diz JB, de Souza JRLM, Leopoldino AAO, Oliveira VC. Exercise, especially combined stretching and strengthening exercise, reduces myofascial pain: a systematic review. J Physiother. 2017;63(1):17-22.',
+    pmid: '27989732',
+    appOnly: true,
+  },
+  {
+    citation:
+      'Meeus M, Nijs J, Vanderheiden T, Baert I, Descheemaeker F, Struyf F. The effect of relaxation therapy on autonomic functioning, symptoms and daily functioning, in patients with chronic fatigue syndrome or fibromyalgia: a systematic review. Clin Rehabil. 2015;29(3):221-233.',
+    pmid: '25200878',
+    appOnly: true,
   },
 ]

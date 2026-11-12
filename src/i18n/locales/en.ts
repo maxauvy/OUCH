@@ -132,11 +132,11 @@ const en: Translations = {
     title: "Scientific sources",
     toggle: "Show the {{n}} references",
     intro:
-      "The benchmarks OUCH uses rest on this published work. Each summary gives the study's main conclusion, taken from its official abstract (PubMed). These studies look at groups of patients: they establish nothing certain about you.",
+      "The benchmarks OUCH uses, and the cards that talk about exercise, rest on this published work. Each summary gives the study's main conclusion, taken from its official abstract (PubMed). These studies look at groups of patients: they establish nothing certain about you.",
     inOuch: "In OUCH:",
     pubmed: "View on PubMed",
     note:
-      "The numbers are those of the footnotes in the report for your doctor. OUCH does not replace medical advice.",
+      "The numbers are those of the footnotes in the report for your doctor; the last ones, which only serve the app's cards, are not in it. OUCH does not replace medical advice.",
     items: [
       {
         summary:
@@ -275,6 +275,54 @@ const en: Translations = {
           "In people with a spinal cord injury followed for 7 days, the time of the measures (morning, midday or evening) did not change the estimated reliability of pain ratings. What matters for reliability is the number of measures.",
         usage:
           "No ideal time is demonstrated: OUCH lets you choose the reminder time (8 pm by default). What counts is rating regularly, on the day itself if possible.",
+      },
+      {
+        summary:
+          "Recommendations from a group of 12 countries, based on 107 reviews and meta-analyses: the only 'strong for' non-drug therapy is exercise, and management starts with education and non-drug approaches.",
+        usage:
+          "Source of the “Moving: what studies say” card for fibromyalgia. Not in the report.",
+      },
+      {
+        summary:
+          "Cochrane review of aerobic exercise in fibromyalgia: it probably improves quality of life (moderate-quality evidence) and may lower pain a little (low-quality evidence); little or no difference in pain in the long term; safety is poorly known.",
+        usage:
+          "Source of the “Moving” card for fibromyalgia. Not in the report.",
+      },
+      {
+        summary:
+          "Cochrane review of exercise for chronic non-specific low back pain: moderate-certainty evidence that it is probably effective against pain compared with no treatment, usual care or placebo; a small effect on functional limitations.",
+        usage:
+          "Source of the “Moving” card for chronic low back pain. Not in the report.",
+      },
+      {
+        summary:
+          "EULAR recommendations on physical activity in rheumatoid arthritis, spondyloarthritis and hip and knee osteoarthritis: 4 principles and 10 recommendations; physical activity is an integral part of standard care, given its effectiveness, feasibility and safety.",
+        usage:
+          "Source of the “Moving” card for rheumatoid arthritis and spondyloarthritis. Not in the report.",
+      },
+      {
+        summary:
+          "Systematic review that informed the 2022 update of the ASAS-EULAR recommendations (it is not the text of the recommendations): education, exercise and anti-inflammatory drugs are confirmed efficacious in axial spondyloarthritis; exercise has moderate to high effects on disease activity, function and mobility.",
+        usage:
+          "Source of the “Moving” card for spondyloarthritis. Not in the report.",
+      },
+      {
+        summary:
+          "Meta-analysis of 6 studies: aerobic exercise lowers the number of migraine days by about 0.6 a month on average (moderate-quality evidence); the other measures differ too much to be pooled.",
+        usage:
+          "Source of the “Moving” card for migraine. Not in the report.",
+      },
+      {
+        summary:
+          "Systematic review of exercise in myofascial pain: small to moderate effects on pain intensity in the short term, from a limited number of trials; combining stretching and strengthening seems to work better; these estimates may change.",
+        usage:
+          "Source of the “Moving” card for myofascial pain. Not in the report.",
+      },
+      {
+        summary:
+          "Systematic review of relaxation in chronic fatigue syndrome and fibromyalgia: moderate evidence of an immediate effect of guided imagery on pain; no conclusive evidence for muscle relaxation or autogenic training.",
+        usage:
+          "Explains why “A moment to breathe” promises nothing about pain: for fibromyalgia, muscle relaxation has no conclusive evidence. Not in the report.",
       },
     ],
   },
@@ -1752,12 +1800,12 @@ const en: Translations = {
     hideMore: 'Hide the detail',
     tryHint: 'For the trial, tick “Short walk” in your diary on the days you walk.',
     items: {
-      fibromyalgie: { short: 'Fibromyalgia: exercise is the best-supported lead (EULAR, 2016).', more: 'Fibromyalgia: the European recommendations (EULAR, 2016) put exercise first, aerobic or strengthening, without knowing which is better. A Cochrane review (2017) finds that aerobic exercise probably improves quality of life and may lower pain a little.' },
+      fibromyalgie: { short: 'Fibromyalgia: exercise is the best-supported lead (EULAR, 2016).', more: 'Fibromyalgia: in the European recommendations (EULAR, 2016), exercise is the only “strong for” recommendation based on meta-analyses. A Cochrane review (2017) finds that aerobic exercise probably improves quality of life and may lower pain a little.' },
       arthrite: { short: 'Rheumatoid arthritis: physical activity is part of routine care (EULAR, 2018).', more: 'Rheumatoid arthritis: the European recommendations (EULAR, 2018) make physical activity part of routine care.' },
-      spondylarthrite: { short: 'Spondyloarthritis: regular exercise recommended, consider physiotherapy (ASAS-EULAR, 2022).', more: 'Spondyloarthritis: the ASAS-EULAR recommendations (2022) encourage regular exercise and suggest considering physiotherapy.' },
-      lombalgie: { short: 'Chronic low back pain: exercise probably eases pain (Cochrane, 2021).', more: 'Chronic low back pain: a Cochrane review (2021, 249 trials) finds that exercise is probably effective against pain, without being able to say which type is best.' },
+      spondylarthrite: { short: 'Spondyloarthritis: physical activity is part of routine care (EULAR, 2018) and exercise is efficacious (ASAS-EULAR review, 2022).', more: 'Spondyloarthritis: the European recommendations (EULAR, 2018) make physical activity part of routine care, and a systematic review behind the 2022 update of the ASAS-EULAR recommendations confirms that exercise is efficacious.' },
+      lombalgie: { short: 'Chronic low back pain: exercise probably eases pain (Cochrane, 2021).', more: 'Chronic low back pain: a Cochrane review (2021) finds that exercise is probably effective against pain, compared with no treatment, usual care or placebo.' },
       migraine: { short: 'Migraine: aerobic exercise slightly reduces migraine days (meta-analysis, 2019).', more: 'Migraine: a meta-analysis (2019, 6 studies) finds, with moderate-quality evidence, about 0.6 fewer migraine days a month with aerobic exercise.' },
-      myofasciale: { short: 'Myofascial pain: exercise helps a little in the short term (review, 2017).', more: 'Myofascial pain: a review (2017, 8 trials) finds a small to moderate effect in the short term, mostly when stretching and strengthening are combined.' },
+      myofasciale: { short: 'Myofascial pain: exercise helps a little in the short term (review, 2017).', more: 'Myofascial pain: a review (2017) finds a small to moderate effect in the short term, mostly when stretching and strengthening are combined.' },
     },
     pace: 'Go gently, at your own pace.',
     action: 'Short walk',

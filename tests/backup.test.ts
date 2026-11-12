@@ -375,3 +375,10 @@ test('the look ahead to tomorrow is a preference that is restored; the forecast 
   assert.equal(sanitizeSettings({ forecastEnabled: 'oui' })?.forecastEnabled, undefined)
   assert.equal((sanitizeSettings({ forecastCache: { fetchedOn: '2026-11-09', days: [] } }) as Record<string, unknown> | undefined)?.forecastCache, undefined)
 })
+
+test('what the breathing screen keeps for this phone (vibration, sound, auto pause) is not read from a copy', () => {
+  const read = sanitizeSettings({ reliefVibrate: true, reliefMusic: true, reliefAuto: true }) as Record<string, unknown> | undefined
+  assert.equal(read?.reliefVibrate, undefined)
+  assert.equal(read?.reliefMusic, undefined)
+  assert.equal(read?.reliefAuto, undefined)
+})

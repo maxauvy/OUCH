@@ -22,7 +22,8 @@ async function buildBackupBundle(): Promise<BackupBundle> {
     getSettings(),
   ])
   // Where copies go on this device is not part of what a copy holds.
-  const { autoBackup: _device, forecastCache: _forecast, ...portable } = settings
+  // Nor is what only makes sense on this phone: the forecast kept for the day, and the breathing screen's vibration, sound and auto pause.
+  const { autoBackup: _device, forecastCache: _forecast, reliefVibrate: _vibrate, reliefMusic: _music, reliefAuto: _auto, ...portable } = settings
   return { version: 2, exportedAt: new Date().toISOString(), entries, medications, settings: portable }
 }
 
