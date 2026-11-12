@@ -1641,6 +1641,37 @@ export interface Translations {
     group: string
     breathHint: string
   }
+  gestures: {
+    title: string
+    none: string
+    choose: string
+    chooseFirst: string
+    minutes: string
+    intro: string
+    empty: string
+    noted: string
+    keep: string
+    unkeep: string
+    length: string
+    shorter: string
+    longer: string
+    add: string
+    addPlaceholder: string
+    full: string
+    note: string
+    calm: string
+    finished: string
+    outOf: string
+    over: string
+    started: string
+    start: string
+    stop: string
+    again: string
+    addHelped: string
+    added: string
+    nothingAdded: string
+    screenOn: string
+  }
   plan: {
     title: string
     shortTitle: string
