@@ -11,6 +11,7 @@ import { format } from '../i18n/format'
 import { todayISO } from '../lib/dates'
 import { usualHelpers } from '../lib/careSheet'
 import { DURATIONS, IN_SECONDS, OUT_SECONDS, SESSION_SECONDS, VIBRATION, breathAt, type Duration } from '../lib/relief'
+import { ReliefIllustration } from '../components/relief/ReliefIllustration'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { IconLeaf, IconWind } from '@tabler/icons-react'
 
@@ -73,7 +74,7 @@ export function ReliefPage() {
           )}
         </>
       ) : (
-        <Steps steps={mode === 'relax' ? t.relax.steps : t.gentle.steps} onDone={() => setMode('home')} />
+        <Steps steps={mode === 'relax' ? t.relax.steps : t.gentle.steps.map((text) => ({ text }))} illustrated={mode === 'relax'} onDone={() => setMode('home')} />
       )}
     </div>
   )
@@ -312,23 +313,92 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
   )
 }
 
-/** One step at a time, read at the person's pace: no timer, nothing to succeed at. */
-function Steps({ steps, onDone }: { steps: string[]; onDone: () => void }) {
+const STEP_MS = 20_000
+
+interface StepLine {
+  title?: string
+  text: string
+  /** A word on the breath, for the steps that have one. */
+  cue?: string
+}
+
+/** One step at a time, read at the person's pace. With "Pause auto" on, the next step comes by itself every 20 seconds; a tap on the picture holds it, the buttons still work, and after the last step the exercise ends. */
+function Steps({ steps, illustrated, onDone }: { steps: StepLine[]; illustrated: boolean; onDone: () => void }) {
   const t = useTranslation().relief
-  const [i, setI] = useState(0)
+  const settings = useSettings()
+  // The step and the time spent on it move together, so that the end of a step is one change, not two.
+  const [pos, setPos] = useState({ i: 0, elapsed: 0, ended: false })
+  const { i, elapsed } = pos
+  const [paused, setPaused] = useState(false)
+  const auto = !!settings.reliefAuto
   const last = i === steps.length - 1
+  const step = steps[i]!
+  useScreenOn(auto && !paused)
+
+  useEffect(() => {
+    if (!auto || paused) return
+    const id = window.setInterval(
+      () =>
+        setPos((p) => {
+          const elapsed = p.elapsed + 250
+          if (elapsed < STEP_MS) return { ...p, elapsed }
+          // The time is up for this step: on to the next one, or the end.
+          return p.i === steps.length - 1 ? { ...p, elapsed: STEP_MS, ended: true } : { i: p.i + 1, elapsed: 0, ended: false }
+        }),
+      250
+    )
+    return () => window.clearInterval(id)
+  }, [auto, paused, steps.length])
+
+  useEffect(() => {
+    if (pos.ended) onDone()
+  }, [pos.ended, onDone])
+
+  const go = (n: number) => setPos({ i: n, elapsed: 0, ended: false })
+
   return (
     <Card>
       <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
         {format(t.step, { n: i + 1, total: steps.length })}
       </p>
-      <p className="text-heading leading-relaxed my-3" aria-live="polite">
-        {steps[i]}
+      <div className="flex items-center justify-between gap-3 min-h-11 mb-1">
+        <span className="min-w-0">
+          <span className="block text-control font-semibold">{t.autoLabel}</span>
+          <span className="block text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+            {auto ? '' : t.autoHelper}
+            {auto && (
+              <button type="button" onClick={() => setPaused(!paused)} className="font-semibold underline underline-offset-2" style={{ color: 'var(--color-brand)' }}>
+                {paused ? t.autoResume : t.autoPause}
+              </button>
+            )}
+          </span>
+        </span>
+        <Toggle checked={auto} onChange={(v) => void updateSettings({ reliefAuto: v })} label={t.autoLabel} />
+      </div>
+      {illustrated && (
+        <div onClick={() => auto && setPaused(!paused)}>
+          <ReliefIllustration step={i} />
+        </div>
+      )}
+      {auto && (
+        <div className="h-1.5 rounded-full mt-2 overflow-hidden" style={{ background: 'var(--color-brand-soft)' }} aria-hidden>
+          <div className="h-full" style={{ width: `${Math.min(100, (elapsed / STEP_MS) * 100)}%`, background: 'var(--color-brand)', transition: 'width .25s linear' }} />
+        </div>
+      )}
+      {step.title && <h2 className="text-heading font-bold mt-3">{step.title}</h2>}
+      <p className="text-heading leading-relaxed my-2" aria-live="polite">
+        {step.text}
       </p>
+      {step.cue && (
+        <p className="text-control font-semibold rounded-[var(--radius-control)] px-3 py-2 mb-3 flex items-center gap-2" style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}>
+          <IconWind size={18} stroke={1.8} aria-hidden />
+          {step.cue}
+        </p>
+      )}
       <div className="flex gap-2">
         <button
           type="button"
-          onClick={() => (i === 0 ? onDone() : setI(i - 1))}
+          onClick={() => (i === 0 ? onDone() : go(i - 1))}
           className="flex-1 rounded-[var(--radius-control)] min-h-11 text-control font-semibold"
           style={{ background: 'var(--color-surface)', color: 'var(--color-brand)', border: '1px solid var(--color-brand)' }}
         >
@@ -336,7 +406,7 @@ function Steps({ steps, onDone }: { steps: string[]; onDone: () => void }) {
         </button>
         <button
           type="button"
-          onClick={() => (last ? onDone() : setI(i + 1))}
+          onClick={() => (last ? onDone() : go(i + 1))}
           className="flex-1 rounded-[var(--radius-control)] min-h-11 text-control font-semibold"
           style={{ background: 'var(--color-brand)', color: 'var(--color-on-brand)' }}
         >
