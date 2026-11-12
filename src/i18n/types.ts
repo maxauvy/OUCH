@@ -1641,6 +1641,21 @@ export interface Translations {
     group: string
     breathHint: string
   }
+  plan: {
+    title: string
+    shortTitle: string
+    cardEmpty: string
+    open: string
+    write: string
+    edit: string
+    intro: string
+    empty: string
+    formTitle: string
+    formIntro: string
+    save: string
+    cancel: string
+    fields: Record<'allow' | 'helps' | 'who' | 'remember', { label: string; placeholder: string }>
+  }
   relief: {
     link: string
     cardButton: string

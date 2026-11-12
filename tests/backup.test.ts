@@ -382,3 +382,8 @@ test('what the breathing screen keeps for this phone (vibration, sound, auto pau
   assert.equal(read?.reliefMusic, undefined)
   assert.equal(read?.reliefAuto, undefined)
 })
+
+test('the plan for hard days is restored from a copy, cleaned like a typed one', () => {
+  assert.deepEqual(sanitizeSettings({ hardDaysPlan: { allow: ' Noter ', helps: 7, who: 'Léa' } })?.hardDaysPlan, { allow: 'Noter', who: 'Léa' })
+  assert.equal(sanitizeSettings({ hardDaysPlan: 'texte' })?.hardDaysPlan, undefined)
+})
