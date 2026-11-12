@@ -438,6 +438,14 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     ...(autoWeather ? {} : { forecastCache: { fetchedOn: endDate, days: [{ date: endDate, pressureHpa: Math.round(pressure) }, { date: shiftISO(endDate, 1), pressureHpa: Math.round(pressure) - 9 }] } }),
     autoWeatherLabel: 'Lyon',
     enabledFactors: ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 'weather', 'medications', 'positiveActions', 'painLocations', 'notes', 'morningStiffness', 'nightWaking', 'dailyInterference', 'unrefreshedWaking'],
+    // A plan for hard days and three gestures kept, so the Soulager tab has something to show.
+    hardDaysPlan: {
+      allow: 'Ne rien faire d’autre que noter ma douleur.',
+      helps: 'La bouillotte, un bain chaud, ma série légère.',
+      who: 'Léa, 06 00 00 00 00, si ça dure plus de trois jours.',
+      remember: 'Mon traitement du soir, un grand verre d’eau.',
+    },
+    reliefGestures: [{ name: 'Bain chaud', minutes: 15 }, { name: 'Marche courte', minutes: 10 }, { name: 'Étirements doux', minutes: 10 }],
     leadChoices,
     ...(walkTrial && { leadTrialHistory: [walkTrial] }),
   }
@@ -469,6 +477,10 @@ const EN_STRINGS: Record<string, string> = {
   'Règles, ventre et bas du dos douloureux.': 'Period, painful belly and lower back.',
   'Arrêt de la prégabaline avec l’accord du médecin : trop de somnolence.': 'Stopped pregabalin with the doctor’s agreement: too much drowsiness.',
   'Consultation chez le médecin traitant : duloxétine passée de 30 à 60 mg.': 'GP appointment: duloxetine raised from 30 to 60 mg.',
+  'Ne rien faire d’autre que noter ma douleur.': 'Do nothing but note my pain.',
+  'La bouillotte, un bain chaud, ma série légère.': 'The hot water bottle, a warm bath, my light series.',
+  'Léa, 06 00 00 00 00, si ça dure plus de trois jours.': 'Léa, 06 00 00 00 00, if it lasts more than three days.',
+  'Mon traitement du soir, un grand verre d’eau.': 'My evening treatment, a big glass of water.',
   'Duloxétine': 'Duloxetine', 'Prégabaline': 'Pregabalin', 'Amitriptyline': 'Amitriptyline', 'Paracétamol': 'Paracetamol', 'Tramadol': 'Tramadol', 'Ibuprofène': 'Ibuprofen',
   'Douleurs diffuses': 'Widespread pain', 'Douleurs neuropathiques': 'Neuropathic pain', 'Douleur': 'Pain', 'Poussées': 'Flares', 'Douleurs de règles': 'Period pain', 'Douleurs et sommeil': 'Pain and sleep',
   'Nausées': 'Nausea', 'Somnolence': 'Drowsiness', 'Prise de poids': 'Weight gain', 'Vertiges': 'Dizziness',
