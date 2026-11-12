@@ -16,7 +16,7 @@ Ce document décrit comment tester OUCH avec des professionnels de santé : ce q
 5. Quel effort le journal demande-t-il aux patients, en particulier les jours difficiles ?
 6. Le tableau « Douleur selon le jour de la semaine » (écart à la moyenne et bande que le hasard suffit à produire), présent dans les deux versions du rapport, est-il lisible ? Risque-t-il d'être lu comme un effet réel alors que les journées ne sont pas indépendantes ?
 7. Le statut des maladies (« diagnostiquée en 2019 », « suspectée »), tel que le patient le déclare et tel que le rapport le reprend, aide-t-il à lire le reste, ou risque-t-il d'être pris pour un diagnostic établi ?
-8. La rubrique « Ce que le patient a remarqué » (les pistes que le patient a choisi de garder, et ses essais d'une semaine) apporte-t-elle quelque chose en consultation, ou risque-t-elle d'orienter la discussion vers une cause que rien n'établit ? Les essais d'une semaine, décrits comme « une idée, pas une réponse », sont-ils bien lus ainsi ?
+8. La rubrique « Ce que le patient a remarqué » (les pistes que le patient a choisi de garder, et ses essais d'une semaine) apporte-t-elle quelque chose en consultation, ou risque-t-elle d'orienter la discussion vers une cause que rien n'établit ? Les essais d'une semaine, décrits comme « c'est peu pour conclure », sont-ils bien lus ainsi ?
 
 **Ce qu'on ne cherche pas à établir** : que OUCH améliore la douleur, l'observance ou la prise en charge ; que ses seuils sont validés ; que ses poussées correspondent à celles que cliniciens ou patients identifient. Ces questions demanderaient une autre étude, avec un cadre éthique et statistique à part.
 
