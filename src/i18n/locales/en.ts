@@ -116,7 +116,7 @@ const en: Translations = {
         body: "Your diary stays on your device. Nothing is sent unless you decide to, apart from one anonymous signal a week (“active this week”) that you can turn off in Settings.",
       },
     },
-    note: "No pressure: on hard days, a single entry is enough (your pain). OUCH is not a medical device and doesn't replace medical advice; trends are leads to explore, not proof.",
+    note: "No pressure: on hard days, a single entry is enough (your pain). OUCH is not a medical device and doesn't replace medical advice; trends give you ideas to explore; they prove nothing.",
   },
 
   support: {
@@ -1738,7 +1738,7 @@ const en: Translations = {
   },
   forecast: {
     label: 'Tomorrow, the pressure falls',
-    text: 'Tomorrow, the pressure is expected to fall by {{fall}} hPa. On the days it fell by at least {{drop}} hPa, your pain was higher than usual {{observed}} times out of {{k}}; chance would give {{band}}. A lead, not a certainty.',
+    text: 'Tomorrow, the pressure is expected to fall by {{fall}} hPa. On the days it fell by at least {{drop}} hPa, your pain was higher than usual {{observed}} times out of {{k}}; chance would give {{band}}. That does not tell you how your day will go.',
     band: '{{low}} to {{high}}',
     thanks: 'Thanks',
     settingsTitle: 'Look ahead to tomorrow',
@@ -2149,7 +2149,7 @@ const en: Translations = {
     privacyNote:
       "OUCH keeps all your data on this device, in local storage: no health data ever leaves it. Only automatic weather, with your position and never your journal, and the anonymous audience count (one signal a week, which you can turn off in Settings) contact outside services. Sharing your weather and making backups is always something you choose to do.",
     notMedicalDevice:
-      'OUCH is not a medical device: it makes no diagnosis, recommends no treatment and does not replace medical advice. Trends are leads to explore, not proof.',
+      'OUCH is not a medical device: it makes no diagnosis, recommends no treatment and does not replace medical advice. Trends give you ideas to explore; they prove nothing.',
   },
 
   childView: {

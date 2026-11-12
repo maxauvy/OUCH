@@ -118,7 +118,7 @@ const fr: Translations = {
         body: "Ton journal reste sur ton appareil. Rien n'est envoyé sans que tu le décides, à part un signal anonyme par semaine (« actif cette semaine ») que tu peux couper dans Réglages.",
       },
     },
-    note: "Pas de pression : les jours difficiles, une seule info suffit (ta douleur). OUCH n’est pas un dispositif médical et ne remplace pas un avis médical ; les tendances sont des pistes à explorer, pas des preuves.",
+    note: "Pas de pression : les jours difficiles, une seule info suffit (ta douleur). OUCH n’est pas un dispositif médical et ne remplace pas un avis médical ; les tendances donnent des idées à explorer, elles ne prouvent rien.",
   },
 
   support: {
@@ -1743,7 +1743,7 @@ const fr: Translations = {
   },
   forecast: {
     label: 'Demain, la pression baisse',
-    text: 'Demain, la pression devrait baisser de {{fall}} hPa. Les jours où elle a baissé d’au moins {{drop}} hPa, ta douleur a été plus haute que d’habitude {{observed}} fois sur {{k}} ; le hasard en donnerait {{band}}. Une piste, pas une certitude.',
+    text: 'Demain, la pression devrait baisser de {{fall}} hPa. Les jours où elle a baissé d’au moins {{drop}} hPa, ta douleur a été plus haute que d’habitude {{observed}} fois sur {{k}} ; le hasard en donnerait {{band}}. Ça ne dit pas ce que sera ta journée.',
     band: '{{low}} à {{high}}',
     thanks: 'Merci',
     settingsTitle: 'Prévoir demain',
@@ -2154,7 +2154,7 @@ const fr: Translations = {
     privacyNote:
       "OUCH garde toutes tes données sur cet appareil, dans son stockage local : aucune donnée de santé n'en sort. Seules la météo automatique, avec ta position et jamais ton journal, et la mesure d'audience anonyme (un signal par semaine, que tu peux couper dans Réglages) contactent des services extérieurs. Le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
     notMedicalDevice:
-      'OUCH n’est pas un dispositif médical : il ne pose aucun diagnostic, ne recommande aucun traitement et ne remplace pas un avis médical. Les tendances sont des pistes à explorer, pas des preuves.',
+      'OUCH n’est pas un dispositif médical : il ne pose aucun diagnostic, ne recommande aucun traitement et ne remplace pas un avis médical. Les tendances donnent des idées à explorer, elles ne prouvent rien.',
   },
 
   childView: {
