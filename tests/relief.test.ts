@@ -25,3 +25,10 @@ test('the session can be one, three or five minutes', () => {
   assert.equal(breathAt(60_000).done, false)
   assert.deepEqual(VIBRATION, { in: [40], out: [40, 120, 40] })
 })
+
+test('the action offered after the exercise is one the entry form suggests, so it reads like the others', async () => {
+  const fr = (await import('../src/i18n/locales/fr.ts')).default
+  const en = (await import('../src/i18n/locales/en.ts')).default
+  assert.ok(fr.entryForm.positiveActionsSuggestions.includes(fr.relief.action))
+  assert.ok(en.entryForm.positiveActionsSuggestions.includes(en.relief.action))
+})
