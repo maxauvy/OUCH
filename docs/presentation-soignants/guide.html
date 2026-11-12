@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>OUCH, guide de présentation pour les professionnels de santé</title>
+<link rel="stylesheet" href="base.css">
+<style>
+@page{size:A4;margin:0}
+body{font-size:9.6pt;line-height:1.45}
+.page{position:relative;width:210mm;height:296.5mm;padding:13mm 15mm 0;overflow:hidden;break-after:page;page-break-after:always}
+.page:last-of-type{break-after:auto;page-break-after:auto}
+@media screen{body{background:#888}.page{background:#fff;margin:0 auto 4mm}}
+.bar{position:absolute;top:0;left:0;width:210mm;height:4.5mm;background:linear-gradient(90deg,var(--gold),var(--lav) 55%,var(--ind))}
+.foot{position:absolute;bottom:8mm;left:15mm;right:15mm;border-top:1px solid var(--hair);padding-top:2.5mm;display:flex;justify-content:space-between;font-size:7.4pt;color:var(--muted)}
+.eyebrow{font-size:7.8pt;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);margin:0 0 1mm}
+h1{font-size:23pt;line-height:1.12;margin:0 0 2mm;font-weight:800;letter-spacing:-.01em}
+h2{font-size:14pt;line-height:1.2;margin:0 0 3mm;font-weight:800}
+h3{font-size:9.8pt;margin:3.5mm 0 1mm;break-after:avoid}
+p{margin:0 0 2mm}
+.lead{font-size:11pt;line-height:1.4;color:#2f3d47;margin:0 0 4mm}
+.m{color:var(--muted)}
+.small{font-size:8pt;color:var(--muted);line-height:1.38}
+sup{font-size:6.6pt;line-height:0}
+ul{margin:0 0 2mm;padding-left:4.5mm}li{margin-bottom:1.2mm}
+ul.ic{list-style:none;padding:0}
+ul.ic li{position:relative;padding-left:6.5mm}
+ul.ic li:before{content:"✓";position:absolute;left:0;top:.4mm;width:4.4mm;height:4.4mm;border-radius:50%;background:var(--greensoft);color:var(--green);font-size:7pt;font-weight:800;text-align:center;line-height:4.4mm}
+ul.ic.no li:before{content:"×";background:var(--lavsoft);color:var(--ind);font-size:9pt}
+.box{background:var(--soft);border-radius:4mm;padding:4mm 5mm;margin:0 0 3.5mm}
+.box.g{background:var(--goldsoft)}.box.l{background:var(--lavsoft)}
+.box h3:first-child{margin-top:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:7mm}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:4.5mm}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm}
+.card{border:1px solid var(--hair);border-top:1.8mm solid var(--gold);border-radius:3mm;padding:3mm 3.5mm;font-size:8.8pt}
+.card.l{border-top-color:var(--lav)}.card.i{border-top-color:var(--ind)}.card.b{border-top-color:var(--brand)}
+.card b.t{display:block;font-size:9.8pt;margin-bottom:1mm}
+.card p{margin:0 0 1mm;color:#2f3d47}
+.num{font-size:21pt;font-weight:800;color:var(--brand);line-height:1}
+.num small{font-size:8.6pt;font-weight:600;color:var(--muted);display:block;margin-top:1mm;line-height:1.3}
+table{width:100%;border-collapse:collapse;font-size:8.6pt;line-height:1.38}
+th{font-size:7.2pt;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;padding:0 2.5mm 1.8mm 0;border-bottom:1.5px solid var(--ink);vertical-align:bottom}
+td{padding:1.7mm 2.5mm 1.7mm 0;border-bottom:1px solid var(--hair);vertical-align:top}
+td:first-child{font-weight:700}tr{break-inside:avoid}
+.shots{display:flex;gap:3.5mm;align-items:flex-start}
+.shot{margin:0;flex:1}
+.shot .scr{width:100%;aspect-ratio:780/1180;border-radius:2.5mm;overflow:hidden;border:1px solid #cfd8de;background:#fff}
+.shot .scr img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.shot figcaption{font-size:7.6pt;line-height:1.3;margin-top:1.5mm;color:var(--muted)}
+.shot figcaption b{color:var(--ink);display:block;font-size:8.1pt}
+.pill{display:inline-block;padding:.2mm 2mm;border-radius:3mm;font-size:7.6pt;font-weight:700;margin-right:1mm}
+.pg{background:var(--greensoft);color:var(--green)}.po{background:var(--goldsoft);color:#8b662f}.pp{background:var(--lavsoft);color:var(--ind)}
+.q{border-left:1.2mm solid var(--lav);background:#f8fafb;border-radius:2mm;padding:2.5mm 4mm;margin:2.5mm 0;font-size:8.8pt}
+.step{display:grid;grid-template-columns:9mm 1fr;gap:3mm;margin-bottom:3.5mm}
+.step .n{width:8mm;height:8mm;border-radius:50%;background:var(--navy);color:#fff;font-weight:700;text-align:center;line-height:8mm;font-size:10pt}
+.step b{display:block;font-size:10pt}
+.hl{background:linear-gradient(transparent 55%,#f3d9a0 55%)}
+.cover{background:linear-gradient(160deg,#e3eef6 0%,#ece7f4 100%)}
+.rep-img{border:1px solid #cfd8de;border-radius:1.5mm;overflow:hidden;background:#fff}
+.rep-img img{width:100%;display:block}
+.co{display:grid;grid-template-columns:5.5mm 1fr;gap:2mm;margin-bottom:2mm;font-size:8.6pt;line-height:1.35}
+.co i{font-style:normal;width:5mm;height:5mm;border-radius:50%;background:var(--gold);color:#fff;font-weight:700;font-size:7.4pt;text-align:center;line-height:5mm;margin-top:.3mm}
+</style></head><body>
+
+<!-- 1. Couverture -->
+<div class="page cover"><div class="bar"></div>
+<div style="display:flex;gap:6mm;align-items:center;margin-top:6mm"><img src="logo.svg" style="width:22mm;height:22mm"><div><p class="eyebrow" style="margin:0">Guide de présentation · professionnels de santé</p><div style="font-size:40pt;font-weight:800;letter-spacing:.02em;line-height:1">OUCH</div><div class="m" style="font-size:10pt;margin-top:1mm"><i>Ouch, Understand, Chart, Heal</i></div></div></div>
+<h1 style="font-size:25pt;margin-top:14mm;max-width:150mm">Le carnet de douleur de vos patients, et un rapport que vous lisez en deux minutes.</h1>
+<p class="lead" style="max-width:150mm">OUCH est un carnet de douleur libre et gratuit, pour la fibromyalgie et les autres douleurs chroniques. Le patient note sa journée en moins d’une minute sur son téléphone ; ses données restent sur l’appareil. Quand il le souhaite, il en tire un rapport pour la consultation, qui <b>décrit</b> sans interpréter.</p>
+<div class="shots" style="margin-top:9mm;gap:6mm">
+ <figure class="shot"><div class="scr"><img src="img/today-1.png"></div></figure>
+ <figure class="shot"><div class="scr"><img src="img/trends-1.png"></div></figure>
+ <figure class="shot"><div class="scr"><img src="img/soulager.png"></div></figure>
+ <figure class="shot"><div class="scr"><img src="img/journal.png"></div></figure>
+</div>
+<div style="position:absolute;left:15mm;right:15mm;bottom:14mm;display:flex;gap:8mm;align-items:flex-end;justify-content:space-between">
+ <div class="small" style="max-width:112mm">Décrit d’après la version 0.12.0 · 12 novembre 2026. Captures d’écran du mode démonstration : <b>données fictives</b>. OUCH n’est ni un dispositif médical ni un avis médical ; les données sont auto-déclarées par le patient et non vérifiées. Logiciel libre, licence CeCILL v2.1.</div>
+ <div style="text-align:center;font-size:7.6pt;line-height:1.3"><img src="qr.svg" style="width:22mm;display:block;margin:0 auto 1mm"><b>maxauvy.github.io/OUCH</b></div>
+</div></div>
+
+<!-- 2. En bref -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">1 · En bref</p><h2>Pourquoi un carnet, et pourquoi celui-ci</h2>
+<div class="two" style="gap:8mm">
+<div>
+<h3 style="margin-top:0">Le constat</h3>
+<p>« Comment ça s’est passé depuis la dernière fois ? » Pour une douleur qui varie d’un jour à l’autre, la réponse vient de la mémoire, et la mémoire d’une semaine est moins fidèle que celle d’une journée<sup>[6]</sup>. Les jours difficiles, ceux qu’on voudrait pouvoir montrer, sont aussi ceux où l’on n’a pas la force de remplir un carnet.</p>
+<p>Les carnets existants sont souvent fermés, ou pénibles à remplir quand on n’en peut plus. OUCH prend le parti inverse : de gros boutons, presque rien à remplir, et aucune donnée qui quitte l’appareil sans que la personne l’ait décidé.</p>
+</div>
+<div>
+<h3 style="margin-top:0">La réponse, en trois principes</h3>
+<ul class="ic" style="margin-top:1mm">
+<li><b>Simple.</b> Seule la douleur, de 0 à 10, suffit pour qu’une journée compte. Les jours les plus durs, l’écran s’allège.</li>
+<li><b>Privé.</b> Pas de compte, pas de serveur : le journal reste sur le téléphone. Le patient décide de ce qu’il partage, et avec qui.</li>
+<li><b>Descriptif.</b> Il décrit : moyennes, médianes, évolution, jours plus difficiles que d’habitude. Il ne pose pas de diagnostic, ne conseille aucun traitement et ne fait jamais passer un rapprochement pour une cause.</li>
+</ul></div></div>
+<div class="four" style="margin:3mm 0 4mm">
+<div class="card b"><div class="num">&lt; 1 min<small>pour noter sa journée</small></div></div>
+<div class="card b"><div class="num">0 compte<small>à créer, rien à héberger</small></div></div>
+<div class="card b"><div class="num">25 zones<small>sur une silhouette, gauche et droite</small></div></div>
+<div class="card b"><div class="num">2 rapports<small>médecin traitant · centre douleur</small></div></div>
+</div>
+<div class="two">
+<div class="box" style="margin:0"><h3>Ce que fait OUCH</h3>
+<ul class="ic" style="margin:0"><li>Décrire : moyennes, médianes, répartition, évolution.</li><li>Repérer les jours nettement au-dessus du niveau habituel du patient (« poussées »).</li><li>Citer la source de chaque seuil, et dire quand il est extrapolé.</li><li>Aider le patient à préparer ce qu’il veut vous dire.</li></ul></div>
+<div class="box l" style="margin:0"><h3>Ce que ne fait pas OUCH</h3>
+<ul class="ic no" style="margin:0"><li>Poser un diagnostic ou conseiller un traitement.</li><li>Remplacer un questionnaire validé ou votre examen.</li><li>Présenter un rapprochement comme une cause.</li><li>Envoyer quoi que ce soit sans geste du patient.</li></ul></div></div>
+<h3 style="margin-top:5mm">Pour qui ?</h3>
+<p>Pour toute personne qui vit avec une douleur chronique : la fibromyalgie d’abord, et d’autres maladies que le patient déclare (polyarthrite rhumatoïde, spondyloarthrite, rhumatisme psoriasique, endométriose, migraine, lombalgie, sclérose en plaques, douleur myofasciale). L’application s’adapte aux maladies indiquées : elle range les indicateurs en trois niveaux (recommandés, utiles aussi, tous les autres), et tout reste facultatif.</p>
+<p class="small">Références numérotées comme dans la note méthodologique d’OUCH : [6] Broderick, rappel d’une journée contre une semaine.</p>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>2</span></div></div>
+
+<!-- 3. Plan -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">2 · Vue d’ensemble</p><h2>Quatre gestes pour le patient, cinq onglets</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3mm 8mm;margin-bottom:3mm">
+<div class="step"><div class="n">1</div><div><b>Noter</b>Chaque jour, en moins d’une minute : la douleur, et si l’on veut le sommeil, la fatigue, les zones, les traitements, ce qui a aidé.</div></div>
+<div class="step"><div class="n">2</div><div><b>Comprendre</b>Le journal raconte : courbe, poussées, avant et après un changement de traitement, rapprochements relevés dans ses propres notes.</div></div>
+<div class="step"><div class="n">3</div><div><b>Soulager</b>Un plan écrit pour les jours difficiles, ses gestes avec un minuteur, une respiration lente. Ni score ni série.</div></div>
+<div class="step"><div class="n">4</div><div><b>Préparer et transmettre</b>Rendez-vous, questions, ordonnance ; un rapport pour vous, une fiche pour un soignant qui ne le connaît pas.</div></div>
+</div>
+<h3>Où trouver quoi dans l’application</h3>
+<table>
+<tr><th style="width:24mm">Onglet</th><th style="width:52mm">Ce qu’il contient</th><th>Ce que cela apporte</th></tr>
+<tr><td>Aujourd’hui</td><td>Douleur du jour, zones, mesures, traitements, ce qui a aidé, une note ; météo à partager ; page « Enfants »</td><td><b>Patient :</b> une saisie qui tient en une minute, et qui s’allège les jours durs. <b>Vous :</b> des mesures prises au jour le jour, plutôt que reconstituées de mémoire.</td></tr>
+<tr><td>Journal</td><td>Calendrier du mois, coloré selon la météo de chaque jour, poussées signalées ; chaque journée se corrige</td><td>Retrouver un jour précis (« le 9, il y avait de l’orage ») sans chercher dans sa mémoire.</td></tr>
+<tr><td>Tendances</td><td>Courbe 7, 30, 90 jours ou depuis le début ; ce qui s’est passé ; zones ; traitements ; jours de la semaine ; ce que disent les notes ; comparer deux périodes</td><td>Voir l’évolution, les poussées, l’effet apparent d’un changement de dose, sans que l’outil conclue à votre place ni à la sienne.</td></tr>
+<tr><td>Soulager</td><td>Mon plan des jours difficiles, mes gestes avec minuteur, respiration lente, deux exercices de détente</td><td>Une aide disponible hors ligne, que le patient a préparée quand il allait mieux.</td></tr>
+<tr><td>Consultation</td><td>Rendez-vous et questions, ordonnance, rapport (deux versions), fiche pour un soignant</td><td>Arriver avec ce que l’on veut dire, repartir avec ce qui a été dit. <b>Vous :</b> un rapport de 3 à 10 pages à lire en deux minutes.</td></tr>
+<tr><td>Réglages</td><td>Profil, indicateurs suivis, suggestions, rappel, sauvegarde chiffrée, verrou par code, sources scientifiques</td><td>Le patient garde la main sur tout : ce qui est suivi, ce qui est proposé, ce qui part ou non.</td></tr>
+</table>
+<div class="box g" style="margin-top:4mm"><h3>Une règle valable partout</h3><p style="margin:0">Quand la personne va mal, <b>l’application se tait</b>. Les jours de poussée, l’écran se réduit à la douleur et à un mot bienveillant ; les pistes, les essais et les bilans attendent. Ce qu’il y a à voir les autres jours tient en une ligne discrète (« 2 petites choses pour toi »), sans jamais prendre la forme d’une alerte.</p></div>
+<p class="small">Et aussi : français et anglais, mode sombre, texte qui suit la taille de police du téléphone, verrou par code facultatif, installation sur l’écran d’accueil et usage hors connexion.</p>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>3</span></div></div>
+
+<!-- 4. Aujourd'hui -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">3 · Noter sa journée</p><h2>L’onglet « Aujourd’hui » : une minute suffit</h2>
+<div class="shots" style="margin-bottom:4mm">
+<figure class="shot"><div class="scr"><img src="img/today-1.png"></div><figcaption><b>Un jour difficile</b>L’écran s’allège : un mot doux, ce qui a déjà fait du bien, la douleur seule.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/today-zones.png"></div><figcaption><b>Où as-tu mal ?</b>Face et dos : une grande région, puis la partie et le côté.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/today-meds.png"></div><figcaption><b>Traitements et ce qui a aidé</b>Fond coché d’office ; au besoin : prises, soulagement, effets indésirables.</figcaption></figure>
+</div>
+<div class="two">
+<div>
+<h3 style="margin-top:0">Ce que le patient peut noter</h3>
+<table>
+<tr><td style="width:30mm">Douleur</td><td>0 à 10, onze cases à toucher. Seule saisie dont une journée a besoin<sup>[1][3]</sup> ; la note porte sur toute la journée, et non sur « maintenant ».</td></tr>
+<tr><td>Zones</td><td>25 zones sur une silhouette, dont les 19 régions que vous connaissez (WPI) ; « douleur partout » possible.</td></tr>
+<tr><td>Mesures</td><td>Fatigue, sommeil, stress, brouillard mental, humeur, activité : échelles simples, <b>non validées</b>.</td></tr>
+<tr><td>Traitements</td><td>De fond ou au besoin, dose, changements, arrêts ; doses oubliées ; soulagement ; effets indésirables datés.</td></tr>
+<tr><td>Ce qui a aidé</td><td>Marche courte, bain chaud, méditation… des approches que le patient repère lui-même.</td></tr>
+<tr><td>Facultatif</td><td>Météo du jour (géolocalisation ou à la main), cycle, une note.</td></tr>
+</table></div>
+<div>
+<h3 style="margin-top:0">Pensé pour les jours où l’on n’en peut plus</h3>
+<ul class="ic"><li>Une poussée repérée, ou une « période plus difficile » que la personne note elle-même : l’écran se réduit, l’app ne propose rien d’autre qu’un mot bienveillant. Les deux restent à part : OUCH ne mélange pas ce que l’on vit et ce que montrent les niveaux de douleur.</li>
+<li>Un jour manqué n’est jamais un échec : il n’est jamais comblé dans les calculs. Si la veille n’a pas été notée, l’app propose d’y revenir, une fois, sans reproche.</li>
+<li>Une journée écrite après coup le dit (« saisi jeudi à 09:12 »), et le rapport vous en donne le nombre.</li></ul>
+<div class="box" style="margin-top:3mm"><h3>Un assistant de démarrage, entièrement facultatif</h3><p style="margin:0">Maladies suivies, prénom, traitements, rappel quotidien. Selon les maladies indiquées, il range <b>les indicateurs en trois niveaux</b>. Quatorze indicateurs plus récents s’y ajoutent : raideur au réveil, réveils à cause de la douleur, gêne dans les gestes, articulations, règles, mal de tête, jambe, spasmes… Relus rapidement en octobre 2026 par un kinésithérapeute, une psychologue de la douleur et une médecin généraliste, ils restent des échelles ou des réponses simples <b>non validées</b>, sans score ni seuil.</p></div>
+</div></div>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>4</span></div></div>
+
+<!-- 5. Tendances -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">4 · Comprendre</p><h2>Journal et Tendances : ce que le carnet raconte</h2>
+<div class="shots" style="margin-bottom:4mm">
+<figure class="shot"><div class="scr"><img src="img/journal.png"></div><figcaption><b>Journal</b>Un mois à la fois ; poussées signalées.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/trends-1.png"></div><figcaption><b>Évolution de la douleur</b>Moyenne sur 7 jours, poussées ombrées, changements de traitement en trait pointillé.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/treatments.png"></div><figcaption><b>Mes traitements</b>Prises, soulagement, effets notés.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/zones.png"></div><figcaption><b>Où ça fait mal</b>Les zones citées, semaine après semaine.</figcaption></figure>
+</div>
+<div class="two">
+<div>
+<h3 style="margin-top:0">Ce que la personne y voit</h3>
+<ul>
+<li><b>Pour ma consultation</b> : douleur moyenne, poussées, zone la plus signalée, dernier changement de traitement.</li>
+<li><b>La courbe</b> sur 7, 30, 90 jours ou depuis le début, avec des calques (poussées, traitements, essais) et une frise « Ce qui s’est passé ».</li>
+<li><b>Les traitements</b> : usage, soulagement déclaré, effets indésirables ; les changements de dose apparaissent sur la courbe. Un avant-après est comparé à l’écart habituel de la personne, pour ne pas lire un hasard comme un effet.</li>
+<li><b>Les jours de la semaine</b> où ça va le mieux ou le moins bien, avec la bande que le hasard suffit à produire.</li>
+<li><b>Comparer deux périodes</b> : les 30 derniers jours, depuis la dernière consultation, ou deux périodes au choix.</li>
+<li><b>Après tes jours actifs</b> : si les lendemains des jours les plus actifs ont été plus difficiles que d’habitude, mis à côté de ce que le hasard donnerait.</li>
+</ul></div>
+<div>
+<h3 style="margin-top:0">« Ce que tes notes racontent »</h3>
+<p>Le sommeil, le stress, l’activité de la veille, ce qui a aidé : <b>une piste à la fois</b>, avec les deux moyennes et le nombre de jours. La personne peut la garder pour sa consultation, l’écarter, ou <b>essayer pendant une semaine</b> une action qu’elle a elle-même notée : l’app met côte à côte les jours avec et sans, en disant que c’est peu pour conclure.</p>
+<div class="q"><b>Des rapprochements, jamais des causes.</b> Ce sont des associations relevées dans ses propres données, avec leur limite affichée (« ça va peut-être dans les deux sens »). Rien ne s’affiche pendant une poussée, et un seul réglage, « Suggestions », coupe le tout.</div>
+<div class="box g"><h3>Définition d’une poussée (propre à OUCH)</h3><p style="margin:0">Au moins 3 jours consécutifs à plus de 2 points ou 30 % au-dessus de la médiane des 28 jours précédents, et au moins 4/10. Il n’existe pas de définition consensuelle : ces seuils viennent d’études sur l’amélioration, appliqués à une aggravation (extrapolation, dite comme telle). <b>C’est le point où votre regard est le plus utile.</b></p></div>
+</div></div>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>5</span></div></div>
+
+<!-- 6. Soulager -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">5 · Soulager</p><h2>L’onglet « Soulager » : des gestes, sans rien promettre</h2>
+<div class="shots" style="margin-bottom:4mm">
+<figure class="shot"><div class="scr"><img src="img/soulager.png"></div><figcaption><b>Soulager</b>Mon plan, respirer et se détendre, mes gestes.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/plan.png"></div><figcaption><b>Mon plan des jours difficiles</b>Quatre lignes écrites à l’avance, lues en grand.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/gestures.png"></div><figcaption><b>Mes gestes</b>Jusqu’à cinq, chacun avec le temps de minuteur choisi par la personne.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/breathing.png"></div><figcaption><b>Un moment pour souffler</b>Respiration lente, 1, 3 ou 5 minutes, hors ligne.</figcaption></figure>
+</div>
+<div class="two">
+<div>
+<h3 style="margin-top:0">Ce que contient l’onglet</h3>
+<ul>
+<li><b>Mon plan des jours difficiles</b> : ce que je m’autorise, ce qui m’aide, qui prévenir, à ne pas oublier. Écrit par la personne quand elle va mieux, lu en grand quand elle va moins bien. Du texte qu’elle a tapé : rien n’est deviné ni envoyé.</li>
+<li><b>Mes gestes</b> : les aides que la personne note le plus souvent (bain chaud, marche courte, étirements…), avec un minuteur dont <i>elle</i> choisit la durée ; l’app n’en recommande aucune.</li>
+<li><b>Respirer lentement</b> : un niveau d’eau qui monte et descend (4 secondes pour inspirer, 6 pour souffler). Vibreur et musique d’ambiance facultatifs.</li>
+<li><b>Deux exercices lus pas à pas</b> : relâcher le corps zone par zone, un geste doux pour la nuque et les épaules.</li>
+</ul></div>
+<div>
+<h3 style="margin-top:0">Et dans la liste « Pour toi »</h3>
+<ul>
+<li><b>« Bouger, ce que disent les études »</b> : rappelle, une seule fois, ce que disent des sources (EULAR, Cochrane, revues) sur l’exercice, pour les maladies suivies où elles existent, chacune avec sa référence. Rien pour l’endométriose, la sclérose en plaques et le rhumatisme psoriasique : les sources que nous avons lues ne permettent pas d’y conclure clairement. Renvoie au kiné ou au médecin pour le choix et la dose.</li>
+<li><b>Prises oubliées</b> : après 3 oublis notés sur un traitement de fond en 14 jours, un mot sans jugement qui évoque un pilulier ou un rappel, et renvoie au médecin ou au pharmacien.</li>
+<li><b>Pression qui baisse demain</b> : facultatif, éteint par défaut ; seulement si le carnet de la personne montre que ces jours-là ont été plus durs que le hasard ne le donne.</li>
+</ul></div></div>
+<div class="box" style="margin-top:2mm"><p style="margin:0"><b>Un garde-fou :</b> l’écran précise que ces gestes détendent un peu mais ne soignent pas la douleur. Les preuves sur la respiration lente et la douleur sont faibles ou mitigées, et le rythme est un repère d’OUCH, sans validation clinique. Il n’y a ni score ni série : rien à perdre. Les gestes pour la nuque n’ont pas encore été relus par un kinésithérapeute.</p></div>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>6</span></div></div>
+
+<!-- 7. Consultation côté patient -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">6 · Préparer et transmettre</p><h2>L’onglet « Consultation » : arriver préparé, repartir avec l’essentiel</h2>
+<div class="shots" style="margin-bottom:4mm">
+<figure class="shot"><div class="scr"><img src="img/consultation.png"></div><figcaption><b>Consultation</b>Rendez-vous, ordonnance, rapport, fiche.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/caresheet.png"></div><figcaption><b>Fiche pour un soignant</b>Une page pour quelqu’un qui ne connaît pas la personne.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/weather.png"></div><figcaption><b>Météo du jour à partager</b>Une image pour les proches ; rien n’est envoyé seul.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="img/kids.png"></div><figcaption><b>Expliquer à son enfant</b>Des mots simples, trois âges.</figcaption></figure>
+</div>
+<div class="two">
+<div>
+<h3 style="margin-top:0">Avant, pendant, après le rendez-vous</h3>
+<ul>
+<li><b>Avant :</b> la personne note la date, ses questions et ce dont elle veut parler en priorité. Une carte douce de la page du jour le rappelle quinze jours avant.</li>
+<li><b>Pendant :</b> elle vous montre le rapport (ou l’imprime). Ses questions figurent en tête du rapport.</li>
+<li><b>Après :</b> elle écrit ce que vous avez dit et, si une ordonnance a été remise, sa durée : l’app prévient une semaine avant la fin (ou deux), <b>sans rien calculer à partir des prises</b>.</li>
+</ul>
+<h3>La fiche pour un soignant qui ne connaît pas la personne</h3>
+<p>Pour les urgences ou un nouveau médecin : maladies suivies et leur statut, traitements en cours, effets indésirables notés, douleur habituelle des 90 derniers jours, zones les plus signalées, ce qui soulage. La personne y ajoute <b>elle-même</b> ses allergies, des personnes à joindre et un mot libre : rien n’est deviné. À montrer sur l’écran (le numéro se touche pour appeler), imprimer ou enregistrer en PDF, en français ou en anglais.</p></div>
+<div>
+<h3 style="margin-top:0">Autour de la consultation</h3>
+<ul>
+<li><b>Météo du jour à partager :</b> les mesures du jour résumées en une image, du ciel dégagé à l’orage ; un petit mot ; la personne l’envoie elle-même à ses proches.</li>
+<li><b>Expliquer à son enfant :</b> la météo du jour en mots simples (« le ciel de maman est un peu voilé »), des idées pour aider, et une explication de la maladie pour trois âges (4–7, 8–12, 13–17 ans).</li>
+<li><b>Sauvegarde :</b> un fichier chiffré avec un mot de passe de son choix, qu’elle réimporte pour changer d’appareil ; l’app rappelle de la faire quand il y a quelque chose à perdre.</li>
+</ul>
+<div class="box g"><h3>Ce que cela change pour vous</h3><p style="margin:0">Le patient arrive avec <b>ses questions déjà posées</b>, ce qu’il a retenu de la dernière fois, et une ordonnance dont il connaît la date de fin. Le temps de consultation sert alors davantage à décider qu’à reconstituer.</p></div>
+<p class="small">C’est une hypothèse de conception, non un résultat : aucun test auprès de soignants n’a encore été mené (voir page 11).</p>
+</div></div>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>7</span></div></div>
+
+<!-- 8. Rapport médecin traitant -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">7 · Le rapport</p><h2>Le rapport pour le médecin traitant : 3 à 5 pages, à lire en deux minutes</h2>
+<div style="display:grid;grid-template-columns:108mm 1fr;gap:6mm;align-items:start">
+<div class="rep-img"><img src="img/report-gp-1.png"></div>
+<div>
+<p class="small" style="margin-bottom:3mm">Page 1 d’un rapport généré avec les données fictives du mode démo.</p>
+<div class="co"><i>1</i><span><b>Qui, quand.</b> Maladies déclarées (diagnostiquée ou suspectée), période analysée, jours renseignés. Les jours non renseignés ne sont jamais comblés.</span></div>
+<div class="co"><i>2</i><span><b>« En bref ».</b> Une phrase : douleur moyenne, évolution face à la période d’avant, poussées, jours sévères.</span></div>
+<div class="co"><i>3</i><span><b>Chiffres clés</b> avec une flèche de tendance : douleur moyenne, jours sévères (≥ 7), poussées, sommeil moyen.</span></div>
+<div class="co"><i>4</i><span><b>La courbe</b> quotidienne, sa moyenne glissante sur 7 jours, les poussées ombrées, et le rendez-vous précédent.</span></div>
+<div class="co"><i>5</i><span><b>Répartition des jours</b> (légers ≤ 3, modérés 4–6, sévères ≥ 7), comparée à la période précédente.</span></div>
+<div class="co"><i>6</i><span><b>Ce que le patient a ajouté</b> : ses questions et sa priorité, sa note après la dernière consultation (qu’il peut écarter), ses périodes difficiles, deux périodes comparées.</span></div>
+<div class="co"><i>7</i><span><b>Ce que le patient a remarqué</b> : les pistes gardées et ses essais d’une semaine, sans lien de cause.</span></div>
+</div></div>
+<h3>Au fil des pages</h3>
+<div class="three">
+<div class="card"><b class="t">Ce qui s’est passé</b><p>Frise des poussées, des essais, des changements de traitement.</p></div>
+<div class="card l"><b class="t">Traitements</b><p>Posologie, jours de prise, prises au besoin, soulagement déclaré, effets indésirables, changements de fond avec l’avant-après.</p></div>
+<div class="card i"><b class="t">Symptômes associés</b><p>Chaque indicateur suivi, avec la valeur avant, pendant la période, l’écart et la tendance ; localisations les plus fréquentes.</p></div>
+</div>
+<div class="box" style="margin-top:3.5mm"><p style="margin:0"><b>Le rapport décrit les données sans les interpréter</b>, et ses seuils citent leurs sources (IMMPACT, HAS et d’autres travaux publiés, résumés dans Réglages › À propos › Sources scientifiques). Le PDF est fabriqué sur le téléphone : le nom saisi n’est pas enregistré. Il se lit en français ou en anglais. Une fiche d’une page, « Lire un rapport OUCH », aide à lire un premier rapport.</p></div>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>8</span></div></div>
+
+<!-- 9. Rapport CETD -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">7 · Le rapport (suite)</p><h2>Le rapport détaillé pour un centre douleur : 6 à 10 pages</h2>
+<div class="shots" style="gap:4mm;margin-bottom:4mm">
+<figure class="shot"><div class="rep-img"><img src="img/report-cetd-1.png"></div><figcaption><b>Résumé</b> puis sommaire des six parties.</figcaption></figure>
+<figure class="shot"><div class="rep-img"><img src="img/report-cetd-2.png"></div><figcaption><b>1 · Douleur</b> statistiques détaillées, répartition.</figcaption></figure>
+<figure class="shot"><div class="rep-img"><img src="img/report-cetd-5.png"></div><figcaption><b>3 · Symptômes et sommeil</b> courbes par symptôme.</figcaption></figure>
+</div>
+<div class="two">
+<div>
+<h3 style="margin-top:0">Six parties numérotées</h3>
+<table>
+<tr><td style="width:7mm">1</td><td><b>Douleur</b> : répartition, évolution, jours plus difficiles (poussées) et leurs 3 jours précédents.</td></tr>
+<tr><td>2</td><td><b>Traitements</b> : chronologie, consommation d’antalgiques semaine par semaine, changements de fond.</td></tr>
+<tr><td>3</td><td><b>Symptômes et sommeil</b> : fatigue, qualité du sommeil, brouillard mental, humeur, stress, activité.</td></tr>
+<tr><td>4</td><td><b>Habitudes et contexte</b> : approches non médicamenteuses, calendrier, météo, zones, jours de la semaine.</td></tr>
+<tr><td>5</td><td><b>Questions et notes du patient</b>.</td></tr>
+<tr><td>6</td><td><b>Méthode et références</b> : chaque seuil, sa source, ses limites.</td></tr>
+</table></div>
+<div>
+<h3 style="margin-top:0">Quelle version pour qui ?</h3>
+<table>
+<tr><th></th><th>Médecin traitant</th><th>Centre douleur</th></tr>
+<tr><td>Longueur</td><td>3 à 5 pages</td><td>6 à 10 pages</td></tr>
+<tr><td>Contenu</td><td>« En bref », chiffres clés, courbe, traitements</td><td>Résumé puis six parties, statistiques détaillées, facteurs associés</td></tr>
+<tr><td>Dans les deux</td><td colspan="2">Maladies déclarées · période comparée à la période d’avant · jours de la semaine avec bande de hasard · avant et après un changement de traitement, sans conclure · pistes et essais du patient · ses questions · méthode</td></tr>
+</table>
+<div class="q" style="margin-top:3mm"><b>Sans interprétation.</b> Le rapport décrit ce que la personne a noté et ne dit pas pourquoi deux périodes diffèrent. Les définitions propres à OUCH, comme celle d’une poussée, sont signalées comme telles.</div>
+</div></div>
+<h3>Ce qui est dans le rapport, et seulement dans le rapport</h3>
+<p>La <b>consommation d’antalgiques</b>, les <b>facteurs associés</b> (corrélations de rang, avec leur force et le nombre de jours) et la <b>douleur par jour de la semaine avec sa bande de hasard</b> sont pensés pour un regard clinique, et se lisent dans ce rapport.</p>
+<p class="small">Un repère rédigé sur la céphalée par abus de médicaments reprend des repères publiés (avec sa source), sans calcul ni conclusion.</p>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>9</span></div></div>
+
+<!-- 10. Ce que ça change -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">8 · À quoi cela peut servir</p><h2>Ce que cela peut changer, pour qui</h2>
+<p class="lead">Voici ce que l’outil est conçu pour faire. Ce sont des hypothèses : son utilité en consultation n’a pas encore été évaluée, et nous vous proposons justement de l’examiner avec nous.</p>
+<div class="two" style="gap:5mm">
+<div class="card b"><b class="t">Pour la personne</b><ul style="margin:0;font-size:8.8pt"><li>Se souvenir : des données plutôt qu’un récit de mémoire.</li><li>Repérer, à son rythme, ce qui précède ses poussées et ce qui revient les bons jours.</li><li>Avoir un plan écrit à l’avance pour les jours difficiles.</li><li>Préparer ses questions, et arriver avec elles.</li><li>Choisir ce qu’elle partage, et avec qui.</li></ul></div>
+<div class="card"><b class="t">Pour le médecin traitant</b><ul style="margin:0;font-size:8.8pt"><li>Une comparaison avec la période précédente, d’un coup d’œil.</li><li>Les jours nettement plus douloureux que d’habitude, et leur contexte.</li><li>Les traitements pris, le soulagement et les effets déclarés.</li><li>Un appui pour l’anamnèse, qui n’est pas une aide à la décision.</li></ul></div>
+<div class="card i"><b class="t">Pour le centre douleur (CETD)</b><ul style="margin:0;font-size:8.8pt"><li>Statistiques détaillées par parties numérotées, avec méthode et références.</li><li>Consommation d’antalgiques semaine par semaine.</li><li>Symptômes, sommeil, facteurs associés, localisations (25 zones).</li><li>Les pistes et essais de la personne, présentés comme tels.</li></ul></div>
+<div class="card l"><b class="t">Pour les autres soignants</b><ul style="margin:0;font-size:8.8pt"><li><b>Kiné, activité physique adaptée :</b> ce que la personne note de l’activité et de la douleur du lendemain.</li><li><b>Psychologue, infirmier·e :</b> sommeil, humeur, stress ; périodes difficiles que la personne a nommées.</li><li><b>Pharmacien :</b> un historique des prises et des effets, une ordonnance dont la fin est notée.</li><li><b>Urgences, nouveau médecin :</b> la fiche d’une page.</li></ul></div>
+</div>
+<h3 style="margin-top:5mm">En consultation, concrètement</h3>
+<table>
+<tr><th style="width:42mm"></th><th>Sans carnet</th><th>Avec le rapport OUCH</th></tr>
+<tr><td>« Comment ça va depuis la dernière fois ? »</td><td>Un souvenir global, souvent teinté par les derniers jours.</td><td>Une moyenne, une comparaison à la période d’avant, des jours difficiles datés.</td></tr>
+<tr><td>« Le changement de dose a-t-il aidé ? »</td><td>Une impression.</td><td>L’avant et l’après sur la courbe, avec ce que le hasard suffit à produire.</td></tr>
+<tr><td>« Qu’aviez-vous prévu de me demander ? »</td><td>Oublié devant la porte.</td><td>Les questions, en tête de rapport.</td></tr>
+<tr><td>« Quand finit l’ordonnance ? »</td><td>À retrouver.</td><td>Notée par le patient, avec un rappel une semaine avant.</td></tr>
+</table>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>10</span></div></div>
+
+<!-- 11. Confiance, limites -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">9 · Confiance et limites</p><h2>Ce qui est solide, et ce qui ne l’est pas encore</h2>
+<div class="three" style="margin-bottom:4mm">
+<div class="card b"><b class="t">Vie privée</b><p>Pas de compte. Le journal est dans le navigateur du téléphone, <b>en clair</b> : un verrou par code facultatif cache l’écran, il ne chiffre rien. Seules les sauvegardes exportées sont chiffrées (AES-256-GCM, mot de passe de la personne : sans lui, une sauvegarde est perdue).</p></div>
+<div class="card"><b class="t">Ce qui sort de l’appareil</b><p>Rien sans geste de la personne, sauf : la météo automatique (facultative, position à Open-Meteo), un signal anonyme « actif cette semaine » (sans donnée de santé, que la personne peut couper), et, en accès anticipé, une sauvegarde chiffrée vers un Dropbox, désactivée par défaut.</p></div>
+<div class="card i"><b class="t">Libre et testé</b><p>Logiciel libre (CeCILL v2.1), code public. Plus de 600 tests automatiques vérifient les calculs et l’application. Pas d’audit de sécurité externe à ce jour.</p></div>
+</div>
+<div class="two">
+<div class="box" style="margin:0"><h3>Cadre</h3>
+<p style="margin:0">OUCH <b>n’est pas un dispositif médical</b> : il décrit ce que la personne note, ne pose pas de diagnostic, ne recommande pas de traitement. Cette position est argumentée, points faibles compris, dans la documentation. Deux fonctions s’en approchent (la carte « Bouger », qui propose une marche courte, et le mot sur les prises oubliées) : elles figurent parmi celles qu’un expert regarderait d’abord.</p></div>
+<div class="box l" style="margin:0"><h3>Validation : l’état des lieux</h3>
+<ul style="margin:0"><li><b>Douleur 0–10 :</b> échelle recommandée (IMMPACT, HAS), reprise telle quelle.</li><li><b>Fatigue, sommeil, humeur, brouillard, nouveaux indicateurs :</b> échelles simples, <b>non validées</b>.</li><li><b>Poussées, avant-après, pistes :</b> règles écrites et testées sur des cas construits ; <b>jamais comparées</b> à des poussées identifiées par des patients ou des soignants.</li><li><b>Utilité en consultation :</b> aucun test mené à ce jour.</li></ul></div></div>
+<h3 style="margin-top:4mm">Limites à garder en tête</h3>
+<ul class="ic no">
+<li>Les données sont <b>auto-déclarées et non vérifiées</b>. Le statut d’une maladie (« diagnostiquée », « suspectée ») est déclaratif.</li>
+<li>Un patient dont la douleur est constamment élevée (au-dessus d’environ 7,7/10 d’habitude) ne verra jamais de poussée : le seuil dépasse 10. Cela ne veut pas dire qu’il n’en a pas.</li>
+<li>Les rapprochements entre sommeil, stress, activité et douleur ne corrigent pas les comparaisons multiples : une fausse piste reste possible.</li>
+<li>L’effet du carnet sur la personne (chercher des causes, s’y fixer, anxiété) n’a pas été étudié. C’est pourquoi il n’y a ni série ni score, et un seul réglage pour tout couper.</li>
+<li>Les textes des fonctions les plus récentes (rythme, « Bouger », gestes de la nuque) sont à relire par un professionnel.</li>
+</ul>
+<p class="small">Détail complet : note méthodologique (14 pages), statut de validation, cadre réglementaire et dictionnaire des données, dans le dossier « soignants » du projet.</p>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>11</span></div></div>
+
+<!-- 12. Essayer, aider -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">10 · Pour la suite</p><h2>Essayer en deux minutes, et nous aider</h2>
+<div class="two" style="gap:8mm">
+<div>
+<h3 style="margin-top:0">Essayer</h3>
+<div class="step"><div class="n">1</div><div><b>Ouvrir le mode démo</b>Sur un téléphone ou un ordinateur : <b>maxauvy.github.io/OUCH/?demo</b> (ou le QR ci-contre, puis « Découvrir avec un exemple »). Un historique fictif de 90 jours s’installe, avec une visite guidée ; « Quitter » l’efface.</div></div>
+<div class="step"><div class="n">2</div><div><b>Générer un rapport</b>Onglet Consultation › « Préparer le rapport » › médecin traitant ou centre douleur.</div></div>
+<div class="step"><div class="n">3</div><div><b>Installer sur l’écran d’accueil</b>Pour une app qui s’ouvre en un geste et marche hors ligne.</div></div>
+<p class="small">Rien de ce qui est saisi ne quitte l’appareil. Les données de démonstration sont fictives.</p>
+</div>
+<div style="text-align:center"><img src="qr.svg" style="width:38mm"><div style="font-size:8.6pt;margin-top:1mm"><b>maxauvy.github.io/OUCH</b></div></div>
+</div>
+<h3 style="margin-top:4mm">Vous pouvez aider, dans l’ordre où cela coûte le moins de temps</h3>
+<div class="four">
+<div class="card"><b class="t">1 · Lire</b><p>La note méthodologique, et répondre, même brièvement, à ses dix questions : la définition d’une poussée, les catégories, ce que vous ne voulez pas voir dans un rapport.</p></div>
+<div class="card l"><b class="t">2 · Dire</b><p>Un libellé qui prête à confusion, une donnée qui manque, un seuil que vous contestez : formulaire « Retour clinique », sans compte à créer.</p></div>
+<div class="card i"><b class="t">3 · Essayer</b><p>Avec quelques patients volontaires, 4 à 6 semaines, puis dire ce que le rapport a changé, ou non. Un protocole de pilote existe.</p></div>
+<div class="card b"><b class="t">4 · Relire</b><p>Les références : une étude manquante ou mal résumée se signale de la même façon.</p></div>
+</div>
+<h3 style="margin-top:4.5mm">Documents disponibles</h3>
+<table>
+<tr><td style="width:46mm">Plaquette (2 pages)</td><td>Le patient, la pertinence, le rapport, en un coup d’œil.</td></tr>
+<tr><td>Lire un rapport OUCH (1 page)</td><td>À glisser avec un rapport reçu pour la première fois.</td></tr>
+<tr><td>Note méthodologique (14 pages)</td><td>Chaque calcul, seuil, source, limite, et dix questions qui vous sont posées.</td></tr>
+<tr><td>Dictionnaire des données, statut de validation, cadre réglementaire, protocole de test</td><td>Dans le dossier « soignants » du projet.</td></tr>
+</table>
+<div class="box g" style="margin-top:4mm"><p style="margin:0"><b>Aucune donnée de patient identifiable</b> dans un retour : l’historique de démonstration suffit pour illustrer. Contact : maxime@open-freax.fr (n’y joignez aucune donnée de patient). Faille de sécurité : signalement privé décrit dans <i>SECURITY.md</i>.</p></div>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>12</span></div></div>
+
+<!-- 13. Fiche animateur -->
+<div class="page"><div class="bar" style="background:var(--ind)"></div>
+<p class="eyebrow">Annexe · Pour la personne qui présente</p><h2>Fiche animateur : une séance de 45 minutes</h2>
+<p class="m">À détacher. Le diaporama suit ce déroulé ; ses notes d’orateur (touche N) reprennent chaque point.</p>
+<table>
+<tr><th style="width:17mm">Durée</th><th style="width:44mm">Temps</th><th>Contenu et diapositives</th></tr>
+<tr><td>5 min</td><td>Le constat</td><td>La mémoire d’une semaine, les jours où l’on ne peut pas écrire. Demandez à la salle : « Combien de vos patients tiennent déjà un carnet ? Que vous en reste-t-il en consultation ? » <span class="m">(diapos 2 à 4)</span></td></tr>
+<tr><td>5 min</td><td>OUCH en bref</td><td>Trois principes, ce que fait et ne fait pas OUCH. Insistez : descriptif, privé, simple. <span class="m">(diapos 5 à 7)</span></td></tr>
+<tr><td>12 min</td><td>Démonstration en direct</td><td>Mode démo sur un téléphone : Aujourd’hui (jour difficile, zones, traitements), Tendances (courbe, poussées, pistes), Soulager, Consultation. Les diapositives 8 à 18 servent de filet si le réseau fait défaut. <span class="m">(diapos 8 à 18)</span></td></tr>
+<tr><td>8 min</td><td>Le rapport</td><td>Faire lire la page 1 du rapport à la salle en deux minutes, puis leur demander ce qui manque, ce qui gêne. <span class="m">(diapos 19 à 21)</span></td></tr>
+<tr><td>5 min</td><td>Confiance et limites</td><td>Vie privée, cadre réglementaire, ce qui n’est pas validé. Ne rien atténuer : c’est ce qui rend l’outil crédible. <span class="m">(diapos 22 à 24)</span></td></tr>
+<tr><td>10 min</td><td>Discussion</td><td>Les questions ci-dessous ; recueillir les retours dans le formulaire pendant la séance. <span class="m">(diapos 25 à 27)</span></td></tr>
+</table>
+<div class="two" style="margin-top:5mm">
+<div><h3 style="margin-top:0">Questions à poser à la salle</h3>
+<ul>
+<li>Que voudriez-vous voir en premier sur un rapport ? Qu’y supprimeriez-vous ?</li>
+<li>La définition d’une poussée (3 jours à plus de 2 points ou 30 % au-dessus de l’habituel) a-t-elle un sens pour vous ?</li>
+<li>Les pistes et essais d’une semaine : aide ou risque d’orienter la discussion vers une cause ?</li>
+<li>Pour quels patients ne proposeriez-vous pas un carnet quotidien ?</li>
+<li>Quelle version de rapport utiliseriez-vous : 3 à 5 pages, 6 à 10 pages, ni l’une ni l’autre ?</li>
+</ul></div>
+<div><h3 style="margin-top:0">Avant la séance</h3>
+<ul class="ic">
+<li>Ouvrir <b>maxauvy.github.io/OUCH/?demo</b> sur un téléphone, passer la visite, et vérifier le réseau.</li>
+<li>Préparer un rapport médecin traitant et un rapport centre douleur en PDF, au cas où.</li>
+<li>Imprimer ce guide (recto-verso), la plaquette et « Lire un rapport » pour chaque participant.</li>
+<li>Rappeler d’entrée : données fictives, ni dispositif médical ni avis médical.</li>
+</ul>
+<h3>Les phrases à garder</h3>
+<p class="m" style="font-size:8.8pt">« Le rapport décrit, il n’interprète pas. » · « Quand la personne va mal, l’appli se tait. » · « Un rapprochement n’est pas une cause. » · « Ce n’est pas validé, et nous le disons clairement. »</p></div></div>
+<div class="foot"><span>OUCH · guide de présentation pour les professionnels de santé</span><span>13</span></div></div>
+
+</body></html>
