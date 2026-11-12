@@ -74,7 +74,7 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
         {openRelief && (
           <button
             type="button"
-            onClick={openRelief}
+            onClick={() => openRelief('breath')}
             className="mt-3 block text-control font-semibold underline underline-offset-2 text-left min-h-11"
             style={{ color: 'var(--color-brand)' }}
           >

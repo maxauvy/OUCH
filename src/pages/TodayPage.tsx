@@ -9,7 +9,7 @@ import { useTodayMessages } from '../hooks/useTodayMessages'
 import type { Tab } from '../components/layout/TabBar'
 import { useSettings } from '../hooks/useSettings'
 import { useTranslation } from '../i18n'
-import { IconCloud, IconMoodKid, IconWind, type Icon } from '@tabler/icons-react'
+import { IconCloud, IconMoodKid, type Icon } from '@tabler/icons-react'
 import { GroupCaption } from '../components/ui/Card'
 import { BackupReminderCard } from '../components/backup/BackupReminderCard'
 import { AppointmentCard } from '../components/consultation/AppointmentCard'
@@ -17,7 +17,6 @@ import { PrescriptionCard } from '../components/prescription/PrescriptionCard'
 import { TodayList } from '../components/today/TodayList'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { todayISO } from '../lib/dates'
-import { useOpenRelief } from '../components/relief/reliefContext'
 
 export function TodayPage({
   onGoToBackup,
@@ -37,7 +36,6 @@ export function TodayPage({
   const [sharing, setSharing] = useState(false)
   const date = todayISO()
   const earlyAccess = useEarlyAccess()
-  const openRelief = useOpenRelief()
 
   // What waits for the person is one quiet line under the title, which opens a
   // list (never during a flare: the soft word of the hard days stands alone).
@@ -58,17 +56,6 @@ export function TodayPage({
         afterHeader={
           <>
             {messages && logged && <TodayList messages={messages} settings={settings} entries={logged} today={date} earlyAccess={earlyAccess} onGoToTab={onGoToTab} />}
-            {openRelief && (
-              <button
-                type="button"
-                onClick={openRelief}
-                className="self-start inline-flex items-center gap-2 rounded-full px-3.5 min-h-11 text-control font-semibold"
-                style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)', boxShadow: 'inset 0 0 0 1px var(--color-hairline)' }}
-              >
-                <IconWind size={18} stroke={1.8} aria-hidden />
-                {t.relief.link}
-              </button>
-            )}
           </>
         }
       />

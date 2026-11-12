@@ -16,6 +16,7 @@ const fr: Translations = {
     trendsNew: 'nouvelle piste',
     kids: 'Enfants',
     settings: 'Réglages',
+    soulager: 'Soulager',
     consultation: 'Consultation',
   },
 
@@ -1821,6 +1822,12 @@ const fr: Translations = {
     label: 'Tes prises',
     text: 'Ces deux dernières semaines, tu as noté {{missed}} prises oubliées pour {{name}}. Ça arrive à beaucoup de monde. Si un repère t’aiderait (un rappel, un pilulier), ton médecin ou ton pharmacien peut en parler avec toi.',
     thanks: 'Compris',
+  },
+  soulager: {
+    kicker: 'Pour toi, quand tu en as besoin',
+    title: 'Soulager',
+    group: 'Respirer et se détendre',
+    breathHint: '1, 3 ou 5 minutes',
   },
   relief: {
     link: 'Besoin de souffler ?',

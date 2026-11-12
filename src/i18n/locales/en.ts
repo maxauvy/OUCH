@@ -14,6 +14,7 @@ const en: Translations = {
     trendsNew: 'new lead',
     kids: 'Kids',
     settings: 'Settings',
+    soulager: 'Relief',
     consultation: 'Consultation',
   },
 
@@ -1816,6 +1817,12 @@ const en: Translations = {
     label: 'Your doses',
     text: 'Over the last two weeks you noted {{missed}} missed doses of {{name}}. That happens to a lot of people. If a cue would help (a reminder, a pill organiser), your doctor or pharmacist can talk it through with you.',
     thanks: 'Got it',
+  },
+  soulager: {
+    kicker: 'For you, whenever you need it',
+    title: 'Relief',
+    group: 'Breathe and unwind',
+    breathHint: '1, 3 or 5 minutes',
   },
   relief: {
     link: 'Need a breather?',
