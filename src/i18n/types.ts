@@ -1649,6 +1649,10 @@ export interface Translations {
     music: string
     musicHelper: string
     timeLeft: string
+    autoLabel: string
+    autoPause: string
+    autoResume: string
+    autoHelper: string
     vibrate: string
     vibrateHelper: string
     levelUp: string
@@ -1669,7 +1673,7 @@ export interface Translations {
     step: string
     helpedTitle: string
     helpedNote: string
-    relax: { title: string; hint: string; steps: string[] }
+    relax: { title: string; hint: string; steps: { title: string; text: string; cue: string }[] }
     gentle: { title: string; hint: string; steps: string[] }
   }
   pacing: {
