@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAllEntries } from '../hooks/useEntries'
 import { useLanguage, useTranslation } from '../i18n'
-import { updateSettings } from '../db'
+import { db, updateSettings } from '../db'
+import { upsertEntry, useTodayEntry } from '../hooks/useEntries'
+import { canPlayAmbient, startAmbient, type Ambient } from '../lib/ambient'
 import { useSettings } from '../hooks/useSettings'
 import { Segmented } from '../components/ui/Segmented'
 import { Toggle } from '../components/ui/Toggle'
@@ -98,6 +100,21 @@ function Pick({ icon, title, hint, onClick }: { icon: React.ReactNode; title: st
   )
 }
 
+/** minutes:seconds, for the clock. */
+const clock = (ms: number) => {
+  const total = Math.ceil(ms / 1000)
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`
+}
+
+/** Adds the action to what helped today: one tap from the person, never on its own. */
+async function addHelped(action: string) {
+  const date = todayISO()
+  const existing = await db.entries.where('date').equals(date).first()
+  const current = existing?.positiveActions ?? []
+  if (current.some((a) => a.trim().toLocaleLowerCase() === action.toLocaleLowerCase())) return
+  await upsertEntry(date, { positiveActions: [...current, action] })
+}
+
 /** Keeps the screen on while the exercise runs, where the phone allows it; gives it back when it stops. */
 function useScreenOn(on: boolean) {
   useEffect(() => {
@@ -130,10 +147,23 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
   const canVibrate = typeof navigator !== 'undefined' && 'vibrate' in navigator
   const vibrate = !!settings.reliefVibrate && canVibrate
   const lastPhase = useRef<'in' | 'out' | null>(null)
+  const ambient = useRef<Ambient | null>(null)
+  const canPlay = canPlayAmbient()
+  const today = useTodayEntry()
+  const alreadyHelped = (today?.positiveActions ?? []).some((a) => a.trim().toLocaleLowerCase() === t.action.toLocaleLowerCase())
+  const [added, setAdded] = useState(false)
 
   const running = startedAt !== null
   useScreenOn(running)
   useEffect(() => onRunning(running), [running, onRunning])
+  // The sound belongs to the exercise: it stops with it, and with the page.
+  useEffect(() => {
+    if (!running) {
+      ambient.current?.stop()
+      ambient.current = null
+    }
+  }, [running])
+  useEffect(() => () => ambient.current?.stop(), [])
 
   useEffect(() => {
     if (startedAt === null) return
@@ -163,6 +193,7 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
     if (lastPhase.current !== b.phase) {
       lastPhase.current = b.phase
       if (vibrate) navigator.vibrate(VIBRATION[b.phase])
+      ambient.current?.phase(b.phase)
     }
   }, [running, b.phase, vibrate])
 
@@ -178,11 +209,15 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
           <div
             className="absolute inset-x-0 bottom-0"
             style={{
-              height: inn ? '82%' : '22%',
+              height: inn ? '100%' : '0%',
               background: 'color-mix(in srgb, var(--color-brand) 38%, var(--color-surface))',
               transition: `height ${inn ? IN_SECONDS : OUT_SECONDS}s ease-in-out`,
             }}
           />
+          <span className="absolute top-3 text-heading font-semibold tabular-nums" style={{ color: 'var(--color-ink)' }}>
+            <span className="sr-only">{t.timeLeft} </span>
+            {clock(running ? Math.max(0, seconds * 1000 - now) : seconds * 1000)}
+          </span>
           <span className="relative text-display font-bold" style={{ color: 'var(--color-ink)' }}>
             {label}
           </span>
@@ -201,6 +236,17 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
               onChange={setSeconds}
               options={DURATIONS.map((d) => ({ value: d, label: format(t.minutes, { n: d / 60 }, language) }))}
             />
+            {canPlay && (
+              <div className="flex items-center justify-between gap-3 min-h-11">
+                <span>
+                  <span className="block text-body font-medium">{t.music}</span>
+                  <span className="block text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+                    {t.musicHelper}
+                  </span>
+                </span>
+                <Toggle checked={!!settings.reliefMusic} onChange={(v) => void updateSettings({ reliefMusic: v })} label={t.music} />
+              </div>
+            )}
             {canVibrate && (
               <div className="flex items-center justify-between gap-3 min-h-11">
                 <span>
@@ -229,6 +275,8 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
               setNow(0)
               setStartedAt(Date.now())
               setSaid(t.startedAnnounce)
+              setAdded(false)
+              if (settings.reliefMusic && canPlay) ambient.current = startAmbient()
             }
           }}
           className="rounded-[var(--radius-control)] px-6 min-h-11 text-control font-semibold"
@@ -242,6 +290,21 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
         {finished && (
           <p className="text-body text-center" aria-hidden>
             {t.finished}
+          </p>
+        )}
+        {finished && !alreadyHelped && !added && (
+          <button
+            type="button"
+            onClick={() => void addHelped(t.action).then(() => setAdded(true))}
+            className="rounded-[var(--radius-control)] px-4 min-h-11 text-control font-semibold"
+            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+          >
+            {t.addHelped}
+          </button>
+        )}
+        {finished && (added || alreadyHelped) && (
+          <p className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.added}
           </p>
         )}
       </div>

@@ -1643,6 +1643,12 @@ export interface Translations {
     breathHint: string
     durationLabel: string
     minutes: string
+    action: string
+    addHelped: string
+    added: string
+    music: string
+    musicHelper: string
+    timeLeft: string
     vibrate: string
     vibrateHelper: string
     levelUp: string

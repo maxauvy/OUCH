@@ -516,6 +516,8 @@ export interface Settings {
   forecastCache?: ForecastCache
   /** The phone vibrates at each change of the breathing exercise. Per device (a phone may not have a vibrator): not restored from a backup. */
   reliefVibrate?: boolean
+  /** A soft sound plays during the breathing exercise. Per device, off until the person says yes; not restored from a backup. */
+  reliefMusic?: boolean
   /** The prescription the person noted, if any. Restored from a backup. */
   prescription?: Prescription
   /** The reminder card was closed, or put off, for this prescription (by its start). Per device. */
