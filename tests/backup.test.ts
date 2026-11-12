@@ -382,3 +382,11 @@ test('what the breathing screen keeps for this phone (vibration, sound, auto pau
   assert.equal(read?.reliefMusic, undefined)
   assert.equal(read?.reliefAuto, undefined)
 })
+
+test('identifiers that are names JavaScript gives meaning to are refused', () => {
+  for (const id of ['__proto__', 'constructor', 'prototype']) {
+    assert.equal(sanitizeMedication({ id, name: 'x' }), null, id)
+    assert.equal(sanitizeEntry({ ...entry, intakes: [{ medicationId: id, doses: 1 }] })?.intakes?.length ?? 0, 0, id)
+  }
+  assert.equal(sanitizeMedication({ id: 'm-proto', name: 'x' })?.id, 'm-proto')
+})
