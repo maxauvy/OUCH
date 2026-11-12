@@ -74,7 +74,7 @@ export function ReliefPage() {
           )}
         </>
       ) : (
-        <Steps steps={mode === 'relax' ? t.relax.steps : t.gentle.steps.map((text) => ({ text }))} illustrated={mode === 'relax'} onDone={() => setMode('home')} />
+        <Steps steps={mode === 'relax' ? t.relax.steps : t.gentle.steps} illustrated set={mode} onDone={() => setMode('home')} />
       )}
     </div>
   )
@@ -323,7 +323,7 @@ interface StepLine {
 }
 
 /** One step at a time, read at the person's pace. With "Pause auto" on, the next step comes by itself every 20 seconds; a tap on the picture holds it, the buttons still work, and after the last step the exercise ends. */
-function Steps({ steps, illustrated, onDone }: { steps: StepLine[]; illustrated: boolean; onDone: () => void }) {
+function Steps({ steps, illustrated, set, onDone }: { steps: StepLine[]; illustrated: boolean; set: 'relax' | 'gentle'; onDone: () => void }) {
   const t = useTranslation().relief
   const settings = useSettings()
   // The step and the time spent on it move together, so that the end of a step is one change, not two.
@@ -377,7 +377,7 @@ function Steps({ steps, illustrated, onDone }: { steps: StepLine[]; illustrated:
       </div>
       {illustrated && (
         <div onClick={() => auto && setPaused(!paused)}>
-          <ReliefIllustration step={i} />
+          <ReliefIllustration step={i} set={set} />
         </div>
       )}
       {auto && (

@@ -1812,7 +1812,7 @@ const fr: Translations = {
     close: 'Terminer',
     step: 'Étape {{n}} sur {{total}}',
     helpedTitle: 'Ce qui t’a aidé',
-    helpedNote: 'D’après ce que tu as noté. Une piste, pas une promesse.',
+    helpedNote: 'D’après ce que tu as noté.',
     relax: {
       title: 'Relâcher le corps, zone par zone',
       hint: '5 étapes, à ton rythme.',
@@ -1828,10 +1828,10 @@ const fr: Translations = {
       title: 'Un geste doux pour la nuque et les épaules',
       hint: '4 gestes lents. Si ça fait mal, tu arrêtes.',
       steps: [
-        'Assis, le dos soutenu. Monte les épaules vers les oreilles en inspirant, puis laisse-les retomber en soufflant. Deux ou trois fois.',
-        'Roule les épaules lentement vers l’arrière, trois petits cercles. Reste dans ce qui est confortable.',
-        'Incline doucement l’oreille vers l’épaule, sans l’aider avec la main. Respire, puis reviens au centre. De l’autre côté.',
-        'Pose les mains sur le ventre. Trois respirations lentes. Si un geste a fait mal, ne le refais pas.',
+        { title: 'Hausse et relâche', text: 'Assis, le dos soutenu. Monte les épaules vers les oreilles en inspirant, puis laisse-les retomber en soufflant. Deux ou trois fois.', cue: 'Inspire en montant, souffle en relâchant.' },
+        { title: 'Roule les épaules', text: 'Roule les épaules lentement vers l’arrière, trois petits cercles. Reste dans ce qui est confortable.', cue: 'Respire normalement.' },
+        { title: 'Incline la tête', text: 'Incline doucement l’oreille vers l’épaule, sans l’aider avec la main. Respire, puis reviens au centre. Puis l’autre côté.', cue: 'Souffle en inclinant.' },
+        { title: 'Les mains sur le ventre', text: 'Pose les mains sur le ventre. Trois respirations lentes. Si un geste a fait mal, ne le refais pas.', cue: 'Trois respirations lentes.' },
       ],
     },
   },
