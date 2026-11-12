@@ -1,6 +1,6 @@
 # Lire un rapport OUCH
 
-Une fiche d'une page (A4, `index.html`, anglais `index.en.html`) un flyer A5 (`flyer.html`, `flyer.en.html`) et un flyer A4 plus complet (`flyer-a4.html`, `flyer-a4.en.html`) pour un soignant qui reçoit un rapport OUCH pour la première fois : ce que c'est, comment lire la première page, les deux versions, ce que le rapport ne dit pas. Décrits d'après la v0.11.2.
+Une fiche d'une page (A4, `index.html`, anglais `index.en.html`) un flyer A5 (`flyer.html`, `flyer.en.html`) et un flyer A4 plus complet (`flyer-a4.html`, `flyer-a4.en.html`) pour un soignant qui reçoit un rapport OUCH pour la première fois : ce que c'est, comment lire la première page, les deux versions, ce que le rapport ne dit pas. Décrits d'après la v0.12.0.
 
 Les PDF sont produits par `scripts/build-clinician-docs.sh` (fiche A4, plaquette et note méthodologique, dans `public/soignants/`, offerts par l'application aux soignants) ; le flyer A5 s'imprime de la même façon :
 
