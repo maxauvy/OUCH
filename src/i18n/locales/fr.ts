@@ -1831,7 +1831,7 @@ const fr: Translations = {
   },
   gestures: {
     title: 'Mes gestes',
-    none: 'Choisis ici les gestes qui t’aident, en un geste.',
+    none: 'Garde ici ce qui t’aide, à portée d’un seul toucher.',
     choose: 'Voir et choisir mes gestes',
     chooseFirst: 'Choisir mes gestes',
     minutes: '{{n}} min',
