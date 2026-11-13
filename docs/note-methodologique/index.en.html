@@ -343,4 +343,28 @@ sup{font-size:6.6pt;line-height:0}
 </table>
 </div><div class="foot"><span>Prepared on 13 November 2026 from the published code of OUCH v0.12.1: the formulas and thresholds described are those of the software. This document is neither medical advice nor a medical device.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div>
 </div>
+<script>
+/* Fit each page: when its content runs down into the footer, shrink it a little (to 85 % at most) until it stops. A page that still overflows gets a data-overflow attribute. */
+(function () {
+  function fit() {
+    document.querySelectorAll('.page').forEach(function (page) {
+      var foot = page.querySelector('.foot'), inn = page.querySelector('.in');
+      if (!foot || !inn) return;
+      function over() {
+        var limit = foot.getBoundingClientRect().top - 2, worst = 0;
+        inn.querySelectorAll('*').forEach(function (c) {
+          if (getComputedStyle(c).position === 'absolute') return;
+          var r = c.getBoundingClientRect();
+          if (r.height > 0 && r.bottom - limit > worst) worst = r.bottom - limit;
+        });
+        return worst > 1;
+      }
+      var z = 1;
+      while (over() && z > 0.85) { z = Math.round((z - 0.01) * 100) / 100; inn.style.zoom = z; }
+      if (over()) page.setAttribute('data-overflow', '');
+    });
+  }
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
+})();
+</script>
 </body></html>

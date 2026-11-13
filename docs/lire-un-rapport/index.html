@@ -115,4 +115,28 @@ td.why{color:#2f3d47}
 <h2>Pour aller plus loin</h2>
 <p class="small" style="margin:0">La plaquette (2 pages) et la note méthodologique (14 pages : chaque formule, chaque seuil, chaque source) sont sur la page de la dernière release du projet. L’application est ouverte à tous, avec un mode démo de 90 jours fictifs : <b>maxauvy.github.io/OUCH</b>. Vos relectures et remarques sont bienvenues.</p>
 </div><div class="foot"><span>Document d’information. OUCH n’est ni un dispositif médical ni un avis médical ; les données sont auto-déclarées par le patient et non vérifiées.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div></div>
+<script>
+/* Fit each page: when its content runs down into the footer, shrink it a little (to 85 % at most) until it stops. A page that still overflows gets a data-overflow attribute. */
+(function () {
+  function fit() {
+    document.querySelectorAll('.page').forEach(function (page) {
+      var foot = page.querySelector('.foot'), inn = page.querySelector('.in');
+      if (!foot || !inn) return;
+      function over() {
+        var limit = foot.getBoundingClientRect().top - 2, worst = 0;
+        inn.querySelectorAll('*').forEach(function (c) {
+          if (getComputedStyle(c).position === 'absolute') return;
+          var r = c.getBoundingClientRect();
+          if (r.height > 0 && r.bottom - limit > worst) worst = r.bottom - limit;
+        });
+        return worst > 1;
+      }
+      var z = 1;
+      while (over() && z > 0.85) { z = Math.round((z - 0.01) * 100) / 100; inn.style.zoom = z; }
+      if (over()) page.setAttribute('data-overflow', '');
+    });
+  }
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
+})();
+</script>
 </body></html>
