@@ -169,6 +169,9 @@ function Pick({ icon, title, hint, onClick }: { icon: React.ReactNode; title: st
   )
 }
 
+/** The outline of the vessel: a soft pebble, no corner and no symmetry. */
+const PEBBLE = 'M104 16 C158 12 190 62 180 112 C172 156 138 188 92 184 C44 180 14 140 20 96 C26 50 58 20 104 16Z'
+
 /** The level: the water rises while breathing in and falls while breathing out. The word changes quietly (not announced at each breath); only the start and the end are said to a screen reader. The phone vibrates at each change, when it can and the person asked. */
 function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
   const t = useTranslation().relief
@@ -236,32 +239,43 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
     <Card>
       <SectionTitle>{t.breathTitle}</SectionTitle>
       <div className="flex flex-col items-center gap-3">
-        <div
-          aria-hidden
-          className="relative w-full h-64 rounded-[var(--radius-card)] overflow-hidden flex flex-col items-center justify-center"
-          style={{ background: 'var(--color-brand-soft)', boxShadow: 'inset 0 0 0 1px var(--color-hairline)' }}
-        >
-          <div
-            className="absolute inset-x-0 bottom-0"
-            style={{
-              height: inn ? '100%' : '0%',
-              background: 'color-mix(in srgb, var(--color-brand) 38%, var(--color-surface))',
-              transition: `height ${inn ? IN_SECONDS : OUT_SECONDS}s ease-in-out`,
-            }}
-          />
-          <span className="absolute top-3 text-heading font-semibold tabular-nums" style={{ color: 'var(--color-ink)' }}>
-            <span className="sr-only">{t.timeLeft} </span>
-            {clock(running ? Math.max(0, seconds * 1000 - now) : seconds * 1000)}
-          </span>
-          <span className="relative text-display font-bold" style={{ color: 'var(--color-ink)' }}>
-            {label}
-          </span>
-          <span className="relative text-body" style={{ color: 'var(--color-ink)' }}>
-            {running ? b.left : ' '}
-          </span>
-          <span className="relative text-caption mt-1" style={{ color: 'var(--color-ink)' }}>
-            {running ? (inn ? t.levelUp : t.levelDown) : ' '}
-          </span>
+        <div aria-hidden className="relative w-64 max-w-full aspect-square">
+          <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full">
+            <defs>
+              <clipPath id="breath-pebble">
+                <path d={PEBBLE} />
+              </clipPath>
+            </defs>
+            <path d={PEBBLE} fill="var(--color-brand-soft)" />
+            <g clipPath="url(#breath-pebble)">
+              <g
+                style={{
+                  transform: `translateY(${inn ? 14 : 198}px)`,
+                  transition: `transform ${inn ? IN_SECONDS : OUT_SECONDS}s ease-in-out`,
+                }}
+              >
+                <g className={running ? 'breath-wave' : undefined} style={{ transform: 'translateX(-100px)' }}>
+                  <path d="M0 0 Q25 -9 50 0 T100 0 T150 0 T200 0 T250 0 T300 0 V240 H0Z" fill="color-mix(in srgb, var(--color-brand) 38%, var(--color-surface))" />
+                </g>
+              </g>
+            </g>
+            <path d={PEBBLE} fill="none" stroke="var(--color-hairline)" strokeWidth="1.5" />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center px-10">
+            <span className="text-heading font-semibold tabular-nums mb-2" style={{ color: 'var(--color-ink)' }}>
+              <span className="sr-only">{t.timeLeft} </span>
+              {clock(running ? Math.max(0, seconds * 1000 - now) : seconds * 1000)}
+            </span>
+            <span className="text-display font-bold text-center leading-tight" style={{ color: 'var(--color-ink)' }}>
+              {label}
+            </span>
+            <span className="text-body" style={{ color: 'var(--color-ink)' }}>
+              {running ? b.left : ' '}
+            </span>
+            <span className="text-caption mt-1 text-center" style={{ color: 'var(--color-ink)' }}>
+              {running ? (inn ? t.levelUp : t.levelDown) : ' '}
+            </span>
+          </div>
         </div>
         {!running && (
           <div className="w-full flex flex-col gap-2">

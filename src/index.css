@@ -380,6 +380,18 @@ input::-webkit-date-and-time-value {
     opacity: 0.45;
   }
 }
+/* The surface of the water in the breathing exercise: one wave length slides by, so the surface ripples. */
+.breath-wave {
+  animation: breath-wave 4s linear infinite;
+}
+@keyframes breath-wave {
+  from {
+    transform: translateX(-100px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
 @keyframes weather-sway {
   50% {
     transform: translateX(2px) scale(1.08);
@@ -392,6 +404,7 @@ input::-webkit-date-and-time-value {
   .wf-drop,
   .wf-flash,
   .weather-sway,
+  .breath-wave,
   .weather-turn {
     animation: none !important;
   }
