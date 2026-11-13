@@ -16,6 +16,7 @@ import { Card, SectionTitle } from '../components/ui/Card'
 import { PageBack } from '../components/layout/PageBack'
 import { addHelped, clock, useScreenOn } from '../components/relief/helpers'
 import { GestureTimer, GesturesCard, GesturesPage } from '../components/relief/GesturesScreens'
+import { Footer } from '../components/layout/Footer'
 import { PlanForm, PlanView } from '../components/relief/PlanScreens'
 import type { ReliefGesture } from '../db/types'
 import { BUTTON, SECONDARY } from '../components/today/cardStyles'
@@ -133,6 +134,8 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
             onChoose={() => setView('gestes')}
           />
         )}
+        {/* Only on the home: not in the way of an exercise or a form. */}
+        {view === 'home' && <Footer />}
 
         {view === 'gestes' && <GesturesPage />}
         {view === 'timer' && gesture && <GestureTimer key={gesture.g.name} gesture={gesture.g} />}
