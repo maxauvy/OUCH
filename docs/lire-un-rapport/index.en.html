@@ -115,4 +115,28 @@ td.why{color:#2f3d47}
 <h2>Going further</h2>
 <p class="small" style="margin:0">The leaflet (2 pages) and the methodology note (14 pages: every formula, threshold and source) are on the project’s latest release page. The app is open to all, with a demo mode of 90 made-up days: <b>maxauvy.github.io/OUCH</b>. Your feedback is welcome.</p>
 </div><div class="foot"><span>Information sheet. OUCH is neither a medical device nor medical advice; the data is self-reported by the patient and unverified.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Free software, CeCILL v2.1 licence</span></div></div>
+<script>
+/* Fit each page: when its content runs down into the footer, shrink it a little (to 85 % at most) until it stops. A page that still overflows gets a data-overflow attribute. */
+(function () {
+  function fit() {
+    document.querySelectorAll('.page').forEach(function (page) {
+      var foot = page.querySelector('.foot'), inn = page.querySelector('.in');
+      if (!foot || !inn) return;
+      function over() {
+        var limit = foot.getBoundingClientRect().top - 2, worst = 0;
+        inn.querySelectorAll('*').forEach(function (c) {
+          if (getComputedStyle(c).position === 'absolute') return;
+          var r = c.getBoundingClientRect();
+          if (r.height > 0 && r.bottom - limit > worst) worst = r.bottom - limit;
+        });
+        return worst > 1;
+      }
+      var z = 1;
+      while (over() && z > 0.85) { z = Math.round((z - 0.01) * 100) / 100; inn.style.zoom = z; }
+      if (over()) page.setAttribute('data-overflow', '');
+    });
+  }
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
+})();
+</script>
 </body></html>
