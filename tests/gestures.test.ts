@@ -14,8 +14,8 @@ test('what was noted comes most often first, a slip of the keyboard is left out,
 })
 
 test('the gestures kept are cleaned: names tidied, no repeat, five at most, a time within the limits', () => {
-  const kept = cleanGestures([{ name: ' Bain  chaud ', minutes: 15 }, { name: 'bain chaud', minutes: 20 }, { name: '', minutes: 5 }, { name: 'Marche', minutes: 999 }, { name: 'Froid', minutes: 'x' }, 7, null])
-  assert.deepEqual(kept, [{ name: 'Bain chaud', minutes: 15 }, { name: 'Marche', minutes: MAX_MINUTES }, { name: 'Froid', minutes: DEFAULT_MINUTES }])
+  const kept = cleanGestures([{ name: ' Chaleur  douce ', minutes: 15 }, { name: 'chaleur douce', minutes: 20 }, { name: '', minutes: 5 }, { name: 'Marche', minutes: 999 }, { name: 'Froid', minutes: 'x' }, 7, null])
+  assert.deepEqual(kept, [{ name: 'Chaleur douce', minutes: 15 }, { name: 'Marche', minutes: MAX_MINUTES }, { name: 'Froid', minutes: DEFAULT_MINUTES }])
   assert.equal(cleanGestures('nope'), undefined)
   assert.equal(cleanGestures([]), undefined)
   assert.equal(cleanGestures(Array.from({ length: 9 }, (_, i) => ({ name: `g${i}`, minutes: 10 })))?.length, MAX_GESTURES)
