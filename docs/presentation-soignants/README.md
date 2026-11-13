@@ -1,6 +1,6 @@
 # Guide papier et diaporama pour présenter OUCH à des professionnels de santé
 
-Deux supports pour une séance de présentation, en français, décrits d'après la v0.12.0 :
+Deux supports pour une séance de présentation, en français, décrits d'après la v0.12.1 :
 
 - `guide.html` : un guide A4 de 13 pages (en bref, vue d'ensemble, une page par onglet, les deux rapports, ce que cela peut changer pour qui, confiance et limites, essayer et aider), plus une **fiche animateur** (annexe, page 13) : déroulé de 45 minutes, questions à poser, préparation. Il s'imprime en recto-verso et se laisse aux participants.
 - `diaporama.html` : 27 diapositives 16:9 avec des **notes d'orateur**. Ouvert dans un navigateur : flèches ou espace pour avancer, `N` affiche les notes, `F` le plein écran. Avec `?print` à la fin de l'adresse, toutes les diapositives s'affichent à la suite (c'est ce que lit `build.mjs` pour fabriquer le PDF).

@@ -6,6 +6,22 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.12.1] - 2026-11-13
+
+### Ajouté
+- **Un guide papier et un diaporama pour présenter OUCH à des professionnels de santé** (`docs/presentation-soignants/`) : un guide A4 de 13 pages avec une fiche animateur, 27 diapositives avec notes d'orateur, captures du mode démo. Rien ne change dans l'application (#283).
+
+### Modifié
+- **« Bain / douche chaude » remplace « Bain chaud »** parmi les suggestions de « Ce qui a aidé », pour celles et ceux qui n'ont pas de baignoire (en anglais : « Warm bath / shower »), avec une icône d'eau à la place de la baignoire. Les entrées déjà notées « Bain chaud » (ou « Warm bath »), les gestes gardés et les sauvegardes faites avant sont mis au nouveau libellé au premier lancement (la base passe en version 9) : elles comptent avec les nouvelles dans Tendances, le rapport et le mot des jours difficiles. Seul le texte exact est converti : ce que tu as écrit toi-même reste tel quel (#286, #287).
+- **« Un moment pour souffler » : le niveau d'eau monte et descend dans un galet**, une forme arrondie sans angle, à la place du cadre carré. La surface de l'eau ondule doucement pendant l'exercice. Les durées (4 secondes pour inspirer, 6 pour souffler), le son, le vibreur et les textes ne changent pas ; l'animation s'arrête pour qui a demandé moins de mouvement (#288).
+- **Le mot doux des jours difficiles** propose « Ouvrir mon plan » et « Un moment pour souffler » en deux lignes avec une icône et un chevron, comme dans l'onglet Consultation, à la place de deux liens soulignés. Les idées surlignées restent du texte : elles ne mènent nulle part (#285).
+- **Les lignes des cartes de l'onglet Consultation** ont toutes la même hauteur, avec ou sans phrase d'aide sous le titre : les séparateurs tombent à intervalles réguliers (#284).
+- **Dans Soulager, « Mes gestes » vide** ne répète plus quatre fois le mot « geste » : « Garde ici ce qui t'aide, à portée d'un seul toucher » (#285).
+- **L'accueil de Soulager a le pied de page** (crédit, code source, version) que les autres onglets avaient déjà. Il reste absent des écrans de l'exercice, du plan et des gestes (#289).
+
+### Corrigé
+- **La fiche pour un soignant et la liste « Ce qui t'a aidé » de Soulager suivent la langue choisie** : quand on passe du français à l'anglais (ou l'inverse), les suggestions de l'appli enregistrées dans l'autre langue (« Chaleur », « Bain / douche chaude »…) sont affichées dans la langue de la fiche, et comptent ensemble. Ce que tu as tapé toi-même n'est pas traduit (#284).
+
 ## [0.12.0] - 2026-11-12
 
 ### Ajouté
@@ -390,7 +406,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.12.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.12.1...HEAD
+[0.12.1]: https://github.com/maxauvy/OUCH/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/maxauvy/OUCH/compare/v0.11.2...v0.12.0
 [0.11.2]: https://github.com/maxauvy/OUCH/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/maxauvy/OUCH/compare/v0.11.0...v0.11.1
