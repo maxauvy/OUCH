@@ -7,6 +7,7 @@
 
 import type { DailyEntry, ReliefGesture } from '../db/types.ts'
 import { shiftISO } from './dates.ts'
+import { currentLabel } from './renamedSuggestions.ts'
 
 export const MAX_GESTURES = 5
 export const MAX_NAME = 60
@@ -29,7 +30,7 @@ export function cleanGestures(raw: unknown): ReliefGesture[] | undefined {
   if (!Array.isArray(raw)) return undefined
   const out: ReliefGesture[] = []
   for (const r of raw) {
-    const name = typeof (r as ReliefGesture)?.name === 'string' ? oneLine((r as ReliefGesture).name) : ''
+    const name = typeof (r as ReliefGesture)?.name === 'string' ? currentLabel(oneLine((r as ReliefGesture).name)) : ''
     if (name && !out.some((g) => same(g.name, name))) out.push({ name, minutes: clampMinutes((r as ReliefGesture).minutes) })
   }
   const kept = out.slice(0, MAX_GESTURES)

@@ -389,7 +389,7 @@ test('the plan for hard days is restored from a copy, cleaned like a typed one',
 })
 
 test('"Mes gestes" are restored from a copy, cleaned like typed ones', () => {
-  assert.deepEqual(sanitizeSettings({ reliefGestures: [{ name: ' Bain chaud ', minutes: 15 }, { name: 'bain chaud', minutes: 20 }, { name: 'Marche', minutes: 9999 }] })?.reliefGestures, [{ name: 'Bain chaud', minutes: 15 }, { name: 'Marche', minutes: 120 }])
+  assert.deepEqual(sanitizeSettings({ reliefGestures: [{ name: ' Chaleur douce ', minutes: 15 }, { name: 'chaleur douce', minutes: 20 }, { name: 'Marche', minutes: 9999 }] })?.reliefGestures, [{ name: 'Chaleur douce', minutes: 15 }, { name: 'Marche', minutes: 120 }])
   assert.equal(sanitizeSettings({ reliefGestures: 'x' })?.reliefGestures, undefined)
 })
 

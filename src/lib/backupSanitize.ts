@@ -53,6 +53,7 @@ import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
 import { makePrescription } from './prescription.ts'
 import { careSheetFromBackup } from './careSheet.ts'
 import { cleanGestures } from './gestures.ts'
+import { currentLabels } from './renamedSuggestions.ts'
 import { planFromBackup } from './hardDaysPlan.ts'
 import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
 import { capPast, cleanDoctor, cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
@@ -244,7 +245,10 @@ export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry 
     intakes: intakes(raw.intakes),
     // Free-text medication names of backups from before the registry existed.
     medications: strings(raw.medications),
-    positiveActions: strings(raw.positiveActions),
+    positiveActions: (() => {
+      const list = strings(raw.positiveActions)
+      return list && currentLabels(list)
+    })(),
     // Zones of every version are valid; an unknown one (or a repeat) is dropped.
     painLocations: (() => {
       const zones = strings(raw.painLocations)

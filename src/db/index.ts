@@ -6,6 +6,7 @@ import { todayISO } from '../lib/dates'
 import { buildDemoHistory } from '../lib/demoData'
 import { DEMO_DB_NAME, DEMO_LANGUAGE, type DemoLanguage } from '../lib/demoMode'
 import { upgradeLegacySettings } from './settingsUpgrade'
+import { currentGestures, currentLabels } from '../lib/renamedSuggestions'
 
 export { upgradeLegacySettings }
 
@@ -100,6 +101,28 @@ class OuchDB extends Dexie {
       })
       .upgrade(async (tx) => {
         await tx.table<LegacySettings>('settings').toCollection().modify(upgradeLegacySettings)
+      })
+    // v9 put "Bain chaud" under its new wording "Bain / douche chaude" (see
+    // `renamedSuggestions`), in the days' actions and in the kept gestures.
+    this.version(9)
+      .stores({
+        entries: '++id, &date, painLevel, createdAt',
+        settings: 'id',
+        medications: 'id, name',
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table<DailyEntry>('entries')
+          .toCollection()
+          .modify((entry) => {
+            if (Array.isArray(entry.positiveActions)) entry.positiveActions = currentLabels(entry.positiveActions)
+          })
+        await tx
+          .table<Settings>('settings')
+          .toCollection()
+          .modify((s) => {
+            if (Array.isArray(s.reliefGestures)) s.reliefGestures = currentGestures(s.reliefGestures)
+          })
       })
   }
 }

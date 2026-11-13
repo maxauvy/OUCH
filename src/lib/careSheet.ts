@@ -11,6 +11,7 @@ import { shiftISO } from './dates.ts'
 import { currentPeriod, isStopped } from './medications.ts'
 import { loggedEntries } from './loggedEntries.ts'
 import { quantile } from './stats.ts'
+import { currentLabel } from './renamedSuggestions.ts'
 import type { Language } from '../i18n/language.ts'
 import fr from '../i18n/locales/fr.ts'
 import en from '../i18n/locales/en.ts'
@@ -20,14 +21,9 @@ const SUGGESTIONS: Record<Language, readonly string[]> = {
   en: en.entryForm.positiveActionsSuggestions,
 }
 
-/** Suggestions that were worded differently before, as already stored in the journal, and the place of their current wording in the list. */
-const RENAMED: Record<string, number> = { 'bain chaud': 6, 'warm bath': 6 }
-
 /** A suggestion offered by the app is stored in the language it was picked in; shown in another language it is put in that one. What the person typed is kept as typed. */
 export function helperIn(label: string, language: Language): string {
-  const key = label.toLocaleLowerCase()
-  const renamed = RENAMED[key]
-  if (renamed !== undefined) return SUGGESTIONS[language][renamed] ?? label
+  const key = currentLabel(label).toLocaleLowerCase()
   for (const list of Object.values(SUGGESTIONS)) {
     const i = list.findIndex((s) => s.toLocaleLowerCase() === key)
     if (i >= 0) return SUGGESTIONS[language][i] ?? label
