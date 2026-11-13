@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { IconHeart, IconX } from '@tabler/icons-react'
+import { IconChevronRight, IconHeart, IconMessageHeart, IconWind, IconX, type Icon } from '@tabler/icons-react'
+import { RoundIcon } from '../ui/RoundIcon'
 import { db, updateSettings } from '../../db'
 import type { HardDaysCard as Card } from '../../lib/hardDays'
 import { useLanguage, useTranslation } from '../../i18n'
@@ -76,15 +77,9 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
           </p>
         )}
         {openRelief && (
-          <div className="flex flex-col items-start mt-2">
-            {hasPlan(plan) && (
-              <button type="button" onClick={() => openRelief('plan')} className="block text-control font-semibold underline underline-offset-2 text-left min-h-11" style={{ color: 'var(--color-brand)' }}>
-                {tp.open}
-              </button>
-            )}
-            <button type="button" onClick={() => openRelief('breath')} className="block text-control font-semibold underline underline-offset-2 text-left min-h-11" style={{ color: 'var(--color-brand)' }}>
-              {tr.cardButton}
-            </button>
+          <div className="flex flex-col gap-2 mt-3">
+            {hasPlan(plan) && <Action icon={IconMessageHeart} label={tp.open} onClick={() => openRelief('plan')} />}
+            <Action icon={IconWind} label={tr.cardButton} onClick={() => openRelief('breath')} />
           </div>
         )}
         {light && (
@@ -108,6 +103,17 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
         <IconX size={16} aria-hidden />
       </button>
     </section>
+  )
+}
+
+/** A way to feel better, one tap away: a white row with a round icon, like the rows of the Consultation tab. */
+function Action({ icon, label, onClick }: { icon: Icon; label: string; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick} className="flex items-center gap-3 w-full min-h-12 py-1.5 pl-2 pr-3 rounded-[var(--radius-control)] text-left text-control font-semibold" style={{ background: 'var(--color-surface)' }}>
+      <RoundIcon icon={icon} />
+      <span className="flex-1 min-w-0">{label}</span>
+      <IconChevronRight size={20} aria-hidden style={{ color: 'var(--color-ink-muted)' }} />
+    </button>
   )
 }
 
