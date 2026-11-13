@@ -795,7 +795,7 @@ const en: Translations = {
       'Gentle stretching',
       'Short walk',
       'Meditation / breathing',
-      'Warm bath',
+      'Warm bath / shower',
       'Physiotherapy / care',
       'Pleasant social time',
       'Enjoyable activity',

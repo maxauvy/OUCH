@@ -155,7 +155,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     { name: 'Marche courte', p: (base) => (base < 4.5 ? 0.6 : 0.08), effect: 1.2 },
     { name: 'Kiné / soins', p: (_, weekday) => (weekday === 2 ? 0.9 : 0), effect: 1.4 },
     { name: 'Étirements doux', p: () => 0.3, effect: 0.6 },
-    { name: 'Bain chaud', p: () => 0.2, effect: 0.6 },
+    { name: 'Bain / douche chaude', p: () => 0.2, effect: 0.6 },
     { name: 'Moment social agréable', p: (_, weekday) => (weekday === 0 || weekday === 6 ? 0.5 : 0.12), effect: 1 },
     { name: 'Repos / sieste', p: (base) => (base >= 6 ? 0.75 : 0.08), effect: 0.3 },
   ]
@@ -445,7 +445,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
       who: 'Léa, 06 00 00 00 00, si ça dure plus de trois jours.',
       remember: 'Mon traitement du soir, un grand verre d’eau.',
     },
-    reliefGestures: [{ name: 'Bain chaud', minutes: 15 }, { name: 'Marche courte', minutes: 10 }, { name: 'Étirements doux', minutes: 10 }],
+    reliefGestures: [{ name: 'Bain / douche chaude', minutes: 15 }, { name: 'Marche courte', minutes: 10 }, { name: 'Étirements doux', minutes: 10 }],
     leadChoices,
     ...(walkTrial && { leadTrialHistory: [walkTrial] }),
   }
@@ -458,7 +458,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
 // an English UI would show them in French. They are translated in the data.
 const EN_STRINGS: Record<string, string> = {
   'Méditation / respiration': 'Meditation / breathing', 'Marche courte': 'Short walk', 'Kiné / soins': 'Physiotherapy / care',
-  'Étirements doux': 'Gentle stretching', 'Bain chaud': 'Warm bath', 'Moment social agréable': 'Pleasant social time', 'Repos / sieste': 'Rest / nap',
+  'Étirements doux': 'Gentle stretching', 'Bain / douche chaude': 'Warm bath / shower', 'Moment social agréable': 'Pleasant social time', 'Repos / sieste': 'Rest / nap',
   'Bonne journée, balade au parc avec les enfants.': 'Good day, walk in the park with the kids.',
   'Journée tranquille à la maison.': 'Quiet day at home.',
   'Déjeuner avec une amie, bon moment.': 'Lunch with a friend, lovely time.',
