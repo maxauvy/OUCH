@@ -11,6 +11,24 @@ import { shiftISO } from './dates.ts'
 import { currentPeriod, isStopped } from './medications.ts'
 import { loggedEntries } from './loggedEntries.ts'
 import { quantile } from './stats.ts'
+import type { Language } from '../i18n/language.ts'
+import fr from '../i18n/locales/fr.ts'
+import en from '../i18n/locales/en.ts'
+
+const SUGGESTIONS: Record<Language, readonly string[]> = {
+  fr: fr.entryForm.positiveActionsSuggestions,
+  en: en.entryForm.positiveActionsSuggestions,
+}
+
+/** A suggestion offered by the app is stored in the language it was picked in; shown in another language it is put in that one. What the person typed is kept as typed. */
+export function helperIn(label: string, language: Language): string {
+  const key = label.toLocaleLowerCase()
+  for (const list of Object.values(SUGGESTIONS)) {
+    const i = list.findIndex((s) => s.toLocaleLowerCase() === key)
+    if (i >= 0) return SUGGESTIONS[language][i] ?? label
+  }
+  return label
+}
 
 export const MAX_ALLERGIES = 8
 export const MAX_ALLERGY_LENGTH = 60
@@ -112,10 +130,10 @@ export function usualZones(entries: readonly DailyEntry[], today: string, max = 
 }
 
 /** What the person noted as having helped, on the most days of the last 90, at most three; kept as typed. */
-export function usualHelpers(entries: readonly DailyEntry[], today: string, max = 3): string[] {
+export function usualHelpers(entries: readonly DailyEntry[], today: string, max = 3, language?: Language): string[] {
   const counts = new Map<string, { label: string; n: number }>()
   for (const e of recent(entries as DailyEntry[], today)) {
-    for (const raw of new Set((e.positiveActions ?? []).map((a) => oneLine(a, 60)).filter(Boolean))) {
+    for (const raw of new Set((e.positiveActions ?? []).map((a) => oneLine(a, 60)).filter(Boolean).map((a) => (language ? helperIn(a, language) : a)))) {
       const key = raw.toLocaleLowerCase()
       const cur = counts.get(key)
       counts.set(key, { label: cur?.label ?? raw, n: (cur?.n ?? 0) + 1 })
@@ -188,12 +206,12 @@ export function ageOn(birthDate: string | undefined, today: string): number | nu
 }
 
 /** Everything the journal gives the sheet, as data: the words around it come from the language of the sheet. */
-export function careSheetData(input: { entries: readonly DailyEntry[]; medications: readonly Medication[]; today: string }) {
-  const { entries, medications, today } = input
+export function careSheetData(input: { entries: readonly DailyEntry[]; medications: readonly Medication[]; today: string; language?: Language }) {
+  const { entries, medications, today, language } = input
   return {
     pain: usualPain(entries, today),
     zones: usualZones(entries, today),
-    helpers: usualHelpers(entries, today),
+    helpers: usualHelpers(entries, today, 3, language),
     treatments: currentMedications(medications),
     effects: notedEffects(medications, entries),
   }

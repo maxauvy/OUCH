@@ -78,6 +78,10 @@ test('the zones listed are those reported on a fifth of the days, most frequent 
 test('what helps needs three days; repeats in case are one; kept as first typed', () => {
   const list = days(20, () => 4, (i) => ({ positiveActions: i < 5 ? ['Bain chaud'] : i < 9 ? ['bain chaud', 'Marche'] : i < 11 ? ['Marche'] : [] }))
   assert.deepEqual(usualHelpers(list, today), ['Bain chaud', 'Marche'])
+  // the app's own suggestions follow the language of the sheet, and count together
+  const mixed = days(20, () => 4, (i) => ({ positiveActions: [i % 2 ? 'Warm bath' : 'Bain chaud', 'Ma tisane'] }))
+  assert.deepEqual(usualHelpers(mixed, today, 3, 'en'), ['Ma tisane', 'Warm bath'])
+  assert.deepEqual(usualHelpers(mixed, today, 3, 'fr'), ['Bain chaud', 'Ma tisane'])
   const two = days(20, () => 4, (i) => ({ positiveActions: i < 3 ? ['Marche'] : [] }))
   assert.deepEqual(usualHelpers(two, today), ['Marche'])
   assert.deepEqual(usualHelpers(days(20, () => 4, (i) => ({ positiveActions: i < 2 ? ['Marche'] : [] })), today), [])

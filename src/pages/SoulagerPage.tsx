@@ -39,7 +39,8 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
   const [gesture, setGesture] = useState<{ g: ReliefGesture; from: 'home' | 'gestes' } | null>(null)
   // While the water moves, nothing else is on the screen.
   const [breathing, setBreathing] = useState(false)
-  const helped = entries ? usualHelpers(entries, todayISO()) : []
+  const language = useLanguage()
+  const helped = entries ? usualHelpers(entries, todayISO(), 3, language) : []
 
   useEffect(() => {
     window.scrollTo(0, 0)

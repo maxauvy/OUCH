@@ -42,7 +42,7 @@ export function CareSheetPage({ onBack }: { onBack: () => void }) {
     headingRef.current?.focus()
   }, [])
 
-  const data = useMemo(() => (entries && medications ? careSheetData({ entries, medications, today }) : null), [entries, medications, today])
+  const data = useMemo(() => (entries && medications ? careSheetData({ entries, medications, today, language }) : null), [entries, medications, today, language])
   const input: CareSheetInput | null = data && {
     language,
     today,
