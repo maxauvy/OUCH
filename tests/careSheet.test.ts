@@ -5,7 +5,7 @@ import type { DailyEntry, Medication } from '../src/db/types.ts'
 import { shiftISO } from '../src/lib/dates.ts'
 import { sanitizeSettings } from '../src/lib/backupSanitize.ts'
 import {
-  careSheetFromBackup, cleanAllergies, cleanCareSheet, cleanContacts, cleanPhone, currentMedications, notedEffects, painRange, usualHelpers, usualPain, usualZones,
+  careSheetFromBackup, cleanAllergies, cleanCareSheet, cleanContacts, cleanPhone, currentMedications, notedEffects, painRange, helperIn, usualHelpers, usualPain, usualZones,
 } from '../src/lib/careSheet.ts'
 
 const today = '2026-11-09'
@@ -80,8 +80,11 @@ test('what helps needs three days; repeats in case are one; kept as first typed'
   assert.deepEqual(usualHelpers(list, today), ['Bain chaud', 'Marche'])
   // the app's own suggestions follow the language of the sheet, and count together
   const mixed = days(20, () => 4, (i) => ({ positiveActions: [i % 2 ? 'Warm bath' : 'Bain chaud', 'Ma tisane'] }))
-  assert.deepEqual(usualHelpers(mixed, today, 3, 'en'), ['Ma tisane', 'Warm bath'])
-  assert.deepEqual(usualHelpers(mixed, today, 3, 'fr'), ['Bain chaud', 'Ma tisane'])
+  assert.deepEqual(usualHelpers(mixed, today, 3, 'en'), ['Ma tisane', 'Warm bath / shower'])
+  assert.deepEqual(usualHelpers(mixed, today, 3, 'fr'), ['Bain / douche chaude', 'Ma tisane'])
+  // the bath suggestion was worded "Bain chaud" before: entries already stored count with the new one
+  assert.equal(helperIn('Bain chaud', 'en'), 'Warm bath / shower')
+  assert.equal(helperIn('Warm bath / shower', 'fr'), 'Bain / douche chaude')
   const two = days(20, () => 4, (i) => ({ positiveActions: i < 3 ? ['Marche'] : [] }))
   assert.deepEqual(usualHelpers(two, today), ['Marche'])
   assert.deepEqual(usualHelpers(days(20, () => 4, (i) => ({ positiveActions: i < 2 ? ['Marche'] : [] })), today), [])

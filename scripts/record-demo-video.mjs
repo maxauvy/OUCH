@@ -102,7 +102,7 @@ await wait(700)
 await tap(p.getByRole('button', { name: 'Tête' })); await wait(500)
 await scroll(520, 1600); await wait(500)
 await scroll(700, 1800); await wait(300)
-await tap(p.getByRole('button', { name: 'Bain chaud' })); await wait(600)
+await tap(p.getByRole('button', { name: 'Bain / douche chaude' })); await wait(600)
 await scroll(-1400, 1500); await wait(200)
 
 // Journal

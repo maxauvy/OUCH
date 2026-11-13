@@ -797,7 +797,7 @@ const fr: Translations = {
       'Étirements doux',
       'Marche courte',
       'Méditation / respiration',
-      'Bain chaud',
+      'Bain / douche chaude',
       'Kiné / soins',
       'Moment social agréable',
       'Activité plaisir',

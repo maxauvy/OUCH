@@ -40,7 +40,7 @@ const T = EN ? {
   c9: ['Appointment', 'A report for your *doctor*', 'Ready to print or export as PDF.'],
 } : {
   locale: 'fr-FR', today: 'Aujourd', journal: 'Journal', trends: 'Tendances', kids: 'Enfants',
-  head: 'Tête', upperBack: 'Dos haut', bath: /Bain chaud/, d90: /^90 j/, age: '8–12 ans', report: 'Rapport pour mon médecin',
+  head: 'Tête', upperBack: 'Dos haut', bath: /Bain \/ douche chaude/, d90: /^90 j/, age: '8–12 ans', report: 'Rapport pour mon médecin',
   weekday: /en moyenne meilleures/, walk: 'Marche courte', shareBtn: /Partager ma météo/, msg: 'Journée un peu voilée, merci d’être là',
   c1: ['Aujourd’hui', 'Ta journée en *10 secondes*', 'Glisse, tape, c’est noté.'],
   c2: ['Comprendre', 'Ce qui *influence* ta douleur', 'Sommeil, stress, météo, traitements : tout est relié.'],
