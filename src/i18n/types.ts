@@ -769,6 +769,9 @@ export interface Translations {
     markedFactors: Record<FlareFactor, string>
     /** In the flares tile: `{{n}} {{n:thing|things}}` marked by the patient */
     tileMarked: string
+    /** The flares tile when only the marked periods can be counted: its name, and what stands under the number */
+    tileMarkedLabel: string
+    tileMarkedBy: string
     compareTitle: string
     compareDiffLower: string
     compareDiffHigher: string

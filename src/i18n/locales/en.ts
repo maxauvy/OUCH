@@ -968,6 +968,8 @@ const en: Translations = {
     markedOngoing: 'ongoing',
     markedFactors: { sleep: 'sleep', stress: 'stress', effort: 'effort', weather: 'weather', period: 'period', infection: 'infection', treatment: 'treatment' },
     tileMarked: '{{n}} {{n:period|periods}} noted by the patient',
+    tileMarkedLabel: 'Difficult periods',
+    tileMarkedBy: 'noted by the patient',
     compareTitle: 'Two periods compared',
     compareDiffLower: 'Mean pain went down by {{diff}} {{n:point|points}} from one period to the other.',
     compareDiffHigher: 'Mean pain went up by {{diff}} {{n:point|points}} from one period to the other.',
