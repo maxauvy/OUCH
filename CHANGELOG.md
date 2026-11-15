@@ -6,6 +6,22 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.12.2] - 2026-11-15
+
+### Ajouté
+- **Une vraie fin pour les exercices de Soulager.** À la fin de la respiration, du geste doux pour la nuque, de « Relâcher le corps » et d'un geste avec minuteur, un petit écran animé s'affiche, tiré au hasard parmi trois : un galet qui se pose avec une coche (« C'est fini. Tu t'es accordé ce moment. »), des bulles qui montent autour d'un cœur (« Bien joué. Tu as pris du temps pour toi. »), une fleur qui s'ouvre (« Voilà. Reste un instant si tu veux. »). Une ligne dit ce qui a été fait, sans compteur ni série (« Relâcher le corps, zone par zone · 5 étapes », « 3 min de respiration »). Puis : ajouter l'exercice à « ce qui a aidé » d'aujourd'hui (un choix, jamais fait seul ; nouveau pour « Relâcher le corps », qui ajoute « Méditation / respiration », et pour le geste doux, qui ajoute « Étirements doux » ; rien n'est proposé si c'est déjà noté), recommencer, ou revenir à l'écran d'où l'on vient. Avant, les deux exercices lus pas à pas renvoyaient directement à l'accueil de Soulager. L'animation s'arrête pour qui a demandé moins de mouvement (#293).
+
+### Modifié
+- **Le calendrier du Journal est lisible en mode sombre.** Les jours avec une météo gardaient les tuiles pastel du mode clair, les éléments les plus brillants de l'écran (13 à 15:1 contre la carte), avec des chiffres et des icônes peu contrastés dessus. Chaque tuile est maintenant une teinte profonde de la couleur de la météo, le chiffre prend l'encre claire de l'appli et l'icône une teinte claire de sa couleur. La légende du calendrier et la tuile « ton jour le plus dur » de Tendances suivent. Le mode clair ne change pas (#294).
+- **Dans le rapport, la tuile des périodes notées par le patient porte son nom quand rien n'est détecté.** Quand OUCH ne peut pas repérer de poussées (une migraine seule, trop peu de jours), la tuile « Poussées » affichait le nombre de périodes notées ; elle s'appelle maintenant « Périodes difficiles », avec « indiquées par le patient » dessous. Quand les poussées sont détectées, rien ne change : la tuile les compte, avec « + n période(s) indiquée(s) par le patient » à côté (#295).
+- **La fiche « Lire un rapport OUCH »** (une page A4 et flyers, français et anglais) : captures refaites depuis le mode démo, un paragraphe sur la fiche d'une page pour un soignant qui ne connaît pas encore la personne, et la note méthodologique compte 14 pages, pas 13 (#292).
+
+### Corrigé
+- **Des PDF pour soignants avaient du texte qui passait sur le pied de page** (plaquette page 2, « Lire un rapport » en français, note méthodologique pages 1, 2 et 5), y compris dans les PDF de la 0.12.0 et de la 0.12.1. Une page dont le contenu déborde est maintenant réduite de 1 % à 5 % jusqu'à tenir ; rien n'est retiré (#291).
+
+### Tests
+- Une poussée repérée et une période notée par le patient ne sont jamais comptées deux fois, ni additionnées : des tests le vérifient (jours de poussée, feuille « depuis le dernier rendez-vous », chronologie, tuile du rapport) et empêchent les modules de calcul de lire les périodes notées (#295). 639 tests.
+
 ## [0.12.1] - 2026-11-13
 
 ### Ajouté
@@ -406,7 +422,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.12.1...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.12.2...HEAD
+[0.12.2]: https://github.com/maxauvy/OUCH/compare/v0.12.1...v0.12.2
 [0.12.1]: https://github.com/maxauvy/OUCH/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/maxauvy/OUCH/compare/v0.11.2...v0.12.0
 [0.11.2]: https://github.com/maxauvy/OUCH/compare/v0.11.1...v0.11.2
