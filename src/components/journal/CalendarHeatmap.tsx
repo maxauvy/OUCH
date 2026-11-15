@@ -12,7 +12,7 @@ import {
 } from 'date-fns'
 import { hasPain } from '../../lib/loggedEntries'
 import type { DailyEntry, PainWeatherLevel } from '../../db/types'
-import { computePainWeather, painWeatherByLevel } from '../../lib/painWeather'
+import { computePainWeather, painWeatherByLevel, painWeatherTile } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { usePalette } from '../../hooks/usePalette'
 import { useLocale, useTranslation } from '../../i18n'
@@ -95,6 +95,8 @@ export function CalendarHeatmap({
           // Days of the neighbouring months keep only the dot: no tint, and a
           // muted number that still reads (fading the whole cell didn't).
           const tinted = weather && inMonth ? weather : null
+          // Its colours follow the mode: pale tints in light, deep ones in dark (see index.css).
+          const tone = tinted ? painWeatherTile(tinted.level) : null
           const selected = key === selectedDate
           const today = isToday(day)
           const dayLabel = format(day, 'd MMMM yyyy', { locale: dateFnsLocale })
@@ -116,15 +118,14 @@ export function CalendarHeatmap({
               // so the flare bar under them crosses neither.
               className={`aspect-square rounded-xl flex flex-col items-center relative text-caption leading-none ${weather ? 'justify-start pt-[3px]' : 'justify-center'} ${inMonth ? 'font-medium' : 'font-normal'}`}
               style={{
-                background: tinted ? tinted.soft : 'transparent',
-                // The weather color stays on the background and the dot; the
-                // number takes the weather's own dark shade (4.6:1 or more on
-                // its tint). The tints stay light in dark mode, so the app's
-                // ink, light there, can't be used on them.
-                color: tinted ? tinted.ink : 'var(--color-ink-muted)',
+                background: tone ? tone.tile : 'transparent',
+                // The weather color stays on the background; the number takes
+                // the weather's own dark shade on the pale tint (4.6:1 or more),
+                // and the page's own light ink on the deep tint of dark mode.
+                color: tone ? tone.mark : 'var(--color-ink-muted)',
                 // Inset rings rather than outlines, so the keyboard focus
                 // outline stays free.
-                boxShadow: selected ? `inset 0 0 0 2px ${t.brand}` : today ? `inset 0 0 0 1.5px ${tinted ? tinted.ink : t.inkMuted}` : undefined,
+                boxShadow: selected ? `inset 0 0 0 2px ${t.brand}` : today ? `inset 0 0 0 1.5px ${tone ? tone.mark : t.inkMuted}` : undefined,
               }}
             >
               {format(day, 'd')}
@@ -138,12 +139,12 @@ export function CalendarHeatmap({
                   name={weather.icon as never}
                   size={14}
                   className="mt-[2px]"
-                  style={{ color: tinted ? tinted.ink : 'var(--color-ink-muted)' }}
+                  style={{ color: tone ? tone.glyph : 'var(--color-ink-muted)' }}
                 />
               )}
               {noPain && <NoPainRing color={inMonth ? 'var(--color-ink-muted)' : 'var(--color-hairline)'} className="mt-0.5" />}
-              {inFlare && <FlareBar color={tinted ? tinted.ink : 'var(--color-ink-muted)'} className={`absolute ${weather ? 'bottom-[2px]' : 'bottom-1.5'}`} />}
-              {inMarked && <MarkedBar color={tinted ? tinted.ink : 'var(--color-ink-muted)'} className={`absolute ${weather ? 'bottom-[2px]' : 'bottom-1.5'} ${inFlare ? 'translate-y-[-5px]' : ''}`} />}
+              {inFlare && <FlareBar color={tone ? tone.mark : 'var(--color-ink-muted)'} className={`absolute ${weather ? 'bottom-[2px]' : 'bottom-1.5'}`} />}
+              {inMarked && <MarkedBar color={tone ? tone.mark : 'var(--color-ink-muted)'} className={`absolute ${weather ? 'bottom-[2px]' : 'bottom-1.5'} ${inFlare ? 'translate-y-[-5px]' : ''}`} />}
             </button>
           )
         })}
@@ -187,11 +188,12 @@ function WeatherLegend({ withFlare, withMarked, withNoPain }: { withFlare: boole
       <ul aria-labelledby={id} className="flex flex-wrap gap-x-3 gap-y-2">
         {LEVELS.map((level) => {
           const w = painWeatherByLevel(level)
+          const tone = painWeatherTile(level)
           return (
             <li key={level} className="flex items-center gap-1.5">
               <span
                 className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center"
-                style={{ background: w.soft, color: w.ink }}
+                style={{ background: tone.tile, color: tone.glyph }}
                 aria-hidden
               >
                 <WeatherIcon name={w.icon as never} size={18} />

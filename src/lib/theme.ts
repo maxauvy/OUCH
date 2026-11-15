@@ -16,6 +16,15 @@ const WEATHER = {
   5: { color: '#574a7a', soft: '#e7e2f0', ink: '#574a7a' },
 } as const
 
+/** The calendar's tiles in dark mode (see `--color-weather-N-tile` in index.css, which this mirrors): a deep tint of each hue, the page's ink for the number and a light shade of the hue for the icon. */
+export const WEATHER_TILE_DARK = {
+  1: { tile: '#48402b', mark: '#e6edf1', glyph: '#e3a73b' },
+  2: { tile: '#414136', mark: '#e6edf1', glyph: '#c7ab68' },
+  3: { tile: '#373c45', mark: '#e6edf1', glyph: '#b3aebf' },
+  4: { tile: '#283744', mark: '#e6edf1', glyph: '#8fb0d1' },
+  5: { tile: '#262a3a', mark: '#e6edf1', glyph: '#b3abc8' },
+} as const
+
 const LIGHT = {
   paper: '#f3f6f8',
   surface: '#ffffff',

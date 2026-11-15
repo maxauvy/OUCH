@@ -70,6 +70,28 @@
   --color-weather-3-text: #6a6473;
   --color-weather-4-text: #506989;
   --color-weather-5-text: #574a7a;
+  /* The tiles of the Journal's calendar (and of the "hardest weekday" tile of
+     Trends): `tile` is the fill, `mark` the day's number and its bars, `glyph`
+     the weather icon. Light mode: the tint and its ink. Dark mode swaps in a
+     deep tint of each hue, so the tiles do not glare against the page (the
+     pale tints were 13 to 15:1 against the card), with the page's own ink for
+     the number and a light shade of the hue for the icon. Mirrored in
+     lib/theme.ts (`WEATHER_TILE_DARK`). */
+  --color-weather-1-tile: #fbf0dc;
+  --color-weather-2-tile: #f3ecd9;
+  --color-weather-3-tile: #eae7ee;
+  --color-weather-4-tile: #e1e9f1;
+  --color-weather-5-tile: #e7e2f0;
+  --color-weather-1-mark: #8b662f;
+  --color-weather-2-mark: #776647;
+  --color-weather-3-mark: #6a6473;
+  --color-weather-4-mark: #506989;
+  --color-weather-5-mark: #574a7a;
+  --color-weather-1-glyph: #8b662f;
+  --color-weather-2-glyph: #776647;
+  --color-weather-3-glyph: #6a6473;
+  --color-weather-4-glyph: #506989;
+  --color-weather-5-glyph: #574a7a;
 
   --radius-card: 12px;
   /* Buttons, chips and inputs: softly squared. */
@@ -150,6 +172,21 @@
     --color-weather-3-text: #9b95a6;
     --color-weather-4-text: #819ab7;
     --color-weather-5-text: #9e96b2;
+    --color-weather-1-tile: #48402b;
+    --color-weather-2-tile: #414136;
+    --color-weather-3-tile: #373c45;
+    --color-weather-4-tile: #283744;
+    --color-weather-5-tile: #262a3a;
+    --color-weather-1-mark: #e6edf1;
+    --color-weather-2-mark: #e6edf1;
+    --color-weather-3-mark: #e6edf1;
+    --color-weather-4-mark: #e6edf1;
+    --color-weather-5-mark: #e6edf1;
+    --color-weather-1-glyph: #e3a73b;
+    --color-weather-2-glyph: #c7ab68;
+    --color-weather-3-glyph: #b3aebf;
+    --color-weather-4-glyph: #8fb0d1;
+    --color-weather-5-glyph: #b3abc8;
     --cat-pain: #f28b82;
     --cat-pain-soft: #3d1f1d;
     --cat-fatigue: #f2b75c;
@@ -196,6 +233,21 @@
   --color-weather-3-text: #9b95a6;
   --color-weather-4-text: #819ab7;
   --color-weather-5-text: #9e96b2;
+  --color-weather-1-tile: #48402b;
+  --color-weather-2-tile: #414136;
+  --color-weather-3-tile: #373c45;
+  --color-weather-4-tile: #283744;
+  --color-weather-5-tile: #262a3a;
+  --color-weather-1-mark: #e6edf1;
+  --color-weather-2-mark: #e6edf1;
+  --color-weather-3-mark: #e6edf1;
+  --color-weather-4-mark: #e6edf1;
+  --color-weather-5-mark: #e6edf1;
+  --color-weather-1-glyph: #e3a73b;
+  --color-weather-2-glyph: #c7ab68;
+  --color-weather-3-glyph: #b3aebf;
+  --color-weather-4-glyph: #8fb0d1;
+  --color-weather-5-glyph: #b3abc8;
   --cat-pain: #f28b82;
   --cat-pain-soft: #3d1f1d;
   --cat-fatigue: #f2b75c;
