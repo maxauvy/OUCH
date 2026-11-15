@@ -7,6 +7,14 @@
 /** Seconds to breathe in, then out. */
 export const IN_SECONDS = 4
 export const OUT_SECONDS = 6
+/** How many closing screens there are for an exercise (see `ExerciseEnd`). */
+export const ENDINGS = 3
+
+/** Which closing screen this time: any of them, at random, so the end is not always the same. `random` is for the tests. */
+export function pickEnding(random: () => number = Math.random): number {
+  return Math.min(ENDINGS - 1, Math.max(0, Math.floor(random() * ENDINGS)))
+}
+
 /** The exercise ends by itself after this long, to choose among `DURATIONS`. */
 export const SESSION_SECONDS = 180
 export const DURATIONS = [60, 180, 300] as const
