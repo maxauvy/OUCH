@@ -1660,16 +1660,10 @@ export interface Translations {
     full: string
     note: string
     calm: string
-    finished: string
     outOf: string
-    over: string
     started: string
     start: string
     stop: string
-    again: string
-    addHelped: string
-    added: string
-    nothingAdded: string
     screenOn: string
   }
   plan: {
@@ -1717,7 +1711,6 @@ export interface Translations {
     breatheIn: string
     breatheOut: string
     ready: string
-    finished: string
     startedAnnounce: string
     otherTitle: string
     next: string
@@ -1726,6 +1719,14 @@ export interface Translations {
     step: string
     helpedTitle: string
     helpedNote: string
+    /** What closes an exercise: one of three words, picked at random, then a line saying what was done. */
+    end: {
+      variants: { title: string; note: string }[]
+      breathInfo: string
+      stepsInfo: string
+      gestureInfo: string
+      nothingAdded: string
+    }
     relax: { title: string; hint: string; steps: { title: string; text: string; cue: string }[] }
     gentle: { title: string; hint: string; steps: { title: string; text: string; cue: string }[] }
   }

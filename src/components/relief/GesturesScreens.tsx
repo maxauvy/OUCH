@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { IconMinus, IconPlus, IconStar, IconStarFilled } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { ReliefGesture } from '../../db/types'
-import { useTodayEntry } from '../../hooks/useEntries'
 import { useAllEntries } from '../../hooks/useEntries'
 import { useSettings } from '../../hooks/useSettings'
 import { format } from '../../i18n/format'
@@ -12,7 +11,8 @@ import { todayISO } from '../../lib/dates'
 import { VIBRATION } from '../../lib/relief'
 import { BUTTON, PRIMARY, SECONDARY } from '../today/cardStyles'
 import { Card, SectionTitle } from '../ui/Card'
-import { addHelped, clock, useScreenOn } from './helpers'
+import { clock, useScreenOn } from './helpers'
+import { ExerciseEnd } from './ExerciseEnd'
 import { gestureIcon } from './gestureIcon'
 
 const save = (kept: ReliefGesture[]) => updateSettings({ reliefGestures: kept.length ? kept : undefined })
@@ -161,16 +161,14 @@ export function GesturesPage() {
 }
 
 /** One gesture, one timer: it waits for a tap to start, counts the time left, and at the end offers to add the gesture to what helped today. The screen stays on while it runs. */
-export function GestureTimer({ gesture }: { gesture: ReliefGesture }) {
+export function GestureTimer({ gesture, onBack, backLabel }: { gesture: ReliefGesture; onBack: () => void; backLabel: string }) {
   const t = useTranslation().gestures
+  const tr = useTranslation().relief
   const language = useLanguage()
   const settings = useSettings()
-  const today = useTodayEntry()
   const [startedAt, setStartedAt] = useState<number | null>(null)
   const [now, setNow] = useState(0)
   const [done, setDone] = useState(false)
-  const [added, setAdded] = useState(false)
-  const alreadyHelped = (today?.positiveActions ?? []).some((a) => a.trim().toLocaleLowerCase() === gesture.name.toLocaleLowerCase())
   const running = startedAt !== null
   const buzzed = useRef(false)
   useScreenOn(running)
@@ -197,13 +195,22 @@ export function GestureTimer({ gesture }: { gesture: ReliefGesture }) {
   const state = startedAt !== null ? timerState(startedAt, now || startedAt, gesture.minutes) : null
   const r = 84
   const c = 2 * Math.PI * r
-  const left = done ? 0 : state ? state.leftMs : gesture.minutes * 60_000
-  const fraction = done ? 1 : state?.fraction ?? 0
+  const left = state ? state.leftMs : gesture.minutes * 60_000
+  const fraction = state?.fraction ?? 0
+
+  // The time is up: the timer gives way to a word, a line saying what was done, and the ways out.
+  if (done) {
+    return (
+      <Card>
+        <ExerciseEnd info={format(tr.end.gestureInfo, { name: gesture.name, n: gesture.minutes }, language)} action={gesture.name} onAgain={() => setDone(false)} onBack={onBack} backLabel={backLabel} />
+      </Card>
+    )
+  }
 
   return (
     <>
       <p className="text-body px-1 -mt-2" style={{ color: 'var(--color-ink-muted)' }}>
-        {done ? t.finished : t.calm}
+        {t.calm}
       </p>
       <Card>
         <div className="flex flex-col items-center gap-4 py-2">
@@ -215,14 +222,14 @@ export function GestureTimer({ gesture }: { gesture: ReliefGesture }) {
             <div className="text-center" aria-hidden>
               <p className="text-display font-bold tabular-nums">{clock(left)}</p>
               <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-                {done ? t.over : format(t.outOf, { n: gesture.minutes }, language)}
+                {format(t.outOf, { n: gesture.minutes }, language)}
               </p>
             </div>
           </div>
           <p role="status" className="sr-only">
-            {done ? t.finished : running ? format(t.started, { name: gesture.name, n: gesture.minutes }, language) : ''}
+            {running ? format(t.started, { name: gesture.name, n: gesture.minutes }, language) : ''}
           </p>
-          {!running && !done && (
+          {!running && (
             <button
               type="button"
               onClick={() => {
@@ -241,34 +248,8 @@ export function GestureTimer({ gesture }: { gesture: ReliefGesture }) {
               {t.stop}
             </button>
           )}
-          {done && (
-            <>
-              {!alreadyHelped && !added && (
-                <button type="button" onClick={() => void addHelped(gesture.name).then(() => setAdded(true))} className={`${BUTTON} inline-flex items-center gap-2`} style={PRIMARY}>
-                  <IconPlus size={18} aria-hidden />
-                  {t.addHelped}
-                </button>
-              )}
-              {(added || alreadyHelped) && (
-                <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-                  {t.added}
-                </p>
-              )}
-              <button
-                type="button"
-                onClick={() => {
-                  setDone(false)
-                  setAdded(false)
-                }}
-                className={BUTTON}
-                style={SECONDARY}
-              >
-                {t.again}
-              </button>
-            </>
-          )}
           <p className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
-            {done ? t.nothingAdded : t.screenOn}
+            {t.screenOn}
           </p>
         </div>
       </Card>

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useAllEntries } from '../hooks/useEntries'
 import { useLanguage, useTranslation } from '../i18n'
 import { updateSettings } from '../db'
-import { useTodayEntry } from '../hooks/useEntries'
 import { canPlayAmbient, startAmbient, type Ambient } from '../lib/ambient'
 import { useSettings } from '../hooks/useSettings'
 import { Segmented } from '../components/ui/Segmented'
@@ -14,7 +13,8 @@ import { DURATIONS, IN_SECONDS, OUT_SECONDS, SESSION_SECONDS, VIBRATION, breathA
 import { ReliefIllustration } from '../components/relief/ReliefIllustration'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { PageBack } from '../components/layout/PageBack'
-import { addHelped, clock, useScreenOn } from '../components/relief/helpers'
+import { clock, useScreenOn } from '../components/relief/helpers'
+import { ExerciseEnd } from '../components/relief/ExerciseEnd'
 import { GestureTimer, GesturesCard, GesturesPage } from '../components/relief/GesturesScreens'
 import { Footer } from '../components/layout/Footer'
 import { PlanForm, PlanView } from '../components/relief/PlanScreens'
@@ -41,6 +41,8 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
   // While the water moves, nothing else is on the screen.
   const [breathing, setBreathing] = useState(false)
   const language = useLanguage()
+  // What the gentle neck exercise adds to "what helped", if the person taps: the app's own "gentle stretching" suggestion, in their language.
+  const gentleAction = useTranslation().entryForm.positiveActionsSuggestions[3] ?? ''
   const helped = entries ? usualHelpers(entries, todayISO(), 3, language) : []
 
   useEffect(() => {
@@ -52,12 +54,14 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
   const leaves = request !== undefined && view === request
   const back = () => (leaves ? onExit() : setView(view === 'planedit' ? 'plan' : view === 'timer' ? gesture?.from ?? 'home' : 'home'))
 
+  const backLabel = leaves ? today.backToToday : view === 'timer' && gesture?.from === 'gestes' ? g.title : s.title
+
   const heading = view === 'home' ? s.title : view === 'breath' ? t.title : view === 'relax' ? t.relax.title : view === 'gentle' ? t.gentle.title : view === 'plan' ? p.title : view === 'planedit' ? p.formTitle : view === 'gestes' ? g.title : gesture?.g.name ?? g.title
 
   return (
     <>
       {view !== 'home' && (
-        <PageBack onBack={back} label={leaves ? today.backToToday : view === 'planedit' ? p.shortTitle : view === 'timer' && gesture?.from === 'gestes' ? g.title : s.title} />
+        <PageBack onBack={back} label={view === 'planedit' ? p.shortTitle : backLabel} />
       )}
       <div className={`flex flex-col gap-4 px-4 ${view === 'home' ? 'pt-4' : 'pt-2'} pb-28`}>
         <div className="px-1">
@@ -106,7 +110,7 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
 
         {view === 'breath' && (
           <>
-            <Breathing onRunning={setBreathing} />
+            <Breathing onRunning={setBreathing} onBack={back} backLabel={backLabel} />
             {!breathing && helped.length > 0 && (
               <Card>
                 <SectionTitle>{t.helpedTitle}</SectionTitle>
@@ -138,13 +142,13 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
         {view === 'home' && <Footer />}
 
         {view === 'gestes' && <GesturesPage />}
-        {view === 'timer' && gesture && <GestureTimer key={gesture.g.name} gesture={gesture.g} />}
+        {view === 'timer' && gesture && <GestureTimer key={gesture.g.name} gesture={gesture.g} onBack={back} backLabel={backLabel} />}
 
         {view === 'plan' && <PlanView plan={settings.hardDaysPlan} onEdit={() => setView('planedit')} onBreathe={() => setView('breath')} />}
         {view === 'planedit' && <PlanForm plan={settings.hardDaysPlan} onDone={() => setView('plan')} />}
 
         {(view === 'relax' || view === 'gentle') && (
-          <Steps steps={view === 'relax' ? t.relax.steps : t.gentle.steps} illustrated set={view} onDone={() => setView('home')} />
+          <Steps steps={view === 'relax' ? t.relax.steps : t.gentle.steps} title={view === 'relax' ? t.relax.title : t.gentle.title} action={view === 'relax' ? t.action : gentleAction} illustrated set={view} onDone={() => setView('home')} onBack={back} backLabel={backLabel} />
         )}
       </div>
     </>
@@ -176,7 +180,7 @@ function Pick({ icon, title, hint, onClick }: { icon: React.ReactNode; title: st
 const PEBBLE = 'M104 16 C158 12 190 62 180 112 C172 156 138 188 92 184 C44 180 14 140 20 96 C26 50 58 20 104 16Z'
 
 /** The level: the water rises while breathing in and falls while breathing out. The word changes quietly (not announced at each breath); only the start and the end are said to a screen reader. The phone vibrates at each change, when it can and the person asked. */
-function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
+function Breathing({ onRunning, onBack, backLabel }: { onRunning: (running: boolean) => void; onBack: () => void; backLabel: string }) {
   const t = useTranslation().relief
   const language = useLanguage()
   const settings = useSettings()
@@ -190,9 +194,6 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
   const lastPhase = useRef<'in' | 'out' | null>(null)
   const ambient = useRef<Ambient | null>(null)
   const canPlay = canPlayAmbient()
-  const today = useTodayEntry()
-  const alreadyHelped = (today?.positiveActions ?? []).some((a) => a.trim().toLocaleLowerCase() === t.action.toLocaleLowerCase())
-  const [added, setAdded] = useState(false)
 
   const running = startedAt !== null
   useScreenOn(running)
@@ -215,11 +216,11 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
         window.clearInterval(id)
         setStartedAt(null)
         setFinished(true)
-        setSaid(t.finished)
+        setSaid('')
       }
     }, 250)
     return () => window.clearInterval(id)
-  }, [startedAt, seconds, t.finished])
+  }, [startedAt, seconds])
 
   const b = breathAt(running ? now : 0, seconds)
   const inn = running && b.phase === 'in'
@@ -241,125 +242,117 @@ function Breathing({ onRunning }: { onRunning: (running: boolean) => void }) {
   return (
     <Card>
       <SectionTitle>{t.breathTitle}</SectionTitle>
-      <div className="flex flex-col items-center gap-3">
-        <div aria-hidden className="relative w-64 max-w-full aspect-square">
-          <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full">
-            <defs>
-              <clipPath id="breath-pebble">
-                <path d={PEBBLE} />
-              </clipPath>
-            </defs>
-            <path d={PEBBLE} fill="var(--color-brand-soft)" />
-            <g clipPath="url(#breath-pebble)">
-              <g
-                style={{
-                  transform: `translateY(${inn ? 14 : 198}px)`,
-                  transition: `transform ${inn ? IN_SECONDS : OUT_SECONDS}s ease-in-out`,
-                }}
-              >
-                <g className={running ? 'breath-wave' : undefined} style={{ transform: 'translateX(-100px)' }}>
-                  <path d="M0 0 Q25 -9 50 0 T100 0 T150 0 T200 0 T250 0 T300 0 V240 H0Z" fill="color-mix(in srgb, var(--color-brand) 38%, var(--color-surface))" />
+      {finished ? (
+        <ExerciseEnd
+          info={format(t.end.breathInfo, { n: seconds / 60 }, language)}
+          action={t.action}
+          onAgain={() => {
+            setFinished(false)
+            setNow(0)
+          }}
+          onBack={onBack}
+          backLabel={backLabel}
+        />
+      ) : (
+        <div className="flex flex-col items-center gap-3">
+          <div aria-hidden className="relative w-64 max-w-full aspect-square">
+            <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full">
+              <defs>
+                <clipPath id="breath-pebble">
+                  <path d={PEBBLE} />
+                </clipPath>
+              </defs>
+              <path d={PEBBLE} fill="var(--color-brand-soft)" />
+              <g clipPath="url(#breath-pebble)">
+                <g
+                  style={{
+                    transform: `translateY(${inn ? 14 : 198}px)`,
+                    transition: `transform ${inn ? IN_SECONDS : OUT_SECONDS}s ease-in-out`,
+                  }}
+                >
+                  <g className={running ? 'breath-wave' : undefined} style={{ transform: 'translateX(-100px)' }}>
+                    <path d="M0 0 Q25 -9 50 0 T100 0 T150 0 T200 0 T250 0 T300 0 V240 H0Z" fill="color-mix(in srgb, var(--color-brand) 38%, var(--color-surface))" />
+                  </g>
                 </g>
               </g>
-            </g>
-            <path d={PEBBLE} fill="none" stroke="var(--color-hairline)" strokeWidth="1.5" />
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center px-10">
-            <span className="text-heading font-semibold tabular-nums mb-2" style={{ color: 'var(--color-ink)' }}>
-              <span className="sr-only">{t.timeLeft} </span>
-              {clock(running ? Math.max(0, seconds * 1000 - now) : seconds * 1000)}
-            </span>
-            <span className="text-display font-bold text-center leading-tight" style={{ color: 'var(--color-ink)' }}>
-              {label}
-            </span>
-            <span className="text-body" style={{ color: 'var(--color-ink)' }}>
-              {running ? b.left : ' '}
-            </span>
-            <span className="text-caption mt-1 text-center" style={{ color: 'var(--color-ink)' }}>
-              {running ? (inn ? t.levelUp : t.levelDown) : ' '}
-            </span>
+              <path d={PEBBLE} fill="none" stroke="var(--color-hairline)" strokeWidth="1.5" />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-10">
+              <span className="text-heading font-semibold tabular-nums mb-2" style={{ color: 'var(--color-ink)' }}>
+                <span className="sr-only">{t.timeLeft} </span>
+                {clock(running ? Math.max(0, seconds * 1000 - now) : seconds * 1000)}
+              </span>
+              <span className="text-display font-bold text-center leading-tight" style={{ color: 'var(--color-ink)' }}>
+                {label}
+              </span>
+              <span className="text-body" style={{ color: 'var(--color-ink)' }}>
+                {running ? b.left : ' '}
+              </span>
+              <span className="text-caption mt-1 text-center" style={{ color: 'var(--color-ink)' }}>
+                {running ? (inn ? t.levelUp : t.levelDown) : ' '}
+              </span>
+            </div>
           </div>
-        </div>
-        {!running && (
-          <div className="w-full flex flex-col gap-2">
-            <Segmented
-              label={t.durationLabel}
-              value={seconds}
-              onChange={setSeconds}
-              options={DURATIONS.map((d) => ({ value: d, label: format(t.minutes, { n: d / 60 }, language) }))}
-            />
-            {canPlay && (
-              <div className="flex items-center justify-between gap-3 min-h-11">
-                <span>
-                  <span className="block text-body font-medium">{t.music}</span>
-                  <span className="block text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-                    {t.musicHelper}
+          {!running && (
+            <div className="w-full flex flex-col gap-2">
+              <Segmented
+                label={t.durationLabel}
+                value={seconds}
+                onChange={setSeconds}
+                options={DURATIONS.map((d) => ({ value: d, label: format(t.minutes, { n: d / 60 }, language) }))}
+              />
+              {canPlay && (
+                <div className="flex items-center justify-between gap-3 min-h-11">
+                  <span>
+                    <span className="block text-body font-medium">{t.music}</span>
+                    <span className="block text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+                      {t.musicHelper}
+                    </span>
                   </span>
-                </span>
-                <Toggle checked={!!settings.reliefMusic} onChange={(v) => void updateSettings({ reliefMusic: v })} label={t.music} />
-              </div>
-            )}
-            {canVibrate && (
-              <div className="flex items-center justify-between gap-3 min-h-11">
-                <span>
-                  <span className="block text-body font-medium">{t.vibrate}</span>
-                  <span className="block text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-                    {t.vibrateHelper}
+                  <Toggle checked={!!settings.reliefMusic} onChange={(v) => void updateSettings({ reliefMusic: v })} label={t.music} />
+                </div>
+              )}
+              {canVibrate && (
+                <div className="flex items-center justify-between gap-3 min-h-11">
+                  <span>
+                    <span className="block text-body font-medium">{t.vibrate}</span>
+                    <span className="block text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+                      {t.vibrateHelper}
+                    </span>
                   </span>
-                </span>
-                <Toggle checked={!!settings.reliefVibrate} onChange={(v) => void updateSettings({ reliefVibrate: v })} label={t.vibrate} />
-              </div>
-            )}
-          </div>
-        )}
-        <p className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
-          {t.breathHint}
-          {'wakeLock' in navigator ? ` ${t.screenOn}` : ''}
-        </p>
-        <button
-          type="button"
-          onClick={() => {
-            if (running) {
-              setStartedAt(null)
-              setSaid('')
-            } else {
-              setFinished(false)
-              setNow(0)
-              setStartedAt(Date.now())
-              setSaid(t.startedAnnounce)
-              setAdded(false)
-              if (settings.reliefMusic && canPlay) ambient.current = startAmbient()
-            }
-          }}
-          className="rounded-[var(--radius-control)] px-6 min-h-11 text-control font-semibold"
-          style={{ background: running ? 'var(--color-surface)' : 'var(--color-brand)', color: running ? 'var(--color-brand)' : 'var(--color-on-brand)', border: '1px solid var(--color-brand)' }}
-        >
-          {running ? t.stop : finished ? t.again : t.start}
-        </button>
-        <p role="status" className="sr-only">
-          {said}
-        </p>
-        {finished && (
-          <p className="text-body text-center" aria-hidden>
-            {t.finished}
+                  <Toggle checked={!!settings.reliefVibrate} onChange={(v) => void updateSettings({ reliefVibrate: v })} label={t.vibrate} />
+                </div>
+              )}
+            </div>
+          )}
+          <p className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.breathHint}
+            {'wakeLock' in navigator ? ` ${t.screenOn}` : ''}
           </p>
-        )}
-        {finished && !alreadyHelped && !added && (
           <button
             type="button"
-            onClick={() => void addHelped(t.action).then(() => setAdded(true))}
-            className="rounded-[var(--radius-control)] px-4 min-h-11 text-control font-semibold"
-            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+            onClick={() => {
+              if (running) {
+                setStartedAt(null)
+                setSaid('')
+              } else {
+                setFinished(false)
+                setNow(0)
+                setStartedAt(Date.now())
+                setSaid(t.startedAnnounce)
+                if (settings.reliefMusic && canPlay) ambient.current = startAmbient()
+              }
+            }}
+            className="rounded-[var(--radius-control)] px-6 min-h-11 text-control font-semibold"
+            style={{ background: running ? 'var(--color-surface)' : 'var(--color-brand)', color: running ? 'var(--color-brand)' : 'var(--color-on-brand)', border: '1px solid var(--color-brand)' }}
           >
-            {t.addHelped}
+            {running ? t.stop : t.start}
           </button>
-        )}
-        {finished && (added || alreadyHelped) && (
-          <p className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.added}
+          <p role="status" className="sr-only">
+            {said}
           </p>
-        )}
-      </div>
+        </div>
+      )}
     </Card>
   )
 }
@@ -374,20 +367,24 @@ interface StepLine {
 }
 
 /** One step at a time, read at the person's pace. With "Pause auto" on, the next step comes by itself every 20 seconds; a tap on the picture holds it, the buttons still work, and after the last step the exercise ends. */
-function Steps({ steps, illustrated, set, onDone }: { steps: StepLine[]; illustrated: boolean; set: 'relax' | 'gentle'; onDone: () => void }) {
+function Steps({ steps, title, action, illustrated, set, onDone, onBack, backLabel }: { steps: StepLine[]; title: string; action: string; illustrated: boolean; set: 'relax' | 'gentle'; onDone: () => void; onBack: () => void; backLabel: string }) {
+  const language = useLanguage()
   const t = useTranslation().relief
   const settings = useSettings()
   // The step and the time spent on it move together, so that the end of a step is one change, not two.
   const [pos, setPos] = useState({ i: 0, elapsed: 0, ended: false })
   const { i, elapsed } = pos
+  // The end is the last step done, by the button or by the clock: it closes with a word, not with a jump back to the home.
+  const [closed, setClosed] = useState(false)
+  const ended = pos.ended || closed
   const [paused, setPaused] = useState(false)
   const auto = !!settings.reliefAuto
   const last = i === steps.length - 1
   const step = steps[i]!
-  useScreenOn(auto && !paused)
+  useScreenOn(auto && !paused && !ended)
 
   useEffect(() => {
-    if (!auto || paused) return
+    if (!auto || paused || ended) return
     const id = window.setInterval(
       () =>
         setPos((p) => {
@@ -399,13 +396,26 @@ function Steps({ steps, illustrated, set, onDone }: { steps: StepLine[]; illustr
       250
     )
     return () => window.clearInterval(id)
-  }, [auto, paused, steps.length])
-
-  useEffect(() => {
-    if (pos.ended) onDone()
-  }, [pos.ended, onDone])
+  }, [auto, paused, ended, steps.length])
 
   const go = (n: number) => setPos({ i: n, elapsed: 0, ended: false })
+
+  if (ended) {
+    return (
+      <Card>
+        <ExerciseEnd
+          info={format(t.end.stepsInfo, { title, n: steps.length }, language)}
+          action={action}
+          onAgain={() => {
+            setClosed(false)
+            go(0)
+          }}
+          onBack={onBack}
+          backLabel={backLabel}
+        />
+      </Card>
+    )
+  }
 
   return (
     <Card>
@@ -457,7 +467,7 @@ function Steps({ steps, illustrated, set, onDone }: { steps: StepLine[]; illustr
         </button>
         <button
           type="button"
-          onClick={() => (last ? onDone() : go(i + 1))}
+          onClick={() => (last ? setClosed(true) : go(i + 1))}
           className="flex-1 rounded-[var(--radius-control)] min-h-11 text-control font-semibold"
           style={{ background: 'var(--color-brand)', color: 'var(--color-on-brand)' }}
         >
