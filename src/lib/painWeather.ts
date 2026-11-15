@@ -41,6 +41,11 @@ const LEVELS: Record<PainWeatherLevel, Omit<PainWeather, 'level'>> = {
   },
 }
 
+/** The colours of a weather's tile in the calendar, as CSS variables that follow the mode: the fill, the number and bars, the icon (see index.css). */
+export function painWeatherTile(level: PainWeatherLevel) {
+  return { tile: `var(--color-weather-${level}-tile)`, mark: `var(--color-weather-${level}-mark)`, glyph: `var(--color-weather-${level}-glyph)` }
+}
+
 /**
  * Turns the day's measures into a single "pain weather" reading.
  * Pain dominates (60%); fatigue and brain fog nudge it (25% / 15%) since a day

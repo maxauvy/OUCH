@@ -1,6 +1,6 @@
 import { WeatherIcon } from '../ui/WeatherIcon'
 import type { WeekdayProfile, WeekdayStat } from '../../lib/weekdays'
-import { painWeatherByLevel } from '../../lib/painWeather'
+import { painWeatherTile } from '../../lib/painWeather'
 import { usePalette } from '../../hooks/usePalette'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { Card, SectionTitle } from '../ui/Card'
@@ -28,7 +28,7 @@ export function WeekdayCard({ profile }: { profile: WeekdayProfile }) {
         <>
           <div className="grid grid-cols-2 gap-2.5">
             <Tile stat={best} label={t.weekdayBest} icon="cloud-sun" tint={palette.brandSoft} ink={palette.brand} nf={nf} />
-            <Tile stat={worst} label={t.weekdayWorst} icon="cloud-rain" tint={painWeatherByLevel(5).soft} ink={painWeatherByLevel(5).ink} nf={nf} />
+            <Tile stat={worst} label={t.weekdayWorst} icon="cloud-rain" tint={painWeatherTile(5).tile} ink={painWeatherTile(5).mark} nf={nf} />
           </div>
           <p className="text-caption leading-snug mt-3" style={{ color: palette.inkMuted }}>
             {format(
