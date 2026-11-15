@@ -973,6 +973,8 @@ const fr: Translations = {
     markedOngoing: 'en cours',
     markedFactors: { sleep: 'sommeil', stress: 'stress', effort: 'effort', weather: 'météo', period: 'règles', infection: 'infection', treatment: 'traitement' },
     tileMarked: '{{n}} {{n:période indiquée|périodes indiquées}} par le patient',
+    tileMarkedLabel: 'Périodes difficiles',
+    tileMarkedBy: 'indiquées par le patient',
     compareTitle: 'Deux périodes comparées',
     compareDiffLower: 'La douleur moyenne a baissé de {{diff}} {{n:point|points}} d’une période à l’autre.',
     compareDiffHigher: 'La douleur moyenne a augmenté de {{diff}} {{n:point|points}} d’une période à l’autre.',

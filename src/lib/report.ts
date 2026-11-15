@@ -315,3 +315,11 @@ export function compareContext(
 export function collapseDoublePeriod(text: string): string {
   return text.replace(/\.\.(?=\s|$)/g, '.')
 }
+
+/**
+ * What the flares tile of the report counts. The flares OUCH detected when it can detect them; only when it cannot (an illness without flares, too few days), the periods the patient marked, under their own name. The two are never added or merged: a marked period over a detected flare is one of each.
+ */
+export function flaresTile(detectable: boolean, detected: number, marked: number): { kind: 'detected' | 'marked'; value: number } | null {
+  if (detectable) return { kind: 'detected', value: detected }
+  return marked > 0 ? { kind: 'marked', value: marked } : null
+}

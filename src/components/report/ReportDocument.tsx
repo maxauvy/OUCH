@@ -18,6 +18,7 @@ import {
   collapseDoublePeriod,
   compareContext,
   daysWithRescueMedication,
+  flaresTile,
   meanOf,
   medicationReports,
   strengthIndex,
@@ -1050,17 +1051,20 @@ function GpTiles({ d }: { d: ReportData }) {
     />,
     <Tile key="severe" tone="severe" icon={IconSun} label={f.t.tileSevere} value={severeN} compare={painPrev ? (d.p.prevDays === d.p.periodDays ? before(String(Math.round(painPrev.severe * painPrev.n))) : f.format(f.t.beforeOfDays, { v: Math.round(painPrev.severe * painPrev.n), days: d.p.prevDays })) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
   ]
-  if (flares.detectable || d.marked.length > 0) {
+  const flaresTileOf = flaresTile(flares.detectable, flares.current.length, d.marked.length)
+  if (flaresTileOf) {
     const marked = d.marked.length ? f.format(f.t.tileMarked, { n: d.marked.length }) : null
     const detected = flares.detectable && flares.current.length ? f.format(f.t.flareDays, { n: flares.currentDays }) : null
+    // The count is the flares OUCH detected, with the patient's own periods beside it, never in it. When nothing can be detected the tile counts the marked periods, and says so in its name.
+    const ofMarked = flaresTileOf.kind === 'marked'
     tiles.push(
       <Tile
         key="flares"
         tone="flare"
         icon={IconCloudStorm}
-        label={f.t.flaresTitle}
-        value={flares.detectable ? flares.current.length : d.marked.length}
-        compare={flares.detectable ? [detected, marked && `+ ${marked}`].filter(Boolean).join(' · ') || undefined : (marked ?? undefined)}
+        label={ofMarked ? f.t.tileMarkedLabel : f.t.flaresTitle}
+        value={flaresTileOf.value}
+        compare={ofMarked ? f.t.tileMarkedBy : [detected, marked && `+ ${marked}`].filter(Boolean).join(' · ') || undefined}
         trend={flares.detectable && painPrev ? trend(flares.currentDays / d.p.periodDays, flares.previousDays / d.p.prevDays, 'lower', FLAT_BELOW.share) : null}
         f={f}
       />
