@@ -34,7 +34,7 @@ export function UpdatedPill() {
   const href = __APP_IS_TAGGED_RELEASE__ ? `${REPO_URL}/releases/tag/v${__APP_VERSION__}` : `${REPO_URL}/commit/${__APP_COMMIT__}`
 
   return (
-    <aside
+    <div
       role="status"
       onMouseEnter={() => setHeld(true)}
       onMouseLeave={() => setHeld(false)}
@@ -50,6 +50,6 @@ export function UpdatedPill() {
       <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-9 items-center rounded-full px-2 underline underline-offset-2" style={{ color: 'var(--color-paper)' }}>
         {t.whatsNew}
       </a>
-    </aside>
+    </div>
   )
 }
