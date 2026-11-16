@@ -2065,6 +2065,9 @@ export interface Translations {
     sourceCode: string
     updateAvailable: string
     reload: string
+    /** After the tap on "reload": what is going on, and that nothing is lost */
+    updating: string
+    updatingNote: string
     earlyOn: string
     earlyOff: string
   }
