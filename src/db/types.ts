@@ -271,6 +271,8 @@ export interface Medication {
   regimen: MedicationRegimen
   /** What it is taken for, in the person's own words */
   reason?: string
+  /** Days a change of this treatment is given to settle in before its effects are counted in the before-and-after review (7 when absent; some take 2 to 4 weeks). See lib/treatmentReview.ts. */
+  settleDays?: number
   /** Oldest first; the last one is the current or most recent posology */
   periods: MedicationPeriod[]
   createdAt: number

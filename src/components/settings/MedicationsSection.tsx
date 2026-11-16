@@ -13,8 +13,10 @@ import { deleteMedication, isMedicationUsed, saveMedication, useMedications } fr
 import { changePosology, currentPeriod, isStopped, newMedicationId, resumeMedication, sameName, stopMedication } from '../../lib/medications'
 import { formatISODate, formatPosology } from '../../lib/medicationFormat'
 import { radioGroupProps, radioProps } from '../../lib/a11y'
-import { format, useLocale, useTranslation } from '../../i18n'
+import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { Chip } from '../ui/Chip'
+import { Segmented } from '../ui/Segmented'
+import { cleanSettleDays, MAX_SETTLE_DAYS, SETTLE_CHOICES } from '../../lib/treatmentReview'
 import { todayISO } from '../../lib/dates'
 
 const inputStyle = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
@@ -187,6 +189,7 @@ function MedicationEditor({
   onDone: (result?: EditorResult) => void
 }) {
   const t = useTranslation()
+  const language = useLanguage()
   const ids = useId()
   const { intlLocale } = useLocale()
   const period = med ? currentPeriod(med) : undefined
@@ -195,6 +198,10 @@ function MedicationEditor({
   const [dose, setDose] = useState<DoseFields>(toFields(period?.dose, period?.perDay))
   const [reason, setReason] = useState(med?.reason ?? '')
   const [since, setSince] = useState(med?.periods[0]?.start ?? todayISO())
+  // The settling-in time: one of the usual choices, or "other" with its own number of days.
+  const storedSettle = cleanSettleDays(med?.settleDays)
+  const [settleChoice, setSettleChoice] = useState<string>(storedSettle === undefined ? '7' : (SETTLE_CHOICES as readonly number[]).includes(storedSettle) ? String(storedSettle) : 'other')
+  const [settleCustom, setSettleCustom] = useState(storedSettle !== undefined && !(SETTLE_CHOICES as readonly number[]).includes(storedSettle) ? String(storedSettle) : '')
   const [panel, setPanel] = useState<'posology' | 'stop' | null>(null)
   const [used, setUsed] = useState(true)
   const stopped = med ? isStopped(med) : false
@@ -218,7 +225,9 @@ function MedicationEditor({
     if (!firstLimit || since <= firstLimit) periods[0] = { ...periods[0], start: since }
     const last = periods.length - 1
     periods[last] = { ...periods[last], dose: posology.dose, perDay: posology.perDay }
-    await saveMedication({ ...base, name, regimen, reason: reason.trim() || undefined, periods })
+    // Only a scheduled treatment is reviewed; 7 (the usual) leaves no trace.
+    const settleDays = regimen === 'scheduled' ? cleanSettleDays(Number(settleChoice === 'other' ? settleCustom : settleChoice)) : undefined
+    await saveMedication({ ...base, name, regimen, reason: reason.trim() || undefined, settleDays, periods })
     onDone({ savedId: base.id })
   }
 
@@ -278,6 +287,34 @@ function MedicationEditor({
       <Field label={t.medications.reason} htmlFor={`${ids}-reason`}>
         <input id={`${ids}-reason`} value={reason} onChange={(e) => setReason(e.target.value)} placeholder={t.medications.reasonPlaceholder} className={inputClass} style={inputStyle} />
       </Field>
+
+      {regimen === 'scheduled' && (
+        <Field label={t.medications.settleTitle}>
+          <Segmented
+            label={t.medications.settleTitle}
+            value={settleChoice}
+            onChange={setSettleChoice}
+            options={[...SETTLE_CHOICES.map((n) => ({ value: String(n), label: format(t.medications.settleOption, { n }, language) })), { value: 'other', label: t.medications.settleOther }]}
+          />
+          {settleChoice === 'other' && (
+            <input
+              type="number"
+              inputMode="numeric"
+              min={1}
+              max={MAX_SETTLE_DAYS}
+              value={settleCustom}
+              onChange={(e) => setSettleCustom(e.target.value)}
+              aria-label={t.medications.settleCustom}
+              placeholder={t.medications.settleCustom}
+              className={`${inputClass} mt-2`}
+              style={inputStyle}
+            />
+          )}
+          <p className="text-caption mt-1" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.medications.settleHelper}
+          </p>
+        </Field>
+      )}
 
       <Field label={t.medications.since} htmlFor={`${ids}-since`}>
         <input id={`${ids}-since`} type="date" value={since} max={todayISO()} onChange={(e) => e.target.value && setSince(e.target.value)} className={inputClass} style={inputStyle} />

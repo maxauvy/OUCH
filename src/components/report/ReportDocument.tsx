@@ -32,7 +32,7 @@ import {
 import type { FlareEpisode } from '../../lib/flares'
 import { actionInSentence, type Lead } from '../../lib/leads'
 import type { ReportTrial } from '../../lib/leadTrial'
-import type { TreatmentReview } from '../../lib/treatmentReview'
+import { DEFAULT_REVIEW_OPTIONS, type TreatmentReview } from '../../lib/treatmentReview'
 import { CONTEXT_KEYS, type ContextKey, type TreatmentEvent } from '../../lib/flareContext'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
 import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
@@ -1601,6 +1601,7 @@ function ReviewTable({ d, from, to }: { d: ReportData; from: number; to: number 
             r.status === 'inProgress' ? f.format(f.t.reviewInProgress, { n: r.daysAfter }) : null,
             r.alsoChanged.length ? f.format(f.t.reviewAlsoChanged, { list: asList(r.alsoChanged) }) : null,
             r.duringFlare ? f.t.reviewDuringFlare : null,
+            r.settleDays !== DEFAULT_REVIEW_OPTIONS.settleDays ? f.format(f.t.reviewSettle, { n: r.settleDays }) : null,
             r.comparable && r.sideEffects.after.length ? f.format(f.t.reviewSideEffects, { list: effects(r) }) : null,
           ].filter((x): x is string => x !== null)
           return (

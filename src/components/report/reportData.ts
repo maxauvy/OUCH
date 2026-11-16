@@ -126,11 +126,10 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
   const flareDays = flareDaySet(episodes)
   const currentFlares = startingIn(p.start, p.end)
   const detectable = applies && canDetectFlares(entries)
-  const { settleDays, windowDays } = DEFAULT_REVIEW_OPTIONS
+  const { windowDays } = DEFAULT_REVIEW_OPTIONS
   const given = options.compareSpans
   const spans = given && validSpans(given.a, given.b, options.end) ? given : { a: { from: p.prevStart, to: shiftISO(p.start, -1) }, b: { from: p.start, to: p.end } }
   const compared = comparePeriods(entries, spans.a, spans.b, detectable ? flareDays : null, options.end)
-  const reviewFrom = shiftISO(p.start, -(settleDays + windowDays))
   return {
     options,
     f: reportFormat(options.language),
@@ -159,7 +158,8 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     reviews: treatmentReviews(entries, medications, detectable ? flareDays : null, options.end).filter(
       // A change with no logged day on either side has nothing to describe
       // (typically a treatment that predates the diary).
-      (r) => r.date >= reviewFrom && r.date <= p.end && r.nBefore + r.nAfter > 0
+      // A change belongs to the period when its window after (its own settling-in days, then 28) reaches it.
+      (r) => r.date >= shiftISO(p.start, -(r.settleDays + windowDays)) && r.date <= p.end && r.nBefore + r.nAfter > 0
     ),
   }
 }

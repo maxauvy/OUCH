@@ -52,6 +52,7 @@ import type { LeadChoices } from './leads.ts'
 import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
 import { makePrescription } from './prescription.ts'
 import { careSheetFromBackup } from './careSheet.ts'
+import { cleanSettleDays } from './treatmentReview.ts'
 import { cleanGestures } from './gestures.ts'
 import { currentLabels } from './renamedSuggestions.ts'
 import { planFromBackup } from './hardDaysPlan.ts'
@@ -295,6 +296,7 @@ export function sanitizeMedication(raw: unknown, now = Date.now()): Medication |
     name,
     regimen: oneOf(raw.regimen, MEDICATION_REGIMENS) ?? 'unspecified',
     reason: str(raw.reason),
+    settleDays: cleanSettleDays(raw.settleDays),
     periods: periods(raw.periods),
     createdAt: timestamp(raw.createdAt, now),
     updatedAt: timestamp(raw.updatedAt, now),

@@ -402,6 +402,8 @@ export interface Translations {
     reviewNotCause: string
     reviewAlsoChanged: string
     reviewDuringFlare: string
+    /** When the treatment has its own settling-in time: `{{n}}` days */
+    reviewSettleNote: string
     /** `{{done}}` days passed of 28, `{{n}}` logged */
     reviewInProgress: string
     /** `{{n}}` logged so far */
@@ -662,6 +664,13 @@ export interface Translations {
     perDayAsNeeded: string
     reason: string
     reasonPlaceholder: string
+    /** The settling-in time of a scheduled treatment (see lib/treatmentReview.ts) */
+    settleTitle: string
+    settleHelper: string
+    /** `{{n}}` days, as an option */
+    settleOption: string
+    settleOther: string
+    settleCustom: string
     since: string
     edit: string
     save: string
@@ -820,6 +829,7 @@ export interface Translations {
     /** `{{list}}` */
     reviewAlsoChanged: string
     reviewDuringFlare: string
+    reviewSettle: string
     /** `{{list}}` */
     reviewSideEffects: string
     reviewSideEffect: string
