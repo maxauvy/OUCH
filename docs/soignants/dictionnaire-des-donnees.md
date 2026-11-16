@@ -80,7 +80,7 @@ Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'
 | `name` | texte | Comparé sans tenir compte de la casse ni des espaces |
 | `regimen` | `scheduled` de fond, `asNeeded` au besoin, `unspecified` non précisé | « Non précisé » : traitement ajouté à la volée ou saisi avant la version 3 |
 | `reason` | texte libre | Ce pour quoi il est pris, avec les mots du patient |
-| `settleDays` | nombre entier de jours, de 1 à 60 ; absent = 7 | Temps de mise en place d'un traitement de fond, non compté dans « avant et après un changement » (certains traitements demandent 2 à 4 semaines). Réglé par le patient ; le rapport dit le délai retenu quand il n'est pas de 7 jours |
+| `settleDays` | nombre entier de jours, de 1 à 60 ; absent = 7 | Délai d'adaptation d'un traitement de fond, non compté dans « avant et après un changement » (certains traitements demandent 2 à 4 semaines). Réglé par le patient ; le rapport dit le délai retenu quand il n'est pas de 7 jours |
 | `periods` | liste, de la plus ancienne à la plus récente | Une période par posologie |
 | `periods[].start`, `end` | `AAAA-MM-JJ`, bornes incluses | `end` absent : en cours |
 | `periods[].dose` | `{ amount, unit }` | Unités : mg, g, µg, ml, gouttes, bouffées, patchs |
