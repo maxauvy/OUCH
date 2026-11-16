@@ -114,6 +114,10 @@ const fr: Translations = {
         title: 'Expliquer aux enfants',
         body: "Une page pensée pour eux, avec des mots doux : comment tu vas aujourd'hui, ce qu'est ta maladie, et comment ils peuvent aider.",
       },
+      relief: {
+        title: 'Un coup de pouce dans les moments durs',
+        body: "Un onglet Soulager : une respiration guidée, un moment de détente, les gestes qui t'aident d'habitude, avec un minuteur. Tout est prêt à portée de main.",
+      },
       private: {
         title: '100 % privé',
         body: "Ton journal reste sur ton appareil. Rien n'est envoyé sans que tu le décides, à part un signal anonyme par semaine (« actif cette semaine ») que tu peux couper dans Réglages.",
@@ -333,6 +337,12 @@ const fr: Translations = {
   today: {
     share: 'Partager ma météo du jour',
     openSettings: 'Ouvrir les réglages',
+    greeting: {
+      morning: 'Bonjour. Rien ne presse.',
+      afternoon: 'Prends le temps qu’il te faut.',
+      evening: 'Quand tu veux, une minute pour ta journée.',
+      night: 'Si tu es réveillé·e, une ligne suffit.',
+    },
     backToToday: 'Aujourd’hui',
     shareTitle: 'Partager',
     shareWeather: 'Météo du jour',
@@ -807,6 +817,7 @@ const fr: Translations = {
     periodHelper: 'Pour croiser douleur et cycle',
     notes: 'Notes',
     notesPlaceholder: 'Un événement particulier, une observation…',
+    dictateHint: 'Tu peux dicter : touche le micro du clavier.',
     measuresTitle: 'Mesures du jour',
     loggedAt: 'Saisi à {{time}}',
     loggedLateDay: 'Saisi {{day}} à {{time}}',

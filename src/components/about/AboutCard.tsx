@@ -3,7 +3,7 @@ import { AppLogo } from '../ui/AppLogo'
 import { useTranslation } from '../../i18n'
 import { Acronym } from './Acronym'
 
-const POINT_ICONS = { track: '🔍', share: '🌤️', kids: '🧒', private: '🔒' } as const
+const POINT_ICONS = { track: '🔍', share: '🌤️', kids: '🧒', relief: '🌿', private: '🔒' } as const
 
 /**
  * What OUCH is and why it exists. Shown on the welcome screen (without the

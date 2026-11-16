@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   IconActivityHeartbeat,
   IconAdjustmentsHorizontal,
@@ -44,6 +44,7 @@ import { useLuminous } from '../../lib/look'
 import { isOffered } from '../../lib/indicatorCatalog'
 import { useEarlyAccess } from '../../lib/earlyAccess'
 import { todayISO } from '../../lib/dates'
+import { dayPart } from '../../lib/dayPart'
 
 /** Pain for the 7 days ending on `date`, oldest first (undefined = no entry). */
 function lastSevenDays(date: string, byDate: Map<string, DailyEntry>, current: number | undefined) {
@@ -275,6 +276,9 @@ export function HealthEntryLayout({
               boxShadow: 'inset 0 0 0 1px var(--color-input-ring)',
             }}
           />
+          <p className="hidden pointer-coarse:block text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.entryForm.dictateHint}
+          </p>
         </Card>
       </>
   ) : null
@@ -294,6 +298,10 @@ export function HealthEntryLayout({
     })
   if (notesBlock) lightItems.push({ key: 'note', label: t.hardDays.lightNote, icon: IconPencil, filled: !!local.notes, content: notesBlock })
 
+  const [hour] = useState(() => new Date().getHours())
+  // One soft line under the title, only while nothing is noted and the form is the full one.
+  const greeting = isToday && ready && !lightToday && !restToday &&local.painLevel === undefined ? t.today.greeting[dayPart(hour)] : null
+
   const header = (
       <div className="flex items-center justify-between px-1">
         <div>
@@ -303,6 +311,11 @@ export function HealthEntryLayout({
             </p>
           )}
           <h1 className="text-title font-bold leading-tight">{isToday ? t.tabs.today : longDateCap}</h1>
+          {greeting && (
+            <p className="text-control mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
+              {greeting}
+            </p>
+          )}
           {isToday && onGoToBackup && <LastBackupLine onClick={onGoToBackup} />}
           {!isToday && restToday && (
             <p className="inline-flex items-center gap-1.5 text-caption" style={{ color: 'var(--color-ink-muted)' }}>
