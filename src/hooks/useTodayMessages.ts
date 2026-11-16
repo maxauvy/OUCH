@@ -20,13 +20,15 @@ import { recentReturn, todayMessages, type TodayMessages } from '../lib/todayMes
 import { weeklyFinding } from '../lib/weeklySentence'
 import { useFlares } from './useFlares'
 import { useLeadList } from './useLeadList'
-import { useLoggedEntries } from './useEntries'
+import { useAllEntries, useLoggedEntries } from './useEntries'
+import { isRestDay } from '../lib/restDay'
 import { useMedications } from './useMedications'
 import { useSettings } from './useSettings'
 
 /** What waits on the day's page (the line under the title and the sheet it opens), or null until the diary is read. */
 export function useTodayMessages(): TodayMessages | null {
   const logged = useLoggedEntries()
+  const allEntries = useAllEntries()
   const leadList = useLeadList()
   const settings = useSettings()
   const earlyAccess = useEarlyAccess()
@@ -56,7 +58,8 @@ export function useTodayMessages(): TodayMessages | null {
   return useMemo(() => {
     if (!logged || !leadList) return null
     // A stretch the person marked counts like a detected one: nothing is brought.
-    const flare = (flaresApply(settings.illnesses) && flareUnderWay(logged, today)) || !!ongoingMarked(settings.markedFlares, today)
+    // A quiet day the person chose is quiet like a flare: nothing is brought.
+    const flare = (flaresApply(settings.illnesses) && flareUnderWay(logged, today)) || !!ongoingMarked(settings.markedFlares, today) || (!!allEntries && isRestDay(allEntries, today))
     const trialsOn = settings.suggestionsEnabled && settings.enabledFactors.includes('positiveActions')
     return todayMessages({
       today,
@@ -86,5 +89,5 @@ export function useTodayMessages(): TodayMessages | null {
       yesterday: settings.suggestionsEnabled ? missedYesterday(logged, today) : null,
       trial: settings.leadTrial,
     })
-  }, [logged, leadList, settings, earlyAccess, today, flares, forecastOn, medications])
+  }, [logged, allEntries, leadList, settings, earlyAccess, today, flares, forecastOn, medications])
 }

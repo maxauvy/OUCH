@@ -12,8 +12,7 @@ import {
   IconPill,
   IconSettings,
   IconSunrise,
-  IconCloud,
-} from '@tabler/icons-react'
+  IconCloud, IconMoon } from '@tabler/icons-react'
 import { MORNING_STIFFNESS_BANDS, type DailyEntry, type FactorKey, type Medication, type PainWeather, type Settings } from '../../db/types'
 import { computePainWeather } from '../../lib/painWeather'
 import { shiftISO } from '../../lib/dates'
@@ -26,6 +25,8 @@ import { BodyMap } from './BodyMap'
 import { Slider } from '../ui/Slider'
 import { FlarePainScale } from './FlarePainScale'
 import { MarkedFlareLine } from '../flare/MarkedFlareLine'
+import { RestDayCard, RestDayLink } from './RestDay'
+import { isRestDay } from '../../lib/restDay'
 import { Toggle } from '../ui/Toggle'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { TagInput } from './TagInput'
@@ -186,6 +187,8 @@ export function HealthEntryLayout({
   const { ready, card, light } = useHardDays(date, allEntries, entriesLoaded)
   // Only today's page: another day is edited in full.
   const lightToday = isToday && light
+  // A quiet day the person chose: its own card says what changes, so the hard days card and the notice about the short form are left out.
+  const restToday = isRestDay(allEntries, date)
 
   const d = new Date(date + 'T00:00:00')
   const longDate = d.toLocaleDateString(intlLocale, { weekday: 'long', day: 'numeric', month: 'long' })
@@ -297,6 +300,12 @@ export function HealthEntryLayout({
           )}
           <h1 className="text-title font-bold leading-tight">{isToday ? t.tabs.today : longDateCap}</h1>
           {isToday && onGoToBackup && <LastBackupLine onClick={onGoToBackup} />}
+          {!isToday && restToday && (
+            <p className="inline-flex items-center gap-1.5 text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+              <IconMoon size={14} aria-hidden />
+              {t.restDay.past}
+            </p>
+          )}
         </div>
         {isToday && onOpenSettings && (
           <button
@@ -322,11 +331,13 @@ export function HealthEntryLayout({
       {header}
       {isToday && afterHeader}
 
-      {isToday && card && <HardDaysCard date={date} card={card} light={lightToday} />}
+      {isToday && restToday && <RestDayCard date={date} light={lightToday} />}
+
+      {isToday && card && !restToday && <HardDaysCard date={date} card={card} light={lightToday} />}
 
       {/* After the first day the card is gone, and this says why the form is
           short and how to get the rest. */}
-      {lightToday && !card && (
+      {lightToday && !card && !restToday && (
         <p className="text-control px-1" style={{ color: 'var(--color-ink-muted)' }}>
           {t.hardDays.lightNotice}{' '}
           <button
@@ -409,6 +420,7 @@ export function HealthEntryLayout({
         )}
 
         {isToday && <MarkedFlareLine />}
+        {isToday && !restToday && <RestDayLink date={date} />}
       </Card>
 
       {/* The one new indicator the lighter form keeps: a single row of five choices, under the pain, optional. */}

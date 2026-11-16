@@ -4,6 +4,7 @@ import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresApply,
 import { flareContext, type FlareContext } from '../../lib/flareContext'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
 import { loggedEntries } from '../../lib/loggedEntries'
+import { restDayCount } from '../../lib/restDay'
 import { findLeads, keptLeads, type Lead, type LeadChoices, type LeadFactors } from '../../lib/leads'
 import { reportTrials, type LeadTrial, type ReportTrial } from '../../lib/leadTrial'
 import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '../../lib/treatmentReview'
@@ -79,6 +80,8 @@ export interface ReportData {
   all: LoggedEntry[]
   current: LoggedEntry[]
   previous: LoggedEntry[]
+  /** Quiet days the patient chose in the reported period (see lib/restDay.ts) */
+  restDays: number
   pain: PainStats | null
   painPrev: PainStats | null
   meds: MedicationReport[]
@@ -138,6 +141,7 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     all: [...previous, ...current],
     current,
     previous,
+    restDays: restDayCount(allEntries, p.start, p.end),
     pain: painStats(current),
     painPrev: painStats(previous),
     meds: medicationReports(current, medications, p),

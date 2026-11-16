@@ -39,6 +39,7 @@ Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'
 | `symptomTags` | **Symptômes du jour** cochés | liste parmi `tingling`, `numbness`, `burning`, `shocks`, `blurredVision`, `urgency`, `dizziness` ; une liste vide est une réponse (aucun) | Pour la SEP et les douleurs nerveuses |
 | `spasms` | **Raideur ou spasmes (jambes)** | entier 0 à 10 | Échelle non validée |
 | `feverInfection` | **Fièvre ou infection en ce moment** | vrai / faux | Du contexte : rien n'en est déduit |
+| `restDay` | vrai (jamais « faux » : absent sinon) | **Journée tranquille** choisie par le patient : formulaire allégé et rien de suggéré ce jour-là. Une déclaration, aucun calcul ne la lit ; le rapport compte ces jours sur la période. Peut exister sans niveau de douleur. Absente de l'export CSV |
 | `newSymptom` | **Nouveau symptôme depuis plus de 24 h**, coché par la personne | vrai / faux | Une déclaration : aucun algorithme ne la lit, elle n'est ni une poussée ni un diagnostic |
 | `sensoryStimuli` | **Sensibilité : ce qui gêne** (bruit, lumière, odeurs, toucher), coché par la personne | liste de `noise`, `light`, `smells`, `touch` (une liste vide est une réponse) | Un ressenti compté en jours, sans intensité ni seuil. Demandé ainsi depuis la prochaine version |
 | `sensorySensitivity` | **Sensibilité** (ancienne version : bruit, lumière, odeurs, toucher) | entier 0 à 10 | Échelle non validée, plus demandée ; les jours déjà notés restent lisibles |

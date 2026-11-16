@@ -1266,6 +1266,7 @@ const fr: Translations = {
     completeness: 'Complétude par dimension, sur les jours renseignés : {{list}}.',
     lateEntries:
       'Saisie : sur {{total}} jours renseignés, {{late}} {{late:a été noté|ont été notés}} deux jours ou plus après le jour concerné, où le rappel est moins fiable.',
+    restDays: 'Le patient a choisi {{n}} {{n:journée tranquille|journées tranquilles}} sur la période : des jours qu’il a voulu vivre plus doucement.',
     intensity: 'Intensité douloureuse',
     distribution: 'Répartition des jours par intensité (0–10)',
     distPrev: 'Période précédente ({{n}} j)',
@@ -1742,6 +1743,13 @@ const fr: Translations = {
     prepAskQuestion: 'Pourriez-vous renouveler mon ordonnance ?',
     afterTitle: 'Une ordonnance a été remise ?',
     afterHint: 'Choisis sa durée et je te préviendrai avant la fin.',
+  },
+  restDay: {
+    link: 'Je lève le pied aujourd’hui',
+    title: 'Journée tranquille.',
+    body: 'Le formulaire est allégé, rien ne te sera suggéré.',
+    resume: 'Reprendre une journée normale',
+    past: 'Journée tranquille',
   },
   markedFlare: {
     link: 'Une période plus difficile commence ?',

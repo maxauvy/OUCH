@@ -293,6 +293,7 @@ function gpPages(d: ReportData): Block[][] {
         <div className="r-method">
           <p>{f.t.methodGp}</p>
           <LateEntries d={d} plain />
+          <RestDays d={d} plain />
           <p>{f.t.trendNote}</p>
         </div>
       </TocBlock>,
@@ -560,6 +561,7 @@ function painClinicLayout(d: ReportData): { pages: Block[][]; labels: string[] }
     <DayMix d={d} />,
     <Completeness d={d} />,
     <LateEntries d={d} />,
+    <RestDays d={d} />,
     <PartsToc parts={parts.map((part, i) => ({ id: `part-${i + 1}`, n: i + 1, title: part.title, hint: part.hint }))} f={f} />,
   ]
   return {
@@ -1233,6 +1235,14 @@ function LateEntries({ d, plain }: { d: ReportData; plain?: boolean }) {
   const late = lateCount(current)
   if (late === 0) return null
   const text = f.format(f.t.lateEntries, { total: current.length, late })
+  return plain ? <p>{text}</p> : <p className="r-small">{text}</p>
+}
+
+/** How many quiet days the patient chose in the period, said once; nothing when none. */
+function RestDays({ d, plain }: { d: ReportData; plain?: boolean }) {
+  const { f, restDays } = d
+  if (restDays === 0) return null
+  const text = f.format(f.t.restDays, { n: restDays })
   return plain ? <p>{text}</p> : <p className="r-small">{text}</p>
 }
 
