@@ -112,6 +112,10 @@ const en: Translations = {
         title: 'Explain it to children',
         body: "A page made for them, in gentle words: how you are today, what your illness is, and how they can help.",
       },
+      relief: {
+        title: 'A hand in the hard moments',
+        body: 'A Relief tab: a guided breath, a moment to unwind, the gestures that usually help you, with a timer. All within reach.',
+      },
       private: {
         title: '100% private',
         body: "Your diary stays on your device. Nothing is sent unless you decide to, apart from one anonymous signal a week (“active this week”) that you can turn off in Settings.",
@@ -331,6 +335,12 @@ const en: Translations = {
   today: {
     share: "Share today's weather",
     openSettings: 'Open settings',
+    greeting: {
+      morning: 'Good morning. No rush.',
+      afternoon: 'Take the time you need.',
+      evening: 'Whenever you like, a minute for your day.',
+      night: 'If you are awake, one line is enough.',
+    },
     backToToday: 'Today',
     shareTitle: 'Share',
     shareWeather: "Today's weather",
@@ -804,6 +814,7 @@ const en: Translations = {
     periodHelper: 'To cross-reference pain and cycle',
     notes: 'Notes',
     notesPlaceholder: 'A particular event, an observation…',
+    dictateHint: 'You can dictate: touch the microphone on your keyboard.',
     measuresTitle: 'Today’s measures',
     loggedAt: 'Logged at {{time}}',
     loggedLateDay: 'Logged {{day}} at {{time}}',

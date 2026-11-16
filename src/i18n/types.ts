@@ -110,7 +110,7 @@ export interface Translations {
   about: {
     title: string
     intro: string
-    points: Record<'track' | 'share' | 'kids' | 'private', { title: string; body: string }>
+    points: Record<'track' | 'share' | 'kids' | 'relief' | 'private', { title: string; body: string }>
     note: string
   }
 
@@ -140,6 +140,8 @@ export interface Translations {
   today: {
     share: string
     openSettings: string
+    /** One soft line under the title, by time of day, until the pain is noted */
+    greeting: Record<'morning' | 'afternoon' | 'evening' | 'night', string>
     backToToday: string
     shareTitle: string
     shareWeather: string
@@ -612,6 +614,8 @@ export interface Translations {
     periodHelper: string
     notes: string
     notesPlaceholder: string
+    /** Shown on touch screens, where the keyboard has a microphone */
+    dictateHint: string
     measuresTitle: string
     loggedAt: string
     /** Written after the day: `{{day}}` the weekday (within a week), `{{time}}` */
