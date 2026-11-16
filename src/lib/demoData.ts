@@ -13,7 +13,9 @@
 //   soft "harder days" card (it looks at the days before today). Today's
 //   entry is an easier day, so the report counts that flare as over; with
 //   `emptyToday` it reads "ongoing". Flares are found relative to the
-//   person's own usual pain;
+//   person's own usual pain. Four flares are found in all (one short one in
+//   the weeks after the dose change), enough for "Before your flares" in
+//   Trends to have something to read;
 // - an earlier background treatment stopped for side effects, as-needed
 //   painkillers with relief ratings;
 // - pain following sleep, stress, pressure drops, storms and periods, and
@@ -116,6 +118,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
   // level stays high until the end instead of peaking and easing.
   const FLARES: Flare[] = [
     ...(LEAD > 0 ? [{ start: -70, length: 7, intensity: 4 }] : []),
+    { start: 74, length: 4, intensity: 4 },
     { start: 22, length: 6, intensity: 3.5 },
     { start: 53, length: 7, intensity: 2.5 },
     calmEnd ? { start: 79, length: 6, intensity: 4.2 } : { start: 84, length: 5, intensity: 5.2, ongoing: true },
