@@ -2291,6 +2291,8 @@ const en: Translations = {
     sourceCode: 'Source code',
     updateAvailable: 'Update available',
     reload: 'Reload',
+    updating: 'Updating…',
+    updatingNote: 'This only takes a few seconds. Your notes stay on your device.',
     earlyOn: 'Early-access features turned on for this device.',
     earlyOff: 'Early-access features turned off.',
   },

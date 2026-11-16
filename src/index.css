@@ -520,6 +520,21 @@ input::-webkit-date-and-time-value {
     opacity: 1;
   }
 }
+/* The little ring that turns while the app updates (the footer's "reload"). It sits still for those who asked for less motion. */
+.update-spin {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--color-brand) 25%, transparent);
+  border-top-color: var(--color-brand);
+  animation: update-spin 0.9s linear infinite;
+}
+@keyframes update-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 @keyframes weather-sway {
   50% {
     transform: translateX(2px) scale(1.08);

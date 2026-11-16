@@ -2296,6 +2296,8 @@ const fr: Translations = {
     sourceCode: 'Code source',
     updateAvailable: 'Mise à jour disponible',
     reload: 'Recharger',
+    updating: 'Mise à jour en cours…',
+    updatingNote: 'Ça ne dure que quelques secondes. Tes notes restent sur ton appareil.',
     earlyOn: 'Fonctions à l’essai activées sur cet appareil.',
     earlyOff: 'Fonctions à l’essai désactivées.',
   },

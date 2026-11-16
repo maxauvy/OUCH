@@ -13,6 +13,18 @@ export function Footer() {
   const isRelease = __APP_COMMIT__ !== 'dev' && __APP_COMMIT__ !== 'unknown'
   const outdated = isRelease && latest !== null && latest !== buildId(__APP_COMMIT__, __APP_IS_TAGGED_RELEASE__)
 
+  // After the tap on "reload": the new version can take a few seconds to take over, so the page says it has heard, and that nothing is lost. The page reloads by itself; if it somehow does not, the link comes back.
+  const [updating, setUpdating] = useState(false)
+  useEffect(() => {
+    if (!updating) return
+    const timer = setTimeout(() => setUpdating(false), 15_000)
+    return () => clearTimeout(timer)
+  }, [updating])
+  function onReload() {
+    setUpdating(true)
+    void reloadToLatest().catch(() => setUpdating(false))
+  }
+
   // Five quick taps on the credit line switch early access on or off for this
   // device (see lib/earlyAccess.ts). Nothing on screen invites it: it is for
   // trying a feature on a phone before it is offered to everyone.
@@ -67,12 +79,22 @@ export function Footer() {
       </p>
       <p role="status">
         {said}
-        {!said && outdated && (
+        {!said && outdated && !updating && (
           <>
             {t.footer.updateAvailable} ·{' '}
-            <button type="button" onClick={() => void reloadToLatest()} className="underline font-medium">
+            <button type="button" onClick={onReload} className="underline font-medium">
               {t.footer.reload}
             </button>
+          </>
+        )}
+        {!said && outdated && updating && (
+          <>
+            <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 mt-1 font-medium" style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}>
+              <span className="update-spin" aria-hidden />
+              {t.footer.updating}
+            </span>
+            <br />
+            {t.footer.updatingNote}
           </>
         )}
       </p>
