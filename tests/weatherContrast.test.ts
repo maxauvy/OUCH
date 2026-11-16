@@ -59,3 +59,24 @@ test('the tile colours of index.css (light, then the two dark rules) say what li
     assert.equal(token(`--color-weather-${level}-glyph`, 0)?.toLowerCase(), theme.weather[level].ink)
   }
 })
+
+test('the light tile colours are declared outside @theme, where Tailwind would leave them out of the built CSS (only inline styles read them)', () => {
+  const open = css.indexOf('@theme {')
+  assert.ok(open >= 0)
+  let depth = 0
+  let close = -1
+  for (let i = open; i < css.length; i++) {
+    if (css[i] === '{') depth++
+    if (css[i] === '}' && --depth === 0) {
+      close = i
+      break
+    }
+  }
+  assert.ok(close > open, 'the @theme block was found')
+  for (const level of LEVELS) {
+    for (const part of ['tile', 'mark', 'glyph'] as const) {
+      const at = css.indexOf(`--color-weather-${level}-${part}:`)
+      assert.ok(at > close, `--color-weather-${level}-${part} is declared inside @theme (light mode would lose it)`)
+    }
+  }
+})
