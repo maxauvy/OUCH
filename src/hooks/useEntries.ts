@@ -43,6 +43,11 @@ export async function upsertEntry(date: string, patch: Partial<DailyEntry>): Pro
   }
 }
 
+/** The person takes the day gently, or takes the day back as an ordinary one (see lib/restDay.ts). */
+export async function setRestDay(date: string, on: boolean): Promise<void> {
+  await upsertEntry(date, { restDay: on ? true : undefined })
+}
+
 export async function deleteEntry(id: number): Promise<void> {
   await db.entries.delete(id)
 }

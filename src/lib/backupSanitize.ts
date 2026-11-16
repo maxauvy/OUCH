@@ -237,6 +237,7 @@ export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry 
     spasms: num(raw.spasms, 0, 10),
     feverInfection: bool(raw.feverInfection),
     newSymptom: bool(raw.newSymptom),
+    restDay: raw.restDay === true ? true : undefined,
     sensorySensitivity: num(raw.sensorySensitivity, 0, 10),
     sensoryStimuli: (() => {
       const list = strings(raw.sensoryStimuli)

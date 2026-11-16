@@ -1268,6 +1268,7 @@ const en: Translations = {
     completeness: 'Completeness by measure, over logged days: {{list}}.',
     lateEntries:
       'Logging: of {{total}} logged days, {{late}} {{late:was|were}} written two or more days after the day itself, when recall is less reliable.',
+    restDays: 'The patient chose {{n}} quiet {{n:day|days}} in the period: days they wanted to take more gently.',
     intensity: 'Pain intensity',
     distribution: 'Days by pain intensity (0–10)',
     distPrev: 'Previous period ({{n}} d)',
@@ -1744,6 +1745,13 @@ const en: Translations = {
     prepAskQuestion: 'Could you renew my prescription?',
     afterTitle: 'Was a prescription given?',
     afterHint: 'Choose its length and I will remind you before it ends.',
+  },
+  restDay: {
+    link: 'I’m taking it easy today',
+    title: 'A quiet day.',
+    body: 'The form is lighter, and nothing will be suggested.',
+    resume: 'Go back to an ordinary day',
+    past: 'A quiet day',
   },
   markedFlare: {
     link: 'Is a harder stretch starting?',

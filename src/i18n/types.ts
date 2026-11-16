@@ -1068,6 +1068,8 @@ export interface Translations {
     completeness: string
     /** `{{late}}` days written two days or more after, out of `{{total}}` logged days */
     lateEntries: string
+    /** `{{n}}` quiet days the patient chose in the period */
+    restDays: string
     intensity: string
     distribution: string
     distPrev: string
@@ -1562,6 +1564,17 @@ export interface Translations {
     prepAskQuestion: string
     afterTitle: string
     afterHint: string
+  }
+  /** "Journée tranquille": a day the person chooses to take gently (see lib/restDay.ts) */
+  restDay: {
+    /** The quiet link under the day's pain */
+    link: string
+    title: string
+    body: string
+    /** Takes the day back as an ordinary one */
+    resume: string
+    /** On a past day that was chosen as a quiet one */
+    past: string
   }
   markedFlare: {
     link: string

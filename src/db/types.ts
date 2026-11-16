@@ -203,6 +203,8 @@ export interface DailyEntry {
   feverInfection?: boolean
   /** Said by the person: a new or worse symptom for over 24 hours. A declaration, no algorithm reads it. */
   newSymptom?: boolean
+  /** The person chose to take this day gently ("journée tranquille"): the day's form is lighter and nothing is suggested. Only ever true; a declaration, no algorithm reads it, and the report counts these days. */
+  restDay?: boolean
   /** 0–10, not validated: sensitivity to noise, light, smells, touch. Asked as a slider until v0.11, now replaced by `sensoryStimuli`; kept so that earlier days still read. */
   sensorySensitivity?: number
   /** The stimuli that bothered on the day. An empty list is an answer (none), unlike a day left blank. */
