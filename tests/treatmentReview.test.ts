@@ -2,7 +2,8 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry, Medication } from '../src/db/types.ts'
-import { changeDate, reviewWindows, treatmentReviews } from '../src/lib/treatmentReview.ts'
+import { changeDate, cleanSettleDays, reviewWindows, settleDaysOf, treatmentReviews } from '../src/lib/treatmentReview.ts'
+import { sanitizeMedication } from '../src/lib/backupSanitize.ts'
 import { shiftISO } from '../src/lib/dates.ts'
 
 const START = '2026-01-01'
@@ -158,4 +159,47 @@ test('no usual gap without enough history, or while the window runs', () => {
   assert.equal(review(raisedHistory(), [raised], day(140)).measures.pain.usualGap, null)
   const { entries, meds } = longHistory()
   assert.equal(review(entries, meds, day(360)).measures.pain.usualGap, null)
+})
+
+test('the settling-in time kept for a treatment is a whole number of days up to 60, and nothing when it is the usual 7', () => {
+  assert.equal(cleanSettleDays(14), 14)
+  assert.equal(cleanSettleDays(60), 60)
+  for (const odd of [7, 0, -3, 61, 2.5, '14', NaN, null, undefined]) assert.equal(cleanSettleDays(odd), undefined, String(odd))
+  assert.equal(settleDaysOf({ settleDays: 28 }), 28)
+  assert.equal(settleDaysOf({}), 7)
+  assert.equal(settleDaysOf({ settleDays: 400 }), 7)
+})
+
+test('a treatment with its own settling-in time keeps it out of the window after, and says which it used', () => {
+  // Pain 6 before the raise (day 100), 8 on days 100 to 113, then 4: a week of settling in leaves some 8s in the window after, two weeks leave none.
+  const history: LoggedEntry[] = []
+  for (let n = 72; n < 150; n++) history.push(entry(n, n < 100 ? 6 : n < 114 ? 8 : 4))
+  const periods = [{ start: day(0), end: day(99) }, { start: day(100) }]
+  const usual = treatmentReviews(history, [med('duloxetine', periods)], null, day(149)).find((r) => r.date === day(100))!
+  const longer = treatmentReviews(history, [{ ...med('duloxetine', periods), settleDays: 14 }], null, day(149)).find((r) => r.date === day(100))!
+  assert.equal(usual.settleDays, 7)
+  assert.equal(longer.settleDays, 14)
+  assert.ok(usual.measures.pain.after! > 4, `with 7 days the window after still holds some of the 8s: ${usual.measures.pain.after}`)
+  assert.equal(longer.measures.pain.after, 4)
+  assert.equal(longer.measures.pain.before, 6)
+  // The window after moves by the same seven days.
+  assert.equal(reviewWindows(day(100), { windowDays: 28, settleDays: 14, minDays: 14, minPairs: 6, usualShare: 0.8 }).afterFrom, day(114))
+})
+
+test('a longer settling-in time also lengthens the wait before the review is ready', () => {
+  const history: LoggedEntry[] = []
+  for (let n = 72; n < 135; n++) history.push(entry(n, 5))
+  const periods = [{ start: day(0), end: day(99) }, { start: day(100) }]
+  // Day 134: with 7 days the window after (107 to 134) just ended; with 14 days it runs to day 141.
+  const usual = treatmentReviews(history, [med('duloxetine', periods)], null, day(134)).find((r) => r.date === day(100))!
+  const longer = treatmentReviews(history, [{ ...med('duloxetine', periods), settleDays: 14 }], null, day(134)).find((r) => r.date === day(100))!
+  assert.equal(usual.status, 'ready')
+  assert.equal(longer.status, 'inProgress')
+})
+
+test('a backup brings the settling-in time back, clean, and leaves out what is not one', () => {
+  const base = { id: 'duloxetine', name: 'Duloxétine', regimen: 'scheduled', periods: [{ start: '2026-01-01' }] }
+  assert.equal(sanitizeMedication({ ...base, settleDays: 14 })?.settleDays, 14)
+  for (const odd of [7, 0, 200, '14', null]) assert.equal(sanitizeMedication({ ...base, settleDays: odd })?.settleDays, undefined, String(odd))
+  assert.equal('settleDays' in (sanitizeMedication(base) ?? {}), false)
 })

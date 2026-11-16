@@ -32,7 +32,7 @@ import {
 import type { FlareEpisode } from '../../lib/flares'
 import { actionInSentence, type Lead } from '../../lib/leads'
 import type { ReportTrial } from '../../lib/leadTrial'
-import type { TreatmentReview } from '../../lib/treatmentReview'
+import { DEFAULT_REVIEW_OPTIONS, type TreatmentReview } from '../../lib/treatmentReview'
 import { CONTEXT_KEYS, type ContextKey, type TreatmentEvent } from '../../lib/flareContext'
 import { PainCalendar, PainChart, PainHistogram, SmallMultiple, TreatmentTimeline } from './ReportCharts'
 import { MIX_COLORS, R, RELIEF_COLORS, rampColor } from './reportColors'
@@ -294,6 +294,7 @@ function gpPages(d: ReportData): Block[][] {
           <p>{f.t.methodGp}</p>
           <Contributors d={d} plain />
           <LateEntries d={d} plain />
+          <RestDays d={d} plain />
           <p>{f.t.trendNote}</p>
         </div>
       </TocBlock>,
@@ -562,6 +563,7 @@ function painClinicLayout(d: ReportData): { pages: Block[][]; labels: string[] }
     <Completeness d={d} />,
     <Contributors d={d} />,
     <LateEntries d={d} />,
+    <RestDays d={d} />,
     <PartsToc parts={parts.map((part, i) => ({ id: `part-${i + 1}`, n: i + 1, title: part.title, hint: part.hint }))} f={f} />,
   ]
   return {
@@ -1247,6 +1249,14 @@ function Contributors({ d, plain }: { d: ReportData; plain?: boolean }) {
   return plain ? <p>{text}</p> : <p className="r-small">{text}</p>
 }
 
+/** How many quiet days the patient chose in the period, said once; nothing when none. */
+function RestDays({ d, plain }: { d: ReportData; plain?: boolean }) {
+  const { f, restDays } = d
+  if (restDays === 0) return null
+  const text = f.format(f.t.restDays, { n: restDays })
+  return plain ? <p>{text}</p> : <p className="r-small">{text}</p>
+}
+
 /** Rows `from` to `to` of the treatments table; the legend goes with the last row. */
 function TreatmentsTable({ d, detailed, from, to }: { d: ReportData; detailed: boolean; from: number; to: number }) {
   const { f, p } = d
@@ -1612,6 +1622,7 @@ function ReviewTable({ d, from, to }: { d: ReportData; from: number; to: number 
             r.status === 'inProgress' ? f.format(f.t.reviewInProgress, { n: r.daysAfter }) : null,
             r.alsoChanged.length ? f.format(f.t.reviewAlsoChanged, { list: asList(r.alsoChanged) }) : null,
             r.duringFlare ? f.t.reviewDuringFlare : null,
+            r.settleDays !== DEFAULT_REVIEW_OPTIONS.settleDays ? f.format(f.t.reviewSettle, { n: r.settleDays }) : null,
             r.comparable && r.sideEffects.after.length ? f.format(f.t.reviewSideEffects, { list: effects(r) }) : null,
           ].filter((x): x is string => x !== null)
           return (

@@ -402,6 +402,8 @@ export interface Translations {
     reviewNotCause: string
     reviewAlsoChanged: string
     reviewDuringFlare: string
+    /** When the treatment has its own settling-in time: `{{n}}` days */
+    reviewSettleNote: string
     /** `{{done}}` days passed of 28, `{{n}}` logged */
     reviewInProgress: string
     /** `{{n}}` logged so far */
@@ -662,6 +664,13 @@ export interface Translations {
     perDayAsNeeded: string
     reason: string
     reasonPlaceholder: string
+    /** The settling-in time of a scheduled treatment (see lib/treatmentReview.ts) */
+    settleTitle: string
+    settleHelper: string
+    /** `{{n}}` days, as an option */
+    settleOption: string
+    settleOther: string
+    settleCustom: string
     since: string
     edit: string
     save: string
@@ -820,6 +829,7 @@ export interface Translations {
     /** `{{list}}` */
     reviewAlsoChanged: string
     reviewDuringFlare: string
+    reviewSettle: string
     /** `{{list}}` */
     reviewSideEffects: string
     reviewSideEffect: string
@@ -1062,6 +1072,8 @@ export interface Translations {
     contributors: string
     /** `{{label}}` (lower case), `{{n}}` days */
     contributorDays: string
+    /** `{{n}}` quiet days the patient chose in the period */
+    restDays: string
     intensity: string
     distribution: string
     distPrev: string
@@ -1557,6 +1569,17 @@ export interface Translations {
     afterTitle: string
     afterHint: string
   }
+  /** "Journée tranquille": a day the person chooses to take gently (see lib/restDay.ts) */
+  restDay: {
+    /** The quiet link under the day's pain */
+    link: string
+    title: string
+    body: string
+    /** Takes the day back as an ordinary one */
+    resume: string
+    /** On a past day that was chosen as a quiet one */
+    past: string
+  }
   markedFlare: {
     link: string
     /** `{{date}}`: the day it began, as "10 nov." */
@@ -1760,6 +1783,29 @@ export interface Translations {
     restLabel: string
     restText: string
     restThanks: string
+  }
+  /** "Avant tes poussées": what the three days before the flares looked like, against chance (see lib/beforeFlares.ts) */
+  beforeFlares: {
+    title: string
+    /** `{{n}}` flares compared */
+    nothing: string
+    /** `{{k}}` flares of `{{n}}`, `{{what}}` what the three days held (one of `measures.*.what`), `{{chance}}` what chance gives (`chanceOne` or `chanceRange`) */
+    found: string
+    /** The same when chance gives almost none (the band is 0 to 0) */
+    foundNone: string
+    chanceNone: string
+    chanceOne: string
+    chanceRange: string
+    notCause: string
+    several: string
+    showAll: string
+    hideAll: string
+    /** `{{k}}` of `{{n}}` */
+    count: string
+    chartLabel: string
+    chance: string
+    you: string
+    measures: Record<'sleepHours' | 'sleepQuality' | 'stressLevel' | 'fatigueLevel' | 'brainFog' | 'moodLevel', { row: string; what: string }>
   }
   todayList: {
     /** `{{n}} {{n:thing|things}}`: how many things wait. */
