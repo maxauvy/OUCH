@@ -5,8 +5,9 @@ import { flareDaySet, type FlareEpisode } from '../../lib/flares'
 import { posologyChange } from '../../lib/medicationFormat'
 import type { TreatmentEvent } from '../../lib/treatmentEvents'
 import {
+  DEFAULT_REVIEW_OPTIONS,
   REVIEW_MEASURES,
-    reviewWindows,
+  reviewWindows,
   treatmentReviews,
   type ReviewMeasure,
   type SideEffectCount,
@@ -103,7 +104,7 @@ function ReviewBody({
     list.length ? list.map((e) => format(tr.reviewSideEffect, { effect: e.effect, n: e.days }, language)).join(', ') : tr.reviewNoSideEffects
   const usual = rows.filter((key) => m[key].usualGap !== null)
 
-  const w = reviewWindows(review.date)
+  const w = reviewWindows(review.date, { ...DEFAULT_REVIEW_OPTIONS, settleDays: review.settleDays })
   const curveTo = w.afterTo < today ? w.afterTo : today
 
   return (
@@ -193,6 +194,11 @@ function ReviewBody({
       {review.duringFlare && (
         <p className="text-caption mt-1" style={{ color: t.inkMuted }}>
           {tr.reviewDuringFlare}
+        </p>
+      )}
+      {review.settleDays !== DEFAULT_REVIEW_OPTIONS.settleDays && (
+        <p className="text-caption mt-1" style={{ color: t.inkMuted }}>
+          {format(tr.reviewSettleNote, { n: review.settleDays }, language)}
         </p>
       )}
 
