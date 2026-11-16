@@ -33,6 +33,8 @@ export function CalendarHeatmap({
   markedDays?: Set<string>
 }) {
   const [cursor, setCursor] = useState(() => new Date())
+  // The month the page was opened in (read once: not while rendering).
+  const [openedIn] = useState(() => new Date())
   const t = usePalette()
   const i18n = useTranslation()
   const { dateFnsLocale } = useLocale()
@@ -56,21 +58,36 @@ export function CalendarHeatmap({
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-start justify-between mb-3">
         <button
           onClick={() => setCursor((c) => addMonths(c, -1))}
-          className="w-9 h-9 rounded-[var(--radius-control)] flex items-center justify-center text-[16px]"
+          className="w-11 h-11 rounded-[var(--radius-control)] flex items-center justify-center text-[16px]"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
           aria-label={i18n.calendar.prevMonth}
         >
           ‹
         </button>
-        <span className="font-semibold text-body capitalize">
-          {format(cursor, 'MMMM yyyy', { locale: dateFnsLocale })}
+        <span className="flex flex-col items-center">
+          {/* As tall as the arrows, so the month stays level with them. */}
+          <span className="flex h-11 items-center font-semibold text-body capitalize">{format(cursor, 'MMMM yyyy', { locale: dateFnsLocale })}</span>
+          {/* Only away from the current month: the way back, soft like the arrows. Its place is kept, so the month does not jump when it comes and goes. */}
+          <span className="-mt-2 h-[22px]">
+            {!isSameMonth(cursor, openedIn) && (
+              <button
+                type="button"
+                onClick={() => setCursor(new Date())}
+                aria-label={i18n.calendar.todayLabel}
+                className="rounded-full px-3 py-0.5 text-caption font-semibold"
+                style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+              >
+                {i18n.calendar.today}
+              </button>
+            )}
+          </span>
         </span>
         <button
           onClick={() => setCursor((c) => addMonths(c, 1))}
-          className="w-9 h-9 rounded-[var(--radius-control)] flex items-center justify-center text-[16px]"
+          className="w-11 h-11 rounded-[var(--radius-control)] flex items-center justify-center text-[16px]"
           style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
           aria-label={i18n.calendar.nextMonth}
         >
