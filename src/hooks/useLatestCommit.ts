@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { grantReloadPass } from '../lib/appLock'
+import { markUpdated } from '../lib/justUpdated'
 import { buildId } from '../lib/buildId'
 
 /** Build currently deployed (see `buildId`), read from version.json, or
@@ -57,5 +58,7 @@ export async function reloadToLatest(): Promise<void> {
   }
   // The code lock would ask again after this reload; the app started it itself, from an unlocked state.
   grantReloadPass()
+  // The page that comes back says the update is done.
+  markUpdated()
   window.location.reload()
 }

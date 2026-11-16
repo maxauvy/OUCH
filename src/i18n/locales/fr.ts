@@ -1333,6 +1333,8 @@ const fr: Translations = {
 
   calendar: {
     prevMonth: 'Mois précédent',
+    today: 'Aujourd’hui',
+    todayLabel: 'Revenir à aujourd’hui',
     nextMonth: 'Mois suivant',
     legend: 'Légende des couleurs',
     flareDay: 'poussée',
@@ -2298,6 +2300,8 @@ const fr: Translations = {
     reload: 'Recharger',
     updating: 'Mise à jour en cours…',
     updatingNote: 'Ça ne dure que quelques secondes. Tes notes restent sur ton appareil.',
+    updated: 'À jour, {{version}}',
+    whatsNew: 'Voir les nouveautés',
     earlyOn: 'Fonctions à l’essai activées sur cet appareil.',
     earlyOff: 'Fonctions à l’essai désactivées.',
   },

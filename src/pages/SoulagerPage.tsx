@@ -284,11 +284,12 @@ function Breathing({ onRunning, onBack, backLabel }: { onRunning: (running: bool
               <path d={PEBBLE} fill="none" stroke="var(--color-hairline)" strokeWidth="1.5" />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center px-10">
-              <span className="text-heading font-semibold tabular-nums mb-2" style={{ color: 'var(--color-ink)' }}>
+              {/* At rest the time is the thing (how long it will last) and the word a murmur under it; once it runs, the word is the thing. */}
+            <span className={running ? 'text-heading font-semibold tabular-nums mb-2' : 'text-display font-bold tabular-nums'} style={{ color: 'var(--color-ink)' }}>
                 <span className="sr-only">{t.timeLeft} </span>
                 {clock(running ? Math.max(0, seconds * 1000 - now) : seconds * 1000)}
               </span>
-              <span className="text-display font-bold text-center leading-tight" style={{ color: 'var(--color-ink)' }}>
+              <span className={running ? 'text-display font-bold text-center leading-tight' : 'text-body text-center'} style={{ color: 'var(--color-ink)' }}>
                 {label}
               </span>
               <span className="text-body" style={{ color: 'var(--color-ink)' }}>

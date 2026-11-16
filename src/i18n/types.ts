@@ -1104,6 +1104,10 @@ export interface Translations {
 
   calendar: {
     prevMonth: string
+    /** The way back to the current month, shown when another month is open */
+    today: string
+    /** Its accessible name: the tab bar has an "Aujourd'hui" too */
+    todayLabel: string
     nextMonth: string
     legend: string
     /** Added to a day's name for a screen reader, and the legend's entry */
@@ -2068,6 +2072,9 @@ export interface Translations {
     /** After the tap on "reload": what is going on, and that nothing is lost */
     updating: string
     updatingNote: string
+    /** The pill after the update: `{{version}}` is "v0.12.3" or "0.12.3+abc1234" */
+    updated: string
+    whatsNew: string
     earlyOn: string
     earlyOff: string
   }

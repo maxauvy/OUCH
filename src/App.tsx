@@ -12,6 +12,7 @@ import { ReliefContext } from './components/relief/reliefContext'
 import type { SoulagerView } from './pages/SoulagerPage'
 import { launchTarget } from './lib/launchTarget'
 import { DemoPill } from './components/demo/DemoPill'
+import { UpdatedPill } from './components/layout/UpdatedPill'
 import { IS_DEMO } from './lib/demoMode'
 import { finishTour, tourPending } from './lib/demoSession'
 import { TodayPage } from './pages/TodayPage'
@@ -274,6 +275,7 @@ function AppShell() {
         ) : (
           <DemoPill />
         ))}
+      <UpdatedPill />
     </>
   )
 }
