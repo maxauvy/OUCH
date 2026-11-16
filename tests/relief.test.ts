@@ -1,7 +1,7 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { DURATIONS, ENDINGS, SESSION_SECONDS, VIBRATION, breathAt, pickEnding } from '../src/lib/relief.ts'
+import { DURATIONS, ENDINGS, SESSION_SECONDS, VIBRATION, breathAt, durationOf, pickEnding } from '../src/lib/relief.ts'
 
 test('the breath is 4 seconds in, then 6 out, and counts the seconds left', () => {
   assert.deepEqual(breathAt(0), { phase: 'in', left: 4, breaths: 0, done: false })
@@ -60,4 +60,22 @@ test('the gentle exercise adds the stretching suggestion, found by its place in 
   const { default: en } = await import('../src/i18n/locales/en.ts')
   assert.equal(fr.entryForm.positiveActionsSuggestions[3], 'Étirements doux')
   assert.equal(en.entryForm.positiveActionsSuggestions[3], 'Gentle stretching')
+})
+
+test('the closing screen is never the one just shown, and the two others come up in turn', () => {
+  for (const avoid of [0, 1, 2]) {
+    const results = Array.from({ length: 100 }, (_, i) => pickEnding(() => i / 100, avoid))
+    assert.ok(results.every((r) => r !== avoid && r >= 0 && r < ENDINGS), `avoid ${avoid}`)
+    assert.deepEqual([...new Set(results)].sort(), [0, 1, 2].filter((n) => n !== avoid))
+  }
+  assert.deepEqual([0, 0.49, 0.5, 0.99, 1].map((r) => pickEnding(() => r, 1)), [0, 0, 2, 2, 2])
+  // Nothing sensible to avoid: any of the three.
+  assert.deepEqual([0, 0.5, 0.99].map((r) => pickEnding(() => r, 7)), [0, 1, 2])
+  assert.deepEqual([0, 0.5, 0.99].map((r) => pickEnding(() => r, -1)), [0, 1, 2])
+})
+
+test('the breathing length chosen last time comes back when it is one of the three, the usual one otherwise', () => {
+  assert.equal(durationOf(60), 60)
+  assert.equal(durationOf(300), 300)
+  for (const odd of [undefined, null, 0, 90, '180', NaN, 3000]) assert.equal(durationOf(odd), SESSION_SECONDS)
 })

@@ -9,7 +9,7 @@ import { Toggle } from '../components/ui/Toggle'
 import { format } from '../i18n/format'
 import { todayISO } from '../lib/dates'
 import { usualHelpers } from '../lib/careSheet'
-import { DURATIONS, IN_SECONDS, OUT_SECONDS, SESSION_SECONDS, VIBRATION, breathAt, type Duration } from '../lib/relief'
+import { DURATIONS, IN_SECONDS, OUT_SECONDS, VIBRATION, breathAt, durationOf, type Duration } from '../lib/relief'
 import { ReliefIllustration } from '../components/relief/ReliefIllustration'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { PageBack } from '../components/layout/PageBack'
@@ -184,7 +184,13 @@ function Breathing({ onRunning, onBack, backLabel }: { onRunning: (running: bool
   const t = useTranslation().relief
   const language = useLanguage()
   const settings = useSettings()
-  const [seconds, setSeconds] = useState<Duration>(SESSION_SECONDS)
+  // The length chosen last time comes back (per device); a new choice is kept at once.
+  const [picked, setPicked] = useState<Duration | null>(null)
+  const seconds = picked ?? durationOf(settings.reliefSeconds)
+  const chooseSeconds = (d: Duration) => {
+    setPicked(d)
+    void updateSettings({ reliefSeconds: d })
+  }
   const [startedAt, setStartedAt] = useState<number | null>(null)
   const [now, setNow] = useState(0)
   const [finished, setFinished] = useState(false)
@@ -298,7 +304,7 @@ function Breathing({ onRunning, onBack, backLabel }: { onRunning: (running: bool
               <Segmented
                 label={t.durationLabel}
                 value={seconds}
-                onChange={setSeconds}
+                onChange={chooseSeconds}
                 options={DURATIONS.map((d) => ({ value: d, label: format(t.minutes, { n: d / 60 }, language) }))}
               />
               {canPlay && (

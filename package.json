@@ -10,6 +10,7 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
+    "check:css": "node scripts/check-css-tokens.mjs",
     "generate-icons": "node scripts/generate-icons.mjs",
     "test": "node --test \"tests/*.test.ts\""
   },

@@ -66,6 +66,9 @@ function Flower() {
 
 const ART = [Settle, Bubbles, Flower]
 
+/** The picture shown last, in this session: the next one is another. */
+let lastEnding: number | undefined
+
 /**
  * The end of an exercise (breathing, the two read ones, a gesture's timer): one of three soft pictures, picked at random each time, a word, a line saying what was done, and the ways out. Nothing is counted or scored; adding the exercise to "what helped" is one tap from the person, never made for them.
  * `action` is what would be added to today's "what helped"; `info` says what was done ("3 min of breathing").
@@ -73,7 +76,11 @@ const ART = [Settle, Bubbles, Flower]
 export function ExerciseEnd({ info, action, onAgain, onBack, backLabel }: { info: string; action: string; onAgain: () => void; onBack: () => void; backLabel: string }) {
   const t = useTranslation().relief
   const today = useTodayEntry()
-  const [variant] = useState(pickEnding)
+  const [variant] = useState(() => pickEnding(Math.random, lastEnding))
+  // Remembered once it is on screen (not while rendering, which React may do twice).
+  useEffect(() => {
+    lastEnding = variant
+  }, [variant])
   const [added, setAdded] = useState(false)
   const heading = useRef<HTMLHeadingElement>(null)
   const words = t.end.variants[variant % ENDINGS] ?? t.end.variants[0]!
