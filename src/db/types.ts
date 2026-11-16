@@ -540,6 +540,8 @@ export interface Settings {
   reliefVibrate?: boolean
   /** A soft sound plays during the breathing exercise. Per device, off until the person says yes; not restored from a backup. */
   reliefMusic?: boolean
+  /** The length of the breathing exercise the person chose last (60, 180 or 300 seconds). Per device, like the other choices of the exercise: not restored from a backup. */
+  reliefSeconds?: number
   /** The relaxing exercise moves on by itself every 20 seconds. Per device, off until the person says yes; not restored from a backup. */
   reliefAuto?: boolean
   /** The prescription the person noted, if any. Restored from a backup. */
