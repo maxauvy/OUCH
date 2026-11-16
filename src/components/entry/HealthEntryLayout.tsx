@@ -300,7 +300,7 @@ export function HealthEntryLayout({
 
   const [hour] = useState(() => new Date().getHours())
   // One soft line under the title, only while nothing is noted and the form is the full one.
-  const greeting = isToday && ready && !lightToday && local.painLevel === undefined ? t.today.greeting[dayPart(hour)] : null
+  const greeting = isToday && ready && !lightToday && !restToday &&local.painLevel === undefined ? t.today.greeting[dayPart(hour)] : null
 
   const header = (
       <div className="flex items-center justify-between px-1">
