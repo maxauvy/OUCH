@@ -6,6 +6,25 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.13.0] - 2026-11-16
+
+Une version tournée vers la douceur : des gestes pour alléger la journée, deux lectures prudentes de ce que le carnet montre, et un délai réglable pour juger un traitement.
+
+### Ajouté
+- **Une journée tranquille.** Sous la douleur, un lien discret : « Je lève le pied aujourd'hui ». Le formulaire est allégé, rien n'est suggéré ce jour-là, et le plan des jours difficiles reste proposé s'il existe. On peut revenir sur son choix (« Reprendre une journée normale »). Aucun calcul ne s'en sert : c'est un repère sur le jour, que le rapport compte en une phrase (#306).
+- **« Qu'est-ce qui a pu jouer ? »** Sur un jour qui sort de l'ordinaire de la personne (douleur d'au moins 2 points au-dessus de sa médiane récente, ou nuit d'au moins 1 h 30 plus courte, avec au moins 10 jours notés) et si les suggestions sont actives, des étiquettes à toucher : sommeil, stress, effort, météo, règles, infection, traitement. Facultatif, gardées sur le jour, jamais présentées comme une cause. Le rapport dit sur combien de jours chaque étiquette a été notée (#307).
+- **« Avant tes poussées » dans Tendances.** À partir de 4 poussées repérées, ce que montraient les 3 jours avant chacune (sommeil, stress, fatigue, brouillard, humeur), lu contre ce que le hasard donnerait. Le plus souvent, la réponse est « Rien ne ressort » ; la fourchette est large exprès, puisque six mesures sont regardées ensemble. Jamais de signal par poussée, et aucun lien de cause affirmé. Non validé : les textes sont à faire relire par un professionnel (#305).
+- **Un délai d'adaptation par traitement.** Pour la comparaison avant et après un changement, les 7 premiers jours d'un traitement de fond ne sont pas comptés ; on peut maintenant choisir 14 ou 28 jours, ou un nombre de son choix (jusqu'à 60), pour les traitements plus lents. Le rapport et la carte disent le délai retenu quand il n'est pas de 7 jours. Réglage conservé dans les sauvegardes (#304).
+- **Une ligne douce sous « Aujourd'hui »**, selon l'heure (« Bonjour. Rien ne presse. », « Quand tu veux, une minute pour ta journée. »…), tant que la douleur n'est pas notée ; elle se tait sur le formulaire allégé et un jour tranquille (#308).
+- **Un rappel qu'on peut dicter** sous Notes, sur écran tactile : « Tu peux dicter : touche le micro du clavier. » (#308).
+- **Soulager est présenté à l'accueil** et dans « À propos » : respiration guidée, détente, gestes qui aident, avec minuteur (#308).
+
+### Modifié
+- **Textes français relus** pour sonner plus naturel : « Délai d'adaptation » (et non « mise en place ») dans l'appli, le rapport et les documents, « par hasard, on en attendrait… », « stress plus fort », etc. (#309).
+
+### Tests
+- 675 tests automatiques, dont de nouveaux pour : délai d'adaptation, « Avant tes poussées », journée tranquille, étiquettes, moment de la journée.
+
 ## [0.12.3] - 2026-11-16
 
 ### Corrigé
@@ -442,7 +461,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.12.3...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/maxauvy/OUCH/compare/v0.12.3...v0.13.0
 [0.12.3]: https://github.com/maxauvy/OUCH/compare/v0.12.2...v0.12.3
 [0.12.2]: https://github.com/maxauvy/OUCH/compare/v0.12.1...v0.12.2
 [0.12.1]: https://github.com/maxauvy/OUCH/compare/v0.12.0...v0.12.1
