@@ -1,9 +1,11 @@
-import type { DailyEntry, LoggedEntry, Illness, IllnessDetails, MarkedFlare, Medication, PastConsultation } from '../../db/types'
+import type { DailyEntry, FlareFactor, LoggedEntry, Illness, IllnessDetails, MarkedFlare, Medication, PastConsultation } from '../../db/types'
 import type { Language } from '../../i18n'
 import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresApply, type FlareEpisode } from '../../lib/flares'
 import { flareContext, type FlareContext } from '../../lib/flareContext'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
 import { loggedEntries } from '../../lib/loggedEntries'
+import { contributorDays } from '../../lib/contributors'
+import { restDayCount } from '../../lib/restDay'
 import { findLeads, keptLeads, type Lead, type LeadChoices, type LeadFactors } from '../../lib/leads'
 import { reportTrials, type LeadTrial, type ReportTrial } from '../../lib/leadTrial'
 import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '../../lib/treatmentReview'
@@ -79,6 +81,10 @@ export interface ReportData {
   all: LoggedEntry[]
   current: LoggedEntry[]
   previous: LoggedEntry[]
+  /** Labels the patient noted on days ("what may have played a part"), in the reported period, the most often first */
+  contributors: { factor: FlareFactor; days: number }[]
+  /** Quiet days the patient chose in the reported period (see lib/restDay.ts) */
+  restDays: number
   pain: PainStats | null
   painPrev: PainStats | null
   meds: MedicationReport[]
@@ -126,11 +132,10 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
   const flareDays = flareDaySet(episodes)
   const currentFlares = startingIn(p.start, p.end)
   const detectable = applies && canDetectFlares(entries)
-  const { settleDays, windowDays } = DEFAULT_REVIEW_OPTIONS
+  const { windowDays } = DEFAULT_REVIEW_OPTIONS
   const given = options.compareSpans
   const spans = given && validSpans(given.a, given.b, options.end) ? given : { a: { from: p.prevStart, to: shiftISO(p.start, -1) }, b: { from: p.start, to: p.end } }
   const compared = comparePeriods(entries, spans.a, spans.b, detectable ? flareDays : null, options.end)
-  const reviewFrom = shiftISO(p.start, -(settleDays + windowDays))
   return {
     options,
     f: reportFormat(options.language),
@@ -138,6 +143,8 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     all: [...previous, ...current],
     current,
     previous,
+    contributors: contributorDays(allEntries, p.start, p.end),
+    restDays: restDayCount(allEntries, p.start, p.end),
     pain: painStats(current),
     painPrev: painStats(previous),
     meds: medicationReports(current, medications, p),
@@ -159,7 +166,8 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     reviews: treatmentReviews(entries, medications, detectable ? flareDays : null, options.end).filter(
       // A change with no logged day on either side has nothing to describe
       // (typically a treatment that predates the diary).
-      (r) => r.date >= reviewFrom && r.date <= p.end && r.nBefore + r.nAfter > 0
+      // A change belongs to the period when its window after (its own settling-in days, then 28) reaches it.
+      (r) => r.date >= shiftISO(p.start, -(r.settleDays + windowDays)) && r.date <= p.end && r.nBefore + r.nAfter > 0
     ),
   }
 }

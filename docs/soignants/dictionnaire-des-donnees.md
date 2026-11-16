@@ -39,6 +39,8 @@ Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'
 | `symptomTags` | **Symptômes du jour** cochés | liste parmi `tingling`, `numbness`, `burning`, `shocks`, `blurredVision`, `urgency`, `dizziness` ; une liste vide est une réponse (aucun) | Pour la SEP et les douleurs nerveuses |
 | `spasms` | **Raideur ou spasmes (jambes)** | entier 0 à 10 | Échelle non validée |
 | `feverInfection` | **Fièvre ou infection en ce moment** | vrai / faux | Du contexte : rien n'en est déduit |
+| `contributors` | liste parmi : sommeil, stress, effort, météo, règles, infection, traitement | **Ce qui a pu jouer**, touché par le patient un jour qui sort de l'ordinaire (douleur d'au moins 2 points au-dessus de l'habituel, ou nuit d'au moins 1 h 30 plus courte) : son ressenti, jamais une cause. Aucun calcul ne la lit ; le rapport dit sur combien de jours chaque étiquette a été notée. Absente de l'export CSV |
+| `restDay` | vrai (jamais « faux » : absent sinon) | **Journée tranquille** choisie par le patient : formulaire allégé et rien de suggéré ce jour-là. Une déclaration, aucun calcul ne la lit ; le rapport compte ces jours sur la période. Peut exister sans niveau de douleur. Absente de l'export CSV |
 | `newSymptom` | **Nouveau symptôme depuis plus de 24 h**, coché par la personne | vrai / faux | Une déclaration : aucun algorithme ne la lit, elle n'est ni une poussée ni un diagnostic |
 | `sensoryStimuli` | **Sensibilité : ce qui gêne** (bruit, lumière, odeurs, toucher), coché par la personne | liste de `noise`, `light`, `smells`, `touch` (une liste vide est une réponse) | Un ressenti compté en jours, sans intensité ni seuil. Demandé ainsi depuis la prochaine version |
 | `sensorySensitivity` | **Sensibilité** (ancienne version : bruit, lumière, odeurs, toucher) | entier 0 à 10 | Échelle non validée, plus demandée ; les jours déjà notés restent lisibles |
@@ -78,6 +80,7 @@ Ce document dit, champ par champ, ce que le patient saisit, sous quelle forme c'
 | `name` | texte | Comparé sans tenir compte de la casse ni des espaces |
 | `regimen` | `scheduled` de fond, `asNeeded` au besoin, `unspecified` non précisé | « Non précisé » : traitement ajouté à la volée ou saisi avant la version 3 |
 | `reason` | texte libre | Ce pour quoi il est pris, avec les mots du patient |
+| `settleDays` | nombre entier de jours, de 1 à 60 ; absent = 7 | Temps de mise en place d'un traitement de fond, non compté dans « avant et après un changement » (certains traitements demandent 2 à 4 semaines). Réglé par le patient ; le rapport dit le délai retenu quand il n'est pas de 7 jours |
 | `periods` | liste, de la plus ancienne à la plus récente | Une période par posologie |
 | `periods[].start`, `end` | `AAAA-MM-JJ`, bornes incluses | `end` absent : en cours |
 | `periods[].dose` | `{ amount, unit }` | Unités : mg, g, µg, ml, gouttes, bouffées, patchs |

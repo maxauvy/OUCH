@@ -3,6 +3,7 @@ import { flaresApply } from '../lib/flares'
 import type { DailyEntry } from '../db/types'
 import { loggedEntries } from '../lib/loggedEntries'
 import { ongoingMarked } from '../lib/markedFlares'
+import { isRestDay } from '../lib/restDay'
 import { useStoredSettings } from './useSettings'
 
 /** What the day's page does while a flare is under way: the soft card (once
@@ -19,12 +20,14 @@ export function useHardDays(
   // A stretch the person marked as harder is as good as a detected flare for the lighter form: they said it, whatever the illness.
   // The soft card is not shown for it: they know.
   const marked = !!ongoingMarked(settings.markedFlares, date) && settings.lightFormEnabled && settings.fullFormDay !== date
+  // A quiet day the person chose is lighter whatever the switch says: they asked for it. The full form stays a tap away.
+  const rest = isRestDay(entries, date) && settings.fullFormDay !== date
   // Migraine alone has no flare to answer: the soft card and the detected flare's lighter form stay out.
-  if (!flaresApply(settings.illnesses)) return { ready: true, card: null, light: marked }
+  if (!flaresApply(settings.illnesses)) return { ready: true, card: null, light: marked || rest }
   const logged = loggedEntries(entries)
   return {
     ready: true,
     card: hardDaysCard({ entries: logged, today: date, seen: settings.hardDaysSeen, enabled: settings.hardDaysCardEnabled }),
-    light: marked || lightFormActive({ entries: logged, today: date, enabled: settings.lightFormEnabled, fullFormDay: settings.fullFormDay }),
+    light: marked || rest || lightFormActive({ entries: logged, today: date, enabled: settings.lightFormEnabled, fullFormDay: settings.fullFormDay }),
   }
 }

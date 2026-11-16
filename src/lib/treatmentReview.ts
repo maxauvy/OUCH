@@ -29,6 +29,21 @@ interface ReviewOptions {
 
 export const DEFAULT_REVIEW_OPTIONS: ReviewOptions = { windowDays: 28, settleDays: 7, minDays: 14, minPairs: 6, usualShare: 0.8 }
 
+/** The settling-in times offered as a choice; any whole number of days up to `MAX_SETTLE_DAYS` is allowed ("other"). */
+export const SETTLE_CHOICES = [7, 14, 28] as const
+export const MAX_SETTLE_DAYS = 60
+
+/** A settling-in time as stored: a whole number of days from 1 to `MAX_SETTLE_DAYS`, and nothing when it is the usual one (so a treatment left alone keeps no trace). */
+export function cleanSettleDays(v: unknown): number | undefined {
+  if (typeof v !== 'number' || !Number.isInteger(v) || v < 1 || v > MAX_SETTLE_DAYS || v === DEFAULT_REVIEW_OPTIONS.settleDays) return undefined
+  return v
+}
+
+/** The days given to this treatment to settle in: its own, or the usual 7. */
+export function settleDaysOf(med: Pick<Medication, 'settleDays'>): number {
+  return cleanSettleDays(med.settleDays) ?? DEFAULT_REVIEW_OPTIONS.settleDays
+}
+
 /** The measures compared, in the order they are shown. */
 export const REVIEW_MEASURES = ['pain', 'flareDays', 'rescue', 'sleepHours'] as const
 export type ReviewMeasure = (typeof REVIEW_MEASURES)[number]
@@ -65,6 +80,8 @@ export interface TreatmentReview {
   nAfter: number
   /** Days of the window after that have passed, up to `windowDays` */
   daysAfter: number
+  /** The days given to settle in before the window after: the treatment's own, or 7 */
+  settleDays: number
   /** Figures are given only when both sides have enough logged days; those
    * that need a full window (flare days, the usual gap) also wait for it */
   comparable: boolean
@@ -201,7 +218,9 @@ export function treatmentReviews(
 
   return scheduled.map((event) => {
     const date = changeDate(event)
-    const w = reviewWindows(date, o)
+    // The days to settle in are the treatment's own.
+    const settleDays = cleanSettleDays(event.med.settleDays) ?? o.settleDays
+    const w = reviewWindows(date, { ...o, settleDays })
     const before = within(sorted, w.beforeFrom, w.beforeTo)
     const after = within(sorted, w.afterFrom, w.afterTo)
     const over = w.afterTo <= asOf
@@ -232,6 +251,7 @@ export function treatmentReviews(
       nBefore: before.length,
       nAfter: after.length,
       daysAfter: Math.max(0, Math.min(o.windowDays, daysBetween(w.afterFrom, asOf) + 1)),
+      settleDays,
       comparable: comparable && status !== 'tooFewDays',
       measures,
       sideEffects: {
