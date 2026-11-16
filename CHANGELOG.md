@@ -6,6 +6,26 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.12.3] - 2026-11-16
+
+### Corrigé
+- **Le calendrier du Journal avait perdu ses tuiles météo et ses barres de poussée en mode clair** (régression de la 0.12.2, introduite avec les tuiles sombres) : les couleurs claires étaient déclarées à un endroit où Tailwind les retirait du CSS produit. Elles sont revenues, avec la barre pleine des poussées repérées et la barre creuse des périodes notées par toi ; la tuile « ton jour le plus dur » de Tendances, qui lit les mêmes couleurs, aussi (#297).
+- **La fin d'un exercice n'est jamais celle qu'on vient de voir.** Le tirage reste aléatoire, mais parmi les deux autres : rejouer le même exercice ne donne plus l'impression que rien n'a changé (#300).
+
+### Ajouté
+- **Un retour tout de suite quand on touche « Recharger » pour une mise à jour.** Le lien est remplacé par une pastille douce avec un petit cercle qui tourne, « Mise à jour en cours… », et une ligne : « Ça ne dure que quelques secondes. Tes notes restent sur ton appareil. » Avant, rien ne changeait à l'écran pendant les quelques secondes d'attente (#299).
+- **Une pastille « À jour » après la mise à jour.** Une seule fois, au retour : « À jour, v0.12.3 · Voir les nouveautés », avec un lien vers la page de la version. Elle se ferme seule au bout de 12 secondes, et reste tant qu'un doigt, la souris ou le clavier la tient. Rien n'est conservé : une note dans l'onglet, jetée dès que la pastille est affichée (#301).
+- **Un retour à aujourd'hui dans le calendrier du Journal.** Une pastille « Aujourd'hui » apparaît sous le mois quand un autre mois est ouvert, et ramène au mois en cours ; sa place est réservée, le titre ne saute pas (#301).
+- **La durée de la respiration est mémorisée** : la durée choisie (1, 3 ou 5 minutes) revient la fois suivante, au lieu de repartir à 3 minutes. Réglage par appareil, comme le vibreur et la musique, non restauré depuis une sauvegarde (#300).
+
+### Modifié
+- **Les flèches du calendrier du Journal font 44 px** (36 avant), comme le reste de l'appli (#301).
+- **Le galet de respiration, au repos, met le temps en grand** (« 3:00 ») avec « Quand tu veux » dessous, sur une ligne, au lieu d'un mot en gros sur deux lignes (#301).
+- **La plaquette pour les soignants montre l'appli telle qu'elle est** : la carte des jours difficiles avec ses deux lignes d'action, les cinq onglets, les deux rapports. Les captures du guide papier et du diaporama (Journal, respiration) sont refaites aussi (#298).
+
+### Tests
+- Un contrôle du CSS produit, en CI (`npm run check:css`, après `npm run build`) : chaque variable que le code lit avec `var(--…)` doit exister dans les règles de base du CSS construit, et pas seulement dans les règles sombres. Il aurait attrapé la régression du Journal en clair (#300). 648 tests.
+
 ## [0.12.2] - 2026-11-15
 
 ### Ajouté
@@ -422,7 +442,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.12.2...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.12.3...HEAD
+[0.12.3]: https://github.com/maxauvy/OUCH/compare/v0.12.2...v0.12.3
 [0.12.2]: https://github.com/maxauvy/OUCH/compare/v0.12.1...v0.12.2
 [0.12.1]: https://github.com/maxauvy/OUCH/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/maxauvy/OUCH/compare/v0.11.2...v0.12.0
