@@ -70,6 +70,26 @@
   --color-weather-3-text: #6a6473;
   --color-weather-4-text: #506989;
   --color-weather-5-text: #574a7a;
+  --radius-card: 12px;
+  /* Buttons, chips and inputs: softly squared. */
+  --radius-control: 10px;
+  --card-shadow: none;
+
+  /* Off state of switches and the empty part of slider tracks: 3:1 against
+     the surface so the control's shape reads (WCAG 1.4.11). */
+  --color-control-off: #8a94a0;
+}
+
+/* Text on a brand-filled button. White in light mode; the dark brand is
+   light and needs dark text. */
+:root {
+  --color-on-brand: #ffffff;
+}
+
+/* The calendar's tile colours (light mode). Outside @theme on purpose: Tailwind keeps from @theme only the variables a utility class uses, and these are read
+   by inline styles alone, so inside @theme their light values were left out of the built CSS (only the dark rules, which are plain :root rules, kept them):
+   the tiles lost their fill and the flare bars their colour. */
+:root {
   /* The tiles of the Journal's calendar (and of the "hardest weekday" tile of
      Trends): `tile` is the fill, `mark` the day's number and its bars, `glyph`
      the weather icon. Light mode: the tint and its ink. Dark mode swaps in a
@@ -92,21 +112,6 @@
   --color-weather-3-glyph: #6a6473;
   --color-weather-4-glyph: #506989;
   --color-weather-5-glyph: #574a7a;
-
-  --radius-card: 12px;
-  /* Buttons, chips and inputs: softly squared. */
-  --radius-control: 10px;
-  --card-shadow: none;
-
-  /* Off state of switches and the empty part of slider tracks: 3:1 against
-     the surface so the control's shape reads (WCAG 1.4.11). */
-  --color-control-off: #8a94a0;
-}
-
-/* Text on a brand-filled button. White in light mode; the dark brand is
-   light and needs dark text. */
-:root {
-  --color-on-brand: #ffffff;
 }
 
 /* Text fields: outlined. */
