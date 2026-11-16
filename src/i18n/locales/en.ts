@@ -1268,6 +1268,8 @@ const en: Translations = {
     completeness: 'Completeness by measure, over logged days: {{list}}.',
     lateEntries:
       'Logging: of {{total}} logged days, {{late}} {{late:was|were}} written two or more days after the day itself, when recall is less reliable.',
+    contributors: 'What the patient feels played a part, noted day by day: {{list}}.',
+    contributorDays: '{{label}} {{n}} {{n:day|days}}',
     restDays: 'The patient chose {{n}} quiet {{n:day|days}} in the period: days they wanted to take more gently.',
     intensity: 'Pain intensity',
     distribution: 'Days by pain intensity (0–10)',
@@ -1958,6 +1960,11 @@ const en: Translations = {
         { title: 'Hands on the belly', text: 'Rest your hands on your belly. Three slow breaths. If a move hurt, do not repeat it.', cue: 'Three slow breaths.' },
       ],
     },
+  },
+  contributors: {
+    title: 'What may have played a part?',
+    optional: 'Optional',
+    note: 'Your sense of it, not an established cause.',
   },
   pacing: {
     title: 'After your active days',

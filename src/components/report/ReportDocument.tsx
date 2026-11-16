@@ -292,6 +292,7 @@ function gpPages(d: ReportData): Block[][] {
         <H level={2} kind="method">{f.t.method}</H>
         <div className="r-method">
           <p>{f.t.methodGp}</p>
+          <Contributors d={d} plain />
           <LateEntries d={d} plain />
           <RestDays d={d} plain />
           <p>{f.t.trendNote}</p>
@@ -560,6 +561,7 @@ function painClinicLayout(d: ReportData): { pages: Block[][]; labels: string[] }
     </>,
     <DayMix d={d} />,
     <Completeness d={d} />,
+    <Contributors d={d} />,
     <LateEntries d={d} />,
     <RestDays d={d} />,
     <PartsToc parts={parts.map((part, i) => ({ id: `part-${i + 1}`, n: i + 1, title: part.title, hint: part.hint }))} f={f} />,
@@ -1235,6 +1237,15 @@ function LateEntries({ d, plain }: { d: ReportData; plain?: boolean }) {
   const late = lateCount(current)
   if (late === 0) return null
   const text = f.format(f.t.lateEntries, { total: current.length, late })
+  return plain ? <p>{text}</p> : <p className="r-small">{text}</p>
+}
+
+/** The labels the patient noted on days as what may have played a part, with the number of days of each; said as their sense of it. Nothing when none. */
+function Contributors({ d, plain }: { d: ReportData; plain?: boolean }) {
+  const { f, contributors } = d
+  if (contributors.length === 0) return null
+  const list = contributors.map((c) => f.format(f.t.contributorDays, { label: f.t.markedFactors[c.factor].toLocaleLowerCase(), n: c.days })).join(' · ')
+  const text = f.format(f.t.contributors, { list })
   return plain ? <p>{text}</p> : <p className="r-small">{text}</p>
 }
 

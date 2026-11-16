@@ -1273,6 +1273,8 @@ const fr: Translations = {
     completeness: 'Complétude par dimension, sur les jours renseignés : {{list}}.',
     lateEntries:
       'Saisie : sur {{total}} jours renseignés, {{late}} {{late:a été noté|ont été notés}} deux jours ou plus après le jour concerné, où le rappel est moins fiable.',
+    contributors: 'Ce que le patient pense avoir pesé, noté jour par jour : {{list}}.',
+    contributorDays: '{{label}} {{n}} {{n:jour|jours}}',
     restDays: 'Le patient a choisi {{n}} {{n:journée tranquille|journées tranquilles}} sur la période : des jours qu’il a voulu vivre plus doucement.',
     intensity: 'Intensité douloureuse',
     distribution: 'Répartition des jours par intensité (0–10)',
@@ -1963,6 +1965,11 @@ const fr: Translations = {
         { title: 'Les mains sur le ventre', text: 'Pose les mains sur le ventre. Trois respirations lentes. Si un geste a fait mal, ne le refais pas.', cue: 'Trois respirations lentes.' },
       ],
     },
+  },
+  contributors: {
+    title: 'Qu’est-ce qui a pu jouer ?',
+    optional: 'Facultatif',
+    note: 'Ton ressenti, pas une cause établie.',
   },
   pacing: {
     title: 'Après tes jours actifs',

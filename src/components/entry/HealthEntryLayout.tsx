@@ -25,6 +25,8 @@ import { BodyMap } from './BodyMap'
 import { Slider } from '../ui/Slider'
 import { FlarePainScale } from './FlarePainScale'
 import { MarkedFlareLine } from '../flare/MarkedFlareLine'
+import { ContributorsCard } from './ContributorsCard'
+import { isUnusual, unusualDay } from '../../lib/contributors'
 import { RestDayCard, RestDayLink } from './RestDay'
 import { isRestDay } from '../../lib/restDay'
 import { Toggle } from '../ui/Toggle'
@@ -189,6 +191,8 @@ export function HealthEntryLayout({
   const lightToday = isToday && light
   // A quiet day the person chose: its own card says what changes, so the hard days card and the notice about the short form are left out.
   const restToday = isRestDay(allEntries, date)
+  // "What may have played a part?": on a day that stands out from the person's usual (and only if suggestions are on), or one where it was already answered; never on the lighter form.
+  const showContributors = !lightToday && ((local.contributors?.length ?? 0) > 0 || (settings.suggestionsEnabled && !restToday && isUnusual(unusualDay(local, allEntries, date))))
 
   const d = new Date(date + 'T00:00:00')
   const longDate = d.toLocaleDateString(intlLocale, { weekday: 'long', day: 'numeric', month: 'long' })
@@ -422,6 +426,8 @@ export function HealthEntryLayout({
         {isToday && <MarkedFlareLine />}
         {isToday && !restToday && <RestDayLink date={date} />}
       </Card>
+
+      {showContributors && <ContributorsCard date={date} selected={local.contributors} />}
 
       {/* The one new indicator the lighter form keeps: a single row of five choices, under the pain, optional. */}
       {lightToday && has('morningStiffness') && (
