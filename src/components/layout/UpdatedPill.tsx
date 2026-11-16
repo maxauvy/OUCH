@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { IconCircleCheck } from '@tabler/icons-react'
 import { format } from '../../i18n/format'
 import { useLanguage, useTranslation } from '../../i18n'
-import { forgetUpdated, justUpdated } from '../../lib/justUpdated'
+import { forgetUpdated, justUpdated, rememberVersion, versionChanged } from '../../lib/justUpdated'
 import { IS_DEMO } from '../../lib/demoMode'
 
 const REPO_URL = 'https://github.com/maxauvy/OUCH'
@@ -10,18 +10,21 @@ const REPO_URL = 'https://github.com/maxauvy/OUCH'
 const SHOW_MS = 12_000
 
 /**
- * Said once, on the page that comes back after the person tapped "reload" for a new version: the update is done, and where to read what changed (the page of that
- * version, like the number in the footer). It closes by itself. Nothing is stored: a note in the tab's session storage, thrown away as soon as the pill shows (see `lib/justUpdated`).
+ * Said once, when a new version is in: the update is done, and where to read what changed (the page of that version, like the number in the footer). It comes after
+ * the tap on "reload" (also for a new build of the same version) and whenever the version number is not the one this device saw last, so also after an update that
+ * came in by itself. It closes by itself. Not in the demo, where the version means nothing. What is kept: the last version seen, on the device (see `lib/justUpdated`).
  */
 export function UpdatedPill() {
   const t = useTranslation().footer
   const language = useLanguage()
-  // Read, not taken, while rendering (React may render twice); thrown away once it is on screen.
-  const [shown, setShown] = useState(() => justUpdated())
+  // Read, not taken, while rendering (React may render twice); remembered and thrown away once the page is on screen.
+  const [shown, setShown] = useState(() => !IS_DEMO && (justUpdated() || versionChanged(__APP_VERSION__)))
   const [held, setHeld] = useState(false)
   useEffect(() => {
-    if (shown) forgetUpdated()
-  }, [shown])
+    if (IS_DEMO) return
+    rememberVersion(__APP_VERSION__)
+    forgetUpdated()
+  }, [])
   useEffect(() => {
     if (!shown || held) return
     const timer = setTimeout(() => setShown(false), SHOW_MS)
