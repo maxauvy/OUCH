@@ -1751,6 +1751,29 @@ export interface Translations {
     restText: string
     restThanks: string
   }
+  /** "Avant tes poussées": what the three days before the flares looked like, against chance (see lib/beforeFlares.ts) */
+  beforeFlares: {
+    title: string
+    /** `{{n}}` flares compared */
+    nothing: string
+    /** `{{k}}` flares of `{{n}}`, `{{what}}` what the three days held (one of `measures.*.what`), `{{chance}}` what chance gives (`chanceOne` or `chanceRange`) */
+    found: string
+    /** The same when chance gives almost none (the band is 0 to 0) */
+    foundNone: string
+    chanceNone: string
+    chanceOne: string
+    chanceRange: string
+    notCause: string
+    several: string
+    showAll: string
+    hideAll: string
+    /** `{{k}}` of `{{n}}` */
+    count: string
+    chartLabel: string
+    chance: string
+    you: string
+    measures: Record<'sleepHours' | 'sleepQuality' | 'stressLevel' | 'fatigueLevel' | 'brainFog' | 'moodLevel', { row: string; what: string }>
+  }
   todayList: {
     /** `{{n}} {{n:thing|things}}`: how many things wait. */
     line: string
