@@ -1058,6 +1058,10 @@ export interface Translations {
     completeness: string
     /** `{{late}}` days written two days or more after, out of `{{total}}` logged days */
     lateEntries: string
+    /** `{{list}}`: the labels the patient noted on days, each as `contributorDays` */
+    contributors: string
+    /** `{{label}}` (lower case), `{{n}}` days */
+    contributorDays: string
     intensity: string
     distribution: string
     distPrev: string
@@ -1736,6 +1740,12 @@ export interface Translations {
     }
     relax: { title: string; hint: string; steps: { title: string; text: string; cue: string }[] }
     gentle: { title: string; hint: string; steps: { title: string; text: string; cue: string }[] }
+  }
+  /** "Qu'est-ce qui a pu jouer ?": labels on a day out of the ordinary (see lib/contributors.ts); the labels themselves are `markedFlare.factors` */
+  contributors: {
+    title: string
+    optional: string
+    note: string
   }
   pacing: {
     title: string

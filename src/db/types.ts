@@ -203,6 +203,8 @@ export interface DailyEntry {
   feverInfection?: boolean
   /** Said by the person: a new or worse symptom for over 24 hours. A declaration, no algorithm reads it. */
   newSymptom?: boolean
+  /** What the person thinks may have played a part in the day (the labels of a difficult period: sleep, stress, effort…), in the app's order. Their sense of it, never a cause: no algorithm reads it, the report counts the days. */
+  contributors?: FlareFactor[]
   /** 0–10, not validated: sensitivity to noise, light, smells, touch. Asked as a slider until v0.11, now replaced by `sensoryStimuli`; kept so that earlier days still read. */
   sensorySensitivity?: number
   /** The stimuli that bothered on the day. An empty list is an answer (none), unlike a day left blank. */

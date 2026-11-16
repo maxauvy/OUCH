@@ -1,9 +1,10 @@
-import type { DailyEntry, LoggedEntry, Illness, IllnessDetails, MarkedFlare, Medication, PastConsultation } from '../../db/types'
+import type { DailyEntry, FlareFactor, LoggedEntry, Illness, IllnessDetails, MarkedFlare, Medication, PastConsultation } from '../../db/types'
 import type { Language } from '../../i18n'
 import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresApply, type FlareEpisode } from '../../lib/flares'
 import { flareContext, type FlareContext } from '../../lib/flareContext'
 import { medicationReports, painStats, reportPeriods, splitEntries, type MedicationReport, type PainStats, type ReportPeriods, type SymptomKey } from '../../lib/report'
 import { loggedEntries } from '../../lib/loggedEntries'
+import { contributorDays } from '../../lib/contributors'
 import { findLeads, keptLeads, type Lead, type LeadChoices, type LeadFactors } from '../../lib/leads'
 import { reportTrials, type LeadTrial, type ReportTrial } from '../../lib/leadTrial'
 import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '../../lib/treatmentReview'
@@ -79,6 +80,8 @@ export interface ReportData {
   all: LoggedEntry[]
   current: LoggedEntry[]
   previous: LoggedEntry[]
+  /** Labels the patient noted on days ("what may have played a part"), in the reported period, the most often first */
+  contributors: { factor: FlareFactor; days: number }[]
   pain: PainStats | null
   painPrev: PainStats | null
   meds: MedicationReport[]
@@ -138,6 +141,7 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     all: [...previous, ...current],
     current,
     previous,
+    contributors: contributorDays(allEntries, p.start, p.end),
     pain: painStats(current),
     painPrev: painStats(previous),
     meds: medicationReports(current, medications, p),
