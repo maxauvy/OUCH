@@ -206,3 +206,8 @@ test('a week of the short walk is among the trials already closed, and the repor
     }
   }
 })
+
+test('four flares are found, enough for the "before your flares" card in Trends', () => {
+  const h = buildDemoHistory({ endDate: END, language: 'fr' })
+  assert.ok(detectFlares(logged(h)).length >= 4)
+})
