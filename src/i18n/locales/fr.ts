@@ -2360,6 +2360,7 @@ const fr: Translations = {
     updatingNote: 'Ça ne dure que quelques secondes. Tes notes restent sur ton appareil.',
     updated: 'À jour, {{version}}',
     whatsNew: 'Voir les nouveautés',
+    closeUpdated: 'Fermer',
     earlyOn: 'Fonctions à l’essai activées sur cet appareil.',
     earlyOff: 'Fonctions à l’essai désactivées.',
   },
