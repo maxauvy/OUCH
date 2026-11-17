@@ -2135,6 +2135,8 @@ export interface Translations {
     /** The pill after the update: `{{version}}` is "v0.12.3" or "0.12.3+abc1234" */
     updated: string
     whatsNew: string
+    /** Label of the cross that closes the pill */
+    closeUpdated: string
     earlyOn: string
     earlyOff: string
   }

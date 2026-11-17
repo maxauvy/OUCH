@@ -2355,6 +2355,7 @@ const en: Translations = {
     updatingNote: 'This only takes a few seconds. Your notes stay on your device.',
     updated: 'Up to date, {{version}}',
     whatsNew: 'See what’s new',
+    closeUpdated: 'Close',
     earlyOn: 'Early-access features turned on for this device.',
     earlyOff: 'Early-access features turned off.',
   },

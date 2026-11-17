@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- **La pastille « À jour » se ferme avec une croix, et plus vite.** Elle reste 7 secondes au lieu de 12. Sur un écran tactile, elle ne reste plus « tenue » après un simple toucher (un survol à la souris ou le clavier la retiennent toujours).
+
 ## [0.13.0] - 2026-11-16
 
 Une version tournée vers la douceur : des gestes pour alléger la journée, deux lectures prudentes de ce que le carnet montre, et un délai réglable pour juger un traitement.
