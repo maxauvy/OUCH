@@ -14,8 +14,7 @@ import { hasPain } from '../../lib/loggedEntries'
 import type { DailyEntry, PainWeatherLevel } from '../../db/types'
 import { computePainWeather, painWeatherByLevel, painWeatherTile } from '../../lib/painWeather'
 import { WeatherIcon } from '../ui/WeatherIcon'
-import { usePalette } from '../../hooks/usePalette'
-import { useLocale, useTranslation } from '../../i18n'
+import { format as formatText, useLanguage, useLocale, useTranslation } from '../../i18n'
 
 export function CalendarHeatmap({
   entries,
@@ -23,6 +22,7 @@ export function CalendarHeatmap({
   selectedDate,
   flareDays,
   markedDays,
+  mosaic = false,
 }: {
   entries: DailyEntry[]
   onSelectDate: (date: string) => void
@@ -31,11 +31,12 @@ export function CalendarHeatmap({
   flareDays?: Set<string>
   /** Days of a period the person marked themselves: a hollow bar, apart from the detected ones */
   markedDays?: Set<string>
+  /** The weather look: the month as a mosaic of taller tiles, with the sky of the month above it. */
+  mosaic?: boolean
 }) {
   const [cursor, setCursor] = useState(() => new Date())
   // The month the page was opened in (read once: not while rendering).
   const [openedIn] = useState(() => new Date())
-  const t = usePalette()
   const i18n = useTranslation()
   const { dateFnsLocale } = useLocale()
   const WEEKDAYS = i18n.calendar.weekdaysShort
@@ -55,6 +56,12 @@ export function CalendarHeatmap({
     return !!e && !hasPain(e)
   }
   const anyNoPain = days.some((d) => isSameMonth(d, cursor) && withNoPain(d))
+  // How many days of the month fell in each weather, clear sky first.
+  const monthCounts = LEVELS.map(() => 0)
+  for (const d of days) {
+    const e = isSameMonth(d, cursor) ? byDate.get(format(d, 'yyyy-MM-dd')) : undefined
+    if (e && hasPain(e)) monthCounts[computePainWeather(e).level - 1]++
+  }
 
   return (
     <div>
@@ -95,7 +102,9 @@ export function CalendarHeatmap({
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1.5 mb-1.5">
+      {mosaic && <MonthSky counts={monthCounts} />}
+
+      <div className={`grid grid-cols-7 ${mosaic ? 'gap-[3px]' : 'gap-1.5'} mb-1.5`}>
         {WEEKDAYS.map((d, i) => (
           <div key={i} className="text-center text-caption font-medium" style={{ color: 'var(--color-ink-muted)' }}>
             {d}
@@ -103,7 +112,7 @@ export function CalendarHeatmap({
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-1.5">
+      <div className={`grid grid-cols-7 ${mosaic ? 'gap-[3px]' : 'gap-1.5'}`}>
         {days.map((day) => {
           const key = format(day, 'yyyy-MM-dd')
           const entry = byDate.get(key)
@@ -124,6 +133,44 @@ export function CalendarHeatmap({
             .filter(Boolean)
             .join(', ')
 
+          if (mosaic)
+            return (
+              <button
+                key={key}
+                onClick={() => onSelectDate(key)}
+                aria-label={label}
+                aria-current={today ? 'date' : undefined}
+                aria-pressed={selected}
+                // A taller tile: the number in its corner, the weather's shape at the bottom, the flare along the bottom edge.
+                className={`aspect-[0.82] rounded-[10px] flex flex-col justify-between relative p-[5px] pb-1 text-caption leading-none text-left ${inMonth ? 'font-semibold' : 'font-normal'}`}
+                style={{
+                  background: tone ? tone.tile : 'transparent',
+                  color: tone ? tone.mark : 'var(--color-ink-muted)',
+                  // A day with nothing noted stays bare, with no edge: an empty box would read as a day missed. The neighbours' days fade.
+                  boxShadow: selected
+                    ? 'inset 0 0 0 2px var(--color-brand)'
+                    : today
+                      ? `inset 0 0 0 2px ${tone ? tone.mark : 'var(--color-ink)'}`
+                      : undefined,
+                  opacity: inMonth ? 1 : 0.45,
+                }}
+              >
+                <span>{format(day, 'd')}</span>
+                {weather && (
+                  <WeatherIcon name={weather.icon as never} size={18} className="self-center mb-1" style={{ color: tone ? tone.glyph : 'var(--color-ink-muted)' }} />
+                )}
+                {noPain && <NoPainRing color="var(--color-ink-muted)" className="self-center mb-1.5" />}
+                {inFlare && <span className="absolute left-[5px] right-[5px] bottom-[3px] h-[3px] rounded-full" style={{ background: tone ? tone.mark : 'var(--color-ink-muted)' }} aria-hidden />}
+                {inMarked && (
+                  <span
+                    className={`absolute left-[5px] right-[5px] h-[6px] rounded-full box-border ${inFlare ? 'bottom-[8px]' : 'bottom-[2px]'}`}
+                    style={{ border: `2px solid ${tone ? tone.mark : 'var(--color-ink-muted)'}` }}
+                    aria-hidden
+                  />
+                )}
+              </button>
+            )
+
           return (
             <button
               key={key}
@@ -142,7 +189,7 @@ export function CalendarHeatmap({
                 color: tone ? tone.mark : 'var(--color-ink-muted)',
                 // Inset rings rather than outlines, so the keyboard focus
                 // outline stays free.
-                boxShadow: selected ? `inset 0 0 0 2px ${t.brand}` : today ? `inset 0 0 0 1.5px ${tone ? tone.mark : t.inkMuted}` : undefined,
+                boxShadow: selected ? 'inset 0 0 0 2px var(--color-brand)' : today ? `inset 0 0 0 1.5px ${tone ? tone.mark : 'var(--color-ink-muted)'}` : undefined,
               }}
             >
               {format(day, 'd')}
@@ -190,6 +237,30 @@ function NoPainRing({ color, className = '' }: { color: string; className?: stri
 }
 
 const LEVELS: PainWeatherLevel[] = [1, 2, 3, 4, 5]
+
+/** The sky of the month, above the mosaic: one band, clear sky to storm, each weather as wide as its share of the days noted. No figures on screen (a month is not a score); a screen reader hears the days of each weather. Only from 3 days noted. */
+function MonthSky({ counts }: { counts: number[] }) {
+  const i18n = useTranslation()
+  const language = useLanguage()
+  const total = counts.reduce((a, b) => a + b, 0)
+  if (total < 3) return null
+  const spoken = LEVELS.filter((l) => counts[l - 1] > 0)
+    .map((l) => formatText(i18n.calendar.monthSkyDays, { weather: i18n.painWeatherLevels[l], n: counts[l - 1] }, language))
+    .join(', ')
+  return (
+    <div className="mb-4 px-0.5">
+      <p className="text-caption font-medium mb-1.5" style={{ color: 'var(--color-ink-muted)' }}>
+        {i18n.calendar.monthSky}
+        <span className="sr-only">. {spoken}</span>
+      </p>
+      <div className="flex gap-[2px] h-2.5 rounded-full overflow-hidden" aria-hidden>
+        {LEVELS.map((l) =>
+          counts[l - 1] > 0 ? <span key={l} style={{ flex: counts[l - 1], background: painWeatherByLevel(l).color }} /> : null,
+        )}
+      </div>
+    </div>
+  )
+}
 
 /** The five weathers, easiest day first, so the calendar's colors can be read. */
 function WeatherLegend({ withFlare, withMarked, withNoPain }: { withFlare: boolean; withMarked: boolean; withNoPain: boolean }) {

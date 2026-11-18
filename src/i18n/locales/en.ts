@@ -1352,6 +1352,8 @@ const en: Translations = {
   calendar: {
     flareDay: 'flare',
     noPain: 'noted, no pain level',
+    monthSky: 'The sky of your month',
+    monthSkyDays: '{{weather}}: {{n}} {{n:day|days}}',
     prevMonth: 'Previous month',
     today: 'Today',
     todayLabel: 'Back to today',
