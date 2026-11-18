@@ -14,7 +14,7 @@ import {
   IconSunrise,
   IconCloud, IconMoon } from '@tabler/icons-react'
 import { MORNING_STIFFNESS_BANDS, type DailyEntry, type FactorKey, type Medication, type PainWeather, type Settings } from '../../db/types'
-import { WEATHER_SCALE_GRADIENT, colorForPainValue, computePainWeather, inkForPainValue } from '../../lib/painWeather'
+import { WEATHER_SCALE_GRADIENT, colorForPainValue, computePainWeather, inkForPainValue, levelForPainValue, painWeatherByLevel } from '../../lib/painWeather'
 import { shiftISO } from '../../lib/dates'
 import { daysLate } from '../../lib/lateEntries'
 import { CategoryIcon, ChoiceRow } from './EntryFields'
@@ -350,6 +350,8 @@ export function HealthEntryLayout({
   // which form it is: show the title only, rather than a full form that then
   // folds up.
   const dayWeather = local.painLevel === undefined ? null : weather
+  // The sky follows the pain number alone, like the colours of the pain scale under it: the number sets the weather.
+  const skyWeather = local.painLevel === undefined ? null : painWeatherByLevel(levelForPainValue(local.painLevel))
   if (isToday && !ready)
     return (
       <div className="flex flex-col gap-3">
@@ -360,9 +362,9 @@ export function HealthEntryLayout({
 
   return (
     <div className="flex flex-col gap-3">
-      {sky && <TodaySkyBackdrop weather={dayWeather} />}
+      {sky && <TodaySkyBackdrop weather={skyWeather} />}
       {header}
-      {sky && <TodaySkyLine weather={dayWeather} painLevel={local.painLevel} />}
+      {sky && <TodaySkyLine weather={skyWeather} painLevel={local.painLevel} />}
       {isToday && afterHeader}
 
       {isToday && restToday && <RestDayCard date={date} light={lightToday} />}
