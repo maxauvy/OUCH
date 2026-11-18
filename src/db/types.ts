@@ -364,6 +364,20 @@ export interface AutoBackupState {
   lastFailureDetail?: string
 }
 
+/** The day's weather image kept up to date at Dropbox for a relative (per device, never in a backup). Present = turned on. */
+export interface WeatherShareState {
+  /** The public link to the image (image only); absent until the first image is there. */
+  link?: string
+  /** What the last image sent was made from (see `weatherImageKey`), so the same image is not sent twice. */
+  sentKey?: string
+  /** When the last image went (ms). */
+  sentAt?: number
+  /** The last try, whether or not it worked (ms). */
+  triedAt?: number
+  /** Why the last try failed; absent when it worked. `permission`: Dropbox has to be asked for the link. */
+  lastFailure?: 'permission' | 'auth' | 'network' | 'quota' | 'other'
+}
+
 /** Who the appointment is with: the family doctor ("médecin traitant") or a pain clinic (CETD). Each has its own report and its own dates. */
 export const CONSULTATION_KINDS = ['gp', 'cetd'] as const
 export type ConsultationKind = (typeof CONSULTATION_KINDS)[number]
@@ -489,6 +503,8 @@ export interface Settings {
   backupReminderSnoozedUntil?: number
   /** Set once the person has linked a place to keep copies. Per device. */
   autoBackup?: AutoBackupState
+  /** The weather image for a relative, at Dropbox. Per device. */
+  weatherShare?: WeatherShareState
   /** The soft message on the day's page when the last days were harder.
    * Switchable on its own, and a preference: restored from a backup. */
   hardDaysCardEnabled: boolean

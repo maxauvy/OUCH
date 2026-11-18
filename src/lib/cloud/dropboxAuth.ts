@@ -25,8 +25,10 @@ export function redirectUri(origin: string, basePath: string): string {
   return `${origin}${basePath}`
 }
 
-/** `offline` asks for a refresh token, so copies can go out for months without a new sign-in. */
-export async function authorizeUrl(args: { verifier: string; state: string; redirect: string }): Promise<string> {
+/** `offline` asks for a refresh token, so copies can go out for months without a new sign-in.
+ * `scope` asks for one more permission on top of those already given (the
+ * new tokens carry both), for a feature only some people turn on. */
+export async function authorizeUrl(args: { verifier: string; state: string; redirect: string; scope?: string }): Promise<string> {
   const params = new URLSearchParams({
     client_id: DROPBOX_APP_KEY,
     response_type: 'code',
@@ -36,6 +38,10 @@ export async function authorizeUrl(args: { verifier: string; state: string; redi
     state: args.state,
     token_access_type: 'offline',
   })
+  if (args.scope) {
+    params.set('scope', args.scope)
+    params.set('include_granted_scopes', 'user')
+  }
   return `${AUTHORIZE_URL}?${params}`
 }
 

@@ -146,6 +146,8 @@ export interface Translations {
     shareTitle: string
     shareWeather: string
     shareWeatherHint: string
+    /** The tile's hint once the day's image went to Dropbox on its own. */
+    shareWeatherAutoHint: string
     kidsTile: string
     kidsTileHint: string
   }
@@ -1259,6 +1261,8 @@ export interface Translations {
     stopNote: string
     /** `{{provider}}` in the third line */
     trust: [string, string, string]
+    /** Replaces the third trust line while the daily weather image is on. */
+    trustWithImage: string
     /** `{{provider}}` in `auth` and `quota` */
     failure: { auth: string; network: string; quota: string; other: string; mismatch: string; unreadable: string }
     /** `{{detail}}` */
@@ -1975,6 +1979,32 @@ export interface Translations {
     footer: string
     nativeShareTitle: string
     cardNotFound: string
+    /** The image kept up to date at Dropbox for a relative. */
+    auto: {
+      title: string
+      hintOff: string
+      /** What turning it on means, said before it is on. */
+      facts: [string, string, string]
+      turnOn: string
+      cancel: string
+      going: string
+      sending: string
+      sentToday: string
+      sentBefore: string
+      permission: string
+      allow: string
+      failed: string
+      auth: string
+      sendLink: string
+      linkCopied: string
+      linkShareText: string
+      offNote: string
+      stopFailed: string
+      ready: string
+      denied: string
+      returnFailed: string
+      footerOn: string
+    }
   }
 
   weatherCard: {

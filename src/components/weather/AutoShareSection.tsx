@@ -1,0 +1,145 @@
+import { useId, useState } from 'react'
+import { useSettings } from '../../hooks/useSettings'
+import { Toggle } from '../ui/Toggle'
+import { format, useLocale, useTranslation } from '../../i18n'
+import { todayISO } from '../../lib/dates'
+import { askWeatherSharePermission, nextSendResult, turnOffWeatherShare, turnOnWeatherShare, type WeatherShareNotice } from '../../lib/weatherShareRuntime'
+
+const mutedText = { color: 'var(--color-ink-muted)' }
+
+/**
+ * In the share sheet: the day's image kept at Dropbox for a relative, at a
+ * link that stays the same. Offered only to people whose backup goes to
+ * Dropbox (it uses the same link to Dropbox). Before it is on, it says what
+ * turning it on means; once on, how the last image went and the link to send.
+ */
+export function AutoShareSection({ notice }: { notice: WeatherShareNotice | null }) {
+  const t = useTranslation().shareSheet.auto
+  const { intlLocale } = useLocale()
+  const settings = useSettings()
+  const share = settings.weatherShare
+  const factsId = useId()
+  const [asking, setAsking] = useState(false)
+  const [activating, setActivating] = useState(false)
+  const [leaving, setLeaving] = useState(false)
+  const [say, setSay] = useState<string | null>(notice ? { ready: t.ready, denied: t.denied, failed: t.returnFailed }[notice] : null)
+
+  if (settings.autoBackup?.provider !== 'dropbox') return null
+
+  async function turnOn() {
+    setSay(null)
+    setActivating(true)
+    setAsking(false)
+    const result = nextSendResult()
+    await turnOnWeatherShare()
+    // Dropbox has not allowed the link yet: off to Dropbox, as the person asked.
+    if ((await result) === 'permission') {
+      setLeaving(true)
+      await askWeatherSharePermission()
+    }
+    setActivating(false)
+  }
+
+  async function turnOff() {
+    setSay(null)
+    const result = await turnOffWeatherShare()
+    if (result !== 'off') setSay(t.stopFailed)
+  }
+
+  async function sendLink() {
+    if (!share?.link) return
+    try {
+      if (navigator.share) {
+        await navigator.share({ text: t.linkShareText, url: share.link })
+        return
+      }
+      await navigator.clipboard.writeText(share.link)
+      setSay(t.linkCopied)
+    } catch (e) {
+      if (!(e instanceof DOMException && e.name === 'AbortError')) setSay(share.link)
+    }
+  }
+
+  const on = !!share
+  let status: string | null = null
+  if (leaving) status = t.going
+  else if (share) {
+    if (share.lastFailure === 'permission') status = t.permission
+    else if (share.lastFailure === 'auth') status = t.auth
+    else if (share.lastFailure) status = t.failed
+    else if (activating) status = t.sending
+    else if (share.sentAt !== undefined && todayISO(new Date(share.sentAt)) === todayISO())
+      status = format(t.sentToday, { time: new Date(share.sentAt).toLocaleTimeString(intlLocale, { hour: '2-digit', minute: '2-digit' }) })
+    else status = t.sentBefore
+  }
+
+  return (
+    <section className="flex flex-col gap-2.5 pt-3" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-body font-semibold">{t.title}</p>
+          <p className="text-caption" style={mutedText} id={factsId}>
+            {on ? t.offNote : t.hintOff}
+          </p>
+        </div>
+        <Toggle
+          checked={on || asking}
+          label={t.title}
+          onChange={(v) => {
+            setSay(null)
+            if (v) setAsking(true)
+            else if (on) void turnOff()
+            else setAsking(false)
+          }}
+        />
+      </div>
+
+      {asking && !on && (
+        <div className="flex flex-col gap-2.5">
+          <ul className="flex flex-col gap-1.5 text-caption list-disc pl-5">
+            {t.facts.map((fact) => (
+              <li key={fact}>{fact}</li>
+            ))}
+          </ul>
+          <div className="flex gap-3">
+            <button type="button" className="btn-secondary flex-1" onClick={() => setAsking(false)}>
+              {t.cancel}
+            </button>
+            <button type="button" className="btn-secondary flex-1" onClick={() => void turnOn()}>
+              {t.turnOn}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {(status || say) && (
+        <div role="status" className="flex flex-col gap-1">
+          {status && <p className="text-caption">{status}</p>}
+          {say && (
+            <p className="text-caption break-all select-text" style={mutedText}>
+              {say}
+            </p>
+          )}
+        </div>
+      )}
+
+      {on && share.lastFailure === 'permission' && !leaving && (
+        <button
+          type="button"
+          className="btn-secondary"
+          onClick={() => {
+            setLeaving(true)
+            void askWeatherSharePermission()
+          }}
+        >
+          {t.allow}
+        </button>
+      )}
+      {on && share.link && (
+        <button type="button" className="btn-secondary" onClick={() => void sendLink()}>
+          {t.sendLink}
+        </button>
+      )}
+    </section>
+  )
+}

@@ -13,7 +13,8 @@ import type { BackupProvider } from './cloud/provider'
 import { dropboxProvider } from './cloud/dropboxProvider'
 import { webdavProvider, type WebdavConfig } from './cloud/webdavProvider'
 import { clearWebdavConfig, getWebdavConfig, saveWebdavConfig } from './cloud/webdavLink'
-import { cleanReturnAddress, finishDropboxLink, forgetPendingDropboxLink, getDropboxToken, readDropboxReturn, startDropboxLink, unlinkDropbox } from './cloud/dropboxLink'
+import { cleanReturnAddress, finishDropboxLink, forgetPendingDropboxLink, getDropboxToken, pendingDropboxPurpose, readDropboxReturn, startDropboxLink, unlinkDropbox } from './cloud/dropboxLink'
+import { finishWeatherSharePermission, turnOffWeatherShare } from './weatherShareRuntime'
 
 type ProviderId = AutoBackupState['provider']
 
@@ -97,6 +98,11 @@ const NOTICE_KEY = 'ouch:autobackup-notice'
 export async function handleProviderReturn(): Promise<ReturnNotice | null> {
   const back = readDropboxReturn(location.search)
   if (!back) return null
+  // Back from allowing the weather image's link: the backup itself is not touched (nor its key, even on a refusal).
+  if (pendingDropboxPurpose() === 'weather') {
+    await finishWeatherSharePermission(back)
+    return null
+  }
   cleanReturnAddress()
   let notice: ReturnNotice
   if ('denied' in back) {
@@ -138,7 +144,13 @@ export function clearReturnNotice(): void {
 
 /** Stops sending copies. The ones already there stay where they are. */
 export async function stopAutoBackup(): Promise<void> {
-  const state = (await getSettings()).autoBackup
+  const settings = await getSettings()
+  const state = settings.autoBackup
+  // The weather image needs the link to Dropbox: it goes first, so that its public link ends too.
+  if (settings.weatherShare) {
+    await turnOffWeatherShare()
+    await updateSettings({ weatherShare: undefined })
+  }
   if (state?.provider === 'dropbox') await unlinkDropbox()
   if (state?.provider === 'webdav') await clearWebdavConfig()
   await clearBackupKey()
