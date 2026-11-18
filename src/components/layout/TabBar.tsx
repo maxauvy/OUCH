@@ -49,7 +49,7 @@ export function TabBar({
               aria-current={isActive ? 'page' : undefined}
               aria-label={badged.includes(tab.id) ? `${tab.label}, ${t.tabs.trendsNew}` : undefined}
               className="flex-1 flex flex-col items-center gap-0.5 py-2.5"
-              style={{ color: isActive ? 'var(--color-brand)' : 'var(--color-ink-muted)' }}
+              style={{ color: isActive ? 'var(--tab-active, var(--color-brand))' : 'var(--color-ink-muted)' }}
             >
               <span
                 className="relative"

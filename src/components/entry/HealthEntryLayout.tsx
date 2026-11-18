@@ -40,7 +40,7 @@ import { useHardDays } from '../../hooks/useHardDays'
 import { updateSettings } from '../../db'
 import { WeatherField } from './WeatherField'
 import { format, useLocale, useTranslation } from '../../i18n'
-import { useLuminous } from '../../lib/look'
+import { useRichLook } from '../../lib/look'
 import { isOffered } from '../../lib/indicatorCatalog'
 import { useEarlyAccess } from '../../lib/earlyAccess'
 import { todayISO } from '../../lib/dates'
@@ -85,7 +85,7 @@ function PainBars({ values }: { values: (number | undefined)[] }) {
  * is set, so logging the first value doesn't push the page down. */
 function WeatherHero({ weather }: { weather: PainWeather | null }) {
   const t = useTranslation()
-  const look = useLuminous()
+  const look = useRichLook()
   const tint = weather?.color ?? 'var(--color-ink-muted)'
   const flat = `color-mix(in srgb, ${tint} ${weather ? 16 : 8}%, var(--color-surface))`
   return (

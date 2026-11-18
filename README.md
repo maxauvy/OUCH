@@ -73,7 +73,7 @@ L'onglet Enfants est fait pour être montré à un enfant. Il raconte la météo
 ### Et aussi
 
 - Français et anglais, au choix à la première ouverture, modifiable à tout moment.
-- Une apparence lumineuse (que l'on peut couper dans Réglages) et un mode sombre.
+- Deux styles, « Météo » (par défaut) et « Léger » (plus sobre, dans Réglages), chacun en clair et en sombre.
 - Un verrou par code à quatre chiffres, facultatif, qui cache l'écran.
 - L'app s'installe sur l'écran d'accueil (mobile ou ordinateur) et marche hors connexion après la première ouverture. Le texte suit la taille de police réglée sur le téléphone.
 - Les données restent dans le navigateur (IndexedDB). Pour sauvegarder ou changer d'appareil, on exporte un fichier chiffré avec un mot de passe de son choix (AES-256-GCM, dans le navigateur), qu'on réimporte ensuite ; un export CSV (deux fichiers en clair : le journal et les prises) sert à l'analyse, pas à la restauration. L'app rappelle de faire une sauvegarde quand il y a quelque chose à perdre, et demande au navigateur de ne pas effacer les données. En accès anticipé, une sauvegarde automatique envoie ce même fichier chiffré vers un Dropbox.

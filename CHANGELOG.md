@@ -7,6 +7,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Modifié
+- **Deux styles au choix, « Météo » et « Léger ».** Première étape de la refonte graphique. « Météo », le style par défaut, remet la météo de la douleur au centre : un papier bleu-gris clair, des cartes blanches à ombre douce, des titres arrondis (Bricolage Grotesque), l'onglet actif sur la teinte « Quelques nuages », un ciel doux derrière l'écran de verrouillage. « Léger », à choisir dans Réglages › Rappel et affichage, est plus sobre : fond uni légèrement rosé, la prune du logo comme seule couleur, des filets plutôt que des ombres. Les deux existent en clair et en sombre. L'« apparence lumineuse » et l'apparence classique disparaissent ; qui avait choisi la classique retrouve le style « Léger ». Le bandeau du ciel du jour et la mosaïque du Journal suivront.
 - **La pastille « À jour » se ferme avec une croix, et plus vite.** Elle reste 7 secondes au lieu de 12. Sur un écran tactile, elle ne reste plus « tenue » après un simple toucher (un survol à la souris ou le clavier la retiennent toujours).
 
 ## [0.13.0] - 2026-11-16

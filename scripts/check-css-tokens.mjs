@@ -9,7 +9,7 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const LEVELS = ['1', '2', '3', '4', '5']
-/** Tokens of an optional look, declared only when it is on (`[data-look='luminous']`) and read under it or with a fallback. */
+/** Tokens of an optional look, declared only when it is on (`[data-look='meteo']`) and read under it or with a fallback. */
 const OPTIONAL_PREFIXES = ['--look-']
 
 const stripComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:'"`\w])\/\/[^\n]*/g, '$1')

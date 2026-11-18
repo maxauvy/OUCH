@@ -6,7 +6,7 @@ import { saveCurrentLocation } from '../../lib/weatherLocation'
 import type { Settings } from '../../db/types'
 import { useTranslation } from '../../i18n'
 import { IconCloud, IconMapPin } from '@tabler/icons-react'
-import { useLuminous } from '../../lib/look'
+import { useRichLook } from '../../lib/look'
 
 const CONDITIONS: ExternalWeatherCondition[] = ['ensoleille', 'variable', 'nuageux', 'pluvieux', 'orageux', 'neige']
 
@@ -22,7 +22,7 @@ export function WeatherField({
   settings: Settings
 }) {
   const t = useTranslation()
-  const look = useLuminous()
+  const look = useRichLook()
   const tempId = useId()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { IconBackspace, IconEye, IconEyeOff } from '@tabler/icons-react'
 import { PIN_LENGTH } from '../../lib/pinLock'
-import { useLuminous } from '../../lib/look'
+import { useRichLook } from '../../lib/look'
 import { format, useLanguage, useTranslation } from '../../i18n'
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -30,7 +30,7 @@ export function PinPad({
   const [digits, setDigits] = useState('')
   const [reveal, setReveal] = useState(false)
   const busy = useRef(false)
-  const look = useLuminous()
+  const look = useRichLook()
   // The key that is lit: held under the finger, then a moment more, so that even a quick tap is seen.
   const [lit, setLit] = useState<string | null>(null)
   const litTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -163,7 +163,7 @@ function Key({
 }: {
   children: string
   onPress: () => void
-  /** The luminous look: the key shows that it is being, or has just been, touched. */
+  /** The default look: the key shows that it is being, or has just been, touched. */
   lit?: boolean
   onDown?: () => void
   onUp?: () => void

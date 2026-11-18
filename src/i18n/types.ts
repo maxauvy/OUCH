@@ -2054,9 +2054,12 @@ export interface Translations {
     themeAuto: string
     themeLight: string
     themeDark: string
-    /** The luminous look, as a switch (off brings back the classic look) */
+    /** The look of the app: "meteo" (default) or "leger" (lighter) */
     lookLabel: string
-    lookHelper: string
+    lookMeteo: string
+    lookLeger: string
+    lookMeteoHelper: string
+    lookLegerHelper: string
     languageTitle: string
     languageHelper: string
     parentGenderTitle: string

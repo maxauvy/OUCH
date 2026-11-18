@@ -20,7 +20,7 @@ test('what the built CSS declares in its base rules: not the dark rules, not a r
     :root { --plain: 2; }
     @media (prefers-color-scheme: dark) { :root:not([data-theme='light']) { --only-dark: 3; --plain: 4; } }
     :root[data-theme='dark'] { --also-dark: 5; }
-    :root[data-look='luminous'] { --look-bg: 6; }
+    :root[data-look='meteo'] { --look-bg: 6; }
     @media (min-width: 700px) { :root { --wide: 7; } }
     @property --registered { syntax: '*'; inherits: false; }
   `

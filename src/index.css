@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/public-sans';
+@import '@fontsource-variable/bricolage-grotesque';
 
 @theme {
   --font-sans: 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -84,6 +85,8 @@
    light and needs dark text. */
 :root {
   --color-on-brand: #ffffff;
+  /* Titles in the default look (see the looks at the end of this file). */
+  --font-display: 'Bricolage Grotesque Variable', 'Public Sans Variable', system-ui, sans-serif;
 }
 
 /* The calendar's tile colours (light mode). Outside @theme on purpose: Tailwind keeps from @theme only the variables a utility class uses, and these are read
@@ -617,55 +620,79 @@ html[data-covered]::after {
   background: var(--color-paper);
 }
 
-/* Luminous look (the app's look; Settings can bring back the classic one, see lib/look.ts): a lighter background, colour
-   on section icons and chips, a pill on the pain weather. Everything is a
-   token override or a `--look-*` alias of the measure colours, so the usual
-   look is untouched when the stamp is absent. */
-:root[data-look='luminous'] {
-  --look-top: #d6e9fa;
-  --look-bottom: #ebe4f8;
-  --look-bg: linear-gradient(180deg, #d6e9fa 0%, #e2f1f3 45%, #ebe4f8 100%);
-  --color-hairline: #c9d9e6;
-  --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 40%, transparent);
-  --card-shadow: 0 2px 8px rgba(40, 70, 110, 0.06);
-  --avatar-bg: linear-gradient(135deg, #bfe0f5, #d8cff3);
-  --tab-pill: linear-gradient(135deg, #d3e8f7, #e0d9f5);
+/* The two looks (see lib/look.ts). The page root always carries one stamp:
+   `meteo`, the default, or `leger`, the lighter one chosen in Settings. Each
+   look only reassigns tokens, so every component follows. The base tokens
+   above are what shows if the stamp is ever missing. */
+
+/* ---- Météo (default): the pain weather at the heart of the design. Cool
+   paper, white cards with a soft shadow instead of a border, a slate blue
+   accent, the active tab on the "few clouds" tint, rounder titles. ---- */
+:root[data-look='meteo'] {
+  --color-paper: #f4f6f9;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f7f9fb;
+  --color-ink: #1d2433;
+  --color-ink-muted: #5a6577;
+  --color-hairline: #e1e6ee;
+  --color-brand: #3a5f8f;
+  --color-brand-soft: #e4ebf4;
+  --color-on-brand: #ffffff;
+  --radius-card: 20px;
+  --card-shadow: 0 8px 22px -16px rgba(30, 45, 70, 0.35);
+  --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
+  --avatar-bg: linear-gradient(135deg, #f3ecd9, #e1e9f1);
+  --tab-pill: #f3ecd9;
   --tab-pill-pad: 2px 16px;
   --tab-pill-margin: -2px 0;
-  --cta-bg: linear-gradient(135deg, #0d5c8c, #2f5fa8);
-  --look-outdoor: #1d6c92;
-  --look-outdoor-soft: #e3f1f8;
+  --tab-active: #1d2433;
+  /* The lock screen: the soft sky of a day with a few clouds. */
+  --look-bg: linear-gradient(180deg, #f7e7c4 0%, #f3ecd9 40%, #e4ecf3 100%);
+  --look-outdoor: #3a5f8f;
+  --look-outdoor-soft: #e4ebf4;
 }
 @media (prefers-color-scheme: dark) {
-  :root[data-look='luminous']:not([data-theme='light']) {
-    --look-top: #12283c;
-    --look-bottom: #1d1a3a;
-    --look-bg: linear-gradient(180deg, #12283c 0%, #131f2b 45%, #1d1a3a 100%);
-    --color-hairline: rgba(160, 185, 200, 0.16);
-    --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
+  :root[data-look='meteo']:not([data-theme='light']) {
+    --color-paper: #11151c;
+    --color-surface: #1b212b;
+    --color-surface-raised: #212834;
+    --color-ink: #e7ecf3;
+    --color-ink-muted: #9aa6b7;
+    --color-hairline: rgba(150, 170, 200, 0.16);
+    --color-brand: #8fb0d1;
+    --color-brand-soft: #1f2c3d;
+    --color-on-brand: #0f1722;
     --card-shadow: none;
-    --avatar-bg: linear-gradient(135deg, #1d3d56, #2c2a52);
-    --tab-pill: linear-gradient(135deg, #1d3d56, #2c2a52);
-    --cta-bg: var(--color-brand);
-    --look-outdoor: #6cc0e6;
-    --look-outdoor-soft: #14303d;
+    --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 25%, transparent);
+    --avatar-bg: linear-gradient(135deg, #3a3424, #283744);
+    --tab-pill: #3a3424;
+    --tab-active: #e7ecf3;
+    --look-bg: linear-gradient(180deg, #3d3421 0%, #2b2a25 40%, #11151c 100%);
+    --look-outdoor: #8fb0d1;
+    --look-outdoor-soft: #1f2c3d;
   }
 }
-:root[data-look='luminous'][data-theme='dark'] {
-  --look-top: #12283c;
-  --look-bottom: #1d1a3a;
-  --look-bg: linear-gradient(180deg, #12283c 0%, #131f2b 45%, #1d1a3a 100%);
-  --color-hairline: rgba(160, 185, 200, 0.16);
-  --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
+:root[data-look='meteo'][data-theme='dark'] {
+  --color-paper: #11151c;
+  --color-surface: #1b212b;
+  --color-surface-raised: #212834;
+  --color-ink: #e7ecf3;
+  --color-ink-muted: #9aa6b7;
+  --color-hairline: rgba(150, 170, 200, 0.16);
+  --color-brand: #8fb0d1;
+  --color-brand-soft: #1f2c3d;
+  --color-on-brand: #0f1722;
   --card-shadow: none;
-  --avatar-bg: linear-gradient(135deg, #1d3d56, #2c2a52);
-  --tab-pill: linear-gradient(135deg, #1d3d56, #2c2a52);
-  --cta-bg: var(--color-brand);
-  --look-outdoor: #6cc0e6;
-  --look-outdoor-soft: #14303d;
+  --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 25%, transparent);
+  --avatar-bg: linear-gradient(135deg, #3a3424, #283744);
+  --tab-pill: #3a3424;
+  --tab-active: #e7ecf3;
+  --look-bg: linear-gradient(180deg, #3d3421 0%, #2b2a25 40%, #11151c 100%);
+  --look-outdoor: #8fb0d1;
+  --look-outdoor-soft: #1f2c3d;
 }
-/* The measure colours, under the names the components use for the look. */
-:root[data-look='luminous'] {
+/* The measure colours, under the names the components use for the default look's coloured icons. */
+:root[data-look='meteo'] {
   --look-fog: var(--cat-fog);
   --look-fog-soft: var(--cat-fog-soft);
   --look-sleep: var(--cat-sleep);
@@ -677,25 +704,64 @@ html[data-covered]::after {
   --look-weather: var(--cat-weather);
   --look-weather-soft: var(--cat-weather-soft);
 }
-/* The root takes the colour the gradient starts with, so what shows behind the
-   status bar and when scrolling past the top matches the page. */
-html[data-look='luminous'] {
-  background: var(--look-top);
+/* Titles in a rounder, warmer face. Only the page titles and the card titles: the text stays in Public Sans. */
+:root[data-look='meteo'] h1,
+:root[data-look='meteo'] .section-title {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
 }
-/* The gradient sits on a layer fixed to the screen, so it stays as visible on a
-   long page as on a short one: the cards scroll over it. */
-html[data-look='luminous'] body {
-  background: transparent;
-}
-html[data-look='luminous'] body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: var(--look-bg);
+:root[data-look='meteo'] h1 {
+  font-weight: 800;
 }
 
-/* Buttons. One main button per screen (`btn-primary`: the gradient of the luminous look, solid brand otherwise),
+/* ---- Légère: plain and calm. A faintly rosy paper, the plum of the logo as
+   the only accent, hairlines rather than shadows, Public Sans only. ---- */
+:root[data-look='leger'] {
+  --color-paper: #fbf8fa;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f8f4f8;
+  --color-ink: #2b2236;
+  --color-ink-muted: #665b72;
+  --color-hairline: #ebe3ee;
+  --color-brand: #5e4b8b;
+  --color-brand-soft: #efe9f6;
+  --color-on-brand: #ffffff;
+  --card-shadow: none;
+  --tab-pill: #efe9f6;
+  --tab-pill-pad: 2px 16px;
+  --tab-pill-margin: -2px 0;
+  --tab-active: #5e4b8b;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-look='leger']:not([data-theme='light']) {
+    --color-paper: #16131b;
+    --color-surface: #1f1a26;
+    --color-surface-raised: #262030;
+    --color-ink: #f0eaf6;
+    --color-ink-muted: #aaa0b9;
+    --color-hairline: rgba(196, 181, 238, 0.14);
+    --color-brand: #c4b5ee;
+    --color-brand-soft: #2f2742;
+    --color-on-brand: #1d1530;
+    --tab-pill: #2f2742;
+    --tab-active: #c4b5ee;
+  }
+}
+:root[data-look='leger'][data-theme='dark'] {
+  --color-paper: #16131b;
+  --color-surface: #1f1a26;
+  --color-surface-raised: #262030;
+  --color-ink: #f0eaf6;
+  --color-ink-muted: #aaa0b9;
+  --color-hairline: rgba(196, 181, 238, 0.14);
+  --color-brand: #c4b5ee;
+  --color-brand-soft: #2f2742;
+  --color-on-brand: #1d1530;
+  --tab-pill: #2f2742;
+  --tab-active: #c4b5ee;
+}
+
+/* Buttons. One main button per screen (`btn-primary`: solid brand, or `--cta-bg` where a look sets one),
    and a soft one for what comes second (`btn-secondary`). Tertiary actions are plain underlined links. */
 .btn-primary,
 .btn-secondary {

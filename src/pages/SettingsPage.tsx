@@ -6,7 +6,6 @@ import { clearAudienceFlag } from '../lib/audience'
 import { type ParentGender, type ThemePref } from '../db/types'
 import { Card, SectionTitle } from '../components/ui/Card'
 import { Segmented } from '../components/ui/Segmented'
-import { Toggle } from '../components/ui/Toggle'
 import { Footer } from '../components/layout/Footer'
 import { AboutCard } from '../components/about/AboutCard'
 import { SourcesCard } from '../components/about/SourcesCard'
@@ -18,7 +17,7 @@ import { BackupSection } from '../components/settings/BackupSection'
 import { IS_DEMO } from '../lib/demoMode'
 import { exitDemo, startDemo } from '../lib/demoSession'
 import { useEarlyAccess } from '../lib/earlyAccess'
-import { setLuminous, useLuminous } from '../lib/look'
+import { setLook, useLook, type Look } from '../lib/look'
 import { LockCard } from '../components/settings/LockCard'
 import { AutoBackupCard } from '../components/settings/AutoBackupCard'
 import { SensitiveZoneCard } from '../components/settings/SensitiveZoneCard'
@@ -41,7 +40,7 @@ import { ModalSheet } from '../components/ui/ModalSheet'
 export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?: boolean; onReplayTour?: () => void }) {
   const settings = useSettings()
   const earlyAccess = useEarlyAccess()
-  const luminous = useLuminous()
+  const look = useLook()
   const allEntries = useAllEntries()
   const [zonesNoticeOpen, setZonesNoticeOpen] = useState(false)
   const [reviewing, setReviewing] = useState(false)
@@ -60,6 +59,10 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
     { value: 'papa', label: t.settings.parentGenderPapa },
   ]
 
+  const LOOK_OPTIONS: { value: Look; label: string }[] = [
+    { value: 'meteo', label: t.settings.lookMeteo },
+    { value: 'leger', label: t.settings.lookLeger },
+  ]
   const THEME_OPTIONS: { value: ThemePref; label: string }[] = [
     { value: 'system', label: t.settings.themeAuto },
     { value: 'light', label: t.settings.themeLight },
@@ -298,14 +301,12 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
             value={settings.theme}
             onChange={(theme) => updateSettings({ theme })}
           />
-          <div className="flex items-center gap-3 mt-4 pt-4" style={{ borderTop: '1px solid var(--color-hairline)' }}>
-            <div className="flex-1 min-w-0">
-              <p className="text-body font-medium">{t.settings.lookLabel}</p>
-              <p className="text-caption mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
-                {t.settings.lookHelper}
-              </p>
-            </div>
-            <Toggle checked={luminous} onChange={setLuminous} label={t.settings.lookLabel} />
+          <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+            <p className="text-body font-medium">{t.settings.lookLabel}</p>
+            <p className="text-caption mt-0.5 mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+              {look === 'meteo' ? t.settings.lookMeteoHelper : t.settings.lookLegerHelper}
+            </p>
+            <Segmented label={t.settings.lookLabel} options={LOOK_OPTIONS} value={look} onChange={setLook} />
           </div>
         </Card>
       </SettingsGroup>

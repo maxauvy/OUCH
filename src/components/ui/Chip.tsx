@@ -12,7 +12,7 @@ export function Chip({
   selected: boolean
   onClick: () => void
   actionLabel?: string
-  /** A measure category (`mood`, `outdoor`…): in the luminous look, the chip is picked out in its colour. */
+  /** A measure category (`mood`, `outdoor`…): in the default look, the chip is picked out in its colour. */
   tone?: string
 }) {
   const accent = tone ? `var(--look-${tone}, var(--color-brand))` : 'var(--color-brand)'
