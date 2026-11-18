@@ -123,7 +123,7 @@ export function PinPad({
         {reveal ? t.hide : t.show}
       </button>
 
-      <div className="grid grid-cols-3 gap-x-5 gap-y-4 mt-4 w-full max-w-[300px]" style={{ opacity: disabled ? 0.5 : 1 }}>
+      <div className="grid grid-cols-3 gap-x-5 gap-y-[var(--key-gap,16px)] mt-[var(--key-gap,16px)] w-full max-w-[300px]" style={{ opacity: disabled ? 0.5 : 1 }}>
         {[...KEYS, '0'].map((d) => (
           <Fragment key={d}>
             {d === '0' && <span aria-hidden />}
@@ -145,7 +145,7 @@ export function PinPad({
           type="button"
           onClick={erase}
           aria-label={t.erase}
-          className="mx-auto w-[76px] h-[76px] rounded-full flex items-center justify-center"
+          className="mx-auto w-[var(--key,76px)] h-[var(--key,76px)] rounded-full flex items-center justify-center"
           style={{ color: 'var(--color-ink-muted)' }}
         >
           <IconBackspace size={26} aria-hidden />
@@ -180,7 +180,7 @@ function Key({
       onPointerUp={onUp}
       onPointerCancel={onUp}
       onPointerLeave={onUp}
-      className={`mx-auto w-[76px] h-[76px] rounded-full text-[28px] transition-[background-color,box-shadow,transform] duration-75 ${rich ? 'sky-title font-bold' : 'font-medium'} ${lit ? 'motion-safe:scale-[0.94]' : ''}`}
+      className={`mx-auto w-[var(--key,76px)] h-[var(--key,76px)] rounded-full text-[28px] transition-[background-color,box-shadow,transform] duration-75 ${rich ? 'sky-title font-bold' : 'font-medium'} ${lit ? 'motion-safe:scale-[0.94]' : ''}`}
       style={
         rich
           ? {
