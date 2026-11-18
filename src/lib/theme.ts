@@ -49,11 +49,30 @@ const DARK = {
   weather: WEATHER,
 }
 
+/** The two looks of the app (see lib/look.ts), as literal colours: the same
+ * values as their `[data-look]` blocks in index.css. Only the neutrals and the
+ * accent change; the weather scale is the same in every look. */
+const LOOKS = {
+  meteo: {
+    light: { ...LIGHT, paper: '#f4f6f9', surface: '#ffffff', surfaceRaised: '#f7f9fb', ink: '#1d2433', inkMuted: '#5a6577', hairline: '#e1e6ee', brand: '#3a5f8f', brandSoft: '#e4ebf4' },
+    dark: { ...DARK, paper: '#11151c', surface: '#1b212b', surfaceRaised: '#212834', ink: '#e7ecf3', inkMuted: '#9aa6b7', hairline: 'rgba(150, 170, 200, 0.16)', brand: '#8fb0d1', brandSoft: '#1f2c3d' },
+  },
+  // The charts draw the pain and the treatments in `brand` next to the flares in the storm's violet: the
+  // lighter look's plum is too close to that violet, so its charts take a petrol blue instead (data only;
+  // the screen keeps the plum).
+  leger: {
+    light: { ...LIGHT, paper: '#fbf8fa', surface: '#ffffff', surfaceRaised: '#f8f4f8', ink: '#2b2236', inkMuted: '#665b72', hairline: '#ebe3ee', brand: '#2f6c86', brandSoft: '#e4eff3' },
+    dark: { ...DARK, paper: '#16131b', surface: '#1f1a26', surfaceRaised: '#262030', ink: '#f0eaf6', inkMuted: '#aaa0b9', hairline: 'rgba(196, 181, 238, 0.14)', brand: '#84bdd6', brandSoft: '#17303b' },
+  },
+} as const
+
 /** The light palette. Used by the exported weather card, which always
  * renders in its fixed light style regardless of the app's live theme (a
  * shared image shouldn't depend on the sender's dark mode). */
 export const theme = LIGHT
 
-export function themeFor(isDark: boolean) {
+/** The palette of the mode and, when given, of the look: charts then wear the same accent as the rest of the screen. */
+export function themeFor(isDark: boolean, look?: 'meteo' | 'leger') {
+  if (look) return LOOKS[look][isDark ? 'dark' : 'light']
   return isDark ? DARK : LIGHT
 }

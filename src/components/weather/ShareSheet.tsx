@@ -8,6 +8,9 @@ import { WeatherCard } from './WeatherCard'
 import { downloadBlob } from '../../lib/backup'
 import { format, useTranslation } from '../../i18n'
 
+// The card's title face is fetched only once something uses it: asked for as soon as the share sheet is loaded, so the preview and the image both have it.
+const titleFont = document.fonts.load('800 30px "Bricolage Grotesque Variable"').catch(() => undefined)
+
 export function ShareSheet({ entry, displayName, onClose }: { entry: LoggedEntry; displayName?: string; onClose: () => void }) {
   const t = useTranslation()
   const messageId = useId()
@@ -45,6 +48,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: LoggedEntry
   async function capture(): Promise<Blob> {
     if (!cardRef.current) throw new Error(t.shareSheet.cardNotFound)
     const { toPng } = await import('html-to-image')
+    await titleFont
     const dataUrl = await toPng(cardRef.current, { pixelRatio: 2, cacheBust: true })
     const res = await fetch(dataUrl)
     return res.blob()
