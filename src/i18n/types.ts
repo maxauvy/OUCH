@@ -1728,6 +1728,8 @@ export interface Translations {
   relief: {
     link: string
     cardButton: string
+    /** The same, in two words, on the side-by-side buttons of the weather look */
+    cardButtonShort: string
     title: string
     intro: string
     breathTitle: string

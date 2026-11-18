@@ -85,6 +85,7 @@ export function ChoiceRow({
   options,
   value,
   onChange,
+  asTitle = false,
 }: {
   icon: Icon
   cat: Category
@@ -92,14 +93,16 @@ export function ChoiceRow({
   options: { value: string; label: string }[]
   value: string | undefined
   onChange: (v: string | undefined) => void
+  /** Alone in its card (the lighter form), in the weather look: the label is the card's title, with no icon. */
+  asTitle?: boolean
 }) {
   // An id with spaces is read as several ids by aria-labelledby, so the group had no name.
   const labelId = useId()
   return (
-    <div className="px-4 pt-3.5 pb-3" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+    <div className={asTitle ? 'p-4' : 'px-4 pt-3.5 pb-3'} style={{ borderTop: '1px solid var(--color-hairline)' }}>
       <div className="flex items-center gap-2.5">
-        <CategoryIcon icon={icon} cat={cat} />
-        <span id={labelId} className="flex-1 text-body font-medium">
+        {!asTitle && <CategoryIcon icon={icon} cat={cat} />}
+        <span id={labelId} className={asTitle ? 'section-title flex-1 text-heading font-bold' : 'flex-1 text-body font-medium'}>
           {label}
         </span>
       </div>

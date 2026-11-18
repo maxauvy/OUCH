@@ -641,13 +641,16 @@ html[data-covered]::after {
   --color-brand: #3a5f8f;
   --color-brand-soft: #e4ebf4;
   --color-on-brand: #ffffff;
-  --radius-card: 20px;
-  --card-shadow: 0 8px 22px -16px rgba(30, 45, 70, 0.35);
+  --radius-card: 24px;
+  --card-shadow: 0 1px 2px rgba(30, 45, 70, 0.04), 0 10px 24px -18px rgba(30, 45, 70, 0.35);
+  /* Cards stand on their shadow, with no edge; a fine edge comes back in dark mode, where there is no shadow. */
+  --card-border: none;
+  /* Chips: a soft fill at rest, the chosen one tinted and ringed. */
+  --chip-bg: #eef1f5;
+  --tab-active-icon: #b0812c;
   --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
   --avatar-bg: linear-gradient(135deg, #f3ecd9, #e1e9f1);
-  --tab-pill: #f3ecd9;
-  --tab-pill-pad: 2px 16px;
-  --tab-pill-margin: -2px 0;
+  --tab-pill: transparent;
   --tab-active: #1d2433;
   /* The lock screen: the soft sky of a day with a few clouds. */
   --look-bg: linear-gradient(180deg, #f7e7c4 0%, #f3ecd9 40%, #e4ecf3 100%);
@@ -666,9 +669,12 @@ html[data-covered]::after {
     --color-brand-soft: #1f2c3d;
     --color-on-brand: #0f1722;
     --card-shadow: none;
+    --card-border: 1px solid var(--color-hairline);
+    --chip-bg: #232a36;
+    --tab-active-icon: #e3b766;
     --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 25%, transparent);
     --avatar-bg: linear-gradient(135deg, #3a3424, #283744);
-    --tab-pill: #3a3424;
+    --tab-pill: transparent;
     --tab-active: #e7ecf3;
     --look-bg: linear-gradient(180deg, #3d3421 0%, #2b2a25 40%, #11151c 100%);
     --look-outdoor: #8fb0d1;
@@ -686,9 +692,12 @@ html[data-covered]::after {
   --color-brand-soft: #1f2c3d;
   --color-on-brand: #0f1722;
   --card-shadow: none;
+  --card-border: 1px solid var(--color-hairline);
+  --chip-bg: #232a36;
+  --tab-active-icon: #e3b766;
   --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 25%, transparent);
   --avatar-bg: linear-gradient(135deg, #3a3424, #283744);
-  --tab-pill: #3a3424;
+  --tab-pill: transparent;
   --tab-active: #e7ecf3;
   --look-bg: linear-gradient(180deg, #3d3421 0%, #2b2a25 40%, #11151c 100%);
   --look-outdoor: #8fb0d1;
@@ -716,6 +725,12 @@ html[data-covered]::after {
 }
 :root[data-look='meteo'] h1 {
   font-weight: 800;
+}
+/* A page name set small above a bigger title (the Journal's month): the text face, not the titles' one. */
+:root[data-look='meteo'] h1.kicker {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 /* The sky of today's page in the weather look (see TodaySky.tsx): one per

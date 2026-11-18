@@ -38,7 +38,7 @@ export function SettingsGroup({
     <section
       id={id}
       className="flex flex-col scroll-mt-4 rounded-[var(--radius-card)] overflow-hidden"
-      style={{ background: 'var(--color-surface)', border: '1px solid var(--color-hairline)', boxShadow: 'var(--card-shadow)' }}
+      style={{ background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}
     >
       <button type="button" aria-expanded={open} aria-controls={bodyId} onClick={() => setOpen(!open)} className="w-full flex items-center gap-3 p-4 text-left">
         <RoundIcon icon={Icon} />

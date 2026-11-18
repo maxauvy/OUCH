@@ -7,6 +7,7 @@ import { useLanguage, useTranslation } from '../../i18n'
 import { useOpenRelief } from '../relief/reliefContext'
 import { useSettings } from '../../hooks/useSettings'
 import { hasPlan } from '../../lib/hardDaysPlan'
+import { useRichLook } from '../../lib/look'
 
 // What the person wrote down as helping reads in their own words ("Bain
 // chaud"), so it goes in the middle of a sentence in lower case, unless it
@@ -29,6 +30,8 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
   const tp = useTranslation().plan
   const plan = useSettings().hardDaysPlan
   const language = useLanguage()
+  // The weather look: no heart in a disc, a title in the titles' face, the two ways to feel better side by side.
+  const rich = useRichLook()
   const start = card?.episode.start
 
   // Remember that it was shown, so it does not come back on the next days.
@@ -48,21 +51,23 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
   return (
     <section
       aria-label={t.label}
-      className="relative flex gap-3 rounded-[var(--radius-card)] py-3.5 pl-3.5 pr-12"
-      style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}
+      className={`relative flex gap-3 rounded-[var(--radius-card)] ${rich ? 'p-[18px] pr-12' : 'py-3.5 pl-3.5 pr-12'}`}
+      style={{ background: 'var(--color-brand-soft)', boxShadow: rich ? undefined : 'var(--tint-edge, none)' }}
     >
-      <span
-        className="w-9 h-9 shrink-0 rounded-full flex items-center justify-center"
-        style={{ background: 'var(--color-surface)', color: 'var(--color-brand)' }}
-        aria-hidden
-      >
-        <IconHeart size={20} stroke={1.8} />
-      </span>
-      <div className="min-w-0">
-        <p className="text-body font-semibold">{t.lead}</p>
+      {!rich && (
+        <span
+          className="w-9 h-9 shrink-0 rounded-full flex items-center justify-center"
+          style={{ background: 'var(--color-surface)', color: 'var(--color-brand)' }}
+          aria-hidden
+        >
+          <IconHeart size={20} stroke={1.8} />
+        </span>
+      )}
+      <div className="min-w-0 flex-1">
+        <p className={rich ? 'section-title text-heading font-bold leading-snug mb-1' : 'text-body font-semibold'}>{t.lead}</p>
         <p className="text-body">{t.body}</p>
         {card.helped.length > 0 && (
-          <p className="text-heading font-medium mt-3 leading-[1.7]">
+          <p className={rich ? 'text-body mt-2.5 leading-[1.7]' : 'text-heading font-medium mt-3 leading-[1.7]'}>
             {before}
             {ideas.map((part, i) =>
               part.type === 'element' ? (
@@ -76,17 +81,23 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
             {after}
           </p>
         )}
-        {openRelief && (
-          <div className="flex flex-col gap-2 mt-3">
-            {hasPlan(plan) && <Action icon={IconMessageHeart} label={tp.open} onClick={() => openRelief('plan')} />}
-            <Action icon={IconWind} label={tr.cardButton} onClick={() => openRelief('breath')} />
-          </div>
-        )}
+        {openRelief &&
+          (rich ? (
+            <div className="flex gap-2 mt-3 -mr-8">
+              {hasPlan(plan) && <ShortAction icon={IconMessageHeart} label={tp.shortTitle} onClick={() => openRelief('plan')} />}
+              <ShortAction icon={IconWind} label={tr.cardButtonShort} onClick={() => openRelief('breath')} />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2 mt-3">
+              {hasPlan(plan) && <Action icon={IconMessageHeart} label={tp.open} onClick={() => openRelief('plan')} />}
+              <Action icon={IconWind} label={tr.cardButton} onClick={() => openRelief('breath')} />
+            </div>
+          ))}
         {light && (
           <button
             type="button"
             onClick={() => void updateSettings({ fullFormDay: date })}
-            className="mt-3 text-control font-semibold underline underline-offset-2 text-left"
+            className={`mt-3 text-control font-semibold text-left ${rich ? '' : 'underline underline-offset-2'}`}
             style={{ color: 'var(--color-brand)' }}
           >
             {t.fullForm}
@@ -113,6 +124,16 @@ function Action({ icon, label, onClick }: { icon: Icon; label: string; onClick: 
       <RoundIcon icon={icon} />
       <span className="flex-1 min-w-0">{label}</span>
       <IconChevronRight size={20} aria-hidden style={{ color: 'var(--color-ink-muted)' }} />
+    </button>
+  )
+}
+
+/** The weather look's way to feel better: a white button, its icon and two words, sharing the row with the other one. */
+function ShortAction({ icon: I, label, onClick }: { icon: Icon; label: string; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick} className="flex-1 min-w-0 flex items-center justify-center gap-2 min-h-11 px-3 rounded-[14px] text-control font-semibold" style={{ background: 'var(--color-surface)' }}>
+      <I size={18} stroke={1.8} aria-hidden style={{ color: 'var(--color-brand)' }} />
+      {label}
     </button>
   )
 }

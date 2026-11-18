@@ -20,7 +20,7 @@ export function Card({ children, className = '', tour }: PropsWithChildren<{ cla
       className={`rounded-[var(--radius-card)] p-5 ${className}`}
       style={{
         background: 'var(--color-surface)',
-        border: '1px solid var(--color-hairline)',
+        border: 'var(--card-border, 1px solid var(--color-hairline))',
         boxShadow: 'var(--card-shadow)',
       }}
     >
@@ -29,35 +29,32 @@ export function Card({ children, className = '', tour }: PropsWithChildren<{ cla
   )
 }
 
-/** The title of a card: the title in bold, after a round icon when it has one. The small grey capitals are for naming a group of cards (see GroupCaption), never one card. */
+/** The title of a card: the title in bold, after a round icon when it has one. The small grey capitals are for naming a group of cards (see GroupCaption), never one card. In the weather look, a larger title in the titles' face and no icon. */
 export function SectionTitle({ children, action, icon }: PropsWithChildren<{ action?: ReactNode; icon?: Icon }>) {
+  const rich = useRichLook()
   return (
     <div className="flex items-center gap-3 mb-3">
-      {icon && <RoundIcon icon={icon} />}
-      <h2 className="section-title flex-1 min-w-0 text-body font-semibold">{children}</h2>
+      {icon && !rich && <RoundIcon icon={icon} />}
+      <h2 className={`section-title flex-1 min-w-0 ${rich ? 'text-heading font-bold' : 'text-body font-semibold'}`}>{children}</h2>
       {action}
     </div>
   )
 }
 
-/** Small uppercase caption above a group of cards. With `icon` and `tone` (a
- * measure category), the default look puts a small coloured icon before it. */
-export function GroupCaption({ children, icon: I, tone }: PropsWithChildren<{ icon?: Icon; tone?: string }>) {
+/** Small uppercase caption above a group of cards. In the weather look, a
+ * plain heading in the titles' face instead. `icon` and `tone` (a measure
+ * category) are no longer drawn: the weather look dropped the small coloured
+ * icon, and the lighter look never had it. */
+export function GroupCaption({ children }: PropsWithChildren<{ icon?: Icon; tone?: string }>) {
   const look = useRichLook()
+  if (look)
+    return (
+      <p className="section-title text-heading font-bold px-1 -mb-1 mt-2" style={{ color: 'var(--color-ink)' }}>
+        {children}
+      </p>
+    )
   return (
-    <p
-      className="text-caption font-semibold uppercase tracking-[0.06em] px-1 -mb-1 mt-1 flex items-center gap-2"
-      style={{ color: 'var(--color-ink-muted)' }}
-    >
-      {look && I && tone && (
-        <span
-          className="inline-flex items-center justify-center shrink-0 rounded-[7px]"
-          style={{ width: 22, height: 22, background: `var(--look-${tone}-soft)`, color: `var(--look-${tone})` }}
-          aria-hidden
-        >
-          <I size={14} stroke={1.8} />
-        </span>
-      )}
+    <p className="text-caption font-semibold uppercase tracking-[0.06em] px-1 -mb-1 mt-1" style={{ color: 'var(--color-ink-muted)' }}>
       {children}
     </p>
   )

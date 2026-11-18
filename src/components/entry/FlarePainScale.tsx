@@ -55,8 +55,9 @@ export function FlarePainScale({ value, onChange, weather = false }: { value: nu
         onClick={() => step(delta)}
         disabled={disabled}
         aria-label={label}
-        className="flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-full text-[36px] leading-none touch-manipulation disabled:opacity-40"
-        style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+        className={`flex shrink-0 items-center justify-center rounded-full leading-none touch-manipulation disabled:opacity-40 ${weather ? 'h-11 w-11 text-[24px]' : 'h-[76px] w-[76px] text-[36px]'}`}
+        // The weather look: a small ringed button on each side of the number, so the number and the scale lead.
+        style={weather ? { boxShadow: 'inset 0 0 0 1.5px var(--color-control-off)', color: 'var(--color-brand)' } : { background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
       >
         <span aria-hidden>{glyph}</span>
       </button>
@@ -65,10 +66,10 @@ export function FlarePainScale({ value, onChange, weather = false }: { value: nu
 
   return (
     <div className="mt-3">
-      <div className="flex items-center justify-between gap-2">
+      <div className={`flex items-center gap-2 ${weather ? 'justify-center gap-6' : 'justify-between'}`}>
         {stepButton(-1, t.painLess, '−')}
         <div className="text-center" aria-live="polite">
-          <p className="tabular-nums text-[60px] leading-none font-bold">
+          <p className={`tabular-nums text-[60px] leading-none font-bold ${weather ? 'sky-title' : ''}`}>
             {value ?? <span className="font-light" style={{ color: 'var(--color-ink-muted)' }}>—</span>}
           </p>
           <p className="text-caption mt-1" style={{ color: 'var(--color-ink-muted)' }}>
@@ -97,7 +98,7 @@ export function FlarePainScale({ value, onChange, weather = false }: { value: nu
               className="flex-1 min-w-0 touch-manipulation"
             >
               <span
-                className="block h-[54px] rounded-lg"
+                className={`block ${weather ? 'h-[46px] rounded-[10px]' : 'h-[54px] rounded-lg'}`}
                 style={{
                   background: filled
                     ? weather

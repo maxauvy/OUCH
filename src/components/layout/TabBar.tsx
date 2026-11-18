@@ -52,8 +52,9 @@ export function TabBar({
               style={{ color: isActive ? 'var(--tab-active, var(--color-brand))' : 'var(--color-ink-muted)' }}
             >
               <span
-                className="relative"
+                className="relative flex"
                 style={{
+                  color: isActive ? 'var(--tab-active-icon, inherit)' : undefined,
                   background: isActive ? 'var(--tab-pill, transparent)' : undefined,
                   borderRadius: 999,
                   padding: 'var(--tab-pill-pad, 0)',

@@ -103,7 +103,7 @@ function ShareTile({ icon: I, title, hint, onClick, tint, color }: { icon: Icon;
       type="button"
       onClick={onClick}
       className="text-left rounded-[var(--radius-card)] p-3.5 flex flex-col gap-2 min-h-11"
-      style={{ background: tint, border: '1px solid var(--color-hairline)', boxShadow: 'var(--card-shadow)' }}
+      style={{ background: tint, border: 'var(--card-border, 1px solid var(--color-hairline))' }}
     >
       <span className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'var(--color-surface)', color }} aria-hidden>
         <I size={20} stroke={1.8} />

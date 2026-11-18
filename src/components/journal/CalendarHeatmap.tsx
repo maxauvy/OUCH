@@ -65,6 +65,46 @@ export function CalendarHeatmap({
 
   return (
     <div>
+      {mosaic ? (
+        <div className="flex items-end gap-2 mb-3 px-0.5">
+          <div className="flex-1 min-w-0">
+            <h2 className="sky-title text-display font-extrabold leading-tight">
+              <span className="capitalize">{format(cursor, 'MMMM', { locale: dateFnsLocale })}</span>
+              <span className="font-semibold ml-1.5 text-title" style={{ color: 'var(--color-ink-muted)' }}>
+                {format(cursor, 'yyyy')}
+              </span>
+            </h2>
+            {!isSameMonth(cursor, openedIn) && (
+              <button
+                type="button"
+                onClick={() => setCursor(new Date())}
+                aria-label={i18n.calendar.todayLabel}
+                className="mt-1 rounded-full px-3 py-0.5 text-caption font-semibold"
+                style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
+              >
+                {i18n.calendar.today}
+              </button>
+            )}
+          </div>
+          {/* Two small round arrows beside the month, rather than two big squares either side of it. */}
+          {(
+            [
+              [-1, i18n.calendar.prevMonth, '‹'],
+              [1, i18n.calendar.nextMonth, '›'],
+            ] as const
+          ).map(([step, label, glyph]) => (
+            <button
+              key={step}
+              onClick={() => setCursor((c) => addMonths(c, step))}
+              className="w-11 h-11 rounded-full flex items-center justify-center text-[20px] shrink-0"
+              style={{ boxShadow: 'inset 0 0 0 1.5px var(--color-control-off)', color: 'var(--color-brand)' }}
+              aria-label={label}
+            >
+              <span aria-hidden>{glyph}</span>
+            </button>
+          ))}
+        </div>
+      ) : (
       <div className="flex items-start justify-between mb-3">
         <button
           onClick={() => setCursor((c) => addMonths(c, -1))}
@@ -101,6 +141,7 @@ export function CalendarHeatmap({
           ›
         </button>
       </div>
+      )}
 
       {mosaic && <MonthSky counts={monthCounts} />}
 
@@ -214,7 +255,7 @@ export function CalendarHeatmap({
         })}
       </div>
 
-      <WeatherLegend withFlare={!!flareDays?.size} withMarked={!!markedDays?.size} withNoPain={anyNoPain} />
+      <WeatherLegend withFlare={!!flareDays?.size} withMarked={!!markedDays?.size} withNoPain={anyNoPain} compact={mosaic} />
     </div>
   )
 }
@@ -263,28 +304,30 @@ function MonthSky({ counts }: { counts: number[] }) {
 }
 
 /** The five weathers, easiest day first, so the calendar's colors can be read. */
-function WeatherLegend({ withFlare, withMarked, withNoPain }: { withFlare: boolean; withMarked: boolean; withNoPain: boolean }) {
+function WeatherLegend({ withFlare, withMarked, withNoPain, compact = false }: { withFlare: boolean; withMarked: boolean; withNoPain: boolean; compact?: boolean }) {
   const i18n = useTranslation()
   const id = useId()
+  // `compact` (the mosaic): smaller swatches right under the month, with no rule above.
+  const box = compact ? 'w-5 h-5 rounded-md' : 'w-7 h-7 rounded-lg'
   return (
-    <div className="mt-4 pt-3" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+    <div className={compact ? 'mt-3 px-0.5' : 'mt-4 pt-3'} style={compact ? undefined : { borderTop: '1px solid var(--color-hairline)' }}>
       <p id={id} className="sr-only">
         {i18n.calendar.legend}
       </p>
       {/* Wraps rather than squeezing five labels into five columns: "Quelques
           nuages" doesn't fit a fifth of a phone, less so with larger text. */}
-      <ul aria-labelledby={id} className="flex flex-wrap gap-x-3 gap-y-2">
+      <ul aria-labelledby={id} className={`flex flex-wrap ${compact ? 'gap-x-3 gap-y-1.5' : 'gap-x-3 gap-y-2'}`}>
         {LEVELS.map((level) => {
           const w = painWeatherByLevel(level)
           const tone = painWeatherTile(level)
           return (
             <li key={level} className="flex items-center gap-1.5">
               <span
-                className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center"
+                className={`${box} shrink-0 flex items-center justify-center`}
                 style={{ background: tone.tile, color: tone.glyph }}
                 aria-hidden
               >
-                <WeatherIcon name={w.icon as never} size={18} />
+                <WeatherIcon name={w.icon as never} size={compact ? 13 : 18} />
               </span>
               <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
                 {i18n.painWeatherLevels[level]}
@@ -294,7 +337,7 @@ function WeatherLegend({ withFlare, withMarked, withNoPain }: { withFlare: boole
         })}
         {withNoPain && (
           <li className="flex items-center gap-1.5">
-            <span className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center" aria-hidden>
+            <span className={`${box} shrink-0 flex items-center justify-center`} aria-hidden>
               <NoPainRing color="var(--color-ink-muted)" />
             </span>
             <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
@@ -304,7 +347,7 @@ function WeatherLegend({ withFlare, withMarked, withNoPain }: { withFlare: boole
         )}
         {withMarked && (
           <li className="flex items-center gap-1.5">
-            <span className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-brand-soft)' }} aria-hidden>
+            <span className={`${box} shrink-0 flex items-center justify-center`} style={{ background: 'var(--color-brand-soft)' }} aria-hidden>
               <MarkedBar color="var(--color-ink-muted)" />
             </span>
             <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
@@ -315,7 +358,7 @@ function WeatherLegend({ withFlare, withMarked, withNoPain }: { withFlare: boole
         {withFlare && (
           <li className="flex items-center gap-1.5">
             <span
-              className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center"
+              className={`${box} shrink-0 flex items-center justify-center`}
               style={{ background: 'var(--color-brand-soft)' }}
               aria-hidden
             >

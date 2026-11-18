@@ -33,7 +33,7 @@ export function InstallFold() {
   return (
     <div
       className="rounded-[var(--radius-card)] overflow-hidden"
-      style={{ background: 'var(--color-surface)', border: '1px solid var(--color-hairline)', boxShadow: 'var(--card-shadow)' }}
+      style={{ background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}
     >
       <button
         type="button"
