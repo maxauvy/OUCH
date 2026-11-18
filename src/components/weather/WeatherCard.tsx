@@ -24,7 +24,8 @@ function intensityIndex(value: number): 0 | 1 | 2 | 3 {
  * 4.3:1 on the storm tint, this one stays above 5.5:1 on every tint. */
 const CARD_MUTED = '#4d5a64'
 /** The pain tile reuses the pain category colors. */
-const PAIN = { color: '#b3261e', soft: '#fdeaea' }
+/** The weather's name, in the face of the app's titles. ShareSheet waits for it to be loaded before the capture. */
+const CARD_TITLE_FONT = '"Bricolage Grotesque Variable", "Public Sans Variable", system-ui, sans-serif'
 const LEVELS: PainWeatherLevel[] = [1, 2, 3, 4, 5]
 const GAUGE = { on: '#4d5a64', off: '#d5dde2' }
 
@@ -196,7 +197,7 @@ export const WeatherCard = forwardRef<
             </span>
             <span style={{ fontSize: 13, color: CARD_MUTED }}>{capitalizeFirst(shortDate)}</span>
           </div>
-          <div style={{ fontSize: 28, fontWeight: 700, lineHeight: 1.15, marginTop: 4 }}>
+          <div style={{ fontSize: 30, fontWeight: 800, lineHeight: 1.15, marginTop: 4, fontFamily: CARD_TITLE_FONT, letterSpacing: '-0.01em' }}>
             {t.painWeatherLevels[weather.level]}
           </div>
           <div style={{ fontSize: 13, color: CARD_MUTED, marginTop: 2 }}>
@@ -210,7 +211,8 @@ export const WeatherCard = forwardRef<
           <div
             style={{
               flex: others.length ? '0 0 150px' : 1,
-              background: PAIN.soft,
+              // The pain wears the day's weather, like the pain scale in the app: no red.
+              background: c.weather[weather.level].soft,
               borderRadius: 12,
               padding: '12px 14px',
               display: 'flex',
@@ -218,7 +220,7 @@ export const WeatherCard = forwardRef<
               justifyContent: 'center',
             }}
           >
-            <span style={{ fontSize: 13, fontWeight: 700, color: PAIN.color }}>{t.entryForm.pain}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: c.weather[weather.level].ink }}>{t.entryForm.pain}</span>
             <span style={{ fontVariantNumeric: 'tabular-nums', lineHeight: 1, marginTop: 6 }}>
               <span style={{ fontSize: 44, fontWeight: 800 }}>{entry.painLevel}</span>
               <span style={{ fontSize: 16, fontWeight: 600, color: CARD_MUTED }}> /10</span>
