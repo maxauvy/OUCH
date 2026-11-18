@@ -1,3 +1,4 @@
+import { useRichLook } from '../../lib/look'
 import { useEffect, useRef, useState } from 'react'
 import { IconMinus, IconPlus, IconStar, IconStarFilled } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
@@ -22,6 +23,8 @@ export function GesturesCard({ onStart, onChoose }: { onStart: (g: ReliefGesture
   const t = useTranslation().gestures
   const language = useLanguage()
   const kept = useSettings().reliefGestures ?? []
+  // The weather look: the gestures on a soft grey fill, the way to choose them as a plain link.
+  const rich = useRichLook()
   return (
     <Card>
       <SectionTitle icon={IconStarFilled}>{t.title}</SectionTitle>
@@ -31,7 +34,7 @@ export function GesturesCard({ onStart, onChoose }: { onStart: (g: ReliefGesture
             const I = gestureIcon(g.name)
             return (
               <li key={g.name}>
-                <button type="button" onClick={() => onStart(g)} className="w-full h-full rounded-[var(--radius-card)] p-2.5 flex flex-col items-center text-center gap-1 min-h-11" style={{ background: 'var(--color-brand-soft)' }}>
+                <button type="button" onClick={() => onStart(g)} className={`w-full h-full ${rich ? 'rounded-[18px]' : 'rounded-[var(--radius-card)]'} p-2.5 flex flex-col items-center text-center gap-1 min-h-11`} style={{ background: rich ? 'var(--chip-bg, var(--color-brand-soft))' : 'var(--color-brand-soft)' }}>
                   <span className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'var(--color-surface)', color: 'var(--color-brand)' }} aria-hidden>
                     <I size={20} stroke={1.8} />
                   </span>
@@ -49,7 +52,7 @@ export function GesturesCard({ onStart, onChoose }: { onStart: (g: ReliefGesture
           {t.none}
         </p>
       )}
-      <button type="button" onClick={onChoose} className="text-control font-semibold underline underline-offset-2 mt-3 min-h-11" style={{ color: 'var(--color-brand)' }}>
+      <button type="button" onClick={onChoose} className={`text-control font-semibold mt-3 min-h-11 ${rich ? '' : 'underline underline-offset-2'}`} style={{ color: 'var(--color-brand)' }}>
         {kept.length > 0 ? t.choose : t.chooseFirst}
       </button>
     </Card>

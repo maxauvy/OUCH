@@ -372,6 +372,7 @@ const en: Translations = {
 
   trends: {
     title: 'Trends',
+    kicker: 'Your pain, day by day',
     rangeLabel: 'Period shown',
     briefMean: 'Average pain of {{v}} / 10 over the period.',
     briefFlares: '{{n}} {{n:flare|flares}}, {{days}} {{days:day|days}} in all.',
@@ -395,6 +396,7 @@ const en: Translations = {
     painEvolution: 'Pain over time',
     indicatorsTitle: 'What else you noted',
     dailyRating: 'Daily rating',
+    weatherStrip: 'Each day’s weather',
     weeklyMean: '7-day mean:',
     flaresTitle: 'Flares',
     flaresNone: 'No flare found over this period.',
@@ -2313,6 +2315,8 @@ const en: Translations = {
     otherNameHelper: 'Used as typed on the report for your doctor, never on the Kids page.',
     illnessesHelper: 'What you track with OUCH; you can pick several. It appears on the report for your doctor and is explained on the "Explain to my child" page (“My kids” tile).',
     backupTitle: 'Backup & sync',
+    clusterYou: 'For you',
+    clusterApp: 'The app',
     groups: {
       profile: 'My profile',
       tracking: 'My tracking',

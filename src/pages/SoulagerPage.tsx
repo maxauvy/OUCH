@@ -22,6 +22,9 @@ import type { ReliefGesture } from '../db/types'
 import { BUTTON, SECONDARY } from '../components/today/cardStyles'
 import { hasPlan, planGlimpse } from '../lib/hardDaysPlan'
 import { IconLeaf, IconMessageHeart, IconWind, IconYoga } from '@tabler/icons-react'
+import { useRichLook } from '../lib/look'
+import { NavTile, NavTiles } from '../components/ui/NavTile'
+import { PageSky } from '../components/entry/TodaySky'
 
 export type SoulagerView = 'home' | 'breath' | 'relax' | 'gentle' | 'plan' | 'planedit' | 'gestes' | 'timer'
 
@@ -35,6 +38,8 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
   const today = useTranslation().today
   const entries = useAllEntries()
   const headingRef = useRef<HTMLHeadingElement>(null)
+  // The weather look: a sky behind the title, the plan as a soft card, breathing as one big tile and the two others side by side.
+  const rich = useRichLook()
   const [view, setView] = useState<SoulagerView>(request ?? 'home')
   // The gesture whose timer is open, and where it was opened from (the way back).
   const [gesture, setGesture] = useState<{ g: ReliefGesture; from: 'home' | 'gestes' } | null>(null)
@@ -63,14 +68,15 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
       {view !== 'home' && (
         <PageBack onBack={back} label={view === 'planedit' ? p.shortTitle : backLabel} />
       )}
-      <div className={`flex flex-col gap-4 px-4 ${view === 'home' ? 'pt-4' : 'pt-2'} pb-28`}>
+      <div className={`relative isolate flex flex-col gap-4 px-4 ${view === 'home' ? 'pt-4' : 'pt-2'} pb-28`}>
+        {view === 'home' && <PageSky />}
         <div className="px-1">
           {view === 'home' && (
             <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
               {s.kicker}
             </p>
           )}
-          <h1 ref={headingRef} tabIndex={-1} className="text-title font-bold leading-tight outline-none">
+          <h1 ref={headingRef} tabIndex={-1} className={`${view === 'home' ? 'page-title ' : ''}text-title font-bold leading-tight outline-none`}>
             {heading}
           </h1>
           {view === 'breath' && !breathing && (
@@ -81,23 +87,61 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
         </div>
 
         {view === 'home' && (
-          <section aria-label={p.title} className="flex gap-3 rounded-[var(--radius-card)] py-3.5 px-3.5" style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}>
-            <span className="w-9 h-9 shrink-0 rounded-full flex items-center justify-center" style={{ background: 'var(--color-surface)', color: 'var(--color-brand)' }} aria-hidden>
-              <IconMessageHeart size={20} stroke={1.8} />
-            </span>
+          <section aria-label={p.title} className={`flex gap-3 rounded-[var(--radius-card)] ${rich ? 'p-[18px]' : 'py-3.5 px-3.5'}`} style={{ background: 'var(--color-brand-soft)', boxShadow: rich ? undefined : 'var(--tint-edge, none)' }}>
+            {!rich && (
+              <span className="w-9 h-9 shrink-0 rounded-full flex items-center justify-center" style={{ background: 'var(--color-surface)', color: 'var(--color-brand)' }} aria-hidden>
+                <IconMessageHeart size={20} stroke={1.8} />
+              </span>
+            )}
             <div className="min-w-0">
-              <p className="text-body font-semibold">{p.title}</p>
+              <p className={rich ? 'section-title text-heading font-bold mb-0.5' : 'text-body font-semibold'}>{p.title}</p>
               <p className="text-body" style={{ color: 'var(--color-ink-muted)' }}>
                 {hasPlan(settings.hardDaysPlan) ? planGlimpse(settings.hardDaysPlan) : p.cardEmpty}
               </p>
-              <button type="button" onClick={() => setView(hasPlan(settings.hardDaysPlan) ? 'plan' : 'planedit')} className={`${BUTTON} mt-2`} style={SECONDARY}>
+              <button
+                type="button"
+                onClick={() => setView(hasPlan(settings.hardDaysPlan) ? 'plan' : 'planedit')}
+                className={rich ? 'mt-3 inline-flex items-center gap-2 min-h-11 px-4 rounded-[14px] text-control font-bold' : `${BUTTON} mt-2`}
+                style={rich ? { background: 'var(--color-surface)', color: 'var(--color-ink)' } : SECONDARY}
+              >
+                {rich && <IconMessageHeart size={18} stroke={1.8} aria-hidden style={{ color: 'var(--color-brand)' }} />}
                 {hasPlan(settings.hardDaysPlan) ? p.open : p.write}
               </button>
             </div>
           </section>
         )}
 
-        {view === 'home' && (
+        {view === 'home' && rich && (
+          <section aria-labelledby="relief-group" className="flex flex-col gap-2.5">
+            <h2 id="relief-group" className="section-title text-heading font-bold px-1 mt-1">
+              {s.group}
+            </h2>
+            <button
+              type="button"
+              onClick={() => setView('breath')}
+              className="flex items-center gap-4 text-left rounded-[var(--radius-card)] p-[18px] min-h-[104px]"
+              style={{ background: 'linear-gradient(135deg, var(--cat-fog-soft), var(--color-brand-soft))' }}
+            >
+              <svg width="60" height="60" viewBox="0 0 64 64" aria-hidden className="shrink-0">
+                <circle cx="32" cy="32" r="30" fill="var(--color-surface)" />
+                <path d="M10 34c6-6 10-6 16 0s10 6 16 0 10-6 12-2" fill="none" stroke="var(--color-brand)" strokeWidth="3" strokeLinecap="round" />
+                <path d="M14 42c5-4 8-4 13 0s9 4 13 0 8-4 10-1" fill="none" stroke="var(--color-brand)" strokeWidth="2" strokeLinecap="round" opacity="0.45" />
+              </svg>
+              <span className="min-w-0">
+                <span className="section-title block text-heading font-bold">{t.breathTitle}</span>
+                <span className="block text-control mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
+                  {s.breathHint}
+                </span>
+              </span>
+            </button>
+            <NavTiles>
+              <NavTile icon={IconLeaf} tone="mood" title={t.relax.title} hint={t.relax.hint} onClick={() => setView('relax')} />
+              <NavTile icon={IconYoga} tone="activity" title={t.gentle.title} hint={t.gentle.hint} onClick={() => setView('gentle')} />
+            </NavTiles>
+          </section>
+        )}
+
+        {view === 'home' && !rich && (
           <Card>
             <SectionTitle icon={IconWind}>{s.group}</SectionTitle>
             <div className="flex flex-col gap-2">

@@ -180,6 +180,8 @@ export interface Translations {
 
   trends: {
     title: string
+    /** The weather look: the small line above the title */
+    kicker: string
     rangeLabel: string
     briefMean: string
     briefFlares: string
@@ -206,6 +208,8 @@ export interface Translations {
     /** The card of what else the person noted (stiffness, wakings, joints…), over the range */
     indicatorsTitle: string
     dailyRating: string
+    /** The weather look: the legend of the strip of daily weathers under the chart */
+    weatherStrip: string
     weeklyMean: string
     weeklyMeanLegend: string
     flaresTitle: string
@@ -2104,6 +2108,9 @@ export interface Translations {
     notMedicalDevice: string
     /** Titles of the collapsible groups of the settings page. */
     groups: { profile: string; tracking: string; messages: string; display: string; data: string; about: string }
+    /** The weather look: the names of the two cards that gather the groups */
+    clusterYou: string
+    clusterApp: string
     /** One-line summaries shown on a group's header while it is folded. */
     factorsCountOne: string
     factorsCountOther: string
