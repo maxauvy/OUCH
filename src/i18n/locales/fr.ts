@@ -2193,6 +2193,7 @@ const fr: Translations = {
 
   weatherCard: {
     levelOf: 'Niveau {{n}} sur 5',
+    weekLabel: 'Ces 7 derniers jours',
     shareSummary: '{{title}} : {{weather}}, douleur : {{painWord}} ({{pain}} sur 10)',
     painWords: ['Aucune', 'Légère', 'Modérée', 'Forte', 'Très forte'],
     moodWords: ['Difficile', 'Mitigée', 'Bonne', 'Très bonne'],
