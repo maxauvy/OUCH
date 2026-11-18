@@ -7,12 +7,28 @@ import { useLoggedEntries } from '../../hooks/useEntries'
 import { WeatherCard } from './WeatherCard'
 import { downloadBlob } from '../../lib/backup'
 import { format, useTranslation } from '../../i18n'
+import { cardToPng, loadCardTitleFont } from '../../lib/cardImage'
+import { AutoShareSection } from './AutoShareSection'
+import { useSettings } from '../../hooks/useSettings'
+import type { WeatherShareNotice } from '../../lib/weatherShareRuntime'
 
 // The card's title face is fetched only once something uses it: asked for as soon as the share sheet is loaded, so the preview and the image both have it.
-const titleFont = document.fonts.load('800 30px "Bricolage Grotesque Variable"').catch(() => undefined)
+void loadCardTitleFont()
 
-export function ShareSheet({ entry, displayName, onClose }: { entry: LoggedEntry; displayName?: string; onClose: () => void }) {
+export function ShareSheet({
+  entry,
+  displayName,
+  onClose,
+  notice = null,
+}: {
+  entry: LoggedEntry
+  displayName?: string
+  onClose: () => void
+  /** How a trip to Dropbox for the daily image ended, when the sheet opens on the way back. */
+  notice?: WeatherShareNotice | null
+}) {
   const t = useTranslation()
+  const autoOn = !!useSettings().weatherShare
   const messageId = useId()
   const titleId = useId()
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -47,11 +63,7 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: LoggedEntry
 
   async function capture(): Promise<Blob> {
     if (!cardRef.current) throw new Error(t.shareSheet.cardNotFound)
-    const { toPng } = await import('html-to-image')
-    await titleFont
-    const dataUrl = await toPng(cardRef.current, { pixelRatio: 2, cacheBust: true })
-    const res = await fetch(dataUrl)
-    return res.blob()
+    return cardToPng(cardRef.current)
   }
 
   async function handleShare() {
@@ -208,8 +220,9 @@ export function ShareSheet({ entry, displayName, onClose }: { entry: LoggedEntry
               {busy ? t.shareSheet.sending : t.shareSheet.send}
             </button>
           </div>
+          <AutoShareSection notice={notice} />
           <p className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.shareSheet.footer}
+            {autoOn ? t.shareSheet.auto.footerOn : t.shareSheet.footer}
           </p>
         </div>
       </div>

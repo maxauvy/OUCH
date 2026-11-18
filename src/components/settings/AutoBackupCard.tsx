@@ -19,13 +19,13 @@ const SOFT_BUTTON = { background: 'var(--color-brand-soft)', color: 'var(--color
  * setting up changes the card, and the wizard has one more thing to say after that.
  */
 export function AutoBackupCard() {
-  const { autoBackup } = useSettings()
+  const { autoBackup, weatherShare } = useSettings()
   // Back from the provider's page: the wizard opens again to say how it went.
   const [returned, setReturned] = useState(peekReturnNotice)
   const [wizardOpen, setWizardOpen] = useState(returned !== null)
   return (
     <>
-      {autoBackup ? <CardOn state={autoBackup} /> : <CardOff onChoose={() => setWizardOpen(true)} />}
+      {autoBackup ? <CardOn state={autoBackup} withImage={!!weatherShare} /> : <CardOff onChoose={() => setWizardOpen(true)} />}
       {wizardOpen && (
         <AutoBackupWizard
           returned={returned}
@@ -61,7 +61,7 @@ function CardOff({ onChoose }: { onChoose: () => void }) {
   )
 }
 
-function CardOn({ state }: { state: AutoBackupState }) {
+function CardOn({ state, withImage }: { state: AutoBackupState; withImage: boolean }) {
   const t = useTranslation().autoBackup
   const language = useLanguage()
   const { intlLocale } = useLocale()
@@ -128,7 +128,7 @@ function CardOn({ state }: { state: AutoBackupState }) {
       )}
 
       <div className="mb-3">
-        <TrustLines provider={provider} />
+        <TrustLines provider={provider} withImage={withImage} />
       </div>
 
       <div className="flex gap-2">

@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Ma météo, chaque jour, pour un proche (accès anticipé, avec la sauvegarde Dropbox).** Dans « Partager ma météo », un interrupteur « Chaque jour, toute seule » : l'image du jour est rangée dans le Dropbox de la personne, sous un nom fixe, et remplacée quand la journée change, l'app ouverte. Un lien qui ne change pas, à envoyer une fois au proche, qui regarde quand il veut (il n'est pas prévenu). Avant d'activer, l'app dit en trois lignes que l'image n'est pas chiffrée et que toute personne qui a le lien la voit. Le lien demande à Dropbox la permission de partage, seulement à l'activation. La tuile « Météo du jour » dit l'heure de la dernière mise à jour. Désactiver supprime l'image et coupe le lien ; arrêter la sauvegarde automatique l'arrête aussi.
+
 ### Modifié
 - **Style Météo : une nouvelle image « Ma météo du jour ».** Le ciel du jour sur toute l'image, la grande icône et le nom de la météo, la douleur avec son mot, sa tendance et l'échelle aux couleurs de la météo, les jauges (fatigue, humeur, brouillard…), puis les sept derniers jours en petites cases comme dans le Journal, et le mot pour les proches. Toujours claire, quel que soit le thème du téléphone. Le style Léger garde l'image d'avant.
 - **Style Météo : de nouvelles icônes de la météo, en deux tons.** Le nuage blanc (clair en mode sombre) cerclé de la couleur du jour, le soleil toujours chaud, des gouttes bleues pour la pluie, un éclair jaune pour l'orage. Chaque météo garde une forme qui se reconnaît sans la couleur. Partout où la météo s'affiche : ciel d'Aujourd'hui, Journal et sa légende, Tendances, page enfants. Le style Léger garde ses icônes pleines.

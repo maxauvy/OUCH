@@ -64,12 +64,26 @@ const clearTokens = () => run('readwrite', (s) => s.delete(ID))
 
 const redirect = () => redirectUri(location.origin, import.meta.env.BASE_URL)
 
+/** Why the person went to Dropbox: to set up the backup, or to give one more permission for the weather image. */
+export type DropboxLinkPurpose = 'backup' | 'weather'
+
 /** Sends the person to Dropbox to agree. They come back to this address with `?code=…&state=…`. */
-export async function startDropboxLink(): Promise<void> {
+export async function startDropboxLink(options: { purpose?: DropboxLinkPurpose; scope?: string } = {}): Promise<void> {
   const verifier = randomToken(48)
   const state = randomToken(16)
-  localStorage.setItem(PENDING_KEY, JSON.stringify({ verifier, state, at: Date.now() }))
-  location.assign(await authorizeUrl({ verifier, state, redirect: redirect() }))
+  const purpose = options.purpose ?? 'backup'
+  localStorage.setItem(PENDING_KEY, JSON.stringify({ verifier, state, at: Date.now(), purpose }))
+  location.assign(await authorizeUrl({ verifier, state, redirect: redirect(), scope: options.scope }))
+}
+
+/** Why the link under way was started; read before finishing it (which forgets it). */
+export function pendingDropboxPurpose(): DropboxLinkPurpose {
+  try {
+    const pending = JSON.parse(localStorage.getItem(PENDING_KEY) ?? 'null') as { purpose?: unknown } | null
+    return pending?.purpose === 'weather' ? 'weather' : 'backup'
+  } catch {
+    return 'backup'
+  }
 }
 
 type DropboxReturn = { code: string; state: string } | { denied: true } | null

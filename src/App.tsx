@@ -5,6 +5,7 @@ import { AppLockGate } from './components/lock/AppLockGate'
 import { handleProviderReturn } from './lib/autoBackupRuntime'
 import { useAutoBackup } from './hooks/useAutoBackup'
 import { useAudiencePing } from './hooks/useAudiencePing'
+import { WeatherShareSender } from './components/weather/WeatherShareSender'
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
 import { PageBack } from './components/layout/PageBack'
@@ -195,6 +196,7 @@ function AppShell() {
 
   return (
     <>
+      {!IS_DEMO && <WeatherShareSender />}
       <main className="flex-1">
         <ReliefContext.Provider
           value={(view) => {

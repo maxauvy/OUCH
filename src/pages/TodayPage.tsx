@@ -8,7 +8,8 @@ import { useLoggedEntries, useTodayEntry } from '../hooks/useEntries'
 import { useTodayMessages } from '../hooks/useTodayMessages'
 import type { Tab } from '../components/layout/TabBar'
 import { useSettings } from '../hooks/useSettings'
-import { useTranslation } from '../i18n'
+import { format, useLocale, useTranslation } from '../i18n'
+import { takeWeatherShareNotice } from '../lib/weatherShareRuntime'
 import { IconCloud, IconMoodKid, type Icon } from '@tabler/icons-react'
 import { GroupCaption } from '../components/ui/Card'
 import { BackupReminderCard } from '../components/backup/BackupReminderCard'
@@ -33,7 +34,10 @@ export function TodayPage({
   const entry = useTodayEntry()
   const settings = useSettings()
   const t = useTranslation()
-  const [sharing, setSharing] = useState(false)
+  const { intlLocale } = useLocale()
+  // Back from Dropbox after allowing the daily image's link: the share sheet opens again and says how it went.
+  const [shareNotice] = useState(takeWeatherShareNotice)
+  const [sharing, setSharing] = useState(shareNotice !== null)
   const date = todayISO()
   const earlyAccess = useEarlyAccess()
 
@@ -43,6 +47,12 @@ export function TodayPage({
   const logged = useLoggedEntries()
   const messages = useTodayMessages()
   const canShareWeather = !!entry && hasPain(entry)
+  // The daily image went to Dropbox on its own today: the tile says when.
+  const autoSentAt = settings.weatherShare?.sentAt
+  const autoSentToday = autoSentAt !== undefined && todayISO(new Date(autoSentAt)) === date
+  const weatherHint = autoSentToday
+    ? format(t.today.shareWeatherAutoHint, { time: new Date(autoSentAt).toLocaleTimeString(intlLocale, { hour: '2-digit', minute: '2-digit' }) })
+    : t.today.shareWeatherHint
 
   return (
     <div className="relative isolate flex flex-col gap-4 px-4 pt-4 pb-28">
@@ -69,7 +79,7 @@ export function TodayPage({
               <ShareTile
                 icon={IconCloud}
                 title={t.today.shareWeather}
-                hint={t.today.shareWeatherHint}
+                hint={weatherHint}
                 onClick={() => setSharing(true)}
                 tint="var(--cat-weather-soft)"
                 color="var(--cat-weather)"
@@ -89,7 +99,7 @@ export function TodayPage({
         </section>
       )}
       {sharing && canShareWeather && entry && (
-        <LazyShareSheet entry={entry} displayName={settings.displayName || undefined} onClose={() => setSharing(false)} />
+        <LazyShareSheet entry={entry} displayName={settings.displayName || undefined} notice={shareNotice} onClose={() => setSharing(false)} />
       )}
       <Footer />
     </div>
