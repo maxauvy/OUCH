@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Corrigé
+- **Note méthodologique : la section 12 ne passe plus sous le pied de page.** Son tableau était trop long pour une page, même réduit à 85 % : les dernières lignes étaient cachées dans le PDF (déjà le cas en 0.13.0 et 0.14.0). Les quatre lectures montrées seulement dans l'app (après les jours les plus actifs, avant les poussées, le lendemain d'un gros jour, l'ordonnance) passent sur une page « 12 · … (suite) ». La note fait maintenant 15 pages, en français et en anglais ; les documents qui la citent sont mis à jour.
+
 ## [0.14.0] - 2026-11-18
 
 Une refonte graphique qui remet la météo de la douleur au centre, avec un style plus sobre pour qui le préfère.
