@@ -13,6 +13,7 @@ import { markedDaySet } from '../lib/markedFlares'
 import { todayISO } from '../lib/dates'
 import { useTranslation } from '../i18n'
 import { useRichLook } from '../lib/look'
+import { PageSky } from '../components/entry/TodaySky'
 
 /** `openDate`: a day to open at once (the offer to write yesterday). */
 export function JournalPage({ openDate }: { openDate?: string | null }) {
@@ -30,6 +31,7 @@ export function JournalPage({ openDate }: { openDate?: string | null }) {
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
+      <PageSky />
       {/* The weather look: the page's name is a small line, and the month below it is the big title. */}
       <h1 className={mosaic ? 'kicker text-control font-medium px-1 -mb-3' : 'text-title font-semibold px-1'} style={mosaic ? { color: 'var(--color-ink-muted)' } : undefined}>
         {t.journal.title}

@@ -46,7 +46,7 @@ export function SettingsGroup({
       className={rich ? 'flex flex-col scroll-mt-4 border-t first:border-t-0' : 'flex flex-col scroll-mt-4 rounded-[var(--radius-card)] overflow-hidden'}
       style={rich ? { borderColor: 'var(--color-hairline)' } : { background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}
     >
-      <button type="button" aria-expanded={open} aria-controls={bodyId} onClick={() => setOpen(!open)} className="w-full flex items-center gap-3 p-4 text-left">
+      <button type="button" aria-expanded={open} aria-controls={bodyId} onClick={() => setOpen(!open)} className={`w-full flex items-center gap-3 p-4 text-left ${rich ? 'min-h-[4.5rem]' : ''}`}>
         {rich ? (
           <span className="w-9 h-9 shrink-0 rounded-xl flex items-center justify-center" style={{ background: `var(--cat-${tone}-soft)`, color: `var(--cat-${tone})` }} aria-hidden>
             <Icon size={20} stroke={1.8} />
@@ -69,7 +69,13 @@ export function SettingsGroup({
           <IconChevronDown size={20} aria-hidden />
         </span>
       </button>
-      <div id={bodyId} hidden={!open} className="flex flex-col px-4 pb-1 border-t" style={{ borderColor: 'var(--color-hairline)' }}>
+      <div
+        id={bodyId}
+        hidden={!open}
+        className="flex flex-col px-4 pb-1 border-t"
+        // The weather look: the open group's content on a slightly different ground, so it reads as the inside of its row.
+        style={{ borderColor: 'var(--color-hairline)', background: rich ? 'var(--color-surface-raised)' : undefined }}
+      >
         <FlatCardContext.Provider value>{children}</FlatCardContext.Provider>
       </div>
     </section>

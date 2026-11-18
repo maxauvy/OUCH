@@ -3,6 +3,7 @@ import { unlock } from '../../lib/appLock'
 import { useTranslation } from '../../i18n'
 import { useRichLook } from '../../lib/look'
 import { AppLogo } from '../ui/AppLogo'
+import { useSkyTop } from '../entry/skyTop'
 import { ForgotSheet } from './ForgotSheet'
 import { PinPad } from './PinPad'
 import { usePause, useWaitText } from './lockHooks'
@@ -15,6 +16,8 @@ import { usePause, useWaitText } from './lockHooks'
 export function LockScreen() {
   const t = useTranslation().lock
   const look = useRichLook()
+  // The weather look: the neutral sky of the pages behind the lock, up to the status bar.
+  useSkyTop(look ? 0 : null)
   const waitText = useWaitText()
   const [wrong, setWrong] = useState(false)
   const [forgotOpen, setForgotOpen] = useState(false)
@@ -47,31 +50,23 @@ export function LockScreen() {
       tabIndex={-1}
       className="fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto px-6 outline-none"
       style={{
-        background: look ? 'var(--look-bg)' : 'var(--color-paper)',
+        background: look ? 'var(--sky-0) top / 100% 420px no-repeat, var(--color-paper)' : 'var(--color-paper)',
         color: 'var(--color-ink)',
         paddingTop: 'calc(env(safe-area-inset-top) + 40px)',
         paddingBottom: 'calc(env(safe-area-inset-bottom) + 24px)',
       }}
     >
       {look ? (
-        // The default look: the logo rests on a card, like the cards of the Today screen.
+        // The weather look: the logo and the title on the sky, the keys straight on the page, like the other screens.
         <>
-          <span
-            className="relative z-10 inline-flex"
-            style={{ borderRadius: '22%', boxShadow: '0 0 0 4px var(--color-surface), 0 4px 14px rgba(70, 60, 130, 0.25)' }}
-          >
-            <AppLogo size={60} />
+          <span className="inline-flex" style={{ borderRadius: '22%', boxShadow: '0 6px 18px -8px rgba(30, 45, 70, 0.45)' }}>
+            <AppLogo size={64} />
           </span>
-          <div
-            className="w-full max-w-[380px] -mt-8 pt-12 pb-4 px-4 flex flex-col items-center rounded-3xl"
-            style={{ background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}
-          >
-            <h1 className="text-title font-semibold text-center">{t.title}</h1>
-            <p role="status" className="text-control text-center mt-1.5 min-h-[2.75rem]" style={{ color: 'var(--color-ink-muted)' }}>
-              {message}
-            </p>
-            <PinPad onComplete={submit} onType={() => setWrong(false)} disabled={pausing || forgotOpen} />
-          </div>
+          <h1 className="page-title text-title font-semibold text-center mt-5">{t.title}</h1>
+          <p role="status" className="text-control text-center mt-1.5 min-h-[2.75rem]" style={{ color: 'var(--color-ink-muted)' }}>
+            {message}
+          </p>
+          <PinPad onComplete={submit} onType={() => setWrong(false)} disabled={pausing || forgotOpen} />
         </>
       ) : (
         <>
@@ -86,8 +81,8 @@ export function LockScreen() {
       <button
         type="button"
         onClick={() => setForgotOpen(true)}
-        className="min-h-11 px-3 mt-3 text-control underline"
-        style={{ color: 'var(--color-ink-muted)' }}
+        className={`min-h-11 px-3 mt-3 text-control ${look ? 'font-semibold' : 'underline'}`}
+        style={{ color: look ? 'var(--color-brand)' : 'var(--color-ink-muted)' }}
       >
         {t.forgot}
       </button>
