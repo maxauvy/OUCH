@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { unlock } from '../../lib/appLock'
 import { useTranslation } from '../../i18n'
-import { useLuminous } from '../../lib/look'
+import { useRichLook } from '../../lib/look'
 import { AppLogo } from '../ui/AppLogo'
 import { ForgotSheet } from './ForgotSheet'
 import { PinPad } from './PinPad'
@@ -14,7 +14,7 @@ import { usePause, useWaitText } from './lockHooks'
  */
 export function LockScreen() {
   const t = useTranslation().lock
-  const look = useLuminous()
+  const look = useRichLook()
   const waitText = useWaitText()
   const [wrong, setWrong] = useState(false)
   const [forgotOpen, setForgotOpen] = useState(false)
@@ -54,7 +54,7 @@ export function LockScreen() {
       }}
     >
       {look ? (
-        // The luminous look: the logo rests on a card, like the cards of the Today screen.
+        // The default look: the logo rests on a card, like the cards of the Today screen.
         <>
           <span
             className="relative z-10 inline-flex"

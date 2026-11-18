@@ -1,6 +1,6 @@
 import { useContext, type PropsWithChildren, type ReactNode } from 'react'
 import type { Icon } from '@tabler/icons-react'
-import { useLuminous } from '../../lib/look'
+import { useRichLook } from '../../lib/look'
 import { FlatCardContext } from './flatCard'
 import { RoundIcon } from './RoundIcon'
 
@@ -34,16 +34,16 @@ export function SectionTitle({ children, action, icon }: PropsWithChildren<{ act
   return (
     <div className="flex items-center gap-3 mb-3">
       {icon && <RoundIcon icon={icon} />}
-      <h2 className="flex-1 min-w-0 text-body font-semibold">{children}</h2>
+      <h2 className="section-title flex-1 min-w-0 text-body font-semibold">{children}</h2>
       {action}
     </div>
   )
 }
 
 /** Small uppercase caption above a group of cards. With `icon` and `tone` (a
- * measure category), the luminous look puts a small coloured icon before it. */
+ * measure category), the default look puts a small coloured icon before it. */
 export function GroupCaption({ children, icon: I, tone }: PropsWithChildren<{ icon?: Icon; tone?: string }>) {
-  const look = useLuminous()
+  const look = useRichLook()
   return (
     <p
       className="text-caption font-semibold uppercase tracking-[0.06em] px-1 -mb-1 mt-1 flex items-center gap-2"

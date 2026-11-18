@@ -1,5 +1,5 @@
 import { useLockState } from './lib/appLock'
-import { useLuminous } from './lib/look'
+import { useLook } from './lib/look'
 import { useIsDark } from './hooks/useIsDark'
 import { AppLockGate } from './components/lock/AppLockGate'
 import { handleProviderReturn } from './lib/autoBackupRuntime'
@@ -58,19 +58,23 @@ function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
   }, [theme])
 }
 
+/** The page background of each look, light then dark: mirrors --color-paper in index.css. */
+const LOOK_PAPER = { meteo: ['#f4f6f9', '#11151c'], leger: ['#fbf8fa', '#16131b'] } as const
+
 /** The look itself is stamped on the page by lib/look.ts; here, the status bar colour that goes with it. */
 function useAppliedLook(theme: 'system' | 'light' | 'dark') {
-  const luminous = useLuminous()
+  const look = useLook()
   const dark = useIsDark(theme)
   // The system tints the status bar area with this colour (the notch and the
-  // dynamic island on a phone): it follows the gradient's first colour.
+  // dynamic island on a phone): the page's own background (--color-paper of
+  // each look, in index.css).
   useEffect(() => {
     const meta = document.querySelector('meta[name="theme-color"]')
     if (!meta) return
     const usual = meta.getAttribute('content') ?? ''
-    meta.setAttribute('content', luminous ? (dark ? '#12283c' : '#d6e9fa') : usual)
+    meta.setAttribute('content', LOOK_PAPER[look][dark ? 1 : 0])
     return () => meta.setAttribute('content', usual)
-  }, [luminous, dark])
+  }, [look, dark])
 }
 
 function useAppliedLanguage(language: Language) {
