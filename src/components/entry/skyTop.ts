@@ -7,13 +7,20 @@ export function useSkyTop(level: number | null) {
   const dark = useIsDark(useSettings().theme)
   useEffect(() => {
     const meta = document.querySelector('meta[name="theme-color"]')
-    if (!meta || level === null) return
-    const before = meta.getAttribute('content') ?? ''
-    // After the app's own setting of it, which runs once its children's effects are done.
-    const timer = setTimeout(() => meta.setAttribute('content', SKY_TOP[dark ? 1 : 0][level]), 0)
+    if (level === null) return
+    const top = SKY_TOP[dark ? 1 : 0][level]
+    const root = document.documentElement.style
+    const beforeMeta = meta?.getAttribute('content') ?? ''
+    const beforeRoot = root.getPropertyValue('--status-top')
+    // The installed app on iOS paints the status bar's strip with the page root's colour (see index.css); browsers that read theme-color take it from there.
+    root.setProperty('--status-top', top)
+    // After the app's own setting of theme-color, which runs once its children's effects are done.
+    const timer = setTimeout(() => meta?.setAttribute('content', top), 0)
     return () => {
       clearTimeout(timer)
-      meta.setAttribute('content', before)
+      meta?.setAttribute('content', beforeMeta)
+      if (beforeRoot) root.setProperty('--status-top', beforeRoot)
+      else root.removeProperty('--status-top')
     }
   }, [level, dark])
 }
