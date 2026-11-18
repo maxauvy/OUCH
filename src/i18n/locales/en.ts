@@ -2187,6 +2187,7 @@ const en: Translations = {
   },
 
   weatherCard: {
+    weekLabel: 'The last 7 days',
     levelOf: 'Level {{n}} of 5',
     shareSummary: '{{title}}: {{weather}}, pain: {{painWord}} ({{pain}} out of 10)',
     painWords: ['None', 'Mild', 'Moderate', 'Severe', 'Very severe'],

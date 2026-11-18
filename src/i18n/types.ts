@@ -1978,6 +1978,8 @@ export interface Translations {
   }
 
   weatherCard: {
+    /** The weather look's card: the label over the last seven days */
+    weekLabel: string
     /** Under the level name on the health card, e.g. "Level 2 of 5". */
     levelOf: string
     /** Text sent along with the shared image, for people who can't see it. */

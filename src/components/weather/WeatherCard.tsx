@@ -1,6 +1,9 @@
 import { forwardRef, type CSSProperties } from 'react'
 import type { LoggedEntry, PainWeather, PainWeatherLevel } from '../../db/types'
-import { computePainWeather, painWeatherByLevel } from '../../lib/painWeather'
+import { colorForPainValue, computePainWeather, painWeatherByLevel } from '../../lib/painWeather'
+import { useRichLook } from '../../lib/look'
+import { shiftISO } from '../../lib/dates'
+import { AppLogo } from '../ui/AppLogo'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { IconArrowDownRight, IconArrowRight, IconArrowUpRight } from '@tabler/icons-react'
 import { theme } from '../../lib/theme'
@@ -28,15 +31,18 @@ const CARD_MUTED = '#4d5a64'
 const CARD_TITLE_FONT = '"Bricolage Grotesque Variable", "Public Sans Variable", system-ui, sans-serif'
 const LEVELS: PainWeatherLevel[] = [1, 2, 3, 4, 5]
 const GAUGE = { on: '#4d5a64', off: '#d5dde2' }
+/** The weather look's card: its ink, and the first colour of each weather's sky (index.css, --sky-1 to --sky-5, light). */
+const CARD_INK = '#1d2433'
+const SKY_TOP_LIGHT = ['#fbe2b4', '#f6e5c1', '#e2dee9', '#d4e0ec', '#ddd4ec']
 
 /** Five notches for a 0–10 score. Decorative: the word next to it carries
  * the meaning (and the direction, since a full mood gauge is a good day). */
-function CardGauge({ value }: { value: number }) {
+function CardGauge({ value, size = 11 }: { value: number; size?: number }) {
   const filled = Math.ceil(value / 2)
   return (
-    <span style={{ display: 'flex', gap: 3 }}>
+    <span style={{ display: 'flex', gap: size > 11 ? 4 : 3 }}>
       {[0, 1, 2, 3, 4].map((i) => (
-        <span key={i} style={{ width: 11, height: 11, borderRadius: 3, background: i < filled ? GAUGE.on : GAUGE.off }} />
+        <span key={i} style={{ width: size, height: size, borderRadius: size > 11 ? 4 : 3, background: i < filled ? GAUGE.on : GAUGE.off }} />
       ))}
     </span>
   )
@@ -154,7 +160,9 @@ export const WeatherCard = forwardRef<
   const weather = computePainWeather(entry)
   const c = theme
 
-  const trend = painTrend(entry, useLoggedEntries() ?? [])
+  const logged = useLoggedEntries() ?? []
+  const trend = painTrend(entry, logged)
+  const rich = useRichLook()
 
   // Scores are told in words with a gauge rather than as "6/10", which means
   // little to someone who doesn't use the app.
@@ -175,6 +183,130 @@ export const WeatherCard = forwardRef<
     day: 'numeric',
     month: 'short',
   })
+
+  // The weather look: the day's sky over the whole image, the pain with its scale, the gauges, then the last seven days as in the Journal.
+  if (rich) {
+    const byDate = new Map(logged.map((e) => [e.date, e]))
+    const days = Array.from({ length: 7 }, (_, i) => shiftISO(entry.date, i - 6))
+    const box: CSSProperties = { background: 'rgba(255, 255, 255, 0.82)', borderRadius: 20, padding: '14px 16px' }
+    const label: CSSProperties = { fontSize: 12.5, fontWeight: 700, color: CARD_MUTED }
+    return (
+      <div
+        ref={ref}
+        style={{
+          width: 420,
+          boxSizing: 'border-box',
+          padding: '24px 24px 18px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 14,
+          background: `linear-gradient(180deg, ${SKY_TOP_LIGHT[weather.level - 1]} 0%, ${weather.soft} 38%, #f7f8fa 100%)`,
+          fontFamily: '"Public Sans Variable", system-ui, -apple-system, "Segoe UI", sans-serif',
+          color: CARD_INK,
+          // The image is always light: the two-tone icons get their light-mode cloud and drops whatever the phone's theme.
+          ['--wx-cloud' as string]: '#ffffff',
+          ['--wx-rain' as string]: '#5e9bd6',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, fontSize: 14, fontWeight: 600, color: CARD_MUTED }}>
+          <span>{displayName ? format(t.weatherCard.weatherOfName, { name: displayName }) : t.weatherCard.weatherOfDay}</span>
+          <span style={{ fontSize: 13 }}>{capitalizeFirst(shortDate)}</span>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={{ color: weather.ink, display: 'flex', flexShrink: 0 }}>
+            <WeatherIcon name={weather.icon as never} size={96} />
+          </span>
+          <div>
+            <div style={{ fontFamily: CARD_TITLE_FONT, fontWeight: 800, fontSize: 42, lineHeight: 1, letterSpacing: '-0.015em' }}>{t.painWeatherLevels[weather.level]}</div>
+            <div style={{ fontSize: 15, color: CARD_MUTED, marginTop: 6 }}>{format(t.weatherCard.levelOf, { n: weather.level })}</div>
+          </div>
+        </div>
+
+        <div style={{ ...box, display: 'flex', alignItems: 'center', gap: 14 }}>
+          <span style={{ fontVariantNumeric: 'tabular-nums', lineHeight: 1, flexShrink: 0 }}>
+            <span style={{ fontFamily: CARD_TITLE_FONT, fontWeight: 800, fontSize: 50 }}>{entry.painLevel}</span>
+            <span style={{ fontSize: 16, fontWeight: 600, color: CARD_MUTED }}> /10</span>
+          </span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={label}>{t.entryForm.pain}</div>
+            <div style={{ fontSize: 16, fontWeight: 700 }}>{t.weatherCard.painWords[painWordIndex(entry.painLevel)]}</div>
+            {trend && (
+              <div style={{ display: 'flex', gap: 3, fontSize: 13, color: CARD_MUTED, lineHeight: 1.3, marginTop: 2 }}>
+                <TrendIcon trend={trend} />
+                {painTrendText(t, trend)}
+              </div>
+            )}
+            <div style={{ display: 'flex', gap: 3, marginTop: 8 }}>
+              {Array.from({ length: 11 }, (_, i) => (
+                <span key={i} style={{ flex: 1, height: 7, borderRadius: 4, background: i <= entry.painLevel ? colorForPainValue(i) : '#e1e5ec' }} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {others.length > 0 && (
+          <div style={{ ...box, padding: '6px 16px' }}>
+            {others.map((m, i) => (
+              <div key={m.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '8px 0', borderTop: i ? '1px solid #e6e9ef' : 'none' }}>
+                <span style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: 13, color: CARD_MUTED }}>{m.label}</span>
+                  <span style={{ fontSize: 15, fontWeight: 700 }}>{m.word}</span>
+                </span>
+                <CardGauge value={m.value} size={14} />
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div style={box}>
+          <div style={{ ...label, marginBottom: 8 }}>{t.weatherCard.weekLabel}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 5 }}>
+            {days.map((date) => {
+              const e = byDate.get(date)
+              const w = e ? computePainWeather(e) : null
+              const d = new Date(date + 'T00:00:00')
+              return (
+                <div
+                  key={date}
+                  style={{
+                    borderRadius: 12,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 2,
+                    padding: '6px 0',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    background: w ? w.soft : '#eef1f5',
+                    color: w ? w.ink : CARD_MUTED,
+                    boxShadow: date === entry.date ? `inset 0 0 0 2.5px ${CARD_INK}` : undefined,
+                  }}
+                >
+                  <span style={{ fontWeight: 600 }}>{capitalizeFirst(d.toLocaleDateString(intlLocale, { weekday: 'narrow' }))}</span>
+                  {w ? <WeatherIcon name={w.icon as never} size={26} /> : <span style={{ height: 26 }} />}
+                  <span>{d.getDate()}</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {message && (
+          <p style={{ margin: 0, background: 'rgba(255, 255, 255, 0.82)', borderRadius: '16px 16px 16px 4px', padding: '11px 14px', fontSize: 16, lineHeight: 1.45 }}>
+            {message}
+          </p>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: CARD_MUTED }}>
+          <AppLogo size={22} />
+          <span>
+            <strong style={{ color: CARD_INK }}>OUCH</strong> · Ouch, Understand, Chart, Heal
+          </span>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div
