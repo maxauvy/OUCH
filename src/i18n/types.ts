@@ -1137,6 +1137,9 @@ export interface Translations {
     flareDay: string
     /** A day with something noted but no pain level; a screen reader's label and the legend's entry */
     noPain: string
+    /** The weather look: the band above the mosaic, and for a screen reader the days of each weather */
+    monthSky: string
+    monthSkyDays: string
     weekdaysShort: Week<string>
   }
 

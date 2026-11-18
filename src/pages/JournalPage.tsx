@@ -12,12 +12,15 @@ import { flareDaySet } from '../lib/flares'
 import { markedDaySet } from '../lib/markedFlares'
 import { todayISO } from '../lib/dates'
 import { useTranslation } from '../i18n'
+import { useRichLook } from '../lib/look'
 
 /** `openDate`: a day to open at once (the offer to write yesterday). */
 export function JournalPage({ openDate }: { openDate?: string | null }) {
   const entries = useAllEntries()
   const settings = useSettings()
   const t = useTranslation()
+  // The weather look shows the month as a mosaic, straight on the page.
+  const mosaic = useRichLook()
   const [selected, setSelected] = useState<string | null>(openDate ?? null)
   const [sharing, setSharing] = useState(false)
   const selectedEntry = useEntry(selected ?? '__none__')
@@ -29,9 +32,13 @@ export function JournalPage({ openDate }: { openDate?: string | null }) {
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
       <h1 className="text-title font-semibold px-1">{t.journal.title}</h1>
 
-      <Card>
-        <CalendarHeatmap entries={entries ?? []} onSelectDate={setSelected} selectedDate={selected ?? undefined} flareDays={flareDays} markedDays={markedDays} />
-      </Card>
+      {mosaic ? (
+        <CalendarHeatmap mosaic entries={entries ?? []} onSelectDate={setSelected} selectedDate={selected ?? undefined} flareDays={flareDays} markedDays={markedDays} />
+      ) : (
+        <Card>
+          <CalendarHeatmap entries={entries ?? []} onSelectDate={setSelected} selectedDate={selected ?? undefined} flareDays={flareDays} markedDays={markedDays} />
+        </Card>
+      )}
 
       {entries && entries.length === 0 && (
         <p className="text-control text-center mt-2" style={{ color: 'var(--color-ink-muted)' }}>
