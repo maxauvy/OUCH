@@ -4,38 +4,25 @@ import { test } from 'node:test'
 import type { PainWeatherLevel } from '../src/db/types.ts'
 import { colorForPainValue, computePainWeather, painWeatherByLevel } from '../src/lib/painWeather.ts'
 
+// Fatigue and brain fog are passed as a real entry would carry them, to show they are left out.
 const levelOf = (painLevel: number, fatigueLevel?: number, brainFog?: number) =>
-  computePainWeather({ painLevel, fatigueLevel, brainFog }).level
+  computePainWeather({ painLevel, ...{ fatigueLevel, brainFog } }).level
 
 test('with pain alone, the level follows the pain score', () => {
   const expected: PainWeatherLevel[] = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5]
   expected.forEach((level, pain) => assert.equal(levelOf(pain), level, `pain ${pain}`))
 })
 
-test('fatigue and brain fog can make the day heavier than the pain alone', () => {
-  assert.equal(levelOf(4), 3)
-  // (4 × 0.6 + 10 × 0.25) / 0.85 ≈ 5.76
-  assert.equal(levelOf(4, 10), 4)
-  // (4 × 0.6 + 10 × 0.15) / 0.75 = 5.2: brain fog weighs less than fatigue
-  assert.equal(levelOf(4, undefined, 10), 3)
-  // (4 × 0.6 + 10 × 0.25 + 10 × 0.15) / 1 = 6.4
-  assert.equal(levelOf(4, 10, 10), 4)
-})
-
-test('a low fatigue or fog lightens a painful day', () => {
-  assert.equal(levelOf(8), 5)
-  // (8 × 0.6 + 0 × 0.25) / 0.85 ≈ 5.65
-  assert.equal(levelOf(8, 0), 4)
-  assert.equal(levelOf(8, 0, 0), 3)
-})
-
-test('a fatigue of 0 counts as logged, not as missing', () => {
-  assert.notEqual(levelOf(8, 0), levelOf(8, undefined))
+test('fatigue and brain fog do not change the weather: the pain number alone sets it', () => {
+  for (let pain = 0; pain <= 10; pain++) {
+    assert.equal(levelOf(pain, 10, 10), levelOf(pain))
+    assert.equal(levelOf(pain, 0, 0), levelOf(pain))
+  }
 })
 
 test('the extremes are the first and the last level', () => {
-  assert.equal(levelOf(0, 0, 0), 1)
-  assert.equal(levelOf(10, 10, 10), 5)
+  assert.equal(levelOf(0), 1)
+  assert.equal(levelOf(10), 5)
 })
 
 test('the reading carries the display of its level', () => {

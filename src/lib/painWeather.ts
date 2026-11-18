@@ -47,27 +47,14 @@ export function painWeatherTile(level: PainWeatherLevel) {
 }
 
 /**
- * Turns the day's measures into a single "pain weather" reading.
- * Pain dominates (60%); fatigue and brain fog nudge it (25% / 15%) since a day
- * can feel heavier than the pain score alone suggests. Falls back to pain
- * alone when the other two weren't logged.
+ * The day's "pain weather": the pain number alone sets it, on five levels
+ * (< 1.5, < 3.5, < 5.5, < 7.5, ≥ 7.5). The same reading everywhere: the sky
+ * of today's page, the calendar, the shared card, the kids' page. Fatigue and
+ * brain fog no longer weigh in (they did until 0.13): the number the person
+ * gives is the weather they see.
  */
-export function computePainWeather(entry: Pick<LoggedEntry, 'painLevel' | 'fatigueLevel' | 'brainFog'>): PainWeather {
-  const parts: { value: number; weight: number }[] = [{ value: entry.painLevel, weight: 0.6 }]
-  if (typeof entry.fatigueLevel === 'number') parts.push({ value: entry.fatigueLevel, weight: 0.25 })
-  if (typeof entry.brainFog === 'number') parts.push({ value: entry.brainFog, weight: 0.15 })
-
-  const totalWeight = parts.reduce((s, p) => s + p.weight, 0)
-  const score = parts.reduce((s, p) => s + (p.value * p.weight) / totalWeight, 0)
-
-  let level: PainWeatherLevel
-  if (score < 1.5) level = 1
-  else if (score < 3.5) level = 2
-  else if (score < 5.5) level = 3
-  else if (score < 7.5) level = 4
-  else level = 5
-
-  return { level, ...LEVELS[level] }
+export function computePainWeather(entry: Pick<LoggedEntry, 'painLevel'>): PainWeather {
+  return painWeatherByLevel(levelForPainValue(entry.painLevel))
 }
 
 export function painWeatherByLevel(level: PainWeatherLevel): PainWeather {

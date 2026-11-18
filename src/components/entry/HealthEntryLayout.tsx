@@ -14,7 +14,7 @@ import {
   IconSunrise,
   IconCloud, IconMoon } from '@tabler/icons-react'
 import { MORNING_STIFFNESS_BANDS, type DailyEntry, type FactorKey, type Medication, type PainWeather, type Settings } from '../../db/types'
-import { WEATHER_SCALE_GRADIENT, colorForPainValue, computePainWeather, inkForPainValue, levelForPainValue, painWeatherByLevel } from '../../lib/painWeather'
+import { WEATHER_SCALE_GRADIENT, colorForPainValue, computePainWeather, inkForPainValue } from '../../lib/painWeather'
 import { shiftISO } from '../../lib/dates'
 import { daysLate } from '../../lib/lateEntries'
 import { CategoryIcon, ChoiceRow } from './EntryFields'
@@ -86,8 +86,8 @@ function PainBars({ values, weather = false }: { values: (number | undefined)[];
   )
 }
 
-/** The day's pain weather, above the pain score: it follows the sliders, so
- * moving them visibly changes the sky. Always there, empty until a pain level
+/** The day's pain weather, above the pain score: it follows the pain slider, so
+ * moving it visibly changes the sky. Always there, empty until a pain level
  * is set, so logging the first value doesn't push the page down. */
 function WeatherHero({ weather }: { weather: PainWeather | null }) {
   const t = useTranslation()
@@ -214,11 +214,7 @@ export function HealthEntryLayout({
   const vsRecent = local.painLevel === undefined ? null : painVsRecent(date, local.painLevel, allEntries)
   const deltaText = new Intl.NumberFormat(intlLocale, { maximumFractionDigits: 1 }).format(Math.abs(vsRecent?.delta ?? 0))
 
-  const weather = computePainWeather({
-    painLevel: local.painLevel ?? 0,
-    fatigueLevel: local.fatigueLevel,
-    brainFog: local.brainFog,
-  })
+  const weather = computePainWeather({ painLevel: local.painLevel ?? 0 })
 
   // "Logged at 20:14", or, for a day written down afterwards, when it was
   // written: a plain statement, nothing to fix.
@@ -350,8 +346,6 @@ export function HealthEntryLayout({
   // which form it is: show the title only, rather than a full form that then
   // folds up.
   const dayWeather = local.painLevel === undefined ? null : weather
-  // The sky follows the pain number alone, like the colours of the pain scale under it: the number sets the weather.
-  const skyWeather = local.painLevel === undefined ? null : painWeatherByLevel(levelForPainValue(local.painLevel))
   if (isToday && !ready)
     return (
       <div className="flex flex-col gap-3">
@@ -362,9 +356,9 @@ export function HealthEntryLayout({
 
   return (
     <div className="flex flex-col gap-3">
-      {sky && <TodaySkyBackdrop weather={skyWeather} />}
+      {sky && <TodaySkyBackdrop weather={dayWeather} />}
       {header}
-      {sky && <TodaySkyLine weather={skyWeather} painLevel={local.painLevel} />}
+      {sky && <TodaySkyLine weather={dayWeather} painLevel={local.painLevel} />}
       {isToday && afterHeader}
 
       {isToday && restToday && <RestDayCard date={date} light={lightToday} />}
