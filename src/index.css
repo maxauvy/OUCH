@@ -316,8 +316,11 @@ textarea {
   max-width: 560px;
   margin: 0 auto;
   /* viewport-fit=cover lets the page run under the status bar and the
-     Dynamic Island, where iOS blurs whatever is there. Start below them. */
-  padding-top: env(safe-area-inset-top);
+     Dynamic Island, where iOS blurs whatever is there. Start below them.
+     Kept in a variable so that a layer can reach back up under the bar (the
+     sky of today's page). */
+  --root-pad-top: env(safe-area-inset-top);
+  padding-top: var(--root-pad-top);
   /* Anything wider than the screen would make the phone zoom the whole page
      out to fit it, fixed tab bar included. Clip, not hidden: sticky headers
      keep working. */
@@ -330,7 +333,7 @@ textarea {
 @media (display-mode: standalone) {
   @supports (-webkit-touch-callout: none) {
     #root {
-      padding-top: calc(env(safe-area-inset-top) + 28px);
+      --root-pad-top: calc(env(safe-area-inset-top) + 28px);
     }
   }
 }
@@ -706,12 +709,43 @@ html[data-covered]::after {
 }
 /* Titles in a rounder, warmer face. Only the page titles and the card titles: the text stays in Public Sans. */
 :root[data-look='meteo'] h1,
-:root[data-look='meteo'] .section-title {
+:root[data-look='meteo'] .section-title,
+:root[data-look='meteo'] .sky-title {
   font-family: var(--font-display);
   letter-spacing: -0.01em;
 }
 :root[data-look='meteo'] h1 {
   font-weight: 800;
+}
+
+/* The sky of today's page in the weather look (see TodaySky.tsx): one per
+   pain weather, 0 before anything is noted. The tint of the weather at the
+   top, fading out into the page. Pale even for a storm. */
+:root {
+  --sky-0: linear-gradient(180deg, #e3e9f1 0%, #ecf0f5 50%, rgba(244, 246, 249, 0) 100%);
+  --sky-1: linear-gradient(180deg, #fbe2b4 0%, #fbf0dc 50%, rgba(251, 240, 220, 0) 100%);
+  --sky-2: linear-gradient(180deg, #f6e5c1 0%, #f3ecd9 50%, rgba(243, 236, 217, 0) 100%);
+  --sky-3: linear-gradient(180deg, #e2dee9 0%, #eae7ee 50%, rgba(234, 231, 238, 0) 100%);
+  --sky-4: linear-gradient(180deg, #d4e0ec 0%, #e1e9f1 50%, rgba(225, 233, 241, 0) 100%);
+  --sky-5: linear-gradient(180deg, #ddd4ec 0%, #e7e2f0 50%, rgba(231, 226, 240, 0) 100%);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --sky-0: linear-gradient(180deg, #1e2733 0%, #171d27 50%, rgba(17, 21, 28, 0) 100%);
+    --sky-1: linear-gradient(180deg, #4a3b1d 0%, #2e281d 50%, rgba(17, 21, 28, 0) 100%);
+    --sky-2: linear-gradient(180deg, #3d3421 0%, #2b2a25 50%, rgba(17, 21, 28, 0) 100%);
+    --sky-3: linear-gradient(180deg, #34323f 0%, #24252f 50%, rgba(17, 21, 28, 0) 100%);
+    --sky-4: linear-gradient(180deg, #22354b 0%, #1a2534 50%, rgba(17, 21, 28, 0) 100%);
+    --sky-5: linear-gradient(180deg, #2d2548 0%, #1f1b33 50%, rgba(17, 21, 28, 0) 100%);
+  }
+}
+:root[data-theme='dark'] {
+  --sky-0: linear-gradient(180deg, #1e2733 0%, #171d27 50%, rgba(17, 21, 28, 0) 100%);
+  --sky-1: linear-gradient(180deg, #4a3b1d 0%, #2e281d 50%, rgba(17, 21, 28, 0) 100%);
+  --sky-2: linear-gradient(180deg, #3d3421 0%, #2b2a25 50%, rgba(17, 21, 28, 0) 100%);
+  --sky-3: linear-gradient(180deg, #34323f 0%, #24252f 50%, rgba(17, 21, 28, 0) 100%);
+  --sky-4: linear-gradient(180deg, #22354b 0%, #1a2534 50%, rgba(17, 21, 28, 0) 100%);
+  --sky-5: linear-gradient(180deg, #2d2548 0%, #1f1b33 50%, rgba(17, 21, 28, 0) 100%);
 }
 
 /* ---- Légère: plain and calm. A faintly rosy paper, the plum of the logo as

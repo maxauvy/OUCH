@@ -11,6 +11,8 @@ interface SliderProps {
   /** labels shown under the ends of the track, e.g. ['Aucune', 'Extrême'] */
   endLabels?: [string, string]
   accent?: string
+  /** The filled part of the track, if not `accent`: a background drawn across the whole track width (a gradient), of which only the filled part shows. */
+  fill?: string
   format?: (v: number) => string
   /** Track only: the caller already shows the label and value. */
   bare?: boolean
@@ -29,6 +31,7 @@ export function Slider({
   step = 1,
   endLabels = ['Aucune', 'Extrême'],
   accent = 'var(--color-brand)',
+  fill,
   format,
   bare = false,
 }: SliderProps) {
@@ -72,7 +75,9 @@ export function Slider({
             style={{
               height: trackHeight,
               width: `${pct}%`,
-              background: value === undefined ? 'transparent' : accent,
+              background: value === undefined ? 'transparent' : (fill ?? accent),
+              // A gradient spans the whole track, not just the filled part, so a value always shows the same colours.
+              backgroundSize: fill && pct > 0 ? `${(100 / pct) * 100}% 100%` : undefined,
               transition: 'width 120ms ease',
             }}
           />

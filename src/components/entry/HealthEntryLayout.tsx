@@ -14,7 +14,7 @@ import {
   IconSunrise,
   IconCloud, IconMoon } from '@tabler/icons-react'
 import { MORNING_STIFFNESS_BANDS, type DailyEntry, type FactorKey, type Medication, type PainWeather, type Settings } from '../../db/types'
-import { computePainWeather } from '../../lib/painWeather'
+import { WEATHER_SCALE_GRADIENT, colorForPainValue, computePainWeather, inkForPainValue } from '../../lib/painWeather'
 import { shiftISO } from '../../lib/dates'
 import { daysLate } from '../../lib/lateEntries'
 import { CategoryIcon, ChoiceRow } from './EntryFields'
@@ -39,6 +39,7 @@ import { LastBackupLine } from '../backup/LastBackupLine'
 import { useHardDays } from '../../hooks/useHardDays'
 import { updateSettings } from '../../db'
 import { WeatherField } from './WeatherField'
+import { TodaySkyBackdrop, TodaySkyLine } from './TodaySky'
 import { format, useLocale, useTranslation } from '../../i18n'
 import { useRichLook } from '../../lib/look'
 import { isOffered } from '../../lib/indicatorCatalog'
@@ -54,7 +55,8 @@ function lastSevenDays(date: string, byDate: Map<string, DailyEntry>, current: n
   })
 }
 
-function PainBars({ values }: { values: (number | undefined)[] }) {
+/** The last seven days of pain, today last. In the weather look each bar takes the colour of its weather. */
+function PainBars({ values, weather = false }: { values: (number | undefined)[]; weather?: boolean }) {
   const H = 44
   return (
     <div className="flex items-end gap-[5px]" style={{ height: H }} aria-hidden>
@@ -69,7 +71,11 @@ function PainBars({ values }: { values: (number | undefined)[] }) {
               background:
                 v === undefined
                   ? 'var(--color-hairline)'
-                  : isLast
+                  : weather
+                    ? isLast
+                      ? colorForPainValue(v)
+                      : `color-mix(in srgb, ${colorForPainValue(v)} 45%, transparent)`
+                    : isLast
                     ? 'var(--cat-pain)'
                     : 'color-mix(in srgb, var(--cat-pain) 28%, transparent)',
             }}
@@ -80,8 +86,8 @@ function PainBars({ values }: { values: (number | undefined)[] }) {
   )
 }
 
-/** The day's pain weather, above the pain score: it follows the sliders, so
- * moving them visibly changes the sky. Always there, empty until a pain level
+/** The day's pain weather, above the pain score: it follows the pain slider, so
+ * moving it visibly changes the sky. Always there, empty until a pain level
  * is set, so logging the first value doesn't push the page down. */
 function WeatherHero({ weather }: { weather: PainWeather | null }) {
   const t = useTranslation()
@@ -187,6 +193,8 @@ export function HealthEntryLayout({
   const earlyAccess = useEarlyAccess()
   const has = (key: FactorKey) => settings.enabledFactors.includes(key) && isOffered(key, earlyAccess)
   const isToday = date === todayISO()
+  // The weather look: today's page opens on the day's sky.
+  const sky = useRichLook() && isToday
   const { ready, card, light } = useHardDays(date, allEntries, entriesLoaded)
   // Only today's page: another day is edited in full.
   const lightToday = isToday && light
@@ -206,11 +214,7 @@ export function HealthEntryLayout({
   const vsRecent = local.painLevel === undefined ? null : painVsRecent(date, local.painLevel, allEntries)
   const deltaText = new Intl.NumberFormat(intlLocale, { maximumFractionDigits: 1 }).format(Math.abs(vsRecent?.delta ?? 0))
 
-  const weather = computePainWeather({
-    painLevel: local.painLevel ?? 0,
-    fatigueLevel: local.fatigueLevel,
-    brainFog: local.brainFog,
-  })
+  const weather = computePainWeather({ painLevel: local.painLevel ?? 0 })
 
   // "Logged at 20:14", or, for a day written down afterwards, when it was
   // written: a plain statement, nothing to fix.
@@ -341,11 +345,20 @@ export function HealthEntryLayout({
   // Until the settings and the journal are read, today's page cannot tell
   // which form it is: show the title only, rather than a full form that then
   // folds up.
-  if (isToday && !ready) return <div className="flex flex-col gap-3">{header}</div>
+  const dayWeather = local.painLevel === undefined ? null : weather
+  if (isToday && !ready)
+    return (
+      <div className="flex flex-col gap-3">
+        {sky && <TodaySkyBackdrop weather={null} />}
+        {header}
+      </div>
+    )
 
   return (
     <div className="flex flex-col gap-3">
+      {sky && <TodaySkyBackdrop weather={dayWeather} />}
       {header}
+      {sky && <TodaySkyLine weather={dayWeather} painLevel={local.painLevel} />}
       {isToday && afterHeader}
 
       {isToday && restToday && <RestDayCard date={date} light={lightToday} />}
@@ -368,7 +381,7 @@ export function HealthEntryLayout({
         </p>
       )}
 
-      {!lightToday && <WeatherHero weather={local.painLevel === undefined ? null : weather} />}
+      {!lightToday && !sky && <WeatherHero weather={dayWeather} />}
 
       <Card className="!p-4" tour="pain">
         <div className="flex items-center justify-between gap-2">
@@ -385,7 +398,7 @@ export function HealthEntryLayout({
         </p>
 
         {lightToday ? (
-          <FlarePainScale value={local.painLevel} onChange={(v) => setField('painLevel', v)} />
+          <FlarePainScale value={local.painLevel} onChange={(v) => setField('painLevel', v)} weather={sky} />
         ) : (
           <>
             <div className="flex items-end justify-between mt-3">
@@ -420,7 +433,7 @@ export function HealthEntryLayout({
                   </p>
                 )}
               </div>
-              <PainBars values={bars} />
+              <PainBars values={bars} weather={sky} />
             </div>
 
             <div className="mt-2">
@@ -430,7 +443,8 @@ export function HealthEntryLayout({
                 value={local.painLevel}
                 onChange={(v) => setField('painLevel', v)}
                 endLabels={[t.entryForm.painEndNone, t.entryForm.painEndExtreme]}
-                accent="var(--cat-pain)"
+                accent={sky && local.painLevel !== undefined ? inkForPainValue(local.painLevel) : 'var(--cat-pain)'}
+                fill={sky ? WEATHER_SCALE_GRADIENT : undefined}
               />
             </div>
           </>

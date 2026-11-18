@@ -535,6 +535,9 @@ export interface Translations {
     painWeatherOfDay: string
     /** Shown in the weather banner before any pain level is set. */
     painWeatherEmpty: string
+    /** The weather look's sky on today's page: before the pain is noted, then the pain it comes from */
+    skyEmpty: string
+    skyPain: string
     pain: string
     /** Under the pain title: the scale is about the whole day, not the moment. */
     painWindowToday: string

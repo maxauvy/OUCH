@@ -45,7 +45,7 @@ export function TodayPage({
   const canShareWeather = !!entry && hasPain(entry)
 
   return (
-    <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
+    <div className="relative isolate flex flex-col gap-4 px-4 pt-4 pb-28">
       {!IS_DEMO && <BackupReminderCard onBackup={onGoToBackup} />}
       <AppointmentCard />
       <PrescriptionCard />

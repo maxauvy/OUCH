@@ -732,6 +732,8 @@ const fr: Translations = {
     weatherOfDay: 'Météo du jour',
     painWeatherOfDay: 'Météo douleur du jour',
     painWeatherEmpty: 'Note ta douleur',
+    skyEmpty: 'Comment était ta journée ?',
+    skyPain: 'Douleur {{n}} sur 10',
     pain: 'Douleur',
     painWindowToday: 'Sur toute ta journée, pas seulement maintenant',
     painWindowPast: 'Sur toute cette journée-là',
