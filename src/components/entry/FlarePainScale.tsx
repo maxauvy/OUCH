@@ -1,6 +1,7 @@
 import { useRef, type KeyboardEvent } from 'react'
 import { PAIN_MAX, segmentStrength, stepPain } from '../../lib/painScale'
 import { useTranslation } from '../../i18n'
+import { colorForPainValue } from '../../lib/painWeather'
 
 const POINTS = Array.from({ length: PAIN_MAX + 1 }, (_, i) => i)
 
@@ -10,9 +11,12 @@ const POINTS = Array.from({ length: PAIN_MAX + 1 }, (_, i) => i)
  * buttons correct it by one. Nothing is preselected, so the answer is not
  * anchored on a starting value. The bar fills from the left in one blue that
  * deepens with pain (no green to red: a colour would say what is "bad"), and
- * the chosen segment is also ringed, so colour is never the only cue.
+ * the chosen segment is also ringed, so colour is never the only cue. With
+ * `weather` (the weather look), each segment takes the colour of the weather
+ * its value gives, light to dark like the weather scale itself: still no
+ * green to red.
  */
-export function FlarePainScale({ value, onChange }: { value: number | undefined; onChange: (v: number) => void }) {
+export function FlarePainScale({ value, onChange, weather = false }: { value: number | undefined; onChange: (v: number) => void; weather?: boolean }) {
   const t = useTranslation().entryForm
   const refs = useRef<(HTMLButtonElement | null)[]>([])
 
@@ -96,10 +100,12 @@ export function FlarePainScale({ value, onChange }: { value: number | undefined;
                 className="block h-[54px] rounded-lg"
                 style={{
                   background: filled
-                    ? `color-mix(in srgb, var(--color-brand) ${segmentStrength(i)}%, var(--color-brand-soft))`
+                    ? weather
+                      ? colorForPainValue(i)
+                      : `color-mix(in srgb, var(--color-brand) ${segmentStrength(i)}%, var(--color-brand-soft))`
                     : 'var(--color-surface)',
                   border: `1.5px solid ${filled ? 'transparent' : 'var(--color-control-off)'}`,
-                  boxShadow: chosen ? '0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-brand)' : undefined,
+                  boxShadow: chosen ? `0 0 0 2px var(--color-surface), 0 0 0 4px ${weather ? 'var(--color-ink)' : 'var(--color-brand)'}` : undefined,
                 }}
                 aria-hidden
               />

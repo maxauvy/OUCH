@@ -77,11 +77,22 @@ export function painWeatherByLevel(level: PainWeatherLevel): PainWeather {
 /** Maps a bare 0–10 value (e.g. a bucket average) to the same ordinal color
  * scale, for charts that show pain magnitude without a full entry. */
 export function colorForPainValue(value: number): string {
-  let level: PainWeatherLevel
-  if (value < 1.5) level = 1
-  else if (value < 3.5) level = 2
-  else if (value < 5.5) level = 3
-  else if (value < 7.5) level = 4
-  else level = 5
-  return LEVELS[level].color
+  return LEVELS[levelForPainValue(value)].color
+}
+
+/** The whole weather scale left to right, clear sky to storm: the fill of a 0–10 track in the weather look. */
+export const WEATHER_SCALE_GRADIENT = `linear-gradient(90deg, ${[1, 2, 3, 4, 5].map((l) => LEVELS[l as PainWeatherLevel].color).join(', ')})`
+
+/** The text shade of the weather a 0–10 value falls in, following the mode (dark on a light page, light on a dark one): readable as an edge or a mark. */
+export function inkForPainValue(value: number): string {
+  return LEVELS[levelForPainValue(value)].text
+}
+
+/** The weather level a bare 0–10 value falls in, on the same thresholds as the day's weather. */
+export function levelForPainValue(value: number): PainWeatherLevel {
+  if (value < 1.5) return 1
+  if (value < 3.5) return 2
+  if (value < 5.5) return 3
+  if (value < 7.5) return 4
+  return 5
 }

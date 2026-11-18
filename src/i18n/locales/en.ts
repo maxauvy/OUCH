@@ -730,6 +730,8 @@ const en: Translations = {
     weatherOfDay: "Today's weather",
     painWeatherOfDay: "Today's pain weather",
     painWeatherEmpty: 'Log your pain',
+    skyEmpty: 'How was your day?',
+    skyPain: 'Pain {{n}} out of 10',
     pain: 'Pain',
     painWindowToday: 'Over your whole day, not just right now',
     painWindowPast: 'Over that whole day',
