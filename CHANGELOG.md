@@ -6,13 +6,22 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.14.0] - 2026-11-18
+
+Une refonte graphique qui remet la météo de la douleur au centre, avec un style plus sobre pour qui le préfère.
+
+### Ajouté
+- **Deux styles au choix, « Météo » et « Léger ».** « Météo », le style par défaut, remet la météo de la douleur au centre : un papier bleu-gris clair, des cartes blanches à ombre douce, des titres arrondis (Bricolage Grotesque), l'onglet actif sur la teinte « Quelques nuages », un ciel doux derrière l'écran de verrouillage. « Léger », à choisir dans Réglages › Rappel et affichage, est plus sobre : fond uni légèrement rosé, la prune du logo comme seule couleur, des filets plutôt que des ombres. Les deux existent en clair et en sombre. L'« apparence lumineuse » et l'apparence classique disparaissent ; qui avait choisi la classique retrouve le style « Léger » (#318).
+- **Le ciel du jour sur « Aujourd'hui »** (style Météo). Le haut de l'écran prend la couleur de la météo de la douleur du jour, avec son icône en grand et « Douleur 4 sur 10 » ; avant la saisie, un ciel neutre demande « Comment était ta journée ? ». Le ciel reste pâle, même pour l'orage. Il remplace la carte « Météo douleur du jour ». L'échelle de douleur prend les couleurs de la météo, du clair au foncé : les cases du formulaire allégé, le curseur et les barres des 7 derniers jours (le rouge disparaît). Le style Léger ne change pas (#319).
+- **Le Journal en mosaïque** (style Météo). Le mois s'affiche directement sur la page, en cases plus hautes : le numéro dans le coin, la forme de la météo en bas, la poussée en trait le long du bord. Au-dessus, « Le ciel de ton mois » : une bande de l'ensoleillé à l'orage, chaque météo aussi large que sa part des jours notés, sans chiffre à l'écran (un lecteur d'écran entend le nombre de jours de chaque météo), à partir de 3 jours notés. Les jours sans note restent nus, sans case vide. Le style Léger garde le calendrier dans sa carte (#320).
+
 ### Modifié
-- **Deux styles au choix, « Météo » et « Léger ».** Première étape de la refonte graphique. « Météo », le style par défaut, remet la météo de la douleur au centre : un papier bleu-gris clair, des cartes blanches à ombre douce, des titres arrondis (Bricolage Grotesque), l'onglet actif sur la teinte « Quelques nuages », un ciel doux derrière l'écran de verrouillage. « Léger », à choisir dans Réglages › Rappel et affichage, est plus sobre : fond uni légèrement rosé, la prune du logo comme seule couleur, des filets plutôt que des ombres. Les deux existent en clair et en sombre. L'« apparence lumineuse » et l'apparence classique disparaissent ; qui avait choisi la classique retrouve le style « Léger ». Le bandeau du ciel du jour et la mosaïque du Journal suivront.
-- **La météo du jour ne dépend plus que de la douleur.** Le chiffre donné est la météo affichée, partout : ciel du jour, calendrier du Journal, image à partager, page « Mes enfants ». La fatigue et le brouillard mental n'y entrent plus (ils comptaient pour 25 % et 15 %). Certains jours passés peuvent changer de couleur dans le calendrier. Note méthodologique et statut de validation mis à jour.
-- **Les graphiques et l'image partagée suivent le style.** Les courbes de Tendances prennent l'accent du style (bleu ardoise en Météo ; en Léger, un bleu-pétrole réservé aux données, pour ne pas se confondre avec le violet des poussées). Sur l'image « Ma météo du jour », la case de la douleur prend la teinte de la météo du jour au lieu du rouge, et le nom de la météo passe dans la fonte des titres. Le rapport pour le médecin garde sa mise en page sobre.
-- **Le Journal en mosaïque** (style Météo). Le mois s'affiche directement sur la page, en cases plus hautes : le numéro dans le coin, la forme de la météo en bas, la poussée en trait le long du bord. Au-dessus, « Le ciel de ton mois » : une bande de l'ensoleillé à l'orage, chaque météo aussi large que sa part des jours notés, sans chiffre à l'écran (un lecteur d'écran entend le nombre de jours de chaque météo), à partir de 3 jours notés. Les jours sans note restent nus, sans case vide. Le style Léger garde le calendrier dans sa carte.
-- **Le ciel du jour sur « Aujourd'hui »** (style Météo). Le haut de l'écran prend la couleur de la météo de la douleur du jour, avec son icône en grand et « Douleur 4 sur 10 » ; avant la saisie, un ciel neutre demande « Comment était ta journée ? ». Le ciel reste pâle, même pour l'orage. Il remplace la carte « Météo douleur du jour ». L'échelle de douleur prend les couleurs de la météo, du clair au foncé : les cases du formulaire allégé, le curseur et les barres des 7 derniers jours (le rouge disparaît). Le style Léger ne change pas.
-- **La pastille « À jour » se ferme avec une croix, et plus vite.** Elle reste 7 secondes au lieu de 12. Sur un écran tactile, elle ne reste plus « tenue » après un simple toucher (un survol à la souris ou le clavier la retiennent toujours).
+- **La météo du jour ne dépend plus que de la douleur.** Le chiffre donné est la météo affichée, partout : ciel du jour, calendrier du Journal, image à partager, page « Mes enfants ». La fatigue et le brouillard mental n'y entrent plus (ils comptaient pour 25 % et 15 %). Certains jours passés peuvent changer de couleur dans le calendrier. Note méthodologique et statut de validation mis à jour (#319).
+- **Les graphiques et l'image partagée suivent le style.** Les courbes de Tendances prennent l'accent du style (bleu ardoise en Météo ; en Léger, un bleu-pétrole réservé aux données, pour ne pas se confondre avec le violet des poussées). Sur l'image « Ma météo du jour », la case de la douleur prend la teinte de la météo du jour au lieu du rouge, et le nom de la météo passe dans la fonte des titres. Le rapport pour le médecin garde sa mise en page sobre (#321).
+- **La pastille « À jour » se ferme avec une croix, et plus vite.** Elle reste 7 secondes au lieu de 12. Sur un écran tactile, elle ne reste plus « tenue » après un simple toucher (un survol à la souris ou le clavier la retiennent toujours) (#313).
+
+### Tests
+- 677 tests automatiques, dont de nouveaux pour : le choix du style, la météo d'une valeur de douleur, la météo qui ne dépend plus que de la douleur.
 
 ## [0.13.0] - 2026-11-16
 
@@ -469,7 +478,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.13.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/maxauvy/OUCH/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/maxauvy/OUCH/compare/v0.12.3...v0.13.0
 [0.12.3]: https://github.com/maxauvy/OUCH/compare/v0.12.2...v0.12.3
 [0.12.2]: https://github.com/maxauvy/OUCH/compare/v0.12.1...v0.12.2
