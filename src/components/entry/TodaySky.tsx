@@ -1,5 +1,7 @@
+import { createPortal } from 'react-dom'
 import { IconCloud } from '@tabler/icons-react'
 import type { PainWeather } from '../../db/types'
+import { useSkyTop } from './skyTop'
 import { format, useTranslation } from '../../i18n'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { useRichLook } from '../../lib/look'
@@ -13,19 +15,23 @@ import { useRichLook } from '../../lib/look'
  * does not alarm.
  */
 export function TodaySkyBackdrop({ weather, height = 360 }: { weather: PainWeather | null; height?: number }) {
-  return (
+  const level = weather?.level ?? 0
+  useSkyTop(level)
+  // Drawn at the top of the document, behind everything (not inside the page, where a link above it, like Settings' way back, would end up under it).
+  return createPortal(
     <div
       aria-hidden
-      className="absolute inset-x-0 -z-10 pointer-events-none"
+      className="absolute inset-x-0 top-0 -z-10 pointer-events-none"
       style={{
-        top: 'calc(-1 * var(--root-pad-top, 0px))',
         height: `calc(var(--root-pad-top, 0px) + ${height}px)`,
-        background: `var(--sky-${weather?.level ?? 0})`,
+        background: `var(--sky-${level})`,
         transition: 'background 300ms ease',
       }}
-    />
+    />,
+    document.body,
   )
 }
+
 
 /** Under the title: the day's weather, large, and the pain it comes from; before anything is noted, the question of the day. */
 export function TodaySkyLine({ weather, painLevel }: { weather: PainWeather | null; painLevel: number | undefined }) {

@@ -133,6 +133,7 @@ export function PinPad({
                 void press(d)
               }}
               lit={look && lit === d}
+              rich={look}
               onDown={look ? () => touchDown(d) : undefined}
               onUp={look ? () => touchUp(d) : undefined}
             >
@@ -158,6 +159,7 @@ function Key({
   children,
   onPress,
   lit = false,
+  rich = false,
   onDown,
   onUp,
 }: {
@@ -165,6 +167,8 @@ function Key({
   onPress: () => void
   /** The default look: the key shows that it is being, or has just been, touched. */
   lit?: boolean
+  /** The weather look: a soft grey key with the number in the titles' face, ringed when touched. */
+  rich?: boolean
   onDown?: () => void
   onUp?: () => void
 }) {
@@ -176,12 +180,20 @@ function Key({
       onPointerUp={onUp}
       onPointerCancel={onUp}
       onPointerLeave={onUp}
-      className={`mx-auto w-[76px] h-[76px] rounded-full text-[28px] font-medium transition-[background-color,box-shadow,transform] duration-75 ${lit ? 'motion-safe:scale-[0.94]' : ''}`}
-      style={{
-        background: lit ? 'color-mix(in srgb, var(--color-brand) 30%, var(--color-surface))' : 'var(--color-brand-soft)',
-        boxShadow: lit ? 'inset 0 0 0 3px var(--color-brand)' : undefined,
-        color: 'var(--color-brand)',
-      }}
+      className={`mx-auto w-[76px] h-[76px] rounded-full text-[28px] transition-[background-color,box-shadow,transform] duration-75 ${rich ? 'sky-title font-bold' : 'font-medium'} ${lit ? 'motion-safe:scale-[0.94]' : ''}`}
+      style={
+        rich
+          ? {
+              background: lit ? 'var(--color-brand-soft)' : 'var(--color-surface)',
+              boxShadow: lit ? 'inset 0 0 0 2px var(--color-brand)' : 'var(--card-shadow), inset 0 0 0 1px var(--color-hairline)',
+              color: 'var(--color-ink)',
+            }
+          : {
+              background: lit ? 'color-mix(in srgb, var(--color-brand) 30%, var(--color-surface))' : 'var(--color-brand-soft)',
+              boxShadow: lit ? 'inset 0 0 0 3px var(--color-brand)' : undefined,
+              color: 'var(--color-brand)',
+            }
+      }
     >
       {children}
     </button>
