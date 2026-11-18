@@ -1,3 +1,5 @@
+import { useRichLook } from '../../lib/look'
+
 /** A toggle chip (aria-pressed). Pass `actionLabel` for a chip that performs
  * an action instead, like adding a suggestion: it is then announced as a
  * plain button with that name, not as a toggle that is "not pressed". */
@@ -17,18 +19,27 @@ export function Chip({
 }) {
   const accent = tone ? `var(--look-${tone}, var(--color-brand))` : 'var(--color-brand)'
   const soft = tone ? `var(--look-${tone}-soft, var(--color-brand-soft))` : 'var(--color-brand-soft)'
-  const style = {
-    background: selected ? soft : 'var(--color-surface)',
-    color: selected ? accent : 'var(--color-ink)',
-    boxShadow: `inset 0 0 0 1px ${selected ? accent : 'var(--color-hairline)'}`,
-  }
+  // The weather look: a soft fill at rest, the chosen one tinted and ringed a little thicker.
+  const rich = useRichLook()
+  const style = rich
+    ? {
+        background: selected ? soft : 'var(--chip-bg, var(--color-surface-raised))',
+        color: selected ? accent : 'var(--color-ink)',
+        boxShadow: selected ? `inset 0 0 0 1.5px ${accent}` : 'none',
+        fontWeight: selected ? 700 : undefined,
+      }
+    : {
+        background: selected ? soft : 'var(--color-surface)',
+        color: selected ? accent : 'var(--color-ink)',
+        boxShadow: `inset 0 0 0 1px ${selected ? accent : 'var(--color-hairline)'}`,
+      }
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={actionLabel ? undefined : selected}
       aria-label={actionLabel}
-      className="rounded-[var(--radius-control)] px-3.5 py-2 text-control font-medium transition-colors"
+      className={`${rich ? 'rounded-[12px]' : 'rounded-[var(--radius-control)]'} px-3.5 py-2 text-control font-medium transition-colors`}
       style={style}
     >
       {label}

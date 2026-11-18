@@ -1913,6 +1913,7 @@ const fr: Translations = {
   relief: {
     link: 'Besoin de souffler ?',
     cardButton: 'Un moment pour souffler',
+    cardButtonShort: 'Respirer',
     title: 'Un moment pour souffler',
     intro: 'Rien n’est noté ni compté, sauf si tu le demandes. Ces gestes détendent un peu, ils ne soignent pas la douleur.',
     breathTitle: 'Respirer lentement',

@@ -1908,6 +1908,7 @@ const en: Translations = {
   relief: {
     link: 'Need a breather?',
     cardButton: 'A moment to breathe',
+    cardButtonShort: 'Breathe',
     title: 'A moment to breathe',
     intro: 'Nothing is noted or counted unless you ask. These gestures relax a little; they do not treat the pain.',
     breathTitle: 'Breathe slowly',

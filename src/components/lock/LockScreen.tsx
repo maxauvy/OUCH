@@ -64,7 +64,7 @@ export function LockScreen() {
           </span>
           <div
             className="w-full max-w-[380px] -mt-8 pt-12 pb-4 px-4 flex flex-col items-center rounded-3xl"
-            style={{ background: 'var(--color-surface)', border: '1px solid var(--color-hairline)', boxShadow: 'var(--card-shadow)' }}
+            style={{ background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}
           >
             <h1 className="text-title font-semibold text-center">{t.title}</h1>
             <p role="status" className="text-control text-center mt-1.5 min-h-[2.75rem]" style={{ color: 'var(--color-ink-muted)' }}>

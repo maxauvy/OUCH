@@ -193,8 +193,9 @@ export function HealthEntryLayout({
   const earlyAccess = useEarlyAccess()
   const has = (key: FactorKey) => settings.enabledFactors.includes(key) && isOffered(key, earlyAccess)
   const isToday = date === todayISO()
-  // The weather look: today's page opens on the day's sky.
-  const sky = useRichLook() && isToday
+  // The weather look: titles inside the cards, no small icons in front of them; today's page opens on the day's sky.
+  const rich = useRichLook()
+  const sky = rich && isToday
   const { ready, card, light } = useHardDays(date, allEntries, entriesLoaded)
   // Only today's page: another day is edited in full.
   const lightToday = isToday && light
@@ -236,38 +237,45 @@ export function HealthEntryLayout({
 
   const metricRows = entryRows({ t, intlLocale, local, setField, settings, has, knownTriggers })
 
-  const zonesBlock = has('painLocations') ? (
+  // A part of the form under its name: a caption above the card, or, in the weather look, the card's own title.
+  const titled = (caption: string, icon: typeof IconMapPin, tone: string, body: ReactNode) =>
+    rich ? (
+      <Card className="!p-4">
+        <h2 className="section-title text-heading font-bold mb-3">{caption}</h2>
+        {body}
+      </Card>
+    ) : (
       <>
-        <GroupCaption icon={IconMapPin} tone="fog">
-          {t.entryForm.whereHurts}
+        <GroupCaption icon={icon} tone={tone}>
+          {caption}
         </GroupCaption>
-        <Card className="!p-4">
-          <BodyMap value={local.painLocations ?? []} onChange={(zones) => setField('painLocations', zones)} />
-        </Card>
+        <Card className="!p-4">{body}</Card>
       </>
-  ) : null
-  const medicationsBlock = has('medications') ? (
-      <>
-        <GroupCaption icon={IconPill} tone="meds">
-          {t.entryForm.medicationsTaken}
-        </GroupCaption>
-        <Card className="!p-4">
-          <MedicationsField
-            date={date}
-            medications={medications}
-            intakes={local.intakes ?? []}
-            onChange={(v) => setField('intakes', v)}
-            placeholder={t.entryForm.addMedicationPlaceholder}
-          />
-        </Card>
-      </>
-  ) : null
-  const notesBlock = has('notes') ? (
-      <>
-        <GroupCaption icon={IconPencil} tone="weather">
-          {t.entryForm.notes}
-        </GroupCaption>
-        <Card className="!p-4">
+    )
+
+  const zonesBlock = has('painLocations')
+    ? titled(t.entryForm.whereHurts, IconMapPin, 'fog', <BodyMap value={local.painLocations ?? []} onChange={(zones) => setField('painLocations', zones)} />)
+    : null
+  const medicationsBlock = has('medications')
+    ? titled(
+        t.entryForm.medicationsTaken,
+        IconPill,
+        'meds',
+        <MedicationsField
+          date={date}
+          medications={medications}
+          intakes={local.intakes ?? []}
+          onChange={(v) => setField('intakes', v)}
+          placeholder={t.entryForm.addMedicationPlaceholder}
+        />,
+      )
+    : null
+  const notesBlock = has('notes')
+    ? titled(
+        t.entryForm.notes,
+        IconPencil,
+        'weather',
+        <>
           <textarea
             value={local.notes ?? ''}
             onChange={(e) => setField('notes', e.target.value)}
@@ -283,9 +291,9 @@ export function HealthEntryLayout({
           <p className="hidden pointer-coarse:block text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
             {t.entryForm.dictateHint}
           </p>
-        </Card>
-      </>
-  ) : null
+        </>,
+      )
+    : null
 
   // The lighter form: what follows the pain, offered one part at a time.
   const lightItems: LightItem[] = []
@@ -385,10 +393,14 @@ export function HealthEntryLayout({
 
       <Card className="!p-4" tour="pain">
         <div className="flex items-center justify-between gap-2">
-          <span className="flex items-center gap-2">
-            <CategoryIcon icon={IconActivityHeartbeat} cat="pain" />
-            <span className="text-body font-semibold">{t.entryForm.pain}</span>
-          </span>
+          {rich ? (
+            <h2 className="section-title text-heading font-bold">{t.entryForm.pain}</h2>
+          ) : (
+            <span className="flex items-center gap-2">
+              <CategoryIcon icon={IconActivityHeartbeat} cat="pain" />
+              <span className="text-body font-semibold">{t.entryForm.pain}</span>
+            </span>
+          )}
           <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
             {statusText}
           </span>
@@ -462,6 +474,7 @@ export function HealthEntryLayout({
           <ChoiceRow
             icon={IconSunrise}
             cat="activity"
+            asTitle={rich}
             label={t.factors.morningStiffness.label}
             options={MORNING_STIFFNESS_BANDS.map((b) => ({ value: b, label: t.entryForm.morningStiffnessBands[b] }))}
             value={local.morningStiffness}

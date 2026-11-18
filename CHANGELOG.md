@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- **Style Météo, au plus près de la maquette.** Cartes sans liseré, aux coins plus ronds, posées sur une ombre douce (un fin contour en sombre). Les cartes et les sections ont un titre dans la fonte des titres, sans carré coloré ni petites capitales grises. Jours difficiles : plus de cœur en pastille, « Mon plan » et « Respirer » côte à côte. Douleur : le chiffre au centre entre deux petits boutons cerclés, cases de l'échelle plus fines. Choix (raideur au réveil…) : puces douces, la choisie teintée et cerclée. Formulaire allégé : médicaments et note en tuiles côte à côte. Onglet actif : icône ambre, sans pastille. Journal : le mois en grand titre, de petites flèches rondes, une légende plus discrète. Le style Léger ne change pas.
+
 ### Corrigé
 - **Note méthodologique : la section 12 ne passe plus sous le pied de page.** Son tableau était trop long pour une page, même réduit à 85 % : les dernières lignes étaient cachées dans le PDF (déjà le cas en 0.13.0 et 0.14.0). Les quatre lectures montrées seulement dans l'app (après les jours les plus actifs, avant les poussées, le lendemain d'un gros jour, l'ordonnance) passent sur une page « 12 · … (suite) ». La note fait maintenant 15 pages, en français et en anglais ; les documents qui la citent sont mis à jour.
 
