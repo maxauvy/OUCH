@@ -763,6 +763,9 @@ html[data-covered]::after {
    pain weather, 0 before anything is noted. The tint of the weather at the
    top, fading out into the page. Pale even for a storm. */
 :root {
+  /* The weather look's two-tone icons (WeatherIcon): the cloud's fill and the drops. */
+  --wx-cloud: #ffffff;
+  --wx-rain: #5e9bd6;
   --sky-0: linear-gradient(180deg, #e3e9f1 0%, #ecf0f5 50%, rgba(244, 246, 249, 0) 100%);
   --sky-1: linear-gradient(180deg, #fbe2b4 0%, #fbf0dc 50%, rgba(251, 240, 220, 0) 100%);
   --sky-2: linear-gradient(180deg, #f6e5c1 0%, #f3ecd9 50%, rgba(243, 236, 217, 0) 100%);
@@ -772,6 +775,8 @@ html[data-covered]::after {
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
+    --wx-cloud: #e7ecf3;
+    --wx-rain: #8fb0d1;
     --sky-0: linear-gradient(180deg, #1e2733 0%, #171d27 50%, rgba(17, 21, 28, 0) 100%);
     --sky-1: linear-gradient(180deg, #4a3b1d 0%, #2e281d 50%, rgba(17, 21, 28, 0) 100%);
     --sky-2: linear-gradient(180deg, #3d3421 0%, #2b2a25 50%, rgba(17, 21, 28, 0) 100%);
@@ -781,6 +786,8 @@ html[data-covered]::after {
   }
 }
 :root[data-theme='dark'] {
+  --wx-cloud: #e7ecf3;
+  --wx-rain: #8fb0d1;
   --sky-0: linear-gradient(180deg, #1e2733 0%, #171d27 50%, rgba(17, 21, 28, 0) 100%);
   --sky-1: linear-gradient(180deg, #4a3b1d 0%, #2e281d 50%, rgba(17, 21, 28, 0) 100%);
   --sky-2: linear-gradient(180deg, #3d3421 0%, #2b2a25 50%, rgba(17, 21, 28, 0) 100%);
