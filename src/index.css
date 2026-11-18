@@ -726,6 +726,10 @@ html[data-covered]::after {
 :root[data-look='meteo'] h1 {
   font-weight: 800;
 }
+/* The title of a page (Tendances, Soulager, Consultation, Réglages): as large as today's. */
+:root[data-look='meteo'] h1.page-title {
+  font-size: var(--text-display);
+}
 /* A page name set small above a bigger title (the Journal's month): the text face, not the titles' one. */
 :root[data-look='meteo'] h1.kicker {
   font-family: var(--font-sans);

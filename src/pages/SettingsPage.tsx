@@ -17,14 +17,15 @@ import { BackupSection } from '../components/settings/BackupSection'
 import { IS_DEMO } from '../lib/demoMode'
 import { exitDemo, startDemo } from '../lib/demoSession'
 import { useEarlyAccess } from '../lib/earlyAccess'
-import { setLook, useLook, type Look } from '../lib/look'
+import { setLook, useLook, useRichLook, type Look } from '../lib/look'
+import { PageSky } from '../components/entry/TodaySky'
 import { LockCard } from '../components/settings/LockCard'
 import { AutoBackupCard } from '../components/settings/AutoBackupCard'
 import { SensitiveZoneCard } from '../components/settings/SensitiveZoneCard'
 import { InstallCard } from '../components/install/InstallCard'
 import { MedicationsSection } from '../components/settings/MedicationsSection'
 import { IllnessPicker } from '../components/settings/IllnessPicker'
-import { SettingsGroup } from '../components/settings/SettingsGroup'
+import { SettingsCluster, SettingsGroup } from '../components/settings/SettingsGroup'
 import { SettingToggle } from '../components/settings/SettingToggle'
 import { ReminderSettings } from '../components/settings/ReminderSettings'
 import { formatCoordinates } from '../lib/weather'
@@ -41,6 +42,8 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
   const settings = useSettings()
   const earlyAccess = useEarlyAccess()
   const look = useLook()
+  // The weather look: the groups gathered in two cards, a sky behind the title.
+  const rich = useRichLook()
   const allEntries = useAllEntries()
   const [zonesNoticeOpen, setZonesNoticeOpen] = useState(false)
   const [reviewing, setReviewing] = useState(false)
@@ -114,10 +117,12 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
   }
 
   return (
-    <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
-      <h1 className="text-title font-semibold px-1">{t.settings.title}</h1>
+    <div className="relative isolate flex flex-col gap-4 px-4 pt-4 pb-28">
+      <PageSky />
+      <h1 className="page-title text-title font-semibold px-1">{t.settings.title}</h1>
 
-      <SettingsGroup icon={IconUser} title={t.settings.groups.profile} summary={profileSummary}>
+      <SettingsCluster title={t.settings.clusterYou}>
+      <SettingsGroup icon={IconUser} tone="fog" title={t.settings.groups.profile} summary={profileSummary}>
         <Card>
           <SectionTitle icon={IconId}>{t.settings.firstNameTitle}</SectionTitle>
           <p className="text-caption mb-2" style={{ color: 'var(--color-ink-muted)' }}>
@@ -158,7 +163,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         </Card>
       </SettingsGroup>
 
-      <SettingsGroup icon={IconHeartbeat} title={t.settings.groups.tracking} summary={trackingSummary}>
+      <SettingsGroup icon={IconHeartbeat} tone="cycle" title={t.settings.groups.tracking} summary={trackingSummary}>
         <Card>
           <SectionTitle icon={IconListCheck}>{t.settings.factorsTitle}</SectionTitle>
           <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
@@ -229,7 +234,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         )}
       </SettingsGroup>
 
-      <SettingsGroup icon={IconHeartHandshake} title={t.settings.groups.messages} summary={messagesSummary}>
+      <SettingsGroup icon={IconHeartHandshake} tone="sleep" title={t.settings.groups.messages} summary={messagesSummary}>
         <SettingToggle
           icon={IconHeart}
           title={t.settings.hardDaysTitle}
@@ -267,7 +272,10 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         </SettingToggle>
       </SettingsGroup>
 
-      <SettingsGroup icon={IconBell} title={t.settings.groups.display} summary={displaySummary}>
+      </SettingsCluster>
+
+      <SettingsCluster title={t.settings.clusterApp}>
+      <SettingsGroup icon={IconBell} tone="fatigue" title={t.settings.groups.display} summary={displaySummary}>
         <ReminderSettings />
 
         <SettingToggle
@@ -311,7 +319,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         </Card>
       </SettingsGroup>
 
-      <SettingsGroup id="backup" icon={IconShieldLock} title={t.settings.groups.data} summary={IS_DEMO ? t.demo.settingsTitle : dataSummary} defaultOpen={openBackup} openSignal={backupSignal}>
+      <SettingsGroup id="backup" icon={IconShieldLock} tone="mood" title={t.settings.groups.data} summary={IS_DEMO ? t.demo.settingsTitle : dataSummary} defaultOpen={openBackup} openSignal={backupSignal}>
         {IS_DEMO ? (
           <Card>
             <SectionTitle icon={IconPlayerPlay}>{t.demo.settingsTitle}</SectionTitle>
@@ -376,9 +384,9 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
         )}
       </SettingsGroup>
 
-      {!IS_DEMO && <InstallCard />}
+      {!IS_DEMO && !rich && <InstallCard />}
 
-      <SettingsGroup icon={IconInfoCircle} title={t.settings.groups.about}>
+      <SettingsGroup icon={IconInfoCircle} tone="weather" title={t.settings.groups.about}>
         <AboutCard withHeader />
 
         <Card>
@@ -434,6 +442,8 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           </p>
         </Card>
       </SettingsGroup>
+      </SettingsCluster>
+      {!IS_DEMO && rich && <InstallCard />}
 
       {reviewing && (
         <ModalSheet title={t.settings.indicators.reviewTitle} closeLabel={t.settings.indicators.reviewClose} onClose={() => setReviewing(false)}>

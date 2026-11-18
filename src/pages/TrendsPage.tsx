@@ -17,6 +17,9 @@ import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
 import { ZonesFlaresCard, ZonesMapCard, ZonesWeeksCard } from '../components/trends/ZonesCards'
 import { Card, GroupCaption, SectionTitle } from '../components/ui/Card'
 import { Segmented } from '../components/ui/Segmented'
+import { NavTile, NavTiles } from '../components/ui/NavTile'
+import { PageSky } from '../components/entry/TodaySky'
+import { useRichLook } from '../lib/look'
 // The report, its charts and the page capture are fetched when it is opened.
 import { useLoggedEntries } from '../hooks/useEntries'
 import { useFlares } from '../hooks/useFlares'
@@ -56,6 +59,8 @@ export function TrendsPage() {
   const settings = useSettings()
   const i18n = useTranslation()
   const t = usePalette()
+  // The weather look: a sky behind the title, figures in bold, chips and tiles like the day's page, the daily weather under the chart.
+  const rich = useRichLook()
   const [rangeIdx, setRangeIdx] = useState(1)
   const medications = useMedications()
   const flares = useFlares()
@@ -261,8 +266,16 @@ export function TrendsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
-      <h1 className="text-title font-semibold px-1">{i18n.trends.title}</h1>
+    <div className="relative isolate flex flex-col gap-4 px-4 pt-4 pb-28">
+      <PageSky />
+      <div className="px-1">
+        {rich && (
+          <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+            {i18n.trends.kicker}
+          </p>
+        )}
+        <h1 className="page-title text-title font-semibold">{i18n.trends.title}</h1>
+      </div>
 
       {rangePicker}
 
@@ -285,8 +298,8 @@ export function TrendsPage() {
           <Card tour="trends-chart">
             <SectionTitle icon={IconChartLine}>{i18n.trends.painEvolution}</SectionTitle>
             {brief && (
-              <p className="text-body font-medium mb-3" style={{ color: 'var(--color-ink)' }}>
-                {brief}
+              <p className={`text-body mb-3 ${rich ? '' : 'font-medium'}`} style={{ color: 'var(--color-ink)' }}>
+                {rich ? boldFigures(brief) : brief}
               </p>
             )}
             <PainTrendChart
@@ -298,6 +311,7 @@ export function TrendsPage() {
               marked={layers.flares ? markedSpans(timeline) : []}
               trialSpans={layers.trials ? trialSpans(timeline) : []}
               showMean={rangeDays !== 7}
+              weatherStrip={rich}
             />
             {layerChips.length > 1 && (
               <div role="group" aria-label={i18n.trends.layersLabel} className="flex flex-wrap gap-2 mt-3">
@@ -307,12 +321,21 @@ export function TrendsPage() {
                     type="button"
                     aria-pressed={layers[key]}
                     onClick={() => setLayers((l) => ({ ...l, [key]: !l[key] }))}
-                    className="rounded-[var(--radius-control)] px-3 py-1.5 text-control font-medium inline-flex items-center gap-2"
-                    style={{
-                      background: layers[key] ? 'var(--color-brand-soft)' : 'var(--color-surface)',
-                      color: layers[key] ? 'var(--color-brand)' : 'var(--color-ink)',
-                      boxShadow: `inset 0 0 0 1px ${layers[key] ? 'var(--color-brand)' : 'var(--color-hairline)'}`,
-                    }}
+                    className={`${rich ? 'rounded-[12px]' : 'rounded-[var(--radius-control)]'} px-3 py-1.5 text-control font-medium inline-flex items-center gap-2`}
+                    style={
+                      rich
+                        ? {
+                            background: layers[key] ? 'var(--color-brand-soft)' : 'var(--chip-bg, var(--color-surface-raised))',
+                            color: layers[key] ? 'var(--color-brand)' : 'var(--color-ink)',
+                            boxShadow: layers[key] ? 'inset 0 0 0 1.5px var(--color-brand)' : undefined,
+                            fontWeight: layers[key] ? 700 : undefined,
+                          }
+                        : {
+                            background: layers[key] ? 'var(--color-brand-soft)' : 'var(--color-surface)',
+                            color: layers[key] ? 'var(--color-brand)' : 'var(--color-ink)',
+                            boxShadow: `inset 0 0 0 1px ${layers[key] ? 'var(--color-brand)' : 'var(--color-hairline)'}`,
+                          }
+                    }
                   >
                     <span aria-hidden className="w-2.5 h-2.5 rounded-full" style={{ background: LAYER_COLOR[key](t) }} />
                     {label}
@@ -335,6 +358,14 @@ export function TrendsPage() {
             <GroupCaption>
               <span id="trends-more">{i18n.trends.moreTitle}</span>
             </GroupCaption>
+            {rich ? (
+              <NavTiles>
+                {zonesTracked && <NavTile icon={IconBodyScan} tone="fog" title={i18n.trends.moreZones} hint={i18n.trends.moreZonesHint} onClick={() => setDetail('zones')} />}
+                {hasTreatments && <NavTile icon={IconPill} tone="meds" title={i18n.trends.moreTreatments} hint={i18n.trends.moreTreatmentsHint} onClick={() => setDetail('treatments')} />}
+                <NavTile icon={IconUser} tone="sleep" title={i18n.trends.moreHabits} hint={i18n.trends.moreHabitsHint} badge={entries.length >= PATTERN_MIN_DAYS && leadList.shown.length > 0 ? i18n.tabs.trendsNew : undefined} onClick={() => setDetail('habits')} />
+                {entries.length >= 14 && <NavTile icon={IconChartDots} tone="fatigue" title={i18n.trends.moreCompare} hint={i18n.trends.moreCompareHint} onClick={() => setDetail('compare')} />}
+              </NavTiles>
+            ) : (
             <Card>
               {zonesTracked && <LinkRow icon={IconBodyScan} title={i18n.trends.moreZones} hint={i18n.trends.moreZonesHint} onClick={() => setDetail('zones')} />}
               {hasTreatments && <LinkRow icon={IconPill} title={i18n.trends.moreTreatments} hint={i18n.trends.moreTreatmentsHint} onClick={() => setDetail('treatments')} />}
@@ -347,10 +378,16 @@ export function TrendsPage() {
               />
               {entries.length >= 14 && <LinkRow icon={IconChartDots} title={i18n.trends.moreCompare} hint={i18n.trends.moreCompareHint} onClick={() => setDetail('compare')} />}
             </Card>
+            )}
           </section>
         </>
       )}
       <Footer />
     </div>
   )
+}
+
+/** The weather look's summary sentence: its figures in bold ("4,9 / 10", "3"), the words around them as they are. */
+function boldFigures(text: string) {
+  return text.split(/(\d+(?:[.,]\d+)?(?:\s*\/\s*10)?)/).map((part, i) => (i % 2 ? <b key={i}>{part}</b> : part))
 }

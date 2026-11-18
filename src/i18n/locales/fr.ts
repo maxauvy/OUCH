@@ -374,6 +374,7 @@ const fr: Translations = {
 
   trends: {
     title: 'Tendances',
+    kicker: 'Ta douleur, au fil des jours',
     rangeLabel: 'Période affichée',
     briefMean: 'Douleur moyenne de {{v}} / 10 sur la période.',
     briefFlares: '{{n}} {{n:poussée|poussées}}, {{days}} {{days:jour|jours}} en tout.',
@@ -397,6 +398,7 @@ const fr: Translations = {
     painEvolution: 'Évolution de la douleur',
     indicatorsTitle: 'Ce que tu as noté en plus',
     dailyRating: 'Note du jour',
+    weatherStrip: 'Météo de chaque jour',
     weeklyMean: 'Moyenne sur 7 jours :',
     weeklyMeanLegend: 'Moyenne des 7 derniers jours (dès 4 jours notés)',
     flaresTitle: 'Poussées',
@@ -2318,6 +2320,8 @@ const fr: Translations = {
     otherNameHelper: 'Repris tel quel sur le rapport pour ton médecin, jamais sur la page Enfants.',
     illnessesHelper: 'Ce que tu suis avec OUCH, plusieurs choix possibles. C’est indiqué sur le rapport pour ton médecin et expliqué sur la page « Expliquer à mon enfant » (tuile « Mes enfants »).',
     backupTitle: 'Sauvegarde & synchro',
+    clusterYou: 'Pour toi',
+    clusterApp: 'L’app',
     groups: {
       profile: 'Mon profil',
       tracking: 'Mon suivi',

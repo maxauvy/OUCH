@@ -2,6 +2,7 @@ import { useId, useState, type PropsWithChildren } from 'react'
 import { IconChevronDown, type Icon as TablerIcon } from '@tabler/icons-react'
 import { FlatCardContext } from '../ui/flatCard'
 import { RoundIcon } from '../ui/RoundIcon'
+import { useRichLook } from '../../lib/look'
 
 /**
  * A collapsible group of settings, in one card: a header showing a one-line
@@ -17,9 +18,12 @@ export function SettingsGroup({
   defaultOpen = false,
   openSignal = 0,
   id,
+  tone = 'fog',
   children,
 }: PropsWithChildren<{
   icon: TablerIcon
+  /** The weather look: the colour of its square icon, a measure category of index.css. */
+  tone?: string
   title: string
   summary?: string
   defaultOpen?: boolean
@@ -34,14 +38,22 @@ export function SettingsGroup({
     if (openSignal > 0) setOpen(true)
   }
   const bodyId = useId()
+  // The weather look: a row of its cluster's card (see SettingsCluster), with a square icon in its own colour.
+  const rich = useRichLook()
   return (
     <section
       id={id}
-      className="flex flex-col scroll-mt-4 rounded-[var(--radius-card)] overflow-hidden"
-      style={{ background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}
+      className={rich ? 'flex flex-col scroll-mt-4 border-t first:border-t-0' : 'flex flex-col scroll-mt-4 rounded-[var(--radius-card)] overflow-hidden'}
+      style={rich ? { borderColor: 'var(--color-hairline)' } : { background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}
     >
       <button type="button" aria-expanded={open} aria-controls={bodyId} onClick={() => setOpen(!open)} className="w-full flex items-center gap-3 p-4 text-left">
-        <RoundIcon icon={Icon} />
+        {rich ? (
+          <span className="w-9 h-9 shrink-0 rounded-xl flex items-center justify-center" style={{ background: `var(--cat-${tone}-soft)`, color: `var(--cat-${tone})` }} aria-hidden>
+            <Icon size={20} stroke={1.8} />
+          </span>
+        ) : (
+          <RoundIcon icon={Icon} />
+        )}
         <span className="flex-1 min-w-0">
           <span className="block text-body font-semibold">{title}</span>
           {summary && (
@@ -59,6 +71,20 @@ export function SettingsGroup({
       </button>
       <div id={bodyId} hidden={!open} className="flex flex-col px-4 pb-1 border-t" style={{ borderColor: 'var(--color-hairline)' }}>
         <FlatCardContext.Provider value>{children}</FlatCardContext.Provider>
+      </div>
+    </section>
+  )
+}
+
+/** Settings groups under one name, in the weather look: one card with a row per group, like a phone's settings. In the lighter look the groups stay separate cards and the name is not shown. */
+export function SettingsCluster({ title, children }: PropsWithChildren<{ title: string }>) {
+  const rich = useRichLook()
+  if (!rich) return <>{children}</>
+  return (
+    <section aria-label={title} className="flex flex-col gap-2">
+      <h2 className="section-title text-heading font-bold px-1 mt-1">{title}</h2>
+      <div className="flex flex-col rounded-[var(--radius-card)] overflow-hidden" style={{ background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}>
+        {children}
       </div>
     </section>
   )

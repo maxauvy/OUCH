@@ -8,6 +8,7 @@ import { trailingMeans } from '../../lib/report'
 import { usePalette } from '../../hooks/usePalette'
 import { useLocale, useTranslation, type Translations } from '../../i18n'
 import { daysBetween, shiftISO } from '../../lib/dates'
+import { WEATHER_SCALE_GRADIENT, colorForPainValue } from '../../lib/painWeather'
 
 /** Same window as the doctor report's curve. */
 const WINDOW = 7
@@ -100,6 +101,7 @@ export function PainTrendChart({
   setApart,
   trialSpans = [],
   marked = [],
+  weatherStrip = false,
 }: {
   /** Every entry: the mean of the range's first days reaches back before it. */
   entries: DailyEntry[]
@@ -120,6 +122,8 @@ export function PainTrendChart({
   trialSpans?: { from: string; to: string }[]
   /** Periods the person marked themselves: an outlined band, apart from the detected flares */
   marked?: { from: string; to: string }[]
+  /** The weather look: under the dates, one mark per noted day in its weather's colour, like the Journal's tiles. */
+  weatherStrip?: boolean
 }) {
   const t = usePalette()
   const i18n = useTranslation()
@@ -286,7 +290,27 @@ export function PainTrendChart({
           </ComposedChart>
         </ResponsiveContainer>
       </div>
+      {weatherStrip && (
+        // Lined up with the plot: the Y axis takes 28px on the left, the chart's margin 8px on the right.
+        <div aria-hidden className="relative h-2 mt-1" style={{ marginLeft: 28, marginRight: 8 }}>
+          {data.map((d) =>
+            d.pain === null ? null : (
+              <span
+                key={d.day}
+                className="absolute top-0 h-2 rounded-[2px]"
+                style={{ left: `${(d.day / (total - 1)) * 100}%`, width: `max(2px, calc(${100 / total}% - 1.5px))`, transform: 'translateX(-50%)', background: colorForPainValue(d.pain) }}
+              />
+            ),
+          )}
+        </div>
+      )}
       <ul className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-caption" style={{ color: t.inkMuted }}>
+        {weatherStrip && (
+          <li className="flex items-center gap-1.5">
+            <span className="w-4 h-2 rounded-[2px]" style={{ background: WEATHER_SCALE_GRADIENT }} aria-hidden />
+            {i18n.trends.weatherStrip}
+          </li>
+        )}
         <li className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full" style={{ background: t.brand, opacity: showMean ? 0.65 : 1 }} aria-hidden />
           {i18n.trends.dailyRating}

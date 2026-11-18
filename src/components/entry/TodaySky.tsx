@@ -2,6 +2,7 @@ import { IconCloud } from '@tabler/icons-react'
 import type { PainWeather } from '../../db/types'
 import { format, useTranslation } from '../../i18n'
 import { WeatherIcon } from '../ui/WeatherIcon'
+import { useRichLook } from '../../lib/look'
 
 /**
  * The sky of the day, behind the top of today's page in the weather look: it
@@ -11,14 +12,14 @@ import { WeatherIcon } from '../ui/WeatherIcon'
  * and fades out into the page. Pale even for a storm: it shows the day, it
  * does not alarm.
  */
-export function TodaySkyBackdrop({ weather }: { weather: PainWeather | null }) {
+export function TodaySkyBackdrop({ weather, height = 360 }: { weather: PainWeather | null; height?: number }) {
   return (
     <div
       aria-hidden
       className="absolute inset-x-0 -z-10 pointer-events-none"
       style={{
         top: 'calc(-1 * var(--root-pad-top, 0px))',
-        height: 'calc(var(--root-pad-top, 0px) + 360px)',
+        height: `calc(var(--root-pad-top, 0px) + ${height}px)`,
         background: `var(--sky-${weather?.level ?? 0})`,
         transition: 'background 300ms ease',
       }}
@@ -50,4 +51,9 @@ export function TodaySkyLine({ weather, painLevel }: { weather: PainWeather | nu
       </div>
     </div>
   )
+}
+
+/** The neutral sky behind the top of the other tabs, in the weather look: the same as today's before anything is noted, shorter. The page's wrapper must be `relative isolate`. */
+export function PageSky() {
+  return useRichLook() ? <TodaySkyBackdrop weather={null} height={240} /> : null
 }
