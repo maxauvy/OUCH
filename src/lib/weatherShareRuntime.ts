@@ -5,7 +5,8 @@
 
 import type { DailyEntry, WeatherShareState } from '../db/types'
 import { getSettings, updateSettings } from '../db'
-import { dropboxWeatherImage, WEATHER_SHARE_SCOPE, weatherShareFailureOf, type WeatherShareFailure } from './cloud/dropboxWeatherImage'
+import { dropboxWeatherImage, LEGACY_WEATHER_IMAGE_PATH, WEATHER_SHARE_SCOPE, weatherShareFailureOf, type WeatherShareFailure } from './cloud/dropboxWeatherImage'
+import { encryptWeatherImage, isWeatherImageKey, newWeatherImageKey } from './weatherImageCrypto'
 import { cleanReturnAddress, finishDropboxLink, forgetPendingDropboxLink, getDropboxToken, startDropboxLink } from './cloud/dropboxLink'
 
 const image = () => dropboxWeatherImage(getDropboxToken)
@@ -63,14 +64,22 @@ export function nextSendResult(timeoutMs = 30_000): Promise<'sent' | WeatherShar
   })
 }
 
-/** Sends the image (and makes its link the first time). One at a time. */
+/** Sends the image, encrypted (and makes its link the first time). One at a time. */
 export function sendWeatherImage(png: Blob, key: string): Promise<'sent' | WeatherShareFailure> {
   sending ??= (async () => {
     let result: 'sent' | WeatherShareFailure = 'other'
     try {
-      if (!(await getSettings()).weatherShare) return result
-      await image().upload(png)
-      const link = (await getSettings()).weatherShare?.link ?? (await image().link())
+      const share = (await getSettings()).weatherShare
+      if (!share) return result
+      // A share from before the encryption: a key now, a new file and a new link; the old image in the clear goes.
+      const fresh = !isWeatherImageKey(share.key)
+      const imageKey = fresh ? newWeatherImageKey() : share.key!
+      if (fresh) await patch({ key: imageKey, link: undefined })
+      await image().upload(await encryptWeatherImage(png, imageKey))
+      const known = fresh ? undefined : share.link
+      // No link yet for the encrypted file (a share being moved over, even if a first try stopped half-way): the old image in the clear goes first.
+      if (!known) await image().remove(LEGACY_WEATHER_IMAGE_PATH)
+      const link = known ?? (await image().link())
       await patch({ link, sentKey: key, sentAt: Date.now(), triedAt: Date.now(), lastFailure: undefined })
       result = 'sent'
     } catch (e) {
@@ -93,10 +102,11 @@ export async function turnOnWeatherShare(): Promise<void> {
   requestWeatherImageNow()
 }
 
-/** Removes the image, which ends its link, then forgets it. Stays on if Dropbox can't be reached. */
+/** Removes the image (and the old one in the clear, if any), which ends its link, then forgets it and its key. Stays on if Dropbox can't be reached. */
 export async function turnOffWeatherShare(): Promise<'off' | WeatherShareFailure> {
   try {
     await image().remove()
+    await image().remove(LEGACY_WEATHER_IMAGE_PATH)
   } catch (e) {
     // The image would stay reachable: stay on, and say why.
     return weatherShareFailureOf(e)

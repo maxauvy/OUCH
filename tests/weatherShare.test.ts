@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { authorizeUrl } from '../src/lib/cloud/dropboxAuth.ts'
-import { dropboxWeatherImage, imageOnlyLink, WEATHER_IMAGE_PATH, WeatherShareError } from '../src/lib/cloud/dropboxWeatherImage.ts'
+import { dropboxWeatherImage, imageOnlyLink, LEGACY_WEATHER_IMAGE_PATH, WEATHER_IMAGE_PATH, WeatherShareError } from '../src/lib/cloud/dropboxWeatherImage.ts'
 
 interface Call {
   url: string
@@ -99,4 +99,11 @@ test('remove ends the link; an image already gone is fine', async () => {
 test('remove that fails says so (the link would stay)', async () => {
   const f = fakeFetch(answer({ error_summary: 'too_many_write_operations/' }, 429))
   await assert.rejects(dropboxWeatherImage(token, f.fn).remove(), (e: unknown) => e instanceof WeatherShareError && e.kind === 'network')
+})
+
+test('the encrypted image has its own name; the old one in the clear can be removed by its own', async () => {
+  assert.equal(WEATHER_IMAGE_PATH, '/meteo-du-jour.ouch')
+  const f = fakeFetch(answer({}))
+  await dropboxWeatherImage(token, f.fn).remove(LEGACY_WEATHER_IMAGE_PATH)
+  assert.deepEqual(JSON.parse(String(f.calls[0].init.body)), { path: '/meteo-du-jour.png' })
 })

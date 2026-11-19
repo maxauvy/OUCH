@@ -1,0 +1,309 @@
+/* OUCH Duo: the Météo look of OUCH (src/index.css, :root[data-look='meteo']),
+   reduced to what Duo shows. A neutral sky at the top (OUCH's --sky-0), the
+   image on the paper, quiet text links for what is rarely needed. */
+
+:root {
+  --paper: #f4f6f9;
+  --surface: #ffffff;
+  --ink: #1d2433;
+  --ink-muted: #5a6577;
+  --hairline: #e1e6ee;
+  --brand: #3a5f8f;
+  --on-brand: #ffffff;
+  --chip: #eef1f5;
+  --sky: linear-gradient(180deg, #e3e9f1 0%, #ecf0f5 50%, rgba(244, 246, 249, 0) 100%);
+  --status-top: #e3e9f1;
+  --shadow: 0 1px 2px rgba(30, 45, 70, 0.04), 0 10px 24px -18px rgba(30, 45, 70, 0.35);
+  --card-border: none;
+  --font-sans: 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', 'Public Sans Variable', system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #11151c;
+    --surface: #1b212b;
+    --ink: #e7ecf3;
+    --ink-muted: #9aa6b7;
+    --hairline: rgba(150, 170, 200, 0.16);
+    --brand: #8fb0d1;
+    --on-brand: #0f1722;
+    --chip: #232a36;
+    --sky: linear-gradient(180deg, #1e2733 0%, #171d27 50%, rgba(17, 21, 28, 0) 100%);
+    --status-top: #1e2733;
+    --shadow: none;
+    --card-border: 1px solid var(--hairline);
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+/* The strip under the status bar on iPhone takes the page's own colour: the sky's top. */
+html {
+  background: var(--status-top);
+  min-height: 100%;
+}
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+#root {
+  min-height: 100dvh;
+  position: relative;
+  isolation: isolate;
+}
+.sky {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 340px;
+  background: var(--sky);
+  z-index: -1;
+}
+.page {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 20px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.grow {
+  flex: 1;
+}
+.push-end {
+  margin-top: auto;
+}
+.kicker {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+.title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.card-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+  line-height: 1.2;
+}
+.text {
+  margin: 0;
+  font-size: 16px;
+}
+.small {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+.card {
+  background: var(--surface);
+  border: var(--card-border);
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+/* The day's image: always light, whatever the phone's theme (OUCH draws it so). */
+.weather-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  background: #f7f8fa;
+}
+.weather-image.placeholder {
+  aspect-ratio: 420 / 620;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: 15px;
+  background: var(--surface);
+  border: var(--card-border);
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn {
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  border: 0;
+  border-radius: 16px;
+  padding: 14px 16px;
+  min-height: 48px;
+  width: 100%;
+  background: var(--brand);
+  color: var(--on-brand);
+  cursor: pointer;
+}
+.btn.soft {
+  background: var(--chip);
+  color: var(--ink);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.link-btn {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--brand);
+  background: none;
+  border: 0;
+  padding: 8px 0;
+  min-height: 40px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.link-btn.center {
+  align-self: center;
+}
+.link-btn.quiet {
+  color: var(--ink-muted);
+  font-weight: 600;
+  font-size: 14px;
+}
+.link-btn:disabled {
+  opacity: 0.5;
+}
+:is(.btn, .link-btn, .input):focus-visible {
+  outline: 2.5px solid var(--brand);
+  outline-offset: 2px;
+}
+.input {
+  font: inherit;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  color: var(--ink);
+  padding: 13px 14px;
+}
+
+.viewfinder {
+  position: relative;
+  flex: 1;
+  min-height: 320px;
+  border-radius: 26px;
+  overflow: hidden;
+  background: #20262f;
+}
+.viewfinder video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.viewfinder .frame {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 62%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 22px;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 999px rgba(20, 25, 32, 0.45);
+}
+.viewfinder p {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  margin: 0;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* The install hint: a sheet at the bottom of the first visit. */
+.sheet {
+  position: sticky;
+  bottom: 0;
+  margin: 8px calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * (env(safe-area-inset-bottom, 0px) + 20px));
+  padding: 18px max(18px, env(safe-area-inset-left, 0px)) calc(env(safe-area-inset-bottom, 0px) + 18px);
+  background: var(--surface);
+  border-radius: 26px 26px 0 0;
+  border-top: var(--card-border);
+  box-shadow: 0 -10px 30px -20px rgba(30, 45, 70, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+}
+.steps li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.steps span {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: var(--chip);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

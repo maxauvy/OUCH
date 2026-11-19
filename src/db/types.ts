@@ -366,7 +366,9 @@ export interface AutoBackupState {
 
 /** The day's weather image kept up to date at Dropbox for a relative (per device, never in a backup). Present = turned on. */
 export interface WeatherShareState {
-  /** The public link to the image (image only); absent until the first image is there. */
+  /** The key the image is encrypted with (see lib/weatherImageCrypto.ts), given to the relative in OUCH Duo's address. Made at the first image; a share from before the encryption has none until then. */
+  key?: string
+  /** The public link to the (encrypted) image file; absent until the first image is there. */
   link?: string
   /** What the last image sent was made from (see `weatherImageKey`), so the same image is not sent twice. */
   sentKey?: string

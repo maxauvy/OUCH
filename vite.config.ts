@@ -156,7 +156,9 @@ export default defineConfig(({ command, mode }) => {
         workbox: {
           globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
           // The PDFs for professionals are not cached: opening one must reach the file, not the app shell.
-          navigateFallbackDenylist: [/\.pdf$/],
+          // OUCH Duo (/duo/, built after OUCH by vite.duo.config.ts) is another app with its own service worker.
+          navigateFallbackDenylist: [/\.pdf$/, /\/duo\//],
+          globIgnores: ['duo/**'],
           // A new release takes over as soon as it is installed; the open page
           // is left alone (see main.tsx).
           skipWaiting: true,

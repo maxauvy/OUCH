@@ -3,6 +3,9 @@ import { useSettings } from '../../hooks/useSettings'
 import { Toggle } from '../ui/Toggle'
 import { format, useLocale, useTranslation } from '../../i18n'
 import { todayISO } from '../../lib/dates'
+import { duoBase } from '../../lib/duoBase'
+import { duoUrl } from '../../lib/duoLink'
+import { DuoCode } from './DuoCode'
 import { askWeatherSharePermission, nextSendResult, turnOffWeatherShare, turnOnWeatherShare, type WeatherShareNotice } from '../../lib/weatherShareRuntime'
 
 const mutedText = { color: 'var(--color-ink-muted)' }
@@ -22,6 +25,7 @@ export function AutoShareSection({ notice }: { notice: WeatherShareNotice | null
   const [asking, setAsking] = useState(false)
   const [activating, setActivating] = useState(false)
   const [leaving, setLeaving] = useState(false)
+  const [showCode, setShowCode] = useState(false)
   const [say, setSay] = useState<string | null>(notice ? { ready: t.ready, denied: t.denied, failed: t.returnFailed }[notice] : null)
 
   if (settings.autoBackup?.provider !== 'dropbox') return null
@@ -46,17 +50,20 @@ export function AutoShareSection({ notice }: { notice: WeatherShareNotice | null
     if (result !== 'off') setSay(t.stopFailed)
   }
 
+  // What a relative receives: OUCH Duo's address, with the image's link and the first name after # (see lib/duoLink.ts).
+  const relativeUrl = share?.link && share.key ? duoUrl(duoBase(), { link: share.link, key: share.key, name: settings.displayName }) : null
+
   async function sendLink() {
-    if (!share?.link) return
+    if (!relativeUrl) return
     try {
       if (navigator.share) {
-        await navigator.share({ text: t.linkShareText, url: share.link })
+        await navigator.share({ text: t.linkShareText, url: relativeUrl })
         return
       }
-      await navigator.clipboard.writeText(share.link)
+      await navigator.clipboard.writeText(relativeUrl)
       setSay(t.linkCopied)
     } catch (e) {
-      if (!(e instanceof DOMException && e.name === 'AbortError')) setSay(share.link)
+      if (!(e instanceof DOMException && e.name === 'AbortError')) setSay(relativeUrl)
     }
   }
 
@@ -135,10 +142,25 @@ export function AutoShareSection({ notice }: { notice: WeatherShareNotice | null
           {t.allow}
         </button>
       )}
-      {on && share.link && (
-        <button type="button" className="btn-secondary" onClick={() => void sendLink()}>
-          {t.sendLink}
-        </button>
+      {on && relativeUrl && (
+        <>
+          {showCode && (
+            <div className="flex flex-col gap-2">
+              <DuoCode url={relativeUrl} label={t.codeAlt} />
+              <p className="text-caption" style={mutedText}>
+                {t.codeHint}
+              </p>
+            </div>
+          )}
+          <div className="flex gap-3">
+            <button type="button" className="btn-secondary flex-1" aria-expanded={showCode} onClick={() => setShowCode((v) => !v)}>
+              {showCode ? t.hideCode : t.showCode}
+            </button>
+            <button type="button" className="btn-secondary flex-1" onClick={() => void sendLink()}>
+              {t.sendLink}
+            </button>
+          </div>
+        </>
       )}
     </section>
   )

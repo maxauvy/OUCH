@@ -1,8 +1,9 @@
 // The day's weather image for a relative: one file in OUCH's Dropbox folder,
 // always under the same name, replaced in place, and one shared link to it
-// that does not change. Unlike the backup copies, the image is NOT encrypted:
-// whoever has the link can see it. The link needs the `sharing.write`
-// permission, asked only of the people who turn this on.
+// that does not change. The file is the image encrypted with a key Dropbox
+// never sees (lib/weatherImageCrypto.ts): the link alone shows nothing, OUCH
+// Duo opens it with the key from its address. The link needs the
+// `sharing.write` permission, asked only of the people who turn this on.
 
 import { ProviderError, type ProviderFailure } from './provider.ts'
 
@@ -10,7 +11,9 @@ const API = 'https://api.dropboxapi.com/2'
 const CONTENT = 'https://content.dropboxapi.com/2'
 
 /** In the app folder's root, next to the backup copies (which are named by date, so the backup never touches it). */
-export const WEATHER_IMAGE_PATH = '/meteo-du-jour.png'
+export const WEATHER_IMAGE_PATH = '/meteo-du-jour.ouch'
+/** Where the image was kept, in the clear, before it was encrypted: removed when a share moves to the encrypted file, and when it stops. */
+export const LEGACY_WEATHER_IMAGE_PATH = '/meteo-du-jour.png'
 /** What has to be asked of Dropbox on top of the backup's permissions. */
 export const WEATHER_SHARE_SCOPE = 'sharing.write'
 
@@ -78,7 +81,7 @@ export function dropboxWeatherImage(getToken: () => Promise<string>, fetchFn: Fe
 
   return {
     /** Replaces the image in place: the file keeps its identity, so its link keeps working and shows the new one. */
-    async upload(png: Blob): Promise<void> {
+    async upload(file: Blob): Promise<void> {
       const res = await post(
         'upload',
         `${CONTENT}/files/upload`,
@@ -86,7 +89,7 @@ export function dropboxWeatherImage(getToken: () => Promise<string>, fetchFn: Fe
           'Content-Type': 'application/octet-stream',
           'Dropbox-API-Arg': JSON.stringify({ path: WEATHER_IMAGE_PATH, mode: 'overwrite', autorename: false, mute: true }),
         },
-        png
+        file
       )
       if (!res.ok) throw await failureFrom(res, 'upload', await readJson(res))
     },
@@ -113,9 +116,9 @@ export function dropboxWeatherImage(getToken: () => Promise<string>, fetchFn: Fe
       throw listed.ok ? new WeatherShareError('other', 'link: exists but not found') : await failureFrom(listed, 'link', await readJson(listed))
     },
 
-    /** Removes the image, which ends its link. Already gone is fine. */
-    async remove(): Promise<void> {
-      const res = await json('remove', `${API}/files/delete_v2`, { path: WEATHER_IMAGE_PATH })
+    /** Removes the image (or, with `LEGACY_WEATHER_IMAGE_PATH`, the old one in the clear), which ends its link. Already gone is fine. */
+    async remove(path: string = WEATHER_IMAGE_PATH): Promise<void> {
+      const res = await json('remove', `${API}/files/delete_v2`, { path })
       if (res.ok) return
       const body = await readJson(res)
       if (res.status === 409 && (body?.error_summary ?? '').includes('not_found')) return

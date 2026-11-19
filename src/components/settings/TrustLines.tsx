@@ -3,7 +3,7 @@ import { format, useLanguage, useTranslation } from '../../i18n'
 
 /** Where the journal goes, in three short lines: it stays on the device, it is
  * encrypted there, and the provider only keeps a file nobody can read. */
-export function TrustLines({ provider, withImage = false }: { provider: string; /** The daily weather image for a relative is on: the provider also keeps it, in the clear. */ withImage?: boolean }) {
+export function TrustLines({ provider, withImage = false }: { provider: string; /** The daily weather image for a relative is on: the provider also keeps it, encrypted with a key of its own. */ withImage?: boolean }) {
   const t = useTranslation().autoBackup
   const language = useLanguage()
   const lines = [

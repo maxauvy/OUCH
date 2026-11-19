@@ -1998,6 +1998,12 @@ export interface Translations {
       sendLink: string
       linkCopied: string
       linkShareText: string
+      /** The button that shows the code a relative scans with OUCH Duo, and hides it. */
+      showCode: string
+      hideCode: string
+      /** Under the code. */
+      codeHint: string
+      codeAlt: string
       offNote: string
       stopFailed: string
       ready: string
