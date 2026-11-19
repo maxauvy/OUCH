@@ -206,6 +206,17 @@ body {
   font-weight: 600;
   font-size: 14px;
 }
+.lang {
+  display: flex;
+  gap: 14px;
+}
+.lang .link-btn[aria-pressed='true'] {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: default;
+}
 .link-btn:disabled {
   opacity: 0.5;
 }
