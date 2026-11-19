@@ -330,23 +330,6 @@ textarea {
   --root-pad-top: env(safe-area-inset-top);
 }
 
-/* The weather look: what iOS shows above and below the page (the strip of
-   the status bar of the installed app, the bounce when scrolling past an
-   end) is the page root's background colour. It takes the first colour of
-   the sky shown on the page (--status-top, set by useSkyTop), while the page
-   itself keeps its paper: drawn as an image over exactly the page's box. The
-   body then has no background of its own, so the sky layer (behind the page)
-   shows over the root's. */
-html[data-look='meteo'] {
-  background-color: var(--status-top, var(--color-paper));
-  background-image: linear-gradient(var(--color-paper), var(--color-paper));
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
-html[data-look='meteo'] body {
-  background: transparent;
-}
-
 /* Installed on an iPhone (iOS 26), the status bar's blur reaches about 40px
    below the bar, and env(safe-area-inset-top) can read 0 there (WebKit bug
    301994). Without this the first line of every page sits in the blur. */

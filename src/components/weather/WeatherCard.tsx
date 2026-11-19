@@ -275,12 +275,14 @@ export const WeatherCard = forwardRef<
                     flexDirection: 'column',
                     alignItems: 'center',
                     gap: 2,
-                    padding: '6px 0',
+                    padding: '3.5px 0',
                     fontSize: 12,
                     fontWeight: 700,
                     background: w ? w.soft : '#eef1f5',
                     color: w ? w.ink : CARD_MUTED,
-                    boxShadow: date === entry.date ? `inset 0 0 0 2.5px ${CARD_INK}` : undefined,
+                    // A border, not an inset shadow: the image is drawn by the browser through SVG, and Safari on iPhone leaves shadows out there.
+                    border: `2.5px solid ${date === entry.date ? CARD_INK : 'transparent'}`,
+                    boxSizing: 'border-box',
                   }}
                 >
                   <span style={{ fontWeight: 600 }}>{capitalizeFirst(d.toLocaleDateString(intlLocale, { weekday: 'narrow' }))}</span>
