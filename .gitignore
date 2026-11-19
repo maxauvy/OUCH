@@ -25,3 +25,5 @@ communication/dropbox-production-request.md
 # Guide and slides for health professionals: PDFs and previews are rebuilt (docs/presentation-soignants/build.mjs)
 docs/presentation-soignants/pdf/
 docs/presentation-soignants/apercus/
+docs/guide-patients/pdf/
+docs/guide-patients/apercus/

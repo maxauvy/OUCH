@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>OUCH, guide pour les utilisateurs</title>
+<link rel="stylesheet" href="../presentation-soignants/base.css">
+<style>
+@page{size:A4;margin:0}
+body{font-size:9.6pt;line-height:1.45}
+.page{position:relative;width:210mm;height:296.5mm;padding:13mm 15mm 0;overflow:hidden;break-after:page;page-break-after:always}
+.page:last-of-type{break-after:auto;page-break-after:auto}
+@media screen{body{background:#888}.page{background:#fff;margin:0 auto 4mm}}
+.bar{position:absolute;top:0;left:0;width:210mm;height:4.5mm;background:linear-gradient(90deg,var(--gold),var(--lav) 55%,var(--ind))}
+.foot{position:absolute;bottom:8mm;left:15mm;right:15mm;border-top:1px solid var(--hair);padding-top:2.5mm;display:flex;justify-content:space-between;font-size:7.4pt;color:var(--muted)}
+.eyebrow{font-size:7.8pt;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);margin:0 0 1mm}
+h1{font-size:23pt;line-height:1.12;margin:0 0 2mm;font-weight:800;letter-spacing:-.01em}
+h2{font-size:14pt;line-height:1.2;margin:0 0 3mm;font-weight:800}
+h3{font-size:9.8pt;margin:3.5mm 0 1mm;break-after:avoid}
+p{margin:0 0 2mm}
+.lead{font-size:11pt;line-height:1.4;color:#2f3d47;margin:0 0 4mm}
+.m{color:var(--muted)}
+.small{font-size:8pt;color:var(--muted);line-height:1.38}
+ul{margin:0 0 2mm;padding-left:4.5mm}li{margin-bottom:1.2mm}
+ul.ic{list-style:none;padding:0}
+ul.ic li{position:relative;padding-left:6.5mm}
+ul.ic li:before{content:"✓";position:absolute;left:0;top:.4mm;width:4.4mm;height:4.4mm;border-radius:50%;background:var(--greensoft);color:var(--green);font-size:7pt;font-weight:800;text-align:center;line-height:4.4mm}
+ul.ic.no li:before{content:"×";background:var(--lavsoft);color:var(--ind);font-size:9pt}
+ul.ic.box-ck li:before{content:"";background:#fff;border:1.2px solid var(--ind);border-radius:1mm;width:3.8mm;height:3.8mm}
+.box{background:var(--soft);border-radius:4mm;padding:4mm 5mm;margin:0 0 3.5mm}
+.box.g{background:var(--goldsoft)}.box.l{background:var(--lavsoft)}
+.box h3:first-child{margin-top:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:7mm}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:4.5mm}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm}
+.card{border:1px solid var(--hair);border-top:1.8mm solid var(--gold);border-radius:3mm;padding:3mm 3.5mm;font-size:8.8pt}
+.card.l{border-top-color:var(--lav)}.card.i{border-top-color:var(--ind)}.card.b{border-top-color:var(--brand)}
+.card b.t{display:block;font-size:9.8pt;margin-bottom:1mm}
+.card p{margin:0 0 1mm;color:#2f3d47}
+.num{font-size:21pt;font-weight:800;color:var(--brand);line-height:1}
+.num small{font-size:8.6pt;font-weight:600;color:var(--muted);display:block;margin-top:1mm;line-height:1.3}
+table{width:100%;border-collapse:collapse;font-size:8.6pt;line-height:1.38}
+th{font-size:7.2pt;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;padding:0 2.5mm 1.8mm 0;border-bottom:1.5px solid var(--ink);vertical-align:bottom}
+td{padding:1.7mm 2.5mm 1.7mm 0;border-bottom:1px solid var(--hair);vertical-align:top}
+td:first-child{font-weight:700}tr{break-inside:avoid}
+.shots{display:flex;gap:3.5mm;align-items:flex-start}
+.shot{margin:0;flex:1}
+.shot .scr{width:100%;aspect-ratio:780/1180;border-radius:2.5mm;overflow:hidden;border:1px solid #cfd8de;background:#fff}
+.shot .scr img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.shot figcaption{font-size:7.6pt;line-height:1.3;margin-top:1.5mm;color:var(--muted)}
+.shot figcaption b{color:var(--ink);display:block;font-size:8.1pt}
+.q{border-left:1.2mm solid var(--lav);background:#f8fafb;border-radius:2mm;padding:2.5mm 4mm;margin:2.5mm 0;font-size:8.8pt}
+.step{display:grid;grid-template-columns:9mm 1fr;gap:3mm;margin-bottom:3.5mm}
+.step .n{width:8mm;height:8mm;border-radius:50%;background:var(--navy);color:#fff;font-weight:700;text-align:center;line-height:8mm;font-size:10pt}
+.step>div>b:first-child{display:block;font-size:10pt}
+.cover{background:linear-gradient(160deg,#e3eef6 0%,#ece7f4 100%)}
+.rep-img{border:1px solid #cfd8de;border-radius:1.5mm;overflow:hidden;background:#fff}
+.rep-img img{width:100%;display:block}
+.faq b{display:block;font-size:9.4pt;margin-bottom:.6mm}
+.faq p{margin:0 0 3mm}
+.line{border-bottom:1px solid #b9c4cc;height:9.5mm}
+.fill h3{margin:3mm 0 0;font-size:9.6pt}
+.fill .hint{font-size:7.8pt;color:var(--muted);margin:0}
+</style></head><body>
+
+<!-- 1. Couverture -->
+<div class="page cover"><div class="bar"></div>
+<div style="display:flex;gap:6mm;align-items:center;margin-top:6mm"><img src="../presentation-soignants/logo.svg" style="width:22mm;height:22mm"><div><p class="eyebrow" style="margin:0">Guide d’utilisation · pour toi</p><div style="font-size:40pt;font-weight:800;letter-spacing:.02em;line-height:1">OUCH</div><div class="m" style="font-size:10pt;margin-top:1mm"><i>Ouch, Understand, Chart, Heal</i></div></div></div>
+<h1 style="font-size:25pt;margin-top:14mm;max-width:155mm">Ton carnet de douleur, une minute par jour. Et des semaines que tu peux enfin raconter.</h1>
+<p class="lead" style="max-width:150mm">OUCH est un carnet de douleur libre et gratuit, pour la fibromyalgie et les autres douleurs chroniques. Tu notes ta journée sur ton téléphone ; ton journal reste chez toi. Petit à petit, il t’aide à voir ce qui t’aggrave et ce qui t’apaise, et à arriver en consultation avec tes semaines en main.</p>
+<div class="shots" style="margin-top:9mm;gap:6mm">
+ <figure class="shot"><div class="scr"><img src="../presentation-soignants/img/today-1.png"></div></figure>
+ <figure class="shot"><div class="scr"><img src="../presentation-soignants/img/journal.png"></div></figure>
+ <figure class="shot"><div class="scr"><img src="../presentation-soignants/img/soulager.png"></div></figure>
+ <figure class="shot"><div class="scr"><img src="../presentation-soignants/img/consultation.png"></div></figure>
+</div>
+<div style="position:absolute;left:15mm;right:15mm;bottom:14mm;display:flex;gap:8mm;align-items:flex-end;justify-content:space-between">
+ <div class="small" style="max-width:112mm">Décrit d’après la version 0.15.0 · 19 novembre 2026. Les captures d’écran viennent du mode démonstration : <b>données fictives</b>. OUCH est un carnet : il ne remplace pas l’avis de ton médecin, ne pose pas de diagnostic et ne recommande aucun traitement. Logiciel libre, licence CeCILL v2.1.</div>
+ <div style="text-align:center;font-size:7.6pt;line-height:1.3"><img src="../presentation-soignants/qr.svg" style="width:22mm;display:block;margin:0 auto 1mm"><b>maxauvy.github.io/OUCH</b></div>
+</div></div>
+
+<!-- 2. En bref -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">1 · En bref</p><h2>Pourquoi tenir un carnet, et pourquoi celui-ci</h2>
+<div class="two" style="gap:8mm">
+<div>
+<h3 style="margin-top:0">Ce que tu connais sans doute</h3>
+<p>« Alors, comment ça s’est passé depuis la dernière fois ? » En consultation, il faut se souvenir de plusieurs semaines d’un coup, et ce sont souvent les derniers jours qui prennent toute la place. Les jours les plus durs, ceux que tu voudrais pouvoir montrer, sont aussi ceux où tu n’as pas la force d’écrire.</p>
+<p>OUCH est fait pour ces jours-là : de gros boutons, presque rien à remplir, et un écran qui s’allège quand tu vas moins bien. Un chiffre suffit pour que ta journée compte.</p>
+</div>
+<div>
+<h3 style="margin-top:0">Trois promesses</h3>
+<ul class="ic" style="margin-top:1mm">
+<li><b>Simple.</b> Ta douleur, de 0 à 10, et c’est noté. Le reste est facultatif : tu ajoutes ce qui t’aide à te comprendre, rien de plus.</li>
+<li><b>À toi.</b> Pas de compte, pas de serveur. Ton journal reste sur ton téléphone, et c’est toi qui décides de ce que tu partages, avec qui.</li>
+<li><b>Honnête.</b> OUCH décrit ce que tu as noté. Quand il relève un rapprochement dans tes notes, il te dit que c’est une piste à regarder, et que c’est à toi de la garder ou de l’écarter.</li>
+</ul></div></div>
+<div class="four" style="margin:3mm 0 4mm">
+<div class="card b"><div class="num">&lt; 1 min<small>pour noter ta journée</small></div></div>
+<div class="card b"><div class="num">0 €<small>libre et gratuit, sans publicité</small></div></div>
+<div class="card b"><div class="num">0 compte<small>rien à créer, aucun mot de passe à retenir pour l’utiliser</small></div></div>
+<div class="card b"><div class="num">Hors ligne<small>une fois installé sur l’écran d’accueil</small></div></div>
+</div>
+<div class="two">
+<div class="box" style="margin:0"><h3>Ce qu’OUCH fait pour toi</h3>
+<ul class="ic" style="margin:0"><li>Garder la trace de tes journées, même les plus courtes.</li><li>Te montrer l’évolution, et les jours plus difficiles que d’habitude.</li><li>Relever ce qui revient les bons jours, et ce qui précède les mauvais.</li><li>Te proposer d’essayer une chose une semaine, puis de comparer.</li><li>Préparer ta consultation, et un rapport pour ton médecin.</li></ul></div>
+<div class="box l" style="margin:0"><h3>Ce qu’il te laisse décider</h3>
+<ul class="ic no" style="margin:0"><li>Il ne pose aucun diagnostic et ne te dit pas quel traitement prendre.</li><li>Il ne te note pas : pas de score, pas de série à tenir, rien à perdre.</li><li>Il ne conclut pas à ta place : un rapprochement reste une piste.</li><li>Il n’envoie rien sans que tu l’aies demandé.</li></ul></div></div>
+<h3 style="margin-top:5mm">Quatre lettres, quatre gestes</h3>
+<div class="four" style="margin-bottom:2mm">
+<div class="card"><b class="t">O · Ouch</b><p>Tu notes ta douleur, telle qu’elle est, sans avoir à la justifier.</p></div>
+<div class="card l"><b class="t">U · Understand</b><p>Tu comprends, à ton rythme, ce qui l’aggrave et ce qui l’apaise.</p></div>
+<div class="card i"><b class="t">C · Chart</b><p>Tu montres tes semaines, à ton médecin ou à tes proches.</p></div>
+<div class="card b"><b class="t">H · Heal</b><p>Tu prends soin de toi, avec ce qui t’aide vraiment.</p></div>
+</div>
+<h3 style="margin-top:4mm">Pour qui ?</h3>
+<p>Pour toute personne qui vit avec une douleur chronique : la fibromyalgie d’abord, et aussi la polyarthrite rhumatoïde, la spondyloarthrite, le rhumatisme psoriasique, l’endométriose, la migraine, la lombalgie, la sclérose en plaques ou la douleur myofasciale. Tu indiques tes maladies (diagnostiquées ou suspectées), et l’app te propose les mesures les plus utiles pour toi. Tout reste facultatif.</p>
+<div class="foot"><span>OUCH · guide pour les utilisateurs</span><span>2</span></div></div>
+
+<!-- 3. Vue d'ensemble -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">2 · Vue d’ensemble</p><h2>Quatre gestes, cinq onglets</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3mm 8mm;margin-bottom:3mm">
+<div class="step"><div class="n">1</div><div><b>Noter</b>Chaque jour, en moins d’une minute : ta douleur, et si tu veux le sommeil, la fatigue, les zones, tes traitements, ce qui t’a aidé.</div></div>
+<div class="step"><div class="n">2</div><div><b>Comprendre</b>Ton journal raconte : la courbe, les jours plus durs, l’avant et l’après d’un changement de traitement, ce que tes notes laissent voir.</div></div>
+<div class="step"><div class="n">3</div><div><b>Soulager</b>Un plan écrit à l’avance pour les jours difficiles, tes gestes avec un minuteur, une respiration lente.</div></div>
+<div class="step"><div class="n">4</div><div><b>Partager</b>Tes questions et un rapport pour ton médecin, une fiche pour un soignant qui ne te connaît pas, ta météo du jour pour tes proches.</div></div>
+</div>
+<h3>Où trouver quoi</h3>
+<table>
+<tr><th style="width:24mm">Onglet</th><th style="width:56mm">Ce que tu y trouves</th><th>Quand t’en servir</th></tr>
+<tr><td>Aujourd’hui</td><td>Ta douleur du jour, tes zones, tes mesures, tes traitements, ce qui a aidé, une note ; ta météo à partager ; la page « Enfants »</td><td>Chaque jour, une minute. C’est là que l’app s’ouvre.</td></tr>
+<tr><td>Journal</td><td>Le calendrier du mois, coloré selon la météo de chaque jour</td><td>Pour retrouver un jour précis, ou corriger une journée.</td></tr>
+<tr><td>Tendances</td><td>Ta courbe, ce qui s’est passé, tes zones, tes traitements, ce que tes notes racontent, comparer deux périodes</td><td>De temps en temps, quand tu as envie de prendre du recul. Rien ne presse.</td></tr>
+<tr><td>Soulager</td><td>Mon plan des jours difficiles, mes gestes, respirer lentement, deux exercices de détente</td><td>Prépare-le un jour où ça va ; ouvre-le un jour où ça va moins bien.</td></tr>
+<tr><td>Consultation</td><td>Ton rendez-vous et tes questions, ton ordonnance, le rapport, la fiche pour un soignant</td><td>Quelques jours avant un rendez-vous, et juste après.</td></tr>
+<tr><td>Réglages</td><td>Ton profil, ce que tu suis, le rappel, les suggestions, le verrou, tes sauvegardes, le style</td><td>Au début, puis quand tu veux changer quelque chose.</td></tr>
+</table>
+<div class="box g" style="margin-top:4mm"><h3>Quand tu vas mal, l’app se fait discrète</h3><p style="margin:0">Les jours plus difficiles, l’écran se réduit à ta douleur et à un mot gentil. Les pistes, les essais et les bilans attendent que tu ailles mieux. Les autres jours, ce qu’il y a à voir tient en une ligne (« 2 petites choses pour toi »), que tu ouvres si tu en as envie.</p></div>
+<p class="small">Et aussi : français ou anglais, deux styles (« Météo » et « Léger »), chacun en clair ou en sombre, et un texte qui suit la taille de police de ton téléphone.</p>
+<div class="foot"><span>OUCH · guide pour les utilisateurs</span><span>3</span></div></div>
+
+<!-- 4. Commencer -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">3 · Commencer</p><h2>Cinq minutes pour t’installer</h2>
+<div class="two" style="gap:8mm">
+<div>
+<div class="step"><div class="n">1</div><div><b>Ouvre l’adresse</b>Sur ton téléphone : <b>maxauvy.github.io/OUCH</b>, ou scanne le code ci-dessous avec l’appareil photo. Rien à télécharger depuis un magasin d’applications.</div></div>
+<div class="step"><div class="n">2</div><div><b>Installe-la sur ton écran d’accueil</b><b style="display:block;font-size:8.8pt;margin-top:1mm">Sur iPhone</b>Ouvre la page dans Safari, touche « Partager », puis « Sur l’écran d’accueil ».<b style="display:block;font-size:8.8pt;margin-top:1mm">Sur Android</b>Dans le menu du navigateur, cherche « Installer l’application » ou « Ajouter à l’écran d’accueil ».<span class="m" style="display:block;margin-top:1mm;font-size:8.4pt">OUCH s’ouvre alors d’un geste, comme une autre app, et fonctionne sans réseau. C’est aussi ce qui protège le mieux ton journal (page 10).</span></div></div>
+<div class="step"><div class="n">3</div><div><b>Laisse-toi guider, ou passe</b>À la première ouverture, un assistant te propose : tes maladies, ton prénom, tes traitements, un rappel. Chaque question peut être passée, et l’assistant se relance plus tard depuis les Réglages.</div></div>
+<div class="step"><div class="n">4</div><div><b>Note ta première journée</b>Touche ta douleur, de 0 à 10. C’est tout ce qu’il faut.</div></div>
+<div class="step"><div class="n">5</div><div><b>Choisis un rappel, si tu veux</b>Le plus fiable : un événement dans l’agenda de ton téléphone, qui sonne chaque jour à l’heure choisie, même app fermée. Rien n’est envoyé pour cela.</div></div>
+</div>
+<div>
+<div class="box" style="margin-top:0"><h3>Tes mesures, rangées pour toi</h3><p style="margin:0">Selon les maladies que tu indiques, l’assistant range ce que tu peux suivre en trois niveaux : <b>recommandé pour toi</b>, <b>utile aussi</b>, et <b>tout le reste</b>. Tu coches ce qui te parle. Raideur au réveil, réveils à cause de la douleur, gêne dans les gestes, mal de tête, règles… Moins tu en coches, plus la saisie est rapide. Tu pourras en ajouter ou en retirer à tout moment (Réglages).</p></div>
+<div class="box l"><h3>Juste pour voir ? Essaie avec un exemple</h3><p style="margin:0">Dans l’assistant ou dans les Réglages, « Découvrir avec un exemple » installe 90 jours fictifs, avec une visite guidée, dans un espace à part : ton propre journal n’est pas touché. « Quitter » efface l’exemple. Tu peux aussi ouvrir <b>maxauvy.github.io/OUCH/?demo</b>.</p></div>
+<div style="text-align:center;margin-top:5mm"><img src="../presentation-soignants/qr.svg" style="width:36mm"><div style="font-size:8.6pt;margin-top:1mm"><b>maxauvy.github.io/OUCH</b></div></div>
+<p class="small" style="margin-top:4mm">Sur ordinateur aussi, OUCH s’ouvre dans le navigateur et peut s’installer. Mais ton journal reste sur l’appareil où tu l’as tenu : choisis celui que tu as le plus souvent sous la main, en général ton téléphone.</p>
+</div></div>
+<div class="box g" style="margin-top:3mm"><h3>Ta première semaine</h3>
+<div class="three" style="gap:6mm"><p style="margin:0"><b>Choisis un moment.</b> Le soir, par exemple, quand la journée est derrière toi. Le rappel t’aide à en faire une habitude.</p><p style="margin:0"><b>Commence petit.</b> La douleur seule, puis le sommeil si tu veux. Tu ajouteras le reste quand tu en auras envie.</p><p style="margin:0"><b>Laisse venir.</b> Les courbes et les pistes ont besoin de quelques semaines de notes. Il n’y a rien à réussir d’ici là.</p></div></div>
+<div class="foot"><span>OUCH · guide pour les utilisateurs</span><span>4</span></div></div>
+
+<!-- 5. Aujourd'hui -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">4 · Noter ta journée</p><h2>L’onglet « Aujourd’hui » : une minute suffit</h2>
+<div class="shots" style="margin-bottom:4mm">
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/today-1.png"></div><figcaption><b>Un jour difficile</b>L’écran s’allège : un mot doux, ce qui t’a déjà fait du bien, ta douleur seule.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/today-zones.png"></div><figcaption><b>Où as-tu mal ?</b>De face et de dos : une grande région, puis la partie et le côté.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/today-meds.png"></div><figcaption><b>Traitements et ce qui a aidé</b>Ton traitement de fond est déjà coché ; tu ajoutes les prises au besoin.</figcaption></figure>
+</div>
+<div class="two">
+<div>
+<h3 style="margin-top:0">Ce que tu peux noter</h3>
+<table>
+<tr><td style="width:27mm">Douleur</td><td>De 0 à 10, onze cases à toucher. Pense à <b>toute ta journée</b>, pas seulement au moment où tu notes. C’est la seule chose nécessaire.</td></tr>
+<tr><td>Zones</td><td>Sur une silhouette, 25 zones, à gauche et à droite ; « douleur partout » si c’est le cas.</td></tr>
+<tr><td>Mesures</td><td>Fatigue, sommeil, stress, brouillard mental, humeur, activité, et celles que tu as choisies.</td></tr>
+<tr><td>Traitements</td><td>Déclarés une fois. Ensuite : les prises au besoin, le soulagement, un effet indésirable, une dose oubliée.</td></tr>
+<tr><td>Ce qui a aidé</td><td>Marche courte, bain ou douche chaude, étirements, méditation… ce que toi, tu as repéré.</td></tr>
+<tr><td>Si tu veux</td><td>La météo du jour (automatique ou à la main), ton cycle, une note libre.</td></tr>
+</table></div>
+<div>
+<h3 style="margin-top:0">Quelques repères</h3>
+<ul class="ic">
+<li><b>Un jour oublié n’est pas grave.</b> Il n’est jamais inventé dans les calculs. Si hier n’a pas été noté, l’app te propose d’y revenir, une fois, sans reproche.</li>
+<li><b>Tu peux tout corriger</b> plus tard, depuis le Journal. Une journée écrite après coup est simplement marquée comme telle.</li>
+<li><b>Ton traitement change ?</b> Dis-le dans tes traitements (nouvelle dose, arrêt) : le changement apparaîtra sur ta courbe, et tu pourras voir l’avant et l’après.</li>
+<li><b>Une période plus difficile commence ?</b> Tu peux la noter toi-même, sous la douleur du jour : quand elle a commencé, ce qui a pu y contribuer, un mot. L’écran s’allège, et ton médecin la verra dans le rapport.</li>
+</ul>
+<div class="box g" style="margin-top:2mm"><p style="margin:0"><b>Ta météo du jour.</b> Tes mesures se résument en un ciel, du dégagé à l’orage. C’est une image, pas une note : elle dit comment était ta journée, sans la juger.</p></div>
+</div></div>
+<div class="foot"><span>OUCH · guide pour les utilisateurs</span><span>5</span></div></div>
+
+<!-- 6. Comprendre -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">5 · Comprendre</p><h2>Journal et Tendances : ce que ton carnet raconte</h2>
+<div class="shots" style="margin-bottom:4mm">
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/journal.png"></div><figcaption><b>Journal</b>Un mois à la fois, chaque jour avec sa météo.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/trends-1.png"></div><figcaption><b>Ta courbe</b>Moyenne sur 7 jours, jours plus durs ombrés, changements de traitement en pointillé.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/lead.png"></div><figcaption><b>Ce que tes notes racontent</b>Une piste à la fois : tu la gardes, tu l’écartes, ou tu essaies.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/compare.png"></div><figcaption><b>Comparer deux périodes</b>Les mêmes mesures, côte à côte.</figcaption></figure>
+</div>
+<div class="two">
+<div>
+<h3 style="margin-top:0">Dans Tendances</h3>
+<ul>
+<li><b>Pour ma consultation</b> : en haut, l’essentiel à dire à ton médecin.</li>
+<li><b>Ta courbe</b> sur 7, 30, 90 jours ou depuis le début, avec ce qui s’est passé : jours plus durs, changements de traitement, essais.</li>
+<li><b>Tes zones</b> : où tu as eu mal, semaine après semaine.</li>
+<li><b>Tes traitements</b> : ce que tu as pris, le soulagement, les effets notés, et l’avant-après d’un changement de dose.</li>
+<li><b>Les jours de la semaine</b> où ça va le mieux ou le moins bien.</li>
+<li><b>Comparer deux périodes</b>, par exemple depuis ta dernière consultation.</li>
+<li><b>Après tes jours actifs</b> : si les lendemains des jours où tu as beaucoup donné sont plus durs que d’habitude.</li>
+</ul>
+<p class="small">Les jours « nettement plus durs que d’habitude » sont ceux où ta douleur dépasse ton niveau habituel pendant au moins trois jours. Dans Tendances et dans le rapport, l’app les appelle « poussées ».</p>
+</div>
+<div>
+<h3 style="margin-top:0">« Ce que tes notes racontent »</h3>
+<p>Au fil des semaines, l’app peut relever un rapprochement dans tes notes : le sommeil, le stress, l’activité de la veille, ce qui a aidé. Elle te montre les deux moyennes et le nombre de jours, et tu choisis :</p>
+<ul class="ic">
+<li><b>Garder pour ta consultation</b> : la piste apparaîtra dans ton rapport.</li>
+<li><b>Essayer une semaine</b> : tu notes la chose les jours où tu peux la faire, sans objectif. À la fin, l’app met côte à côte les jours avec et sans.</li>
+<li><b>« Pas vraiment »</b> : elle est mise de côté, et ne revient que si elle se précise.</li>
+</ul>
+<div class="q"><b>Une piste reste une piste.</b> Les jours où tu marches, tu as peut-être moins mal ; ou bien tu marches parce que tu as moins mal. L’app te le rappelle à chaque fois. C’est une idée à regarder, et à discuter avec ton médecin si elle te parle.</div>
+<p class="small">Tu préfères ne rien recevoir de tout cela ? Un seul réglage, « Suggestions », coupe toutes les pistes. Et rien ne s’affiche pendant une période difficile.</p>
+</div></div>
+<div class="foot"><span>OUCH · guide pour les utilisateurs</span><span>6</span></div></div>
+
+<!-- 7. Soulager -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">6 · Soulager</p><h2>L’onglet « Soulager » : préparé les bons jours, ouvert les mauvais</h2>
+<div class="shots" style="margin-bottom:4mm">
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/soulager.png"></div><figcaption><b>Soulager</b>Ton plan, respirer et se détendre, tes gestes.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/plan.png"></div><figcaption><b>Mon plan des jours difficiles</b>Quatre questions, tes réponses, lues en grand.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/gestures.png"></div><figcaption><b>Mes gestes</b>Jusqu’à cinq, chacun avec la durée que tu choisis.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/breathing.png"></div><figcaption><b>Un moment pour souffler</b>1, 3 ou 5 minutes, sans réseau.</figcaption></figure>
+</div>
+<div class="two">
+<div>
+<h3 style="margin-top:0">Mon plan des jours difficiles</h3>
+<p>Un jour où tu te sens assez bien, prends cinq minutes pour répondre à quatre questions : <b>ce que je m’autorise</b> (annuler, me reposer, demander de l’aide), <b>ce qui m’aide</b>, <b>qui prévenir</b>, et <b>ce que je ne dois pas oublier</b>. Le jour où ça va mal, tu n’as plus à réfléchir : tu ouvres ton plan, et tu relis ce que tu t’es écrit. Une version papier est à la fin de ce guide.</p>
+<h3>Mes gestes</h3>
+<p>Les choses qui t’aident le plus souvent (bain chaud, marche courte, étirements…), chacune avec un minuteur. C’est toi qui choisis les gestes et leur durée.</p>
+<h3>Respirer, se détendre</h3>
+<p>Un niveau d’eau monte et descend : tu inspires quand il monte, tu souffles quand il descend. Vibreur et musique d’ambiance si tu veux. Deux exercices lus pas à pas : relâcher le corps zone par zone, et un geste doux pour la nuque et les épaules.</p>
+</div>
+<div>
+<h3 style="margin-top:0">Dans « Pour toi », de temps en temps</h3>
+<ul>
+<li><b>Bouger, ce que disent les études</b> : une fois, ce que des sources reconnues disent de l’activité physique pour ta maladie, avec leurs références. Pour savoir quoi faire et combien, l’app te renvoie à ton kiné ou à ton médecin.</li>
+<li><b>Des prises oubliées</b> : si tu as noté plusieurs oublis d’un traitement de fond, un mot sans jugement, qui évoque un pilulier ou un rappel, et ton médecin ou ton pharmacien.</li>
+<li><b>La pression baisse demain</b> : si tu l’as activé, et seulement si, dans ton carnet, ces jours-là ont été plus durs pour toi.</li>
+<li><b>Une période qui se termine</b> : l’app le remarque en une phrase douce.</li>
+</ul>
+<div class="box"><p style="margin:0"><b>Pour être franc :</b> ces gestes peuvent détendre un peu, mais ils ne soignent pas la douleur, et l’écran le dit. Il n’y a ni score ni série : un jour sans exercice ne compte pour rien. Si un geste te fait mal, arrête-le et parles-en à un professionnel.</p></div>
+</div></div>
+<div class="foot"><span>OUCH · guide pour les utilisateurs</span><span>7</span></div></div>
+
+<!-- 8. Consultation -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">7 · Ta consultation</p><h2>Arriver préparé, repartir avec l’essentiel</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 66mm;gap:4mm;align-items:start;margin-bottom:3mm">
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/consultation.png"></div><figcaption><b>Consultation</b>Rendez-vous, ordonnance, rapport, fiche.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/caresheet.png"></div><figcaption><b>Fiche pour un soignant</b>Une page pour quelqu’un qui ne te connaît pas.</figcaption></figure>
+<figure class="shot"><div class="rep-img"><img src="../presentation-soignants/img/report-gp-1.png"></div><figcaption><b>Le rapport</b>Page 1 de la version médecin traitant (données fictives).</figcaption></figure>
+</div>
+<div class="two">
+<div>
+<h3 style="margin-top:0">Avant, pendant, après</h3>
+<div class="step"><div class="n">1</div><div><b>Avant</b>Note la date du rendez-vous, tes questions, et ce dont tu veux parler en premier. Quinze jours avant, une carte douce te le rappelle.</div></div>
+<div class="step"><div class="n">2</div><div><b>Pendant</b>Montre ton rapport sur l’écran, ou imprime-le. Tes questions sont en tête : tu ne les oublieras pas devant la porte.</div></div>
+<div class="step"><div class="n">3</div><div><b>Après</b>Écris ce que ton médecin t’a dit. Si une ordonnance t’a été remise, note sa durée : l’app te prévient une semaine avant la fin (ou deux, au choix).</div></div>
+<h3>La fiche pour un soignant</h3>
+<p style="margin:0">Pour les urgences ou un nouveau médecin : tes maladies, tes traitements, les effets indésirables notés, ta douleur habituelle, ce qui te soulage. Tu y ajoutes toi-même tes allergies et des personnes à joindre. À montrer, imprimer ou enregistrer en PDF, en français ou en anglais.</p>
+</div>
+<div>
+<h3 style="margin-top:0">Le rapport : quelle version choisir ?</h3>
+<p>Onglet Consultation › « Préparer le rapport ». Il couvre la période depuis ta dernière consultation, et la compare à la même durée juste avant.</p>
+<table>
+<tr><th style="width:27mm"></th><th>Médecin traitant</th><th>Centre douleur</th></tr>
+<tr><td>Longueur</td><td>3 à 5 pages</td><td>6 à 10 pages</td></tr>
+<tr><td>Pour qui</td><td>Ton généraliste, un rhumatologue, une consultation courte</td><td>Un centre ou une consultation douleur, un suivi détaillé</td></tr>
+<tr><td>Dans les deux</td><td colspan="2">Ta douleur et son évolution, tes traitements, tes questions, les pistes que tu as gardées et tes essais</td></tr>
+</table>
+<div class="q" style="margin-top:3mm">Le rapport décrit ce que tu as noté, sans l’interpréter : c’est ton médecin qui en tire des conclusions, avec toi. Il est fabriqué sur ton téléphone ; le nom que tu y tapes n’est pas enregistré.</div>
+<p class="small">Si ton médecin ne connaît pas OUCH, une fiche d’une page, « Lire un rapport OUCH », l’aide à lire son premier rapport.</p>
+</div></div>
+<div class="foot"><span>OUCH · guide pour les utilisateurs</span><span>8</span></div></div>
+
+<!-- 9. Proches -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">8 · Tes proches</p><h2>Dire comment tu vas, sans tout expliquer</h2>
+<div style="display:grid;grid-template-columns:50mm 50mm 1fr;gap:5mm;align-items:start">
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/weather.png"></div><figcaption><b>Ta météo du jour</b>Une image, un petit mot, et tu l’envoies toi-même.</figcaption></figure>
+<figure class="shot"><div class="scr"><img src="../presentation-soignants/img/kids.png"></div><figcaption><b>Expliquer à ton enfant</b>Des mots simples, pour trois âges.</figcaption></figure>
+<div>
+<h3 style="margin-top:0">Ta météo du jour, à partager</h3>
+<p>Il y a des jours où l’on n’a pas envie de raconter. Depuis l’écran Aujourd’hui, OUCH résume ta journée en une image : ciel dégagé, voilé, nuageux, pluie ou orage, avec ta douleur, ta fatigue et ton humeur. Tu peux y ajouter un mot (« Je me repose, appelle-moi demain »), puis l’envoyer par message à qui tu veux. Rien ne part sans que tu le choisisses.</p>
+<h3>La page « Enfants »</h3>
+<p>Faite pour être montrée à ton enfant. Elle raconte ta météo avec des mots à sa hauteur (« aujourd’hui, le ciel de maman est un peu voilé »), propose des idées pour aider, et explique ta maladie selon son âge : 4 à 7 ans, 8 à 12 ans, 13 à 17 ans. Tu choisis « maman » ou « papa ».</p>
+</div></div>
+<h3 style="margin-top:5mm">Qui voit quoi : c’est toi qui choisis</h3>
+<table>
+<tr><th style="width:38mm">Avec qui</th><th style="width:52mm">Ce que tu peux partager</th><th>Comment</th></tr>
+<tr><td>Ton médecin</td><td>Le rapport (3 à 5 ou 6 à 10 pages)</td><td>Sur l’écran pendant la consultation, imprimé, ou en PDF que tu envoies toi-même.</td></tr>
+<tr><td>Un soignant qui ne te connaît pas</td><td>La fiche d’une page</td><td>À montrer sur l’écran, imprimer ou enregistrer en PDF.</td></tr>
+<tr><td>Tes proches</td><td>Ta météo du jour, avec un mot</td><td>Une image que tu envoies par message.</td></tr>
+<tr><td>Ton enfant</td><td>La page « Enfants »</td><td>Tu la lui montres sur ton téléphone.</td></tr>
+<tr><td>Personne d’autre</td><td>Tout le reste</td><td>Ton journal, tes notes, tes pistes restent sur ton téléphone.</td></tr>
+</table>
+<div class="box l" style="margin-top:4mm"><h3>En accès anticipé : ta météo, chaque jour, toute seule</h3><p style="margin:0">Si tu as activé la sauvegarde vers Dropbox, ta météo du jour peut partir d’elle-même, chiffrée, dès que ta journée est remplie. Ton proche scanne une fois un code que tu lui montres, et la regarde quand il veut dans <b>OUCH Duo</b>, une petite app faite pour lui. Il n’est pas prévenu, et tu coupes tout d’un geste : le lien ne mène alors plus nulle part. Toute personne qui a ce code voit ton image du jour : ne le donne qu’à des gens de confiance.</p></div>
+<div class="box g"><p style="margin:0"><b>Une idée :</b> la météo du jour est souvent plus facile à envoyer qu’un long message. Elle dit « aujourd’hui, c’est dur » sans que tu aies à te justifier, et tes proches savent comment ajuster.</p></div>
+<div class="foot"><span>OUCH · guide pour les utilisateurs</span><span>9</span></div></div>
+
+<!-- 10. Données -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">9 · Tes données</p><h2>Ton journal est chez toi : garde-le à l’abri</h2>
+<div class="three" style="margin-bottom:4mm">
+<div class="card b"><b class="t">Où il est</b><p>Dans le navigateur de ton téléphone, et nulle part ailleurs : pas de compte, pas de serveur. Personne d’autre que toi n’y a accès à distance, ni le développeur d’OUCH.</p></div>
+<div class="card"><b class="t">Ce qui peut le faire disparaître</b><p>Perdre ou changer de téléphone, vider les données du navigateur, ou un navigateur qui fait de la place. Safari efface même les sites non installés après une semaine sans visite : <b>installe OUCH</b> sur l’écran d’accueil.</p></div>
+<div class="card i"><b class="t">Ce qui le protège</b><p>Une <b>sauvegarde</b> : un fichier chiffré avec un mot de passe que tu choisis, à ranger où tu veux. L’app te rappelle d’en faire une quand ton journal a changé.</p></div>
+</div>
+<div class="two">
+<div>
+<h3 style="margin-top:0">Faire une sauvegarde</h3>
+<div class="step"><div class="n">1</div><div><b>Réglages › Mes données</b>Touche « Exporter une sauvegarde ».</div></div>
+<div class="step"><div class="n">2</div><div><b>Choisis un mot de passe</b>Note-le en lieu sûr. OUCH ne le connaît pas : <b>sans lui, la sauvegarde ne peut pas être ouverte</b>, par personne.</div></div>
+<div class="step"><div class="n">3</div><div><b>Range le fichier</b>Sur iPhone, « Enregistrer dans Fichiers » (dans iCloud Drive, par exemple). Ailleurs : ton cloud personnel, ou un e-mail à toi-même.</div></div>
+<h3>Changer de téléphone</h3>
+<p>Installe OUCH sur le nouveau, puis Réglages › Mes données › « Importer une sauvegarde », et ton mot de passe.</p>
+<p class="small">En accès anticipé, et désactivée par défaut : une sauvegarde automatique du même fichier chiffré vers ton Dropbox. L’export CSV, lui, est en clair : il sert à analyser tes données, pas à les restaurer.</p>
+</div>
+<div>
+<h3 style="margin-top:0">Un verrou, si d’autres utilisent ton téléphone</h3>
+<p>Réglages › Verrouillage : un code à quatre chiffres cache OUCH après une minute. Il cache l’écran, il ne chiffre pas ton journal. OUCH ne garde pas ton code : si tu l’oublies, il faudra effacer l’appareil et restaurer une sauvegarde.</p>
+<h3>Ce qui sort de ton téléphone</h3>
+<ul>
+<li><b>Ce que tu envoies toi-même</b> : un rapport, une fiche, ta météo du jour, une sauvegarde.</li>
+<li><b>La météo automatique</b>, si tu l’actives : ta position est envoyée au service météo Open-Meteo, et une position arrondie à OpenStreetMap pour le nom de ta ville.</li>
+<li><b>Un signal « actif cette semaine »</b>, une fois par semaine, sans aucune donnée de santé ni identifiant, pour savoir combien de personnes utilisent OUCH. Une case des Réglages le coupe.</li>
+</ul>
+<p class="small">Le détail de ce que chaque service reçoit est dans la politique de confidentialité d’OUCH, sur la page du projet (fichier PRIVACY.md).</p>
+</div></div>
+<div class="two" style="margin-top:3mm">
+<div class="box" style="margin:0"><h3>Si tu perds ton téléphone</h3><p style="margin:0">Ton journal part avec lui : c’est pour cela que la sauvegarde compte. Avec ta dernière sauvegarde et son mot de passe, tu retrouves tout sur un nouveau téléphone, jusqu’au jour de cette sauvegarde.</p></div>
+<div class="box l" style="margin:0"><h3>Si tu veux arrêter</h3><p style="margin:0">Réglages › Mes données › « Supprimer mes données » efface tout de cet appareil, définitivement. Les sauvegardes que tu as exportées restent là où tu les as rangées : supprime-les toi-même si tu n’en veux plus.</p></div>
+</div>
+<div class="foot"><span>OUCH · guide pour les utilisateurs</span><span>10</span></div></div>
+
+<!-- 11. FAQ -->
+<div class="page"><div class="bar"></div>
+<p class="eyebrow">10 · Questions fréquentes</p><h2>Ce qu’on se demande souvent</h2>
+<div class="two faq" style="gap:8mm">
+<div>
+<b>Je n’ai pas noté depuis une semaine. Est-ce que c’est fichu ?</b>
+<p>Pas du tout. Les jours manquants restent vides, rien n’est inventé, et tout ce que tu as noté reste utile. Tu reprends quand tu veux. Pour la veille, l’app te propose d’y revenir ; pour les jours plus anciens, passe par le Journal.</p>
+<b>Je ne sais jamais quel chiffre mettre.</b>
+<p>Il n’y a pas de bonne réponse. Ce qui compte, c’est d’utiliser l’échelle à ta façon, de la même façon d’un jour à l’autre. Pense à ta journée en entier, pas seulement au moment où tu notes.</p>
+<b>Combien de choses dois-je suivre ?</b>
+<p>Le moins possible pour que ça reste facile. La douleur suffit. Ajoute une ou deux mesures qui te parlent (le sommeil, souvent), et retire celles que tu ne remplis jamais.</p>
+<b>Tenir un carnet, ça ne va pas me faire penser à ma douleur tout le temps ?</b>
+<p>C’est une vraie question, et elle n’a pas encore été étudiée. OUCH est fait pour prendre une minute, pas plus. Si ça te pèse, coupe les suggestions, note moins souvent, ou fais une pause : ton journal t’attendra.</p>
+<b>Je ne suis pas à l’aise avec mon téléphone.</b>
+<p>Une personne de confiance peut t’aider à l’installer et à passer l’assistant. Ensuite, il n’y a qu’un chiffre à toucher chaque jour ; le reste peut attendre, ou ne jamais servir.</p>
+</div>
+<div>
+<b>L’app me montre une piste. Dois-je changer quelque chose ?</b>
+<p>Rien ne t’y oblige. Une piste est une idée tirée de tes notes. Si elle te parle, tu peux l’essayer une semaine, ou la garder pour en parler à ton médecin. Pour un traitement, ne change rien sans lui.</p>
+<b>Mon médecin n’a jamais entendu parler d’OUCH.</b>
+<p>Le rapport se lit sans connaître l’app. Tu peux aussi lui laisser « Lire un rapport OUCH » (une page) ou la plaquette pour les soignants.</p>
+<b>Est-ce que quelqu’un peut lire mon journal ?</b>
+<p>À distance, non : il n’est envoyé nulle part. Mais quelqu’un qui a ton téléphone déverrouillé en main peut l’ouvrir : le verrou par code est là pour ça.</p>
+<b>OUCH est gratuit. Où est le piège ?</b>
+<p>Il n’y en a pas : pas de publicité, pas de revente de données, et rien à revendre puisque rien n’est collecté. OUCH est un logiciel libre, son code est public. Après quinze jours de journal, une carte discrète, tout en bas des Réglages, propose de soutenir le projet par un don ; rien n’est débloqué en échange.</p>
+<b>Puis-je l’utiliser sur mon téléphone et sur ma tablette ?</b>
+<p>Ton journal vit sur un seul appareil : les deux ne se synchronisent pas. Une sauvegarde permet de le déplacer de l’un à l’autre, mais le plus simple est d’en choisir un.</p>
+</div></div>
+<div class="box l" style="margin-top:2mm"><h3>Ce qu’OUCH ne remplace pas</h3><p style="margin:0">OUCH est un carnet. Il ne pose pas de diagnostic, ne recommande aucun traitement et ne surveille pas ta santé : personne ne regarde ce que tu notes. Si ta douleur change de nature, si un symptôme nouveau t’inquiète, ou si tu ne vas pas bien moralement, parles-en à ton médecin sans attendre ton prochain rendez-vous. <b>En cas d’urgence, appelle le 15 ou le 112.</b> Si tu as des idées suicidaires, le <b>3114</b> répond jour et nuit, gratuitement.</p></div>
+<div class="foot"><span>OUCH · guide pour les utilisateurs</span><span>11</span></div></div>
+
+<!-- 12. Annexe -->
+<div class="page"><div class="bar" style="background:var(--ind)"></div>
+<p class="eyebrow">Annexe · À détacher et à garder</p><h2>Mon plan des jours difficiles, sur papier</h2>
+<p class="m">À remplir un jour où ça va. Tu peux recopier tes réponses dans OUCH (Soulager › Mon plan), ou garder cette page sur ton frigo.</p>
+<div class="two" style="gap:8mm">
+<div class="fill">
+<h3>Ce que je m’autorise</h3><p class="hint">Annuler, me reposer, dire non, demander de l’aide…</p>
+<div class="line"></div><div class="line"></div><div class="line"></div>
+<h3>Ce qui m’aide</h3><p class="hint">Un bain chaud, une marche courte, une série, un appel…</p>
+<div class="line"></div><div class="line"></div><div class="line"></div>
+<h3>Qui prévenir</h3><p class="hint">Un prénom, un numéro, ce que je peux lui demander.</p>
+<div class="line"></div><div class="line"></div><div class="line"></div>
+<h3>À ne pas oublier</h3><p class="hint">Mon traitement au besoin, boire, manger un peu, ce n’est qu’une période…</p>
+<div class="line"></div><div class="line"></div><div class="line"></div>
+</div>
+<div>
+<div class="box" style="margin-top:3mm"><h3>Avant ma prochaine consultation</h3>
+<ul class="ic box-ck" style="margin:0">
+<li>J’ai noté la date dans l’onglet Consultation.</li>
+<li>J’ai écrit mes questions, et ce dont je veux parler en premier.</li>
+<li>J’ai regardé les pistes que j’ai gardées.</li>
+<li>J’ai préparé le rapport : médecin traitant ou centre douleur.</li>
+<li>Je sais quand finit mon ordonnance.</li>
+</ul></div>
+<div class="box g"><h3>Après la consultation</h3>
+<ul class="ic box-ck" style="margin:0">
+<li>J’ai écrit ce que mon médecin m’a dit.</li>
+<li>J’ai noté un changement de traitement, s’il y en a un.</li>
+<li>J’ai noté la durée de ma nouvelle ordonnance.</li>
+</ul></div>
+<div class="box l"><h3>Une fois par mois</h3>
+<ul class="ic box-ck" style="margin:0">
+<li>J’exporte une sauvegarde (Réglages › Mes données).</li>
+<li>Mon mot de passe de sauvegarde est rangé en lieu sûr.</li>
+</ul></div>
+<h3>Les phrases à garder</h3>
+<p class="m" style="font-size:8.8pt">« Un chiffre suffit. » · « Un jour oublié n’est pas grave. » · « Une piste n’est pas une preuve. » · « C’est moi qui décide de ce que je partage. »</p>
+</div></div>
+<div class="foot"><span>OUCH · guide pour les utilisateurs · maxauvy.github.io/OUCH</span><span>12</span></div></div>
+
+</body></html>
