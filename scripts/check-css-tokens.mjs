@@ -101,17 +101,25 @@ function walk(dir, ext, out = []) {
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-  const cssFiles = walk(join(root, 'dist', 'assets'), ['.css'])
-  if (!cssFiles.length) {
-    console.error('No built CSS in dist/assets: run `npm run build` first.')
-    process.exit(2)
+  const duoSrc = join(root, 'src', 'duo')
+  // Two apps, each checked against its own build: OUCH (dist/assets) and OUCH Duo (src/duo, dist/duo/assets).
+  const apps = [
+    { name: 'OUCH', built: join(root, 'dist', 'assets'), sources: walk(join(root, 'src'), ['.ts', '.tsx', '.css']).filter((f) => !f.startsWith(duoSrc)) },
+    { name: 'OUCH Duo', built: join(root, 'dist', 'duo', 'assets'), sources: walk(duoSrc, ['.ts', '.tsx', '.css']) },
+  ]
+  let failed = false
+  for (const app of apps) {
+    const cssFiles = walk(app.built, ['.css'])
+    if (!cssFiles.length) {
+      console.error(`No built CSS in ${app.built}: run \`npm run build\` first.`)
+      process.exit(2)
+    }
+    const css = cssFiles.map((f) => readFileSync(f, 'utf8')).join('\n')
+    const missing = missingTokens({ css, sources: app.sources.map((f) => readFileSync(f, 'utf8')) })
+    if (missing.length) {
+      failed = true
+      console.error(`${app.name}: read by the code but not declared in the base rules of the built CSS (in an @theme block that no utility class uses? only in the dark rules?):\n  ${missing.join('\n  ')}`)
+    } else console.log(`${app.name}: all the custom properties the code reads are declared in the base rules of the built CSS (${declaredTokens(css).size} declared).`)
   }
-  const css = cssFiles.map((f) => readFileSync(f, 'utf8')).join('\n')
-  const sources = walk(join(root, 'src'), ['.ts', '.tsx', '.css']).map((f) => readFileSync(f, 'utf8'))
-  const missing = missingTokens({ css, sources })
-  if (missing.length) {
-    console.error(`Read by the code but not declared in the base rules of the built CSS (in an @theme block that no utility class uses? only in the dark rules?):\n  ${missing.join('\n  ')}`)
-    process.exit(1)
-  }
-  console.log(`All the custom properties the code reads are declared in the base rules of the built CSS (${declaredTokens(css).size} declared).`)
+  if (failed) process.exit(1)
 }
