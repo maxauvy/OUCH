@@ -6,9 +6,26 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.15.1] - 2026-11-19
+
+Un bouton « Nouveautés » à côté de Réglages et un mot pour remercier celles et ceux qui utilisent déjà OUCH. Et côté documents : un guide pour les utilisateurs, de nouveaux flyers, et tous les PDF refaits pour cette version.
+
 ### Ajouté
 - **« Nouveautés », à côté de Réglages.** Sur la page Aujourd'hui, un bouton rond avec une cloche ouvre une feuille qui regroupe ce qu'OUCH a à dire de lui-même, le plus récent en haut ; chaque ligne ouvre sa fenêtre. Un petit point ambre dit qu'une nouveauté n'a pas été lue, sans chiffre ni rouge, et il attend pendant une période difficile. L'annonce des zones du corps y passe : sa carte quitte Réglages › À propos.
 - **Un mot de remerciement, « Merci d'être là ».** Pour les personnes qui avaient déjà au moins 7 jours notés le 20 novembre : il dit depuis combien de jours elles notent, qu'OUCH change vite grâce à ce qu'elles disent et essaient, qu'on peut dire ce qui gêne, et que le journal ne change pas d'une mise à jour à l'autre. Il s'ouvre tout seul une fois (jamais pendant une période difficile ni dans la démo), puis se relit dans « Nouveautés ».
+- **Un guide pour les utilisateurs et les patients**, en français et en anglais (12 pages A4, `docs/guide-patients/`), sur le modèle du guide de présentation pour les soignants : commencer, une page par onglet, les proches, les données et la sauvegarde, des questions fréquentes, et une annexe à détacher (le plan des jours difficiles sur papier, des listes à cocher avant et après une consultation). La version anglaise a ses propres captures, en anglais.
+- **Deux flyers A4 pour les futurs utilisateurs**, en français et en anglais : l'un dans le style du flyer A4 pour les soignants, l'autre, « Aube », plus léger (« Ta douleur a une météo. »).
+
+### Modifié
+- **Flyers et plaquette pour les patients, « Lire un rapport » pour les soignants** : captures du style Météo, l'image du jour pour un proche dans la plaquette, les six parties du rapport centre douleur dans le flyer A5.
+- **Le script des captures** (`scripts/capture-presentation.mjs`) prend les écrans en anglais avec `--lang en`.
+
+### Corrigé
+- **Flyer « Aube » : le dernier « o » de « météo » (et le « r » de « weather ») n'est plus coupé.**
+- **Flyer « Aube » : « météo » (et « weather ») n'a plus de bloc rose dans le PDF.** Le dégradé découpé dans les lettres s'affichait en rectangle plein dans Aperçu ; chaque lettre a maintenant sa couleur, du corail au violet.
+
+### Tests
+- 704 tests automatiques, dont de nouveaux pour « Nouveautés » : qui reçoit le mot de remerciement, ce qui est non lu, ce qui s'ouvre tout seul.
 
 ## [0.15.0] - 2026-11-19
 
@@ -510,7 +527,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.15.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.15.1...HEAD
+[0.15.1]: https://github.com/maxauvy/OUCH/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/maxauvy/OUCH/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/maxauvy/OUCH/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/maxauvy/OUCH/compare/v0.12.3...v0.13.0
