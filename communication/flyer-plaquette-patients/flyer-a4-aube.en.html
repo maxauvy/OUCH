@@ -12,7 +12,8 @@ body{margin:0;font-family:"Public Sans",sans-serif;color:var(--ink);font-size:9.
 .brand{display:flex;align-items:center;gap:3mm;font-family:var(--display);font-weight:800;font-size:15pt;letter-spacing:.02em}.brand img{width:11mm;height:11mm}
 .pill{background:var(--ink);border-radius:99px;padding:1.4mm 4mm;font-weight:700;font-size:8.6pt;color:#fff}
 h1{position:absolute;left:14mm;top:33mm;width:120mm;margin:0;font-family:var(--display);font-weight:800;font-size:56pt;line-height:.9;letter-spacing:-.045em}
-h1 em{font-style:normal;background:linear-gradient(90deg,#ff5f3d,#c46bd6);-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 .14em .06em 0;margin-right:-.14em}
+/* One solid colour per letter, from coral to violet: a gradient clipped to the text (background-clip:text) prints as a block in some PDF viewers (Aperçu). */
+h1 em{font-style:normal}
 .sub{position:absolute;left:14mm;top:80mm;width:100mm;margin:0;font-size:12pt;line-height:1.38;color:#3b3863}
 .sub b{color:var(--ink)}
 .phone{position:absolute;right:13mm;top:36mm;width:58mm;border-radius:7mm;overflow:hidden;border:1.6mm solid #0f0e26;box-shadow:4mm 5mm 0 #ffb58a;transform:rotate(5deg)}.phone img{display:block;width:100%}
@@ -36,7 +37,7 @@ h1 em{font-style:normal;background:linear-gradient(90deg,#ff5f3d,#c46bd6);-webki
 .fine{position:absolute;left:14mm;right:14mm;bottom:3.4mm;font-size:6.2pt;color:#6b668e}
 </style></head><body><div class="page">
 <div class="top"><div class="brand"><img src="assets/logo.svg" alt="">OUCH</div><div class="pill">Free · open source · no account</div></div>
-<h1>Your pain has a <em>weather.</em></h1>
+<h1>Your pain has a <em><span style="color:#ff5f3d">w</span><span style="color:#f76153">e</span><span style="color:#ee6269">a</span><span style="color:#e6647f">t</span><span style="color:#dd6694">h</span><span style="color:#d568aa">e</span><span style="color:#cc69c0">r</span><span style="color:#c46bd6">.</span></em></h1>
 <p class="sub">One minute a day to log it. A few weeks to see <b>what makes it worse and what eases it</b>. For fibromyalgia and other chronic pain.</p>
 <div class="phone"><img src="assets/en-today.png" alt=""></div>
 <div class="stk s1">1 min<small>a day</small></div><div class="stk s2">Free<small>no ads, no account</small></div><div class="stk s3">At home<small>on your phone</small></div>
