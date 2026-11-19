@@ -538,6 +538,8 @@ export interface Settings {
   indicatorInviteDismissCount?: number
   /** The notice about the new body zones was seen on this device (shown once, to a journal that holds zones of the first versions). Per device. */
   zonesNoticeSeen?: boolean
+  /** The « Nouveautés » items opened (see lib/news.ts), so the dot on the button goes away and the word of thanks opens only once. */
+  newsSeen?: string[]
   /** The weekly anonymous "active this week" signal (see lib/audience.ts). On unless it is `false`, so a journal from before the setting counts as on. A preference, restored from a backup. */
   audienceMeasurementEnabled?: boolean
   /** The appointment being prepared, if any. Restored from a backup. */

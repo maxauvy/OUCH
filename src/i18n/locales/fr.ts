@@ -706,6 +706,26 @@ const fr: Translations = {
     names: { shoulders: 'Épaules', arms: 'Bras', hands: 'Mains', hips: 'Hanches', legs: 'Jambes', feet: 'Pieds' },
   },
 
+  news: {
+    title: 'Nouveautés',
+    unreadLabel: 'Nouveautés, {{n}} non {{n:lue|lues}}',
+    intro: 'Ce qui change dans OUCH, et quelques mots pour toi.',
+    close: 'Fermer',
+    unread: 'non lu',
+    thanksRow: 'Merci d’être là',
+    thanksRowHint: 'Un mot de Maxime, qui fait OUCH',
+    zonesRowHint: 'Gauche et droite, une silhouette, les 19 régions',
+    thanks: {
+      title: 'Merci d’être là',
+      days: 'Tu notes tes journées dans OUCH depuis {{n}} {{n:jour|jours}}. Merci.',
+      pace: 'OUCH change vite : plusieurs versions par semaine depuis fin septembre, et beaucoup sont nées de ce que des personnes comme toi ont dit, essayé ou trouvé gênant.',
+      say: 'Si un changement te dérange, ou s’il te manque quelque chose, dis-le-moi : rien n’est figé.',
+      kept: 'Ton journal, lui, reste le même à chaque mise à jour : rien n’est perdu ni modifié.',
+      signature: 'Maxime, qui fait OUCH',
+      ok: 'Avec plaisir',
+    },
+  },
+
   weatherConditions: {
     ensoleille: 'Ensoleillé',
     variable: 'Variable',

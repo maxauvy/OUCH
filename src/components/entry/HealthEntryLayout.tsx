@@ -169,6 +169,7 @@ export function HealthEntryLayout({
   knownPositiveActions,
   onGoToBackup,
   onOpenSettings,
+  headerAction,
   afterHeader,
 }: {
   date: string
@@ -185,6 +186,8 @@ export function HealthEntryLayout({
   onGoToBackup?: () => void
   /** On today's page: the gear in the corner that opens the settings. */
   onOpenSettings?: () => void
+  /** On today's page: a round button before the gear (« Nouveautés »). */
+  headerAction?: ReactNode
   /** Under the title, on the day's page: the line that says what waits. */
   afterHeader?: ReactNode
 }) {
@@ -336,16 +339,21 @@ export function HealthEntryLayout({
             </p>
           )}
         </div>
-        {isToday && onOpenSettings && (
-          <button
-            type="button"
-            onClick={onOpenSettings}
-            aria-label={t.today.openSettings}
-            className="w-11 h-11 -mr-1 rounded-full flex items-center justify-center shrink-0"
-            style={{ background: 'var(--avatar-bg, var(--color-brand-soft))', color: 'var(--color-brand)' }}
-          >
-            <IconSettings size={22} stroke={1.8} aria-hidden />
-          </button>
+        {isToday && (onOpenSettings || headerAction) && (
+          <div className="-mr-1 flex shrink-0 items-center gap-2">
+            {headerAction}
+            {onOpenSettings && (
+              <button
+                type="button"
+                onClick={onOpenSettings}
+                aria-label={t.today.openSettings}
+                className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: 'var(--avatar-bg, var(--color-brand-soft))', color: 'var(--color-brand)' }}
+              >
+                <IconSettings size={22} stroke={1.8} aria-hidden />
+              </button>
+            )}
+          </div>
         )}
       </div>
   )
