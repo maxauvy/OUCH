@@ -704,6 +704,26 @@ const en: Translations = {
     names: { shoulders: 'Shoulders', arms: 'Arms', hands: 'Hands', hips: 'Hips', legs: 'Legs', feet: 'Feet' },
   },
 
+  news: {
+    title: 'What’s new',
+    unreadLabel: 'What’s new, {{n}} unread',
+    intro: 'What changes in OUCH, and a few words for you.',
+    close: 'Close',
+    unread: 'unread',
+    thanksRow: 'Thank you for being here',
+    thanksRowHint: 'A note from Maxime, who makes OUCH',
+    zonesRowHint: 'Left and right, a body outline, the 19 regions',
+    thanks: {
+      title: 'Thank you for being here',
+      days: 'You have been logging your days in OUCH for {{n}} {{n:day|days}}. Thank you.',
+      pace: 'OUCH changes fast: several versions a week since late September, and many grew out of what people like you said, tried or found awkward.',
+      say: 'If a change bothers you, or something is missing, tell me: nothing is set in stone.',
+      kept: 'Your diary, for its part, stays the same with every update: nothing is lost or altered.',
+      signature: 'Maxime, who makes OUCH',
+      ok: 'My pleasure',
+    },
+  },
+
   weatherConditions: {
     ensoleille: 'Sunny',
     variable: 'Variable',

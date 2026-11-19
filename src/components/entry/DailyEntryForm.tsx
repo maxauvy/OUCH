@@ -8,7 +8,7 @@ import { defaultIntakes } from '../../lib/medications'
 import { useTranslation } from '../../i18n'
 import { HealthEntryLayout } from './HealthEntryLayout'
 
-export function DailyEntryForm({ date, onGoToBackup, onOpenSettings, afterHeader }: { date: string; onGoToBackup?: () => void; onOpenSettings?: () => void; afterHeader?: ReactNode }) {
+export function DailyEntryForm({ date, onGoToBackup, onOpenSettings, headerAction, afterHeader }: { date: string; onGoToBackup?: () => void; onOpenSettings?: () => void; headerAction?: ReactNode; afterHeader?: ReactNode }) {
   const dbEntry = useEntry(date)
   const settings = useSettings()
   const allEntries = useAllEntries()
@@ -105,6 +105,7 @@ export function DailyEntryForm({ date, onGoToBackup, onOpenSettings, afterHeader
       knownPositiveActions={knownPositiveActions}
       onGoToBackup={onGoToBackup}
       onOpenSettings={onOpenSettings}
+      headerAction={headerAction}
       afterHeader={afterHeader}
     />
   )

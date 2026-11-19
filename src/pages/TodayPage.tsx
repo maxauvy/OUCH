@@ -16,17 +16,21 @@ import { BackupReminderCard } from '../components/backup/BackupReminderCard'
 import { AppointmentCard } from '../components/consultation/AppointmentCard'
 import { PrescriptionCard } from '../components/prescription/PrescriptionCard'
 import { TodayList } from '../components/today/TodayList'
+import { NewsButton } from '../components/news/NewsButton'
 import { useEarlyAccess } from '../lib/earlyAccess'
 import { todayISO } from '../lib/dates'
 
 export function TodayPage({
   onGoToBackup,
   onOpenSettings,
+  news,
   onOpenKids,
   onGoToTab,
 }: {
   onGoToBackup: () => void
   onOpenSettings: () => void
+  /** « Nouveautés »: how many items are unread (0 on a quiet day: the dot waits), and what opens the sheet. */
+  news?: { unread: number; onOpen: () => void }
   /** Absent when the kids' page is turned off in the settings. */
   onOpenKids?: () => void
   onGoToTab: (tab: Tab, date?: string) => void
@@ -63,6 +67,7 @@ export function TodayPage({
         date={date}
         onGoToBackup={IS_DEMO ? undefined : onGoToBackup}
         onOpenSettings={onOpenSettings}
+        headerAction={news && <NewsButton unread={news.unread} onClick={news.onOpen} />}
         afterHeader={
           <>
             {messages && logged && <TodayList messages={messages} settings={settings} entries={logged} today={date} earlyAccess={earlyAccess} onGoToTab={onGoToTab} />}

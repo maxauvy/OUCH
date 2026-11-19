@@ -516,6 +516,31 @@ export interface Translations {
     names: Record<(typeof COARSE_ZONES)[number], string>
   }
 
+  /** « Nouveautés »: the button next to the settings, the sheet it opens, and the word of thanks. */
+  news: {
+    /** The button's name, and the sheet's title. */
+    title: string
+    /** `{{n}}`: how many items are unread (the button's name for a screen reader). */
+    unreadLabel: string
+    intro: string
+    close: string
+    /** Said beside an unread item, for a screen reader. */
+    unread: string
+    thanksRow: string
+    thanksRowHint: string
+    zonesRowHint: string
+    thanks: {
+      title: string
+      /** `{{n}}`: days since the first logged day */
+      days: string
+      pace: string
+      say: string
+      kept: string
+      signature: string
+      ok: string
+    }
+  }
+
   weatherConditions: {
     ensoleille: string
     variable: string

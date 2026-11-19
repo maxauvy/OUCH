@@ -6,6 +6,10 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **« Nouveautés », à côté de Réglages.** Sur la page Aujourd'hui, un bouton rond avec une cloche ouvre une feuille qui regroupe ce qu'OUCH a à dire de lui-même, le plus récent en haut ; chaque ligne ouvre sa fenêtre. Un petit point ambre dit qu'une nouveauté n'a pas été lue, sans chiffre ni rouge, et il attend pendant une période difficile. L'annonce des zones du corps y passe : sa carte quitte Réglages › À propos.
+- **Un mot de remerciement, « Merci d'être là ».** Pour les personnes qui avaient déjà au moins 7 jours notés le 20 novembre : il dit depuis combien de jours elles notent, qu'OUCH change vite grâce à ce qu'elles disent et essaient, qu'on peut dire ce qui gêne, et que le journal ne change pas d'une mise à jour à l'autre. Il s'ouvre tout seul une fois (jamais pendant une période difficile ni dans la démo), puis se relit dans « Nouveautés ».
+
 ## [0.15.0] - 2026-11-19
 
 La météo du jour peut maintenant partir toute seule chez un proche : chiffrée chez Dropbox, lue dans OUCH Duo, l'app du proche. Et le style Météo, revu sur un vrai iPhone.

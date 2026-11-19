@@ -9,9 +9,6 @@ import { Segmented } from '../components/ui/Segmented'
 import { Footer } from '../components/layout/Footer'
 import { AboutCard } from '../components/about/AboutCard'
 import { SourcesCard } from '../components/about/SourcesCard'
-import { ZonesNotice } from '../components/about/ZonesNotice'
-import { useAllEntries } from '../hooks/useEntries'
-import { oldZonesUsed } from '../lib/bodyZones'
 import { SupportCard } from '../components/about/SupportCard'
 import { BackupSection } from '../components/settings/BackupSection'
 import { IS_DEMO } from '../lib/demoMode'
@@ -44,8 +41,6 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
   const look = useLook()
   // The weather look: the groups gathered in two cards, a sky behind the title.
   const rich = useRichLook()
-  const allEntries = useAllEntries()
-  const [zonesNoticeOpen, setZonesNoticeOpen] = useState(false)
   const [reviewing, setReviewing] = useState(false)
   // Raised to open the "Mes données" group from the lock's sheet ("Faire d'abord une sauvegarde").
   const [backupSignal, setBackupSignal] = useState(0)
@@ -388,22 +383,6 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
 
       <SettingsGroup icon={IconInfoCircle} tone="weather" title={t.settings.groups.about}>
         <AboutCard withHeader />
-
-        <Card>
-          <SectionTitle icon={IconInfoCircle}>{t.zonesNotice.cardTitle}</SectionTitle>
-          <p className="text-caption mb-3" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.zonesNotice.cardText}
-          </p>
-          <button
-            type="button"
-            onClick={() => setZonesNoticeOpen(true)}
-            className="min-h-11 rounded-[var(--radius-control)] px-4 text-control font-semibold"
-            style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}
-          >
-            {t.zonesNotice.cardButton}
-          </button>
-        </Card>
-        {zonesNoticeOpen && <ZonesNotice oldZones={oldZonesUsed(allEntries ?? [])} onClose={() => setZonesNoticeOpen(false)} />}
 
         {!IS_DEMO && (
           <Card>

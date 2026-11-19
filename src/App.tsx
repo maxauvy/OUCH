@@ -23,6 +23,10 @@ import { hasPain } from './lib/loggedEntries'
 import { useAllEntries, useTodayEntry } from './hooks/useEntries'
 import { oldZonesUsed } from './lib/bodyZones'
 import { ZonesNotice } from './components/about/ZonesNotice'
+import { NewsSheet } from './components/news/NewsSheet'
+import { ThanksNote } from './components/news/ThanksNote'
+import { daysWithOuch, newsItems, newsToOpen, quietDay, thanksEligible, unreadNews, type NewsId, type NewsState } from './lib/news'
+import { loggedEntries } from './lib/loggedEntries'
 import { useLeadList } from './hooks/useLeadList'
 import { useTodayMessages } from './hooks/useTodayMessages'
 import { trendsDot } from './lib/leadHints'
@@ -113,6 +117,24 @@ function AppShell() {
   const allEntries = useAllEntries()
   // A journal that holds zones of the first versions is told about the new ones, once per device.
   const oldZones = useMemo(() => oldZonesUsed(allEntries ?? []), [allEntries])
+  // « Nouveautés »: the button next to the settings, its sheet, and the item opened from it (or on its own, once per launch).
+  const logged = useMemo(() => loggedEntries(allEntries ?? []), [allEntries])
+  const today = todayISO()
+  const newsState: NewsState = {
+    hasOldZones: oldZones.length > 0,
+    zonesNoticeSeen: !!settings.zonesNoticeSeen,
+    thanksEligible: thanksEligible(logged),
+    seen: settings.newsSeen ?? [],
+  }
+  const quiet = quietDay({ illnesses: settings.illnesses, logged, all: allEntries ?? [], markedFlares: settings.markedFlares, today })
+  const unread = unreadNews(newsState)
+  const [newsOpen, setNewsOpen] = useState(false)
+  const [newsItem, setNewsItem] = useState<NewsId | null>(null)
+  const [newsAutoDone, setNewsAutoDone] = useState(false)
+  function markNewsSeen(id: NewsId) {
+    const seen = settings.newsSeen ?? []
+    void updateSettings({ newsSeen: seen.includes(id) ? seen : [...seen, id], ...(id === 'zones' ? { zonesNoticeSeen: true } : {}) })
+  }
   useAppliedTheme(settings.theme)
   useEffect(() => {
     if (!settings.onboardingDone) return
@@ -145,6 +167,14 @@ function AppShell() {
   useEffect(() => {
     if (settings.onboardingDone && hasEntry) void requestStorageProtection()
   }, [settings.onboardingDone, hasEntry])
+
+  // One unread item opens on its own, once per launch, after the setup and the tour, never on a quiet day nor in the demo.
+  const autoNews = allEntries && settingsLoaded && settings.onboardingDone && !tourOpen && !IS_DEMO && !newsAutoDone ? newsToOpen(newsState, quiet) : null
+  // Adjusted during render (React's pattern for state that follows other state): no effect, no extra paint without it.
+  if (autoNews) {
+    setNewsAutoDone(true)
+    setNewsItem(autoNews)
+  }
 
   // From the backup reminder: open the settings on the backup card.
   const [backupRequested, setBackupRequested] = useState(false)
@@ -222,6 +252,7 @@ function AppShell() {
               setBackupRequested(false)
               setScreen('settings')
             }}
+            news={{ unread: quiet ? 0 : unread.length, onOpen: () => setNewsOpen(true) }}
             onOpenKids={settings.kidsTabEnabled ? () => setScreen('kids') : undefined}
             onGoToTab={(next, date) => {
               setBackupRequested(false)
@@ -256,14 +287,42 @@ function AppShell() {
           setTab(next)
         }}
       />
-      {settings.onboardingDone && !settings.zonesNoticeSeen && oldZones.length > 0 && !tourOpen && !IS_DEMO && (
+      {newsOpen && (
+        <NewsSheet
+          items={newsItems(newsState)}
+          unread={unread}
+          onClose={() => setNewsOpen(false)}
+          onOpen={(id) => {
+            setNewsOpen(false)
+            setNewsItem(id)
+          }}
+        />
+      )}
+      {newsItem === 'zones' && (
         <ZonesNotice
           oldZones={oldZones}
-          onClose={() => void updateSettings({ zonesNoticeSeen: true })}
-          onTry={() => {
-            void updateSettings({ zonesNoticeSeen: true })
-            setBackupRequested(false)
-            setTab('today')
+          onClose={() => {
+            markNewsSeen('zones')
+            setNewsItem(null)
+          }}
+          onTry={
+            oldZones.length > 0
+              ? () => {
+                  markNewsSeen('zones')
+                  setNewsItem(null)
+                  setBackupRequested(false)
+                  setTab('today')
+                }
+              : undefined
+          }
+        />
+      )}
+      {newsItem === 'thanks' && (
+        <ThanksNote
+          days={daysWithOuch(logged, today)}
+          onClose={() => {
+            markNewsSeen('thanks')
+            setNewsItem(null)
           }}
         />
       )}
