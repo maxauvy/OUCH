@@ -15,6 +15,9 @@ const fr = {
   goneTitle: 'Cette météo n’est plus partagée',
   goneText: (name?: string) =>
     `${name ?? 'Ton proche'} a peut-être arrêté le partage, ou en a commencé un nouveau. S’il y a un nouveau code, tu pourras le scanner ici.`,
+  newCodeTitle: 'Ce code ne correspond plus',
+  newCodeText: (name?: string) =>
+    `${name ?? 'Ton proche'} a sans doute fait un nouveau code en relançant le partage. Quand tu l’as, scanne-le ici.`,
   tryAgain: 'Réessayer',
   scanNew: 'Scanner un nouveau code',
   welcomeTitle: 'Scanne le code de ton proche',
@@ -28,7 +31,7 @@ const fr = {
   pasteLabel: 'Le lien reçu',
   pastePlaceholder: 'https://…',
   pasteOk: 'Valider',
-  pasteWrong: 'Ce lien ne vient pas d’OUCH. Il commence par « https://maxauvy.github.io/OUCH/duo/ » ou « https://www.dropbox.com/ ».',
+  pasteWrong: 'Ce lien ne vient pas d’OUCH. Il commence par « https://maxauvy.github.io/OUCH/duo/ », et c’est ton proche qui l’envoie depuis OUCH.',
   firstTitle: (name?: string) => (name ? `${name} partage sa météo avec toi` : 'Une météo est partagée avec toi'),
   installTitle: 'Pour la retrouver chaque jour',
   iosStep1: 'Touche Partager en bas de Safari',
@@ -36,7 +39,7 @@ const fr = {
   iosOther: 'Ouvre cette page dans Safari pour l’ajouter à l’écran d’accueil.',
   install: 'Installer',
   later: 'Plus tard',
-  privacy: 'Rien n’est envoyé ailleurs : l’image vient directement du Dropbox de ton proche.',
+  privacy: 'L’image arrive chiffrée du Dropbox de ton proche et s’ouvre seulement sur ce téléphone, avec la clé du code. Rien n’est envoyé ailleurs.',
 }
 
 export type DuoStrings = typeof fr
@@ -55,6 +58,9 @@ const en: DuoStrings = {
   goneTitle: 'This weather is no longer shared',
   goneText: (name?: string) =>
     `${name ?? 'Your relative'} may have stopped sharing, or started a new share. If there is a new code, you can scan it here.`,
+  newCodeTitle: 'This code no longer matches',
+  newCodeText: (name?: string) =>
+    `${name ?? 'Your relative'} probably made a new code by restarting the share. When you have it, scan it here.`,
   tryAgain: 'Try again',
   scanNew: 'Scan a new code',
   welcomeTitle: 'Scan your relative’s code',
@@ -68,7 +74,7 @@ const en: DuoStrings = {
   pasteLabel: 'The link you received',
   pastePlaceholder: 'https://…',
   pasteOk: 'OK',
-  pasteWrong: 'This link does not come from OUCH. It starts with “https://maxauvy.github.io/OUCH/duo/” or “https://www.dropbox.com/”.',
+  pasteWrong: 'This link does not come from OUCH. It starts with “https://maxauvy.github.io/OUCH/duo/”, and your relative sends it from OUCH.',
   firstTitle: (name?: string) => (name ? `${name} is sharing their weather with you` : 'Someone is sharing their weather with you'),
   installTitle: 'To find it every day',
   iosStep1: 'Tap Share at the bottom of Safari',
@@ -76,7 +82,7 @@ const en: DuoStrings = {
   iosOther: 'Open this page in Safari to add it to your Home Screen.',
   install: 'Install',
   later: 'Later',
-  privacy: 'Nothing is sent anywhere else: the image comes straight from your relative’s Dropbox.',
+  privacy: 'The image arrives encrypted from your relative’s Dropbox and only opens on this phone, with the key in the code. Nothing is sent anywhere else.',
 }
 
 export const strings: DuoStrings = /^fr\b/i.test(navigator.language || 'fr') ? fr : en

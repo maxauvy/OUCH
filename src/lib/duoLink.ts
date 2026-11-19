@@ -1,15 +1,20 @@
 // The address a relative opens to follow someone's weather in OUCH Duo: the
-// Duo app's own address, with the Dropbox link to the day's image (and the
-// person's first name) after the `#`. What follows `#` never leaves the
-// phone: GitHub Pages, which serves Duo, does not see it.
+// Duo app's own address, with the Dropbox link to the day's image, the key
+// that opens it (lib/weatherImageCrypto.ts) and the person's first name after
+// the `#`. What follows `#` never leaves the phone: GitHub Pages, which serves
+// Duo, does not see it, and Dropbox only ever gets the encrypted file.
 //
 // Used by OUCH (to make the code and the link) and by Duo (to read them back).
 // No DOM, no storage: tested in tests/duoLink.test.ts.
 
+import { isWeatherImageKey } from './weatherImageCrypto.ts'
+
 /** What Duo needs to show someone's weather. */
 export interface DuoTarget {
-  /** The Dropbox shared link to the image, image only (`raw=1`). */
+  /** The Dropbox shared link to the encrypted image (`raw=1`). */
   link: string
+  /** The key that opens it. */
+  key: string
   /** The first name the person gave OUCH, if any. */
   name?: string
 }
@@ -60,34 +65,31 @@ function cleanName(name: string | null | undefined): string | undefined {
   return clean || undefined
 }
 
-/** The address to give a relative: `duoBase` (Duo's own address, ending in `/`) with the link and the name after `#`. */
+/** The address to give a relative: `duoBase` (Duo's own address, ending in `/`) with the link, the key and the name after `#`. */
 export function duoUrl(duoBase: string, target: DuoTarget): string {
-  const params = new URLSearchParams({ l: target.link })
+  const params = new URLSearchParams({ l: target.link, k: target.key })
   const name = cleanName(target.name)
   if (name) params.set('n', name)
   return `${duoBase}#${params.toString()}`
 }
 
-/** Reads what follows `#` in a Duo address; null when it does not hold a usable Dropbox link. */
+/** Reads what follows `#` in a Duo address; null when it does not hold a Dropbox link and a key. */
 export function readDuoHash(hash: string): DuoTarget | null {
   const params = new URLSearchParams(hash.replace(/^#/, ''))
   const link = dropboxImageLink(params.get('l') ?? '')
-  if (!link) return null
+  const key = params.get('k')
+  if (!link || !isWeatherImageKey(key)) return null
   const name = cleanName(params.get('n'))
-  return name ? { link, name } : { link }
+  return name ? { link, key, name } : { link, key }
 }
 
 /**
  * What a person pastes or scans into Duo: a whole Duo address (from OUCH's
- * code or message), or a bare Dropbox link. Null for anything else.
+ * code or message). A bare Dropbox link is not enough any more: without the
+ * key, the image cannot be opened. Null for anything else.
  */
 export function readDuoInput(text: string): DuoTarget | null {
   const trimmed = text.trim()
   const hashAt = trimmed.indexOf('#')
-  if (hashAt >= 0) {
-    const fromHash = readDuoHash(trimmed.slice(hashAt))
-    if (fromHash) return fromHash
-  }
-  const link = dropboxImageLink(trimmed)
-  return link ? { link } : null
+  return hashAt >= 0 ? readDuoHash(trimmed.slice(hashAt)) : null
 }

@@ -1472,7 +1472,7 @@ const en: Translations = {
     stop: 'Stop automatic backup',
     stopNote: 'Copies already sent stay with {{provider}}: you can delete them there.',
     trust: ['Your journal, on your device', 'Encrypted here, with your password', '{{provider}} only keeps an unreadable file'],
-    trustWithImage: '{{provider}} keeps an unreadable file, and your day’s image in the clear, for your loved one',
+    trustWithImage: '{{provider}} keeps an unreadable file, and your day’s image, encrypted too, for your loved one',
     failure: {
       auth: 'The link with {{provider}} needs to be made again.',
       network: 'The copy could not go out. We will try again next time you open the app.',
@@ -2188,11 +2188,11 @@ const en: Translations = {
     cardNotFound: 'Card not found',
     auto: {
       title: 'Every day, on its own',
-      hintOff: 'Through Dropbox, at a link that stays the same. Not encrypted.',
+      hintOff: 'Through Dropbox, encrypted, to open in OUCH Duo.',
       facts: [
         'Your day’s image is kept in your Dropbox and replaced when you fill in your day, with the app open.',
-        'A link that stays the same: your loved one keeps it and looks whenever they like. They are not notified.',
-        'It is not encrypted: Dropbox can see it, and so can anyone who has the link. Without your note.',
+        'A code to scan, which stays the same: your loved one opens it in OUCH Duo and looks whenever they like. They are not notified.',
+        'It is encrypted: Dropbox cannot see it. Anyone who has your code or your link can. Without your note.',
       ],
       turnOn: 'Turn on',
       cancel: 'Cancel',

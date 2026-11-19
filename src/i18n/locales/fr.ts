@@ -1477,7 +1477,7 @@ const fr: Translations = {
     stop: 'Arrêter la sauvegarde automatique',
     stopNote: 'Les copies déjà envoyées restent chez {{provider}} : tu peux les y supprimer.',
     trust: ['Ton journal, sur ton appareil', 'Chiffré ici, avec ton mot de passe', '{{provider}} ne garde qu’un fichier illisible'],
-    trustWithImage: '{{provider}} garde un fichier illisible, et ton image du jour en clair, pour ton proche',
+    trustWithImage: '{{provider}} garde un fichier illisible, et ton image du jour chiffrée elle aussi, pour ton proche',
     failure: {
       auth: 'Le lien avec {{provider}} est à refaire.',
       network: 'La copie n’a pas pu partir. On réessaiera à ta prochaine ouverture.',
@@ -2193,11 +2193,11 @@ const fr: Translations = {
     cardNotFound: 'Carte introuvable',
     auto: {
       title: 'Chaque jour, toute seule',
-      hintOff: 'Par Dropbox, à un lien qui ne change pas. Pas chiffrée.',
+      hintOff: 'Par Dropbox, chiffrée, à ouvrir dans OUCH Duo.',
       facts: [
         'Ton image du jour est rangée dans ton Dropbox et remplacée quand tu remplis ta journée, l’app ouverte.',
-        'Un lien qui ne change pas : ton proche le garde et regarde quand il veut. Il n’est pas prévenu.',
-        'Elle n’est pas chiffrée : Dropbox la voit, et toute personne qui a le lien aussi. Sans le mot pour tes proches.',
+        'Un code à scanner, qui ne change pas : ton proche l’ouvre dans OUCH Duo et regarde quand il veut. Il n’est pas prévenu.',
+        'Elle est chiffrée : Dropbox ne peut pas la voir. Toute personne qui a ton code ou ton lien, si. Sans le mot pour tes proches.',
       ],
       turnOn: 'Activer',
       cancel: 'Annuler',

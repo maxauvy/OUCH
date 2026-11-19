@@ -51,7 +51,7 @@ export function AutoShareSection({ notice }: { notice: WeatherShareNotice | null
   }
 
   // What a relative receives: OUCH Duo's address, with the image's link and the first name after # (see lib/duoLink.ts).
-  const relativeUrl = share?.link ? duoUrl(duoBase(), { link: share.link, name: settings.displayName }) : null
+  const relativeUrl = share?.link && share.key ? duoUrl(duoBase(), { link: share.link, key: share.key, name: settings.displayName }) : null
 
   async function sendLink() {
     if (!relativeUrl) return

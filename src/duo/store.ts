@@ -1,8 +1,10 @@
-// What Duo remembers on this phone: whose weather it shows (the link and the
-// name), whether the install hint was put aside, and the last image received,
-// for when the phone is offline. Nothing else, and nothing leaves the phone.
+// What Duo remembers on this phone: whose weather it shows (the link, its key
+// and the name), whether the install hint was put aside, and the last image
+// received, still encrypted, for when the phone is offline. Nothing else, and
+// nothing leaves the phone.
 
 import { dropboxImageLink, readDuoHash, type DuoTarget } from '../lib/duoLink'
+import { isWeatherImageKey } from '../lib/weatherImageCrypto'
 
 const TARGET_KEY = 'ouch-duo:target'
 const INSTALL_LATER_KEY = 'ouch-duo:install-later'
@@ -17,8 +19,9 @@ export function loadTarget(): DuoTarget | null {
     if (!raw) return null
     const found = JSON.parse(raw) as Partial<DuoTarget>
     const link = dropboxImageLink(found.link ?? '')
-    if (!link) return null
-    return typeof found.name === 'string' && found.name ? { link, name: found.name } : { link }
+    if (!link || !isWeatherImageKey(found.key)) return null
+    const key = found.key
+    return typeof found.name === 'string' && found.name ? { link, key, name: found.name } : { link, key }
   } catch {
     return null
   }
@@ -67,7 +70,7 @@ export function setInstallLater(): void {
   }
 }
 
-/** The last image received from `link`, and when; null when there is none (or it came from another link). */
+/** The last file received from `link` (encrypted, as Dropbox gave it), and when; null when there is none (or it came from another link). */
 export async function loadLastImage(link: string): Promise<{ blob: Blob; at: number } | null> {
   try {
     const cache = await caches.open(IMAGE_CACHE)

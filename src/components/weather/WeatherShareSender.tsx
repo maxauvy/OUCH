@@ -27,7 +27,8 @@ export function WeatherShareSender() {
   const logged = entry && hasPain(entry) ? entry : null
   const key = logged ? weatherImageKey(logged, { displayName: settings.displayName || undefined, language: settings.language, look }) : null
   // `permission` waits for the person to allow the link in the share sheet.
-  const due = !!share && !!key && key !== share.sentKey && share.lastFailure !== 'permission'
+  // A share from before the encryption has no key yet: its image goes again (encrypted, with a new link) even if the day did not change.
+  const due = !!share && !!key && (key !== share.sentKey || !share.key) && share.lastFailure !== 'permission'
   const triedAt = share?.triedAt
   const failed = !!share?.lastFailure
 

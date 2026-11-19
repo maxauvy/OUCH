@@ -10,16 +10,16 @@ import { fileURLToPath } from 'node:url'
 // Dev: `npm run dev:duo` serves it at http://localhost:5174/duo/; OUCH in dev
 // points its code and link there (see lib/duoBase.ts).
 
-// What Duo may load: its own files, and the image from Dropbox (the shared
-// link at www.dropbox.com redirects to a *.dropboxusercontent.com host). The
-// camera stream for the code scanner is a MediaStream, not a fetched URL.
+// What Duo may load: its own files, and the encrypted image from Dropbox's
+// content host (read with fetch(), then shown from a blob: URL once opened).
+// The camera stream for the code scanner is a MediaStream, not a fetched URL.
 const policy = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://www.dropbox.com https://*.dropboxusercontent.com",
+  "img-src 'self' data: blob:",
   "font-src 'self' data:",
-  "connect-src 'self' https://www.dropbox.com https://*.dropboxusercontent.com",
+  "connect-src 'self' https://dl.dropboxusercontent.com https://*.dl.dropboxusercontent.com",
   "media-src 'self' blob:",
   "worker-src 'self'",
   "manifest-src 'self'",

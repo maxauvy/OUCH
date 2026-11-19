@@ -82,7 +82,6 @@ function Shell({ children }: { children: ReactNode }) {
 function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolean; onScan: () => void }) {
   const [result, setResult] = useState<ImageResult | null>(null)
   const [lookedAt, setLookedAt] = useState(0)
-  const [directFailed, setDirectFailed] = useState(false)
   const [loading, setLoading] = useState(true)
 
   const show = useCallback((next: ImageResult) => {
@@ -90,35 +89,31 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
       for (const url of objectUrls(previous)) URL.revokeObjectURL(url)
       return next
     })
-    setDirectFailed(false)
     setLookedAt(Date.now())
     setLoading(false)
   }, [])
 
+  const look = useCallback(() => fetchImage(target.link, target.key).catch((): ImageResult => ({ kind: 'nothing' })), [target.link, target.key])
+
   const refresh = useCallback(() => {
     setLoading(true)
-    void fetchImage(target.link).then(show)
-  }, [target.link, show])
+    void look().then(show)
+  }, [look, show])
 
   useEffect(() => {
-    void fetchImage(target.link).then(show)
+    void look().then(show)
     // Back to the app after a while (it stays open in the background): look again.
     const onVisible = () => {
       if (document.visibilityState === 'visible') refresh()
     }
     document.addEventListener('visibilitychange', onVisible)
     return () => document.removeEventListener('visibilitychange', onVisible)
-  }, [target.link, show, refresh])
+  }, [look, show, refresh])
 
   let image: { url: string; note: string } | null = null
-  let gone = false
   if (result?.kind === 'fresh') image = { url: result.url, note: t.lookedAt(time(lookedAt)) }
   else if (result?.kind === 'offline') image = { url: result.url, note: t.offline(day(result.at)) }
-  else if (result?.kind === 'direct') {
-    if (!directFailed) image = { url: result.url, note: t.lookedAt(time(lookedAt)) }
-    else if (result.kept) image = { url: result.kept.url, note: t.offline(day(result.kept.at)) }
-    else gone = true
-  } else if (result?.kind === 'gone') gone = true
+  const gone = result?.kind === 'gone' || result?.kind === 'wrongKey'
 
   return (
     <div className="stack grow">
@@ -127,11 +122,13 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
 
       {gone ? (
         <div className="card stack">
-          <h2 className="card-title">{t.goneTitle}</h2>
-          <p className="text">{t.goneText(target.name)}</p>
-          <button type="button" className="btn soft" onClick={refresh}>
-            {t.tryAgain}
-          </button>
+          <h2 className="card-title">{result.kind === 'wrongKey' ? t.newCodeTitle : t.goneTitle}</h2>
+          <p className="text">{result.kind === 'wrongKey' ? t.newCodeText(target.name) : t.goneText(target.name)}</p>
+          {result.kind === 'gone' && (
+            <button type="button" className="btn soft" onClick={refresh}>
+              {t.tryAgain}
+            </button>
+          )}
           <button type="button" className="btn soft" onClick={onScan}>
             {t.scanNew}
           </button>
@@ -141,8 +138,6 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
           className="weather-image"
           src={image.url}
           alt={t.imageAlt(target.name)}
-          referrerPolicy="no-referrer"
-          onError={() => setDirectFailed(true)}
         />
       ) : (
         <div className="weather-image placeholder" role="status">
@@ -173,9 +168,7 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
 
 function objectUrls(result: ImageResult | null): string[] {
   if (!result) return []
-  if (result.kind === 'fresh' || result.kind === 'offline') return [result.url]
-  if (result.kind === 'direct' && result.kept) return [result.kept.url]
-  return []
+  return result.kind === 'fresh' || result.kind === 'offline' ? [result.url] : []
 }
 
 /** How to keep Duo on the home screen, on the first visit only, until put aside. */
