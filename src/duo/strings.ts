@@ -39,6 +39,7 @@ const fr = {
   iosOther: 'Ouvre cette page dans Safari pour l’ajouter à l’écran d’accueil.',
   install: 'Installer',
   later: 'Plus tard',
+  language: 'Langue',
   privacy: 'L’image arrive chiffrée du Dropbox de ton proche et s’ouvre seulement sur ce téléphone, avec la clé du code. Rien n’est envoyé ailleurs.',
 }
 
@@ -82,8 +83,31 @@ const en: DuoStrings = {
   iosOther: 'Open this page in Safari to add it to your Home Screen.',
   install: 'Install',
   later: 'Later',
+  language: 'Language',
   privacy: 'The image arrives encrypted from your relative’s Dropbox and only opens on this phone, with the key in the code. Nothing is sent anywhere else.',
 }
 
-export const strings: DuoStrings = /^fr\b/i.test(navigator.language || 'fr') ? fr : en
+const LANG_KEY = 'ouch-duo:lang'
+
+function chosenLanguage(): 'fr' | 'en' | null {
+  try {
+    const v = localStorage.getItem(LANG_KEY)
+    return v === 'fr' || v === 'en' ? v : null
+  } catch {
+    return null
+  }
+}
+
+/** The language chosen in Duo, else the phone's. */
+export const strings: DuoStrings = (chosenLanguage() ?? (/^fr\b/i.test(navigator.language || 'fr') ? 'fr' : 'en')) === 'fr' ? fr : en
 export const intlLocale = strings.lang === 'fr' ? 'fr-FR' : 'en-GB'
+
+/** Keeps the language chosen and shows Duo again in it. */
+export function chooseLanguage(lang: 'fr' | 'en'): void {
+  try {
+    localStorage.setItem(LANG_KEY, lang)
+  } catch {
+    // Not kept: it holds for this visit only.
+  }
+  location.reload()
+}

@@ -4,7 +4,7 @@ import { fetchImage, type ImageResult } from './image'
 import { useDuoInstall, promptInstall } from './install'
 import { Scanner } from './Scanner'
 import { initialTarget, installLater, saveTarget, setInstallLater } from './store'
-import { intlLocale, strings as t } from './strings'
+import { chooseLanguage, intlLocale, strings as t } from './strings'
 
 type Screen = 'welcome' | 'scan' | 'paste' | 'view'
 
@@ -57,6 +57,7 @@ export function DuoApp() {
               {t.paste}
             </button>
             <p className="small">{t.privacy}</p>
+            <LanguageChoice />
           </div>
         </div>
       </Shell>
@@ -155,10 +156,19 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
             {t.refresh}
           </button>
         </div>
-        <button type="button" className="link-btn quiet" onClick={onScan}>
-          {t.otherCode}
-        </button>
+        <div className="footer-row">
+          <button type="button" className="link-btn quiet" onClick={onScan}>
+            {t.otherCode}
+          </button>
+          <LanguageChoice />
+        </div>
       </div>
+      )}
+
+      {gone && (
+        <div className="footer">
+          <LanguageChoice />
+        </div>
       )}
 
       {arrived && <InstallSheet />}
@@ -252,5 +262,27 @@ function Paste({ onDone, onCancel }: { onDone: (target: DuoTarget) => void; onCa
         </button>
       </div>
     </form>
+  )
+}
+
+/** Français · English: the phone's language at first, then the one chosen here. */
+function LanguageChoice() {
+  return (
+    <div className="lang" role="group" aria-label={t.language}>
+      {(['fr', 'en'] as const).map((lang) => (
+        <button
+          key={lang}
+          type="button"
+          lang={lang}
+          className="link-btn quiet"
+          aria-pressed={t.lang === lang}
+          onClick={() => {
+            if (t.lang !== lang) chooseLanguage(lang)
+          }}
+        >
+          {lang === 'fr' ? 'Français' : 'English'}
+        </button>
+      ))}
+    </div>
   )
 }
