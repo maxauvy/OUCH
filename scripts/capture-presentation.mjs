@@ -1,6 +1,7 @@
 // Takes the screenshots of the guide and the slides for health professionals (docs/presentation-soignants/img) from the app's demo mode
-// (fictional data, French). Needs the app served (npm run dev -- --port 5180) and Playwright (npm i --no-save playwright).
-//   node scripts/capture-presentation.mjs [--base http://localhost:5180] [--out DIR] [--only today,trends]
+// (fictional data, French by default; --lang en for English, e.g. --out docs/guide-patients/img-en). Needs the app served
+// (npm run dev -- --port 5180) and Playwright (npm i --no-save playwright).
+//   node scripts/capture-presentation.mjs [--base http://localhost:5180] [--out DIR] [--lang fr|en] [--only today,trends]
 import { chromium } from 'playwright'
 import { mkdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -13,17 +14,23 @@ const base = opt('base', 'http://localhost:5180')
 const out = opt('out', join(root, 'docs', 'presentation-soignants', 'img'))
 const only = opt('only', '') ? new Set(opt('only', '').split(',')) : null
 const want = (k) => !only || only.has(k)
+const lang = opt('lang', 'fr') === 'en' ? 'en' : 'fr'
+// The labels the script clicks or looks for, in the app's two languages (the demo follows the browser's language).
+const L = {
+  fr: { skip: /Passer la visite/, fullForm: /Afficher le formulaire complet/, where: /Où as-tu mal/i, meds: /Médicaments pris|Mes médicaments/i, journal: /Journal/, trends: /Tendances/, relief: /Soulager/, consultation: /Consultation/, d90: '90 j', zones: /Où ça fait mal/, treatments: /Mes traitements/, compare: /Comparer deux périodes/, caresheet: /Fiche pour un soignant/, kids: /Mes enfants/, weather: /Météo du jour/, weatherSheet: /Partager ma météo/, plan: /Ouvrir mon plan/, breathe: /Respirer lentement/, gestures: /Voir et choisir mes gestes/, habits: /Mes habitudes/, leads: /Ce que tes notes racontent/, report: /Préparer le rapport/, gp: /Médecin traitant/, cetd: /Centre douleur/ },
+  en: { skip: /Skip the tour/, fullForm: /Show the full form/, where: /Where does it hurt/i, meds: /Medications taken|My medications/i, journal: /Journal/, trends: /Trends/, relief: /Relief/, consultation: /Consultation/, d90: '90 d', zones: /Where it hurts/, treatments: /My treatments/, compare: /Compare two periods/, caresheet: /Sheet for a health professional/, kids: /My kids/, weather: /Today's weather/, weatherSheet: /Share my weather/, plan: /Open my plan/, breathe: /Breathe slowly/, gestures: /See and choose my moves/, habits: /My habits/, leads: /What your notes say/, report: /Prepare the report/, gp: /General practitioner/, cetd: /Pain clinic/ },
+}[lang]
 mkdirSync(out, { recursive: true })
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 const browser = await chromium.launch({ channel: 'chrome' }).catch(() => chromium.launch())
 
 async function open(viewport, { dpr = 2, path = '' } = {}) {
-  const ctx = await browser.newContext({ viewport, deviceScaleFactor: dpr, locale: 'fr-FR', colorScheme: 'light' })
+  const ctx = await browser.newContext({ viewport, deviceScaleFactor: dpr, locale: lang === 'en' ? 'en-GB' : 'fr-FR', colorScheme: 'light' })
   const page = await ctx.newPage()
-  await page.goto(`${base}/${path}?demo=fr`)
+  await page.goto(`${base}/${path}?demo=${lang}`)
   await sleep(1800)
-  await page.getByRole('button', { name: /Passer la visite/ }).click({ timeout: 4000 }).catch(() => {})
+  await page.getByRole('button', { name: L.skip }).click({ timeout: 4000 }).catch(() => {})
   await sleep(1500)
   await unveil(page)
   await hideFixed(page, false)
@@ -76,18 +83,18 @@ await step('today', async () => {
   const { ctx, page } = await open(PHONE)
   await top(page)
   await shot(page, 'today-1')
-  await page.getByRole('button', { name: /Afficher le formulaire complet/ }).click().catch(() => {})
+  await page.getByRole('button', { name: L.fullForm }).click().catch(() => {})
   await sleep(600)
-  await scrollToText(page, /Où as-tu mal/i)
+  await scrollToText(page, L.where)
   await shot(page, 'today-zones')
-  await scrollToText(page, /Médicaments pris|Mes médicaments/i, -70)
+  await scrollToText(page, L.meds, -70)
   await shot(page, 'today-meds')
   await ctx.close()
 })
 
 await step('journal', async () => {
   const { ctx, page } = await open(PHONE)
-  await tab(page, /Journal/)
+  await tab(page, L.journal)
   await top(page)
   await shot(page, 'journal')
   await ctx.close()
@@ -95,8 +102,8 @@ await step('journal', async () => {
 
 await step('trends', async () => {
   const { ctx, page } = await open(PHONE)
-  await tab(page, /Tendances/)
-  await page.getByRole('radio', { name: '90 j' }).click().catch(() => {})
+  await tab(page, L.trends)
+  await page.getByRole('radio', { name: L.d90 }).click().catch(() => {})
   await sleep(900)
   await top(page)
   await shot(page, 'trends-1')
@@ -105,7 +112,7 @@ await step('trends', async () => {
 
 await step('soulager', async () => {
   const { ctx, page } = await open(PHONE)
-  await tab(page, /Soulager/)
+  await tab(page, L.relief)
   await top(page)
   await shot(page, 'soulager')
   await ctx.close()
@@ -113,7 +120,7 @@ await step('soulager', async () => {
 
 await step('consultation', async () => {
   const { ctx, page } = await open(PHONE)
-  await tab(page, /Consultation/)
+  await tab(page, L.consultation)
   await top(page)
   await shot(page, 'consultation')
   await ctx.close()
@@ -132,21 +139,22 @@ const sub = (key, tabName, rowRe, file) =>
     await page.screenshot({ path: join(out, `${file}.png`) })
     await ctx.close()
   })
-await sub('zones', /Tendances/, /Où ça fait mal/, 'zones')
-await sub('treatments', /Tendances/, /Mes traitements/, 'treatments')
-await sub('compare', /Tendances/, /Comparer deux périodes/, 'compare')
-await sub('caresheet', /Consultation/, /Fiche pour un soignant/, 'caresheet')
-await sub('kids', null, /Mes enfants/, 'kids')
+await sub('zones', L.trends, L.zones, 'zones')
+await sub('treatments', L.trends, L.treatments, 'treatments')
+await sub('compare', L.trends, L.compare, 'compare')
+await sub('caresheet', L.consultation, L.caresheet, 'caresheet')
+await sub('kids', null, L.kids, 'kids')
 // The weather sheet slides over the page and dims it: only the sheet is photographed, on white.
 await step('weather', async () => {
   const { ctx, page } = await open(PHONE)
-  await page.getByRole('button', { name: /Météo du jour/ }).first().click()
+  await page.getByRole('button', { name: L.weather }).first().click()
   await sleep(1500)
   await unveil(page)
-  const box = await page.evaluate(() => {
+  const box = await page.evaluate((src) => {
+    const re = new RegExp(src)
     const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
     for (let n = w.nextNode(); n; n = w.nextNode()) {
-      if (!/Partager ma météo/.test(n.textContent || '')) continue
+      if (!re.test(n.textContent || '')) continue
       for (let el = n.parentElement; el; el = el.parentElement) {
         if (parseFloat(getComputedStyle(el).borderTopLeftRadius) > 8) {
           // The sheet is the rounded panel; its siblings (the dimming layer) go.
@@ -159,22 +167,22 @@ await step('weather', async () => {
       }
     }
     return null
-  })
+  }, L.weatherSheet.source)
   if (!box) throw new Error('sheet not found')
   await page.screenshot({ path: join(out, 'weather.png'), clip: box })
   await ctx.close()
 })
-await sub('plan', /Soulager/, /Ouvrir mon plan/, 'plan')
-await sub('breathing', /Soulager/, /Respirer lentement/, 'breathing')
-await sub('gestures', /Soulager/, /Voir et choisir mes gestes/, 'gestures')
+await sub('plan', L.relief, L.plan, 'plan')
+await sub('breathing', L.relief, L.breathe, 'breathing')
+await sub('gestures', L.relief, L.gestures, 'gestures')
 
 await step('lead', async () => {
   const { ctx, page } = await open({ width: 390, height: 1400 }, { dpr: 3 })
-  await tab(page, /Tendances/)
-  await page.getByRole('button', { name: /Mes habitudes/ }).click()
+  await tab(page, L.trends)
+  await page.getByRole('button', { name: L.habits }).click()
   await sleep(1300)
   await hideFixed(page, true)
-  const card = page.locator('main').getByText(/Ce que tes notes racontent/).first().locator('xpath=ancestor::*[contains(@class,"rounded")][1]')
+  const card = page.locator('main').getByText(L.leads).first().locator('xpath=ancestor::*[contains(@class,"rounded")][1]')
   await card.scrollIntoViewIfNeeded()
   await sleep(300)
   await card.screenshot({ path: join(out, 'lead.png') })
@@ -183,10 +191,10 @@ await step('lead', async () => {
 
 // The two reports (A4 pages, 1100 px wide window): every page, one picture each.
 await step('report', async () => {
-  for (const [slug, label] of [['gp', /Médecin traitant/], ['cetd', /Centre douleur/]]) {
+  for (const [slug, label] of [['gp', L.gp], ['cetd', L.cetd]]) {
     const { ctx, page } = await open({ width: 1100, height: 1400 })
-    await tab(page, /Consultation/)
-    await page.getByRole('button', { name: /Préparer le rapport/ }).click()
+    await tab(page, L.consultation)
+    await page.getByRole('button', { name: L.report }).click()
     await sleep(2200)
     await page.getByRole('radio', { name: label }).click()
     const d = new Date(); d.setDate(d.getDate() - 31)
