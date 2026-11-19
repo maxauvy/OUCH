@@ -26,3 +26,21 @@ const SKY_TOP = [
   ['#e3e9f1', '#fbe2b4', '#f6e5c1', '#e2dee9', '#d4e0ec', '#ddd4ec'],
   ['#1e2733', '#4a3b1d', '#3d3421', '#34323f', '#22354b', '#2d2548'],
 ] as const
+
+/** How far below the status bar's strip a sky reaches its own colour (px). */
+const RISE = 60
+
+/**
+ * A sky as a CSS background that starts with the page's paper and takes its
+ * own colour a little lower. On iPhone the installed app paints the status
+ * bar's strip itself, in a fixed light colour (the paper) that the page cannot
+ * change: a sky that started at its strongest colour right under it made a
+ * band. `height` is the sky's own height (a CSS length); the layer it is drawn
+ * on can be taller.
+ */
+export function risingSky(level: number, height = '100%'): string {
+  const strip = 'env(safe-area-inset-top, 0px)'
+  const fade = `linear-gradient(180deg, var(--color-paper) 0, var(--color-paper) ${strip}, transparent calc(${strip} + ${RISE}px)) 0 0 / 100% 100% no-repeat`
+  const sky = `var(--sky-${level}) 0 ${strip} / 100% calc(${height} - ${strip}) no-repeat`
+  return `${fade}, ${sky}`
+}

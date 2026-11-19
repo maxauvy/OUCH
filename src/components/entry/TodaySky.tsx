@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom'
 import { IconCloud } from '@tabler/icons-react'
 import type { PainWeather } from '../../db/types'
-import { useSkyTop } from './skyTop'
+import { risingSky, useSkyTop } from './skyTop'
 import { format, useTranslation } from '../../i18n'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { useRichLook } from '../../lib/look'
@@ -24,7 +24,7 @@ export function TodaySkyBackdrop({ weather, height = 360 }: { weather: PainWeath
       className="absolute inset-x-0 top-0 -z-10 pointer-events-none"
       style={{
         height: `calc(var(--root-pad-top, 0px) + ${height}px)`,
-        background: `var(--sky-${level})`,
+        background: risingSky(level),
         transition: 'background 300ms ease',
       }}
     />,

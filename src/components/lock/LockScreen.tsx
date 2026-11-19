@@ -3,7 +3,7 @@ import { unlock } from '../../lib/appLock'
 import { useTranslation } from '../../i18n'
 import { useRichLook } from '../../lib/look'
 import { AppLogo } from '../ui/AppLogo'
-import { useSkyTop } from '../entry/skyTop'
+import { risingSky, useSkyTop } from '../entry/skyTop'
 import { ForgotSheet } from './ForgotSheet'
 import { PinPad } from './PinPad'
 import { usePause, useWaitText } from './lockHooks'
@@ -52,7 +52,7 @@ export function LockScreen() {
       style={
         look
           ? ({
-              background: 'var(--sky-0) top / 100% 420px no-repeat, var(--color-paper)',
+              background: `${risingSky(0, '420px')}, var(--color-paper)`,
               color: 'var(--color-ink)',
               // Centred when there is room; from the top, never cut, when there is not.
               justifyContent: 'safe center',
