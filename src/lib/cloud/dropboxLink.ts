@@ -127,11 +127,12 @@ export function forgetPendingDropboxLink(): void {
 
 let renewing: Promise<string> | null = null
 
-/** A working access token, renewed if it is about to expire. Throws `ProviderError`. */
-export async function getDropboxToken(): Promise<string> {
+/** A working access token, renewed if it is about to expire (or has less than
+ * `margin` ms left, to renew ahead of a send that must be quick). Throws `ProviderError`. */
+export async function getDropboxToken(margin = RENEW_MARGIN_MS): Promise<string> {
   const tokens = await loadTokens()
   if (!tokens) throw new ProviderError('auth')
-  if (tokens.expiresAt - Date.now() > RENEW_MARGIN_MS) return tokens.accessToken
+  if (tokens.expiresAt - Date.now() > margin) return tokens.accessToken
   renewing ??= (async () => {
     try {
       const fresh = await refreshTokens(tokens.refreshToken)
