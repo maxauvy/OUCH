@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>OUCH, Ta douleur a une météo (A4)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600;700&display=block">
+<style>
+/* Aube: a punchy A4 for people who might use the app. Dawn colours (prints with little ink), one big line, a tilted phone, three stickers, then a white panel with the notes card and four steps. */
+:root{--night:#1f1d44;--night2:#2c2860;--coral:#ff7a59;--apricot:#ffc285;--sky:#9cc8ff;--cloud:#f6f2ff;--ink:#1f1d44;--display:"Bricolage Grotesque","Public Sans",sans-serif}
+@page{size:A4;margin:0}*{box-sizing:border-box}html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:"Public Sans",sans-serif;color:var(--ink);font-size:9.4pt;line-height:1.4}
+.page{position:relative;width:210mm;height:296.5mm;overflow:hidden;background:radial-gradient(130mm 100mm at 88% 6%,#ffb58a66,transparent 70%),radial-gradient(150mm 120mm at 0% 45%,#c9bdff55,transparent 70%),linear-gradient(180deg,#fff3ea 0%,#f6efff 60%,#ece6ff 100%)}
+@media screen{body{background:#777}.page{margin:0 auto}}
+.top{position:absolute;left:14mm;top:13mm;right:14mm;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:3mm;font-family:var(--display);font-weight:800;font-size:15pt;letter-spacing:.02em}.brand img{width:11mm;height:11mm}
+.pill{background:var(--ink);border-radius:99px;padding:1.4mm 4mm;font-weight:700;font-size:8.6pt;color:#fff}
+h1{position:absolute;left:14mm;top:33mm;width:120mm;margin:0;font-family:var(--display);font-weight:800;font-size:56pt;line-height:.9;letter-spacing:-.045em}
+h1 em{font-style:normal;background:linear-gradient(90deg,#ff5f3d,#c46bd6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{position:absolute;left:14mm;top:80mm;width:100mm;margin:0;font-size:12pt;line-height:1.38;color:#3b3863}
+.sub b{color:var(--ink)}
+.phone{position:absolute;right:13mm;top:36mm;width:58mm;border-radius:7mm;overflow:hidden;border:1.6mm solid #0f0e26;box-shadow:4mm 5mm 0 #ffb58a;transform:rotate(5deg)}.phone img{display:block;width:100%}
+.stk{position:absolute;font-family:var(--display);font-weight:800;color:var(--ink);border-radius:4mm;padding:2.4mm 3.6mm;line-height:1}
+.stk small{display:block;font-family:"Public Sans";font-weight:700;font-size:7.6pt;margin-top:.8mm;letter-spacing:.01em}
+.s1{left:14mm;top:116mm;background:var(--apricot);font-size:24pt;transform:rotate(-4deg)}
+.s2{left:54mm;top:120mm;background:var(--sky);font-size:24pt;transform:rotate(3deg)}
+.s3{left:94mm;top:115mm;background:var(--coral);font-size:24pt;transform:rotate(-2deg)}
+.panel{position:absolute;left:9mm;right:9mm;top:146mm;bottom:42mm;background:#fff;box-shadow:0 0 0 .3mm #1f1d4422;border-radius:7mm;color:var(--ink);padding:8mm 9mm;display:grid;grid-template-columns:1fr 1fr;gap:5mm 8mm}
+.it h2{margin:0 0 1mm;font-family:var(--display);font-weight:800;font-size:15pt;letter-spacing:-.02em;line-height:1.05}
+.it h2 span{display:inline-block;width:7mm;height:7mm;border-radius:50%;background:var(--coral);color:#fff;font-size:10pt;text-align:center;line-height:7mm;margin-right:2mm;vertical-align:.4mm}
+.it p{margin:0;font-size:9.4pt;line-height:1.4;color:#3b3863}
+.lead{grid-column:1 / -1;display:flex;gap:6mm;align-items:center;background:#fff1e8;border-radius:5mm;padding:3.5mm 4.5mm}
+.lead .pic{flex:none;width:52mm;height:40mm;overflow:hidden;border-radius:3mm;border:.3mm solid #1f1d4433;transform:rotate(-2deg)}.lead .pic img{display:block;width:100%}
+.lead p{margin:0;font-size:10pt;line-height:1.4}.lead b{font-family:var(--display);font-size:13pt;display:block;margin-bottom:1mm}
+.ft{position:absolute;left:14mm;right:14mm;bottom:10mm;display:flex;gap:6mm;align-items:center}
+.qr{width:24mm;height:24mm;background:#fff;border-radius:3mm;padding:1.6mm;flex:none}.qr img{width:100%;height:100%;display:block}
+.ft b{font-family:var(--display);font-weight:800;font-size:19pt;letter-spacing:-.02em;display:block;line-height:1}
+.ft .u{color:#e0502f;font-family:var(--display);font-weight:800;font-size:13pt;margin-top:1.2mm;display:block}
+.ft p{margin:1mm 0 0;font-size:8.6pt;color:#3b3863}
+.fine{position:absolute;left:14mm;right:14mm;bottom:3.4mm;font-size:6.2pt;color:#6b668e}
+</style></head><body><div class="page">
+<div class="top"><div class="brand"><img src="assets/logo.svg" alt="">OUCH</div><div class="pill">Gratuit · libre · sans compte</div></div>
+<h1>Ta douleur a une <em>météo.</em></h1>
+<p class="sub">Une minute par jour pour la noter. Quelques semaines pour voir <b>ce qui l’aggrave et ce qui l’apaise</b>. Pour la fibromyalgie et les autres douleurs chroniques.</p>
+<div class="phone"><img src="assets/today.png" alt=""></div>
+<div class="stk s1">1 min<small>par jour</small></div><div class="stk s2">0 €<small>ni pub, ni compte</small></div><div class="stk s3">Chez toi<small>sur ton téléphone</small></div>
+<div class="panel">
+<div class="lead"><div class="pic"><img src="assets/piste.png" alt=""></div><p><b>Tes notes te parlent.</b>Sommeil, stress, une marche courte… OUCH compare tes jours et te montre ce qui revient quand ça va moins bien, ou mieux. Une piste à la fois, avec les jours derrière.</p></div>
+<div class="it"><h2><span>1</span>Note</h2><p>Un chiffre de 0 à 10. Le reste est facultatif, et l’écran s’allège les jours difficiles.</p></div>
+<div class="it"><h2><span>2</span>Essaie</h2><p>Une piste te parle ? Teste-la une semaine : OUCH compare tes jours avec et sans.</p></div>
+<div class="it"><h2><span>3</span>Montre</h2><p>Un rapport pour ton médecin : ta courbe, tes traitements, tes questions.</p></div>
+<div class="it"><h2><span>4</span>Partage</h2><p>Ta météo du jour pour tes proches, et des mots simples pour tes enfants.</p></div>
+</div>
+<div class="ft"><div class="qr"><img src="assets/qr.svg" alt=""></div><div><b>Essaie sans rien saisir.</b><span class="u">maxauvy.github.io/OUCH</span><p>« Découvrir avec un exemple » : 90 jours fictifs et une visite guidée. Puis « Ajouter à l’écran d’accueil ».</p></div></div>
+<div class="fine">Captures : données fictives. OUCH décrit tes notes : il ne diagnostique rien et ne remplace pas ton médecin. Logiciel libre (CeCILL v2.1) · Ouch, Understand, Chart, Heal.</div>
+</div></body></html>
