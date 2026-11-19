@@ -37,6 +37,13 @@ export function onWeatherImageNow(listener: () => void): () => void {
   return () => window.removeEventListener(NOW_EVENT, listener)
 }
 
+/** Renews the link to Dropbox if it has less than a quarter of an hour left,
+ * so that the send itself, maybe while the app leaves the screen, needs one
+ * request and not two. Quiet on failure: the send will say. */
+export async function readyWeatherShare(): Promise<void> {
+  await getDropboxToken(15 * 60 * 1000).catch(() => undefined)
+}
+
 /** After a failed try, the next one waits this long (ms), except after a new permission. */
 export const RETRY_AFTER_MS = 5 * 60 * 1000
 

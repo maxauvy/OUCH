@@ -66,6 +66,20 @@ export function DailyEntryForm({ date, onGoToBackup, onOpenSettings, afterHeader
     }
   }, [date])
 
+  // The same when the app leaves the screen: a phone may pause it before the
+  // debounce fires, and what follows the save (the weather image sent for a
+  // relative) would wait for the next opening.
+  useEffect(() => {
+    const onHide = () => {
+      if (document.visibilityState !== 'hidden' || !dirtyRef.current) return
+      dirtyRef.current = false
+      const { date: pendingDate, local: pendingLocal } = pendingRef.current
+      upsertEntry(pendingDate, pendingLocal).catch(() => {})
+    }
+    document.addEventListener('visibilitychange', onHide)
+    return () => document.removeEventListener('visibilitychange', onHide)
+  }, [])
+
   function setField<K extends keyof DailyEntry>(key: K, value: DailyEntry[K]) {
     dirtyRef.current = true
     setLocal((prev) => ({ ...prev, [key]: value }))

@@ -3,12 +3,15 @@ import { useSettings } from '../../hooks/useSettings'
 import { useTodayEntry } from '../../hooks/useEntries'
 import { hasPain } from '../../lib/loggedEntries'
 import { cardToPng } from '../../lib/cardImage'
-import { onWeatherImageNow, RETRY_AFTER_MS, sendWeatherImage, takeNowRequest, weatherImageKey } from '../../lib/weatherShareRuntime'
+import { onWeatherImageNow, readyWeatherShare, RETRY_AFTER_MS, sendWeatherImage, takeNowRequest, weatherImageKey } from '../../lib/weatherShareRuntime'
 import { WeatherCard } from './WeatherCard'
 import { useLook } from '../../lib/look'
 
-/** Quiet time after the last change of the day before the image goes: a day is often a few edits in a row. */
-const SETTLE_MS = 10_000
+/** Quiet time after the last change of the day before the image is made and
+ * sent: a day is often a few edits in a row. Short, so that closing the app
+ * soon after filling the day rarely beats it; not shorter, since making the
+ * image holds the page for about a second on a phone. */
+const SETTLE_MS = 3_000
 
 /**
  * Keeps the day's weather image at Dropbox up to date, when the person turned
@@ -35,16 +38,22 @@ export function WeatherShareSender() {
   useEffect(() => {
     if (!due || !key) return
     let timer: ReturnType<typeof setTimeout> | undefined
+    // Once per image: leaving the app while it is being made or sent does not start it over.
+    let started = false
+    // The link to Dropbox renewed now if it is close to its end, not while the app leaves the screen.
+    void readyWeatherShare()
     const send = () => {
       clearTimeout(timer)
       const node = cardRef.current
-      if (!node) return
+      if (!node || started) return
+      started = true
       void cardToPng(node)
         .then((png) => sendWeatherImage(png, key))
         .catch(() => undefined)
     }
     const wait = failed && triedAt !== undefined ? Math.max(SETTLE_MS, RETRY_AFTER_MS - (Date.now() - triedAt)) : SETTLE_MS
-    if (takeNowRequest()) send()
+    // Asked for now, or the day was saved as the app left the screen (the form saves at once then): no waiting.
+    if (takeNowRequest() || (document.visibilityState === 'hidden' && !failed)) send()
     else timer = setTimeout(send, wait)
     const stopListening = onWeatherImageNow(() => {
       takeNowRequest()
