@@ -1,9 +1,9 @@
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useRememberedLiveQuery } from './rememberedLiveQuery'
 import { db } from '../db'
 import { DEFAULT_SETTINGS, type Settings } from '../db/types'
 
 export function useSettings(): Settings {
-  const s = useLiveQuery(() => db.settings.get(1), [])
+  const s = useRememberedLiveQuery('settings', () => db.settings.get(1), [])
   // Merge so settings saved before a new field existed (e.g. `language`) fall
   // back to its default instead of being `undefined`.
   return s ? { ...DEFAULT_SETTINGS, ...s } : DEFAULT_SETTINGS
@@ -14,7 +14,7 @@ export function useSettings(): Settings {
  * for anything that writes settings back based on what it read, that gap is
  * a window where the defaults are mistaken for what is stored. */
 export function useStoredSettings(): Settings | null {
-  const stored = useLiveQuery(async () => ({ settings: await db.settings.get(1) }), [])
+  const stored = useRememberedLiveQuery('settings:stored', async () => ({ settings: await db.settings.get(1) }), [])
   return stored ? { ...DEFAULT_SETTINGS, ...stored.settings } : null
 }
 
@@ -22,5 +22,5 @@ export function useStoredSettings(): Settings | null {
  * to the defaults meanwhile, which is wrong for anything decided once, like
  * whether to show the first-run setup. */
 export function useSettingsLoaded(): boolean {
-  return useLiveQuery(() => db.settings.get(1).then(() => true), []) ?? false
+  return useRememberedLiveQuery('settings:loaded', () => db.settings.get(1).then(() => true), []) ?? false
 }
