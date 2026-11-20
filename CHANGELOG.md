@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- **Image de la météo (style Météo) : deux semaines au lieu d'une.** Sous la douleur et les jauges du jour, qui ne changent pas, une courbe douce des 14 derniers jours, posée sur les bandes de couleur de la météo, de « plus doux » à « plus dur », sans chiffres ; un jour sans note coupe la ligne. La semaine en petites cases reste dessous, et une phrase la compare à la semaine d'avant (« Plus douce que la semaine d'avant. »), quand chacune a au moins 3 jours notés. La même image part vers Dropbox pour OUCH Duo. Le style Léger ne change pas.
+
 ## [0.15.1] - 2026-11-19
 
 Un bouton « Nouveautés » à côté de Réglages et un mot pour remercier celles et ceux qui utilisent déjà OUCH. Et côté documents : un guide pour les utilisateurs, de nouveaux flyers, et tous les PDF refaits pour cette version.

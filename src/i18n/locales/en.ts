@@ -2241,7 +2241,12 @@ const en: Translations = {
   },
 
   weatherCard: {
-    weekLabel: 'The last 7 days',
+    weekLabel: 'The last 14 days',
+    curveHarder: 'Harder',
+    curveEasier: 'Easier',
+    weekLower: 'Easier than the week before.',
+    weekSame: 'Close to the week before.',
+    weekHigher: 'Harder than the week before.',
     levelOf: 'Level {{n}} of 5',
     shareSummary: '{{title}}: {{weather}}, pain: {{painWord}} ({{pain}} out of 10)',
     painWords: ['None', 'Mild', 'Moderate', 'Severe', 'Very severe'],
