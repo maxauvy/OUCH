@@ -115,6 +115,12 @@
   --color-weather-3-glyph: #6a6473;
   --color-weather-4-glyph: #506989;
   --color-weather-5-glyph: #574a7a;
+  /* The cloud of the two-tone icons on a calendar tile: white in light mode, the weather's own pale tint in dark mode, so the five days do not all show the same white cloud. */
+  --color-weather-1-cloud: #ffffff;
+  --color-weather-2-cloud: #ffffff;
+  --color-weather-3-cloud: #ffffff;
+  --color-weather-4-cloud: #ffffff;
+  --color-weather-5-cloud: #ffffff;
 }
 
 /* Text fields: outlined. */
@@ -180,21 +186,27 @@
     --color-weather-3-text: #9b95a6;
     --color-weather-4-text: #819ab7;
     --color-weather-5-text: #9e96b2;
-    --color-weather-1-tile: #48402b;
-    --color-weather-2-tile: #414136;
-    --color-weather-3-tile: #373c45;
-    --color-weather-4-tile: #283744;
-    --color-weather-5-tile: #262a3a;
+    --color-weather-1-tile: #5a4520;
+    --color-weather-2-tile: #47432e;
+    --color-weather-3-tile: #2c323d;
+    --color-weather-4-tile: #1d3653;
+    --color-weather-5-tile: #2b2450;
     --color-weather-1-mark: #e6edf1;
     --color-weather-2-mark: #e6edf1;
     --color-weather-3-mark: #e6edf1;
     --color-weather-4-mark: #e6edf1;
     --color-weather-5-mark: #e6edf1;
-    --color-weather-1-glyph: #e3a73b;
-    --color-weather-2-glyph: #c7ab68;
-    --color-weather-3-glyph: #b3aebf;
-    --color-weather-4-glyph: #8fb0d1;
-    --color-weather-5-glyph: #b3abc8;
+    --color-weather-1-glyph: #f2bf5e;
+    --color-weather-2-glyph: #dcc792;
+    --color-weather-3-glyph: #aeb6c4;
+    --color-weather-4-glyph: #a3c6ec;
+    --color-weather-5-glyph: #bdb2ee;
+    --color-weather-1-cloud: #f2bf5e;
+    --color-weather-2-cloud: #e6d7ad;
+    --color-weather-3-cloud: #aeb6c4;
+    --color-weather-4-cloud: #bcd6f2;
+    --color-weather-5-cloud: #cfc6f4;
+    --cal-today: #e3b766;
     --cat-pain: #f28b82;
     --cat-pain-soft: #3d1f1d;
     --cat-fatigue: #f2b75c;
@@ -241,21 +253,27 @@
   --color-weather-3-text: #9b95a6;
   --color-weather-4-text: #819ab7;
   --color-weather-5-text: #9e96b2;
-  --color-weather-1-tile: #48402b;
-  --color-weather-2-tile: #414136;
-  --color-weather-3-tile: #373c45;
-  --color-weather-4-tile: #283744;
-  --color-weather-5-tile: #262a3a;
+  --color-weather-1-tile: #5a4520;
+  --color-weather-2-tile: #47432e;
+  --color-weather-3-tile: #2c323d;
+  --color-weather-4-tile: #1d3653;
+  --color-weather-5-tile: #2b2450;
   --color-weather-1-mark: #e6edf1;
   --color-weather-2-mark: #e6edf1;
   --color-weather-3-mark: #e6edf1;
   --color-weather-4-mark: #e6edf1;
   --color-weather-5-mark: #e6edf1;
-  --color-weather-1-glyph: #e3a73b;
-  --color-weather-2-glyph: #c7ab68;
-  --color-weather-3-glyph: #b3aebf;
-  --color-weather-4-glyph: #8fb0d1;
-  --color-weather-5-glyph: #b3abc8;
+  --color-weather-1-glyph: #f2bf5e;
+  --color-weather-2-glyph: #dcc792;
+  --color-weather-3-glyph: #aeb6c4;
+  --color-weather-4-glyph: #a3c6ec;
+  --color-weather-5-glyph: #bdb2ee;
+  --color-weather-1-cloud: #f2bf5e;
+  --color-weather-2-cloud: #e6d7ad;
+  --color-weather-3-cloud: #aeb6c4;
+  --color-weather-4-cloud: #bcd6f2;
+  --color-weather-5-cloud: #cfc6f4;
+  --cal-today: #e3b766;
   --cat-pain: #f28b82;
   --cat-pain-soft: #3d1f1d;
   --cat-fatigue: #f2b75c;
@@ -777,6 +795,16 @@ html[data-covered]::after {
   --sky-3: linear-gradient(180deg, #34323f 0%, #24252f 50%, rgba(17, 21, 28, 0) 100%);
   --sky-4: linear-gradient(180deg, #22354b 0%, #1a2534 50%, rgba(17, 21, 28, 0) 100%);
   --sky-5: linear-gradient(180deg, #2d2548 0%, #1f1b33 50%, rgba(17, 21, 28, 0) 100%);
+}
+
+/* The Journal's month in dark mode: the days of the neighbouring months keep their number only, their faded icons were noise on the dark page. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .cal-neighbour-icon {
+    visibility: hidden;
+  }
+}
+:root[data-theme='dark'] .cal-neighbour-icon {
+  visibility: hidden;
 }
 
 /* ---- Légère: plain and calm. A faintly rosy paper, the plum of the logo as

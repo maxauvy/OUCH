@@ -16,13 +16,13 @@ const WEATHER = {
   5: { color: '#574a7a', soft: '#e7e2f0', ink: '#574a7a' },
 } as const
 
-/** The calendar's tiles in dark mode (see `--color-weather-N-tile` in index.css, which this mirrors): a deep tint of each hue, the page's ink for the number and a light shade of the hue for the icon. */
+/** The calendar's tiles in dark mode (see `--color-weather-N-tile` in index.css, which this mirrors): a deep tint of each hue, darker from clear sky to storm and each in its own hue so the five tell apart, the page's ink for the number, a light shade of the hue for the icon and its bars, and a pale one for the icon's cloud. */
 export const WEATHER_TILE_DARK = {
-  1: { tile: '#48402b', mark: '#e6edf1', glyph: '#e3a73b' },
-  2: { tile: '#414136', mark: '#e6edf1', glyph: '#c7ab68' },
-  3: { tile: '#373c45', mark: '#e6edf1', glyph: '#b3aebf' },
-  4: { tile: '#283744', mark: '#e6edf1', glyph: '#8fb0d1' },
-  5: { tile: '#262a3a', mark: '#e6edf1', glyph: '#b3abc8' },
+  1: { tile: '#5a4520', mark: '#e6edf1', glyph: '#f2bf5e', cloud: '#f2bf5e' },
+  2: { tile: '#47432e', mark: '#e6edf1', glyph: '#dcc792', cloud: '#e6d7ad' },
+  3: { tile: '#2c323d', mark: '#e6edf1', glyph: '#aeb6c4', cloud: '#aeb6c4' },
+  4: { tile: '#1d3653', mark: '#e6edf1', glyph: '#a3c6ec', cloud: '#bcd6f2' },
+  5: { tile: '#2b2450', mark: '#e6edf1', glyph: '#bdb2ee', cloud: '#cfc6f4' },
 } as const
 
 const LIGHT = {

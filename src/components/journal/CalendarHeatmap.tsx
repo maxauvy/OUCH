@@ -182,33 +182,33 @@ export function CalendarHeatmap({
                 aria-label={label}
                 aria-current={today ? 'date' : undefined}
                 aria-pressed={selected}
-                // A taller tile: the number in its corner, the weather's shape at the bottom, the flare along the bottom edge.
-                className={`aspect-[0.82] rounded-[10px] flex flex-col justify-between relative p-[5px] pb-1 text-caption leading-none text-left ${inMonth ? 'font-semibold' : 'font-normal'}`}
+                // A taller tile: the number in its corner, the weather's shape in the middle, and under it a strip of its own for the flare and the marked period, so the bars never cross the icon.
+                className={`aspect-[0.82] rounded-[10px] flex flex-col relative p-[5px] pb-[3px] text-caption leading-none text-left ${inMonth ? 'font-semibold' : 'font-normal'}`}
                 style={{
                   background: tone ? tone.tile : 'transparent',
                   color: tone ? tone.mark : 'var(--color-ink-muted)',
+                  // The icon's cloud takes the weather's own tint (pale in dark mode, white in light).
+                  ...(tone ? { ['--wx-cloud' as string]: tone.cloud } : {}),
                   // A day with nothing noted stays bare, with no edge: an empty box would read as a day missed. The neighbours' days fade.
+                  // Today: amber in dark mode, like the active tab (--cal-today), the day's ink in light.
                   boxShadow: selected
                     ? 'inset 0 0 0 2px var(--color-brand)'
                     : today
-                      ? `inset 0 0 0 2px ${tone ? tone.mark : 'var(--color-ink)'}`
+                      ? `inset 0 0 0 2px var(--cal-today, ${tone ? tone.mark : 'var(--color-ink)'})`
                       : undefined,
                   opacity: inMonth ? 1 : 0.45,
                 }}
               >
                 <span>{format(day, 'd')}</span>
-                {weather && (
-                  <WeatherIcon name={weather.icon as never} size={18} className="self-center mb-1" style={{ color: tone ? tone.glyph : 'var(--color-ink-muted)' }} />
-                )}
-                {noPain && <NoPainRing color="var(--color-ink-muted)" className="self-center mb-1.5" />}
-                {inFlare && <span className="absolute left-[5px] right-[5px] bottom-[3px] h-[3px] rounded-full" style={{ background: tone ? tone.mark : 'var(--color-ink-muted)' }} aria-hidden />}
-                {inMarked && (
-                  <span
-                    className={`absolute left-[5px] right-[5px] h-[6px] rounded-full box-border ${inFlare ? 'bottom-[8px]' : 'bottom-[2px]'}`}
-                    style={{ border: `2px solid ${tone ? tone.mark : 'var(--color-ink-muted)'}` }}
-                    aria-hidden
-                  />
-                )}
+                <span className={`flex-1 min-h-0 flex items-center justify-center ${inMonth ? '' : 'cal-neighbour-icon'}`}>
+                  {weather && <WeatherIcon name={weather.icon as never} size={18} style={{ color: tone ? tone.glyph : 'var(--color-ink-muted)' }} />}
+                  {noPain && <NoPainRing color="var(--color-ink-muted)" />}
+                </span>
+                {/* Kept even when empty, so every icon sits at the same height. */}
+                <span className="relative h-[11px] shrink-0" aria-hidden>
+                  {inMarked && <span className="absolute inset-x-0 top-0 h-[6px] rounded-full box-border" style={{ border: `2px solid ${tone ? tone.glyph : 'var(--color-ink-muted)'}` }} />}
+                  {inFlare && <span className={`absolute inset-x-0 h-[3px] rounded-full ${inMarked ? 'bottom-0' : 'bottom-[2px]'}`} style={{ background: tone ? tone.glyph : 'var(--color-ink-muted)' }} />}
+                </span>
               </button>
             )
 
@@ -324,7 +324,7 @@ function WeatherLegend({ withFlare, withMarked, withNoPain, compact = false }: {
             <li key={level} className="flex items-center gap-1.5">
               <span
                 className={`${box} shrink-0 flex items-center justify-center`}
-                style={{ background: tone.tile, color: tone.glyph }}
+                style={{ background: tone.tile, color: tone.glyph, ['--wx-cloud' as string]: tone.cloud }}
                 aria-hidden
               >
                 <WeatherIcon name={w.icon as never} size={compact ? 13 : 18} />
