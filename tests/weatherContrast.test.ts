@@ -48,7 +48,7 @@ test('dark mode: the number reads on its tile (4.5:1) and the icon too (3:1 for 
 
 test('the tile colours of index.css (light, then the two dark rules) say what lib/theme.ts says', () => {
   for (const level of LEVELS) {
-    for (const part of ['tile', 'mark', 'glyph'] as const) {
+    for (const part of ['tile', 'mark', 'glyph', 'cloud'] as const) {
       const name = `--color-weather-${level}-${part}`
       assert.equal(token(name, 1), WEATHER_TILE_DARK[level][part], `${name} (OS dark rule)`)
       assert.equal(token(name, 2), WEATHER_TILE_DARK[level][part], `${name} (explicit dark)`)
@@ -74,7 +74,7 @@ test('the light tile colours are declared outside @theme, where Tailwind would l
   }
   assert.ok(close > open, 'the @theme block was found')
   for (const level of LEVELS) {
-    for (const part of ['tile', 'mark', 'glyph'] as const) {
+    for (const part of ['tile', 'mark', 'glyph', 'cloud'] as const) {
       const at = css.indexOf(`--color-weather-${level}-${part}:`)
       assert.ok(at > close, `--color-weather-${level}-${part} is declared inside @theme (light mode would lose it)`)
     }

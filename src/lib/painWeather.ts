@@ -43,7 +43,7 @@ const LEVELS: Record<PainWeatherLevel, Omit<PainWeather, 'level'>> = {
 
 /** The colours of a weather's tile in the calendar, as CSS variables that follow the mode: the fill, the number and bars, the icon (see index.css). */
 export function painWeatherTile(level: PainWeatherLevel) {
-  return { tile: `var(--color-weather-${level}-tile)`, mark: `var(--color-weather-${level}-mark)`, glyph: `var(--color-weather-${level}-glyph)` }
+  return { tile: `var(--color-weather-${level}-tile)`, mark: `var(--color-weather-${level}-mark)`, glyph: `var(--color-weather-${level}-glyph)`, cloud: `var(--color-weather-${level}-cloud)` }
 }
 
 /**
