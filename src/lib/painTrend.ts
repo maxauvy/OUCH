@@ -29,6 +29,24 @@ export function painVsRecent(
   return { delta, trend, n: previous.length }
 }
 
+/** The 7 days ending on `date` against the 7 before them, as the mean pain of
+ * each week: the line under the curve on the shared card. Null when either
+ * week has fewer than 3 logged days. */
+export function weekVsWeekBefore(
+  date: string,
+  entries: readonly { date: string; painLevel?: number }[]
+): PainTrend | null {
+  const week = (from: number) => {
+    const days = new Set(Array.from({ length: 7 }, (_, i) => shiftISO(date, -(from + i))))
+    return entries.flatMap((e) => (days.has(e.date) && typeof e.painLevel === 'number' ? [e.painLevel] : []))
+  }
+  const now = week(0)
+  const before = week(7)
+  if (now.length < TREND_MIN_DAYS || before.length < TREND_MIN_DAYS) return null
+  const delta = mean(now) - mean(before)
+  return Math.abs(delta) < TREND_SAME_BAND ? 'same' : delta < 0 ? 'lower' : 'higher'
+}
+
 export function painTrend(entry: LoggedEntry, entries: LoggedEntry[]): PainTrend | null {
   return painVsRecent(entry.date, entry.painLevel, entries)?.trend ?? null
 }

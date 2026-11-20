@@ -2039,8 +2039,15 @@ export interface Translations {
   }
 
   weatherCard: {
-    /** The weather look's card: the label over the last seven days */
+    /** The weather look's card: the label over the last 14 days (curve, then the last week as tiles). */
     weekLabel: string
+    /** Ends of the curve's height, worded as how the day felt. */
+    curveHarder: string
+    curveEasier: string
+    /** The week against the week before, under the curve. */
+    weekLower: string
+    weekSame: string
+    weekHigher: string
     /** Under the level name on the health card, e.g. "Level 2 of 5". */
     levelOf: string
     /** Text sent along with the shared image, for people who can't see it. */

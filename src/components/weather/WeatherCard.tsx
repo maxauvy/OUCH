@@ -7,7 +7,7 @@ import { AppLogo } from '../ui/AppLogo'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { IconArrowDownRight, IconArrowRight, IconArrowUpRight } from '@tabler/icons-react'
 import { theme } from '../../lib/theme'
-import { painTrend, painTrendText, painWordIndex, type PainTrend } from '../../lib/painTrend'
+import { painTrend, painTrendText, painWordIndex, weekVsWeekBefore, type PainTrend } from '../../lib/painTrend'
 import { useLoggedEntries } from '../../hooks/useEntries'
 import { format, useLocale, useTranslation, type Translations } from '../../i18n'
 
@@ -34,6 +34,58 @@ const GAUGE = { on: '#4d5a64', off: '#d5dde2' }
 /** The weather look's card: its ink, and the first colour of each weather's sky (index.css, --sky-1 to --sky-5, light). */
 const CARD_INK = '#1d2433'
 const SKY_TOP_LIGHT = ['#fbe2b4', '#f6e5c1', '#e2dee9', '#d4e0ec', '#ddd4ec']
+
+/** The curve's drawing area, in the card's pixels (no stretching, so the dots stay round). */
+const CURVE = { w: 280, h: 116, pad: 8 }
+/** The five weathers as bands of the curve's background, by their 0–10 thresholds (lib/painWeather.ts). */
+const CURVE_BANDS: [number, number, PainWeatherLevel][] = [[0, 1.5, 1], [1.5, 3.5, 2], [3.5, 5.5, 3], [5.5, 7.5, 4], [7.5, 10, 5]]
+
+/** The last 14 days' pain as a line over the weather bands, a dot per logged
+ * day in its weather's colour, the day itself ringed. A day without a note
+ * breaks the line. No numbers: the axis reads "harder" to "easier". */
+function CardCurve({ date, byDate, t, intlLocale }: { date: string; byDate: Map<string, LoggedEntry>; t: Translations; intlLocale: string }) {
+  const days = Array.from({ length: 14 }, (_, i) => shiftISO(date, i - 13))
+  const x = (i: number) => CURVE.pad + (i * (CURVE.w - 2 * CURVE.pad)) / 13
+  const y = (p: number) => CURVE.pad + ((10 - p) / 10) * (CURVE.h - 2 * CURVE.pad)
+  let path = ''
+  let open = false
+  days.forEach((d, i) => {
+    const e = byDate.get(d)
+    if (!e) return void (open = false)
+    path += `${open ? 'L' : 'M'}${x(i).toFixed(1)} ${y(e.painLevel).toFixed(1)}`
+    open = true
+  })
+  const short = (d: string) => new Date(d + 'T00:00:00').toLocaleDateString(intlLocale, { day: 'numeric', month: 'short' })
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ width: 44, flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: 12, lineHeight: 1.2, color: CARD_MUTED, padding: '4px 0' }}>
+          <span>{t.weatherCard.curveHarder}</span>
+          <span>{t.weatherCard.curveEasier}</span>
+        </div>
+        <svg width={CURVE.w} height={CURVE.h} viewBox={`0 0 ${CURVE.w} ${CURVE.h}`} style={{ display: 'block', borderRadius: 10 }} aria-hidden>
+          {CURVE_BANDS.map(([lo, hi, l]) => (
+            <rect key={l} x={0} y={y(hi)} width={CURVE.w} height={y(lo) - y(hi)} fill={painWeatherByLevel(l).soft} />
+          ))}
+          <rect x={0} y={0} width={CURVE.w} height={y(10)} fill={painWeatherByLevel(5).soft} />
+          <rect x={0} y={y(0)} width={CURVE.w} height={CURVE.h - y(0)} fill={painWeatherByLevel(1).soft} />
+          <path d={path} fill="none" stroke={CARD_MUTED} strokeWidth={2.4} strokeLinejoin="round" strokeLinecap="round" />
+          {days.map((d, i) => {
+            const e = byDate.get(d)
+            if (!e) return null
+            const today = d === date
+            return <circle key={d} cx={x(i)} cy={y(e.painLevel)} r={today ? 6 : 4} fill={colorForPainValue(e.painLevel)} stroke={today ? CARD_INK : '#ffffff'} strokeWidth={2} />
+          })}
+        </svg>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: CARD_MUTED, margin: '4px 0 0 52px' }}>
+        <span>{short(days[0])}</span>
+        <span>{short(days[7])}</span>
+        <span>{short(date)}</span>
+      </div>
+    </div>
+  )
+}
 
 /** Five notches for a 0–10 score. Decorative: the word next to it carries
  * the meaning (and the direction, since a full mood gauge is a good day). */
@@ -188,6 +240,8 @@ export const WeatherCard = forwardRef<
   if (rich) {
     const byDate = new Map(logged.map((e) => [e.date, e]))
     const days = Array.from({ length: 7 }, (_, i) => shiftISO(entry.date, i - 6))
+    const weekTrend = weekVsWeekBefore(entry.date, logged)
+    const weekTrendText = weekTrend === 'lower' ? t.weatherCard.weekLower : weekTrend === 'same' ? t.weatherCard.weekSame : t.weatherCard.weekHigher
     const box: CSSProperties = { background: 'rgba(255, 255, 255, 0.82)', borderRadius: 20, padding: '14px 16px' }
     const label: CSSProperties = { fontSize: 12.5, fontWeight: 700, color: CARD_MUTED }
     return (
@@ -261,7 +315,8 @@ export const WeatherCard = forwardRef<
 
         <div style={box}>
           <div style={{ ...label, marginBottom: 8 }}>{t.weatherCard.weekLabel}</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 5 }}>
+          <CardCurve date={entry.date} byDate={byDate} t={t} intlLocale={intlLocale} />
+          <div style={{ display: 'grid', marginTop: 12, gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 5 }}>
             {days.map((date) => {
               const e = byDate.get(date)
               const w = e ? computePainWeather(e) : null
@@ -292,6 +347,7 @@ export const WeatherCard = forwardRef<
               )
             })}
           </div>
+          {weekTrend && <div style={{ fontSize: 13.5, lineHeight: 1.4, marginTop: 10 }}>{weekTrendText}</div>}
         </div>
 
         {message && (

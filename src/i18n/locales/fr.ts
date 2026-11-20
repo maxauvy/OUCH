@@ -2247,7 +2247,12 @@ const fr: Translations = {
 
   weatherCard: {
     levelOf: 'Niveau {{n}} sur 5',
-    weekLabel: 'Ces 7 derniers jours',
+    weekLabel: 'Ces 14 derniers jours',
+    curveHarder: 'Plus dur',
+    curveEasier: 'Plus doux',
+    weekLower: 'Plus douce que la semaine d’avant.',
+    weekSame: 'Proche de la semaine d’avant.',
+    weekHigher: 'Plus difficile que la semaine d’avant.',
     shareSummary: '{{title}} : {{weather}}, douleur : {{painWord}} ({{pain}} sur 10)',
     painWords: ['Aucune', 'Légère', 'Modérée', 'Forte', 'Très forte'],
     moodWords: ['Difficile', 'Mitigée', 'Bonne', 'Très bonne'],
