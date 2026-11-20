@@ -1,3 +1,4 @@
+import { Brand } from './Brand'
 import { useEffect, useRef, useState } from 'react'
 import { readDuoInput, type DuoTarget } from '../lib/duoLink'
 import { strings as t } from './strings'
@@ -93,7 +94,7 @@ export function Scanner({ onFound, onCancel, onPaste }: { onFound: (target: DuoT
 
   return (
     <div className="stack grow">
-      <p className="kicker">{t.appName}</p>
+      <Brand />
       <h1 className="title">{t.welcomeTitle}</h1>
       {refused ? (
         <p className="card text">{t.cameraRefused}</p>

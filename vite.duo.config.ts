@@ -45,6 +45,17 @@ export default defineConfig(({ command }) => ({
         { tag: 'meta', attrs: { 'http-equiv': 'Content-Security-Policy', content: policy }, injectTo: 'head-prepend' },
       ],
     },
+    // Dev only: Duo's entry lies outside its root (duo/), in src/duo. The page asks for it at
+    // ../src/duo/main.tsx, which the browser reads as /src/duo/main.tsx, outside the /duo/ base:
+    // the dev server answered 404 and the page stayed blank. Point it at the file itself (/@fs/).
+    {
+      name: 'duo-dev-entry',
+      apply: 'serve',
+      transformIndexHtml: {
+        order: 'pre',
+        handler: (html) => html.replace('src="../src/duo/main.tsx"', `src="/@fs${fileURLToPath(new URL('./src/duo/main.tsx', import.meta.url))}"`),
+      },
+    },
     react(),
   ],
 }))
