@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from
 import { duoUrl, readDuoHash, readDuoInput, type DuoTarget } from '../lib/duoLink'
 import { fetchImage, type ImageResult } from './image'
 import { useDuoInstall, promptInstall } from './install'
+import { Brand } from './Brand'
+import { AppLogo } from '../components/ui/AppLogo'
 import { Scanner } from './Scanner'
 import { initialTarget, installLater, saveTarget, setInstallLater } from './store'
 import { chooseLanguage, intlLocale, strings as t } from './strings'
@@ -10,6 +12,8 @@ type Screen = 'welcome' | 'scan' | 'paste' | 'view'
 
 const time = (at: number) => new Date(at).toLocaleTimeString(intlLocale, { hour: '2-digit', minute: '2-digit' })
 const day = (at: number) => new Date(at).toLocaleDateString(intlLocale, { weekday: 'long', day: 'numeric', month: 'long' })
+
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 const isStandalone = () =>
   window.matchMedia?.('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true
@@ -46,18 +50,33 @@ export function DuoApp() {
     return (
       <Shell>
         <div className="stack grow">
-          <p className="kicker">{t.appName}</p>
-          <h1 className="title">{t.welcomeTitle}</h1>
-          <p className="text">{t.welcomeText}</p>
+          <div className="welcome-hero">
+            <AppLogo size={104} className="welcome-logo" />
+            <p className="welcome-name">
+              OUCH <span className="brand-duo">Duo</span>
+            </p>
+            <h1 className="title">{t.welcomeTitle}</h1>
+            <p className="text">{t.welcomeText}</p>
+          </div>
+          <ol className="how">
+            {t.howSteps.map((step, i) => (
+              <li key={step}>
+                <span aria-hidden="true">{i + 1}</span>
+                {step}
+              </li>
+            ))}
+          </ol>
           <div className="stack push-end">
             <button type="button" className="btn" onClick={() => setScreen('scan')}>
               {t.scan}
             </button>
-            <button type="button" className="btn soft" onClick={() => setScreen('paste')}>
+            <button type="button" className="link-btn center" onClick={() => setScreen('paste')}>
               {t.paste}
             </button>
-            <p className="small">{t.privacy}</p>
-            <LanguageChoice />
+            <p className="small center-text">{t.privacy}</p>
+            <div className="center-row">
+              <LanguageChoice />
+            </div>
           </div>
         </div>
       </Shell>
@@ -118,7 +137,10 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
 
   return (
     <div className="stack grow">
-      <p className="kicker">{t.appName}</p>
+      <div className="top-row">
+        <Brand />
+        {!gone && <Menu onScan={onScan} />}
+      </div>
       <h1 className="title">{arrived ? t.firstTitle(target.name) : t.weatherOf(target.name)}</h1>
 
       {gone ? (
@@ -147,22 +169,19 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
       )}
 
       {!gone && (
-      <div className="footer">
-        <div className="footer-row">
-          <span className="small" role="status">
-            {loading ? t.loading : image ? image.note : ''}
+        // On the first visit the install hint takes the bottom of the screen: the bar stays in its place under the image.
+        <div className={arrived ? 'dock in-flow' : 'dock'}>
+          <span className="dock-status" role="status">
+            <strong>{loading ? t.loading : image ? image.note : ''}</strong>
+            {!loading && result?.kind === 'fresh' && <span>{capitalize(day(lookedAt))}</span>}
           </span>
-          <button type="button" className="link-btn" onClick={refresh} disabled={loading}>
+          <button type="button" className="pill" onClick={refresh} disabled={loading}>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 11A8 8 0 0 0 5.6 6.6L4 8M4 4v4h4M4 13a8 8 0 0 0 14.4 4.4L20 16M20 20v-4h-4" />
+            </svg>
             {t.refresh}
           </button>
         </div>
-        <div className="footer-row">
-          <button type="button" className="link-btn quiet" onClick={onScan}>
-            {t.otherCode}
-          </button>
-          <LanguageChoice />
-        </div>
-      </div>
       )}
 
       {gone && (
@@ -172,6 +191,48 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
       )}
 
       {arrived && <InstallSheet />}
+    </div>
+  )
+}
+
+/** The round button at the top: what is rarely needed, scanning another code and the language, out of the way. */
+function Menu({ onScan }: { onScan: () => void }) {
+  const [open, setOpen] = useState(false)
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open])
+  return (
+    <div className="menu">
+      <button type="button" className="round" aria-label={t.more} aria-expanded={open} aria-controls="duo-menu" onClick={() => setOpen((v) => !v)}>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor">
+          <circle cx="12" cy="5" r="1.8" />
+          <circle cx="12" cy="12" r="1.8" />
+          <circle cx="12" cy="19" r="1.8" />
+        </svg>
+      </button>
+      {open && (
+        <>
+          <button type="button" className="menu-backdrop" aria-label={t.close} onClick={() => setOpen(false)} />
+          <div className="menu-panel" id="duo-menu">
+            <button
+              type="button"
+              className="link-btn"
+              onClick={() => {
+                setOpen(false)
+                onScan()
+              }}
+            >
+              {t.otherCode}
+            </button>
+            <LanguageChoice />
+          </div>
+        </>
+      )}
     </div>
   )
 }
@@ -229,7 +290,7 @@ function Paste({ onDone, onCancel }: { onDone: (target: DuoTarget) => void; onCa
   }
   return (
     <form className="stack grow" onSubmit={submit}>
-      <p className="kicker">{t.appName}</p>
+      <Brand />
       <h1 className="title">{t.pasteLabel}</h1>
       <input
         id="duo-link"

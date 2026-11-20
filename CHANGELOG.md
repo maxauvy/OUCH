@@ -7,6 +7,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Modifié
+- **OUCH Duo prend l'icône d'OUCH et un nouveau look, « Lever du jour ».** Un ciel doux aux couleurs de l'icône, de l'ambre au lilas, et l'icône avec « OUCH Duo » en haut de chaque écran. Le premier écran montre l'icône en grand et les trois étapes (ton proche ouvre OUCH, « Partager ma météo », tu scannes le code). La météo du jour s'affiche en carte, avec en bas une barre qui reste visible : quand elle a été regardée, et « Actualiser ». « Scanner un autre code » et la langue passent dans le bouton rond en haut. Le mode sombre suit, en ciel du soir.
+
+### Modifié
 - **Image de la météo (style Météo) : deux semaines au lieu d'une.** Sous la douleur et les jauges du jour, qui ne changent pas, une courbe douce des 14 derniers jours, posée sur les bandes de couleur de la météo, de « plus doux » à « plus dur », sans chiffres ; un jour sans note coupe la ligne. La semaine en petites cases reste dessous, et une phrase la compare à la semaine d'avant (« Plus douce que la semaine d'avant. »), quand chacune a au moins 3 jours notés. La même image part vers Dropbox pour OUCH Duo. Le style Léger ne change pas.
 
 ## [0.15.1] - 2026-11-19
