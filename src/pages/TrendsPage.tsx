@@ -17,6 +17,8 @@ import { WeekdayCard, WeekdayWaiting } from '../components/trends/WeekdayCard'
 import { ZonesFlaresCard, ZonesMapCard, ZonesWeeksCard } from '../components/trends/ZonesCards'
 import { Card, GroupCaption, SectionTitle } from '../components/ui/Card'
 import { Segmented } from '../components/ui/Segmented'
+import { FloatingTop } from '../components/layout/FloatingTop'
+import { useScrolledAway } from '../hooks/useScrolledAway'
 import { NavTile, NavTiles } from '../components/ui/NavTile'
 import { PageSky } from '../components/entry/TodaySky'
 import { useRichLook } from '../lib/look'
@@ -67,6 +69,8 @@ export function TrendsPage() {
   const { intlLocale, language } = useLocale()
   // The detail pages the summary opens (zones, treatments, habits, comparison); null is the summary itself.
   const [detail, setDetail] = useState<Detail | null>(null)
+  // The period picker, and its stand-in at the top once it has scrolled away: every card below depends on it.
+  const [rangeAnchor, rangeAway] = useScrolledAway()
   // A page of Trends opens at its top, and so does the way back: without it, one opened from low on the list started half-way down, its title and way back out of sight.
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -184,8 +188,16 @@ export function TrendsPage() {
     .join(' ')
 
   const hasTreatments = (medicationsTracked && !!medications) || (settings.leadTrialHistory?.length ?? 0) > 0
+  const rangeOptions = RANGES.map((r, i) => ({ value: i, label: r.label }))
   const rangePicker = (
-    <Segmented label={i18n.trends.rangeLabel} options={RANGES.map((r, i) => ({ value: i, label: r.label }))} value={rangeIdx} onChange={setRangeIdx} />
+    <>
+      <div ref={rangeAnchor}>
+        <Segmented label={i18n.trends.rangeLabel} options={rangeOptions} value={rangeIdx} onChange={setRangeIdx} />
+      </div>
+      <FloatingTop away={rangeAway} besideBack={detail !== null}>
+        <Segmented label={i18n.trends.rangeLabel} options={rangeOptions} value={rangeIdx} onChange={setRangeIdx} />
+      </FloatingTop>
+    </>
   )
 
   const DETAIL_TITLES: Record<Detail, string> = {

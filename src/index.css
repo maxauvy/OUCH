@@ -633,20 +633,21 @@ input::-webkit-date-and-time-value {
   box-shadow: 0 10px 30px -14px rgba(20, 28, 48, 0.5);
 }
 
-/* The round way back of a page (PageBack): out of sight while the page's own link is in view, then it comes in softly. */
-.page-back-float {
+/* What floats in at the top once its original has scrolled away (the round way back of PageBack, FloatingTop): out of sight
+   while the original is in view, then it comes in softly. */
+.float-in {
   opacity: 0;
   transform: translateY(-6px);
   pointer-events: none;
   transition: opacity 200ms ease, transform 200ms ease;
 }
-.page-back-float.is-away {
+.float-in.is-away {
   opacity: 1;
   transform: none;
   pointer-events: auto;
 }
 @media (prefers-reduced-motion: reduce) {
-  .page-back-float {
+  .float-in {
     transition: none;
   }
 }

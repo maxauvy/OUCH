@@ -43,6 +43,8 @@ import { TodaySkyBackdrop, TodaySkyLine } from './TodaySky'
 import { format, useLocale, useTranslation } from '../../i18n'
 import { useRichLook } from '../../lib/look'
 import { AppLogo } from '../ui/AppLogo'
+import { FloatingTop } from '../layout/FloatingTop'
+import { useScrolledAway } from '../../hooks/useScrolledAway'
 import { isOffered } from '../../lib/indicatorCatalog'
 import { useEarlyAccess } from '../../lib/earlyAccess'
 import { todayISO } from '../../lib/dates'
@@ -220,6 +222,27 @@ export function HealthEntryLayout({
   const deltaText = new Intl.NumberFormat(intlLocale, { maximumFractionDigits: 1 }).format(Math.abs(vsRecent?.delta ?? 0))
 
   const weather = computePainWeather({ painLevel: local.painLevel ?? 0 })
+  // A past day (the Journal): once its title has scrolled away, a bar at the top keeps the day and its weather in view down the long form.
+  const [dayAnchor, dayAway] = useScrolledAway()
+  const dayBar = !isToday && (
+    <FloatingTop away={dayAway}>
+      <div className="flex items-center gap-2.5 px-2.5 py-1">
+        {local.painLevel !== undefined && (
+          <span className="w-8 h-8 shrink-0 rounded-[10px] flex items-center justify-center" style={{ background: 'var(--color-surface)', color: weather.text }} aria-hidden>
+            <WeatherIcon name={weather.icon as never} size={22} />
+          </span>
+        )}
+        <span className="min-w-0">
+          <span className="block text-body font-semibold leading-tight truncate">{longDateCap}</span>
+          {local.painLevel !== undefined && (
+            <span className="block text-caption leading-tight truncate" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.painWeatherLevels[weather.level]} · {format(t.entryForm.skyPain, { n: local.painLevel })}
+            </span>
+          )}
+        </span>
+      </div>
+    </FloatingTop>
+  )
 
   // "Logged at 20:14", or, for a day written down afterwards, when it was
   // written: a plain statement, nothing to fix.
@@ -329,7 +352,7 @@ export function HealthEntryLayout({
               {longDateCap}
             </p>
           )}
-          <h1 className="text-title font-bold leading-tight">{isToday ? t.tabs.today : longDateCap}</h1>
+          <h1 ref={isToday ? undefined : dayAnchor} className="text-title font-bold leading-tight">{isToday ? t.tabs.today : longDateCap}</h1>
           {greeting && (
             <p className="text-control mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
               {greeting}
@@ -372,6 +395,7 @@ export function HealthEntryLayout({
       <div className="flex flex-col gap-3">
         {sky && <TodaySkyBackdrop weather={null} />}
         {header}
+        {dayBar}
       </div>
     )
 
@@ -379,6 +403,7 @@ export function HealthEntryLayout({
     <div className="flex flex-col gap-3">
       {sky && <TodaySkyBackdrop weather={dayWeather} />}
       {header}
+      {dayBar}
       {sky && <TodaySkyLine weather={dayWeather} painLevel={local.painLevel} />}
       {isToday && afterHeader}
 
