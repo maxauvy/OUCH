@@ -646,6 +646,10 @@ input::-webkit-date-and-time-value {
   transform: none;
   pointer-events: auto;
 }
+/* Buttons that keep their own soft fill in the page (the bell of « Nouveautés ») take the glass around them instead. */
+.float-rounds button {
+  background: transparent !important;
+}
 @media (prefers-reduced-motion: reduce) {
   .float-in {
     transition: none;
