@@ -5,6 +5,7 @@ import { useDuoInstall, promptInstall } from './install'
 import { Brand } from './Brand'
 import { AppLogo } from '../components/ui/AppLogo'
 import { Scanner } from './Scanner'
+import { Understand } from './Understand'
 import { initialTarget, installLater, saveTarget, setInstallLater } from './store'
 import { chooseLanguage, intlLocale, strings as t } from './strings'
 
@@ -134,6 +135,7 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
   if (result?.kind === 'fresh') image = { url: result.url, note: t.lookedAt(time(lookedAt)) }
   else if (result?.kind === 'offline') image = { url: result.url, note: t.offline(day(result.at)) }
   const gone = result?.kind === 'gone' || result?.kind === 'wrongKey'
+  const [tab, setTab] = useState<Tab>('weather')
 
   return (
     <div className="stack grow">
@@ -141,56 +143,100 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
         <Brand />
         {!gone && <Menu onScan={onScan} />}
       </div>
-      <h1 className="title">{arrived ? t.firstTitle(target.name) : t.weatherOf(target.name)}</h1>
+      {!gone && <Tabs tab={tab} onTab={setTab} />}
 
-      {gone ? (
-        <div className="card stack">
-          <h2 className="card-title">{result.kind === 'wrongKey' ? t.newCodeTitle : t.goneTitle}</h2>
-          <p className="text">{result.kind === 'wrongKey' ? t.newCodeText(target.name) : t.goneText(target.name)}</p>
-          {result.kind === 'gone' && (
-            <button type="button" className="btn soft" onClick={refresh}>
-              {t.tryAgain}
-            </button>
-          )}
-          <button type="button" className="btn soft" onClick={onScan}>
-            {t.scanNew}
-          </button>
+      {tab === 'understand' && !gone ? (
+        <div role="tabpanel" id="duo-panel-understand" aria-labelledby="duo-tab-understand">
+          <Understand name={target.name} />
         </div>
-      ) : image ? (
-        <img
-          className="weather-image"
-          src={image.url}
-          alt={t.imageAlt(target.name)}
-        />
       ) : (
-        <div className="weather-image placeholder" role="status">
-          {result?.kind === 'nothing' ? t.offlineNothing : t.loading}
-        </div>
-      )}
+        <div role={gone ? undefined : 'tabpanel'} id="duo-panel-weather" aria-labelledby={gone ? undefined : 'duo-tab-weather'} className="stack grow">
+          <h1 className="title">{arrived ? t.firstTitle(target.name) : t.weatherOf(target.name)}</h1>
 
-      {!gone && (
-        // On the first visit the install hint takes the bottom of the screen: the bar stays in its place under the image.
-        <div className={arrived ? 'dock in-flow' : 'dock'}>
-          <span className="dock-status" role="status">
-            <strong>{loading ? t.loading : image ? image.note : ''}</strong>
-            {!loading && result?.kind === 'fresh' && <span>{capitalize(day(lookedAt))}</span>}
-          </span>
-          <button type="button" className="pill" onClick={refresh} disabled={loading}>
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 11A8 8 0 0 0 5.6 6.6L4 8M4 4v4h4M4 13a8 8 0 0 0 14.4 4.4L20 16M20 20v-4h-4" />
-            </svg>
-            {t.refresh}
-          </button>
-        </div>
-      )}
+          {gone ? (
+            <div className="card stack">
+              <h2 className="card-title">{result.kind === 'wrongKey' ? t.newCodeTitle : t.goneTitle}</h2>
+              <p className="text">{result.kind === 'wrongKey' ? t.newCodeText(target.name) : t.goneText(target.name)}</p>
+              {result.kind === 'gone' && (
+                <button type="button" className="btn soft" onClick={refresh}>
+                  {t.tryAgain}
+                </button>
+              )}
+              <button type="button" className="btn soft" onClick={onScan}>
+                {t.scanNew}
+              </button>
+            </div>
+          ) : image ? (
+            <img
+              className="weather-image"
+              src={image.url}
+              alt={t.imageAlt(target.name)}
+            />
+          ) : (
+            <div className="weather-image placeholder" role="status">
+              {result?.kind === 'nothing' ? t.offlineNothing : t.loading}
+            </div>
+          )}
 
-      {gone && (
-        <div className="footer">
-          <LanguageChoice />
+          {!gone && (
+            // On the first visit the install hint takes the bottom of the screen: the bar stays in its place under the image.
+            <div className={arrived ? 'dock in-flow' : 'dock'}>
+              <span className="dock-status" role="status">
+                <strong>{loading ? t.loading : image ? image.note : ''}</strong>
+                {!loading && result?.kind === 'fresh' && <span>{capitalize(day(lookedAt))}</span>}
+              </span>
+              <button type="button" className="pill" onClick={refresh} disabled={loading}>
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 11A8 8 0 0 0 5.6 6.6L4 8M4 4v4h4M4 13a8 8 0 0 0 14.4 4.4L20 16M20 20v-4h-4" />
+                </svg>
+                {t.refresh}
+              </button>
+            </div>
+          )}
+
+          {gone && (
+            <div className="footer">
+              <LanguageChoice />
+            </div>
+          )}
         </div>
       )}
 
       {arrived && <InstallSheet />}
+    </div>
+  )
+}
+
+type Tab = 'weather' | 'understand'
+
+/** "Their weather" and "Understand": two tabs, the arrows move between them. */
+function Tabs({ tab, onTab }: { tab: Tab; onTab: (tab: Tab) => void }) {
+  const tabs: [Tab, string][] = [
+    ['weather', t.tabWeather],
+    ['understand', t.tabUnderstand],
+  ]
+  return (
+    <div className="tabs" role="tablist" aria-label={t.tabsLabel}>
+      {tabs.map(([id, label]) => (
+        <button
+          key={id}
+          type="button"
+          role="tab"
+          id={`duo-tab-${id}`}
+          aria-selected={tab === id}
+          aria-controls={`duo-panel-${id}`}
+          tabIndex={tab === id ? 0 : -1}
+          onClick={() => onTab(id)}
+          onKeyDown={(e) => {
+            if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+            const next: Tab = id === 'weather' ? 'understand' : 'weather'
+            onTab(next)
+            document.getElementById(`duo-tab-${next}`)?.focus()
+          }}
+        >
+          {label}
+        </button>
+      ))}
     </div>
   )
 }
