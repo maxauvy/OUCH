@@ -222,6 +222,8 @@ export function HealthEntryLayout({
   const deltaText = new Intl.NumberFormat(intlLocale, { maximumFractionDigits: 1 }).format(Math.abs(vsRecent?.delta ?? 0))
 
   const weather = computePainWeather({ painLevel: local.painLevel ?? 0 })
+  // Today: the header, whose bell and settings float in at the top right once it has scrolled away.
+  const [headAnchor, headAway] = useScrolledAway()
   // A past day (the Journal): once its title has scrolled away, a bar at the top keeps the day and its weather in view down the long form.
   const [dayAnchor, dayAway] = useScrolledAway()
   const dayBar = !isToday && (
@@ -342,7 +344,7 @@ export function HealthEntryLayout({
   const greeting = isToday && ready && !lightToday && !restToday &&local.painLevel === undefined ? t.today.greeting[dayPart(hour)] : null
 
   const header = (
-      <div className="flex items-center justify-between px-1">
+      <div ref={isToday ? headAnchor : undefined} className="flex items-center justify-between px-1">
         <div className="flex items-center gap-3 min-w-0">
         {/* The OUCH icon beside today's title, as OUCH Duo shows it at the top of its screens. */}
         {isToday && rich && <AppLogo size={44} className="shrink-0 rounded-[10px] shadow-[0_4px_12px_-4px_rgba(124,111,168,0.5)]" />}
@@ -380,6 +382,24 @@ export function HealthEntryLayout({
               >
                 <IconSettings size={22} stroke={1.8} aria-hidden />
               </button>
+            )}
+          </div>
+        )}
+        {/* Once the header has scrolled away, its two buttons stay at hand: round glass buttons at the top right, in a mirror of the way back of other pages. */}
+        {isToday && (onOpenSettings || headerAction) && (
+          <div
+            aria-hidden={!headAway}
+            inert={!headAway}
+            className={`float-in float-rounds${headAway ? ' is-away' : ''} fixed z-40 flex gap-2`}
+            style={{ top: 'calc(var(--root-pad-top, 0px) + 8px)', right: 'max(12px, env(safe-area-inset-right))' }}
+          >
+            {headerAction && <span className="glass-float flex rounded-full">{headerAction}</span>}
+            {onOpenSettings && (
+              <span className="glass-float flex rounded-full">
+                <button type="button" onClick={onOpenSettings} aria-label={t.today.openSettings} className="w-11 h-11 rounded-full flex items-center justify-center shrink-0" style={{ color: 'var(--color-brand)' }}>
+                  <IconSettings size={22} stroke={1.8} aria-hidden />
+                </button>
+              </span>
             )}
           </div>
         )}
