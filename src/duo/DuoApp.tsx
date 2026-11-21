@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { duoUrl, readDuoHash, readDuoInput, type DuoTarget } from '../lib/duoLink'
 import { fetchImage, type ImageResult } from './image'
 import { useDuoInstall, promptInstall } from './install'
@@ -6,7 +6,7 @@ import { Brand } from './Brand'
 import { Scanner } from './Scanner'
 import { Tour, Understand } from './Understand'
 import { EXAMPLE_IMAGE } from './example'
-import { initialTarget, installLater, saveTarget, setInstallLater } from './store'
+import { forgetTarget, initialTarget, installLater, saveTarget, setInstallLater } from './store'
 import { chooseLanguage, intlLocale, strings as t } from './strings'
 
 type Screen = 'welcome' | 'scan' | 'paste' | 'view'
@@ -33,6 +33,16 @@ export function DuoApp() {
     setTarget(next)
     setArrived(!isStandalone())
     setScreen('view')
+  }, [])
+
+  // "Stop following this weather": back to the first screen, with nothing kept.
+  const forget = useCallback((link: string) => {
+    void forgetTarget(link).then(() => {
+      history.replaceState(null, '', `${location.pathname}${location.search}`)
+      setTarget(null)
+      setArrived(false)
+      setScreen('welcome')
+    })
   }, [])
 
   // A new link opened while Duo is already open in the browser: only the part after # changes, the page does not reload.
@@ -83,7 +93,7 @@ export function DuoApp() {
   }
   return (
     <Shell>
-      <Today key={target.link} target={target} arrived={arrived} onScan={() => setScreen('scan')} />
+      <Today key={target.link} target={target} arrived={arrived} onScan={() => setScreen('scan')} onForget={() => forget(target.link)} />
     </Shell>
   )
 }
@@ -137,7 +147,8 @@ function Shell({ children }: { children: ReactNode }) {
 }
 
 /** The day's weather: the image, when it was looked at, and a way to look again. */
-function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolean; onScan: () => void }) {
+function Today({ target, arrived, onScan, onForget }: { target: DuoTarget; arrived: boolean; onScan: () => void; onForget: () => void }) {
+  const [asking, setAsking] = useState(false)
   const [result, setResult] = useState<ImageResult | null>(null)
   const [lookedAt, setLookedAt] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -178,7 +189,7 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
     <div className="stack grow">
       <div className="top-row">
         <Brand />
-        {!gone && <Menu onScan={onScan} />}
+        {!gone && <Menu onScan={onScan} onForget={() => setAsking(true)} />}
       </div>
       {!gone && <Tabs tab={tab} onTab={setTab} />}
 
@@ -201,6 +212,9 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
               )}
               <button type="button" className="btn soft" onClick={onScan}>
                 {t.scanNew}
+              </button>
+              <button type="button" className="link-btn center" onClick={() => setAsking(true)}>
+                {t.forget}
               </button>
             </div>
           ) : image ? (
@@ -240,6 +254,7 @@ function Today({ target, arrived, onScan }: { target: DuoTarget; arrived: boolea
       )}
 
       {arrived && <InstallSheet />}
+      {asking && <ForgetConfirm name={target.name} onForget={onForget} onCancel={() => setAsking(false)} />}
     </div>
   )
 }
@@ -279,7 +294,7 @@ function Tabs({ tab, onTab }: { tab: Tab; onTab: (tab: Tab) => void }) {
 }
 
 /** The round button at the top: what is rarely needed, scanning another code and the language, out of the way. */
-function Menu({ onScan }: { onScan: () => void }) {
+function Menu({ onScan, onForget }: { onScan: () => void; onForget: () => void }) {
   const [open, setOpen] = useState(false)
   useEffect(() => {
     if (!open) return
@@ -291,7 +306,7 @@ function Menu({ onScan }: { onScan: () => void }) {
   }, [open])
   return (
     <div className="menu">
-      <button type="button" className="round" aria-label={t.more} aria-expanded={open} aria-controls="duo-menu" onClick={() => setOpen((v) => !v)}>
+      <button type="button" className="round" id="duo-menu-button" aria-label={t.more} aria-expanded={open} aria-controls="duo-menu" onClick={() => setOpen((v) => !v)}>
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor">
           <circle cx="12" cy="5" r="1.8" />
           <circle cx="12" cy="12" r="1.8" />
@@ -312,10 +327,57 @@ function Menu({ onScan }: { onScan: () => void }) {
             >
               {t.otherCode}
             </button>
+            <button
+              type="button"
+              className="link-btn"
+              onClick={() => {
+                setOpen(false)
+                onForget()
+              }}
+            >
+              {t.forget}
+            </button>
             <LanguageChoice />
           </div>
         </>
       )}
+    </div>
+  )
+}
+
+/** Asks before forgetting, since the code is needed to come back. Calm: no alert colour, and "Cancel" has the focus. */
+function ForgetConfirm({ name, onForget, onCancel }: { name?: string; onForget: () => void; onCancel: () => void }) {
+  const cancel = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    const before = document.activeElement as HTMLElement | null
+    cancel.current?.focus()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onCancel()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      // The menu item that opened it is gone with the menu: back to the round button.
+      ;(before?.isConnected ? before : document.getElementById('duo-menu-button'))?.focus()
+    }
+  }, [onCancel])
+  return (
+    <div className="confirm-layer">
+      <button type="button" className="confirm-backdrop" aria-label={t.cancel} tabIndex={-1} onClick={onCancel} />
+      <section className="confirm" role="alertdialog" aria-modal="true" aria-labelledby="duo-forget-title" aria-describedby="duo-forget-text">
+        <h2 id="duo-forget-title" className="card-title">
+          {t.forgetTitle(name)}
+        </h2>
+        <p id="duo-forget-text" className="text">
+          {t.forgetText(name)}
+        </p>
+        <button type="button" className="btn" onClick={onForget}>
+          {t.forgetOk}
+        </button>
+        <button type="button" className="link-btn center" ref={cancel} onClick={onCancel}>
+          {t.cancel}
+        </button>
+      </section>
     </div>
   )
 }

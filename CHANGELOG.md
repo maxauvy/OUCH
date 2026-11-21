@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **OUCH Duo : « Ne plus suivre cette météo ».** Dans le menu du bouton rond (et sur l'écran « Cette météo n'est plus partagée »), après une confirmation calme : Duo efface de ce téléphone le lien, la clé et la dernière image reçue, et revient à l'accueil. Rien ne change pour la personne qui partage. Sur iPhone, l'app installée ne reprend pas ce lien en se rouvrant ; scanner à nouveau le code le rétablit.
+
 ### Modifié
 - **La période de Tendances et le jour ouvert du Journal restent sous les yeux.** Quand on fait défiler, les choix 7 j / 30 j / 90 j / Tout passent dans une barre de verre en haut, toujours touchables (à côté du bouton de retour sur les pages de Tendances) ; dans le Journal, la barre rappelle le jour ouvert, sa météo et sa douleur tout le long du formulaire. En haut de la page, rien ne change.
 - **Le retour en arrière ne se perd plus sur une longue page.** Sur les pages ouvertes depuis une autre (Tendances, Réglages, « Mes enfants », Soulager), le lien « ‹ … » reste en haut comme avant ; dès qu'il part avec le défilement, un bouton rond en verre avec sa flèche apparaît en douceur en haut à gauche, comme le bouton rond de Duo, et s'efface quand le lien revient.
