@@ -3,9 +3,9 @@ import { duoUrl, readDuoHash, readDuoInput, type DuoTarget } from '../lib/duoLin
 import { fetchImage, type ImageResult } from './image'
 import { useDuoInstall, promptInstall } from './install'
 import { Brand } from './Brand'
-import { AppLogo } from '../components/ui/AppLogo'
 import { Scanner } from './Scanner'
-import { Understand } from './Understand'
+import { Tour, Understand } from './Understand'
+import { EXAMPLE_IMAGE } from './example'
 import { initialTarget, installLater, saveTarget, setInstallLater } from './store'
 import { chooseLanguage, intlLocale, strings as t } from './strings'
 
@@ -51,14 +51,12 @@ export function DuoApp() {
     return (
       <Shell>
         <div className="stack grow">
-          <div className="welcome-hero">
-            <AppLogo size={104} className="welcome-logo" />
-            <p className="welcome-name">
-              OUCH <span className="brand-duo">Duo</span>
-            </p>
-            <h1 className="title">{t.welcomeTitle}</h1>
-            <p className="text">{t.welcomeText}</p>
+          <div className="top-row">
+            <Brand />
           </div>
+          <h1 className="title">{t.showcaseTitle}</h1>
+          <p className="text muted-text">{t.showcaseText}</p>
+          <Showcase />
           <ol className="how">
             {t.howSteps.map((step, i) => (
               <li key={step}>
@@ -87,6 +85,41 @@ export function DuoApp() {
     <Shell>
       <Today key={target.link} target={target} arrived={arrived} onScan={() => setScreen('scan')} />
     </Shell>
+  )
+}
+
+/** Before any code: the example image, half shown, and the tour that explains it, so a relative sees what Duo brings before scanning. */
+function Showcase() {
+  const [tour, setTour] = useState<number | null>(null)
+  const [opener, setOpener] = useState<HTMLButtonElement | null>(null)
+  return (
+    <div className="showcase">
+      <img src={EXAMPLE_IMAGE[t.lang === 'en' ? 'en' : 'fr']} alt={t.exampleAlt} />
+      <span className="showcase-tag" aria-hidden="true">
+        {t.exampleTag}
+      </span>
+      <span className="showcase-fade" aria-hidden="true" />
+      <button
+        type="button"
+        className="showcase-go"
+        onClick={(e) => {
+          setOpener(e.currentTarget)
+          setTour(0)
+        }}
+      >
+        {t.understandThis}
+      </button>
+      {tour !== null && (
+        <Tour
+          step={tour}
+          onStep={setTour}
+          onClose={() => {
+            setTour(null)
+            opener?.focus()
+          }}
+        />
+      )}
+    </div>
   )
 }
 

@@ -133,7 +133,7 @@ function Fold({ icon, tint, title, line, children }: { icon: ReactNode; tint: st
 }
 
 /** The tour: the example image, dimmed except the part explained, and its explanation below. */
-function Tour({ step, name, onStep, onClose }: { step: number; name?: string; onStep: (step: number) => void; onClose: () => void }) {
+export function Tour({ step, name, onStep, onClose }: { step: number; name?: string; onStep: (step: number) => void; onClose: () => void }) {
   const heading = useRef<HTMLHeadingElement>(null)
   const part = t.parts[step]
   const last = step === t.parts.length - 1
