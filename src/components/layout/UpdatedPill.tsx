@@ -46,7 +46,7 @@ export function UpdatedPill() {
       onBlur={() => setHeld(false)}
       className="fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full py-1 pl-3 pr-0.5 text-caption font-semibold shadow-lg"
       // Above the tab bar, and above the demo's pill when there is one.
-      style={{ bottom: `calc(env(safe-area-inset-bottom) + ${IS_DEMO ? 124 : 76}px)`, background: 'var(--color-ink)', color: 'var(--color-paper)' }}
+      style={{ bottom: `calc(max(12px, calc(env(safe-area-inset-bottom) - 12px)) + ${IS_DEMO ? 118 : 70}px)`, background: 'var(--color-ink)', color: 'var(--color-paper)' }}
     >
       <IconCircleCheck size={16} aria-hidden />
       <span>{format(t.updated, { version }, language)}</span>

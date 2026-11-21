@@ -10,7 +10,7 @@ export function DemoPill() {
     <aside
       aria-label={t.pill}
       className="fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-full py-1 pl-4 pr-1 text-caption font-semibold whitespace-nowrap shadow-lg"
-      style={{ bottom: 'calc(env(safe-area-inset-bottom) + 76px)', background: 'var(--color-ink)', color: 'var(--color-paper)' }}
+      style={{ bottom: 'calc(max(12px, calc(env(safe-area-inset-bottom) - 12px)) + 70px)', background: 'var(--color-ink)', color: 'var(--color-paper)' }}
     >
       <span>{t.pill}</span>
       <button
