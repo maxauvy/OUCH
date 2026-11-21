@@ -15,7 +15,6 @@
   --chip: #eef1f5;
   --glass: rgba(255, 255, 255, 0.78);
   --sky: linear-gradient(180deg, #fbe2c4 0%, #efe2f0 45%, rgba(244, 246, 249, 0) 100%);
-  --status-top: #fbe2c4;
   --dock-shadow: 0 10px 30px -14px rgba(58, 53, 96, 0.45);
   --shadow: 0 1px 2px rgba(30, 45, 70, 0.04), 0 10px 24px -18px rgba(30, 45, 70, 0.35);
   --card-border: none;
@@ -36,7 +35,6 @@
     --chip: #232a36;
     --glass: rgba(30, 34, 46, 0.82);
     --sky: linear-gradient(180deg, #3b2c33 0%, #2a2540 45%, rgba(17, 21, 28, 0) 100%);
-    --status-top: #3b2c33;
     --dock-shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.6);
     --shadow: none;
     --card-border: 1px solid var(--hairline);
@@ -47,9 +45,24 @@
 * {
   box-sizing: border-box;
 }
-/* The strip under the status bar on iPhone takes the page's own colour: the sky's top. */
+:root {
+  --page-top: calc(env(safe-area-inset-top, 0px) + 20px);
+}
+/* Installed on an iPhone (iOS 26), the status bar's blur reaches about 40px
+   below the bar, and env(safe-area-inset-top) can read 0 there (WebKit bug
+   301994): the same room as OUCH (src/index.css) keeps the top out of the blur. */
+@media (display-mode: standalone) {
+  @supports (-webkit-touch-callout: none) {
+    :root {
+      --page-top: calc(env(safe-area-inset-top, 0px) + 48px);
+    }
+  }
+}
+/* On iPhone, the installed app paints the status bar's strip itself, in a
+   colour the page cannot change: the page's root stays the paper, and the sky
+   starts from it (see .sky), as on OUCH's pages (components/entry/skyTop.ts). */
 html {
-  background: var(--status-top);
+  background: var(--paper);
   min-height: 100%;
 }
 body {
@@ -71,7 +84,11 @@ body {
   position: absolute;
   inset: 0 0 auto;
   height: 420px;
-  background: var(--sky);
+  /* The paper over the status bar's strip, fading into the sky over the next
+     60px: a sky at its strongest colour right under the strip made a hard band. */
+  background:
+    linear-gradient(180deg, var(--paper) 0, var(--paper) env(safe-area-inset-top, 0px), transparent calc(env(safe-area-inset-top, 0px) + 60px)) 0 0 / 100% 100% no-repeat,
+    var(--sky) 0 env(safe-area-inset-top, 0px) / 100% calc(100% - env(safe-area-inset-top, 0px)) no-repeat;
   z-index: -1;
 }
 .page {
@@ -80,7 +97,7 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  padding-top: calc(env(safe-area-inset-top, 0px) + 20px);
+  padding-top: var(--page-top);
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
