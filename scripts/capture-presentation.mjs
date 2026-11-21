@@ -131,6 +131,8 @@ const sub = (key, tabName, rowRe, file) =>
   step(key, async () => {
     const { ctx, page } = await open(PHONE)
     if (tabName) await tab(page, tabName)
+    // The floating tab bar can cover the row once it is scrolled into view: out of the way first.
+    await hideFixed(page, true)
     await page.getByRole('button', { name: rowRe }).first().click()
     await sleep(1500)
     await unveil(page)
@@ -147,6 +149,7 @@ await sub('kids', null, L.kids, 'kids')
 // The weather sheet slides over the page and dims it: only the sheet is photographed, on white.
 await step('weather', async () => {
   const { ctx, page } = await open(PHONE)
+  await hideFixed(page, true)
   await page.getByRole('button', { name: L.weather }).first().click()
   await sleep(1500)
   await unveil(page)
