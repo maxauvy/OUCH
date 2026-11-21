@@ -67,6 +67,10 @@ export function TrendsPage() {
   const { intlLocale, language } = useLocale()
   // The detail pages the summary opens (zones, treatments, habits, comparison); null is the summary itself.
   const [detail, setDetail] = useState<Detail | null>(null)
+  // A page of Trends opens at its top, and so does the way back: without it, one opened from low on the list started half-way down, its title and way back out of sight.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [detail])
   const [openAppointment, setOpenAppointment] = useState<PastConsultation | null>(null)
   // What the curve shows besides the pain itself; a convenience of this visit, not a setting.
   const [layers, setLayers] = useState({ flares: true, treatment: true, trials: true })

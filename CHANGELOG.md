@@ -7,11 +7,13 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Modifié
+- **Le retour en arrière ne se perd plus sur une longue page.** Sur les pages ouvertes depuis une autre (Tendances, Réglages, « Mes enfants », Soulager), le lien « ‹ … » reste en haut comme avant ; dès qu'il part avec le défilement, un bouton rond en verre avec sa flèche apparaît en douceur en haut à gauche, comme le bouton rond de Duo, et s'efface quand le lien revient.
 - **OUCH Duo : l'accueil montre d'abord à quoi ressemble une météo.** Avant tout code, le premier écran affiche une image d'exemple (données fictives), à moitié visible et marquée « Exemple », avec « Comprendre cette météo », qui ouvre la visite de l'onglet « Comprendre ». Le titre devient « La météo d'un proche, chaque jour », et les étapes passent à deux : ton proche ouvre « Partager ma météo » dans OUCH, tu scannes son code ici.
 - **« Mode démo », « À jour » et la visite de la démo passent dans le verre de la barre d'onglets.** Plus de pilule sombre au-dessus d'une pilule claire : les bulles qui flottent en bas de l'écran ont le même verre dépoli, un texte à l'encre et des liens en indigo, en clair comme en sombre. Leur place, leurs textes et le moment où elles apparaissent ne changent pas.
 
 ### Corrigé
 - **OUCH Duo : « Comprendre cette météo » se voit mieux sur l'accueil.** Le bouton passe en indigo plein, avec un « ? », au lieu de blanc sur le bas clair de l'image d'exemple. Le badge « Exemple » prend la taille de l'image et couvre sa date sur tous les écrans.
+- **Une page de Tendances s'ouvre en haut.** « Où ça fait mal », « Mes traitements », « Mes habitudes » et « Comparer deux périodes » gardaient le défilement de Tendances : ouvertes depuis le bas de la liste, elles commençaient au milieu, titre et retour hors de l'écran.
 
 ## [0.15.2] - 2026-11-21
 
