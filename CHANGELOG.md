@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- **OUCH Duo : l'accueil montre d'abord à quoi ressemble une météo.** Avant tout code, le premier écran affiche une image d'exemple (données fictives), à moitié visible et marquée « Exemple », avec « Comprendre cette météo », qui ouvre la visite de l'onglet « Comprendre ». Le titre devient « La météo d'un proche, chaque jour », et les étapes passent à deux : ton proche ouvre « Partager ma météo » dans OUCH, tu scannes son code ici.
+
 ## [0.15.2] - 2026-11-21
 
 Un air de famille avec OUCH Duo : la barre d'onglets devient une pilule qui flotte au-dessus de la page, et le look Météo prend l'indigo de Duo. Duo gagne un onglet « Comprendre », l'image de la météo montre deux semaines, et tous les PDF sont refaits pour cette version.
