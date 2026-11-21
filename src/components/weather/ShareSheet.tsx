@@ -143,15 +143,19 @@ export function ShareSheet({
       }}
       className="fixed inset-0 m-0 p-0 w-full h-full max-w-none max-h-none bg-transparent backdrop:bg-transparent"
     >
+      {/* The same floating glass card as every other sheet (ModalSheet). */}
       <div
         className="w-full h-full flex items-end sm:items-center justify-center"
-        style={{ background: 'rgba(20, 15, 35, 0.45)' }}
+        style={{
+          background: 'rgba(20, 15, 35, 0.22)',
+          padding: 'calc(var(--root-pad-top, 0px) + 12px) max(12px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 12px) max(12px, env(safe-area-inset-left))',
+        }}
         onClick={onClose}
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 flex flex-col gap-4 max-h-[92vh] overflow-y-auto"
-          style={{ background: 'var(--look-bg, var(--color-paper))' }}
+          className="glass-float w-full sm:max-w-md rounded-[28px] p-5 flex flex-col gap-4 max-h-[min(100%,92vh)] overflow-y-auto"
+          style={{ WebkitBackdropFilter: 'blur(22px) saturate(1.4)', backdropFilter: 'blur(22px) saturate(1.4)' }}
         >
           <div className="flex items-center justify-between">
             <h2 id={titleId} className="text-heading font-semibold">

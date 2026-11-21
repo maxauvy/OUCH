@@ -2,8 +2,9 @@ import { useEffect, useId, useRef, type ReactNode } from 'react'
 import { IconX } from '@tabler/icons-react'
 
 /**
- * A modal sheet (a bottom sheet on a phone, a dialog on a wide screen) for an
- * action that deserves a pause: the page behind is inert and focus stays
+ * A modal sheet (a card floating at the foot of a phone, a dialog on a wide
+ * screen) for an action that deserves a pause, in the glass of the tab bar on
+ * a light veil, the page showing through: the page behind is inert and focus stays
  * inside. Focus goes to the close button, not to a field or a red button, so
  * nothing is one keystroke from acting; it returns to what opened the sheet.
  * While `busy`, it cannot be closed.
@@ -56,13 +57,17 @@ export function ModalSheet({
     >
       <div
         className="w-full h-full flex items-end sm:items-center justify-center"
-        style={{ background: 'rgba(20, 15, 35, 0.45)' }}
+        style={{
+          background: 'rgba(20, 15, 35, 0.22)',
+          padding: 'calc(var(--root-pad-top, 0px) + 12px) max(12px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 12px) max(12px, env(safe-area-inset-left))',
+        }}
         onClick={close}
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 flex flex-col gap-4 max-h-[92vh] overflow-y-auto"
-          style={{ background: 'var(--look-bg, var(--color-paper))' }}
+          className="glass-float w-full sm:max-w-md rounded-[28px] p-5 flex flex-col gap-4 max-h-[min(100%,92vh)] overflow-y-auto"
+          // A stronger blur than the tab bar's: a form is read on it, over a page that can be busy.
+          style={{ WebkitBackdropFilter: 'blur(22px) saturate(1.4)', backdropFilter: 'blur(22px) saturate(1.4)' }}
         >
           <div className="flex items-start justify-between gap-2">
             <h2 id={titleId} className="text-heading font-semibold">
