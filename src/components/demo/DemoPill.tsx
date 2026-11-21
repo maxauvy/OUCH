@@ -1,7 +1,7 @@
 import { exitDemo } from '../../lib/demoSession'
 import { useTranslation } from '../../i18n'
 
-/** On every screen of the demo, above the tab bar: a quiet reminder that the
+/** On every screen of the demo, above the tab bar and in the same glass: a quiet reminder that the
  * data is made up, and the way out. Leaving needs no confirmation: nothing in
  * the sandbox is worth keeping, and the person's own journal was never in it. */
 export function DemoPill() {
@@ -9,15 +9,15 @@ export function DemoPill() {
   return (
     <aside
       aria-label={t.pill}
-      className="fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-full py-1 pl-4 pr-1 text-caption font-semibold whitespace-nowrap shadow-lg"
-      style={{ bottom: 'calc(max(12px, calc(env(safe-area-inset-bottom) - 12px)) + 70px)', background: 'var(--color-ink)', color: 'var(--color-paper)' }}
+      className="glass-float fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-full py-1 pl-4 pr-1 text-caption font-semibold whitespace-nowrap"
+      style={{ bottom: 'calc(max(12px, calc(env(safe-area-inset-bottom) - 12px)) + 70px)', color: 'var(--color-ink)' }}
     >
       <span>{t.pill}</span>
       <button
         type="button"
         onClick={() => void exitDemo()}
         className="min-h-9 rounded-full px-3 underline underline-offset-2"
-        style={{ color: 'var(--color-paper)' }}
+        style={{ color: 'var(--color-brand)' }}
       >
         {t.exit}
       </button>

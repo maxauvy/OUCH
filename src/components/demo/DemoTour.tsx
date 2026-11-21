@@ -41,12 +41,8 @@ export function DemoTour({ setTab, onClose }: { setTab: (tab: Tab) => void; onCl
   return (
     <section
       aria-label={copy.title}
-      className="fixed inset-x-4 z-40 mx-auto max-w-[520px] rounded-2xl p-4 shadow-xl"
-      style={{
-        bottom: 'calc(max(12px, calc(env(safe-area-inset-bottom) - 12px)) + 70px)',
-        background: 'var(--color-surface)',
-        border: '1px solid var(--color-hairline)',
-      }}
+      className="glass-float fixed inset-x-4 z-40 mx-auto max-w-[520px] rounded-3xl p-4"
+      style={{ bottom: 'calc(max(12px, calc(env(safe-area-inset-bottom) - 12px)) + 70px)' }}
     >
       <div aria-live="polite">
         <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>

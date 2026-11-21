@@ -623,6 +623,16 @@ input::-webkit-date-and-time-value {
 }
 
 /* The demo tour outlines what a step speaks of. */
+/* What floats above the page at its foot (the tab bar, the demo and update bubbles, the demo's visit):
+   one frosted glass, as the bubble of OUCH Duo, the page showing through as it scrolls. */
+.glass-float {
+  border: 1px solid var(--color-hairline);
+  background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: 0 10px 30px -14px rgba(20, 28, 48, 0.5);
+}
+
 .tour-glow {
   outline: 3px solid color-mix(in srgb, var(--color-brand) 60%, transparent);
   outline-offset: 3px;
