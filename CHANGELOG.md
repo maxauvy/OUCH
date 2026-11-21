@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **OUCH Duo : un onglet « Comprendre », à côté de « Sa météo ».** Pour le proche qui reçoit l'image. Quatre vignettes montrent les parties de l'image : la météo, la douleur, les jauges, les 14 jours. Toucher une vignette ouvre une visite sur une image d'exemple (données fictives), où la partie expliquée est éclairée. Viennent ensuite les 5 ciels avec leurs chiffres et « Ce que ça ne dit pas », toujours visible : un jour d'orage n'est pas une alerte, un jour sans note n'est pas un signal. Trois cartes repliables complètent l'onglet : OUCH en bref, ce que Duo reçoit, et la méthode avec ses sources (IMMPACT 2005, Boonstra 2016, HAS 2008) et un lien vers la note méthodologique. Il est en français et en anglais, en clair et en sombre.
+
 ### Modifié
 - **OUCH Duo prend l'icône d'OUCH et un nouveau look, « Lever du jour ».** Un ciel doux aux couleurs de l'icône, de l'ambre au lilas, et l'icône avec « OUCH Duo » en haut de chaque écran. Le premier écran montre l'icône en grand et les trois étapes (ton proche ouvre OUCH, « Partager ma météo », tu scannes le code). La météo du jour s'affiche en carte, avec en bas une barre qui reste visible : quand elle a été regardée, et « Actualiser ». « Scanner un autre code » et la langue passent dans le bouton rond en haut. Le mode sombre suit, en ciel du soir.
 - **Image de la météo (style Météo) : deux semaines au lieu d'une.** Sous la douleur et les jauges du jour, qui ne changent pas, une courbe douce des 14 derniers jours, posée sur les bandes de couleur de la météo, de « plus doux » à « plus dur », sans chiffres ; un jour sans note coupe la ligne. La semaine en petites cases reste dessous, et une phrase la compare à la semaine d'avant (« Plus douce que la semaine d'avant. »), quand chacune a au moins 3 jours notés. La même image part vers Dropbox pour OUCH Duo. Le style Léger ne change pas.

@@ -530,3 +530,354 @@ body {
     animation: none !important;
   }
 }
+
+/* "Their weather" and "Understand": two tabs under the brand. */
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 15px;
+  background: var(--glass);
+  border: var(--card-border);
+}
+.tabs button {
+  flex: 1;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  min-height: 42px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.tabs button[aria-selected='true'] {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 2px 8px -4px rgba(58, 53, 96, 0.45);
+}
+.tabs button:focus-visible {
+  outline: 2.5px solid var(--brand);
+  outline-offset: 1px;
+}
+
+/* The "Understand" tab. Its weather colours are the app's (theme.ts), and its calendar tiles in dark mode. */
+.understand {
+  --w1-bg: #fbf0dc;
+  --w1-ink: #8b662f;
+  --w2-bg: #f3ecd9;
+  --w2-ink: #776647;
+  --w3-bg: #eae7ee;
+  --w3-ink: #6a6473;
+  --w4-bg: #e1e9f1;
+  --w4-ink: #506989;
+  --w5-bg: #e7e2f0;
+  --w5-ink: #574a7a;
+  --calm: #fbf0dc;
+  padding-bottom: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  .understand {
+    --w1-bg: #48402b;
+    --w1-ink: #f0c877;
+    --w2-bg: #414136;
+    --w2-ink: #ddc58f;
+    --w3-bg: #373c45;
+    --w3-ink: #c8c3d2;
+    --w4-bg: #283744;
+    --w4-ink: #a9c4de;
+    --w5-bg: #2f2a40;
+    --w5-ink: #c6bde0;
+    --calm: #352f22;
+  }
+}
+.w1 {
+  background: var(--w1-bg);
+  color: var(--w1-ink);
+}
+.w2 {
+  background: var(--w2-bg);
+  color: var(--w2-ink);
+}
+.w3 {
+  background: var(--w3-bg);
+  color: var(--w3-ink);
+}
+.w4 {
+  background: var(--w4-bg);
+  color: var(--w4-ink);
+}
+.w5 {
+  background: var(--w5-bg);
+  color: var(--w5-ink);
+}
+
+.parts {
+  list-style: none;
+  margin: 0;
+  padding: 4px 14px;
+}
+.parts li + li {
+  border-top: 1px solid var(--hairline);
+}
+.part,
+.fold summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.part:focus-visible,
+.fold summary:focus-visible {
+  outline: 2.5px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+.thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 96px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  background: #f7f8fa;
+}
+.thumb img {
+  position: absolute;
+  max-width: none;
+}
+.part-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.part-text strong {
+  font-size: 15.5px;
+}
+.part-text span {
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--ink-muted);
+}
+.chevron {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+.small-title {
+  font-size: 16px;
+}
+.scale-text {
+  margin: 4px 0 10px;
+}
+.scale {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+}
+.scale li {
+  border-radius: 12px;
+  padding: 8px 2px 7px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.scale strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 13px;
+}
+.card.calm {
+  background: var(--calm);
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fold {
+  padding: 4px 16px;
+}
+.fold summary {
+  list-style: none;
+}
+.fold summary::-webkit-details-marker {
+  display: none;
+}
+.fold[open] summary .chevron {
+  transform: rotate(180deg);
+}
+.fold-icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+}
+.fold-icon svg {
+  border-radius: 7px;
+}
+.fold-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 2px 0 12px;
+}
+.refs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.refs li {
+  border-top: 1px solid var(--hairline);
+  padding: 9px 0;
+  font-size: 14px;
+}
+.ref-source {
+  color: var(--ink-muted);
+}
+.ref-text {
+  display: block;
+  margin-top: 2px;
+  font-size: 13.5px;
+  line-height: 1.35;
+  color: var(--ink-muted);
+}
+.fold-body .link-btn {
+  text-decoration: none;
+}
+.inline-link {
+  color: var(--brand);
+  font-weight: 700;
+  text-decoration: none;
+}
+.inline-link:focus-visible,
+.fold-body .link-btn:focus-visible {
+  outline: 2.5px solid var(--brand);
+  outline-offset: 2px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* The tour: over the whole screen, the example image dimmed except the part explained. */
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  overflow-y: auto;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--page-top) max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
+}
+.tour > * {
+  width: 100%;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tour-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tour-name {
+  font-size: 18px;
+}
+.stage {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #f7f8fa;
+  box-shadow: 0 18px 40px -22px rgba(58, 53, 96, 0.5);
+}
+.stage img {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  max-width: none;
+}
+.hole {
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  border-radius: 16px;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 0 0 999px rgba(29, 36, 51, 0.4);
+}
+.num {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #e3a73b, #a894c9);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 3px #ffffff;
+}
+.tour-sheet {
+  margin-top: auto;
+  background: var(--surface);
+  border-top: var(--card-border);
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -10px 30px -18px rgba(58, 53, 96, 0.4);
+  padding: 18px 20px calc(env(safe-area-inset-bottom, 0px) + 22px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tour-sheet h2:focus {
+  outline: none;
+}
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dots > span:not(.small) {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--hairline);
+}
+.dots > span.on {
+  width: 22px;
+  background: var(--duo);
+}
+.dots .small {
+  margin-left: auto;
+}
+.tour-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
