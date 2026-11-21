@@ -186,6 +186,7 @@ body {
 }
 .showcase {
   position: relative;
+  container-type: inline-size;
   height: 260px;
   overflow: hidden;
   border-radius: 22px;
@@ -198,15 +199,17 @@ body {
 }
 .showcase-tag {
   position: absolute;
-  /* Over the example's date, which means nothing here. */
-  right: 12px;
-  top: 8px;
+  /* Over the example's date, which means nothing here. Sized on the image's width (cqw), like the date it covers, so it stays covered on any phone. */
+  right: 2.5cqw;
+  top: 3.6cqw;
+  min-width: 26cqw;
+  padding: 1.7cqw 3cqw;
   border-radius: 999px;
-  padding: 7px 13px;
   background: #2a2f3d;
   color: #ffffff;
-  font-size: 13px;
+  font-size: max(13px, 3.5cqw);
   font-weight: 700;
+  text-align: center;
 }
 /* The image is always light: it fades into a light veil, whatever the phone's theme. */
 .showcase-fade {
@@ -223,21 +226,25 @@ body {
   bottom: 16px;
   transform: translateX(-50%);
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font: inherit;
   font-size: 15px;
   font-weight: 700;
   min-height: 46px;
-  padding: 0 18px;
+  padding: 0 18px 0 14px;
   border-radius: 15px;
   border: 0;
-  background: #ffffff;
-  color: #3a3560;
-  box-shadow: 0 0 0 1px rgba(58, 53, 96, 0.14), 0 10px 24px -14px rgba(58, 53, 96, 0.6);
+  /* Indigo in both modes: the image under it is always light, so a white button disappeared into it. */
+  background: #3a3560;
+  color: #ffffff;
+  box-shadow: 0 12px 26px -12px rgba(58, 53, 96, 0.8);
   cursor: pointer;
 }
 .showcase-go:focus-visible {
   outline: 2.5px solid #3a3560;
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 .how {
   list-style: none;
