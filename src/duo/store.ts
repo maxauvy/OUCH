@@ -8,6 +8,8 @@ import { isWeatherImageKey } from '../lib/weatherImageCrypto'
 
 const TARGET_KEY = 'ouch-duo:target'
 const INSTALL_LATER_KEY = 'ouch-duo:install-later'
+/** The link last put aside with "Stop following this weather": the app installed on an iPhone keeps it in its own address, and must not take it back. */
+const FORGOTTEN_KEY = 'ouch-duo:forgotten'
 const IMAGE_CACHE = 'ouch-duo-image'
 const IMAGE_KEY = 'last-image'
 const IMAGE_AT_HEADER = 'x-ouch-duo-at'
@@ -30,6 +32,7 @@ export function loadTarget(): DuoTarget | null {
 export function saveTarget(target: DuoTarget): void {
   try {
     localStorage.setItem(TARGET_KEY, JSON.stringify(target))
+    localStorage.removeItem(FORGOTTEN_KEY)
   } catch {
     // Private browsing: the address after # still holds it for this visit.
   }
@@ -47,11 +50,36 @@ export function saveTarget(target: DuoTarget): void {
  * the installed app opens the very address it was added from).
  */
 export function initialTarget(hash: string, standalone: boolean): DuoTarget | null {
-  const fromHash = readDuoHash(hash)
+  let fromHash = readDuoHash(hash)
+  // Installed, the address is always the one of the install: a link put aside since then stays aside.
+  if (standalone && fromHash && fromHash.link === forgottenLink()) fromHash = null
   const kept = loadTarget()
   const chosen = standalone ? (kept ?? fromHash) : (fromHash ?? kept)
   if (chosen && chosen !== kept) saveTarget(chosen)
   return chosen
+}
+
+function forgottenLink(): string | null {
+  try {
+    return localStorage.getItem(FORGOTTEN_KEY)
+  } catch {
+    return null
+  }
+}
+
+/** "Stop following this weather": the link, its key and the last image received leave this phone. Nothing is sent anywhere: the person's sharing goes on. */
+export async function forgetTarget(link: string): Promise<void> {
+  try {
+    localStorage.removeItem(TARGET_KEY)
+    localStorage.setItem(FORGOTTEN_KEY, link)
+  } catch {
+    // Private browsing: nothing was kept anyway.
+  }
+  try {
+    await caches.delete(IMAGE_CACHE)
+  } catch {
+    // No cache to clear.
+  }
 }
 
 export function installLater(): boolean {

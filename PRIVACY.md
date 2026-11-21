@@ -92,7 +92,8 @@ Pour suivre cette image, le proche peut installer **OUCH Duo**, une petite app s
 - **Ce que Duo garde, sur le téléphone du proche seulement :** ce lien, cette clé et ce prénom, la dernière image reçue, toujours chiffrée (pour l'afficher hors connexion) et le fait d'avoir écarté le conseil d'installation. Pas de compte, pas de mesure d'audience, rien d'autre.
 - **Ce que Duo contacte :** Dropbox, pour lire le fichier chiffré, ouvert ensuite sur le téléphone (le serveur voit l'adresse IP du téléphone, comme pour tout lien public), et GitHub Pages, pour ses propres fichiers. Duo n'accepte que des liens Dropbox, et une politique de sécurité du contenu bloque tout autre appel.
 - **L'appareil photo** sert seulement à lire le code, sur le téléphone, et s'arrête dès qu'il est lu. Aucune image de la caméra n'est gardée ni envoyée.
-- **Quand la personne arrête le partage,** l'image disparaît de Dropbox : Duo dit alors que la météo n'est plus partagée. La dernière image reçue reste sur le téléphone du proche jusqu'à ce qu'il scanne un autre code.
+- **Quand la personne arrête le partage,** l'image disparaît de Dropbox : Duo dit alors que la météo n'est plus partagée. La dernière image reçue reste sur le téléphone du proche jusqu'à ce qu'il scanne un autre code ou choisisse « Ne plus suivre cette météo ».
+- **« Ne plus suivre cette météo »,** dans le menu de Duo, efface du téléphone du proche le lien, la clé, le prénom et la dernière image reçue. Duo garde seulement le lien écarté, sans la clé, pour que l'app installée sur iPhone, qui rouvre toujours l'adresse de son installation, ne le reprenne pas. Rien ne change pour la personne : son partage continue.
 
 ## Le rappel dans l'agenda
 

@@ -921,3 +921,38 @@ body {
   gap: 12px;
   margin-top: 4px;
 }
+
+/* "Stop following this weather?": a sheet from the bottom, over a soft veil. */
+.confirm-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.confirm-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(29, 36, 51, 0.35);
+  cursor: default;
+}
+.confirm {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-top: var(--card-border);
+  border-radius: 26px 26px 0 0;
+  padding: 22px max(20px, env(safe-area-inset-left, 0px)) calc(env(safe-area-inset-bottom, 0px) + 18px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 -10px 30px -18px rgba(58, 53, 96, 0.45);
+}
+.menu-panel > .link-btn + .link-btn {
+  color: var(--ink-muted);
+  font-weight: 600;
+}

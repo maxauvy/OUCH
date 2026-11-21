@@ -12,6 +12,11 @@ const fr = {
   offlineNothing: 'Pas de connexion pour l’instant. La météo s’affichera dès que le téléphone sera en ligne.',
   refresh: 'Actualiser',
   otherCode: 'Scanner un autre code',
+  forget: 'Ne plus suivre cette météo',
+  forgetTitle: (name?: string) => (name ? `Ne plus suivre la météo de ${name}\u00a0?` : 'Ne plus suivre cette météo\u00a0?'),
+  forgetText: (name?: string) =>
+    `Duo oublie le lien et la dernière image reçue, sur ce téléphone. Rien ne change pour ${name ?? 'ton proche'}\u00a0: son partage continue. Pour revoir cette météo, il faudra scanner son code à nouveau.`,
+  forgetOk: 'Oublier cette météo',
   goneTitle: 'Cette météo n’est plus partagée',
   goneText: (name?: string) =>
     `${name ?? 'Ton proche'} a peut-être arrêté le partage, ou en a commencé un nouveau. S’il y a un nouveau code, tu pourras le scanner ici.`,
@@ -126,6 +131,11 @@ const en: DuoStrings = {
   offlineNothing: 'No connection right now. The weather will show as soon as the phone is online.',
   refresh: 'Refresh',
   otherCode: 'Scan another code',
+  forget: 'Stop following this weather',
+  forgetTitle: (name?: string) => (name ? `Stop following ${name}’s weather?` : 'Stop following this weather?'),
+  forgetText: (name?: string) =>
+    `Duo forgets the link and the last image received, on this phone. Nothing changes for ${name ?? 'your relative'}: their sharing goes on. To see this weather again, you will need to scan their code again.`,
+  forgetOk: 'Forget this weather',
   goneTitle: 'This weather is no longer shared',
   goneText: (name?: string) =>
     `${name ?? 'Your relative'} may have stopped sharing, or started a new share. If there is a new code, you can scan it here.`,
