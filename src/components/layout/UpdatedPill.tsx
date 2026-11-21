@@ -44,14 +44,14 @@ export function UpdatedPill() {
       onPointerLeave={(e) => e.pointerType === 'mouse' && setHeld(false)}
       onFocus={() => setHeld(true)}
       onBlur={() => setHeld(false)}
-      className="fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full py-1 pl-3 pr-0.5 text-caption font-semibold shadow-lg"
+      className="glass-float fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full py-1 pl-3 pr-0.5 text-caption font-semibold"
       // Above the tab bar, and above the demo's pill when there is one.
-      style={{ bottom: `calc(max(12px, calc(env(safe-area-inset-bottom) - 12px)) + ${IS_DEMO ? 118 : 70}px)`, background: 'var(--color-ink)', color: 'var(--color-paper)' }}
+      style={{ bottom: `calc(max(12px, calc(env(safe-area-inset-bottom) - 12px)) + ${IS_DEMO ? 118 : 70}px)`, color: 'var(--color-ink)' }}
     >
-      <IconCircleCheck size={16} aria-hidden />
+      <IconCircleCheck size={16} aria-hidden style={{ color: 'var(--color-brand)' }} />
       <span>{format(t.updated, { version }, language)}</span>
       <span aria-hidden>·</span>
-      <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-9 items-center rounded-full px-2 underline underline-offset-2" style={{ color: 'var(--color-paper)' }}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-9 items-center rounded-full px-2 underline underline-offset-2" style={{ color: 'var(--color-brand)' }}>
         {t.whatsNew}
       </a>
       <button
@@ -59,7 +59,7 @@ export function UpdatedPill() {
         onClick={() => setShown(false)}
         aria-label={t.closeUpdated}
         className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
-        style={{ color: 'var(--color-paper)' }}
+        style={{ color: 'var(--color-ink-muted)' }}
       >
         <IconX size={16} aria-hidden />
       </button>

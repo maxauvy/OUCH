@@ -40,17 +40,8 @@ export function TabBar({
       style={{ bottom: 'max(12px, calc(env(safe-area-inset-bottom) - 12px))' }}
     >
       <div
-        className="pointer-events-auto flex items-center max-w-full"
-        style={{
-          height: 58,
-          padding: 5,
-          borderRadius: 999,
-          border: '1px solid var(--color-hairline)',
-          background: 'color-mix(in srgb, var(--color-surface) 80%, transparent)',
-          WebkitBackdropFilter: 'blur(14px) saturate(1.4)',
-          backdropFilter: 'blur(14px) saturate(1.4)',
-          boxShadow: '0 10px 30px -14px rgba(20, 28, 48, 0.5)',
-        }}
+        className="glass-float pointer-events-auto flex items-center max-w-full"
+        style={{ height: 58, padding: 5, borderRadius: 999 }}
       >
         {TABS.map((tab) => {
           const isActive = active === tab.id
