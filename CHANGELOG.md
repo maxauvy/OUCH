@@ -6,15 +6,26 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.15.2] - 2026-11-21
+
+Un air de famille avec OUCH Duo : la barre d'onglets devient une pilule qui flotte au-dessus de la page, et le look Météo prend l'indigo de Duo. Duo gagne un onglet « Comprendre », l'image de la météo montre deux semaines, et tous les PDF sont refaits pour cette version.
+
 ### Ajouté
 - **OUCH Duo : un onglet « Comprendre », à côté de « Sa météo ».** Pour le proche qui reçoit l'image. Quatre vignettes montrent les parties de l'image : la météo, la douleur, les jauges, les 14 jours. Toucher une vignette ouvre une visite sur une image d'exemple (données fictives), où la partie expliquée est éclairée. Viennent ensuite les 5 ciels avec leurs chiffres et « Ce que ça ne dit pas », toujours visible : un jour d'orage n'est pas une alerte, un jour sans note n'est pas un signal. Trois cartes repliables complètent l'onglet : OUCH en bref, ce que Duo reçoit, et la méthode avec ses sources (IMMPACT 2005, Boonstra 2016, HAS 2008) et un lien vers la note méthodologique. Il est en français et en anglais, en clair et en sombre.
 
 ### Modifié
+- **La barre d'onglets devient une pilule qui flotte**, comme la bulle « Actualiser » de Duo. Elle ne colle plus au bas de l'écran : posée juste au-dessus, en verre dépoli, elle laisse voir la page qui défile derrière. Seul l'onglet ouvert affiche son nom, sur une pastille douce avec son icône ambre ; les autres gardent leur nom pour les lecteurs d'écran.
+- **Look Météo : l'indigo de Duo et l'icône d'OUCH.** L'accent bleu ardoise devient l'indigo profond de Duo (lilas en mode sombre) : liens, choix et boutons. L'icône d'OUCH se pose à côté du titre d'Aujourd'hui. Le ciel garde la couleur de la météo du jour, et les graphiques gardent le bleu ardoise pour ne pas se confondre avec le violet des poussées. Le look Léger ne change pas.
+- **Journal en mode sombre : une teinte nette par temps.** Les cinq tuiles du calendrier vont du plus clair (soleil) au plus sombre (orage), chacune dans sa couleur, l'icône et ses nuages compris ; aujourd'hui est cerclé d'ambre. Dans les deux modes, les barres de poussée et de période ont leur bande sous l'icône et ne la croisent plus.
+- **Documents** : nouvelles captures (pilule, indigo) dans les guides, la plaquette, les flyers et « Lire un rapport » ; le guide des utilisateurs parle de la courbe des 14 jours et de l'onglet « Comprendre » de Duo ; la note méthodologique décrit la phrase qui compare la semaine à la précédente (au moins 3 jours notés de chaque côté, 0,5 point).
 - **OUCH Duo prend l'icône d'OUCH et un nouveau look, « Lever du jour ».** Un ciel doux aux couleurs de l'icône, de l'ambre au lilas, et l'icône avec « OUCH Duo » en haut de chaque écran. Le premier écran montre l'icône en grand et les trois étapes (ton proche ouvre OUCH, « Partager ma météo », tu scannes le code). La météo du jour s'affiche en carte, avec en bas une barre qui reste visible : quand elle a été regardée, et « Actualiser ». « Scanner un autre code » et la langue passent dans le bouton rond en haut. Le mode sombre suit, en ciel du soir.
 - **Image de la météo (style Météo) : deux semaines au lieu d'une.** Sous la douleur et les jauges du jour, qui ne changent pas, une courbe douce des 14 derniers jours, posée sur les bandes de couleur de la météo, de « plus doux » à « plus dur », sans chiffres ; un jour sans note coupe la ligne. La semaine en petites cases reste dessous, et une phrase la compare à la semaine d'avant (« Plus douce que la semaine d'avant. »), quand chacune a au moins 3 jours notés. La même image part vers Dropbox pour OUCH Duo. Le style Léger ne change pas.
 
 ### Corrigé
 - **OUCH Duo sur iPhone : plus de bande contrastée sous la barre d'état.** Comme dans OUCH, le haut de l'écran garde la couleur du papier sous la barre d'état et le ciel ne prend sa teinte qu'un peu plus bas. Installé sur iPhone, le haut des écrans laisse aussi un peu plus de place sous la barre d'état et son flou.
+
+### Tests
+- 705 tests automatiques, dont un nouveau pour la phrase qui compare la semaine à la précédente.
 
 ## [0.15.1] - 2026-11-19
 
@@ -537,7 +548,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.15.1...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.15.2...HEAD
+[0.15.2]: https://github.com/maxauvy/OUCH/compare/v0.15.1...v0.15.2
 [0.15.1]: https://github.com/maxauvy/OUCH/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/maxauvy/OUCH/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/maxauvy/OUCH/compare/v0.13.0...v0.14.0
