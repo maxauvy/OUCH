@@ -42,6 +42,7 @@ import { WeatherField } from './WeatherField'
 import { TodaySkyBackdrop, TodaySkyLine } from './TodaySky'
 import { format, useLocale, useTranslation } from '../../i18n'
 import { useRichLook } from '../../lib/look'
+import { AppLogo } from '../ui/AppLogo'
 import { isOffered } from '../../lib/indicatorCatalog'
 import { useEarlyAccess } from '../../lib/earlyAccess'
 import { todayISO } from '../../lib/dates'
@@ -319,7 +320,10 @@ export function HealthEntryLayout({
 
   const header = (
       <div className="flex items-center justify-between px-1">
-        <div>
+        <div className="flex items-center gap-3 min-w-0">
+        {/* The OUCH icon beside today's title, as OUCH Duo shows it at the top of its screens. */}
+        {isToday && rich && <AppLogo size={44} className="shrink-0 rounded-[10px] shadow-[0_4px_12px_-4px_rgba(124,111,168,0.5)]" />}
+        <div className="min-w-0">
           {isToday && (
             <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
               {longDateCap}
@@ -338,6 +342,7 @@ export function HealthEntryLayout({
               {t.restDay.past}
             </p>
           )}
+        </div>
         </div>
         {isToday && (onOpenSettings || headerAction) && (
           <div className="-mr-1 flex shrink-0 items-center gap-2">

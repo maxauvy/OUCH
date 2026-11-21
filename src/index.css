@@ -650,8 +650,8 @@ html[data-covered]::after {
    above are what shows if the stamp is ever missing. */
 
 /* ---- Météo (default): the pain weather at the heart of the design. Cool
-   paper, white cards with a soft shadow instead of a border, a slate blue
-   accent, the active tab on the "few clouds" tint, rounder titles. ---- */
+   paper, white cards with a soft shadow instead of a border, the deep indigo
+   of OUCH Duo as the accent (lilac in dark mode), the active tab on the "few clouds" tint, rounder titles. ---- */
 :root[data-look='meteo'] {
   --color-paper: #f4f6f9;
   --color-surface: #ffffff;
@@ -659,8 +659,8 @@ html[data-covered]::after {
   --color-ink: #1d2433;
   --color-ink-muted: #5a6577;
   --color-hairline: #e1e6ee;
-  --color-brand: #3a5f8f;
-  --color-brand-soft: #e4ebf4;
+  --color-brand: #3a3560;
+  --color-brand-soft: #ebe8f3;
   --color-on-brand: #ffffff;
   --radius-card: 24px;
   --card-shadow: 0 1px 2px rgba(30, 45, 70, 0.04), 0 10px 24px -18px rgba(30, 45, 70, 0.35);
@@ -687,9 +687,9 @@ html[data-covered]::after {
     --color-ink: #e7ecf3;
     --color-ink-muted: #9aa6b7;
     --color-hairline: rgba(150, 170, 200, 0.16);
-    --color-brand: #8fb0d1;
-    --color-brand-soft: #1f2c3d;
-    --color-on-brand: #0f1722;
+    --color-brand: #c9bff0;
+    --color-brand-soft: #2a2540;
+    --color-on-brand: #1b1830;
     --card-shadow: none;
     --card-border: 1px solid var(--color-hairline);
     --chip-bg: #232a36;
@@ -709,9 +709,9 @@ html[data-covered]::after {
   --color-ink: #e7ecf3;
   --color-ink-muted: #9aa6b7;
   --color-hairline: rgba(150, 170, 200, 0.16);
-  --color-brand: #8fb0d1;
-  --color-brand-soft: #1f2c3d;
-  --color-on-brand: #0f1722;
+  --color-brand: #c9bff0;
+  --color-brand-soft: #2a2540;
+  --color-on-brand: #1b1830;
   --card-shadow: none;
   --card-border: 1px solid var(--color-hairline);
   --chip-bg: #232a36;
