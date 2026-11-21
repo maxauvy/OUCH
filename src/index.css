@@ -673,7 +673,6 @@ html[data-covered]::after {
   --tab-active-icon: #b0812c;
   --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
   --avatar-bg: linear-gradient(135deg, #f3ecd9, #e1e9f1);
-  --tab-pill: transparent;
   --tab-active: #1d2433;
   /* The lock screen: the soft sky of a day with a few clouds. */
   --look-bg: linear-gradient(180deg, #f7e7c4 0%, #f3ecd9 40%, #e4ecf3 100%);
@@ -697,7 +696,6 @@ html[data-covered]::after {
     --tab-active-icon: #e3b766;
     --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 25%, transparent);
     --avatar-bg: linear-gradient(135deg, #3a3424, #283744);
-    --tab-pill: transparent;
     --tab-active: #e7ecf3;
     --look-bg: linear-gradient(180deg, #3d3421 0%, #2b2a25 40%, #11151c 100%);
     --look-outdoor: #8fb0d1;
@@ -720,7 +718,6 @@ html[data-covered]::after {
   --tab-active-icon: #e3b766;
   --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 25%, transparent);
   --avatar-bg: linear-gradient(135deg, #3a3424, #283744);
-  --tab-pill: transparent;
   --tab-active: #e7ecf3;
   --look-bg: linear-gradient(180deg, #3d3421 0%, #2b2a25 40%, #11151c 100%);
   --look-outdoor: #8fb0d1;
@@ -820,9 +817,6 @@ html[data-covered]::after {
   --color-brand-soft: #efe9f6;
   --color-on-brand: #ffffff;
   --card-shadow: none;
-  --tab-pill: #efe9f6;
-  --tab-pill-pad: 2px 16px;
-  --tab-pill-margin: -2px 0;
   --tab-active: #5e4b8b;
 }
 @media (prefers-color-scheme: dark) {
@@ -836,7 +830,6 @@ html[data-covered]::after {
     --color-brand: #c4b5ee;
     --color-brand-soft: #2f2742;
     --color-on-brand: #1d1530;
-    --tab-pill: #2f2742;
     --tab-active: #c4b5ee;
   }
 }
@@ -850,7 +843,6 @@ html[data-covered]::after {
   --color-brand: #c4b5ee;
   --color-brand-soft: #2f2742;
   --color-on-brand: #1d1530;
-  --tab-pill: #2f2742;
   --tab-active: #c4b5ee;
 }
 

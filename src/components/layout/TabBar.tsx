@@ -30,39 +30,50 @@ export function TabBar({
     { id: 'consultation', label: t.tabs.consultation },
   ]
   const TABS = ALL
+  // A compact pill floating above the bottom edge, as the « Actualiser » bubble of OUCH Duo: the page
+  // shows through its frosted glass while it scrolls. Only the open tab shows its name; the others keep
+  // theirs for screen readers. On an installed iPhone it sits just above the home bar rather than below
+  // the whole safe area. The pages keep 112px free at their foot (pb-28), more than the pill needs.
   return (
     <nav
-      className="fixed bottom-0 inset-x-0 z-40"
-      style={{
-        borderTop: '1px solid var(--color-hairline)',
-        background: 'var(--color-surface)',
-      }}
+      className="fixed inset-x-0 z-40 flex justify-center px-3 pointer-events-none"
+      style={{ bottom: 'max(12px, calc(env(safe-area-inset-bottom) - 12px))' }}
     >
-      <div className="max-w-[560px] mx-auto flex" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <div
+        className="pointer-events-auto flex items-center max-w-full"
+        style={{
+          height: 58,
+          padding: 5,
+          borderRadius: 999,
+          border: '1px solid var(--color-hairline)',
+          background: 'color-mix(in srgb, var(--color-surface) 80%, transparent)',
+          WebkitBackdropFilter: 'blur(14px) saturate(1.4)',
+          backdropFilter: 'blur(14px) saturate(1.4)',
+          boxShadow: '0 10px 30px -14px rgba(20, 28, 48, 0.5)',
+        }}
+      >
         {TABS.map((tab) => {
           const isActive = active === tab.id
           const Icon = TAB_ICONS[tab.id]
+          const badge = badged.includes(tab.id)
           return (
             <button
               key={tab.id}
               onClick={() => onChange(tab.id)}
               aria-current={isActive ? 'page' : undefined}
-              aria-label={badged.includes(tab.id) ? `${tab.label}, ${t.tabs.trendsNew}` : undefined}
-              className="flex-1 flex flex-col items-center gap-0.5 py-2.5"
-              style={{ color: isActive ? 'var(--tab-active, var(--color-brand))' : 'var(--color-ink-muted)' }}
+              aria-label={badge ? `${tab.label}, ${t.tabs.trendsNew}` : tab.label}
+              className="h-full flex items-center justify-center gap-1.5 shrink-0 min-w-0"
+              style={{
+                borderRadius: 999,
+                minWidth: 46,
+                padding: isActive ? '0 15px 0 12px' : 0,
+                color: isActive ? 'var(--tab-active, var(--color-ink))' : 'var(--color-ink-muted)',
+                background: isActive ? 'var(--color-brand-soft)' : undefined,
+              }}
             >
-              <span
-                className="relative flex"
-                style={{
-                  color: isActive ? 'var(--tab-active-icon, inherit)' : undefined,
-                  background: isActive ? 'var(--tab-pill, transparent)' : undefined,
-                  borderRadius: 999,
-                  padding: 'var(--tab-pill-pad, 0)',
-                  margin: 'var(--tab-pill-margin, 0)',
-                }}
-              >
-                <Icon size={22} stroke={isActive ? 2 : 1.6} aria-hidden />
-                {badged.includes(tab.id) && (
+              <span className="relative flex shrink-0" style={{ color: isActive ? 'var(--tab-active-icon, inherit)' : undefined }}>
+                <Icon size={24} stroke={isActive ? 2 : 1.6} aria-hidden />
+                {badge && (
                   <span
                     aria-hidden
                     className="absolute -top-0.5 -right-1 w-2.5 h-2.5 rounded-full"
@@ -70,16 +81,15 @@ export function TabBar({
                   />
                 )}
               </span>
-              {/* Capped: five labels share the screen width, so they only grow
-                  as far as the longest one ("Aujourd'hui") still fits — 13px on
-                  a 360px phone, up to 16px on wider screens. iOS caps its own
-                  tab bar labels the same way. */}
-              <span
-                className={isActive ? 'font-semibold' : 'font-medium'}
-                style={{ fontSize: 'min(var(--text-caption), max(13px, 3.5vw), 16px)' }}
-              >
-                {tab.label}
-              </span>
+              {isActive && (
+                <span
+                  aria-hidden
+                  className="font-semibold truncate"
+                  style={{ fontSize: 'min(calc(var(--text-caption) * 1.1), 16px)' }}
+                >
+                  {tab.label}
+                </span>
+              )}
             </button>
           )
         })}
