@@ -13,6 +13,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ### Corrigé
 - **OUCH Duo : « Comprendre cette météo » se voit mieux sur l'accueil.** Le bouton passe en indigo plein, avec un « ? », au lieu de blanc sur le bas clair de l'image d'exemple. Le badge « Exemple » prend la taille de l'image et couvre sa date sur tous les écrans.
+- **Une page de Tendances s'ouvre en haut.** « Où ça fait mal », « Mes traitements », « Mes habitudes » et « Comparer deux périodes » gardaient le défilement de Tendances : ouvertes depuis le bas de la liste, elles commençaient au milieu, titre et retour hors de l'écran.
 
 ## [0.15.2] - 2026-11-21
 
