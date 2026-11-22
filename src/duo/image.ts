@@ -6,12 +6,13 @@
 import { dropboxFetchUrl } from '../lib/duoLink'
 import { decryptWeatherImage, WeatherImageKeyError } from '../lib/weatherImageCrypto'
 import { loadLastImage, saveLastImage } from './store'
+import { signature } from './signature'
 
 export type ImageResult =
-  /** Just received. `url` is an object URL. */
-  | { kind: 'fresh'; url: string; at: number }
+  /** Just received. `url` is an object URL; `sig` tells one sent image from another (see signature). */
+  | { kind: 'fresh'; url: string; at: number; sig: string }
   /** Dropbox could not be reached: the last image received, if any. */
-  | { kind: 'offline'; url: string; at: number }
+  | { kind: 'offline'; url: string; at: number; sig: string }
   /** Dropbox could not be reached and nothing was kept. */
   | { kind: 'nothing' }
   /** Dropbox says the file is not there any more: the share was stopped. */
@@ -30,7 +31,8 @@ async function lastKept(link: string, key: string): Promise<ImageResult> {
   const last = await loadLastImage(link)
   if (!last) return { kind: 'nothing' }
   try {
-    return { kind: 'offline', url: await opened(await last.blob.arrayBuffer(), key), at: last.at }
+    const file = await last.blob.arrayBuffer()
+    return { kind: 'offline', url: await opened(file, key), at: last.at, sig: signature(file) }
   } catch {
     return { kind: 'nothing' }
   }
@@ -49,7 +51,7 @@ export async function fetchImage(link: string, key: string, now = Date.now()): P
   try {
     const url = await opened(file, key)
     await saveLastImage(link, new Blob([file]), now)
-    return { kind: 'fresh', url, at: now }
+    return { kind: 'fresh', url, at: now, sig: signature(file) }
   } catch (e) {
     if (e instanceof WeatherImageKeyError) return { kind: 'wrongKey' }
     throw e
