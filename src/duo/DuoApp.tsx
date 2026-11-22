@@ -152,15 +152,36 @@ function Today({ target, arrived, onScan, onForget }: { target: DuoTarget; arriv
   const [result, setResult] = useState<ImageResult | null>(null)
   const [lookedAt, setLookedAt] = useState(0)
   const [loading, setLoading] = useState(true)
+  // A newly sent image comes in over the one shown, which leaves once covered (`leaving`); the first one rises in (`entrance`).
+  const shown = useRef<ImageResult | null>(null)
+  const [leaving, setLeaving] = useState<string | null>(null)
+  const [entrance, setEntrance] = useState<'arrive' | 'fade'>('arrive')
 
   const show = useCallback((next: ImageResult) => {
-    setResult((previous) => {
+    const previous = shown.current
+    shown.current = next
+    const before = sigOf(previous)
+    const after = sigOf(next)
+    const calm = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (before && after && before !== after && !calm) {
+      setEntrance('fade')
+      setLeaving((old) => {
+        if (old) URL.revokeObjectURL(old)
+        return objectUrls(previous)[0] ?? null
+      })
+    } else {
+      if (!before && after) setEntrance('arrive')
       for (const url of objectUrls(previous)) URL.revokeObjectURL(url)
-      return next
-    })
+    }
+    setResult(next)
     setLookedAt(Date.now())
     setLoading(false)
   }, [])
+  const settled = () =>
+    setLeaving((old) => {
+      if (old) URL.revokeObjectURL(old)
+      return null
+    })
 
   const look = useCallback(() => fetchImage(target.link, target.key).catch((): ImageResult => ({ kind: 'nothing' })), [target.link, target.key])
 
@@ -179,9 +200,9 @@ function Today({ target, arrived, onScan, onForget }: { target: DuoTarget; arriv
     return () => document.removeEventListener('visibilitychange', onVisible)
   }, [look, show, refresh])
 
-  let image: { url: string; note: string } | null = null
-  if (result?.kind === 'fresh') image = { url: result.url, note: t.lookedAt(time(lookedAt)) }
-  else if (result?.kind === 'offline') image = { url: result.url, note: t.offline(day(result.at)) }
+  let image: { url: string; sig: string; note: string } | null = null
+  if (result?.kind === 'fresh') image = { url: result.url, sig: result.sig, note: t.lookedAt(time(lookedAt)) }
+  else if (result?.kind === 'offline') image = { url: result.url, sig: result.sig, note: t.offline(day(result.at)) }
   const gone = result?.kind === 'gone' || result?.kind === 'wrongKey'
   const [tab, setTab] = useState<Tab>('weather')
 
@@ -218,11 +239,17 @@ function Today({ target, arrived, onScan, onForget }: { target: DuoTarget; arriv
               </button>
             </div>
           ) : image ? (
-            <img
-              className="weather-image"
-              src={image.url}
-              alt={t.imageAlt(target.name)}
-            />
+            <div className="weather-frame">
+              {leaving && <img className="weather-image" src={leaving} alt="" aria-hidden="true" />}
+              {/* One element per sent image: looking again at the same one changes nothing on screen. */}
+              <img
+                key={image.sig}
+                className={`weather-image ${entrance === 'fade' ? 'image-fade-in' : 'image-arrive'}`}
+                src={image.url}
+                alt={t.imageAlt(target.name)}
+                onAnimationEnd={leaving ? settled : undefined}
+              />
+            </div>
           ) : (
             <div className="weather-image placeholder" role="status">
               {result?.kind === 'nothing' ? t.offlineNothing : t.loading}
@@ -236,7 +263,7 @@ function Today({ target, arrived, onScan, onForget }: { target: DuoTarget; arriv
                 <strong>{loading ? t.loading : image ? image.note : ''}</strong>
                 {!loading && result?.kind === 'fresh' && <span>{capitalize(day(lookedAt))}</span>}
               </span>
-              <button type="button" className="pill" onClick={refresh} disabled={loading}>
+              <button type="button" className={loading ? 'pill is-loading' : 'pill'} onClick={refresh} disabled={loading}>
                 <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 11A8 8 0 0 0 5.6 6.6L4 8M4 4v4h4M4 13a8 8 0 0 0 14.4 4.4L20 16M20 20v-4h-4" />
                 </svg>
@@ -380,6 +407,10 @@ function ForgetConfirm({ name, onForget, onCancel }: { name?: string; onForget: 
       </section>
     </div>
   )
+}
+
+function sigOf(result: ImageResult | null): string | undefined {
+  return result?.kind === 'fresh' || result?.kind === 'offline' ? result.sig : undefined
 }
 
 function objectUrls(result: ImageResult | null): string[] {

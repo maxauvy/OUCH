@@ -402,6 +402,39 @@ body {
   background: var(--surface);
   border: var(--card-border);
 }
+/* The image arriving: the first one rises in softly; a newly sent one fades in over the one it replaces (0.7 s). */
+.weather-frame {
+  display: grid;
+}
+.weather-frame > img {
+  grid-area: 1 / 1;
+}
+.image-arrive {
+  animation: duo-image-arrive 450ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.image-fade-in {
+  animation: duo-image-fade 700ms ease-in-out both;
+}
+@keyframes duo-image-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes duo-image-fade {
+  from {
+    opacity: 0;
+  }
+}
+/* « Actualiser » while it looks: its arrows turn, only that long. */
+.pill.is-loading svg {
+  animation: duo-turn 900ms linear infinite;
+}
+@keyframes duo-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .footer {
   margin-top: auto;
