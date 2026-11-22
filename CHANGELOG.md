@@ -6,33 +6,41 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.16.0] - 2026-11-22
+
+Une app plus douce à l'œil et à la main : des cartes de verre qui flottent, des animations calmes (le ciel qui change en fondu, les feuilles qui montent, la pastille qui glisse, le fondu entre les onglets), et la sauvegarde automatique vers Dropbox, avec la météo du jour pour un proche dans OUCH Duo, ouvertes à tous. Tous les PDF, les flyers et l'image du README sont refaits pour cette version.
+
 ### Ajouté
-- **OUCH Duo : « Ne plus suivre cette météo ».** Dans le menu du bouton rond (et sur l'écran « Cette météo n'est plus partagée »), après une confirmation calme : Duo efface de ce téléphone le lien, la clé et la dernière image reçue, et revient à l'accueil. Rien ne change pour la personne qui partage. Sur iPhone, l'app installée ne reprend pas ce lien en se rouvrant ; scanner à nouveau le code le rétablit.
 - **« Enregistré » a sa petite coche.** Quand ta douleur est notée, une coche se dessine devant « Enregistré », en haut de la carte, comme à la fin des exercices de Soulager. Pas de son, rien qui clignote.
 - **Dans « Nouveautés » : « Ta météo, chaque jour, pour un proche ».** Un mot sur la sauvegarde Dropbox et OUCH Duo, désormais pour tous : ce que fait chacune, que tout est facultatif, et « Voir la sauvegarde » qui mène à Réglages › Mes données. Il s'ouvre une fois de lui-même chez les personnes déjà là au 22 novembre (jamais un jour calme), et reste dans la liste pour les autres.
+- **OUCH Duo : « Ne plus suivre cette météo ».** Dans le menu du bouton rond (et sur l'écran « Cette météo n'est plus partagée »), après une confirmation calme : Duo efface de ce téléphone le lien, la clé et la dernière image reçue, et revient à l'accueil. Rien ne change pour la personne qui partage. Sur iPhone, l'app installée ne reprend pas ce lien en se rouvrant ; scanner à nouveau le code le rétablit.
 
 ### Modifié
 - **« Partager ma météo » dit qu'un proche peut la recevoir chaque jour.** Sans la sauvegarde Dropbox, la section « Chaque jour, toute seule » s'affiche quand même : elle explique qu'il faut d'abord la sauvegarde automatique, et « Mettre en place la sauvegarde » mène à Réglages › Mes données. Avec Dropbox, rien ne change.
 - **La sauvegarde automatique vers Dropbox est ouverte à tous.** Plus besoin de l'accès anticipé : la carte « Sauvegarde automatique » est dans Réglages › Mes données, désactivée par défaut, et avec elle « Ma météo, chaque jour, pour un proche ». Le serveur personnel (WebDAV) reste « Bientôt ».
-- **OUCH Duo : l'image du jour arrive en douceur.** La première image monte légèrement en apparaissant ; quand une nouvelle météo a été envoyée, elle apparaît en fondu par-dessus l'ancienne. Regarder à nouveau la même image ne fait rien bouger. Pendant qu'il cherche, les flèches d'« Actualiser » tournent.
 - **Le ciel du jour change en douceur.** Quand tu notes ta douleur, le nouveau ciel apparaît en fondu par-dessus l'ancien (0,7 s), puis la météo sous le titre en fondu. À l'ouverture de l'app, le ciel est là tout de suite, sans fondu. Rien ne bouge si le téléphone demande de réduire les animations.
 - **Aujourd'hui : la cloche et les Réglages restent à portée.** Quand l'en-tête part avec le défilement, ses deux boutons reviennent en ronds de verre en haut à droite, en miroir du retour en haut à gauche des autres pages ; le point ambre des Nouveautés y reste visible. En haut de la page, rien ne change.
-- **OUCH Duo : la visite de « Comprendre » glisse d'une partie à l'autre.** Elle s'ouvre en fondu ; à chaque étape, la fenêtre sur l'image d'exemple glisse jusqu'à la partie expliquée au lieu de sauter, le point de l'étape s'allonge et le texte apparaît en douceur.
 - **Les feuilles deviennent des cartes de verre qui flottent.** « Nouveautés », le rendez-vous, l'ordonnance, « Partager ma météo » et les autres feuilles se posent à 12 px des bords et du bas, arrondies partout, dans le verre de la barre d'onglets, sur un voile plus léger : on devine la page derrière. Elles se ferment comme avant (Fermer, Échap, un toucher à côté), et le focus va toujours d'abord sur « Fermer ».
 - **La pastille de la barre d'onglets glisse.** Quand tu changes d'onglet, le fond de l'onglet ouvert glisse jusqu'au nouveau au lieu de sauter, et les autres icônes se décalent avec lui. Rien ne bouge si le téléphone demande de réduire les animations.
-- **OUCH Duo : le blanc de l'onglet ouvert glisse.** Entre « Sa météo » et « Comprendre », le fond de l'onglet ouvert glisse de l'un à l'autre, et la page choisie apparaît en fondu.
 - **La période de Tendances et le jour ouvert du Journal restent sous les yeux.** Quand on fait défiler, les choix 7 j / 30 j / 90 j / Tout passent dans une barre de verre en haut, toujours touchables (à côté du bouton de retour sur les pages de Tendances) ; dans le Journal, la barre rappelle le jour ouvert, sa météo et sa douleur tout le long du formulaire. En haut de la page, rien ne change.
 - **Le retour en arrière ne se perd plus sur une longue page.** Sur les pages ouvertes depuis une autre (Tendances, Réglages, « Mes enfants », Soulager), le lien « ‹ … » reste en haut comme avant ; dès qu'il part avec le défilement, un bouton rond en verre avec sa flèche apparaît en douceur en haut à gauche, comme le bouton rond de Duo, et s'efface quand le lien revient.
-- **OUCH Duo : les feuilles montent, le menu s'ouvre depuis son bouton.** « Installer Duo » et « Ne plus suivre cette météo » montent doucement et redescendent quand on les écarte (« Plus tard », « Annuler », Échap, un toucher à côté) ; le menu du bouton rond s'ouvre en grandissant un peu depuis le bouton.
 - **Les feuilles montent et redescendent.** À l'ouverture, la carte de verre monte doucement pendant que le voile s'installe ; quand tu la fermes (Fermer, Échap, un toucher à côté), elle redescend avant de disparaître. Rien ne bouge si le téléphone demande de réduire les animations.
-- **OUCH Duo : l'accueil montre d'abord à quoi ressemble une météo.** Avant tout code, le premier écran affiche une image d'exemple (données fictives), à moitié visible et marquée « Exemple », avec « Comprendre cette météo », qui ouvre la visite de l'onglet « Comprendre ». Le titre devient « La météo d'un proche, chaque jour », et les étapes passent à deux : ton proche ouvre « Partager ma météo » dans OUCH, tu scannes son code ici.
-- **OUCH Duo : les cartes repliables s'ouvrent en douceur.** Dans « Comprendre », le chevron tourne et le contenu apparaît en fondu ; sur Chrome et Android, la carte grandit jusqu'à sa hauteur au lieu de sauter (Safari l'ouvre d'un coup, avec le fondu).
 - **« Mode démo », « À jour » et la visite de la démo passent dans le verre de la barre d'onglets.** Plus de pilule sombre au-dessus d'une pilule claire : les bulles qui flottent en bas de l'écran ont le même verre dépoli, un texte à l'encre et des liens en indigo, en clair comme en sombre. Leur place, leurs textes et le moment où elles apparaissent ne changent pas.
 - **Changer d'onglet se fait en fondu.** La page quittée s'efface et la nouvelle apparaît en montant légèrement, la barre d'onglets restant en place. L'ancienne page reste à l'écran tant que la nouvelle n'est pas prête : plus de blanc entre les deux. Sur un navigateur sans cette fonction, ou si le téléphone demande de réduire les animations, l'onglet change d'un coup comme avant.
+- **OUCH Duo : l'image du jour arrive en douceur.** La première image monte légèrement en apparaissant ; quand une nouvelle météo a été envoyée, elle apparaît en fondu par-dessus l'ancienne. Regarder à nouveau la même image ne fait rien bouger. Pendant qu'il cherche, les flèches d'« Actualiser » tournent.
+- **OUCH Duo : la visite de « Comprendre » glisse d'une partie à l'autre.** Elle s'ouvre en fondu ; à chaque étape, la fenêtre sur l'image d'exemple glisse jusqu'à la partie expliquée au lieu de sauter, le point de l'étape s'allonge et le texte apparaît en douceur.
+- **OUCH Duo : le blanc de l'onglet ouvert glisse.** Entre « Sa météo » et « Comprendre », le fond de l'onglet ouvert glisse de l'un à l'autre, et la page choisie apparaît en fondu.
+- **OUCH Duo : les feuilles montent, le menu s'ouvre depuis son bouton.** « Installer Duo » et « Ne plus suivre cette météo » montent doucement et redescendent quand on les écarte (« Plus tard », « Annuler », Échap, un toucher à côté) ; le menu du bouton rond s'ouvre en grandissant un peu depuis le bouton.
+- **OUCH Duo : l'accueil montre d'abord à quoi ressemble une météo.** Avant tout code, le premier écran affiche une image d'exemple (données fictives), à moitié visible et marquée « Exemple », avec « Comprendre cette météo », qui ouvre la visite de l'onglet « Comprendre ». Le titre devient « La météo d'un proche, chaque jour », et les étapes passent à deux : ton proche ouvre « Partager ma météo » dans OUCH, tu scannes son code ici.
+- **OUCH Duo : les cartes repliables s'ouvrent en douceur.** Dans « Comprendre », le chevron tourne et le contenu apparaît en fondu ; sur Chrome et Android, la carte grandit jusqu'à sa hauteur au lieu de sauter (Safari l'ouvre d'un coup, avec le fondu).
+- **Documents** : toutes les captures refaites (cartes de verre, indigo), sans les éléments flottants qui couvraient le contenu ; l'image du README redessinée (`scripts/render-readme.mjs`) ; le guide des utilisateurs parle de « Nouveautés », de la sauvegarde automatique et de l'envoi quotidien vers OUCH Duo, et dit ce qui part vers Dropbox ; le guide et le diaporama pour les soignants, la plaquette et le flyer A4 pour les patients ne parlent plus d'essai pour Dropbox et mentionnent OUCH Duo.
 
 ### Corrigé
-- **OUCH Duo : « Comprendre cette météo » se voit mieux sur l'accueil.** Le bouton passe en indigo plein, avec un « ? », au lieu de blanc sur le bas clair de l'image d'exemple. Le badge « Exemple » prend la taille de l'image et couvre sa date sur tous les écrans.
 - **Une page de Tendances s'ouvre en haut.** « Où ça fait mal », « Mes traitements », « Mes habitudes » et « Comparer deux périodes » gardaient le défilement de Tendances : ouvertes depuis le bas de la liste, elles commençaient au milieu, titre et retour hors de l'écran.
+- **OUCH Duo : « Comprendre cette météo » se voit mieux sur l'accueil.** Le bouton passe en indigo plein, avec un « ? », au lieu de blanc sur le bas clair de l'image d'exemple. Le badge « Exemple » prend la taille de l'image et couvre sa date sur tous les écrans.
+
+### Tests
+- 709 tests automatiques, dont de nouveaux pour : la signature de l'image du jour dans OUCH Duo, et à qui s'adresse le mot « Ta météo, chaque jour, pour un proche ».
 
 ## [0.15.2] - 2026-11-21
 
@@ -576,7 +584,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.15.2...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/maxauvy/OUCH/compare/v0.15.2...v0.16.0
 [0.15.2]: https://github.com/maxauvy/OUCH/compare/v0.15.1...v0.15.2
 [0.15.1]: https://github.com/maxauvy/OUCH/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/maxauvy/OUCH/compare/v0.14.0...v0.15.0
