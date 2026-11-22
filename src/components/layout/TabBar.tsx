@@ -1,4 +1,5 @@
 import { IconCalendar, IconChartLine, IconHeartbeat, IconStethoscope, IconWind, type Icon } from '@tabler/icons-react'
+import { useEffect, useLayoutEffect, useRef, type RefObject } from 'react'
 import { useTranslation } from '../../i18n'
 
 export type Tab = 'today' | 'journal' | 'trends' | 'soulager' | 'consultation'
@@ -22,6 +23,16 @@ export function TabBar({
   badged?: Tab[]
 }) {
   const t = useTranslation()
+  const pillRef = useRef<HTMLDivElement>(null)
+  const place = useGlidingPill(pillRef, active)
+  // The pill's width follows the text size and the language: the soft disc goes back under the open tab, without moving.
+  useEffect(() => {
+    const pill = pillRef.current
+    if (!pill || typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(() => place.current(false))
+    observer.observe(pill)
+    return () => observer.disconnect()
+  }, [place])
   const ALL: { id: Tab; label: string }[] = [
     { id: 'today', label: t.tabs.today },
     { id: 'journal', label: t.tabs.journal },
@@ -40,9 +51,17 @@ export function TabBar({
       style={{ bottom: 'max(12px, calc(env(safe-area-inset-bottom) - 12px))' }}
     >
       <div
-        className="glass-float pointer-events-auto flex items-center max-w-full"
+        ref={pillRef}
+        className="glass-float pointer-events-auto relative flex items-center max-w-full"
         style={{ height: 58, padding: 5, borderRadius: 999 }}
       >
+        {/* The soft disc under the open tab: one for the bar, so it can glide from a tab to the next. */}
+        <span
+          aria-hidden
+          data-pill-disc
+          className="absolute left-0 top-[5px] bottom-[5px] rounded-full"
+          style={{ background: 'var(--color-brand-soft)', width: 0 }}
+        />
         {TABS.map((tab) => {
           const isActive = active === tab.id
           const Icon = TAB_ICONS[tab.id]
@@ -50,16 +69,16 @@ export function TabBar({
           return (
             <button
               key={tab.id}
+              data-tab={tab.id}
               onClick={() => onChange(tab.id)}
               aria-current={isActive ? 'page' : undefined}
               aria-label={badge ? `${tab.label}, ${t.tabs.trendsNew}` : tab.label}
-              className="h-full flex items-center justify-center gap-1.5 shrink-0 min-w-0"
+              className="relative h-full flex items-center justify-center gap-1.5 shrink-0 min-w-0"
               style={{
                 borderRadius: 999,
                 minWidth: 46,
                 padding: isActive ? '0 15px 0 12px' : 0,
                 color: isActive ? 'var(--tab-active, var(--color-ink))' : 'var(--color-ink-muted)',
-                background: isActive ? 'var(--color-brand-soft)' : undefined,
               }}
             >
               <span className="relative flex shrink-0" style={{ color: isActive ? 'var(--tab-active-icon, inherit)' : undefined }}>
@@ -75,6 +94,7 @@ export function TabBar({
               {isActive && (
                 <span
                   aria-hidden
+                  data-tab-label
                   className="font-semibold truncate"
                   style={{ fontSize: 'min(calc(var(--text-caption) * 1.1), 16px)' }}
                 >
@@ -87,4 +107,58 @@ export function TabBar({
       </div>
     </nav>
   )
+}
+
+/** How long the soft disc takes to glide to the tab just opened (ms). */
+const GLIDE_MS = 300
+const GLIDE_EASE = 'cubic-bezier(0.2, 0.7, 0.2, 1)'
+
+/**
+ * Puts the soft disc under the open tab. When the tab changes, it glides there
+ * and the other tabs slide to their new places (the open one widens with its
+ * name) instead of jumping; nothing moves with reduced motion. Returns the
+ * placing, for a change of size (no glide then).
+ */
+function useGlidingPill(pillRef: RefObject<HTMLDivElement | null>, active: Tab) {
+  // Where each tab and the disc were after the last placing, from the pill's left edge.
+  const lefts = useRef(new Map<string, number>())
+  const disc = useRef<{ left: number; width: number } | null>(null)
+  const place = useRef<(glide: boolean) => void>(() => {})
+
+  useLayoutEffect(() => {
+    place.current = (glide: boolean) => {
+      const pill = pillRef.current
+      const ind = pill?.querySelector<HTMLElement>('[data-pill-disc]')
+      if (!pill || !ind) return
+      const tabs = [...pill.querySelectorAll<HTMLElement>('[data-tab]')]
+      const open = tabs.find((b) => b.dataset.tab === active)
+      if (!open) return
+      const to = { left: open.offsetLeft, width: open.offsetWidth }
+      ind.style.transform = `translateX(${to.left}px)`
+      ind.style.width = `${to.width}px`
+      const from = disc.current
+      const calm = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      if (glide && from && !calm && typeof ind.animate === 'function') {
+        const timing = { duration: GLIDE_MS, easing: GLIDE_EASE }
+        ind.animate(
+          [
+            { transform: `translateX(${from.left}px)`, width: `${from.width}px` },
+            { transform: `translateX(${to.left}px)`, width: `${to.width}px` },
+          ],
+          timing,
+        )
+        for (const tab of tabs) {
+          const before = lefts.current.get(tab.dataset.tab ?? '')
+          const dx = before === undefined ? 0 : before - tab.offsetLeft
+          if (Math.abs(dx) > 0.5) tab.animate([{ transform: `translateX(${dx}px)` }, { transform: 'none' }], timing)
+        }
+        open.querySelector('[data-tab-label]')?.animate([{ opacity: 0 }, { opacity: 1 }], timing)
+      }
+      disc.current = to
+      for (const tab of tabs) lefts.current.set(tab.dataset.tab ?? '', tab.offsetLeft)
+    }
+    place.current(true)
+  }, [active, pillRef])
+
+  return place
 }
