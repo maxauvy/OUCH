@@ -40,7 +40,7 @@ You enter each treatment once: regular or as-needed, the dose, dose changes, whe
 
 ### Share your weather of the day
 
-The day's measures are boiled down to a single picture, from clear skies to a storm, with pain, fatigue and mood. You can add a short note and send it to your loved ones yourself. Nothing is ever sent automatically.
+The day's measures are boiled down to a single picture, from clear skies to a storm, with pain, fatigue and mood. You can add a short note and send it to your loved ones yourself. Nothing goes out on its own unless you choose it: with the automatic backup to Dropbox, the picture can go out by itself every day, encrypted, to a loved one who follows it in [OUCH Duo](https://maxauvy.github.io/OUCH/duo/), a small app they install on their phone. They scan a code shown by OUCH once; only that code opens the picture.
 
 ### Journal and trends
 

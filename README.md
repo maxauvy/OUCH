@@ -40,7 +40,7 @@ On déclare ses traitements une fois : de fond ou pris au besoin, la dose, les c
 
 ### Sa météo du jour, à partager
 
-Les mesures du jour se résument en une image, du ciel dégagé à l'orage, avec la douleur, la fatigue et l'humeur. On peut y ajouter un petit mot, puis l'envoyer soi-même à ses proches. Rien n'est envoyé automatiquement.
+Les mesures du jour se résument en une image, du ciel dégagé à l'orage, avec la douleur, la fatigue et l'humeur. On peut y ajouter un petit mot, puis l'envoyer soi-même à ses proches. Rien ne part tout seul, sauf si on le choisit : avec la sauvegarde automatique vers Dropbox, l'image peut partir d'elle-même chaque jour, chiffrée, vers un proche qui la suit dans [OUCH Duo](https://maxauvy.github.io/OUCH/duo/), une petite app à installer sur son téléphone. Il scanne une fois un code montré par OUCH ; seul ce code ouvre l'image.
 
 ### Journal et tendances
 
