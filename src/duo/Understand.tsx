@@ -190,11 +190,16 @@ export function Tour({ step, name, onStep, onClose }: { step: number; name?: str
           ))}
           <span className="small">{t.stepOf(step + 1, t.parts.length)}</span>
         </div>
-        <h2 id="duo-tour-title" className="card-title" tabIndex={-1} ref={heading}>
+        {/* Each step's words come in softly while the window glides to its part. */}
+        <h2 key={`title-${step}`} id="duo-tour-title" className="card-title tour-step-in" tabIndex={-1} ref={heading}>
           {part.title}
         </h2>
-        <p className="text">{part.text(t.who(name))}</p>
-        <p className="small">{part.more}</p>
+        <p key={`text-${step}`} className="text tour-step-in">
+          {part.text(t.who(name))}
+        </p>
+        <p key={`more-${step}`} className="small tour-step-in">
+          {part.more}
+        </p>
         <div className="tour-nav">
           {step > 0 ? (
             <button type="button" className="link-btn" onClick={() => onStep(step - 1)}>
