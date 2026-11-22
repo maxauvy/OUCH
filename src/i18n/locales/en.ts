@@ -1417,7 +1417,7 @@ const en: Translations = {
     whereTitle: 'Where to keep your copy?',
     whereFiles: 'Files or iCloud Drive: your phone’s share sheet lets you choose the folder.',
     whereFolder: 'A folder your computer already syncs (iCloud Drive, Google Drive, OneDrive, Nextcloud…): save the file in it and your copy follows.',
-    whereDropbox: 'Dropbox, as an automatic copy: in early access, in the card above.',
+    whereDropbox: 'Dropbox, as an automatic copy: in the card above.',
     whereAlways: 'Either way, the copy is encrypted with your password.',
   },
 

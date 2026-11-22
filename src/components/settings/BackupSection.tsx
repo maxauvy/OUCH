@@ -2,7 +2,6 @@ import { useRef, useState } from 'react'
 import { IconFileCheck, IconFileImport, IconX } from '@tabler/icons-react'
 import { exportEncryptedBackup, downloadBlob, importEncryptedBackup } from '../../lib/backup'
 import { canShareFiles, shareOrDownload, type ShareEnv } from '../../lib/shareFile'
-import { useEarlyAccess } from '../../lib/earlyAccess'
 import { format, useLocale, useTranslation } from '../../i18n'
 import { useSettings } from '../../hooks/useSettings'
 import { updateSettings } from '../../db'
@@ -24,7 +23,6 @@ export function BackupSection() {
   const t = useTranslation()
   const { intlLocale } = useLocale()
   const { lastBackupAt } = useSettings()
-  const earlyAccess = useEarlyAccess()
   const [exportPassword, setExportPassword] = useState('')
   const [exportBusy, setExportBusy] = useState(false)
   const [exportMsg, setExportMsg] = useState<string | null>(null)
@@ -96,7 +94,7 @@ export function BackupSection() {
         <ul className="text-caption flex flex-col gap-1.5 list-disc pl-5" style={{ color: 'var(--color-ink-muted)' }}>
           {canShareBackup && <li>{t.backup.whereFiles}</li>}
           <li>{t.backup.whereFolder}</li>
-          {earlyAccess && <li>{t.backup.whereDropbox}</li>}
+          <li>{t.backup.whereDropbox}</li>
         </ul>
         <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
           {t.backup.whereAlways}

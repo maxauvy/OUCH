@@ -6,6 +6,7 @@ import type { AutoBackupState } from '../../db/types'
 import { format, useLanguage, useTranslation } from '../../i18n'
 import { ModalSheet } from '../ui/ModalSheet'
 import { TrustLines } from './TrustLines'
+import { useEarlyAccess } from '../../lib/earlyAccess'
 
 type ProviderId = AutoBackupState['provider']
 
@@ -43,6 +44,8 @@ export function AutoBackupWizard({ onClose, returned }: { onClose: () => void; r
   const [check, setCheck] = useState<ConnectionCheck | null>(null)
   const [testing, setTesting] = useState(false)
   const redirects = provider !== null && REDIRECT_PROVIDERS.includes(provider)
+  // A server of one's own (WebDAV) stays in early access: the official site's content policy does not let the page reach it, so for everyone else it says « Bientôt ».
+  const earlyAccess = useEarlyAccess()
 
   // The trial provider only shows in development, the three real ones always (not yet usable).
   const rows = ROWS.filter((r) => r.id !== 'memory' || AVAILABLE_PROVIDERS.includes('memory'))
@@ -109,7 +112,7 @@ export function AutoBackupWizard({ onClose, returned }: { onClose: () => void; r
           </div>
           <ul className="flex flex-col gap-2">
             {rows.map(({ id, Icon }) => {
-              const available = AVAILABLE_PROVIDERS.includes(id)
+              const available = AVAILABLE_PROVIDERS.includes(id) && (id !== 'webdav' || earlyAccess)
               return (
                 <li key={id}>
                   <button
