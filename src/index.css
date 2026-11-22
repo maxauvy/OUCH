@@ -608,6 +608,45 @@ input::-webkit-date-and-time-value {
   }
 }
 
+/* Changing tab (lib/pageFade.ts): the leaving page fades out, the new one fades in rising 6px; the tab bar is
+   left out of the fade, live, so its pill can glide; the rest (sky, paper) crossfades. Named only during the change. */
+html.page-fading main {
+  view-transition-name: page;
+}
+html.page-fading main ~ nav {
+  view-transition-name: tabbar;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+}
+::view-transition-group(page) {
+  animation: none;
+}
+::view-transition-old(page) {
+  animation: page-out 120ms ease-out both;
+}
+::view-transition-new(page) {
+  animation: page-in 200ms 80ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+::view-transition-old(tabbar) {
+  display: none;
+}
+::view-transition-group(tabbar),
+::view-transition-new(tabbar) {
+  animation: none;
+}
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
 /* Follow the phone's text size setting.
    - Android / Chrome: <meta name="text-scale" content="scale"> in
      index.html makes the root font size follow the OS setting.

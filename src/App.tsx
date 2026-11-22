@@ -37,6 +37,7 @@ import { requestStorageProtection } from './lib/storage'
 import { getTranslations, I18nProvider } from './i18n'
 import type { Language } from './i18n'
 import { todayISO } from './lib/dates'
+import { withPageFade } from './lib/pageFade'
 
 // The day's page and the journal open the app. The other screens, the first-run
 // setup and the demo tour are loaded on demand, so the first paint does not wait
@@ -280,12 +281,14 @@ function AppShell() {
       <TabBar
         active={tab}
         badged={tab !== 'trends' && trendsDot({ shown: leadList?.shown ?? [], seen: settings.leadsSeen, enabled: settings.suggestionsEnabled, announced }) ? ['trends'] : []}
-        onChange={(next) => {
-          setBackupRequested(false)
-          setJournalDate(null)
-          setSoulagerRequest(null)
-          setTab(next)
-        }}
+        onChange={(next) =>
+          withPageFade(() => {
+            setBackupRequested(false)
+            setJournalDate(null)
+            setSoulagerRequest(null)
+            setTab(next)
+          })
+        }
       />
       {newsOpen && (
         <NewsSheet
