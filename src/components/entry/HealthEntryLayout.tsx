@@ -459,8 +459,25 @@ export function HealthEntryLayout({
               <span className="text-body font-semibold">{t.entryForm.pain}</span>
             </span>
           )}
-          <span className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-            {statusText}
+          <span className="text-caption inline-flex items-center gap-1" style={{ color: 'var(--color-ink-muted)' }}>
+            {/* Just saved: a small check draws itself, as at the end of a Soulager exercise; it draws again at each save. */}
+            {saveState === 'saved' && (
+              <svg width="15" height="15" viewBox="0 0 20 20" aria-hidden className="shrink-0">
+                <path
+                  className="save-check"
+                  pathLength={1}
+                  d="M5 10.5l3.2 3.2L15 6.8"
+                  fill="none"
+                  stroke="var(--color-brand)"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+            <span key={saveState} className={saveState === 'saved' ? 'save-text-in' : undefined}>
+              {statusText}
+            </span>
           </span>
         </div>
         <p className="text-caption mt-1.5" style={{ color: 'var(--color-ink-muted)' }}>
