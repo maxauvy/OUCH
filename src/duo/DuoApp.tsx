@@ -184,6 +184,13 @@ function Today({ target, arrived, onScan, onForget }: { target: DuoTarget; arriv
   else if (result?.kind === 'offline') image = { url: result.url, note: t.offline(day(result.at)) }
   const gone = result?.kind === 'gone' || result?.kind === 'wrongKey'
   const [tab, setTab] = useState<Tab>('weather')
+  // Once a tab has been chosen, the panel shown comes in softly; not when the app opens.
+  const [switched, setSwitched] = useState(false)
+  const choose = (next: Tab) => {
+    if (next === tab) return
+    setSwitched(true)
+    setTab(next)
+  }
 
   return (
     <div className="stack grow">
@@ -191,14 +198,14 @@ function Today({ target, arrived, onScan, onForget }: { target: DuoTarget; arriv
         <Brand />
         {!gone && <Menu onScan={onScan} onForget={() => setAsking(true)} />}
       </div>
-      {!gone && <Tabs tab={tab} onTab={setTab} />}
+      {!gone && <Tabs tab={tab} onTab={choose} />}
 
       {tab === 'understand' && !gone ? (
-        <div role="tabpanel" id="duo-panel-understand" aria-labelledby="duo-tab-understand">
+        <div role="tabpanel" id="duo-panel-understand" aria-labelledby="duo-tab-understand" className={switched ? 'panel-in' : undefined}>
           <Understand name={target.name} />
         </div>
       ) : (
-        <div role={gone ? undefined : 'tabpanel'} id="duo-panel-weather" aria-labelledby={gone ? undefined : 'duo-tab-weather'} className="stack grow">
+        <div role={gone ? undefined : 'tabpanel'} id="duo-panel-weather" aria-labelledby={gone ? undefined : 'duo-tab-weather'} className={switched ? 'stack grow panel-in' : 'stack grow'}>
           <h1 className="title">{arrived ? t.firstTitle(target.name) : t.weatherOf(target.name)}</h1>
 
           {gone ? (
@@ -268,7 +275,7 @@ function Tabs({ tab, onTab }: { tab: Tab; onTab: (tab: Tab) => void }) {
     ['understand', t.tabUnderstand],
   ]
   return (
-    <div className="tabs" role="tablist" aria-label={t.tabsLabel}>
+    <div className="tabs" role="tablist" aria-label={t.tabsLabel} data-on={tab}>
       {tabs.map(([id, label]) => (
         <button
           key={id}

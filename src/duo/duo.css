@@ -573,6 +573,7 @@ body {
 
 /* "Their weather" and "Understand": two tabs under the brand. */
 .tabs {
+  position: relative;
   display: flex;
   gap: 4px;
   padding: 4px;
@@ -580,7 +581,25 @@ body {
   background: var(--glass);
   border: var(--card-border);
 }
+/* The white of the open tab: one for both, so it glides from one to the other (300 ms). */
+.tabs::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 6px);
+  border-radius: 11px;
+  background: var(--surface);
+  box-shadow: 0 2px 8px -4px rgba(58, 53, 96, 0.45);
+  transition: transform 300ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tabs[data-on='understand']::before {
+  transform: translateX(calc(100% + 4px));
+}
 .tabs button {
+  position: relative;
+  transition: color 300ms ease;
   flex: 1;
   font: inherit;
   font-size: 15px;
@@ -593,9 +612,16 @@ body {
   cursor: pointer;
 }
 .tabs button[aria-selected='true'] {
-  background: var(--surface);
   color: var(--ink);
-  box-shadow: 0 2px 8px -4px rgba(58, 53, 96, 0.45);
+}
+/* The panel of the tab just chosen fades in; nothing moves, the bar of « Sa météo » stays in its place. */
+.panel-in {
+  animation: duo-panel-in 250ms ease-out both;
+}
+@keyframes duo-panel-in {
+  from {
+    opacity: 0;
+  }
 }
 .tabs button:focus-visible {
   outline: 2.5px solid var(--brand);
