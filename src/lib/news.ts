@@ -10,7 +10,7 @@ import { isRestDay } from './restDay.ts'
  * word of thanks), gathered behind one button next to the settings. Each item
  * opens its own sheet. Newest first.
  */
-export type NewsId = 'thanks' | 'zones'
+export type NewsId = 'duo' | 'thanks' | 'zones'
 
 /** The word of thanks goes to the people already there when it came out:
  * at least this many days logged up to the cutoff. Someone who starts later
@@ -18,6 +18,19 @@ export type NewsId = 'thanks' | 'zones'
 export const THANKS_MIN_DAYS = 7
 /** The day the word of thanks came out: days logged after it do not count. */
 export const THANKS_CUTOFF = '2026-11-20'
+
+/**
+ * The day the automatic backup to Dropbox, and with it the weather of the day
+ * for a relative (OUCH Duo), opened to everyone. The word about it is news for
+ * the people already there by then; someone who starts later finds it listed,
+ * without a dot.
+ */
+export const DUO_CUTOFF = '2026-11-22'
+
+/** At least one day logged up to `cutoff`: the person was there before a change. */
+export function loggedBy(logged: readonly Pick<LoggedEntry, 'date'>[], cutoff: string): boolean {
+  return logged.some((e) => e.date <= cutoff)
+}
 
 export function thanksEligible(logged: readonly Pick<LoggedEntry, 'date'>[], cutoff = THANKS_CUTOFF, min = THANKS_MIN_DAYS): boolean {
   return logged.filter((e) => e.date <= cutoff).length >= min
@@ -35,19 +48,22 @@ export interface NewsState {
   hasOldZones: boolean
   zonesNoticeSeen: boolean
   thanksEligible: boolean
+  /** A day logged by the time Dropbox and OUCH Duo opened to everyone (see DUO_CUTOFF). */
+  duoEligible: boolean
   /** The items opened on this device. */
   seen: readonly string[]
 }
 
-/** The items the sheet lists, newest first. The zones notice is listed for everyone, as it was in Settings. */
+/** The items the sheet lists, newest first. The word about Duo and the zones notice are listed for everyone. */
 export function newsItems(state: NewsState): NewsId[] {
-  return [...(state.thanksEligible ? (['thanks'] as const) : []), 'zones']
+  return ['duo', ...(state.thanksEligible ? (['thanks'] as const) : []), 'zones']
 }
 
 /** The items not yet read. The zones notice only counts for a journal it was written for. */
 export function unreadNews(state: NewsState): NewsId[] {
   return newsItems(state).filter((id) => {
     if (id === 'zones') return state.hasOldZones && !state.zonesNoticeSeen && !state.seen.includes('zones')
+    if (id === 'duo') return state.duoEligible && !state.seen.includes('duo')
     return !state.seen.includes(id)
   })
 }

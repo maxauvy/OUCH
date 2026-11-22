@@ -713,6 +713,18 @@ const en: Translations = {
     thanksRow: 'Thank you for being here',
     thanksRowHint: 'A note from Maxime, who makes OUCH',
     zonesRowHint: 'Left and right, a body outline, the 19 regions',
+    duoRowHint: 'The Dropbox backup and OUCH Duo, for everyone',
+    duo: {
+      title: 'Your weather, every day, for a loved one',
+      intro: 'Two things that were being tried out are now here for everyone.',
+      backup: 'Automatic backup: an encrypted copy of your diary goes to your Dropbox on its own. If you change phones, nothing is lost.',
+      relative: 'With it, your weather of the day can also go out by itself to a loved one, who looks at it in OUCH Duo, a small app to install. No need to send it every day.',
+      free: 'All of it is optional and stays off until you choose it. Dropbox only ever sees encrypted files.',
+      ready: 'Your backup already goes to Dropbox: sending to a loved one is in “Share my weather”.',
+      setUp: 'See the backup',
+      later: 'Later',
+      ok: 'OK',
+    },
     thanks: {
       title: 'Thank you for being here',
       days: 'You have been logging your days in OUCH for {{n}} {{n:day|days}}. Thank you.',

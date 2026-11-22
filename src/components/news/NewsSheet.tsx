@@ -1,4 +1,4 @@
-import { IconChevronRight, IconHeart, IconMapPin, type Icon } from '@tabler/icons-react'
+import { IconChevronRight, IconCloud, IconHeart, IconMapPin, type Icon } from '@tabler/icons-react'
 import { useTranslation } from '../../i18n'
 import type { NewsId } from '../../lib/news'
 import { ModalSheet } from '../ui/ModalSheet'
@@ -7,6 +7,7 @@ import { ModalSheet } from '../ui/ModalSheet'
 export function NewsSheet({ items, unread, onOpen, onClose }: { items: NewsId[]; unread: NewsId[]; onOpen: (id: NewsId) => void; onClose: () => void }) {
   const t = useTranslation()
   const rows: Record<NewsId, { icon: Icon; title: string; hint: string; warm: boolean }> = {
+    duo: { icon: IconCloud, title: t.news.duo.title, hint: t.news.duoRowHint, warm: false },
     thanks: { icon: IconHeart, title: t.news.thanksRow, hint: t.news.thanksRowHint, warm: true },
     zones: { icon: IconMapPin, title: t.zonesNotice.cardTitle, hint: t.news.zonesRowHint, warm: false },
   }

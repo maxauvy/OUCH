@@ -25,7 +25,8 @@ import { oldZonesUsed } from './lib/bodyZones'
 import { ZonesNotice } from './components/about/ZonesNotice'
 import { NewsSheet } from './components/news/NewsSheet'
 import { ThanksNote } from './components/news/ThanksNote'
-import { daysWithOuch, newsItems, newsToOpen, quietDay, thanksEligible, unreadNews, type NewsId, type NewsState } from './lib/news'
+import { DuoNote } from './components/news/DuoNote'
+import { daysWithOuch, DUO_CUTOFF, loggedBy, newsItems, newsToOpen, quietDay, thanksEligible, unreadNews, type NewsId, type NewsState } from './lib/news'
 import { loggedEntries } from './lib/loggedEntries'
 import { useLeadList } from './hooks/useLeadList'
 import { useTodayMessages } from './hooks/useTodayMessages'
@@ -125,6 +126,7 @@ function AppShell() {
     hasOldZones: oldZones.length > 0,
     zonesNoticeSeen: !!settings.zonesNoticeSeen,
     thanksEligible: thanksEligible(logged),
+    duoEligible: loggedBy(logged, DUO_CUTOFF),
     seen: settings.newsSeen ?? [],
   }
   const quiet = quietDay({ illnesses: settings.illnesses, logged, all: allEntries ?? [], markedFlares: settings.markedFlares, today })
@@ -318,6 +320,20 @@ function AppShell() {
                 }
               : undefined
           }
+        />
+      )}
+      {newsItem === 'duo' && (
+        <DuoNote
+          backupReady={settings.autoBackup?.provider === 'dropbox'}
+          onClose={() => {
+            markNewsSeen('duo')
+            setNewsItem(null)
+          }}
+          onSetUp={() => {
+            markNewsSeen('duo')
+            setNewsItem(null)
+            goToBackup()
+          }}
         />
       )}
       {newsItem === 'thanks' && (
