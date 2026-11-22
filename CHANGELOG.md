@@ -8,6 +8,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ### Ajouté
 - **OUCH Duo : « Ne plus suivre cette météo ».** Dans le menu du bouton rond (et sur l'écran « Cette météo n'est plus partagée »), après une confirmation calme : Duo efface de ce téléphone le lien, la clé et la dernière image reçue, et revient à l'accueil. Rien ne change pour la personne qui partage. Sur iPhone, l'app installée ne reprend pas ce lien en se rouvrant ; scanner à nouveau le code le rétablit.
+- **« Enregistré » a sa petite coche.** Quand ta douleur est notée, une coche se dessine devant « Enregistré », en haut de la carte, comme à la fin des exercices de Soulager. Pas de son, rien qui clignote.
 
 ### Modifié
 - **Le ciel du jour change en douceur.** Quand tu notes ta douleur, le nouveau ciel apparaît en fondu par-dessus l'ancien (0,7 s), puis la météo sous le titre en fondu. À l'ouverture de l'app, le ciel est là tout de suite, sans fondu. Rien ne bouge si le téléphone demande de réduire les animations.
