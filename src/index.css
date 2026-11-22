@@ -464,6 +464,23 @@ input::-webkit-date-and-time-value {
     opacity: 0.45;
   }
 }
+/* Today's sky when the pain changes: the new sky comes in over the old one, then the weather under the title. */
+.sky-fade-in {
+  animation: sky-fade-in 700ms ease-in-out both;
+}
+@keyframes sky-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+.sky-line-in {
+  animation: sky-line-in 450ms 120ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes sky-line-in {
+  from {
+    opacity: 0;
+  }
+}
 /* The surface of the water in the breathing exercise: one wave length slides by, so the surface ripples. */
 .breath-wave {
   animation: breath-wave 4s linear infinite;

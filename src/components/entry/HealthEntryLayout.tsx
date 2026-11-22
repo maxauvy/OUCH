@@ -413,7 +413,8 @@ export function HealthEntryLayout({
   if (isToday && !ready)
     return (
       <div className="flex flex-col gap-3">
-        {sky && <TodaySkyBackdrop weather={null} />}
+        {/* Its own sky (a key of its own): the day's sky then shows at once when the page is ready, without fading in from this neutral one. */}
+        {sky && <TodaySkyBackdrop key="loading" weather={null} />}
         {header}
         {dayBar}
       </div>
