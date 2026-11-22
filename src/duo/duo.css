@@ -777,6 +777,35 @@ body {
   gap: 8px;
   padding: 2px 0 12px;
 }
+/* A card that unfolds: its chevron turns, what it holds fades in; where the browser can (Chrome, Android),
+   the card also grows to its height instead of jumping (300 ms). Elsewhere it opens at once, with the fade. */
+.fold summary .chevron {
+  transition: transform 300ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.fold[open] .fold-body {
+  animation: duo-fold-in 260ms 60ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes duo-fold-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+@supports (interpolate-size: allow-keywords) and selector(::details-content) {
+  .fold {
+    interpolate-size: allow-keywords;
+  }
+  .fold::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 300ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      content-visibility 300ms allow-discrete;
+  }
+  .fold[open]::details-content {
+    block-size: auto;
+  }
+}
 .refs {
   list-style: none;
   margin: 0;
