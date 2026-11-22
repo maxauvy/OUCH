@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>OUCH, Un rapport OUCH, mode d’emploi (A5, Aube)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600;700&display=block">
+<style>
+/* Aube: dawn colours (little ink), one big line in Bricolage with a coral-to-violet word, tilted pictures, white panels. Same family as flyer-a4-aube. */
+@page{size:A5;margin:0}
+:root{--night:#1f1d44;--coral:#ff7a59;--apricot:#ffc285;--sky:#9cc8ff;--lilac:#e4dcff;--peach:#fff1e8;--ink:#1f1d44;--sub:#3b3863;--display:"Bricolage Grotesque","Public Sans",sans-serif}
+*{box-sizing:border-box}html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:"Public Sans",sans-serif;color:var(--ink)}
+.page{position:relative;overflow:hidden;background:radial-gradient(130mm 100mm at 88% 6%,#ffb58a66,transparent 70%),radial-gradient(150mm 120mm at 0% 45%,#c9bdff55,transparent 70%),linear-gradient(180deg,#fff3ea 0%,#f6efff 60%,#ece6ff 100%)}
+@media screen{body{background:#777}.page{margin:0 auto 8mm}}
+h1 em{font-style:normal}
+.top{position:absolute;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;font-family:var(--display);font-weight:800;letter-spacing:.02em}
+.pill{background:var(--ink);border-radius:99px;font-weight:700;color:#fff}
+.stk{position:absolute;font-family:var(--display);font-weight:800;color:var(--ink);line-height:1}
+.stk small{display:block;font-family:"Public Sans";font-weight:700;letter-spacing:.01em}
+.panel{position:absolute;background:#fff;box-shadow:0 0 0 .3mm #1f1d4422;color:var(--ink)}
+.num{display:inline-block;border-radius:50%;background:var(--coral);color:#fff;text-align:center;font-family:var(--display);font-weight:800}
+.qr{background:#fff;flex:none}.qr img{width:100%;height:100%;display:block}
+.u{color:#e0502f;font-family:var(--display);font-weight:800;display:block}
+.fine{position:absolute;color:#6b668e}
+
+.ar{display:flex;align-items:center;gap:2.2mm;font-weight:600;flex-wrap:wrap}
+.p{display:inline-flex;align-items:center;gap:1.3mm;background:var(--peach);border-radius:99px;padding:.8mm 2.4mm}
+.t{display:inline-block;width:0;height:0;border-left:1.4mm solid transparent;border-right:1.4mm solid transparent}
+.t.g{border-top:2.5mm solid #1f7a45}.t.o{border-bottom:2.5mm solid #b45309}.t.f{width:2.8mm;height:.65mm;border:0;background:#8a99a3}
+h2{letter-spacing:.14em;text-transform:uppercase;color:#e0502f;margin:0 0 1.8mm;font-weight:700}
+ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;flex:1}
+ol li{display:flex}ol b{display:block}
+ol .num{flex:none}
+.vs{display:grid;grid-template-columns:1fr 1fr}
+.v{background:var(--peach);border-radius:3mm}
+.v small{font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7a5a8f}
+.v h3{font-family:var(--display);font-weight:800;line-height:1.05}.v p{margin:0}
+.lim{background:var(--lilac);border-radius:3.4mm}
+.shot{position:absolute;background:#fff;overflow:hidden;border:.3mm solid #1f1d4433;transform:rotate(3deg)}.shot img{display:block;width:100%}
+
+body{font-size:8.2pt;line-height:1.36}
+.page{width:148mm;height:209.5mm}
+.top{left:10mm;top:9mm;right:10mm}.brand{gap:2.2mm;font-size:12pt}.brand img{width:8.5mm;height:8.5mm}
+.pill{padding:1.1mm 3.2mm;font-size:7.2pt}
+h1{position:absolute;left:10mm;top:23mm;width:80mm;margin:0;font-family:var(--display);font-weight:800;font-size:23pt;line-height:.92;letter-spacing:-.04em}
+.lead{position:absolute;left:10mm;top:43mm;width:72mm;margin:0;font-size:8.6pt;line-height:1.38;color:var(--sub)}
+.shot{right:8mm;top:25mm;width:50mm;border-radius:2.4mm;box-shadow:3mm 3.4mm 0 #ffb58a}
+.panel{left:6mm;right:6mm;top:70mm;bottom:27mm;border-radius:5mm;padding:5mm 5.4mm;display:flex;flex-direction:column;gap:4.4mm}
+h2{font-size:7pt}
+ol{gap:2.2mm}ol li{gap:2.2mm;font-size:7.7pt;line-height:1.3;align-items:center}ol b{display:inline;font-size:8.2pt;margin-right:1.4mm}
+ol .num{width:5mm;height:5mm;font-size:7.2pt;line-height:5mm}
+.ar{font-size:7.6pt;margin-top:2.2mm}
+.vs{gap:3mm}.v{padding:2mm 2.8mm}.v small{font-size:6.2pt}.v h3{font-size:10.5pt;margin:.3mm 0 .5mm}.v p{font-size:7.4pt;line-height:1.28}
+.lim{padding:2.4mm 3.4mm;font-size:7.6pt;line-height:1.32}.lim h2{margin-bottom:.8mm}
+.ft{position:absolute;left:10mm;right:10mm;bottom:6.5mm;display:flex;gap:4mm;align-items:center}
+.qr{width:17mm;height:17mm;border-radius:2.2mm;padding:1.1mm}
+.ft .u{font-size:10.5pt}.ft span{display:block;font-size:7pt;line-height:1.3;color:var(--sub);margin-top:.6mm}
+
+</style></head><body>
+<div class="page">
+<div class="top"><div class="brand"><img src="logo.svg" alt="">OUCH</div><div class="pill">Pour les soignants</div></div>
+<h1>Un rapport OUCH,<br>mode <em><span style="color:#ff5f3d">d</span><span style="color:#f86050">’</span><span style="color:#f06263">e</span><span style="color:#e96476">m</span><span style="color:#e2658a">p</span><span style="color:#da669d">l</span><span style="color:#d368b0">o</span><span style="color:#cb6ac3">i</span><span style="color:#c46bd6">.</span></em></h1>
+<p class="lead">Le carnet de douleur de votre patient, tiré pour votre consultation. Ce que c’est, comment le lire, ce qu’il ne dit pas.</p>
+<div class="shot"><img src="rapport.png" alt=""></div>
+<div class="panel">
+<div><h2>La première page, dans l’ordre</h2><ol><li><span class="num">1</span><span><b>Le bandeau</b>La période couverte, celle d’avant, les jours renseignés.</span></li><li><span class="num">2</span><span><b>« En bref »</b>Une phrase, avec les mêmes chiffres.</span></li><li><span class="num">3</span><span><b>Les chiffres clés</b>Chacun avec sa flèche de tendance.</span></li><li><span class="num">4</span><span><b>La courbe</b>Points : chaque jour. Ligne : moyenne sur 7 jours.</span></li><li><span class="num">5</span><span><b>La répartition des jours</b>Légers, modérés, sévères, avec la période d’avant.</span></li></ol>
+<div class="ar">La flèche donne le sens, pas l’ampleur : <span class="p"><i class="t g"></i>favorable</span><span class="p"><i class="t o"></i>inverse</span><span class="p"><i class="t f"></i>trop petit</span></div></div>
+<div><h2>Deux versions</h2><div class="vs"><div class="v"><small>3 à 5 pages</small><h3>Médecin traitant</h3><p>Chiffres clés, courbe, traitements, questions du patient.</p></div><div class="v"><small>6 à 10 pages</small><h3>Centre douleur</h3><p>Un résumé, puis six parties numérotées : douleur, traitements, symptômes, habitudes, questions et notes, méthode.</p></div></div></div>
+<div class="lim"><h2>À garder en tête</h2>Données auto-déclarées, non vérifiées. Échelles non validées. Une poussée est une définition propre à OUCH. Un rapprochement n’est jamais une cause : le rapport décrit, il ne diagnostique pas.</div>
+</div>
+<div class="ft"><div class="qr"><img src="qr.svg" alt=""></div><div><span class="u">maxauvy.github.io/OUCH</span><span>La plaquette et la note méthodologique (chaque formule, chaque seuil) sont sur la page de la release. Mode démo : 90 jours fictifs.</span></div></div>
+</div>
+</body></html>
