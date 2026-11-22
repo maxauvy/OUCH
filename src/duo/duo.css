@@ -954,6 +954,38 @@ body {
   gap: 12px;
   margin-top: 4px;
 }
+/* The tour moving: it opens in a fade; from a part to the next, the window glides along the example image
+   (the image and the light frame move together, 450 ms), the dot of the step stretches, the words fade in. */
+.tour {
+  animation: duo-tour-in 220ms ease-out both;
+}
+.stage img {
+  transition: top 450ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hole {
+  transition:
+    top 450ms cubic-bezier(0.4, 0, 0.2, 1),
+    height 450ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.dots > span:not(.small) {
+  transition:
+    width 300ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    background-color 300ms ease;
+}
+.tour-step-in {
+  animation: duo-tour-step 300ms 120ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes duo-tour-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes duo-tour-step {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
 
 /* "Stop following this weather?": a sheet from the bottom, over a soft veil. */
 .confirm-layer {
