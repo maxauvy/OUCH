@@ -36,7 +36,7 @@ async function open(viewport, { dpr = 2, path = '' } = {}) {
   await hideFixed(page, false)
   return { ctx, page }
 }
-// The floating "Mode démo" pill (and, when asked, the fixed tab bar) are kept out of the pictures.
+// The floating "Mode démo" pill, what floats in at the top (and, when asked, the fixed tab bar) are kept out of the pictures.
 const hideFixed = (page, withNav) =>
   page.evaluate((nav) => {
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
@@ -46,6 +46,8 @@ const hideFixed = (page, withNav) =>
         if (getComputedStyle(el).position === 'fixed') { el.style.display = 'none'; break }
       }
     }
+    // What floats in at the top once the page scrolls (the glass rounds, the period bar, the way back) is not the page itself.
+    if (!document.getElementById('no-float')) document.head.insertAdjacentHTML('beforeend', '<style id="no-float">.float-in{display:none!important}</style>')
     if (nav) document.querySelectorAll('nav').forEach((el) => { if (getComputedStyle(el).position === 'fixed') el.style.display = 'none' })
   }, withNav)
 // The visit and the sheets dim the page with a translucent layer: it must not end up as a grey veil in a picture.

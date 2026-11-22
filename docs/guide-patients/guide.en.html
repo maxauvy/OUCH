@@ -72,7 +72,7 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
  <figure class="shot"><div class="scr"><img src="img-en/consultation.png"></div></figure>
 </div>
 <div style="position:absolute;left:15mm;right:15mm;bottom:14mm;display:flex;gap:8mm;align-items:flex-end;justify-content:space-between">
- <div class="small" style="max-width:112mm">Based on version 0.15.2 · 21 November 2026. The screenshots come from the demo mode: <b>made-up data</b>. OUCH is a diary: it does not replace your doctor’s advice, makes no diagnosis and recommends no treatment. Free software, CeCILL v2.1 licence.</div>
+ <div class="small" style="max-width:112mm">Based on version 0.16.0 · 22 November 2026. The screenshots come from the demo mode: <b>made-up data</b>. OUCH is a diary: it does not replace your doctor’s advice, makes no diagnosis and recommends no treatment. Free software, CeCILL v2.1 licence.</div>
  <div style="text-align:center;font-size:7.6pt;line-height:1.3"><img src="../presentation-soignants/qr.svg" style="width:22mm;display:block;margin:0 auto 1mm"><b>maxauvy.github.io/OUCH</b></div>
 </div></div>
 
@@ -132,6 +132,7 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
 <tr><td>Relief</td><td>My plan for hard days, my go-to moves, slow breathing, two relaxation exercises</td><td>Prepare it on a good day; open it on a harder one.</td></tr>
 <tr><td>Consultation</td><td>Your appointment and your questions, your prescription, the report, the sheet for a health professional</td><td>A few days before an appointment, and just after.</td></tr>
 <tr><td>Settings</td><td>Your profile, what you track, the reminder, suggestions, the lock, your backups, the style</td><td>At the start, then whenever you want to change something.</td></tr>
+<tr><td>What’s new</td><td>The bell next to Settings: what changes in OUCH, and a few words for you</td><td>When a small amber dot shows on it. Nothing you have to do.</td></tr>
 </table>
 <div class="box g" style="margin-top:4mm"><h3>When you are struggling, the app steps back</h3><p style="margin:0">On harder days, the screen shrinks to your pain and a kind word. Leads, trials and summaries wait until you feel better. On other days, whatever there is to see fits in one line (“2 small things for you”), which you open if you feel like it.</p></div>
 <p class="small">Also: French or English, two styles (“Weather” and “Plain”), each in light or dark, and text that follows your phone’s font size.</p>
@@ -303,11 +304,11 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
 <tr><th style="width:38mm">With whom</th><th style="width:52mm">What you can share</th><th>How</th></tr>
 <tr><td>Your doctor</td><td>The report (3 to 5 or 6 to 10 pages)</td><td>On screen during the appointment, printed, or as a PDF you send yourself.</td></tr>
 <tr><td>A health professional who doesn’t know you</td><td>The one-page sheet</td><td>Show it on screen, print it or save it as a PDF.</td></tr>
-<tr><td>Your loved ones</td><td>Today’s weather, with a note</td><td>A picture you send by message.</td></tr>
+<tr><td>Your loved ones</td><td>Today’s weather, with a note</td><td>A picture you send by message, or that goes out by itself every day to OUCH Duo.</td></tr>
 <tr><td>Your child</td><td>The “My kids” page</td><td>You show it to them on your phone.</td></tr>
 <tr><td>Nobody else</td><td>Everything else</td><td>Your diary, your notes, your leads stay on your phone.</td></tr>
 </table>
-<div class="box l" style="margin-top:4mm"><h3>Your weather, every day, on its own</h3><p style="margin:0">If you have turned on the Dropbox backup, your weather of the day can go out by itself, encrypted, once your day is filled in. Your loved one scans a code you show them once, and looks at it whenever they like in <b>OUCH Duo</b>, a small app made for them, which also explains how to read the picture. They are not notified, and you can turn it all off in one tap: the link then leads nowhere. Anyone who has this code can see your picture of the day: only give it to people you trust.</p></div>
+<div class="box l" style="margin-top:4mm"><h3>Your weather, every day, on its own</h3><p style="margin:0">If you have turned on the Dropbox backup, your weather of the day can go out by itself, encrypted, once your day is filled in. Your loved one scans a code you show them once, and looks at it whenever they like in <b>OUCH Duo</b>, a small app made for them, which also explains how to read the picture. They are not notified, and you can turn it all off in one tap: the link then leads nowhere. Anyone who has this code can see your picture of the day: only give it to people you trust. To turn it on: the automatic backup (Settings › My data), then “Share my weather” › “Every day, on its own”.</p></div>
 <div class="box g"><p style="margin:0"><b>An idea:</b> today’s weather is often easier to send than a long message. It says “today is hard” without you having to justify yourself, and your loved ones know how to adjust.</p></div>
 <div class="foot"><span>OUCH · a guide for users</span><span>9</span></div></div>
 
@@ -327,7 +328,7 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
 <div class="step"><div class="n">3</div><div><b>Store the file</b>On iPhone, “Save to Files” (in iCloud Drive, for example). Elsewhere: your personal cloud, or an email to yourself.</div></div>
 <h3>Changing phones</h3>
 <p>Install OUCH on the new one, then Settings › My data › “Import a backup”, and your password.</p>
-<p class="small">As an option, off by default: an automatic backup of the same encrypted file to your Dropbox. The CSV export, on the other hand, is not encrypted: it is for analysing your data, not for restoring it.</p>
+<p class="small">As an option, off by default, Settings › My data › “Automatic backup” sends the same encrypted file to your Dropbox on its own. The CSV export, on the other hand, is not encrypted: it is for analysing your data, not for restoring it.</p>
 </div>
 <div>
 <h3 style="margin-top:0">A lock, if others use your phone</h3>
@@ -336,6 +337,7 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
 <ul>
 <li><b>What you send yourself</b>: a report, a sheet, your weather of the day, a backup.</li>
 <li><b>Automatic weather</b>, if you turn it on: your position goes to the Open-Meteo weather service, and a rounded position to OpenStreetMap for your town’s name.</li>
+<li><b>To your Dropbox</b>, if you turn them on: the automatic backup and your weather of the day for a loved one, always encrypted.</li>
 <li><b>An “active this week” signal</b>, once a week, with no health data and no identifier, to know how many people use OUCH. A box in Settings turns it off.</li>
 </ul>
 <p class="small">The details of what each service receives are in OUCH’s privacy policy, on the project page (PRIVACY.md file).</p>

@@ -35,7 +35,7 @@ async function open(lang, viewport, dpr) {
   await page.addStyleTag({ content: '[class*="DemoPill"], [data-demo-pill]{display:none!important}' })
   return { ctx, page }
 }
-// The floating "Demo mode" pill (and, when asked, the fixed tab bar) are kept out of the pictures.
+// The floating "Demo mode" pill, what floats in at the top (and, when asked, the fixed tab bar) are kept out of the pictures.
 const hideFixed = (page, { nav = false } = {}) =>
   page.evaluate((withNav) => {
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
@@ -45,6 +45,8 @@ const hideFixed = (page, { nav = false } = {}) =>
         if (getComputedStyle(el).position === 'fixed') { el.style.display = 'none'; break }
       }
     }
+    // What floats in at the top once the page scrolls (the glass rounds, the period bar, the way back) is not the page itself.
+    if (!document.getElementById('no-float')) document.head.insertAdjacentHTML('beforeend', '<style id="no-float">.float-in{display:none!important}</style>')
     if (withNav) document.querySelectorAll('nav').forEach((el) => { if (getComputedStyle(el).position === 'fixed') el.style.display = 'none' })
   }, nav)
 const hidePill = (page) => hideFixed(page)
@@ -75,8 +77,9 @@ for (const lang of ['fr', 'en']) {
     await sleep(300)
     await big.page.screenshot({ path: shot(`${pre}today.png`) })
     await big.ctx.close()
+    // The leaflets' crops are pieces of a page: the floating tab bar would cover their foot.
     const s = await open(lang, { width: 390, height: 590 }, 2)
-    await hidePill(s.page)
+    await hideFixed(s.page, { nav: true })
     await s.page.evaluate(() => window.scrollTo(0, 0))
     await sleep(300)
     await s.page.screenshot({ path: shot(`${pre}a-flare.png`) })
@@ -116,6 +119,7 @@ for (const lang of ['fr', 'en']) {
     await sleep(1500)
     await s.page.getByRole('radio', { name: t.ninety }).click().catch(() => {})
     await sleep(900)
+    await hideFixed(s.page, { nav: true })
     await s.page.evaluate(() => window.scrollTo(0, 0))
     await sleep(300)
     await s.page.screenshot({ path: shot(`${pre}d-trends.png`) })
