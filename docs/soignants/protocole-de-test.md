@@ -1,6 +1,6 @@
 # Protocole de test avec des soignants
 
-*Version 0.3, brouillon pour relecture. Proposé le 9 octobre 2026 pour OUCH v0.3.0 ; mis à jour le 14 octobre 2026 pour la v0.5.0 (mode démo intégré à l'app, nouveaux éléments du rapport à relire : jour de la semaine, statut des maladies ; sauvegarde et verrou par code dans les garde-fous), puis le 15 octobre 2026 pour la v0.6.0 : pistes de Tendances, essais d'une semaine et rubrique « Ce que le patient a remarqué » du rapport, avec leurs garde-fous et deux questions de plus.*
+*Version 0.3, brouillon pour relecture. Proposé le 9 octobre 2026 pour OUCH v0.3.0 ; mis à jour le 14 octobre 2026 pour la v0.5.0 (mode démo intégré à l'app, nouveaux éléments du rapport à relire : jour de la semaine, statut des maladies ; sauvegarde et verrou par code dans les garde-fous), puis le 15 octobre 2026 pour la v0.6.0 : pistes de Tendances, essais d'une semaine et rubrique « Ce que le patient a remarqué » du rapport, avec leurs garde-fous et deux questions de plus, puis le 22 novembre 2026 : la sauvegarde automatique vers Dropbox, ouverte à tous, peut être proposée aux patients du pilote.*
 
 Ce document décrit comment tester OUCH avec des professionnels de santé : ce qu'on cherche à apprendre, qui on sollicite, ce qu'on leur demande, ce qui est recueilli (et ce qui ne l'est pas), et comment on décide de changer l'application. C'est un **pilote d'usage**, pas une étude clinique : il ne mesure ni l'efficacité d'un traitement ni un bénéfice pour la santé, et ne prétend à aucune valeur statistique. Les chiffres proposés (nombre de participants, durées, seuils de décision) sont des points de départ à discuter.
 
@@ -36,7 +36,7 @@ Rien n'oblige à passer à la phase B : la phase A est utile seule.
 - Inclus : adulte, douleur chronique (fibromyalgie ou autre), téléphone personnel, volontaire après avoir lu le texte de l'annexe C. Proposer à 2 à 4 patients par soignant au plus.
 - Non invités, à l'appréciation du soignant : un patient en crise aiguë, ou pour qui un suivi quotidien de la douleur serait source d'anxiété ou de fixation. Le soignant n'a pas à justifier son choix.
 - Aucune obligation de saisir tous les jours : l'application est conçue pour qu'un jour sans saisie n'ait pas de conséquence, et le rapport le dit.
-- Ce qui n'est **pas** proposé aux patients du pilote : la sauvegarde automatique vers un service en ligne (elle est en accès anticipé et n'est pas ouverte à tous). Les patients utilisent la sauvegarde manuelle, qui reste sur leur téléphone ou dans le service de leur choix.
+- Sauvegarde : la sauvegarde manuelle (un fichier chiffré, gardé sur le téléphone ou dans le service de son choix) suffit. Le patient qui a un compte Dropbox peut aussi mettre en place la sauvegarde automatique, facultative : l'application y envoie elle-même des copies chiffrées sur le téléphone, avec un mot de passe que lui seul connaît. Ni le soignant ni l'équipe d'OUCH n'y ont accès.
 
 ## 4. Déroulé type
 
@@ -49,7 +49,7 @@ Rien n'oblige à passer à la phase B : la phase A est utile seule.
 
 Le soignant peut arrêter à tout moment, sans raison à donner. Un patient aussi : supprimer ses données se fait dans Réglages, et cela n'a aucune conséquence sur sa prise en charge.
 
-À la semaine 0, le soignant rappelle au patient de **faire une sauvegarde** (Réglages, Mes données) et d'en refaire une vers la semaine 3 : c'est la seule façon de ne pas perdre son journal en changeant de téléphone ou si le navigateur efface les données du site.
+À la semaine 0, le soignant rappelle au patient de **faire une sauvegarde** (Réglages, Mes données) et d'en refaire une vers la semaine 3, ou, s'il a un compte Dropbox, de mettre en place la sauvegarde automatique, qui s'en charge ensuite : c'est la seule façon de ne pas perdre son journal en changeant de téléphone ou si le navigateur efface les données du site.
 
 ## 5. Ce qui est recueilli
 
@@ -147,4 +147,4 @@ Puis, ouvertes : ce qui vous a surpris ; ce que vous craignez que l'on fasse dir
 
 > Je teste un carnet de douleur gratuit qui s'appelle OUCH, et je vous propose de l'essayer, si vous le souhaitez. Vous y notez votre journée en moins d'une minute sur votre téléphone ; les jours difficiles, la douleur seule suffit. Vos notes restent sur votre téléphone : personne d'autre n'y a accès, ni moi, ni le créateur de l'application. Si vous voulez, vous pouvez en tirer un résumé à m'apporter à la prochaine consultation, et c'est vous qui décidez de me le montrer ou non.
 >
-> Vous n'êtes pas obligé(e) de noter tous les jours, ni d'aller au bout. Vous pouvez arrêter quand vous voulez, supprimer vos notes d'un geste, et cela ne changera rien à votre suivi. Je vous suggère de faire de temps en temps une sauvegarde (dans les Réglages de l'application) : si vous changez de téléphone, c'est la seule façon de retrouver vos notes. Si vous le souhaitez, vous pouvez aussi cacher l'application derrière un code ; dans ce cas, notez-le bien, car personne ne peut le retrouver. L'application n'est pas un avis médical : elle sert seulement à vous aider à me raconter vos journées avec des chiffres. Je ne note rien de ce que vous y écrivez, et je ne vous demanderai que votre impression si vous avez envie de la partager.
+> Vous n'êtes pas obligé(e) de noter tous les jours, ni d'aller au bout. Vous pouvez arrêter quand vous voulez, supprimer vos notes d'un geste, et cela ne changera rien à votre suivi. Je vous suggère de faire de temps en temps une sauvegarde (dans les Réglages de l'application) : si vous changez de téléphone, c'est la seule façon de retrouver vos notes. Si vous avez un compte Dropbox, l'application peut aussi la faire toute seule, chiffrée. Si vous le souhaitez, vous pouvez aussi cacher l'application derrière un code ; dans ce cas, notez-le bien, car personne ne peut le retrouver. L'application n'est pas un avis médical : elle sert seulement à vous aider à me raconter vos journées avec des chiffres. Je ne note rien de ce que vous y écrivez, et je ne vous demanderai que votre impression si vous avez envie de la partager.
