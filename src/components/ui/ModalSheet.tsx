@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react'
 import { IconX } from '@tabler/icons-react'
+import { useSheetClose } from './sheetClose'
 
 /**
  * A modal sheet (a card floating at the foot of a phone, a dialog on a wide
@@ -7,7 +8,8 @@ import { IconX } from '@tabler/icons-react'
  * a light veil, the page showing through: the page behind is inert and focus stays
  * inside. Focus goes to the close button, not to a field or a red button, so
  * nothing is one keystroke from acting; it returns to what opened the sheet.
- * While `busy`, it cannot be closed.
+ * While `busy`, it cannot be closed. It rises on a fading veil, and goes back
+ * down when it is closed from inside (Fermer, Escape, a tap beside it).
  */
 export function ModalSheet({
   title,
@@ -41,9 +43,7 @@ export function ModalSheet({
     }
   }, [])
 
-  function close() {
-    if (!busy) onClose()
-  }
+  const [closing, close] = useSheetClose(onClose, busy)
 
   return (
     <dialog
@@ -56,7 +56,7 @@ export function ModalSheet({
       className="fixed inset-0 m-0 p-0 w-full h-full max-w-none max-h-none bg-transparent backdrop:bg-transparent"
     >
       <div
-        className="w-full h-full flex items-end sm:items-center justify-center"
+        className={`sheet-veil w-full h-full flex items-end sm:items-center justify-center${closing ? ' is-closing' : ''}`}
         style={{
           background: 'rgba(20, 15, 35, 0.22)',
           padding: 'calc(var(--root-pad-top, 0px) + 12px) max(12px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 12px) max(12px, env(safe-area-inset-left))',
@@ -65,7 +65,7 @@ export function ModalSheet({
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="glass-float w-full sm:max-w-md rounded-[28px] p-5 flex flex-col gap-4 max-h-[min(100%,92vh)] overflow-y-auto"
+          className="sheet-card glass-float w-full sm:max-w-md rounded-[28px] p-5 flex flex-col gap-4 max-h-[min(100%,92vh)] overflow-y-auto"
           // A stronger blur than the tab bar's: a form is read on it, over a page that can be busy.
           style={{ WebkitBackdropFilter: 'blur(22px) saturate(1.4)', backdropFilter: 'blur(22px) saturate(1.4)' }}
         >
