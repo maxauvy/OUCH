@@ -9,6 +9,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ### Ajouté
 - **OUCH Duo : « Ne plus suivre cette météo ».** Dans le menu du bouton rond (et sur l'écran « Cette météo n'est plus partagée »), après une confirmation calme : Duo efface de ce téléphone le lien, la clé et la dernière image reçue, et revient à l'accueil. Rien ne change pour la personne qui partage. Sur iPhone, l'app installée ne reprend pas ce lien en se rouvrant ; scanner à nouveau le code le rétablit.
 - **« Enregistré » a sa petite coche.** Quand ta douleur est notée, une coche se dessine devant « Enregistré », en haut de la carte, comme à la fin des exercices de Soulager. Pas de son, rien qui clignote.
+- **Dans « Nouveautés » : « Ta météo, chaque jour, pour un proche ».** Un mot sur la sauvegarde Dropbox et OUCH Duo, désormais pour tous : ce que fait chacune, que tout est facultatif, et « Voir la sauvegarde » qui mène à Réglages › Mes données. Il s'ouvre une fois de lui-même chez les personnes déjà là au 22 novembre (jamais un jour calme), et reste dans la liste pour les autres.
 
 ### Modifié
 - **« Partager ma météo » dit qu'un proche peut la recevoir chaque jour.** Sans la sauvegarde Dropbox, la section « Chaque jour, toute seule » s'affiche quand même : elle explique qu'il faut d'abord la sauvegarde automatique, et « Mettre en place la sauvegarde » mène à Réglages › Mes données. Avec Dropbox, rien ne change.

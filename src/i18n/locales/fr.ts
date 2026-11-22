@@ -715,6 +715,18 @@ const fr: Translations = {
     thanksRow: 'Merci d’être là',
     thanksRowHint: 'Un mot de Maxime, qui fait OUCH',
     zonesRowHint: 'Gauche et droite, une silhouette, les 19 régions',
+    duoRowHint: 'La sauvegarde Dropbox et OUCH Duo, pour tous',
+    duo: {
+      title: 'Ta météo, chaque jour, pour un proche',
+      intro: 'Deux choses qui étaient à l’essai sont maintenant là pour tout le monde.',
+      backup: 'La sauvegarde automatique : une copie chiffrée de ton journal part toute seule vers ton Dropbox. Si tu changes de téléphone, rien n’est perdu.',
+      relative: 'Avec elle, ta météo du jour peut aussi partir d’elle-même vers un proche, qui la regarde dans OUCH Duo, une petite app à installer. Plus besoin de lui envoyer chaque jour.',
+      free: 'Tout est facultatif et reste éteint tant que tu ne le choisis pas. Dropbox ne voit que des fichiers chiffrés.',
+      ready: 'Ta sauvegarde va déjà vers Dropbox : l’envoi à un proche est dans « Partager ma météo ».',
+      setUp: 'Voir la sauvegarde',
+      later: 'Plus tard',
+      ok: 'D’accord',
+    },
     thanks: {
       title: 'Merci d’être là',
       days: 'Tu notes tes journées dans OUCH depuis {{n}} {{n:jour|jours}}. Merci.',

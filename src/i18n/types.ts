@@ -529,6 +529,9 @@ export interface Translations {
     thanksRow: string
     thanksRowHint: string
     zonesRowHint: string
+    duoRowHint: string
+    /** Dropbox backup and OUCH Duo, open to everyone. `ready`: said instead of the button when the backup already goes to Dropbox. */
+    duo: { title: string; intro: string; backup: string; relative: string; free: string; ready: string; setUp: string; later: string; ok: string }
     thanks: {
       title: string
       /** `{{n}}`: days since the first logged day */
