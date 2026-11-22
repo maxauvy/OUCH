@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>OUCH, leaflet (A4, Dawn)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600;700&display=block">
+<style>
+/* Aube: dawn colours (little ink), one big line in Bricolage with a coral-to-violet word, tilted pictures, white panels. Same family as flyer-a4-aube. */
+@page{size:A4;margin:0}
+:root{--night:#1f1d44;--coral:#ff7a59;--apricot:#ffc285;--sky:#9cc8ff;--lilac:#e4dcff;--peach:#fff1e8;--ink:#1f1d44;--sub:#3b3863;--display:"Bricolage Grotesque","Public Sans",sans-serif}
+*{box-sizing:border-box}html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:"Public Sans",sans-serif;color:var(--ink)}
+.page{position:relative;overflow:hidden;background:radial-gradient(130mm 100mm at 88% 6%,#ffb58a66,transparent 70%),radial-gradient(150mm 120mm at 0% 45%,#c9bdff55,transparent 70%),linear-gradient(180deg,#fff3ea 0%,#f6efff 60%,#ece6ff 100%)}
+@media screen{body{background:#777}.page{margin:0 auto 8mm}}
+h1 em{font-style:normal}
+.top{position:absolute;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;font-family:var(--display);font-weight:800;letter-spacing:.02em}
+.pill{background:var(--ink);border-radius:99px;font-weight:700;color:#fff}
+.stk{position:absolute;font-family:var(--display);font-weight:800;color:var(--ink);line-height:1}
+.stk small{display:block;font-family:"Public Sans";font-weight:700;letter-spacing:.01em}
+.panel{position:absolute;background:#fff;box-shadow:0 0 0 .3mm #1f1d4422;color:var(--ink)}
+.num{display:inline-block;border-radius:50%;background:var(--coral);color:#fff;text-align:center;font-family:var(--display);font-weight:800}
+.qr{background:#fff;flex:none}.qr img{width:100%;height:100%;display:block}
+.u{color:#e0502f;font-family:var(--display);font-weight:800;display:block}
+.fine{position:absolute;color:#6b668e}
+
+body{font-size:9.2pt;line-height:1.4}
+.page{width:210mm;height:296.5mm;break-after:page}
+.top{left:14mm;top:13mm;right:14mm}.brand{gap:3mm;font-size:15pt}.brand img{width:11mm;height:11mm}
+.pill{padding:1.4mm 4mm;font-size:8.6pt}
+h1{position:absolute;left:14mm;top:33mm;width:120mm;margin:0;font-family:var(--display);font-weight:800;font-size:54pt;line-height:.9;letter-spacing:-.045em}
+.sub{position:absolute;left:14mm;top:79mm;width:100mm;margin:0;font-size:11.6pt;line-height:1.38;color:var(--sub)}.sub b{color:var(--ink)}
+.phone{position:absolute;right:13mm;top:34mm;width:56mm;border-radius:7mm;overflow:hidden;border:1.6mm solid #0f0e26;box-shadow:4mm 5mm 0 #ffb58a;transform:rotate(5deg)}.phone img{display:block;width:100%}
+.panel{left:9mm;right:9mm;top:116mm;bottom:16mm;border-radius:7mm;padding:7mm 8mm;display:grid;grid-template-columns:1fr 62mm;gap:6mm}
+.k{font-size:8pt;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#e0502f;margin:0 0 3mm}
+.row{display:flex;gap:3.4mm;margin-bottom:3.6mm}.row .num{flex:none;width:7mm;height:7mm;font-size:10pt;line-height:7mm}
+.row h3{margin:0 0 .6mm;font-family:var(--display);font-weight:800;font-size:13pt;letter-spacing:-.02em;line-height:1.05}
+.row p{margin:0;font-size:9pt;line-height:1.38;color:var(--sub)}
+.side{display:flex;flex-direction:column;gap:5mm}
+.tag{display:inline-block;align-self:flex-start;background:var(--apricot);border-radius:99px;padding:1.2mm 3.4mm;font-weight:700;font-size:7.8pt;transform:rotate(-3deg)}
+.card{border-radius:3mm;overflow:hidden;border:.3mm solid #1f1d4433;background:#fff}.card img{display:block;width:100%}
+.c1{height:45.5mm;transform:rotate(2deg)}.c2{height:49.5mm;transform:rotate(-2deg)}
+.foot{position:absolute;left:14mm;right:14mm;bottom:7mm;display:flex;justify-content:space-between;font-size:7pt;color:#6b668e}
+.p2 h1{top:22mm;width:186mm;font-size:39pt}
+.faq{position:absolute;left:9mm;right:9mm;top:48mm;display:grid;grid-template-columns:1fr 1fr;gap:6.5mm 5mm}
+.q{background:#fff;border-radius:5mm;padding:5.4mm 6mm;box-shadow:0 0 0 .3mm #1f1d4418}
+.q h3{margin:0 0 1.6mm;font-family:var(--display);font-weight:800;font-size:13pt;letter-spacing:-.015em;line-height:1.1}
+.q p{margin:0;font-size:9.6pt;line-height:1.42;color:var(--sub)}
+.q.y{background:var(--peach)}
+.last{position:absolute;left:14mm;right:14mm;bottom:12mm;display:flex;gap:6mm;align-items:center}
+.qr{width:26mm;height:26mm;border-radius:3mm;padding:1.6mm}
+.last b{font-family:var(--display);font-weight:800;font-size:20pt;letter-spacing:-.02em;display:block;line-height:1}
+.last .u{font-size:13pt;margin-top:1.2mm}.last p{margin:1mm 0 0;font-size:8.6pt;color:var(--sub)}
+.fine{left:14mm;right:14mm;bottom:4mm;font-size:6.4pt}
+
+</style></head><body>
+<div class="page">
+<div class="top"><div class="brand"><img src="assets/logo.svg" alt="">OUCH</div><div class="pill">Free · open source · no account</div></div>
+<h1>Your pain has a <em><span style="color:#ff5f3d">w</span><span style="color:#f76153">e</span><span style="color:#ee6269">a</span><span style="color:#e6647f">t</span><span style="color:#dd6694">h</span><span style="color:#d568aa">e</span><span style="color:#cc69c0">r</span><span style="color:#c46bd6">.</span></em></h1>
+<p class="sub">OUCH is a diary for fibromyalgia and other chronic pain. You log your day in under a minute. Over the weeks, your notes show <b>what seems to make your pain worse and what helps</b>, so you can act on it.</p>
+<div class="phone"><img src="assets/en-today.png" alt=""></div>
+<div class="panel">
+<div><p class="k">What it’s for</p>
+<div class="row"><span class="num">1</span><div><h3>See what makes it worse</h3><p>Sleep, stress, yesterday’s activity: OUCH compares your days and shows what comes back when things get harder. One lead at a time, with the days behind it.</p></div></div>
+<div class="row"><span class="num">2</span><div><h3>See what helps</h3><p>A short walk, a hot bath, stretching… whatever you noted as helping, with your days with and without it side by side.</p></div></div>
+<div class="row"><span class="num">3</span><div><h3>Try it for a week</h3><p>A lead speaks to you? Start a trial: you log as usual and OUCH compares your days with and without. It helps you see more clearly.</p></div></div>
+<div class="row"><span class="num">4</span><div><h3>Talk it over with your doctor</h3><p>The leads you keep go into the report, with your curve, your treatments and your questions. It describes your data without drawing conclusions for you.</p></div></div>
+<div class="row"><span class="num">5</span><div><h3>Even on days with no energy</h3><p>When things are hard, the screen shrinks to your pain. One number is enough: the diary keeps going.</p></div></div>
+</div>
+<div class="side"><span class="tag">Keep it for your appointment</span><div class="card c1"><img src="assets/en-piste.png" alt=""></div><div class="card c2" style="height:45.5mm"><img src="assets/en-allege.png" alt=""></div></div>
+</div>
+<div class="foot"><span>OUCH · Ouch, Understand, Chart, Heal</span><span>Screenshots: made-up demo data</span></div>
+</div>
+<div class="page p2">
+<h1>The questions we get <em><span style="color:#ff5f3d">a</span><span style="color:#f3615c">s</span><span style="color:#e7647a">k</span><span style="color:#dc6699">e</span><span style="color:#d069b7">d</span><span style="color:#c46bd6">.</span></em></h1>
+<div class="faq">
+<div class="q"><h3>What is it for, exactly?</h3><p>To spot what makes your pain worse and what helps, so you can act on it and talk it over with your doctor. OUCH shows you leads drawn from your notes, and you can try them for a week to see.</p></div>
+<div class="q"><h3>Will it take much time?</h3><p>Under a minute: one number from 0 to 10 is enough. The rest is optional, and the screen shrinks on harder days.</p></div>
+<div class="q"><h3>Is it free? Do I need an account?</h3><p>Free, no subscription, no ads, and no account. The code is open: anyone can read it.</p></div>
+<div class="q"><h3>Where does my data go?</h3><p>It stays on your phone, unless you turn on automatic weather, Dropbox backup or the day’s image for a loved one, both encrypted. A code lock is available.</p></div>
+<div class="q"><h3>What if I change phones?</h3><p>You export an encrypted backup with a password of your choice (or let it go to your Dropbox on its own), then import it on the new one.</p></div>
+<div class="q"><h3>Do I need an app store?</h3><p>No. You open it in your browser, then “Add to Home Screen”. After that it works offline too.</p></div>
+<div class="q"><h3>Is it medical advice?</h3><p>No. OUCH describes your notes and diagnoses nothing. A lead can also run the other way round: people do more on the days they feel better.</p></div>
+<div class="q"><h3>What about children?</h3><p>A tab explains your day to them in gentle, simple words, for three ages: 4–7, 8–12 and 13–17.</p></div>
+<div class="q y"><h3>Not sure where to start?</h3><p>Launch the demo: 90 made-up days and a guided tour. You see everything without entering a thing.</p></div>
+<div class="q y"><h3>Is it available in French?</h3><p>Yes, and so is the report. You can switch language any time.</p></div>
+</div>
+<div class="last"><div class="qr"><img src="assets/qr.svg" alt="QR code"></div><div><b>Want a look?</b><span class="u">maxauvy.github.io/OUCH</span><p>Open the link, then choose “Discover with an example”. Nothing to install, nothing to create.</p></div></div>
+<div class="fine">OUCH is a diary, not medical advice: it doesn’t replace your doctor. Made with care by Maxime Auvy · Free software (CeCILL v2.1) · OUCH stands for Ouch, Understand, Chart, Heal.</div>
+</div>
+</body></html>

@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Documents en « Aube » pour tous les flyers.** Le flyer A5 et la plaquette A4 pour les patients, et les flyers « Lire un rapport » A5 et A4 pour les soignants, existent aussi aux couleurs de l'aube du flyer A4 Aube (peu d'encre, un grand titre, des images inclinées, des panneaux blancs), en français et en anglais. Les textes sont ceux des versions actuelles, qui ne changent pas.
+
 ## [0.16.0] - 2026-11-22
 
 Une app plus douce à l'œil et à la main : des cartes de verre qui flottent, des animations calmes (le ciel qui change en fondu, les feuilles qui montent, la pastille qui glisse, le fondu entre les onglets), et la sauvegarde automatique vers Dropbox, avec la météo du jour pour un proche dans OUCH Duo, ouvertes à tous. Tous les PDF, les flyers et l'image du README sont refaits pour cette version.
