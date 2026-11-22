@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { useLeave } from './leave'
 import { duoUrl, readDuoHash, readDuoInput, type DuoTarget } from '../lib/duoLink'
 import { fetchImage, type ImageResult } from './image'
 import { useDuoInstall, promptInstall } from './install'
@@ -382,11 +383,17 @@ function Menu({ onScan, onForget }: { onScan: () => void; onForget: () => void }
 /** Asks before forgetting, since the code is needed to come back. Calm: no alert colour, and "Cancel" has the focus. */
 function ForgetConfirm({ name, onForget, onCancel }: { name?: string; onForget: () => void; onCancel: () => void }) {
   const cancel = useRef<HTMLButtonElement>(null)
+  // « Annuler », Escape or a tap beside it: the sheet goes back down first.
+  const [leaving, leave] = useLeave(onCancel)
+  const leaveRef = useRef(leave)
+  useEffect(() => {
+    leaveRef.current = leave
+  })
   useEffect(() => {
     const before = document.activeElement as HTMLElement | null
     cancel.current?.focus()
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onCancel()
+      if (e.key === 'Escape') leaveRef.current()
     }
     document.addEventListener('keydown', onKey)
     return () => {
@@ -394,10 +401,10 @@ function ForgetConfirm({ name, onForget, onCancel }: { name?: string; onForget: 
       // The menu item that opened it is gone with the menu: back to the round button.
       ;(before?.isConnected ? before : document.getElementById('duo-menu-button'))?.focus()
     }
-  }, [onCancel])
+  }, [])
   return (
-    <div className="confirm-layer">
-      <button type="button" className="confirm-backdrop" aria-label={t.cancel} tabIndex={-1} onClick={onCancel} />
+    <div className={leaving ? 'confirm-layer is-leaving' : 'confirm-layer'}>
+      <button type="button" className="confirm-backdrop" aria-label={t.cancel} tabIndex={-1} onClick={leave} />
       <section className="confirm" role="alertdialog" aria-modal="true" aria-labelledby="duo-forget-title" aria-describedby="duo-forget-text">
         <h2 id="duo-forget-title" className="card-title">
           {t.forgetTitle(name)}
@@ -408,7 +415,7 @@ function ForgetConfirm({ name, onForget, onCancel }: { name?: string; onForget: 
         <button type="button" className="btn" onClick={onForget}>
           {t.forgetOk}
         </button>
-        <button type="button" className="link-btn center" ref={cancel} onClick={onCancel}>
+        <button type="button" className="link-btn center" ref={cancel} onClick={leave}>
           {t.cancel}
         </button>
       </section>
@@ -429,13 +436,15 @@ function objectUrls(result: ImageResult | null): string[] {
 function InstallSheet() {
   const kind = useDuoInstall()
   const [hidden, setHidden] = useState(installLater)
+  // « Plus tard »: noted at once, and the sheet goes back down before it goes.
+  const [leaving, leave] = useLeave(() => setHidden(true))
   if (hidden || kind === 'installed' || kind === 'other') return null
   const later = () => {
     setInstallLater()
-    setHidden(true)
+    leave()
   }
   return (
-    <section className="sheet" aria-label={t.installTitle}>
+    <section className={leaving ? 'sheet is-leaving' : 'sheet'} aria-label={t.installTitle}>
       <h2 className="card-title">{t.installTitle}</h2>
       {kind === 'ios-safari' && (
         <ol className="steps">

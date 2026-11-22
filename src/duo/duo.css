@@ -322,6 +322,17 @@ body {
   display: flex;
   flex-direction: column;
 }
+/* The menu opens from its round button: it grows a little from the top right as it fades in. */
+.menu-panel {
+  transform-origin: top right;
+  animation: duo-menu-in 180ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes duo-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.96);
+  }
+}
 .menu-panel > .link-btn {
   border-bottom: 1px solid var(--hairline);
   align-self: stretch;
@@ -570,6 +581,44 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+/* The sheets that come up from the bottom (the install hint, « Ne plus suivre ») rise 16px as they come (260 ms),
+   and go back down 12px when put aside (200 ms, see leave.ts); their veil fades. */
+.sheet,
+.confirm {
+  animation: duo-sheet-in 260ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.confirm-backdrop {
+  animation: duo-veil-in 260ms ease-out both;
+}
+.sheet.is-leaving,
+.is-leaving .confirm {
+  animation: duo-sheet-out 200ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+.is-leaving .confirm-backdrop {
+  animation: duo-veil-out 200ms ease-in both;
+}
+@keyframes duo-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes duo-sheet-out {
+  to {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@keyframes duo-veil-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes duo-veil-out {
+  to {
+    opacity: 0;
+  }
 }
 .steps {
   list-style: none;
