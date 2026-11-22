@@ -6,6 +6,9 @@ import { todayISO } from '../../lib/dates'
 import { duoBase } from '../../lib/duoBase'
 import { duoUrl } from '../../lib/duoLink'
 import { DuoCode } from './DuoCode'
+import { IconChevronRight } from '@tabler/icons-react'
+import { useOpenBackup } from '../settings/backupContext'
+import { IS_DEMO } from '../../lib/demoMode'
 import { askWeatherSharePermission, nextSendResult, turnOffWeatherShare, turnOnWeatherShare, type WeatherShareNotice } from '../../lib/weatherShareRuntime'
 
 const mutedText = { color: 'var(--color-ink-muted)' }
@@ -28,7 +31,29 @@ export function AutoShareSection({ notice }: { notice: WeatherShareNotice | null
   const [showCode, setShowCode] = useState(false)
   const [say, setSay] = useState<string | null>(notice ? { ready: t.ready, denied: t.denied, failed: t.returnFailed }[notice] : null)
 
-  if (settings.autoBackup?.provider !== 'dropbox') return null
+  const openBackup = useOpenBackup()
+
+  // Without the Dropbox backup the daily image cannot go out: the same section says so, and leads to the backup (not in the demo, which has none).
+  if (settings.autoBackup?.provider !== 'dropbox') {
+    if (IS_DEMO || !openBackup) return null
+    return (
+      <section className="flex flex-col gap-1 pt-3" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+        <p className="text-body font-semibold">{t.title}</p>
+        <p className="text-caption" style={mutedText}>
+          {t.needsBackup}
+        </p>
+        <button
+          type="button"
+          onClick={openBackup}
+          className="self-start min-h-11 -mb-1.5 flex items-center gap-1 text-control font-semibold"
+          style={{ color: 'var(--color-brand)' }}
+        >
+          {t.setUpBackup}
+          <IconChevronRight size={18} stroke={2.2} aria-hidden />
+        </button>
+      </section>
+    )
+  }
 
   async function turnOn() {
     setSay(null)

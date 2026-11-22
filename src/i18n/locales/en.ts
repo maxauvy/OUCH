@@ -2209,6 +2209,8 @@ const en: Translations = {
     auto: {
       title: 'Every day, on its own',
       hintOff: 'Through Dropbox, encrypted, to open in OUCH Duo.',
+      needsBackup: 'Through Dropbox, encrypted, to open in OUCH Duo. It needs the automatic backup to Dropbox first.',
+      setUpBackup: 'Set up the backup',
       facts: [
         'Your day’s image is kept in your Dropbox and replaced when you fill in your day, with the app open.',
         'A code to scan, which stays the same: your loved one opens it in OUCH Duo and looks whenever they like. They are not notified.',
