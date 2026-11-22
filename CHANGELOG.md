@@ -11,6 +11,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - **« Enregistré » a sa petite coche.** Quand ta douleur est notée, une coche se dessine devant « Enregistré », en haut de la carte, comme à la fin des exercices de Soulager. Pas de son, rien qui clignote.
 
 ### Modifié
+- **« Partager ma météo » dit qu'un proche peut la recevoir chaque jour.** Sans la sauvegarde Dropbox, la section « Chaque jour, toute seule » s'affiche quand même : elle explique qu'il faut d'abord la sauvegarde automatique, et « Mettre en place la sauvegarde » mène à Réglages › Mes données. Avec Dropbox, rien ne change.
 - **La sauvegarde automatique vers Dropbox est ouverte à tous.** Plus besoin de l'accès anticipé : la carte « Sauvegarde automatique » est dans Réglages › Mes données, désactivée par défaut, et avec elle « Ma météo, chaque jour, pour un proche ». Le serveur personnel (WebDAV) reste « Bientôt ».
 - **OUCH Duo : l'image du jour arrive en douceur.** La première image monte légèrement en apparaissant ; quand une nouvelle météo a été envoyée, elle apparaît en fondu par-dessus l'ancienne. Regarder à nouveau la même image ne fait rien bouger. Pendant qu'il cherche, les flèches d'« Actualiser » tournent.
 - **Le ciel du jour change en douceur.** Quand tu notes ta douleur, le nouveau ciel apparaît en fondu par-dessus l'ancien (0,7 s), puis la météo sous le titre en fondu. À l'ouverture de l'app, le ciel est là tout de suite, sans fondu. Rien ne bouge si le téléphone demande de réduire les animations.

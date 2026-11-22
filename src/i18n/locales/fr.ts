@@ -2214,6 +2214,8 @@ const fr: Translations = {
     auto: {
       title: 'Chaque jour, toute seule',
       hintOff: 'Par Dropbox, chiffrée, à ouvrir dans OUCH Duo.',
+      needsBackup: 'Par Dropbox, chiffrée, à ouvrir dans OUCH Duo. Il faut d’abord la sauvegarde automatique vers Dropbox.',
+      setUpBackup: 'Mettre en place la sauvegarde',
       facts: [
         'Ton image du jour est rangée dans ton Dropbox et remplacée quand tu remplis ta journée, l’app ouverte.',
         'Un code à scanner, qui ne change pas : ton proche l’ouvre dans OUCH Duo et regarde quand il veut. Il n’est pas prévenu.',

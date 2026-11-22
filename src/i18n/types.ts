@@ -2008,6 +2008,9 @@ export interface Translations {
     auto: {
       title: string
       hintOff: string
+      /** Without the Dropbox backup: what the daily image needs first, and the link to it. */
+      needsBackup: string
+      setUpBackup: string
       /** What turning it on means, said before it is on. */
       facts: [string, string, string]
       turnOn: string

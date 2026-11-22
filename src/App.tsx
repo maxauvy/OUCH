@@ -10,6 +10,7 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { TabBar, type Tab } from './components/layout/TabBar'
 import { PageBack } from './components/layout/PageBack'
 import { ReliefContext } from './components/relief/reliefContext'
+import { BackupContext } from './components/settings/backupContext'
 import type { SoulagerView } from './pages/SoulagerPage'
 import { launchTarget } from './lib/launchTarget'
 import { DemoPill } from './components/demo/DemoPill'
@@ -235,6 +236,7 @@ function AppShell() {
             setTab('soulager')
           }}
         >
+        <BackupContext.Provider value={goToBackup}>
         <Suspense fallback={null}>
         {screen === 'settings' && (
           <PageBack onBack={() => setScreen(null)}>
@@ -276,6 +278,7 @@ function AppShell() {
         )}
         {screen === null && tab === 'consultation' && <ConsultationPage />}
         </Suspense>
+        </BackupContext.Provider>
         </ReliefContext.Provider>
       </main>
       <TabBar
