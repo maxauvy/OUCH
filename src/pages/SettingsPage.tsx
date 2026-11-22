@@ -342,7 +342,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           </Card>
         ) : (
           <>
-        {earlyAccess && <AutoBackupCard />}
+        <AutoBackupCard />
 
         <Card>
           <SectionTitle icon={IconDatabaseExport}>{t.settings.backupTitle}</SectionTitle>

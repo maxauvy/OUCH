@@ -1422,7 +1422,7 @@ const fr: Translations = {
     whereTitle: 'Où garder ta copie ?',
     whereFiles: 'Fichiers ou iCloud Drive : la feuille de partage de ton téléphone te laisse choisir le dossier.',
     whereFolder: 'Un dossier que ton ordinateur synchronise déjà (iCloud Drive, Google Drive, OneDrive, Nextcloud…) : enregistre le fichier dedans et ta copie le suit.',
-    whereDropbox: 'Dropbox, en copie automatique : en accès anticipé, dans la carte au-dessus.',
+    whereDropbox: 'Dropbox, en copie automatique : dans la carte au-dessus.',
     whereAlways: 'Dans tous les cas, la copie est chiffrée avec ton mot de passe.',
   },
 
