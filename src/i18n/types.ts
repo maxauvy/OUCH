@@ -1912,9 +1912,12 @@ export interface Translations {
   }
 
   demo: {
-    /** The floating pill */
+    /** Read by screen readers on the tag on the tab bar */
     pill: string
-    exit: string
+    /** The small tag on the tab bar's edge */
+    tag: string
+    /** In the bubble the tag opens */
+    tagText: string
     /** Link under the setup's main button */
     startLink: string
     cardTitle: string

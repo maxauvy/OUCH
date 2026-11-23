@@ -31,7 +31,7 @@ async function open(lang, viewport, dpr) {
   await sleep(1800)
   await page.getByRole('button', { name: T[lang].skip }).click({ timeout: 4000 }).catch(() => {})
   await sleep(500)
-  // The "Demo mode" pill floats over the page: keep it out of the pictures.
+  // The "Demo" tag on the tab bar: keep it out of the pictures.
   await page.addStyleTag({ content: '[class*="DemoPill"], [data-demo-pill]{display:none!important}' })
   return { ctx, page }
 }

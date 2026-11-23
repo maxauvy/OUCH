@@ -2122,7 +2122,8 @@ const fr: Translations = {
 
   demo: {
     pill: 'Mode démo · données fictives',
-    exit: 'Quitter',
+    tag: 'Démo',
+    tagText: 'Les données sont fictives. Ton journal n’est pas touché.',
     startLink: 'Essayer d’abord avec des données d’exemple',
     cardTitle: 'Découvrir avec un exemple',
     cardText:

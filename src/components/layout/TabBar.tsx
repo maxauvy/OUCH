@@ -1,5 +1,5 @@
 import { IconCalendar, IconChartLine, IconHeartbeat, IconStethoscope, IconWind, type Icon } from '@tabler/icons-react'
-import { useEffect, useLayoutEffect, useRef, type RefObject } from 'react'
+import { useEffect, useLayoutEffect, useRef, type ReactNode, type RefObject } from 'react'
 import { useTranslation } from '../../i18n'
 
 export type Tab = 'today' | 'journal' | 'trends' | 'soulager' | 'consultation'
@@ -12,15 +12,20 @@ const TAB_ICONS: Record<Tab, Icon> = {
   consultation: IconStethoscope,
 }
 
-/** `badged` tabs carry a small dot, named for screen readers: something new is there, without a number. */
+/**
+ * `badged` tabs carry a small dot, named for screen readers: something new is there, without a number. `tag` is drawn on the bar's top left
+ * edge, the same place whatever the open tab (the demo's tag).
+ */
 export function TabBar({
   active,
   onChange,
   badged = [],
+  tag,
 }: {
   active: Tab
   onChange: (t: Tab) => void
   badged?: Tab[]
+  tag?: ReactNode
 }) {
   const t = useTranslation()
   const pillRef = useRef<HTMLDivElement>(null)
@@ -104,6 +109,7 @@ export function TabBar({
             </button>
           )
         })}
+        {tag}
       </div>
     </nav>
   )
