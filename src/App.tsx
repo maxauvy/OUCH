@@ -13,7 +13,7 @@ import { ReliefContext } from './components/relief/reliefContext'
 import { BackupContext } from './components/settings/backupContext'
 import type { SoulagerView } from './pages/SoulagerPage'
 import { launchTarget } from './lib/launchTarget'
-import { DemoPill } from './components/demo/DemoPill'
+import { DemoTag } from './components/demo/DemoTag'
 import { UpdatedPill } from './components/layout/UpdatedPill'
 import { IS_DEMO } from './lib/demoMode'
 import { finishTour, tourPending } from './lib/demoSession'
@@ -285,6 +285,7 @@ function AppShell() {
       </main>
       <TabBar
         active={tab}
+        tag={IS_DEMO && !tourOpen ? <DemoTag /> : undefined}
         badged={tab !== 'trends' && trendsDot({ shown: leadList?.shown ?? [], seen: settings.leadsSeen, enabled: settings.suggestionsEnabled, announced }) ? ['trends'] : []}
         onChange={(next) =>
           withPageFade(() => {
@@ -348,20 +349,17 @@ function AppShell() {
           }}
         />
       )}
-      {IS_DEMO &&
-        (tourOpen ? (
-          <Suspense fallback={null}>
-            <DemoTour
-              setTab={setTab}
-              onClose={() => {
-                finishTour()
-                setTourOpen(false)
-              }}
-            />
-          </Suspense>
-        ) : (
-          <DemoPill />
-        ))}
+      {IS_DEMO && tourOpen && (
+        <Suspense fallback={null}>
+          <DemoTour
+            setTab={setTab}
+            onClose={() => {
+              finishTour()
+              setTourOpen(false)
+            }}
+          />
+        </Suspense>
+      )}
       <UpdatedPill />
     </>
   )

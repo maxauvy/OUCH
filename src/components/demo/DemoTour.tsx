@@ -13,7 +13,7 @@ const STEPS: { tab: Tab; target: string }[] = [
 /**
  * A three-step visit of the demo: the day's entry, what Trends shows, the
  * report. Each step switches to its screen and outlines what it speaks of; the
- * visit can be skipped at any time (the demo pill is then on screen), and the
+ * visit can be skipped at any time (the demo tag on the tab bar is then on screen), and the
  * last step can also leave the demo.
  */
 export function DemoTour({ setTab, onClose }: { setTab: (tab: Tab) => void; onClose: () => void }) {

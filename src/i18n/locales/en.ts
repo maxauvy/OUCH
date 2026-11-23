@@ -2117,7 +2117,8 @@ const en: Translations = {
 
   demo: {
     pill: 'Demo mode · made-up data',
-    exit: 'Leave',
+    tag: 'Demo',
+    tagText: 'The data is made up. Your own journal is not touched.',
     startLink: 'Try it first with sample data',
     cardTitle: 'Discover with an example',
     cardText:

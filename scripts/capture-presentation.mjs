@@ -46,6 +46,8 @@ const hideFixed = (page, withNav) =>
         if (getComputedStyle(el).position === 'fixed') { el.style.display = 'none'; break }
       }
     }
+    // The demo's tag on the tab bar.
+    document.querySelectorAll('[data-demo-pill]').forEach((el) => { el.style.display = 'none' })
     // What floats in at the top once the page scrolls (the glass rounds, the period bar, the way back) is not the page itself.
     if (!document.getElementById('no-float')) document.head.insertAdjacentHTML('beforeend', '<style id="no-float">.float-in{display:none!important}</style>')
     if (nav) document.querySelectorAll('nav').forEach((el) => { if (getComputedStyle(el).position === 'fixed') el.style.display = 'none' })
