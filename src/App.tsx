@@ -67,7 +67,7 @@ function useAppliedTheme(theme: 'system' | 'light' | 'dark') {
 }
 
 /** The page background of each look, light then dark: mirrors --color-paper in index.css. */
-const LOOK_PAPER = { meteo: ['#f4f6f9', '#11151c'], leger: ['#fbf8fa', '#16131b'] } as const
+const LOOK_PAPER = { meteo: ['#f8f3fa', '#14121d'], leger: ['#fbf8fa', '#16131b'] } as const
 
 /** The look itself is stamped on the page by lib/look.ts; here, the status bar colour that goes with it. */
 function useAppliedLook(theme: 'system' | 'light' | 'dark') {

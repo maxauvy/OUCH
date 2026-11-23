@@ -58,8 +58,8 @@ const DARK = {
 // the screen keeps the indigo and the plum).
 const LOOKS = {
   meteo: {
-    light: { ...LIGHT, paper: '#f4f6f9', surface: '#ffffff', surfaceRaised: '#f7f9fb', ink: '#1d2433', inkMuted: '#5a6577', hairline: '#e1e6ee', brand: '#3a5f8f', brandSoft: '#e4ebf4' },
-    dark: { ...DARK, paper: '#11151c', surface: '#1b212b', surfaceRaised: '#212834', ink: '#e7ecf3', inkMuted: '#9aa6b7', hairline: 'rgba(150, 170, 200, 0.16)', brand: '#8fb0d1', brandSoft: '#1f2c3d' },
+    light: { ...LIGHT, paper: '#f8f3fa', surface: '#ffffff', surfaceRaised: '#fbf8fd', ink: '#1f1d44', inkMuted: '#5e5a80', hairline: '#ece5f4', brand: '#3a5f8f', brandSoft: '#e4ebf4' },
+    dark: { ...DARK, paper: '#14121d', surface: '#1d1a29', surfaceRaised: '#242033', ink: '#ece9f6', inkMuted: '#a7a1c2', hairline: 'rgba(180, 160, 230, 0.16)', brand: '#8fb0d1', brandSoft: '#1f2c3d' },
   },
 
   leger: {

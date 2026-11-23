@@ -23,8 +23,8 @@ export function useSkyTop(level: number | null) {
 
 /** The first colour of each sky (index.css, `--sky-0` to `--sky-5`), light then dark: the colour of the status bar's strip above it. */
 const SKY_TOP = [
-  ['#e3e9f1', '#fbe2b4', '#f6e5c1', '#e2dee9', '#d4e0ec', '#ddd4ec'],
-  ['#1e2733', '#4a3b1d', '#3d3421', '#34323f', '#22354b', '#2d2548'],
+  ['#ffe3d1', '#fbe2b4', '#f6e5c1', '#e2dee9', '#d4e0ec', '#ddd4ec'],
+  ['#33243a', '#4a3b1d', '#3d3421', '#34323f', '#22354b', '#2d2548'],
 ] as const
 
 /** How far below the status bar's strip a sky reaches its own colour (px). */

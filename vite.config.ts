@@ -131,7 +131,7 @@ export default defineConfig(({ command, mode }) => {
           description:
             "Un journal quotidien simple pour suivre la douleur, comprendre ce qui l'influence et partager sa météo du jour avec ses proches.",
           theme_color: '#7c6fa8',
-          background_color: '#f4f6f9',
+          background_color: '#f8f3fa',
           display: 'standalone',
           orientation: 'portrait',
           start_url: base,

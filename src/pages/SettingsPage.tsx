@@ -114,7 +114,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
   return (
     <div className="relative isolate flex flex-col gap-4 px-4 pt-4 pb-28">
       <PageSky />
-      <h1 className="page-title text-title font-semibold px-1">{t.settings.title}</h1>
+      <h1 className="page-title dawn-title text-title font-semibold px-1">{t.settings.title}</h1>
 
       <SettingsCluster title={t.settings.clusterYou}>
       <SettingsGroup icon={IconUser} tone="fog" title={t.settings.groups.profile} summary={profileSummary}>
