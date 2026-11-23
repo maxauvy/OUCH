@@ -6,9 +6,11 @@ export const RELIEF_COLORS = ['#86b6ef', '#3987e5', '#1c5cab', '#0d366b']
 
 /** The chart colors of report.css's --r-* tokens, as literals. SVG attributes
  * can't rely on those variables: the PDF export captures each page on its
- * own, outside the .report element that defines them. Keep both in sync. */
+ * own, outside the .report element that defines them. Keep both in sync,
+ * except hair, axis and band: the charts keep their cool greys (« Aube »
+ * tints the page around them, not the data). */
 export const R = {
-  ink: '#1b2430',
+  ink: '#1f1d44',
   muted: '#56606b',
   faint: '#6b7480',
   hair: '#d7dde2',
@@ -20,7 +22,7 @@ export const R = {
   orange: '#eb6834',
   severe: '#9a5b00',
   prev: '#8a939c',
-  /** Arrows: the way things get better (4.9:1 on the tint), the other way, and flat is `prev`. */
+  /** Arrows: the way things get better (4.9:1 on the tint), the other way; flat is `muted`. */
   good: '#1f7a45',
   worse: '#a8480a',
 } as const

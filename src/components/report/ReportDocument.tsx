@@ -1115,7 +1115,7 @@ function DayMix({ d }: { d: ReportData }) {
   )
   const arrow = (direction: MixDirection | undefined, points: number | undefined) => {
     if (direction === undefined || points === undefined) return null
-    const color = direction === 'better' ? R.good : direction === 'worse' ? R.worse : R.prev
+    const color = direction === 'better' ? R.good : direction === 'worse' ? R.worse : R.muted
     const sign = points > 0 ? '+' : points < 0 ? '−' : '±'
     const glyph = points > 0 ? '▲' : points < 0 ? '▼' : '▬'
     return (
