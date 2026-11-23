@@ -813,73 +813,81 @@ html[data-covered]::after {
    paper, white cards with a soft shadow instead of a border, the deep indigo
    of OUCH Duo as the accent (lilac in dark mode), the active tab on the "few clouds" tint, rounder titles. ---- */
 :root[data-look='meteo'] {
-  --color-paper: #f4f6f9;
+  /* « Papier d'aube »: the paper, ink and shadows of the « Aube » flyers and guides, a lilac-tinted white with a violet ink. */
+  --color-paper: #f8f3fa;
   --color-surface: #ffffff;
-  --color-surface-raised: #f7f9fb;
-  --color-ink: #1d2433;
-  --color-ink-muted: #5a6577;
-  --color-hairline: #e1e6ee;
-  --color-brand: #3a3560;
-  --color-brand-soft: #ebe8f3;
+  --color-surface-raised: #fbf8fd;
+  --color-ink: #1f1d44;
+  --color-ink-muted: #5e5a80;
+  --color-hairline: #ece5f4;
+  --color-brand: #2c2860;
+  --color-brand-soft: #f0ebfa;
   --color-on-brand: #ffffff;
   --radius-card: 24px;
-  --card-shadow: 0 1px 2px rgba(30, 45, 70, 0.04), 0 10px 24px -18px rgba(30, 45, 70, 0.35);
+  --card-shadow: 0 1px 2px rgba(60, 40, 110, 0.05), 0 12px 26px -18px rgba(90, 60, 150, 0.38);
   /* Cards stand on their shadow, with no edge; a fine edge comes back in dark mode, where there is no shadow. */
   --card-border: none;
   /* Text fields: white, on the cards and on an open settings group's grey alike. */
   --color-input: var(--color-surface);
   /* Chips: a soft fill at rest, the chosen one tinted and ringed. */
-  --chip-bg: #eef1f5;
-  --tab-active-icon: #b0812c;
+  --chip-bg: #f3eef9;
+  /* The open tab's icon: the coral of the flyers. */
+  --tab-active-icon: #d4502f;
   --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 30%, transparent);
   --avatar-bg: linear-gradient(135deg, #f3ecd9, #e1e9f1);
   --tab-active: #1d2433;
-  /* The lock screen: the soft sky of a day with a few clouds. */
-  --look-bg: linear-gradient(180deg, #f7e7c4 0%, #f3ecd9 40%, #e4ecf3 100%);
+  /* The lock screen: a dawn sky, peach into lilac. */
+  --look-bg: linear-gradient(180deg, #ffe3d1 0%, #f8ecf6 40%, #efe8f8 100%);
+  /* The highlighter under the words to remember: apricot. */
+  --marker: #ffc28599;
   --look-outdoor: #3a5f8f;
   --look-outdoor-soft: #e4ebf4;
 }
 @media (prefers-color-scheme: dark) {
   :root[data-look='meteo']:not([data-theme='light']) {
-    --color-paper: #11151c;
-    --color-surface: #1b212b;
-    --color-surface-raised: #212834;
-    --color-ink: #e7ecf3;
-    --color-ink-muted: #9aa6b7;
-    --color-hairline: rgba(150, 170, 200, 0.16);
+    --color-paper: #14121d;
+    --color-surface: #1d1a29;
+    --color-surface-raised: #242033;
+    --color-ink: #ece9f6;
+    --color-ink-muted: #a7a1c2;
+    --color-hairline: rgba(180, 160, 230, 0.16);
     --color-brand: #c9bff0;
     --color-brand-soft: #2a2540;
     --color-on-brand: #1b1830;
     --card-shadow: none;
     --card-border: 1px solid var(--color-hairline);
-    --chip-bg: #232a36;
-    --tab-active-icon: #e3b766;
+    --chip-bg: #262235;
+    --tab-active-icon: #ff8a6b;
     --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 25%, transparent);
     --avatar-bg: linear-gradient(135deg, #3a3424, #283744);
-    --tab-active: #e7ecf3;
-    --look-bg: linear-gradient(180deg, #3d3421 0%, #2b2a25 40%, #11151c 100%);
+    --tab-active: #ece9f6;
+    --look-bg: linear-gradient(180deg, #33243a 0%, #221d30 40%, #14121d 100%);
+    --marker: color-mix(in srgb, var(--color-weather-1) 45%, transparent);
+    --title-dawn: linear-gradient(90deg, #ff8a6b 0%, #f08ac0 55%, #c9a6ff 100%);
     --look-outdoor: #8fb0d1;
     --look-outdoor-soft: #1f2c3d;
   }
 }
 :root[data-look='meteo'][data-theme='dark'] {
-  --color-paper: #11151c;
-  --color-surface: #1b212b;
-  --color-surface-raised: #212834;
-  --color-ink: #e7ecf3;
-  --color-ink-muted: #9aa6b7;
-  --color-hairline: rgba(150, 170, 200, 0.16);
+  --color-paper: #14121d;
+  --color-surface: #1d1a29;
+  --color-surface-raised: #242033;
+  --color-ink: #ece9f6;
+  --color-ink-muted: #a7a1c2;
+  --color-hairline: rgba(180, 160, 230, 0.16);
   --color-brand: #c9bff0;
   --color-brand-soft: #2a2540;
   --color-on-brand: #1b1830;
   --card-shadow: none;
   --card-border: 1px solid var(--color-hairline);
-  --chip-bg: #232a36;
-  --tab-active-icon: #e3b766;
+  --chip-bg: #262235;
+  --tab-active-icon: #ff8a6b;
   --tint-edge: inset 0 0 0 1px color-mix(in srgb, var(--color-brand) 25%, transparent);
   --avatar-bg: linear-gradient(135deg, #3a3424, #283744);
-  --tab-active: #e7ecf3;
-  --look-bg: linear-gradient(180deg, #3d3421 0%, #2b2a25 40%, #11151c 100%);
+  --tab-active: #ece9f6;
+  --look-bg: linear-gradient(180deg, #33243a 0%, #221d30 40%, #14121d 100%);
+  --marker: color-mix(in srgb, var(--color-weather-1) 45%, transparent);
+  --title-dawn: linear-gradient(90deg, #ff8a6b 0%, #f08ac0 55%, #c9a6ff 100%);
   --look-outdoor: #8fb0d1;
   --look-outdoor-soft: #1f2c3d;
 }
@@ -906,6 +914,33 @@ html[data-covered]::after {
 :root[data-look='meteo'] h1 {
   font-weight: 800;
 }
+/* The title of each tab (Aujourd'hui, Tendances, Soulager, Consultation, Réglages): coral into violet, the signature of the « Aube » flyers. */
+:root[data-look='meteo'] .dawn-title {
+  background: var(--title-dawn);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  width: fit-content;
+  max-width: 100%;
+}
+@media (forced-colors: active) {
+  :root[data-look='meteo'] .dawn-title {
+    background: none;
+    color: CanvasText;
+  }
+}
+/* The neutral sky (the other tabs, and today's before the pain is noted): a dawn, peach into lilac. */
+:root[data-look='meteo'] {
+  --sky-0: linear-gradient(180deg, #ffe3d1 0%, #f8ecf6 50%, rgba(248, 243, 250, 0) 100%);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-look='meteo']:not([data-theme='light']) {
+    --sky-0: linear-gradient(180deg, #33243a 0%, #211c2d 50%, rgba(20, 18, 29, 0) 100%);
+  }
+}
+:root[data-look='meteo'][data-theme='dark'] {
+  --sky-0: linear-gradient(180deg, #33243a 0%, #211c2d 50%, rgba(20, 18, 29, 0) 100%);
+}
 /* The title of a page (Tendances, Soulager, Consultation, Réglages): as large as today's. */
 :root[data-look='meteo'] h1.page-title {
   font-size: var(--text-display);
@@ -921,6 +956,10 @@ html[data-covered]::after {
    pain weather, 0 before anything is noted. The tint of the weather at the
    top, fading out into the page. Pale even for a storm. */
 :root {
+  /* The highlighter under the words to remember (cardStyles' MARKER): the clear sky's gold; apricot in the weather look. */
+  --marker: color-mix(in srgb, var(--color-weather-1) 45%, transparent);
+  /* The weather look's tab titles (.dawn-title): coral into violet, like the flyers' headline (each stop ≥ 3:1 on the paper, for large text); lighter in dark mode. */
+  --title-dawn: linear-gradient(90deg, #e0502f 0%, #c94f8a 55%, #8f5bd6 100%);
   /* The weather look's two-tone icons (WeatherIcon): the cloud's fill and the drops. */
   --wx-cloud: #ffffff;
   --wx-rain: #5e9bd6;

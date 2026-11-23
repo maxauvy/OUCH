@@ -98,7 +98,7 @@ export function ConsultationPage() {
         <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
           {t.pageKicker}
         </p>
-        <h1 className="page-title text-title font-bold leading-tight">{i18n.tabs.consultation}</h1>
+        <h1 className="page-title dawn-title text-title font-bold leading-tight">{i18n.tabs.consultation}</h1>
       </div>
 
       {rich ? (

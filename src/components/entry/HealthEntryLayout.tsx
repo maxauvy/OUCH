@@ -354,7 +354,7 @@ export function HealthEntryLayout({
               {longDateCap}
             </p>
           )}
-          <h1 ref={isToday ? undefined : dayAnchor} className="text-title font-bold leading-tight">{isToday ? t.tabs.today : longDateCap}</h1>
+          <h1 ref={isToday ? undefined : dayAnchor} className={`${isToday ? 'dawn-title ' : ''}text-title font-bold leading-tight`}>{isToday ? t.tabs.today : longDateCap}</h1>
           {greeting && (
             <p className="text-control mt-0.5" style={{ color: 'var(--color-ink-muted)' }}>
               {greeting}

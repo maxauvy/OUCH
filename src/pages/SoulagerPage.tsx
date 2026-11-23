@@ -77,7 +77,7 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
               {s.kicker}
             </p>
           )}
-          <h1 ref={headingRef} tabIndex={-1} className={`${view === 'home' ? 'page-title ' : ''}text-title font-bold leading-tight outline-none`}>
+          <h1 ref={headingRef} tabIndex={-1} className={`${view === 'home' ? 'page-title dawn-title ' : ''}text-title font-bold leading-tight outline-none`}>
             {heading}
           </h1>
           {view === 'breath' && !breathing && (
