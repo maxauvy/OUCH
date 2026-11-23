@@ -38,6 +38,12 @@ test('a hard day brings nothing, whatever is waiting', () => {
   assert.deepEqual(r, { items: [], count: 0 })
 })
 
+test('a drawn trial under way stays within reach on a hard day, and nothing else', () => {
+  const drawn: LeadTrial = { ...trial(), end: '2026-11-03', plan: ['with', 'without', 'with', 'without', 'with', 'without', 'with', 'without', 'with', 'without'] }
+  const r = todayMessages({ ...base, quiet: true, leads: [lead('sleep')], invite: true, trial: drawn })
+  assert.deepEqual(r, { items: [{ kind: 'trial', key: 'trial', trial: drawn }], count: 0 })
+})
+
 test('the sheet lists the Sunday sentence, then the leads, a trial to repeat, the invitation, and the trial under way last', () => {
   const r = todayMessages({
     ...base,

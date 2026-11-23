@@ -4,13 +4,13 @@ import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalend
 import { updateSettings } from '../../db'
 import type { LoggedEntry, Settings } from '../../db/types'
 import { useLeadList } from '../../hooks/useLeadList'
-import { daysBetween, shiftISO } from '../../lib/dates'
+import { daysBetween } from '../../lib/dates'
 import { formatIllnessList } from '../../lib/childView'
 import { snoozeInvite } from '../../lib/indicatorInvite'
 import { frenchOfMonth } from '../../lib/monthName'
 import { actionInSentence, actionKey } from '../../lib/leads'
 import type { ActivityIllness } from '../../lib/activityEvidence'
-import { TRIAL_DAYS, restartTrial } from '../../lib/leadTrial'
+import { newTrial, restartTrial } from '../../lib/leadTrial'
 import { updateLeadsSeen } from '../../lib/leadsSeenStore'
 import { DROP_HPA } from '../../lib/forecast'
 import { markDone, postpone, type TodayMessage, type TodayMessages } from '../../lib/todayMessages'
@@ -234,7 +234,7 @@ export function TodayList({
                       label: t.activity.tryIt,
                       primary: true,
                       // The trial is written first, then the card is put away: the two writes on the settings must not run side by side, or the second wipes the first.
-                      onClick: () => void updateSettings({ leadTrial: { key: `action:${actionKey(t.activity.action)}`, action: t.activity.action, start: today, end: shiftISO(today, TRIAL_DAYS - 1) } }).then(() => done(m.key)),
+                      onClick: () => void updateSettings({ leadTrial: newTrial(`action:${actionKey(t.activity.action)}`, t.activity.action, today) }).then(() => done(m.key)),
                     },
                   ]
                 : []),

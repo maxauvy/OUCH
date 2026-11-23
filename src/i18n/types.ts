@@ -369,6 +369,8 @@ export interface Translations {
     trialsFew: string
     trialsHarder: string
     trialsAgain: string
+    trialsDrawn: string
+    trialsNext: string
     trialsRunning: string
     medicationsTitle: string
     medicationsCaption: string
@@ -1092,6 +1094,9 @@ export interface Translations {
     /** `{{action}}`, the week `{{from}}` to `{{to}}`, then pain `{{a}}` on `{{aN}}` days with it and `{{b}}` on `{{bN}}` days without */
     noticedTrialLine: string
     noticedTrialNote: string
+    noticedTrialDrawnLine: string
+    noticedTrialNext: string
+    noticedTrialDrawnNote: string
     /** Added when a week's days with the action were the harder ones */
     noticedTrialHarder: string
     notes: string
@@ -1415,7 +1420,32 @@ export interface Translations {
     monthBack: string
     monthThanks: string
     trialKeep: string
-    trialContinue: string
+    trialAgain: string
+    trialDrawnDay: string
+    trialStartsTomorrow: string
+    trialTodayIs: string
+    trialTomorrowIs: string
+    trialArmWith: string
+    trialArmWithout: string
+    trialDrawnHow: string
+    trialWithHint: string
+    trialWithoutHint: string
+    trialWas: string
+    trialLastDone: string
+    trialNeedIt: string
+    trialRescueTitle: string
+    trialRescueBody: string
+    trialRescueUndo: string
+    trialLegendWith: string
+    trialLegendWithout: string
+    trialLegendRescue: string
+    trialDrawnTitle: string
+    trialNextTitle: string
+    trialNextLine: string
+    trialDrawnFair: string
+    trialRescues: string
+    trialDrawnSmall: string
+    trialDrawnFew: string
     trialEnd: string
     weeklyLabel: string
     /** `{{action}}` in the middle of a sentence */

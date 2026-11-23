@@ -4,7 +4,9 @@
 //
 // The rules:
 // - A hard day (a flare under way) has no list at all: the soft word of the
-//   hard days stands alone, and nothing else is asked.
+//   hard days stands alone, and nothing else is asked. The one exception is a
+//   drawn trial under way: the person needs to know whether today is a day with
+//   or without, and its card is where a hard day becomes a rescue day.
 // - Opening the sheet consumes nothing. A message leaves the list when the
 //   person acts on it, or says "later": it is then away for 7 days, and the
 //   second "later" is the last, it does not come back on the day's page (a lead
@@ -118,7 +120,7 @@ export function recentReturn(episodes: readonly FlareEpisode[], today: string): 
 
 export function todayMessages(input: TodayMessagesInput): TodayMessages {
   const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, yesterday, weather, regularity, activity, trial } = input
-  if (quiet) return { items: [], count: 0 }
+  if (quiet) return { items: trial?.plan ? [{ kind: 'trial', key: 'trial', trial }] : [], count: 0 }
   const waiting = (key: string) => !isAway(later?.[key], today)
 
   const items: TodayMessage[] = []
