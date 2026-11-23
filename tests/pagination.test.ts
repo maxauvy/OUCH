@@ -1,7 +1,7 @@
 // Run with `npm test`.
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { buildSheets, rowsBlock, rowsToc, type Block } from '../src/components/report/pagination.ts'
+import { buildSheets, keepWithNext, rowsBlock, rowsToc, type Block } from '../src/components/report/pagination.ts'
 
 const pages: Block[][] = [['a', rowsBlock(4, (from, to) => `rows ${from}-${to}`), 'b']]
 
@@ -38,4 +38,15 @@ test('a list or table block carries the name the contents line points to', () =>
   assert.equal(rowsToc(rowsBlock(3, () => null, 'timeline')), 'timeline')
   assert.equal(rowsToc(rowsBlock(3, () => null)), undefined)
   assert.equal(rowsToc('plain'), undefined)
+})
+
+test('a title band kept with what follows moves with it, rather than staying alone at the bottom of a sheet', () => {
+  // Sheet 2: the end of part 1 (page 0, block 2), then part 2's band (page 1, block 0) and its first block (page 1, block 1), which overflows.
+  const pages: Block[][] = [['a', 'b', 'c'], ['band', 'd']]
+  const parts = buildSheets(pages, [{ page: 0, block: 2, row: 0 }])[1].parts
+  const isBand = (j: number) => parts[j].node === 'band'
+  assert.deepEqual(keepWithNext({ page: 1, block: 1, row: 0 }, parts, 2, isBand), { page: 1, block: 0, row: 0 })
+  // A cut between rows keeps the band with the rows above it; a band first on its sheet stays.
+  assert.deepEqual(keepWithNext({ page: 1, block: 1, row: 3 }, [...parts.slice(0, 2), { ...parts[2], from: 0, splittable: true }], 2, isBand), { page: 1, block: 1, row: 3 })
+  assert.deepEqual(keepWithNext({ page: 1, block: 1, row: 0 }, parts.slice(1), 1, (j) => j === 0), { page: 1, block: 1, row: 0 })
 })

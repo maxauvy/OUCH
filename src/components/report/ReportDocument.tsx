@@ -873,10 +873,10 @@ function tocPagesOf(pages: Block[][], sheets: ReturnType<typeof buildSheets>): R
   return found
 }
 
-/** The title band that opens each numbered part of the pain clinic report, on its own page. */
+/** The title band that opens each numbered part of the pain clinic report, on its own page (or after the end of a part that overflowed, kept with what follows it). */
 function PartTitle({ n, title, hint }: { n: number; title: string; hint: string }) {
   return (
-    <div className="r-partband">
+    <div className="r-partband" data-keep-with-next>
       <b className="r-partn">{n}</b>
       <span className="r-parttitle">{title}</span>
       <em className="r-parthint">{hint}</em>

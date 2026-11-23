@@ -18,6 +18,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - **Mode démo : une étiquette « Démo » sur la barre d'onglets, à la place de la pastille.** La pastille « Mode démo · données fictives » flottait au-dessus de la barre et cachait le bas de chaque page, dont « Mise à jour disponible · Recharger ». Une petite étiquette « Démo » est maintenant posée sur le bord gauche de la barre, au même endroit quel que soit l'onglet. La toucher ouvre une bulle : les données sont fictives, ton journal n'est pas touché, et « Quitter la démo ». Toucher ailleurs (un onglet aussi) ou Échap la referme. Pendant la visite guidée, elle n'est pas là, comme la pastille avant elle.
 
 ### Corrigé
+- **Rapport pour le centre douleur : un titre de partie n'est plus laissé seul en bas d'une page.** Quand une partie déborde et que la suivante commence sur la même page, son bandeau (« 2 Traitements ») passe maintenant à la page suivante avec ce qu'il annonce.
 - **Les titres disent de quoi ils parlent.** Là où « l'aggrave », « la noter » ou « what makes it worse » ne disaient pas clairement qu'il s'agit de la douleur, le mot est écrit : flyers Aube A5 et A4 (« Une minute par jour pour noter ta douleur »), plaquettes patients en anglais (« See what makes your pain worse »), lettre U du guide des utilisateurs, README en anglais (« Ease the pain »), couverture du carrousel de présentation (« Ta douleur : ce qui l'aggrave, ce qui l'apaise. »).
 
 ## [0.16.0] - 2026-11-22
