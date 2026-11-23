@@ -157,6 +157,43 @@
   --kids-soft: #ece4f8;
 }
 
+/* The friend of the day (components/friend/Friend.tsx): the child view's character and the exercises'. A light
+   character with a dark face, the same in both themes; only what stands around it (its cushion, the arrows of a
+   move) follows the theme. */
+:root {
+  --friend-ink: #4a3b57;
+  --friend-cheek: #ff9d8a;
+  --friend-sun: #ffd36b;
+  --friend-ray: #f2b24a;
+  --friend-white: #ffffff;
+  --friend-air: #7fa3cf;
+  --friend-move: #b0812c;
+  /* Arms drawn outside the body, on the page itself: the face's ink in light mode, a light lilac on a dark page. */
+  --friend-limb: #4a3b57;
+  --friend-cushion: #ddd5f0;
+  /* The two read exercises of the Soulager tab: the lilac of the look and a soft amber. */
+  --cat-relax: var(--color-brand);
+  --cat-relax-soft: var(--color-brand-soft);
+  --cat-gentle: #8b662f;
+  --cat-gentle-soft: #fbf0dc;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --friend-move: #e3b766;
+    --friend-limb: #d8d2ee;
+    --friend-cushion: #3b3460;
+    --cat-gentle: #e3b766;
+    --cat-gentle-soft: #3a3020;
+  }
+}
+:root[data-theme='dark'] {
+  --friend-move: #e3b766;
+  --friend-limb: #d8d2ee;
+  --friend-cushion: #3b3460;
+  --cat-gentle: #e3b766;
+  --cat-gentle-soft: #3a3020;
+}
+
 /* Dark-mode token overrides: reassigning the same --color-* custom
    properties (not new -dark-suffixed ones) so every consumer — Tailwind
    utilities generated from @theme and plain var(--color-x) inline styles —
@@ -481,16 +518,16 @@ input::-webkit-date-and-time-value {
     opacity: 0;
   }
 }
-/* The surface of the water in the breathing exercise: one wave length slides by, so the surface ripples. */
-.breath-wave {
-  animation: breath-wave 4s linear infinite;
-}
-@keyframes breath-wave {
-  from {
-    transform: translateX(-100px);
+/* The breathing exercise: the sun rises in the pebble while breathing in and goes down while breathing out (see
+   SoulagerPage). For those who asked for less motion, it stays still and only the words change. */
+@media (prefers-reduced-motion: reduce) {
+  .breath-sun {
+    transition: none !important;
+    transform: translateY(20px) !important;
   }
-  to {
-    transform: translateX(0);
+  .breath-glow {
+    transition: none !important;
+    opacity: 0.6 !important;
   }
 }
 /* The picture that closes an exercise (see `ExerciseEnd`): it settles, widens, rises or opens, once, and the rings and bubbles go on slowly. */
@@ -591,7 +628,6 @@ input::-webkit-date-and-time-value {
   .wf-drop,
   .wf-flash,
   .weather-sway,
-  .breath-wave,
   .weather-turn {
     animation: none !important;
   }

@@ -5,8 +5,11 @@ import { useTranslation } from '../../i18n'
 import { ENDINGS, pickEnding } from '../../lib/relief'
 import { BUTTON, SECONDARY } from '../today/cardStyles'
 import { addHelped } from './helpers'
+import { FriendFigure } from '../friend/Friend'
+import { useFriendLevel } from '../friend/friendLevel'
 
-const SOFT = 'var(--color-brand-soft)'
+// A fill that stands out on the white card (the soft brand tint alone was too pale to see).
+const SOFT = 'color-mix(in srgb, var(--color-brand) 16%, var(--color-surface))'
 const BRAND = 'var(--color-brand)'
 
 /** A pebble settles and a tick draws itself; rings widen around it. */
@@ -64,13 +67,30 @@ function Flower() {
   )
 }
 
-const ART = [Settle, Bubbles, Flower]
+/** The friend of the day, eyes closed, at ease; rings widen around it. */
+function Friend() {
+  const level = useFriendLevel()
+  const ring = (delay: number) => <ellipse className="end-ring" style={{ animationDelay: `${delay}s` }} cx="100" cy="62" rx="62" ry="46" fill="none" stroke={BRAND} strokeWidth="1.5" />
+  return (
+    <>
+      {ring(0)}
+      {ring(1.2)}
+      <g className="end-pop">
+        <g transform="translate(55.2 17.2) scale(0.7)">
+          <FriendFigure level={level} eyes="closed" />
+        </g>
+      </g>
+    </>
+  )
+}
+
+const ART = [Settle, Bubbles, Flower, Friend]
 
 /** The picture shown last, in this session: the next one is another. */
 let lastEnding: number | undefined
 
 /**
- * The end of an exercise (breathing, the two read ones, a gesture's timer): one of three soft pictures, picked at random each time, a word, a line saying what was done, and the ways out. Nothing is counted or scored; adding the exercise to "what helped" is one tap from the person, never made for them.
+ * The end of an exercise (breathing, the two read ones, a gesture's timer): one of four soft pictures (the last is the friend of the day), picked at random each time, a word, a line saying what was done, and the ways out. Nothing is counted or scored; adding the exercise to "what helped" is one tap from the person, never made for them.
  * `action` is what would be added to today's "what helped"; `info` says what was done ("3 min of breathing").
  */
 export function ExerciseEnd({ info, action, onAgain, onBack, backLabel }: { info: string; action: string; onAgain: () => void; onBack: () => void; backLabel: string }) {
@@ -92,7 +112,7 @@ export function ExerciseEnd({ info, action, onAgain, onBack, backLabel }: { info
 
   return (
     <div className="flex flex-col items-center gap-2 text-center py-2">
-      <svg viewBox="0 0 200 120" className="w-48 h-auto" aria-hidden>
+      <svg viewBox="0 0 200 120" className="w-60 max-w-full h-auto" aria-hidden>
         <Art />
       </svg>
       <h2 ref={heading} tabIndex={-1} className="text-heading font-bold leading-snug outline-none">

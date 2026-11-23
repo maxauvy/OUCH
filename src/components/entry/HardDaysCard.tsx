@@ -8,6 +8,7 @@ import { useOpenRelief } from '../relief/reliefContext'
 import { useSettings } from '../../hooks/useSettings'
 import { hasPlan } from '../../lib/hardDaysPlan'
 import { useRichLook } from '../../lib/look'
+import { MARKER } from '../today/cardStyles'
 
 // What the person wrote down as helping reads in their own words ("Bain
 // chaud"), so it goes in the middle of a sentence in lower case, unless it
@@ -138,6 +139,3 @@ function ShortAction({ icon: I, label, onClick }: { icon: Icon; label: string; o
   )
 }
 
-/** A highlighter stroke under the lower part of the words. */
-const MARKER =
-  'linear-gradient(transparent 58%, color-mix(in srgb, var(--color-weather-1) 45%, transparent) 58%, color-mix(in srgb, var(--color-weather-1) 45%, transparent) 92%, transparent 92%)'

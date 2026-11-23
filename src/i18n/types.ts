@@ -1779,13 +1779,13 @@ export interface Translations {
     musicHelper: string
     timeLeft: string
     autoLabel: string
+    /** The chip once on: the seconds left before the next step. */
+    autoLeft: string
     autoPause: string
     autoResume: string
     autoHelper: string
     vibrate: string
     vibrateHelper: string
-    levelUp: string
-    levelDown: string
     screenOn: string
     start: string
     stop: string
