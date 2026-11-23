@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { DailyEntry } from '../src/db/types.ts'
 import { shiftISO } from '../src/lib/dates.ts'
-import { DEFAULT_MINUTES, MAX_GESTURES, MAX_MINUTES, MIN_MINUTES, cleanGestures, gestureRows, notedActions, stepMinutes, timerState, toggleGesture } from '../src/lib/gestures.ts'
+import { DEFAULT_MINUTES, MAX_GESTURES, MAX_MINUTES, MIN_MINUTES, cleanGestures, gestureRows, notedActions, stepMinutes, timerState, toggleGesture, trialName, trialOptions } from '../src/lib/gestures.ts'
 
 const today = '2026-11-12'
 const day = (back: number, actions: string[]): DailyEntry => ({ date: shiftISO(today, -back), painLevel: 4, positiveActions: actions, createdAt: 0, updatedAt: 0 }) as DailyEntry
@@ -42,4 +42,22 @@ test('the timer says what is left, how far it is, and when it is over', () => {
   assert.deepEqual(timerState(0, 300_000, 10), { leftMs: 300_000, fraction: 0.5, done: false })
   assert.deepEqual(timerState(0, 600_000, 10), { leftMs: 0, fraction: 1, done: true })
   assert.equal(timerState(1000, 0, 5).leftMs, 300_000)
+})
+
+test('a trial from Soulager offers the gestures kept first, then what was noted, a few at most', () => {
+  const kept = [{ name: 'Bain chaud', minutes: 15 }, { name: 'Yoga', minutes: 10 }]
+  const noted = [{ label: 'Marche', days: 30 }, { label: 'bain chaud', days: 20 }, { label: 'Sieste', days: 12 }, { label: 'Lecture', days: 5 }, { label: 'Musique', days: 3 }]
+  assert.deepEqual(trialOptions(kept, noted), [
+    { name: 'Bain chaud', days: 20 },
+    { name: 'Yoga', days: undefined },
+    { name: 'Marche', days: 30 },
+    { name: 'Sieste', days: 12 },
+    { name: 'Lecture', days: 5 },
+  ])
+  assert.deepEqual(trialOptions([], []), [])
+})
+
+test('a name typed for a trial is one tidy line', () => {
+  assert.equal(trialName('  yoga \n doux  '), 'yoga doux')
+  assert.equal(trialName('x'.repeat(80)).length, 60)
 })

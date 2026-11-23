@@ -7,6 +7,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Ajouté
+- **Lancer un essai soi-même, depuis Soulager.** Sous « Mes gestes », « Est-ce que ça t’aide vraiment ? » ouvre une feuille : on choisit une seule chose parmi ses gestes et ce qu’on note le plus, ou on en écrit une nouvelle, et l’essai tiré au sort commence le lendemain. Plus besoin d’attendre qu’une piste apparaisse dans Tendances. Un seul essai à la fois : pendant qu’il dure, Soulager montre où il en est. Les jours « avec », la carte de l’essai a un bouton « Je l’ai fait » qui note l’action dans « Ce qui a aidé », et l’action de l’essai vient en premier dans les suggestions de ce champ, même si elle est nouvelle.
 - **Documents en « Aube » pour tous les flyers.** Le flyer A5 et la plaquette A4 pour les patients, et les flyers « Lire un rapport » A5 et A4 pour les soignants, existent aussi aux couleurs de l'aube du flyer A4 Aube (peu d'encre, un grand titre, des images inclinées, des panneaux blancs), en français et en anglais. Les textes sont ceux des versions actuelles, qui ne changent pas.
 
 ### Modifié

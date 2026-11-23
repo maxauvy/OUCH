@@ -1429,6 +1429,8 @@ export interface Translations {
     trialArmWithout: string
     trialDrawnHow: string
     trialWithHint: string
+    trialDidIt: string
+    trialDidItNoted: string
     trialWithoutHint: string
     trialWas: string
     trialLastDone: string
@@ -1775,6 +1777,27 @@ export interface Translations {
     start: string
     stop: string
     screenOn: string
+    trialQuestion: string
+    trialPitch: string
+    trialLaunch: string
+    trialRunning: string
+    trialDay: string
+    trialStartsTomorrow: string
+    trialTomorrowWith: string
+    trialTomorrowWithout: string
+    trialOver: string
+    trialOne: string
+    sheetTitle: string
+    sheetClose: string
+    sheetIntroBefore: string
+    sheetIntroMarked: string
+    sheetIntroAfter: string
+    sheetChoose: string
+    sheetOther: string
+    sheetOtherLabel: string
+    sheetOtherHint: string
+    sheetOne: string
+    sheetCancel: string
   }
   plan: {
     title: string
