@@ -1987,9 +1987,22 @@ function noticedLine(d: ReportData, lead: Lead): string {
   })
 }
 
-/** One week the patient tried, as the diary reads it: the days with the action beside the others. */
+/** One trial the patient ran, as the diary reads it: the days with the action beside the others, and for a drawn trial the next day too. */
 function trialLine(d: ReportData, { trial, result }: ReportTrial): string {
   const { f } = d
+  if (trial.plan) {
+    const line = f.format(f.t.noticedTrialDrawnLine, {
+      action: trial.action,
+      days: trial.plan.length,
+      from: f.dayMonth(trial.start),
+      to: f.dayMonth(trial.end),
+      a: f.nf(result.with.mean),
+      aN: result.with.n,
+      b: f.nf(result.without.mean),
+      bN: result.without.n,
+    })
+    return result.next ? line + f.format(f.t.noticedTrialNext, { c: f.nf(result.next.with.mean), d: f.nf(result.next.without.mean) }) : line
+  }
   return f.format(f.t.noticedTrialLine, {
     action: trial.action,
     from: f.dayMonth(trial.start),
@@ -2018,8 +2031,9 @@ function Noticed({ d }: { d: ReportData }) {
         </ul>
       </div>
       <p className="r-small">
-        {noticed.length > 0 && f.t.noticedNote} {trials.length > 0 && f.t.noticedTrialNote}
-        {trials.some((x) => x.result.gap > 0) && ` ${f.t.noticedTrialHarder}`}
+        {noticed.length > 0 && f.t.noticedNote} {trials.some((x) => !x.trial.plan) && f.t.noticedTrialNote}
+        {trials.some((x) => !x.trial.plan && x.result.gap > 0) && ` ${f.t.noticedTrialHarder}`}
+        {trials.some((x) => x.trial.plan) && ` ${f.t.noticedTrialDrawnNote}`}
       </p>
     </>
   )

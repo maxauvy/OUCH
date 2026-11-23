@@ -7,8 +7,8 @@ import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { Card, SectionTitle } from '../ui/Card'
 import { capitalise } from './leadTexts'
 
-/** The weeks of trial the person closed, newest first, so a result is not lost
- * once the card on Today is gone, and a week can be done again. */
+/** The trials the person closed, newest first, so a result is not lost
+ * once the card on Today is gone, and a trial can be done again. */
 export function TrialsCard({
   history,
   entries,
@@ -39,7 +39,7 @@ export function TrialsCard({
       </p>
       <ul className="flex flex-col mt-1">
         {weeks.map((trial, i) => {
-          const { result } = trialStatus(trial, entries, today)
+          const { result, drawn } = trialStatus(trial, entries, today)
           const action = actionInSentence(trial.action)
           return (
             <li key={`${trial.key}@${trial.start}`} className="py-2.5" style={i > 0 ? { borderTop: `1px solid ${palette.hairline}` } : undefined}>
@@ -54,7 +54,13 @@ export function TrialsCard({
                     ].join(' · ')
                   : t.trialsFew}
               </p>
-              {result && result.gap > 0 && (
+              {result && drawn && (
+                <p className="text-caption leading-snug" style={{ color: palette.inkMuted }}>
+                  {t.trialsDrawn}
+                  {result.next && ` ${format(t.trialsNext, { a: nf.format(result.next.with.mean), b: nf.format(result.next.without.mean) }, language)}`}
+                </p>
+              )}
+              {result && !drawn && result.gap > 0 && (
                 <p className="text-caption leading-snug" style={{ color: palette.inkMuted }}>
                   {t.trialsHarder}
                 </p>

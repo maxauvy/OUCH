@@ -49,7 +49,7 @@ import type {
 import { cleanZones } from './bodyZones.ts'
 import { cleanOtherName, FIRST_DIAGNOSIS_YEAR } from './illnessStatus.ts'
 import type { LeadChoices } from './leads.ts'
-import { MAX_TRIAL_HISTORY, type LeadTrial } from './leadTrial.ts'
+import { MAX_TRIAL_HISTORY, type LeadTrial, type TrialArm } from './leadTrial.ts'
 import { makePrescription } from './prescription.ts'
 import { careSheetFromBackup } from './careSheet.ts'
 import { cleanSettleDays } from './treatmentReview.ts'
@@ -327,14 +327,19 @@ function leadChoices(v: unknown): LeadChoices | undefined {
   return entries.length > 0 && Object.keys(out).length === 0 ? undefined : out
 }
 
-/** A one-week trial: a known kind of key, its action, and a first and last day a few days apart. */
+/** A trial: a known kind of key, its action, a first and last day a few days apart and, when the days were drawn, one arm per day. */
 function leadTrial(v: unknown): LeadTrial | undefined {
   if (!isRecord(v)) return undefined
   const key = str(v.key)
   const action = str(v.action)
   if (!key?.startsWith('action:') || !action?.trim() || !isISODate(v.start) || !isISODate(v.end)) return undefined
   const days = (Date.parse(`${v.end}T12:00:00Z`) - Date.parse(`${v.start}T12:00:00Z`)) / 86_400_000
-  return days >= 0 && days <= 30 ? { key, action, start: v.start, end: v.end } : undefined
+  if (!(days >= 0 && days <= 30)) return undefined
+  const trial: LeadTrial = { key, action, start: v.start, end: v.end }
+  if (v.plan === undefined) return trial
+  // A draw that does not cover the days exactly would compare the wrong days: the trial is dropped rather than misread.
+  const plan = Array.isArray(v.plan) && v.plan.length === days + 1 && v.plan.every((a) => a === 'with' || a === 'without') ? (v.plan as TrialArm[]) : undefined
+  return plan ? { ...trial, plan } : undefined
 }
 
 /** The weeks closed: each one well formed, a cap of them. */

@@ -275,6 +275,16 @@ test('the trial under way and the switches of the lead cards are restored, and o
   assert.equal(sanitizeSettings({ leadTrial: { ...trial, start: 'later' } })?.leadTrial, undefined)
 })
 
+test('a drawn trial keeps its draw, and is dropped when the draw does not cover its days', () => {
+  const plan = ['with', 'without', 'without', 'with', 'with', 'without', 'with', 'without', 'with', 'without']
+  const trial = { key: 'action:marche', action: 'Marche', start: '2026-10-05', end: '2026-10-14', plan }
+  assert.deepEqual(sanitizeSettings({ leadTrial: trial })?.leadTrial, trial)
+  assert.deepEqual(sanitizeSettings({ leadTrialHistory: [trial] })?.leadTrialHistory, [trial])
+  assert.equal(sanitizeSettings({ leadTrial: { ...trial, plan: plan.slice(1) } })?.leadTrial, undefined)
+  assert.equal(sanitizeSettings({ leadTrial: { ...trial, plan: [...plan.slice(1), 'maybe'] } })?.leadTrial, undefined)
+  assert.equal(sanitizeSettings({ leadTrial: { ...trial, plan: 'with' } })?.leadTrial, undefined)
+})
+
 test('the closed weeks are restored, each one well formed', () => {
   const week = { key: 'action:marche', action: 'Marche', start: '2026-10-05', end: '2026-10-11' }
   const out = sanitizeSettings({ leadTrialHistory: [week, { ...week, key: 'sleep' }, { ...week, end: 'x' }, 'no', { ...week, start: '2026-09-01', end: '2026-09-07' }] })

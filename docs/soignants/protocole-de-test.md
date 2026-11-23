@@ -16,7 +16,7 @@ Ce document décrit comment tester OUCH avec des professionnels de santé : ce q
 5. Quel effort le journal demande-t-il aux patients, en particulier les jours difficiles ?
 6. Le tableau « Douleur selon le jour de la semaine » (écart à la moyenne et bande que le hasard suffit à produire), présent dans les deux versions du rapport, est-il lisible ? Risque-t-il d'être lu comme un effet réel alors que les journées ne sont pas indépendantes ?
 7. Le statut des maladies (« diagnostiquée en 2019 », « suspectée »), tel que le patient le déclare et tel que le rapport le reprend, aide-t-il à lire le reste, ou risque-t-il d'être pris pour un diagnostic établi ?
-8. La rubrique « Ce que le patient a remarqué » (les pistes que le patient a choisi de garder, et ses essais d'une semaine) apporte-t-elle quelque chose en consultation, ou risque-t-elle d'orienter la discussion vers une cause que rien n'établit ? Les essais d'une semaine, décrits comme « c'est peu pour conclure », sont-ils bien lus ainsi ?
+8. La rubrique « Ce que le patient a remarqué » (les pistes que le patient a choisi de garder, et ses essais tirés au sort) apporte-t-elle quelque chose en consultation, ou risque-t-elle d'orienter la discussion vers une cause que rien n'établit ? Les essais d'une semaine, décrits comme « c'est peu pour conclure », sont-ils bien lus ainsi ?
 
 **Ce qu'on ne cherche pas à établir** : que OUCH améliore la douleur, l'observance ou la prise en charge ; que ses seuils sont validés ; que ses poussées correspondent à celles que cliniciens ou patients identifient. Ces questions demanderaient une autre étude, avec un cadre éthique et statistique à part.
 
@@ -137,7 +137,7 @@ Trois questions de plus, propres aux éléments ajoutés depuis la note (le tabl
 
 9. Le tableau « Douleur selon le jour de la semaine » et sa bande de hasard : le lisez-vous comme une description, ou risque-t-il de faire croire à un effet ? Faut-il le retirer de la version « Médecin traitant » ?
 10. Le statut des maladies déclarées (« diagnostiquée en 2019 », « suspectée ») aide-t-il à lire le rapport, et est-il assez clair qu'il est déclaré par le patient et non vérifié ?
-11. Les essais d'une semaine (jours avec et sans une action choisie par le patient) vous semblent-ils utiles, ou trop courts pour être montrés ? Quelle durée ou quelles précautions de lecture ?
+11. Les essais tirés au sort (10 jours, 5 avec et 5 sans une action choisie par le patient, dans un ordre tiré au sort) vous semblent-ils utiles, ou trop courts pour être montrés ? Quelle durée ou quelles précautions de lecture ?
 
 Puis, ouvertes : ce qui vous a surpris ; ce que vous craignez que l'on fasse dire au rapport ; ce qui vous ferait le recommander, ou non ; si vous continueriez à l'utiliser. Facultatif : une échelle d'utilisabilité de 10 items (type SUS) appliquée au rapport.
 
