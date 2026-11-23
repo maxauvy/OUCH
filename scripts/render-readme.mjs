@@ -1,8 +1,9 @@
-// Draws the README's picture (docs/images/ouch-readme.fr.png and .en.png, 2400 x 1200) from the app's demo captures:
-// the day's page, a lead drawn from the notes and the report, beside the line « Ce qui l'aggrave, ce qui l'apaise ».
+// Draws the README's picture (docs/images/ouch-readme.fr.png and .en.png, 2400 x 1200) from the app's demo captures, in the
+// « Aube » look of the flyers: a dawn background, « Ce qui l'aggrave, ce qui l'apaise » in Bricolage with its last words coloured
+// letter by letter (coral to violet), the day's page in a phone, a lead drawn from the notes and the report, four stickers.
 // Run after the captures are retaken (node scripts/capture-presentation.mjs, and with --lang en for the guide):
 //   node scripts/render-readme.mjs
-// Needs Playwright (npm i --no-save playwright), `npm install` (fonts from node_modules) and a connection (Instrument Serif, Google Fonts).
+// Needs Playwright (npm i --no-save playwright) and `npm install` (the fonts come from node_modules).
 import { chromium } from 'playwright'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -11,68 +12,82 @@ const root = process.cwd()
 const data = (path, type) => `data:${type};base64,${readFileSync(join(root, path)).toString('base64')}`
 const font = (pkg, file) => data(`node_modules/@fontsource-variable/${pkg}/files/${file}`, 'font/woff2')
 
+// One solid colour per letter, coral to violet, as on the flyers (a gradient clipped to text prints as a block in some viewers).
+const dawn = (words) => {
+  const letters = [...words]
+  const n = Math.max(1, letters.filter((c) => c.trim()).length - 1)
+  let i = 0
+  return letters
+    .map((c) => {
+      if (!c.trim()) return c
+      const t = i++ / n
+      const rgb = [[0xff, 0xc4], [0x5f, 0x6b], [0x3d, 0xd6]].map(([a, b]) => Math.round(a + (b - a) * t))
+      return `<span style="color:rgb(${rgb.join(',')})">${c}</span>`
+    })
+    .join('')
+}
+
 const TEXT = {
   fr: {
     img: 'docs/presentation-soignants/img',
-    worse: 'Ce qui l’aggrave,',
-    size: 84,
-    eases: 'ce qui l’apaise.',
+    first: 'Ce qui l’aggrave,',
+    second: ['ce qui ', 'l’apaise.'],
+    size: 70,
     line: 'Un carnet de douleur pour la fibromyalgie et les autres douleurs chroniques. Une minute par jour, des pistes tirées de tes notes, et un rapport pour ton médecin.',
-    chips: ['Gratuit', 'Libre', 'Sans compte', 'Sur ton téléphone'],
+    chips: [['Gratuit', 'ni pub, ni compte'], ['Libre', 'code ouvert'], ['1 min', 'par jour'], ['Chez toi', 'sur ton téléphone']],
   },
   en: {
     img: 'docs/guide-patients/img-en',
-    worse: 'What makes it worse,',
-    // Longer than the French line: a little smaller, so it stays on one line.
-    size: 68,
-    eases: 'what eases it.',
+    first: 'What makes it worse,',
+    second: ['what ', 'eases it.'],
+    // Longer than the French lines: a little smaller, so each stays on one line.
+    size: 60,
     line: 'A pain diary for fibromyalgia and other chronic pain. A minute a day, leads drawn from your notes, and a report for your doctor.',
-    chips: ['Free', 'Open source', 'No account', 'On your phone'],
+    chips: [['Free', 'no ads, no account'], ['Open', 'open source'], ['1 min', 'a day'], ['At home', 'on your phone']],
   },
 }
 
 const page = (t) => `<!doctype html><html><head><meta charset="utf-8">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap">
 <style>
 @font-face { font-family: 'Bricolage'; src: url(${font('bricolage-grotesque', 'bricolage-grotesque-latin-wght-normal.woff2')}) format('woff2'); font-weight: 200 800; }
 @font-face { font-family: 'Public Sans'; src: url(${font('public-sans', 'public-sans-latin-wght-normal.woff2')}) format('woff2'); font-weight: 100 900; }
 * { box-sizing: border-box; margin: 0; }
-body { width: 1200px; height: 600px; overflow: hidden; background: #574a7e; font-family: 'Public Sans', sans-serif; color: #fff; position: relative; }
-.glow { position: absolute; width: 900px; height: 900px; border-radius: 50%; right: -330px; top: -170px; background: #655890; }
-.band { position: absolute; inset: 0 0 auto 0; height: 10px; background: linear-gradient(90deg, #e3a73b, #b39ad6 60%, #8f7cc0); }
-.left { position: absolute; left: 60px; top: 52px; width: 600px; }
-.icon { width: 70px; height: 70px; border-radius: 17px; display: block; box-shadow: 0 10px 24px -12px rgba(0,0,0,.45); }
-h1 { margin-top: 26px; line-height: .98; }
-h1 .worse { display: block; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; font-size: ${t.size}px; white-space: nowrap; color: #f3cf7c; letter-spacing: -.5px; }
-h1 .eases { display: block; font-family: 'Bricolage', sans-serif; font-weight: 800; font-size: 74px; letter-spacing: -2.5px; margin-top: 6px; }
-p.line { margin-top: 48px; font-size: 22px; line-height: 1.42; color: #ecebf6; width: 520px; }
-.chips { position: absolute; left: 60px; bottom: 40px; display: flex; gap: 11px; }
-.chips span { background: rgba(255,255,255,.14); border-radius: 999px; padding: 8px 18px; font-size: 19px; font-weight: 600; }
-.phone { position: absolute; background: #fff; border-radius: 34px; padding: 9px; box-shadow: 0 24px 48px -24px rgba(10,6,30,.7); overflow: hidden; }
-.phone .scr { border-radius: 26px; overflow: hidden; background: #f4f6f9; height: 100%; }
-.phone img { display: block; width: 100%; }
-.today { left: 676px; top: 92px; width: 238px; height: 560px; transform: rotate(-4deg); }
-.lead { left: 928px; top: 24px; width: 236px; height: 360px; transform: rotate(3deg); }
-.report { left: 748px; top: 402px; width: 418px; height: 260px; border-radius: 10px; padding: 0; transform: rotate(-2.5deg); }
-.report img { width: 100%; }
+body { width: 1200px; height: 600px; overflow: hidden; position: relative; font-family: 'Public Sans', sans-serif; color: #1f1d44;
+  background: radial-gradient(620px 460px at 88% 6%, #ffb58a66, transparent 70%), radial-gradient(700px 540px at 0% 60%, #c9bdff55, transparent 70%), linear-gradient(180deg, #fff3ea 0%, #f6efff 60%, #ece6ff 100%); }
+.left { position: absolute; left: 60px; top: 50px; width: 620px; }
+.brand { display: flex; align-items: center; gap: 14px; font-family: 'Bricolage', sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .02em; }
+.brand img { width: 58px; height: 58px; border-radius: 14px; display: block; }
+h1 { margin-top: 26px; font-family: 'Bricolage', sans-serif; font-weight: 800; font-size: ${t.size}px; line-height: .98; letter-spacing: -.04em; white-space: nowrap; }
+h1 span.l { display: block; }
+p.line { margin-top: 26px; font-size: 21px; line-height: 1.42; color: #3b3863; width: 540px; }
+.stk { position: absolute; font-family: 'Bricolage', sans-serif; font-weight: 800; font-size: 30px; line-height: 1; border-radius: 14px; padding: 10px 15px; }
+.stk small { display: block; font-family: 'Public Sans', sans-serif; font-weight: 700; font-size: 13px; margin-top: 4px; }
+.s1 { left: 60px; top: 470px; background: #ffc285; transform: rotate(-4deg); }
+.s2 { left: 210px; top: 478px; background: #9cc8ff; transform: rotate(3deg); }
+.s3 { left: 345px; top: 466px; background: #ff7a59; transform: rotate(-2deg); }
+.s4 { left: 478px; top: 476px; background: #e4dcff; transform: rotate(2.5deg); }
+.phone { position: absolute; left: 690px; top: 70px; width: 236px; height: 560px; border-radius: 30px; overflow: hidden; border: 7px solid #0f0e26; box-shadow: 16px 20px 0 #ffb58a; transform: rotate(-4deg); background: #f4f6f9; }
+.phone img, .card img { display: block; width: 100%; }
+.card { position: absolute; background: #fff; overflow: hidden; border: 1.5px solid #1f1d4433; }
+.lead { left: 940px; top: 26px; width: 228px; height: 336px; border-radius: 18px; transform: rotate(3deg); box-shadow: 0 22px 40px -26px rgba(31,29,68,.55); }
+.report { left: 770px; top: 396px; width: 410px; height: 250px; border-radius: 10px; transform: rotate(-2.5deg); box-shadow: 0 22px 40px -26px rgba(31,29,68,.55); }
 </style></head><body>
-<div class="glow"></div><div class="band"></div>
 <div class="left">
-  <img class="icon" src="${data('public/apple-touch-icon.png', 'image/png')}" alt="">
-  <h1><span class="worse">${t.worse}</span><span class="eases">${t.eases}</span></h1>
+  <div class="brand"><img src="${data('public/apple-touch-icon.png', 'image/png')}" alt="">OUCH</div>
+  <h1><span class="l">${t.first}</span><span class="l">${t.second[0]}${dawn(t.second[1])}</span></h1>
   <p class="line">${t.line}</p>
 </div>
-<div class="chips">${t.chips.map((c) => `<span>${c}</span>`).join('')}</div>
-<div class="phone today"><div class="scr"><img src="${data(`${t.img}/today-1.png`, 'image/png')}" alt=""></div></div>
-<div class="phone lead"><div class="scr"><img src="${data(`${t.img}/lead.png`, 'image/png')}" alt=""></div></div>
-<div class="phone report"><img src="${data(`${t.img}/report-gp-1.png`, 'image/png')}" alt=""></div>
+${t.chips.map(([b, s], i) => `<div class="stk s${i + 1}">${b}<small>${s}</small></div>`).join('')}
+<div class="phone"><img src="${data(`${t.img}/today-1.png`, 'image/png')}" alt=""></div>
+<div class="card lead"><img src="${data(`${t.img}/lead.png`, 'image/png')}" alt=""></div>
+<div class="card report"><img src="${data(`${t.img}/report-gp-1.png`, 'image/png')}" alt=""></div>
 </body></html>`
 
 const browser = await chromium.launch({ channel: 'chrome' })
 for (const [lang, t] of Object.entries(TEXT)) {
   const ctx = await browser.newContext({ viewport: { width: 1200, height: 600 }, deviceScaleFactor: 2 })
   const p = await ctx.newPage()
-  await p.setContent(page(t), { waitUntil: 'networkidle' })
+  await p.setContent(page(t), { waitUntil: 'load' })
   await p.evaluate(() => document.fonts.ready)
   const out = `docs/images/ouch-readme.${lang}.png`
   await p.screenshot({ path: out })
