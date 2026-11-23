@@ -1,0 +1,26 @@
+/* « Aube »: the dawn look of the flyers, for the long documents (guides, slides, plaquette, « Lire un rapport », methodology note).
+   Linked after each document's own styles; the <body> says how far it goes:
+     .aube          every page: Bricolage titles, coral eyebrows, peach and lilac boxes, a dawn corner and a soft glow at the top
+                    (no gradient band any more: it was too loud in this look)
+     .aube-h2       section titles (h2) in Bricolage too; not in the methodology note, whose h2 are small capitals
+     .aube-cover    the first page is a dawn cover (guides, slides)
+     .aube-header   the document has no cover: its first page gets a dawn header behind the title, fading into white
+     .aube-slides   16:9 slides (sizes in px) instead of A4 pages
+   The last word of the title is coloured letter by letter in the HTML (coral to violet): a gradient clipped to text prints as a block in Aperçu.
+   Bricolage Grotesque comes from node_modules (npm install), like Public Sans. */
+@font-face{font-family:"Bricolage Grotesque";src:url(../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-ext-wght-normal.woff2) format("woff2");font-weight:200 800;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Bricolage Grotesque";src:url(../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2) format("woff2");font-weight:200 800;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+.aube{--ink:#1f1d44;--muted:#5e5a80;--hair:#ece5f6;--brand:#d4502f;--soft:#fff1e8;--gold:#ff9a76;--goldsoft:#fff4e6;--lav:#b59cf0;--lavsoft:#f2edff;--ind:#3b3672;--navy:#2c2860;color:var(--ink)}
+.aube .bar{display:none}
+.aube h1,.aube.aube-h2 h2:not(.eyebrow),.aube .card .t,.aube .card b.t{font-family:"Bricolage Grotesque","Public Sans",sans-serif;letter-spacing:-.025em}
+.aube .eyebrow{color:#d4502f}
+
+/* Every page: a soft glow from the top edge, and a dawn corner at the top right. */
+.aube .page{background:linear-gradient(180deg,#ffeadf 0,rgba(255,255,255,0) 16mm),radial-gradient(110mm 60mm at 100% 0%,#ffe4d3,transparent 70%),#fff}
+.aube.aube-slides .slide{background:linear-gradient(180deg,#ffeadf 0,rgba(255,255,255,0) 70px),radial-gradient(520px 300px at 100% 0%,#ffe2cf,transparent 70%),#fff}
+
+/* The first page: a whole dawn cover, or a dawn header behind the title that fades into the page. */
+.aube-cover .page:first-of-type{background:radial-gradient(150mm 110mm at 92% 4%,#ffb58a77,transparent 70%),radial-gradient(160mm 130mm at 0% 55%,#c9bdff55,transparent 70%),linear-gradient(180deg,#fff3ea 0%,#f6efff 60%,#ece6ff 100%)}
+.aube-cover.aube-slides .slide:first-of-type{background:radial-gradient(700px 520px at 92% 0%,#ffb58a88,transparent 70%),radial-gradient(800px 600px at 0% 70%,#c9bdff66,transparent 70%),linear-gradient(180deg,#fff3ea,#f3edff)}
+.aube-header .page:first-of-type{background:radial-gradient(130mm 75mm at 96% 0%,#ffcfb466,transparent 70%),linear-gradient(180deg,#fff1e6 0,#f7f1ff 42mm,#ffffff 85mm)}
