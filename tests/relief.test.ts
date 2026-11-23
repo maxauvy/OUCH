@@ -33,14 +33,14 @@ test('the action offered after the exercise is one the entry form suggests, so i
   assert.ok(en.entryForm.positiveActionsSuggestions.includes(en.relief.action))
 })
 
-test('the closing screen of an exercise is one of the three, at random, whatever the draw gives', () => {
-  assert.equal(ENDINGS, 3)
-  assert.deepEqual([0, 0.2, 0.34, 0.5, 0.67, 0.99].map((r) => pickEnding(() => r)), [0, 0, 1, 1, 2, 2])
+test('the closing screen of an exercise is one of the four, at random, whatever the draw gives', () => {
+  assert.equal(ENDINGS, 4)
+  assert.deepEqual([0, 0.2, 0.26, 0.5, 0.76, 0.99].map((r) => pickEnding(() => r)), [0, 0, 1, 2, 3, 3])
   // A draw outside [0, 1) still gives a screen that exists.
   assert.equal(pickEnding(() => 1), ENDINGS - 1)
   assert.equal(pickEnding(() => -0.5), 0)
   const seen = new Set(Array.from({ length: 200 }, () => pickEnding()))
-  assert.deepEqual([...seen].sort(), [0, 1, 2])
+  assert.deepEqual([...seen].sort(), [0, 1, 2, 3])
 })
 
 test('each closing screen has its word and its lines, in both languages, and the exercise lines carry their blanks', async () => {
@@ -62,16 +62,16 @@ test('the gentle exercise adds the stretching suggestion, found by its place in 
   assert.equal(en.entryForm.positiveActionsSuggestions[3], 'Gentle stretching')
 })
 
-test('the closing screen is never the one just shown, and the two others come up in turn', () => {
-  for (const avoid of [0, 1, 2]) {
+test('the closing screen is never the one just shown, and the others come up in turn', () => {
+  for (const avoid of [0, 1, 2, 3]) {
     const results = Array.from({ length: 100 }, (_, i) => pickEnding(() => i / 100, avoid))
     assert.ok(results.every((r) => r !== avoid && r >= 0 && r < ENDINGS), `avoid ${avoid}`)
-    assert.deepEqual([...new Set(results)].sort(), [0, 1, 2].filter((n) => n !== avoid))
+    assert.deepEqual([...new Set(results)].sort(), [0, 1, 2, 3].filter((n) => n !== avoid))
   }
-  assert.deepEqual([0, 0.49, 0.5, 0.99, 1].map((r) => pickEnding(() => r, 1)), [0, 0, 2, 2, 2])
-  // Nothing sensible to avoid: any of the three.
-  assert.deepEqual([0, 0.5, 0.99].map((r) => pickEnding(() => r, 7)), [0, 1, 2])
-  assert.deepEqual([0, 0.5, 0.99].map((r) => pickEnding(() => r, -1)), [0, 1, 2])
+  assert.deepEqual([0, 0.33, 0.34, 0.67, 0.99, 1].map((r) => pickEnding(() => r, 1)), [0, 0, 2, 3, 3, 3])
+  // Nothing sensible to avoid: any of the four.
+  assert.deepEqual([0, 0.3, 0.5, 0.99].map((r) => pickEnding(() => r, 7)), [0, 1, 2, 3])
+  assert.deepEqual([0, 0.5, 0.99].map((r) => pickEnding(() => r, -1)), [0, 2, 3])
 })
 
 test('the breathing length chosen last time comes back when it is one of the three, the usual one otherwise', () => {

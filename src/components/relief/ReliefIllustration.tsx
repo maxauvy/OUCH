@@ -1,101 +1,106 @@
-// The little round friend of the relaxing exercise: one picture per step. Drawn
-// by hand in SVG (light, offline, no file). Decorative: the words of the step
-// say everything, so the picture is hidden from screen readers. The friend stays
-// white with a dark face in both themes; only the sky behind it follows the theme.
+// The friend of the day in the read exercises: one pose per step. Drawn by hand in SVG (light, offline, no file).
+// Decorative: the words of the step say everything, so the picture is hidden from screen readers. The friend takes the
+// day's weather (a sun on an easy day, a cloud resting on a hard one) and stands on the page's own sky: no background.
 
-const INK = '#2b4a62'
-const CHEEK = '#f2b8c0'
-const LAV = '#c9b8e6'
-const SKY = '#7fa5c2'
-const SPARK = '#ffffff'
+import type { PainWeatherLevel } from '../../db/types'
+import { FriendFigure } from '../friend/Friend'
+import { FRIEND_INK, ON_STAGE, friendBody, useFriendLevel, type FriendEyes, type FriendMouth } from '../friend/friendLevel'
 
-function Friend({ cx, cy, r, eyes, mouth, children }: { cx: number; cy: number; r: number; eyes: 'open' | 'closed'; mouth: 'smile' | 'o' | 'calm'; children?: React.ReactNode }) {
+const MOVE = 'var(--friend-move)'
+const AIR = 'var(--friend-air)'
+
+function Friend({ level, eyes, mouth }: { level: PainWeatherLevel; eyes: FriendEyes; mouth: FriendMouth }) {
   return (
-    <g>
-      <ellipse cx={cx} cy={cy + r * 0.9} rx={r * 0.9} ry={5} fill={SKY} opacity={0.3} />
-      <path d={`M${cx - r} ${cy + r * 0.8} C${cx - r} ${cy - r * 1.1} ${cx + r} ${cy - r * 1.1} ${cx + r} ${cy + r * 0.8} Z`} fill="#fff" />
-      <circle cx={cx - r * 0.55} cy={cy + 6} r={5} fill={CHEEK} opacity={0.6} />
-      <circle cx={cx + r * 0.55} cy={cy + 6} r={5} fill={CHEEK} opacity={0.6} />
-      {eyes === 'open' ? (
-        <>
-          <circle cx={cx - 11} cy={cy - 4} r={3.2} fill={INK} />
-          <circle cx={cx + 11} cy={cy - 4} r={3.2} fill={INK} />
-        </>
-      ) : (
-        <path d={`M${cx - 16} ${cy - 4} q5 5 10 0 M${cx + 6} ${cy - 4} q5 5 10 0`} stroke={INK} strokeWidth={2.5} fill="none" strokeLinecap="round" />
-      )}
-      {mouth === 'smile' && <path d={`M${cx - 8} ${cy + 8} q8 7 16 0`} stroke={INK} strokeWidth={2.5} fill="none" strokeLinecap="round" />}
-      {mouth === 'o' && <ellipse cx={cx} cy={cy + 10} rx={5} ry={6} fill={INK} opacity={0.8} />}
-      {mouth === 'calm' && <path d={`M${cx - 6} ${cy + 10} h12`} stroke={INK} strokeWidth={2.5} strokeLinecap="round" />}
-      {children}
+    <g transform={ON_STAGE}>
+      <FriendFigure level={level} eyes={eyes} mouth={mouth} />
     </g>
   )
 }
 
+const Shadow = () => <ellipse cx="100" cy="119" rx="30" ry="4" fill="var(--color-brand)" opacity={0.12} />
+
+const Hand = ({ cx, cy, level }: { cx: number; cy: number; level: PainWeatherLevel }) => <circle cx={cx} cy={cy} r="10" fill={friendBody(level)} stroke={FRIEND_INK} strokeWidth="1.6" />
+
+const line = { fill: 'none', strokeLinecap: 'round', strokeLinejoin: 'round' } as const
+
 /** The relaxing exercise, step 0 to 4 (settle, jaw, shoulders, hands, belly), or the gentle moves, step 0 to 3 (lift, roll, tilt, hands on the belly). */
 export function ReliefIllustration({ step, set = 'relax' }: { step: number; set?: 'relax' | 'gentle' }) {
+  const level = useFriendLevel()
+  const pose = `${set}-${step}`
   return (
-    <svg viewBox="0 0 200 150" width="100%" aria-hidden focusable="false" className="block rounded-[var(--radius-card)]" style={{ background: 'var(--color-brand-soft)' }}>
-      <circle cx="30" cy="30" r="2" fill={SPARK} opacity={0.8} />
-      <circle cx="170" cy="40" r="2.5" fill={SPARK} opacity={0.8} />
-      <circle cx="160" cy="120" r="2" fill={SPARK} opacity={0.7} />
-      {set === 'relax' && step === 0 && (
+    <svg viewBox="0 0 200 150" width="100%" aria-hidden focusable="false" className="block mx-auto max-w-[320px]">
+      {pose === 'relax-0' && (
         <>
-          <rect x="40" y="96" width="120" height="30" rx="15" fill={LAV} />
-          <Friend cx={100} cy={78} r={30} eyes="closed" mouth="smile" />
-          <text x="150" y="42" fontSize="13" fill="#0d5c8c" opacity={0.8}>
+          <rect x="46" y="98" width="108" height="24" rx="12" fill="var(--friend-cushion)" />
+          <Friend level={level} eyes="closed" mouth="smile" />
+          <text x="150" y="36" fontSize="14" fill="var(--color-ink-muted)">
             z z
           </text>
         </>
       )}
-      {set === 'relax' && step === 1 && (
-        <Friend cx={100} cy={76} r={36} eyes="closed" mouth="o">
-          <path d="M146 62 q10 -4 14 4 M150 50 q8 -3 12 3" stroke={SKY} strokeWidth={2.5} fill="none" strokeLinecap="round" />
-        </Friend>
+      {pose === 'relax-1' && (
+        <>
+          <Shadow />
+          <Friend level={level} eyes="closed" mouth="o" />
+          <path d="M150 70 q10 -4 14 4 M154 58 q8 -3 12 3" stroke={AIR} strokeWidth="2.5" {...line} />
+        </>
       )}
-      {set === 'relax' && step === 2 && (
-        <Friend cx={100} cy={78} r={34} eyes="closed" mouth="calm">
-          <path d="M58 100 q-2 -12 4 -16 M142 100 q2 -12 -4 -16" stroke="#0d5c8c" strokeWidth={3} fill="none" strokeLinecap="round" />
-          <path d="M52 76 v18 m-5 -6 l5 7 l5 -7 M148 76 v18 m-5 -6 l5 7 l5 -7" stroke={SKY} strokeWidth={2.5} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        </Friend>
+      {pose === 'relax-2' && (
+        <>
+          <Shadow />
+          <Friend level={level} eyes="closed" mouth="calm" />
+          <path d="M68 106 q-7 -8 -2 -19 M132 106 q7 -8 2 -19" stroke="var(--friend-limb)" strokeWidth="3" {...line} />
+          <path d="M38 66 v18 m-5 -6 l5 7 l5 -7 M162 66 v18 m-5 -6 l5 7 l5 -7" stroke={MOVE} strokeWidth="2.6" {...line} />
+        </>
       )}
-      {set === 'relax' && step === 3 && (
-        <Friend cx={100} cy={70} r={30} eyes="open" mouth="smile">
-          <circle cx="58" cy="108" r="12" fill="#fff" />
-          <circle cx="142" cy="108" r="12" fill="#fff" />
-          <path d="M52 104 l-5 -6 M58 102 v-8 M64 104 l5 -6 M136 104 l-5 -6 M142 102 v-8 M148 104 l5 -6" stroke={INK} strokeWidth={2} strokeLinecap="round" />
-        </Friend>
+      {pose === 'relax-3' && (
+        <>
+          <Shadow />
+          <Friend level={level} eyes="open" mouth="smile" />
+          <Hand cx={56} cy={118} level={level} />
+          <Hand cx={144} cy={118} level={level} />
+          <path d="M50 104 l-4 -6 M56 102 v-8 M62 104 l4 -6 M138 104 l-4 -6 M144 102 v-8 M150 104 l4 -6" stroke={MOVE} strokeWidth="2" {...line} />
+        </>
       )}
-      {set === 'relax' && step === 4 && (
-        <Friend cx={100} cy={70} r={32} eyes="closed" mouth="smile">
-          <circle cx="100" cy="100" r="13" fill={CHEEK} opacity={0.7} />
-          <path d="M92 100 q8 -6 16 0" stroke="#fff" strokeWidth={2} fill="none" strokeLinecap="round" />
-        </Friend>
+      {pose === 'relax-4' && (
+        <>
+          <Shadow />
+          <Friend level={level} eyes="closed" mouth="smile" />
+          <circle cx="100" cy="99" r="6" fill="var(--friend-cheek)" opacity={0.55} />
+          <circle cx="152" cy="64" r="11" stroke={AIR} strokeWidth="2" strokeDasharray="2 5" {...line} />
+        </>
       )}
-      {set === 'gentle' && step === 0 && (
-        <Friend cx={100} cy={84} r={32} eyes="open" mouth="smile">
-          <path d="M60 96 q-4 -10 2 -16 M140 96 q4 -10 -2 -16" stroke="#0d5c8c" strokeWidth={3} fill="none" strokeLinecap="round" />
-          <path d="M52 86 v-18 m-5 6 l5 -7 l5 7 M148 86 v-18 m-5 6 l5 -7 l5 7" stroke={SKY} strokeWidth={2.5} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        </Friend>
+      {pose === 'gentle-0' && (
+        <>
+          <Shadow />
+          <Friend level={level} eyes="open" mouth="smile" />
+          <path d="M66 98 q-9 -8 -4 -21 M134 98 q9 -8 4 -21" stroke="var(--friend-limb)" strokeWidth="3" {...line} />
+          <path d="M38 86 v-18 m-5 6 l5 -7 l5 7 M162 86 v-18 m-5 6 l5 -7 l5 7" stroke={MOVE} strokeWidth="2.6" {...line} />
+        </>
       )}
-      {set === 'gentle' && step === 1 && (
-        <Friend cx={100} cy={78} r={32} eyes="open" mouth="smile">
-          <path d="M46 92 a16 16 0 1 1 6 -14 m-1 -7 l1 8 l8 -3 M154 92 a16 16 0 1 0 -6 -14 m1 -7 l-1 8 l-8 -3" stroke={SKY} strokeWidth={2.5} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        </Friend>
+      {pose === 'gentle-1' && (
+        <>
+          <Shadow />
+          <Friend level={level} eyes="open" mouth="smile" />
+          <path d="M34 98 a14 14 0 1 1 6 -12 m-1 -6 l1 7 l7 -3 M166 98 a14 14 0 1 0 -6 -12 m1 -6 l-1 7 l-7 -3" stroke={MOVE} strokeWidth="2.5" {...line} />
+        </>
       )}
-      {set === 'gentle' && step === 2 && (
-        <g transform="rotate(12 100 112)">
-          <Friend cx={100} cy={76} r={34} eyes="closed" mouth="calm">
-            <path d="M144 56 q8 8 4 20" stroke={SKY} strokeWidth={2.5} fill="none" strokeLinecap="round" strokeDasharray="1 6" />
-          </Friend>
-        </g>
+      {pose === 'gentle-2' && (
+        <>
+          <Shadow />
+          <g transform="rotate(12 100 112)">
+            <Friend level={level} eyes="closed" mouth="calm" />
+          </g>
+          <path d="M152 46 q10 8 6 22" stroke={AIR} strokeWidth="2.5" strokeDasharray="1 6" {...line} />
+        </>
       )}
-      {set === 'gentle' && step === 3 && (
-        <Friend cx={100} cy={70} r={32} eyes="closed" mouth="smile">
-          <circle cx="86" cy="104" r="11" fill="#fff" />
-          <circle cx="114" cy="104" r="11" fill="#fff" />
-          <path d="M80 100 q6 -5 12 0 M108 100 q6 -5 12 0" stroke={INK} strokeWidth={2} fill="none" strokeLinecap="round" />
-        </Friend>
+      {pose === 'gentle-3' && (
+        <>
+          <Shadow />
+          <Friend level={level} eyes="closed" mouth="smile" />
+          <Hand cx={88} cy={103} level={level} />
+          <Hand cx={112} cy={103} level={level} />
+        </>
       )}
     </svg>
   )

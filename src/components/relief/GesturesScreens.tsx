@@ -196,10 +196,12 @@ export function GestureTimer({ gesture, onBack, backLabel }: { gesture: ReliefGe
   }, [startedAt, gesture.minutes, settings.reliefVibrate])
 
   const state = startedAt !== null ? timerState(startedAt, now || startedAt, gesture.minutes) : null
-  const r = 84
-  const c = 2 * Math.PI * r
   const left = state ? state.leftMs : gesture.minutes * 60_000
   const fraction = state?.fraction ?? 0
+  // The sun crosses an arc of sky, from the left at the start to the right at the end.
+  const angle = Math.PI * fraction
+  const sunX = 110 - 80 * Math.cos(angle)
+  const sunY = 118 - 80 * Math.sin(angle)
 
   // The time is up: the timer gives way to a word, a line saying what was done, and the ways out.
   if (done) {
@@ -217,17 +219,25 @@ export function GestureTimer({ gesture, onBack, backLabel }: { gesture: ReliefGe
       </p>
       <Card>
         <div className="flex flex-col items-center gap-4 py-2">
-          <div className="relative w-52 h-52 flex items-center justify-center">
-            <svg viewBox="0 0 200 200" className="absolute inset-0" aria-hidden>
-              <circle cx="100" cy="100" r={r} fill="none" stroke="var(--color-brand-soft)" strokeWidth="10" />
-              <circle cx="100" cy="100" r={r} fill="none" stroke="var(--color-brand)" strokeWidth="10" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - fraction)} transform="rotate(-90 100 100)" style={{ transition: 'stroke-dashoffset .25s linear' }} />
+          <div className="w-full max-w-[280px] flex flex-col items-center" aria-hidden>
+            <svg viewBox="0 0 220 128" className="w-full h-auto">
+              <defs>
+                <linearGradient id="gesture-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="var(--cat-gentle-soft)" />
+                  <stop offset="1" stopColor="var(--cat-gentle-soft)" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <path d="M30 118 A80 80 0 0 1 190 118 Z" fill="url(#gesture-sky)" />
+              <path d="M30 118 A80 80 0 0 1 190 118" fill="none" stroke="var(--color-hairline)" strokeWidth="6" strokeLinecap="round" />
+              <path d="M30 118 A80 80 0 0 1 190 118" pathLength={1} strokeDasharray={`${fraction} 1`} fill="none" stroke="var(--friend-ray)" strokeWidth="6" strokeLinecap="round" style={{ transition: 'stroke-dasharray .25s linear' }} />
+              <circle cx={sunX} cy={sunY} r="20" fill="var(--friend-sun)" opacity={0.3} />
+              <circle cx={sunX} cy={sunY} r="12" fill="var(--friend-sun)" />
+              <path d="M14 118 H30 M190 118 H206" stroke="var(--color-hairline)" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
-            <div className="text-center" aria-hidden>
-              <p className="text-display font-bold tabular-nums">{clock(left)}</p>
-              <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-                {format(t.outOf, { n: gesture.minutes }, language)}
-              </p>
-            </div>
+            <p className="text-display font-bold tabular-nums leading-none -mt-12">{clock(left)}</p>
+            <p className="text-caption mt-1" style={{ color: 'var(--color-ink-muted)' }}>
+              {format(t.outOf, { n: gesture.minutes }, language)}
+            </p>
           </div>
           <p role="status" className="sr-only">
             {running ? format(t.started, { name: gesture.name, n: gesture.minutes }, language) : ''}
