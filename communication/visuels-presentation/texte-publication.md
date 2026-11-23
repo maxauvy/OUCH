@@ -19,7 +19,7 @@ Pas de compte, tes notes restent sur ton téléphone, le code est ouvert à tous
 Premier commentaire : https://maxauvy.github.io/OUCH
 
 ## Texte alternatif
-- **Couverture** : fond indigo, « Ce qui l'aggrave, ce qui l'apaise. », pastille « Gratuit · libre · sans compte », trois puces (une minute par jour, des pistes tirées de tes notes, tout reste sur ton téléphone) et l'écran « Aujourd'hui » de l'app.
+- **Couverture** : fond indigo, « Ta douleur : ce qui l'aggrave, ce qui l'apaise. », pastille « Gratuit · libre · sans compte », trois puces (une minute par jour, des pistes tirées de tes notes, tout reste sur ton téléphone) et l'écran « Aujourd'hui » de l'app.
 1. Fond crème. « Une minute par jour. » L'écran Aujourd'hui : douleur de 0 à 10, silhouette pour dire où.
 2. Fond lavande. « Les jours durs, l'écran s'allège. » Un mot bienveillant et la douleur seule.
 3. Fond bleu clair. « Ce que tes notes racontent. » Une carte : douleur moyenne 2,2 les jours avec marche courte, 5,9 les autres ; « une piste, pas une preuve ».
