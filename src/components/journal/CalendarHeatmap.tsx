@@ -69,7 +69,7 @@ export function CalendarHeatmap({
         <div className="flex items-end gap-2 mb-3 px-0.5">
           <div className="flex-1 min-w-0">
             <h2 className="sky-title text-display font-extrabold leading-tight">
-              <span className="capitalize">{format(cursor, 'MMMM', { locale: dateFnsLocale })}</span>
+              <span className="dawn-title capitalize">{format(cursor, 'MMMM', { locale: dateFnsLocale })}</span>
               <span className="font-semibold ml-1.5 text-title" style={{ color: 'var(--color-ink-muted)' }}>
                 {format(cursor, 'yyyy')}
               </span>
