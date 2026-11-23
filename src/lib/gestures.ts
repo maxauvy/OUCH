@@ -97,3 +97,19 @@ export function timerState(startedAt: number, now: number, minutes: number): { l
   const spent = Math.max(0, now - startedAt)
   return { leftMs: Math.max(0, total - spent), fraction: Math.min(1, spent / total), done: spent >= total }
 }
+
+export interface TrialOption {
+  name: string
+  /** Days it was noted on, in the window, when it was. */
+  days?: number
+}
+
+/** What a trial started from Soulager offers first: the gestures kept, then what was noted most and is not kept. A few, so the choice stays easy; anything else is typed. */
+export function trialOptions(kept: readonly ReliefGesture[], noted: readonly NotedAction[], max = 5): TrialOption[] {
+  const out: TrialOption[] = kept.map((g) => ({ name: g.name, days: noted.find((n) => same(n.label, g.name))?.days }))
+  for (const n of noted) if (!out.some((o) => same(o.name, n.label))) out.push({ name: n.label, days: n.days })
+  return out.slice(0, max)
+}
+
+/** A name typed for a trial, tidied as a gesture's is: one line, a length cap. */
+export const trialName = (raw: string) => oneLine(raw)

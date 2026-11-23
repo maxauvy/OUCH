@@ -1,12 +1,13 @@
 import type { CSSProperties } from 'react'
-import { IconDice, IconNotebook } from '@tabler/icons-react'
+import { IconCheck, IconDice, IconNotebook } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { Lead, LeadChoices } from '../../lib/leads'
 import { actionInSentence, actionKey, choiceFor } from '../../lib/leads'
 import { archiveTrial, restartTrial, trialStatus, type LeadTrial, type TrialArm } from '../../lib/leadTrial'
 import type { LoggedEntry } from '../../db/types'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
-import { upsertEntry, useEntry } from '../../hooks/useEntries'
+import { useEntry } from '../../hooks/useEntries'
+import { RESCUE, WITH, WITHOUT, setHelped, trialCellStyle } from './trialStrip'
 import { capitalise } from '../trends/leadTexts'
 import { BUTTON, MARKER, PRIMARY, SECONDARY } from '../today/cardStyles'
 
@@ -27,28 +28,6 @@ export function TrialCard(props: TrialCardProps) {
 }
 
 const CARD: CSSProperties = { background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }
-const WITH = 'var(--color-brand)'
-const WITHOUT = 'color-mix(in srgb, var(--color-brand) 30%, transparent)'
-const RESCUE = 'var(--marker)'
-
-/** One day of the strip: done days filled, the days known ahead ringed, the rest still to be drawn. */
-function cellStyle(d: { arm?: TrialArm; state: string; revealed?: boolean; rescue?: boolean }): CSSProperties {
-  const tone = d.arm === 'with' ? WITH : WITHOUT
-  if (d.rescue) return { background: RESCUE }
-  if (d.state === 'with' || d.state === 'without') return { background: tone }
-  if (d.revealed) return { boxShadow: `inset 0 0 0 2px ${tone}` }
-  const faint = 'color-mix(in srgb, var(--color-brand) 22%, transparent)'
-  return { boxShadow: `inset 0 0 0 1.5px ${faint}`, background: `repeating-linear-gradient(90deg, transparent 0 3px, ${faint} 3px 5px)` }
-}
-
-/** Adds or takes away the action in what helped on a day, keeping the rest of that list as it is. */
-async function setHelped(date: string, current: string[] | undefined, action: string, on: boolean) {
-  const list = current ?? []
-  const has = list.some((a) => actionKey(a) === actionKey(action))
-  if (on === has) return
-  await upsertEntry(date, { positiveActions: on ? [...list, action] : list.filter((a) => actionKey(a) !== actionKey(action)) })
-}
-
 /** A trial on days drawn at random: tomorrow's day once today is logged, a way out on a day without, then the two sorts of days side by side. */
 function DrawnTrialCard({ trial, history, entries, today, lead, choices }: TrialCardProps) {
   const t = useTranslation()
@@ -68,7 +47,7 @@ function DrawnTrialCard({ trial, history, entries, today, lead, choices }: Trial
   const strip = (
     <div className="flex gap-1 mt-1 items-start" aria-hidden>
       {status.days.map((d) => (
-        <span key={d.date} className={`flex-1 rounded-full ${d.date === today ? 'h-3.5 -mt-0.5' : 'h-2.5'}`} style={cellStyle(d)} />
+        <span key={d.date} className={`flex-1 rounded-full ${d.date === today ? 'h-3.5 -mt-0.5' : 'h-2.5'}`} style={trialCellStyle(d)} />
       ))}
     </div>
   )
@@ -95,7 +74,11 @@ function DrawnTrialCard({ trial, history, entries, today, lead, choices }: Trial
     const next = status.days[i + 1]
     const logged = entries.some((e) => e.date === today)
     // The rescue shows as soon as the action is in today's list, before the day's pain is logged.
-    const neededToday = todayDay?.arm === 'without' && (todayEntry?.positiveActions ?? []).some((a) => actionKey(a) === actionKey(trial.action))
+    const notedToday = (todayEntry?.positiveActions ?? []).some((a) => actionKey(a) === actionKey(trial.action))
+    const neededToday = todayDay?.arm === 'without' && notedToday
+    // On a day with, the action can be noted from the card itself: the form may be in its light version, and a new action is not among its suggestions yet.
+    const canDo = todayDay?.arm === 'with' && !notedToday
+    const doneToday = todayDay?.arm === 'with' && notedToday
     const announce = (lead: string, a: TrialArm) => (
       <p className="text-body font-semibold mt-1" style={{ fontSize: '1.15rem', lineHeight: 1.3 }}>
         {lead}{' '}
@@ -158,7 +141,18 @@ function DrawnTrialCard({ trial, history, entries, today, lead, choices }: Trial
         {body}
         {strip}
         {legend(status.days.some((d) => d.rescue) || !!neededToday)}
+        {doneToday && (
+          <p className="flex items-center gap-1.5 text-caption" style={{ color: 'var(--color-brand)' }}>
+            <IconCheck size={16} aria-hidden />
+            {format(lh.trialDidItNoted, { where: t.entryForm.positiveActionsTitle })}
+          </p>
+        )}
         <div className="flex flex-wrap gap-2">
+          {canDo && (
+            <button type="button" className={BUTTON} style={SECONDARY} onClick={() => void setHelped(today, todayEntry?.positiveActions, trial.action, true)}>
+              {lh.trialDidIt}
+            </button>
+          )}
           {canNeed && (
             <button type="button" className={BUTTON} style={SECONDARY} onClick={() => void setHelped(today, todayEntry?.positiveActions, trial.action, true)}>
               {lh.trialNeedIt}

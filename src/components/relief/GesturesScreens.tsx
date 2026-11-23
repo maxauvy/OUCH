@@ -15,6 +15,7 @@ import { Card, SectionTitle } from '../ui/Card'
 import { clock, useScreenOn } from './helpers'
 import { ExerciseEnd } from './ExerciseEnd'
 import { gestureIcon } from './gestureIcon'
+import { SelfTrial } from './SelfTrial'
 
 const save = (kept: ReliefGesture[]) => updateSettings({ reliefGestures: kept.length ? kept : undefined })
 
@@ -55,6 +56,7 @@ export function GesturesCard({ onStart, onChoose }: { onStart: (g: ReliefGesture
       <button type="button" onClick={onChoose} className={`text-control font-semibold mt-3 min-h-11 ${rich ? '' : 'underline underline-offset-2'}`} style={{ color: 'var(--color-brand)' }}>
         {kept.length > 0 ? t.choose : t.chooseFirst}
       </button>
+      <SelfTrial />
     </Card>
   )
 }

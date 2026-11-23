@@ -85,8 +85,10 @@ export function DailyEntryForm({ date, onGoToBackup, onOpenSettings, headerActio
     setLocal((prev) => ({ ...prev, [key]: value }))
   }
 
+  // The action of a trial under way comes first: a new one is not among the past ones yet.
   const knownPositiveActions = Array.from(
     new Set([
+      ...(settings.leadTrial ? [settings.leadTrial.action] : []),
       ...(allEntries ?? []).flatMap((e) => e.positiveActions ?? []),
       ...t.entryForm.positiveActionsSuggestions,
     ])
