@@ -102,6 +102,17 @@ export function withCut(cuts: Cut[], cut: Cut): Cut[] {
   return [...cuts.filter((c) => before(c, cut) < 0), cut]
 }
 
+/** A cut that moves part `i` of a sheet whole also takes along the parts just
+ * before it that must stay with what follows (a part's title band, marked
+ * `data-keep-with-next`), so no title is left alone at the bottom of a sheet.
+ * The first part of the sheet stays: moving it would only move the problem. */
+export function keepWithNext(cut: Cut, parts: Part[], i: number, keeps: (j: number) => boolean): Cut {
+  if (cut.row !== parts[i].from) return cut
+  let j = i
+  while (j > 1 && keeps(j - 1)) j--
+  return j === i ? cut : { page: parts[j].page, block: parts[j].block, row: parts[j].from }
+}
+
 /** A4 height in CSS pixels (297 mm at 96 dpi). */
 const A4_HEIGHT = 1122.5
 
@@ -142,6 +153,7 @@ export function findCut(sections: HTMLElement[], sheets: Sheet[], cuts: Cut[]): 
       } else if (!first) {
         cut = { page: part.page, block: part.block, row: part.from }
       }
+      if (cut) cut = keepWithNext(cut, sheets[s].parts, i, (j) => !!partElements[j].querySelector('[data-keep-with-next]'))
       if (cut && !cuts.some((c) => c.page === cut.page && c.block === cut.block && c.row === cut.row)) return cut
       break
     }

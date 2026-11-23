@@ -1,21 +1,23 @@
 /* The doctor report is a printed document: fixed A4 pages, always light,
    whatever the app's theme or design. Everything is scoped under .report so
-   none of it leaks into the app. "Clinical blue" palette: a navy identity
-   band, the app's health blue for data and accents, a blue ramp for
-   magnitude, orange for as-needed intakes, cool grey for the comparison
-   period. Every value that matters is also written out, so the report
-   reads the same printed in greys. Mirrored as literals in reportColors.ts
-   for SVG attributes. */
+   none of it leaks into the app. « Aube » around the data, like the app and
+   the documents: an indigo ink, a dawn band at the top of every page, a dawn
+   header on the first one, titles in Bricolage, coral labels, peach and
+   lilac tints. The data itself stays "clinical blue": the app's health blue
+   for data and accents, a blue ramp for magnitude, orange for as-needed
+   intakes, cool grey for the comparison period (clear to a doctor, and safe
+   printed in greys). Every value that matters is also written out. The data
+   colours are mirrored as literals in reportColors.ts for SVG attributes. */
 
 .report {
   color-scheme: light;
-  --r-ink: #1b2430;
-  --r-navy: #0d2b40;
+  --r-ink: #1f1d44;
+  --r-navy: #1f1d44;
   --r-muted: #56606b;
   --r-faint: #6b7480;
-  --r-hair: #d7dde2;
+  --r-hair: #ece5f6;
   --r-axis: #c3cbd2;
-  --r-band: #f3f6f8;
+  --r-band: #faf6ff;
   --r-blue-250: #a9c9e6;
   /* Daily dots: 3:1 on white and on the grey band, lighter than the mean line. */
   --r-blue-350: #5b93c7;
@@ -28,7 +30,10 @@
   /* Previous-period bars and missing days: 3.2:1 on white. */
   --r-prev: #8a939c;
   --r-brand: #0d5c8c;
-  --r-brand-soft: #eaf1f6;
+  --r-brand-soft: #f2edff;
+  /* Labels above the figures: Aube coral, 4.6:1 on the lightest tint, 5.5:1 on white. */
+  --r-coral: #b8401f;
+  --r-display: 'Bricolage Grotesque Variable', 'Public Sans Variable', system-ui, sans-serif;
   color: var(--r-ink);
   font: 12.5px/1.45 'Public Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   text-align: left;
@@ -44,6 +49,10 @@
 }
 .report-page > .r-body {
   flex: 1;
+}
+/* The first page: a dawn header behind the title, fading into white (as in the documents without a cover). */
+.report section.report-page:first-child {
+  background: linear-gradient(180deg, #fff1e6 0, #f8f3ff 38mm, #fff 70mm);
 }
 .report-preview .report-page {
   margin-bottom: 24px;
@@ -62,15 +71,15 @@
   /* Bleeds to the page edges (the page padding is 9mm 14mm). */
   margin: -9mm -14mm 12px;
   padding: 7px 14mm;
-  background: var(--r-navy);
-  color: #fff;
+  background: linear-gradient(90deg, #ffe8da, #f1e9ff);
+  color: var(--r-ink);
   font-size: 10.5px;
 }
 .report .r-running .r-who {
   font-weight: 600;
 }
 .report .r-running .num {
-  color: #bcd3e3;
+  color: #6e4f84;
 }
 .report .r-foot {
   border-top: 1px solid var(--r-hair);
@@ -81,11 +90,12 @@
 
 .report .r-h1 {
   color: var(--r-navy);
+  font-family: var(--r-display);
   font-size: 20px;
   line-height: 1.2;
   margin: 0;
-  letter-spacing: -0.01em;
-  font-weight: 700;
+  letter-spacing: -0.015em;
+  font-weight: 800;
 }
 .report .r-sub {
   color: var(--r-muted);
@@ -93,6 +103,8 @@
 }
 .report .r-h2 {
   color: var(--r-navy);
+  font-family: var(--r-display);
+  letter-spacing: -0.015em;
   font-size: 14px;
   font-weight: 700;
   margin: 14px 0 6px;
@@ -117,6 +129,8 @@
 }
 .report .r-h3 {
   color: var(--r-navy);
+  font-family: var(--r-display);
+  letter-spacing: -0.015em;
   font-size: 12.5px;
   font-weight: 700;
   margin: 10px 0 4px;
@@ -150,7 +164,7 @@
   border-left: 1px solid #fff;
 }
 .report .r-k {
-  color: var(--r-faint);
+  color: var(--r-coral);
   font-size: 10.5px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -160,7 +174,7 @@
 .report .r-id .r-k,
 .report .r-tile .r-k,
 .report .r-card.tint .r-k {
-  color: var(--r-muted);
+  color: var(--r-coral);
 }
 .report .r-v {
   font-weight: 600;
@@ -585,10 +599,6 @@
 
 /* OUCH identity: the app's gradient (gold, lavender, indigo) as a strip at the top of every page, the icon beside the running title
    and the title, a colour accent on the figures and the section headings. */
-.report .r-running {
-  background: linear-gradient(90deg, #e3a73b, #a894c9 55%, #574a7a) top / 100% 4px no-repeat, var(--r-navy);
-  padding-top: 11px;
-}
 .report .r-running .r-brand {
   display: inline-flex;
   align-items: center;
@@ -603,7 +613,7 @@
   min-width: 0;
 }
 .report .r-tiles .r-tile {
-  border-top: 3px solid #e3a73b;
+  border-top: 3px solid #ff9a76;
 }
 .report .r-tiles .r-tile:nth-child(4n + 2) {
   border-top-color: #a894c9;
@@ -624,7 +634,7 @@
   width: 4px;
   height: 14px;
   border-radius: 2px;
-  background: linear-gradient(#e3a73b, #a894c9);
+  background: linear-gradient(#ff8a6b, #c46bd6);
 }
 
 .report .r-logo {
@@ -670,19 +680,19 @@
   border-top: 0;
 }
 .report .r-tile[data-tone='brand'] {
-  background: #e3eef6;
+  background: #f2edff;
 }
 .report .r-tile[data-tone='pain'] {
-  background: #fdeaea;
+  background: #fff0e8;
 }
 .report .r-tile[data-tone='severe'] {
-  background: #fff1dc;
+  background: #fff4e2;
 }
 .report .r-tile[data-tone='flare'] {
-  background: #ece4f8;
+  background: #efe8ff;
 }
 .report .r-tile[data-tone='sleep'] {
-  background: #e8e9fb;
+  background: #ecebff;
 }
 .report .r-tile[data-tone='body'] {
   background: #ddf3f0;
@@ -697,7 +707,7 @@
   letter-spacing: 0;
   font-size: 11.5px;
   font-weight: 600;
-  color: var(--r-ink);
+  color: var(--r-coral);
 }
 /* The tile's pastille is white, on the tint. */
 .report .r-tile[data-tone] .r-pastille {
@@ -709,7 +719,7 @@
   padding: 9px 14px 10px 18px;
   border: 1px solid var(--r-hair);
   border-radius: 8px;
-  background: linear-gradient(135deg, #fff, #f2f6fb);
+  background: linear-gradient(135deg, #fff, #fff3ea);
   overflow: hidden;
 }
 .report .r-brief::before {
@@ -719,12 +729,14 @@
   top: 0;
   bottom: 0;
   width: 6px;
-  background: linear-gradient(180deg, #e3a73b, #a894c9);
+  background: linear-gradient(180deg, #ff8a6b, #c46bd6);
 }
 .report .r-brief .r-k {
-  color: var(--r-muted);
+  color: var(--r-coral);
 }
 .report .r-brief .r-sentence {
+  font-family: var(--r-display);
+  letter-spacing: -0.015em;
   margin: 3px 0 0;
   font-size: 14.5px;
   font-weight: 600;
@@ -746,17 +758,17 @@
   border-top: 0;
 }
 .report .r-card.r-toned[data-tone='sleep'] {
-  background: #e8e9fb;
+  background: #ecebff;
 }
 .report .r-card.r-toned[data-tone='brand'] {
-  background: #e3eef6;
+  background: #f2edff;
 }
 .report .r-card.r-toned .r-k {
   text-transform: none;
   letter-spacing: 0;
   font-size: 11.5px;
   font-weight: 600;
-  color: var(--r-ink);
+  color: var(--r-coral);
 }
 .report .r-card.r-toned .r-pastille {
   background: #fff !important;
@@ -930,9 +942,11 @@
   margin: 0 0 12px;
   padding: 8px 12px;
   border-radius: 10px;
-  background: linear-gradient(90deg, #e3eef6, #ece4f8);
+  background: linear-gradient(90deg, #fff0e8, #f2edff);
 }
 .report .r-parttitle {
+  font-family: var(--r-display);
+  letter-spacing: -0.015em;
   font-size: 17px;
   font-weight: 700;
   color: var(--r-navy);
@@ -971,5 +985,5 @@
   color: var(--r-brand);
 }
 .report .r-part-name {
-  color: #e3d9f7;
+  color: #6e4f84;
 }
