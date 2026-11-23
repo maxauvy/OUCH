@@ -316,15 +316,22 @@ sup{font-size:6.6pt;line-height:0}
 <p>On met de la chaleur <i>parce qu’</i>on a mal ; on marche plutôt les jours où ça va. Comparer les jours avec et sans l’action, c’est alors comparer des jours durs à des jours doux : un <b>biais d’indication</b>. Une action qui soulage peut sortir « liée à plus de douleur », une action sans effet faite les bons jours « liée à moins ». Regarder <b>le lendemain</b> ne suffit pas : la douleur persiste d’un jour à l’autre (l’action paraît nuire) et revient vers son niveau habituel après un pic (elle paraît soulager). Comparer à <b>douleur égale</b> le jour même ou la veille non plus : la note du jour suit l’action, et la veille ne dit qu’en partie ce que sera le jour.</p>
 
 <h3>Ce qu’en dit une simulation</h3>
-<p>Douleur sous-jacente autorégressive (coefficient 0,7 autour de 4,5, quelques poussées), note arrondie de 0 à 10 ; 200 séries de 330 jours. L’effet vrai est connu. Écart de douleur « avec − sans » lu de quatre façons :</p>
+<p>Douleur sous-jacente autorégressive (coefficient 0,7 autour de 4,5, quelques poussées), note arrondie de 0 à 10 ; moyenne de 200 séries de 330 jours (d’une série à l’autre, environ ± 0,4). L’effet vrai est connu. Chaque colonne est une façon de lire l’écart de douleur « avec − sans » : les deux premières et la dernière visent l’effet du jour, les deux du milieu l’effet du lendemain.</p>
 <table>
-<tr><th style="width:28%">Effet vrai</th><th>Jours choisis par la personne (70 % des jours durs, 10 % des autres)</th><th>Jours tirés au sort</th></tr>
-<tr><td>Aucun</td><td>même jour <b>+1,5</b> ; lendemain <b>+1,1</b> ; lendemain à douleur égale le jour même +0,1 ; jour à douleur égale la veille <b>+0,9</b></td><td>même jour 0,0 ; lendemain 0,0</td></tr>
-<tr><td>Soulage le jour même (−1,5)</td><td>même jour <b>+0,1</b> ; lendemain <b>+0,9</b> ; lendemain à douleur égale <b>+0,8</b> ; à douleur égale la veille −0,4</td><td>même jour <b>−1,5</b> ; lendemain 0,0</td></tr>
-<tr><td>Soulage le lendemain (−1)</td><td>même jour <b>+1,2</b> ; lendemain −0,1 ; lendemain à douleur égale −0,9 ; à douleur égale la veille <b>+0,9</b></td><td>même jour 0,0 ; lendemain <b>−0,9</b></td></tr>
+<tr><th style="width:22%">Effet vrai<br>(jour / lendemain)</th><th style="width:19.5%">Le jour même</th><th style="width:19.5%">Le lendemain</th><th style="width:19.5%">Le lendemain, à douleur égale le jour même</th><th>Le jour, à douleur égale la veille</th></tr>
+<tr><td colspan="5" style="font-weight:700;padding-top:2.5mm">Jours choisis par la personne (action prise 70 % des jours durs, 10 % des autres)</td></tr>
+<tr><td>Aucun (0 / 0)</td><td><b>+1,5</b></td><td><b>+1,1</b></td><td>+0,1</td><td><b>+0,9</b></td></tr>
+<tr><td>Soulage le jour (−1,5 / 0)</td><td><b>+0,1</b></td><td><b>+0,9</b></td><td><b>+0,8</b></td><td><b>−0,4</b></td></tr>
+<tr><td>Soulage le lendemain (0 / −1)</td><td><b>+1,2</b></td><td><b>−0,1</b></td><td>−0,9</td><td><b>+0,9</b></td></tr>
+<tr><td colspan="5" style="font-weight:700;padding-top:2.5mm">Jours tirés au sort</td></tr>
+<tr><td>Aucun (0 / 0)</td><td>0,0</td><td>0,0</td><td>0,0</td><td>0,0</td></tr>
+<tr><td>Soulage le jour (−1,5 / 0)</td><td>−1,5</td><td>0,0</td><td><b>+1,0</b></td><td>−1,5</td></tr>
+<tr><td>Soulage le lendemain (0 / −1)</td><td>0,0</td><td>−0,9</td><td>−1,0</td><td>0,0</td></tr>
 </table>
-<p>Quand la personne choisit, <b>chaque lecture se trompe dans au moins un cas</b>, parfois de sens. Quand les jours sont tirés, la comparaison simple du jour retrouve l’effet du jour, et celle du lendemain l’effet du lendemain. Le script est dans le dépôt (<span class="f">scripts/simulate-trial-designs.ts</span>) ; ses hypothèses sont des choix de modélisation, pas des mesures.</p>
-
+<p style="font-size:8pt;color:var(--muted)">En gras : à un demi-point ou plus de l’effet vrai que la lecture vise.</p>
+<p>Quand la personne choisit ses jours, <b>aucune lecture n’est juste dans tous les cas</b> : chacune se trompe au moins une fois, parfois de sens (une action qui soulage sort « liée à plus de douleur »). Celle qui compare le lendemain à douleur égale le jour même s’en sort quand l’action n’agit que le lendemain, mais se trompe dès qu’elle soulage le jour même, y compris avec un tirage : la note du jour, déjà abaissée par l’action, sert de point de départ. Quand les jours sont tirés, les deux comparaisons simples suffisent : <b>le jour même</b> pour l’effet du jour, <b>le lendemain</b> pour l’effet du lendemain. Ce sont les deux que l’essai affiche. Le script est dans le dépôt (<span class="f">scripts/simulate-trial-designs.ts</span>) ; ses hypothèses sont des choix de modélisation, pas des mesures.</p>
+</div><div class="foot"><span>Établi le 22 novembre 2026 à partir du code publié d’OUCH v0.16.0 : les formules et seuils décrits sont ceux du logiciel. Ce document n’est ni un avis médical ni un dispositif médical.</span><span class="r">OUCH · maxauvy.github.io/OUCH<br>Logiciel libre, licence CeCILL v2.1</span></div>
+<div class="page"><div class="bar"></div><div class="in"><h2>Annexe (suite) · L’essai tiré au sort : plan et limites</h2>
 <h3>Le plan</h3>
 <ul class="ic">
 <li><b>10 jours</b> à partir du lendemain du « Oui », <b>5 avec l’action et 5 sans</b>, dans un ordre tiré au hasard (permutation) au départ. Des groupes égaux, une durée qu’on peut tenir.</li>
