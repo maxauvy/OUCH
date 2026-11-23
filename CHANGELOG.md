@@ -9,6 +9,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ### Ajouté
 - **Documents en « Aube » pour tous les flyers.** Le flyer A5 et la plaquette A4 pour les patients, et les flyers « Lire un rapport » A5 et A4 pour les soignants, existent aussi aux couleurs de l'aube du flyer A4 Aube (peu d'encre, un grand titre, des images inclinées, des panneaux blancs), en français et en anglais. Les textes sont ceux des versions actuelles, qui ne changent pas.
 
+### Modifié
+- **Soulager prend les couleurs et le ciel de l'app, avec l'ami du jour.** Le personnage des exercices est désormais celui de la vue enfant : un soleil quand la journée est facile, un nuage doux entre les deux, un nuage qui se repose les yeux fermés les jours durs (jamais de pluie ni d'éclair pendant un exercice), et un soleil avec quelques nuages tant que rien n'est noté. « Respirer lentement » montre un soleil qui se lève dans le galet quand tu inspires et redescend quand tu souffles. Les étapes de « Relâcher le corps » et du « Geste doux » passent en plein écran calme : l'ami sur le ciel de la page, une phrase, deux ronds pour avancer, et « Pause auto » en pastille qui compte les secondes. Le minuteur d'un geste devient un soleil qui traverse un arc de ciel, la fin d'un exercice est plus grande et plus contrastée (l'ami du jour est un quatrième dessin de fin), le ciel reste en haut des exercices, et les tuiles « Relâcher » et « Geste doux » passent au lilas et à l'ambre. Rien ne bouge si le téléphone demande de réduire les animations.
+
 ## [0.16.0] - 2026-11-22
 
 Une app plus douce à l'œil et à la main : des cartes de verre qui flottent, des animations calmes (le ciel qui change en fondu, les feuilles qui montent, la pastille qui glisse, le fondu entre les onglets), et la sauvegarde automatique vers Dropbox, avec la météo du jour pour un proche dans OUCH Duo, ouvertes à tous. Tous les PDF, les flyers et l'image du README sont refaits pour cette version.

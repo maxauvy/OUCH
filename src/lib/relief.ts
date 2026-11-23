@@ -8,7 +8,7 @@
 export const IN_SECONDS = 4
 export const OUT_SECONDS = 6
 /** How many closing screens there are for an exercise (see `ExerciseEnd`). */
-export const ENDINGS = 3
+export const ENDINGS = 4
 
 /** Which closing screen this time: at random, so the end is not always the same, and never the one just shown (`avoid`), which would look like nothing changed. `random` is for the tests. */
 export function pickEnding(random: () => number = Math.random, avoid?: number): number {
