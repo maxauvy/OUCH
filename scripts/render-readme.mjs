@@ -1,6 +1,6 @@
 // Draws the README's picture (docs/images/ouch-readme.fr.png and .en.png, 2400 x 1200) from the app's demo captures, in the
 // « Aube » look of the flyers: a dawn background, « Ce qui l'aggrave, ce qui l'apaise » in Bricolage with its last words coloured
-// letter by letter (coral to violet), the day's page in a phone, a lead drawn from the notes and the report, four stickers.
+// letter by letter (coral to violet), « Ta douleur : » first so the « l’ » says what it stands for, the day's page in a phone, a lead drawn from the notes and the report, four stickers.
 // Run after the captures are retaken (node scripts/capture-presentation.mjs, and with --lang en for the guide):
 //   node scripts/render-readme.mjs
 // Needs Playwright (npm i --no-save playwright) and `npm install` (the fonts come from node_modules).
@@ -30,16 +30,15 @@ const dawn = (words) => {
 const TEXT = {
   fr: {
     img: 'docs/presentation-soignants/img',
-    first: 'Ce qui l’aggrave,',
-    second: ['ce qui ', 'l’apaise.'],
-    size: 70,
+    // Each line of the title; the second item of a line is coloured letter by letter.
+    lines: [['Ta douleur :'], ['ce qui l’aggrave,'], ['ce qui ', 'l’apaise.']],
+    size: 62,
     line: 'Un carnet de douleur pour la fibromyalgie et les autres douleurs chroniques. Une minute par jour, des pistes tirées de tes notes, et un rapport pour ton médecin.',
     chips: [['Gratuit', 'ni pub, ni compte'], ['Libre', 'code ouvert'], ['1 min', 'par jour'], ['Chez toi', 'sur ton téléphone']],
   },
   en: {
     img: 'docs/guide-patients/img-en',
-    first: 'What makes it worse,',
-    second: ['what ', 'eases it.'],
+    lines: [['Your pain:'], ['what makes it worse,'], ['what ', 'eases it.']],
     // Longer than the French lines: a little smaller, so each stays on one line.
     size: 60,
     line: 'A pain diary for fibromyalgia and other chronic pain. A minute a day, leads drawn from your notes, and a report for your doctor.',
@@ -74,7 +73,7 @@ p.line { margin-top: 26px; font-size: 21px; line-height: 1.42; color: #3b3863; w
 </style></head><body>
 <div class="left">
   <div class="brand"><img src="${data('public/apple-touch-icon.png', 'image/png')}" alt="">OUCH</div>
-  <h1><span class="l">${t.first}</span><span class="l">${t.second[0]}${dawn(t.second[1])}</span></h1>
+  <h1>${t.lines.map(([plain, coloured]) => `<span class="l">${plain}${coloured ? dawn(coloured) : ''}</span>`).join('')}</h1>
   <p class="line">${t.line}</p>
 </div>
 ${t.chips.map(([b, s], i) => `<div class="stk s${i + 1}">${b}<small>${s}</small></div>`).join('')}
