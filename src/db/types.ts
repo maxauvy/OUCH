@@ -466,6 +466,13 @@ export interface HardDaysPlan {
   remember?: string
 }
 
+/** « Le mot des bons jours »: a few lines written on a calmer day, for a harder one (see lib/goodDayNote.ts). */
+export interface GoodDayNote {
+  text: string
+  /** The day it was written or last changed. */
+  date: string
+}
+
 /** One of "Mes gestes": what the person does to feel better, with the time they chose for it. */
 export interface ReliefGesture {
   name: string
@@ -560,6 +567,10 @@ export interface Settings {
   forecastCache?: ForecastCache
   /** The plan for hard days, written by the person. Restored from a backup. */
   hardDaysPlan?: HardDaysPlan
+  /** The note for a harder day, written by the person. Restored from a backup. */
+  goodDayNote?: GoodDayNote
+  /** First day of the flare whose end the invitation to write was last answered for (written, or « later »). Per device, like `hardDaysSeen`. */
+  goodDayNoteAsked?: string
   /** "Mes gestes": a few kept by the person, with the time they chose (see lib/gestures.ts). Restored from a backup. */
   reliefGestures?: ReliefGesture[]
   /** The phone vibrates at each change of the breathing exercise. Per device (a phone may not have a vibrator): not restored from a backup. */

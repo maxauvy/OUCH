@@ -10,6 +10,7 @@
 import type { LoggedEntry } from '../db/types'
 import { detectFlares, type FlareEpisode } from './flares.ts'
 import { shiftISO } from './dates.ts'
+import { pastFlareLengths } from './goodDayNote.ts'
 
 /** The flare the card was last shown for, kept in the settings. */
 export interface HardDaysSeen {
@@ -24,6 +25,8 @@ export interface HardDaysCard {
   episode: FlareEpisode
   /** What helped on flare days, most frequent first; may be empty */
   helped: string[]
+  /** How long each earlier flare lasted, in days, oldest first: they all came to an end */
+  past: number[]
 }
 
 const MAX_HELPED = 3
@@ -76,7 +79,7 @@ export function hardDaysCard(input: {
   // Once per flare: the day it first showed, unless it was dismissed.
   if (seen && seen.start === episode.start && (seen.dismissed || seen.date !== today)) return null
 
-  return { episode, helped: helpedDuring(before, episodes) }
+  return { episode, helped: helpedDuring(before, episodes), past: pastFlareLengths(episodes.filter((e) => e !== episode)) }
 }
 
 /** What the person noted as helping on days inside a flare. Free text, so

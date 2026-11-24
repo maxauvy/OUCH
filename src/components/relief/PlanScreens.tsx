@@ -1,23 +1,41 @@
 import { useState } from 'react'
 import { IconWind } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
-import type { HardDaysPlan } from '../../db/types'
+import type { GoodDayNote, HardDaysPlan } from '../../db/types'
 import { useTranslation } from '../../i18n'
 import { MAX_PLAN, PLAN_FIELDS, cleanPlan, hasPlan } from '../../lib/hardDaysPlan'
 import { BUTTON, PRIMARY, SECONDARY } from '../today/cardStyles'
 import { Card } from '../ui/Card'
+import { NoteLetter, NoteSheet } from './GoodDayNote'
 
 const field = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 
 /** The plan, in large type, to be read on a hard day: only the rubriques that were written. */
-export function PlanView({ plan, onEdit, onBreathe }: { plan: HardDaysPlan | undefined; onEdit: () => void; onBreathe: () => void }) {
+export function PlanView({
+  plan,
+  note,
+  pastFlares,
+  onEdit,
+  onBreathe,
+}: {
+  plan: HardDaysPlan | undefined
+  /** « Le mot des bons jours », read first, like a letter. */
+  note: GoodDayNote | undefined
+  /** How long each earlier flare lasted, for the line under the note. */
+  pastFlares: readonly number[]
+  onEdit: () => void
+  onBreathe: () => void
+}) {
   const t = useTranslation().plan
+  const tn = useTranslation().goodDayNote
   const cardButton = useTranslation().relief.cardButton
+  const [writing, setWriting] = useState(false)
   return (
     <>
       <p className="text-body px-1 -mt-2" style={{ color: 'var(--color-ink-muted)' }}>
         {hasPlan(plan) ? t.intro : t.empty}
       </p>
+      {note && <NoteLetter note={note} lengths={pastFlares} onEdit={() => setWriting(true)} />}
       {hasPlan(plan) &&
         PLAN_FIELDS.filter((f) => plan[f]).map((f) => (
           <Card key={f}>
@@ -36,6 +54,12 @@ export function PlanView({ plan, onEdit, onBreathe }: { plan: HardDaysPlan | und
           {cardButton}
         </button>
       </div>
+      {!note && (
+        <button type="button" onClick={() => setWriting(true)} className="self-start min-h-11 px-1 text-control font-semibold" style={{ color: 'var(--color-brand)' }}>
+          {tn.writeFromPlan}
+        </button>
+      )}
+      {writing && <NoteSheet note={note} onClose={() => setWriting(false)} />}
     </>
   )
 }

@@ -448,6 +448,8 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
       who: 'Léa, 06 00 00 00 00, si ça dure plus de trois jours.',
       remember: 'Mon traitement du soir, un grand verre d’eau.',
     },
+    // A note written on a calm day after the October flare, given back in the soft card of the flare under way.
+    goodDayNote: { text: 'Ce n’est pas de la paresse, c’est la douleur. Annule ce que tu peux, sans t’excuser. Bain chaud, bouillotte, et écris à Léa.', date: shiftISO(endDate, -25) },
     reliefGestures: [{ name: 'Bain / douche chaude', minutes: 15 }, { name: 'Marche courte', minutes: 10 }, { name: 'Étirements doux', minutes: 10 }],
     leadChoices,
     ...(walkTrial && { leadTrialHistory: [walkTrial] }),
@@ -484,6 +486,7 @@ const EN_STRINGS: Record<string, string> = {
   'La bouillotte, un bain chaud, ma série légère.': 'The hot water bottle, a warm bath, my light series.',
   'Léa, 06 00 00 00 00, si ça dure plus de trois jours.': 'Léa, 06 00 00 00 00, if it lasts more than three days.',
   'Mon traitement du soir, un grand verre d’eau.': 'My evening treatment, a big glass of water.',
+  'Ce n’est pas de la paresse, c’est la douleur. Annule ce que tu peux, sans t’excuser. Bain chaud, bouillotte, et écris à Léa.': 'This isn’t laziness, it’s pain. Cancel what you can, without apologising. A warm bath, the hot water bottle, and text Léa.',
   'Duloxétine': 'Duloxetine', 'Prégabaline': 'Pregabalin', 'Amitriptyline': 'Amitriptyline', 'Paracétamol': 'Paracetamol', 'Tramadol': 'Tramadol', 'Ibuprofène': 'Ibuprofen',
   'Douleurs diffuses': 'Widespread pain', 'Douleurs neuropathiques': 'Neuropathic pain', 'Douleur': 'Pain', 'Poussées': 'Flares', 'Douleurs de règles': 'Period pain', 'Douleurs et sommeil': 'Pain and sleep',
   'Nausées': 'Nausea', 'Somnolence': 'Drowsiness', 'Prise de poids': 'Weight gain', 'Vertiges': 'Dizziness',

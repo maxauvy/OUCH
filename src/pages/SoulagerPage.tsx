@@ -21,6 +21,9 @@ import { PlanForm, PlanView } from '../components/relief/PlanScreens'
 import type { ReliefGesture } from '../db/types'
 import { BUTTON, MARKER, PRIMARY, SECONDARY } from '../components/today/cardStyles'
 import { hasPlan, planGlimpse } from '../lib/hardDaysPlan'
+import { flaresAsOfYesterday, pastFlareLengths } from '../lib/goodDayNote'
+import { flaresApply } from '../lib/flares'
+import { loggedEntries } from '../lib/loggedEntries'
 import { IconCheck, IconChevronLeft, IconChevronRight, IconLeaf, IconMessageHeart, IconPlayerPause, IconPlayerPlay, IconWind, IconX, IconYoga } from '@tabler/icons-react'
 import { useRichLook } from '../lib/look'
 import { NavTile, NavTiles } from '../components/ui/NavTile'
@@ -49,6 +52,8 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
   // What the gentle neck exercise adds to "what helped", if the person taps: the app's own "gentle stretching" suggestion, in their language.
   const gentleAction = useTranslation().entryForm.positiveActionsSuggestions[3] ?? ''
   const helped = entries ? usualHelpers(entries, todayISO(), 3, language) : []
+  // Under the note, at the top of the plan: how long the earlier flares lasted (none for migraine alone, which has no flare).
+  const pastFlares = view === 'plan' && entries && flaresApply(settings.illnesses) ? pastFlareLengths(flaresAsOfYesterday(loggedEntries(entries), todayISO())) : []
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -101,12 +106,12 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
               </p>
               <button
                 type="button"
-                onClick={() => setView(hasPlan(settings.hardDaysPlan) ? 'plan' : 'planedit')}
+                onClick={() => setView(hasPlan(settings.hardDaysPlan) || settings.goodDayNote ? 'plan' : 'planedit')}
                 className={rich ? 'mt-3 inline-flex items-center gap-2 min-h-11 px-4 rounded-[14px] text-control font-bold' : `${BUTTON} mt-2`}
                 style={rich ? { background: 'var(--color-surface)', color: 'var(--color-ink)' } : SECONDARY}
               >
                 {rich && <IconMessageHeart size={18} stroke={1.8} aria-hidden style={{ color: 'var(--color-brand)' }} />}
-                {hasPlan(settings.hardDaysPlan) ? p.open : p.write}
+                {hasPlan(settings.hardDaysPlan) || settings.goodDayNote ? p.open : p.write}
               </button>
             </div>
           </section>
@@ -191,7 +196,7 @@ export function SoulagerPage({ request, onExit }: { request?: SoulagerView; onEx
         {view === 'gestes' && <GesturesPage />}
         {view === 'timer' && gesture && <GestureTimer key={gesture.g.name} gesture={gesture.g} onBack={back} backLabel={backLabel} />}
 
-        {view === 'plan' && <PlanView plan={settings.hardDaysPlan} onEdit={() => setView('planedit')} onBreathe={() => setView('breath')} />}
+        {view === 'plan' && <PlanView plan={settings.hardDaysPlan} note={settings.goodDayNote} pastFlares={pastFlares} onEdit={() => setView('planedit')} onBreathe={() => setView('breath')} />}
         {view === 'planedit' && <PlanForm plan={settings.hardDaysPlan} onDone={() => setView('plan')} />}
 
         {(view === 'relax' || view === 'gentle') && (
