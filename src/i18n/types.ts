@@ -1541,6 +1541,69 @@ export interface Translations {
     cardSoonWith: string
     cardAfterWith: string
   }
+  /** « Mon année »: the story of the year, told by the journal (lib/yearReview.ts). {{year}}, {{next}}, {{n}}… as named */
+  year: {
+    entryKicker: string
+    entryTitle: string
+    entryBody: string
+    open: string
+    later: string
+    tileTitle: string
+    tileHint: string
+    close: string
+    next: string
+    previous: string
+    tapHint: string
+    coverBody: string
+    coverBodySince: string
+    skyKicker: string
+    skyTitle: string
+    skyGentleBefore: string
+    skyGentleMarked: string
+    skyGentleAfter: string
+    skyNoGentle: string
+    flaresKicker: string
+    flaresTitle: string
+    days: string
+    calm: string
+    calmKicker: string
+    calmTitle: string
+    calmDates: string
+    helpedKicker: string
+    helpedTitle: string
+    helpedRow: string
+    helpedNote: string
+    didKicker: string
+    didTitle: string
+    didDays: string
+    didTrial: string
+    didTrials: string
+    didNote: string
+    didAppointments: string
+    endTitle: string
+    endBody: string
+    keep: string
+    cardKicker: string
+    cardKickerNamed: string
+    cardTitle: string
+    cardTitleNoGentle: string
+    tileFlares: string
+    tileFlaresSub: string
+    tileCalm: string
+    tileCalmSub: string
+    tileHelpedSub: string
+    tileTrials: string
+    tileNote: string
+    tileNoteSub: string
+    wishLabel: string
+    wishPlaceholder: string
+    wishHint: string
+    share: string
+    making: string
+    failed: string
+    back: string
+    progress: string
+  }
   /** « Les mots de ma douleur »: our own palette of everyday words (lib/painWords.ts); not a questionnaire, no score */
   painWords: {
     title: string

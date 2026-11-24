@@ -14,6 +14,7 @@ import { IconCloud, IconMoodKid, type Icon } from '@tabler/icons-react'
 import { GroupCaption } from '../components/ui/Card'
 import { BackupReminderCard } from '../components/backup/BackupReminderCard'
 import { AppointmentCard } from '../components/consultation/AppointmentCard'
+import { YearEntryCard } from '../components/year/YearEntry'
 import { PrescriptionCard } from '../components/prescription/PrescriptionCard'
 import { TodayList } from '../components/today/TodayList'
 import { NewsButton } from '../components/news/NewsButton'
@@ -61,6 +62,7 @@ export function TodayPage({
   return (
     <div className="relative isolate flex flex-col gap-4 px-4 pt-4 pb-28">
       {!IS_DEMO && <BackupReminderCard onBackup={onGoToBackup} />}
+      <YearEntryCard />
       <AppointmentCard />
       <PrescriptionCard />
       <DailyEntryForm
