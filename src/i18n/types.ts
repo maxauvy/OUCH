@@ -1540,6 +1540,115 @@ export interface Translations {
     cardSoonWith: string
     cardAfterWith: string
   }
+  /** « Mon dossier MDPH »: the journal for the request form (cerfa 15692*01) and the medical certificate (cerfa 15695*01). See lib/mdph.ts */
+  mdph: {
+    row: string
+    rowHint: string
+    title: string
+    back: string
+    intro: string
+    periodLabel: string
+    /** {{n}} months */
+    periodOption: string
+    /** {{from}}, {{logged}}, {{span}} */
+    span: string
+    /** {{from}}, {{logged}}, {{span}}: the journal began inside the period */
+    spanShorter: string
+    tooFew: string
+    /** {{box}}, a box of the request form, and {{page}}, its page on cerfa 15692*01 */
+    refForm: string
+    /** {{box}}, a part of the medical certificate */
+    refCert: string
+    b3Title: string
+    d1Title: string
+    d1Hint: string
+    b2Title: string
+    b2Intro: string
+    b2Kept: string
+    c3Title: string
+    c3Intro: string
+    c3None: string
+    c5Title: string
+    c5None: string
+    copy: string
+    copied: string
+    copyFailed: string
+    /** The parts of the sentence for the form, each said only when the journal supports it */
+    s: {
+      journal: string
+      flaresOne: string
+      flaresMany: string
+      strong: string
+      interference: string
+      nights: string
+      stiffness: string
+      rest: string
+      d1Flares: string
+      d1Strong: string
+      d1Todo: string
+    }
+    gestures: Record<'hygiene' | 'dressing' | 'shopping' | 'meals' | 'eating' | 'housework' | 'health' | 'moveHome' | 'goOut' | 'moveOut' | 'vehicle' | 'transport' | 'leisure' | 'social' | 'family', string>
+    answers: Record<'often' | 'sometimes' | 'no', string>
+    docPreview: string
+    exportPdf: string
+    exporting: string
+    exportHelper: string
+    exportFailed: string
+    print: string
+    /** The page for the doctor */
+    doc: {
+      heading: string
+      title: string
+      /** {{name}} */
+      titleNamed: string
+      /** {{from}}, {{to}}, {{logged}}, {{span}} */
+      meta: string
+      frequency: string
+      evolution: string
+      treatments: string
+      nights: string
+      gestures: string
+      /** {{n}}, a part of the certificate */
+      certPart: string
+      /** The nights and mornings: clinical signs (part 3) and their impact (part 6) */
+      nightsPart: string
+      formPart: string
+      month: string
+      logged: string
+      flareDays: string
+      strongDays: string
+      /** {{n}} days in that month inside the period */
+      partialMonth: string
+      chartLabel: string
+      /** {{n}} */
+      lineLabel: string
+      /** {{n}} flares, {{total}} days */
+      flaresSummary: string
+      /** {{from}}, {{to}}, {{days}} */
+      flare: string
+      ongoing: string
+      noFlare: string
+      nightsRow: string
+      sleepRow: string
+      stiffnessRow: string
+      interferenceRow: string
+      /** {{n}} of {{tracked}} */
+      ofTracked: string
+      /** {{h}} */
+      hours: string
+      asNeeded: string
+      effectsNoted: string
+      stoppedForEffects: string
+      /** {{n}} */
+      careRow: string
+      /** {{list}} */
+      often: string
+      /** {{list}} */
+      sometimes: string
+      declared: string
+      foot: string
+    }
+  }
   careSheet: {
     /** Row on the Consultation tab */
     row: string

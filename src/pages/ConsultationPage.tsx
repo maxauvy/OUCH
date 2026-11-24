@@ -1,6 +1,6 @@
 import { lazy, Suspense, useRef, useState, useEffect } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconCalendarCheck, IconCalendarHeart, IconFileText, IconMessageQuestion, IconNotes, IconPill, IconStethoscope } from '@tabler/icons-react'
+import { IconCalendarCheck, IconCalendarHeart, IconFileText, IconMessageQuestion, IconNotes, IconPill, IconStethoscope, IconFolder } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
 import { consultationCard, daysUntil, kindOf, pastConsultations } from '../lib/consultation'
 import { prescriptionEnd } from '../lib/prescription'
@@ -19,6 +19,7 @@ import { NavTile, NavTiles } from '../components/ui/NavTile'
 import { PageSky } from '../components/entry/TodaySky'
 
 const CareSheetPage = lazy(() => import('./CareSheetPage').then((m) => ({ default: m.CareSheetPage })))
+const MdphPage = lazy(() => import('./MdphPage').then((m) => ({ default: m.MdphPage })))
 const DoctorReportPage = lazy(() => import('./DoctorReportPage').then((m) => ({ default: m.DoctorReportPage })))
 
 /** Everything that prepares a visit to the doctor, in one place: the appointment, its questions, the report, the prescription. */
@@ -32,6 +33,9 @@ export function ConsultationPage() {
   const [sheet, setSheet] = useState<'appointment' | 'after' | 'prescription' | null>(null)
   const [reporting, setReporting] = useState(false)
   const [careSheet, setCareSheet] = useState(false)
+  const [mdph, setMdph] = useState(false)
+  const mdphRow = useRef<HTMLButtonElement>(null)
+  const mdphFrom = useRef(false)
   const [openPast, setOpenPast] = useState<PastConsultation | null>(null)
   const reportButton = useRef<HTMLButtonElement>(null)
   // The weather look: no dark block; the appointment in a light card with a small calendar page, one filled button, tiles for the rest.
@@ -43,10 +47,11 @@ export function ConsultationPage() {
 
   // Back from the report: focus returns to the button that opened it.
   useEffect(() => {
-    if (reporting || careSheet || !returning.current) return
+    if (reporting || careSheet || mdph || !returning.current) return
     returning.current = false
-    ;(careSheetFrom.current ? careSheetRow.current : reportButton.current)?.focus()
-  }, [reporting, careSheet])
+    ;(mdphFrom.current ? mdphRow.current : careSheetFrom.current ? careSheetRow.current : reportButton.current)?.focus()
+    mdphFrom.current = false
+  }, [reporting, careSheet, mdph])
 
   if (reporting) {
     return (
@@ -70,6 +75,20 @@ export function ConsultationPage() {
             returning.current = true
             careSheetFrom.current = true
             setCareSheet(false)
+          }}
+        />
+      </Suspense>
+    )
+  }
+
+  if (mdph) {
+    return (
+      <Suspense fallback={null}>
+        <MdphPage
+          onBack={() => {
+            returning.current = true
+            mdphFrom.current = true
+            setMdph(false)
           }}
         />
       </Suspense>
@@ -152,6 +171,7 @@ export function ConsultationPage() {
             {afterKind && <NavTile icon={IconNotes} tone="mood" title={t.afterRow} hint={t.afterRowHint} onClick={() => setSheet('after')} />}
             <NavTile icon={IconPill} tone="meds" title={t.prescriptionRow} hint={prescriptionHint} onClick={() => setSheet('prescription')} />
             <NavTile buttonRef={careSheetRow} icon={IconStethoscope} tone="fog" title={i18n.careSheet.row} hint={i18n.careSheet.rowHint} onClick={openCareSheet} />
+            <NavTile buttonRef={mdphRow} icon={IconFolder} tone="sleep" title={i18n.mdph.row} hint={i18n.mdph.rowHint} onClick={() => setMdph(true)} />
           </NavTiles>
         </>
       ) : (
@@ -207,6 +227,7 @@ export function ConsultationPage() {
             hint={i18n.careSheet.rowHint}
             onClick={openCareSheet}
           />
+          <LinkRow buttonRef={mdphRow} icon={IconFolder} title={i18n.mdph.row} hint={i18n.mdph.rowHint} onClick={() => setMdph(true)} />
         </div>
       </Card>
         </>

@@ -1,0 +1,54 @@
+/* The page for the doctor who fills in the MDPH certificate: the sheet for a
+   health professional (caresheet.css), with the dawn of the reports in its
+   band, a part reference beside each title, and plain tables of figures. */
+.md {
+  --cs-ink: #1f1d44;
+  --cs-muted: #5e5a80;
+  --cs-hair: #ebe4f2;
+  --cs-soft: #f6f0fb;
+}
+.md-head {
+  background: radial-gradient(120% 140% at 50% 0%, #ffe3d1 0%, #f3e6fa 60%, #f6f0fb 100%);
+}
+.md-title {
+  font-size: var(--text-heading);
+}
+.md-ref {
+  display: block;
+  margin-top: 2px;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #c44a2c;
+}
+.md-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.md-table th,
+.md-table td {
+  text-align: left;
+  font-weight: 400;
+  padding: 4px 4px 4px 0;
+  border-bottom: 1px solid var(--cs-hair);
+}
+.md-table thead th {
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--cs-muted);
+}
+.md-table .md-n {
+  text-align: right;
+}
+.md-table tr:last-child > * {
+  border-bottom: 0;
+}
+.cs-paper.md .md-title {
+  font-size: 26px;
+}
+.cs-paper.md .md-ref {
+  font-size: 11.5px;
+}
