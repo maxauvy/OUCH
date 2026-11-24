@@ -1749,6 +1749,8 @@ const en: Translations = {
     title: 'What does it feel like?',
     usual: 'Usually: {{list}}.',
     asUsual: 'As usual',
+    lastTime: 'Last time: {{list}}.',
+    asLast: 'Same as last time',
     different: 'Different',
     todayLike: 'Today, it feels like…',
     firstTime: 'Up to 3 words, if you like. They will come back the next days.',

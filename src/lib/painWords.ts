@@ -5,7 +5,7 @@
 // The report and Trends count days, like the other indicators.
 //
 // The usual words come back each day: one tap says « as usual » and writes
-// them for the day; « different » opens the palette. So every day keeps its
+// them for the day (before there are enough days, « same as last time »); « different » opens the palette. So every day keeps its
 // own words, and days of flare can be told from the others.
 //
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
@@ -82,4 +82,20 @@ export function summarizePainWords(entries: readonly Pick<DailyEntry, 'date' | '
     noted: days.length,
     words: [...counts].map(([word, c]) => ({ word, ...c })).sort((a, b) => b.days - a.days || a.word.localeCompare(b.word)),
   }
+}
+
+/** The words of the most recent day with words, in the same weeks before `today`: what « same as last time » writes. Empty when there is none. */
+export function lastWords(entries: readonly Pick<DailyEntry, 'date' | 'painWords'>[], today: string): string[] {
+  const from = shiftISO(today, -USUAL_WINDOW)
+  let last: Pick<DailyEntry, 'date' | 'painWords'> | undefined
+  for (const e of entries) if (e.date >= from && e.date < today && e.painWords?.length && (!last || e.date > last.date)) last = e
+  return last ? [...last.painWords!] : []
+}
+
+/** What the card offers in one tap: the usual words once there are enough days, the last day's words before that, nothing on the very first time. */
+export function wordsToOffer(entries: readonly Pick<DailyEntry, 'date' | 'painWords'>[], today: string): { words: string[]; kind: 'usual' | 'last' } | null {
+  const usual = usualWords(entries, today)
+  if (usual.length) return { words: usual, kind: 'usual' }
+  const last = lastWords(entries, today)
+  return last.length ? { words: last, kind: 'last' } : null
 }

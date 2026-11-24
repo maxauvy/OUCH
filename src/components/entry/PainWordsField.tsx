@@ -5,16 +5,27 @@ import { MAX_TYPED, MAX_WORDS, PAIN_WORDS, cleanPainWords, isPaletteWord, sameWo
 import { Chip } from '../ui/Chip'
 
 /**
- * « À quoi ressemble-t-elle ? »: the usual words come back, one tap says
- * « as usual » and writes them for the day; « different » opens the palette.
- * Before there are usual words, the palette is open from the start. Three
+ * « À quoi ressemble-t-elle ? »: the usual words come back (the last day's,
+ * while there are too few days), one tap writes them for the day; « different » opens the palette.
+ * The very first time, with nothing to offer, the palette is open from the start. Three
  * words at most; a word of one's own can be added. Never a score.
  */
-export function PainWordsField({ value, usual, onChange }: { value: string[] | undefined; usual: string[]; onChange: (words: string[] | undefined) => void }) {
+export function PainWordsField({
+  value,
+  offer,
+  onChange,
+}: {
+  value: string[] | undefined
+  /** The words one tap writes: the usual ones, or the last day's while there are too few days. */
+  offer: { words: string[]; kind: 'usual' | 'last' } | null
+  onChange: (words: string[] | undefined) => void
+}) {
   const t = useTranslation().painWords
   const language = useLanguage()
   const ids = useId()
   const words = value ?? []
+  const usual = offer?.words ?? []
+  const last = offer?.kind === 'last'
   const asUsual = usual.length > 0 && sameWords(words, usual)
   // The palette is open when there is nothing usual yet, when the day already differs, or when asked.
   const [opened, setOpened] = useState(false)
@@ -31,7 +42,7 @@ export function PainWordsField({ value, usual, onChange }: { value: string[] | u
     <div className="flex flex-col gap-3">
       {usual.length > 0 && (
         <>
-          <p className="text-body">{format(t.usual, { list: new Intl.ListFormat(language, { type: 'conjunction' }).format(usual.map((w) => label(w).toLocaleLowerCase(language))) }, language)}</p>
+          <p className="text-body">{format(last ? t.lastTime : t.usual, { list: new Intl.ListFormat(language, { type: 'conjunction' }).format(usual.map((w) => label(w).toLocaleLowerCase(language))) }, language)}</p>
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
@@ -44,7 +55,7 @@ export function PainWordsField({ value, usual, onChange }: { value: string[] | u
               style={asUsual ? { background: 'var(--look-fog-soft, var(--color-brand-soft))', color: 'var(--look-fog, var(--color-brand))', boxShadow: 'inset 0 0 0 1.5px var(--look-fog, var(--color-brand))' } : { background: 'var(--color-surface)', boxShadow: 'inset 0 0 0 1px var(--color-hairline)' }}
             >
               {asUsual && <IconCheck size={18} aria-hidden />}
-              {t.asUsual}
+              {last ? t.asLast : t.asUsual}
             </button>
             <button
               type="button"
