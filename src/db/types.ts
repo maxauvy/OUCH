@@ -590,6 +590,10 @@ export interface Settings {
   prescriptionCardState?: { start: string; closed?: boolean; snoozeUntil?: string }
   /** The difficult periods the person marked, newest first. Restored from a backup. */
   markedFlares?: MarkedFlare[]
+  /** « Mon année »: the year whose story was opened or put off, so the card on the day's page goes. Per device. */
+  yearReviewSeen?: number
+  /** « Mon année »: the person's own line for the year to come, on the card of the year. Restored from a backup. */
+  yearWish?: { year: number; text: string }
   /** « Mon dossier MDPH »: how often the pain gets in the way of each gesture of the form's part B2, as the person answered once (see lib/mdph.ts). Kept for the next renewal; restored from a backup. */
   mdphGestures?: Partial<Record<string, 'often' | 'sometimes' | 'no'>>
 }

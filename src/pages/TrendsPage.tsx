@@ -45,6 +45,7 @@ import { markedSpans, timelineItems, trialSpans } from '../lib/trendsTimeline'
 import { weekdayProfile } from '../lib/weekdays'
 import { format, useLocale, useTranslation } from '../i18n'
 import { IndicatorsCard } from '../components/trends/IndicatorsCard'
+import { YearTrendsTile } from '../components/year/YearEntry'
 import { PainWordsCard } from '../components/trends/PainWordsCard'
 import { isOffered } from '../lib/indicatorCatalog'
 import { useEarlyAccess } from '../lib/earlyAccess'
@@ -298,6 +299,8 @@ export function TrendsPage() {
         )}
         <h1 className="page-title dawn-title text-title font-semibold">{i18n.trends.title}</h1>
       </div>
+
+      <YearTrendsTile />
 
       {rangePicker}
 
