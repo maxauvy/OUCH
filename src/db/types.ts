@@ -587,6 +587,8 @@ export interface Settings {
   prescriptionCardState?: { start: string; closed?: boolean; snoozeUntil?: string }
   /** The difficult periods the person marked, newest first. Restored from a backup. */
   markedFlares?: MarkedFlare[]
+  /** « Mon dossier MDPH »: how often the pain gets in the way of each gesture of the form's part B2, as the person answered once (see lib/mdph.ts). Kept for the next renewal; restored from a backup. */
+  mdphGestures?: Partial<Record<string, 'often' | 'sometimes' | 'no'>>
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness

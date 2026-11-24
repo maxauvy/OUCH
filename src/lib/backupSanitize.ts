@@ -56,6 +56,7 @@ import { cleanSettleDays } from './treatmentReview.ts'
 import { cleanGestures } from './gestures.ts'
 import { currentLabels } from './renamedSuggestions.ts'
 import { planFromBackup } from './hardDaysPlan.ts'
+import { cleanMdphGestures } from './mdph.ts'
 import { noteFromBackup } from './goodDayNote.ts'
 import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
 import { capPast, cleanDoctor, cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
@@ -457,6 +458,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     reliefGestures: cleanGestures(raw.reliefGestures),
     forecastEnabled: bool(raw.forecastEnabled),
     markedFlares: markedFlares(raw.markedFlares),
+    mdphGestures: cleanMdphGestures(raw.mdphGestures),
   })
 }
 
