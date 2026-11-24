@@ -34,6 +34,7 @@ import { WeatherIcon } from '../ui/WeatherIcon'
 import { TagInput } from './TagInput'
 import { MedicationsField } from './MedicationsField'
 import { HardDaysCard } from './HardDaysCard'
+import { NoteInviteCard } from '../relief/GoodDayNote'
 import { LightExtras, type LightItem } from './LightExtras'
 import { LastBackupLine } from '../backup/LastBackupLine'
 import { useHardDays } from '../../hooks/useHardDays'
@@ -202,7 +203,7 @@ export function HealthEntryLayout({
   // The weather look: titles inside the cards, no small icons in front of them; today's page opens on the day's sky.
   const rich = useRichLook()
   const sky = rich && isToday
-  const { ready, card, light } = useHardDays(date, allEntries, entriesLoaded)
+  const { ready, card, light, invite } = useHardDays(date, allEntries, entriesLoaded)
   // Only today's page: another day is edited in full.
   const lightToday = isToday && light
   // A quiet day the person chose: its own card says what changes, so the hard days card and the notice about the short form are left out.
@@ -431,6 +432,8 @@ export function HealthEntryLayout({
       {isToday && restToday && <RestDayCard date={date} light={lightToday} />}
 
       {isToday && card && !restToday && <HardDaysCard date={date} card={card} light={lightToday} />}
+
+      {isToday && invite && !card && !restToday && <NoteInviteCard flareStart={invite} />}
 
       {/* After the first day the card is gone, and this says why the form is
           short and how to get the rest. */}

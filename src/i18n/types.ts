@@ -1814,6 +1814,39 @@ export interface Translations {
     cancel: string
     fields: Record<'allow' | 'helps' | 'who' | 'remember', { label: string; placeholder: string }>
   }
+  /** « Le mot des bons jours »: a note written on a calmer day, given back during a flare (see lib/goodDayNote.ts) */
+  goodDayNote: {
+    /** {{n}} earlier flares, from {{min}} to {{max}} days */
+    proofSpan: string
+    /** {{n}} earlier flares, all of {{days}} days */
+    proofSame: string
+    /** Said after the sentence, in bold */
+    proofEnd: string
+    /** {{n}} days, under a bar */
+    days: string
+    waiting: string
+    /** {{date}} */
+    writtenOn: string
+    /** {{date}} */
+    letterTitle: string
+    inviteLabel: string
+    inviteTitle: string
+    inviteBody: string
+    write: string
+    later: string
+    sheetTitle: string
+    sheetIntro: string
+    fieldLabel: string
+    placeholder: string
+    startersLabel: string
+    starters: string[]
+    emptyHint: string
+    save: string
+    cancel: string
+    close: string
+    edit: string
+    writeFromPlan: string
+  }
   relief: {
     link: string
     cardButton: string

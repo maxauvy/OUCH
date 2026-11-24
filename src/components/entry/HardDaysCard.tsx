@@ -9,6 +9,7 @@ import { useSettings } from '../../hooks/useSettings'
 import { hasPlan } from '../../lib/hardDaysPlan'
 import { useRichLook } from '../../lib/look'
 import { MARKER } from '../today/cardStyles'
+import { FlareProof, NoteWaitingRow } from '../relief/GoodDayNote'
 
 // What the person wrote down as helping reads in their own words ("Bain
 // chaud"), so it goes in the middle of a sentence in lower case, unless it
@@ -29,7 +30,9 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
   const tr = useTranslation().relief
   const openRelief = useOpenRelief()
   const tp = useTranslation().plan
-  const plan = useSettings().hardDaysPlan
+  const settings = useSettings()
+  const plan = settings.hardDaysPlan
+  const note = settings.goodDayNote
   const language = useLanguage()
   // The weather look: no heart in a disc, a title in the titles' face, the two ways to feel better side by side.
   const rich = useRichLook()
@@ -67,6 +70,16 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
       <div className="min-w-0 flex-1">
         <p className={rich ? 'section-title text-heading font-bold leading-snug mb-1' : 'text-body font-semibold'}>{t.lead}</p>
         <p className="text-body">{t.body}</p>
+        {card.past.length > 1 && (
+          <div className="mt-2.5">
+            <FlareProof lengths={card.past} />
+          </div>
+        )}
+        {note && openRelief && (
+          <div className={rich ? 'mt-3 -mr-8' : 'mt-3'}>
+            <NoteWaitingRow note={note} onOpen={() => openRelief('plan')} />
+          </div>
+        )}
         {card.helped.length > 0 && (
           <p className={rich ? 'text-body mt-2.5 leading-[1.7]' : 'text-heading font-medium mt-3 leading-[1.7]'}>
             {before}
