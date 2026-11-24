@@ -1754,6 +1754,8 @@ const fr: Translations = {
     title: 'À quoi ressemble-t-elle ?',
     usual: 'D’habitude : {{list}}.',
     asUsual: 'Comme d’habitude',
+    lastTime: 'La dernière fois : {{list}}.',
+    asLast: 'Comme la dernière fois',
     different: 'Différente',
     todayLike: 'Aujourd’hui, elle ressemble à…',
     firstTime: 'Jusqu’à 3 mots, si tu veux. Ils reviendront les jours suivants.',

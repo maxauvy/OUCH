@@ -1547,6 +1547,9 @@ export interface Translations {
     /** {{list}} the usual words */
     usual: string
     asUsual: string
+    /** {{list}} the words of the last day with words, while there are too few days for usual ones */
+    lastTime: string
+    asLast: string
     different: string
     todayLike: string
     firstTime: string

@@ -36,7 +36,7 @@ import { TagInput } from './TagInput'
 import { MedicationsField } from './MedicationsField'
 import { HardDaysCard } from './HardDaysCard'
 import { PainWordsField } from './PainWordsField'
-import { usualWords } from '../../lib/painWords'
+import { wordsToOffer } from '../../lib/painWords'
 import { NoteInviteCard } from '../relief/GoodDayNote'
 import { LightExtras, type LightItem } from './LightExtras'
 import { LastBackupLine } from '../backup/LastBackupLine'
@@ -304,7 +304,7 @@ export function HealthEntryLayout({
       )
     : null
   const wordsBlock = has('painWords')
-    ? titled(t.painWords.title, IconMessageCircle, 'pain', <PainWordsField value={local.painWords} usual={usualWords(allEntries, date)} onChange={(w) => setField('painWords', w)} />)
+    ? titled(t.painWords.title, IconMessageCircle, 'pain', <PainWordsField value={local.painWords} offer={wordsToOffer(allEntries, date)} onChange={(w) => setField('painWords', w)} />)
     : null
   const notesBlock = has('notes')
     ? titled(
