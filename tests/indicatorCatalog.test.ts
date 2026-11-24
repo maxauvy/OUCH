@@ -80,10 +80,10 @@ test('indicators not built yet are ignored, whatever the early access', () => {
   }
 })
 
-test('every indicator has been read, so all are offered without early access', () => {
-  assert.ok(INDICATORS.every((d) => d.reviewed))
+test('every indicator but the words of the pain has been read, so all others are offered without early access', () => {
+  assert.deepEqual(INDICATORS.filter((d) => !d.reviewed).map((d) => d.key), ['painWords'])
   const plan = planForIllnesses(['arthrite'], { implemented: INDICATORS.map((d) => d.key) })
-  assert.equal([...plan.recommended, ...plan.suggested, ...plan.others].length, INDICATORS.length)
+  assert.equal([...plan.recommended, ...plan.suggested, ...plan.others].length, INDICATORS.length - 1)
 })
 
 test('the gate still works for an indicator not yet read: left out without early access, there with it', () => {
@@ -99,7 +99,8 @@ const ORIGINAL = ['fatigue', 'sleep', 'stress', 'brainFog', 'mood', 'activity', 
 test('the original indicators come first, and every indicator is offered with or without early access', () => {
   for (const key of ORIGINAL) assert.ok(isOffered(key, false), key)
   assert.deepEqual([...offeredFactors(false)].slice(0, ORIGINAL.length), ORIGINAL)
-  assert.deepEqual(offeredFactors(false), [...ALL_FACTORS])
+  // The words of the pain wait for a health professional's reading: early access only.
+  assert.deepEqual(offeredFactors(false), ALL_FACTORS.filter((k) => k !== 'painWords'))
   assert.deepEqual(offeredFactors(true), [...ALL_FACTORS])
 })
 
@@ -115,10 +116,13 @@ test('the catalogue is consistent: every factor is in it, every detail has a par
   for (const d of INDICATORS.filter((d) => d.kind === 'detail')) assert.ok(d.parent && INDICATORS.some((p) => p.key === d.parent), `${d.key} has a parent`)
 })
 
-test('an entry is shown whole, with or without early access: nothing a person wrote is hidden', () => {
+test('an entry is shown whole with early access; without it, only what an unread indicator wrote is left out', () => {
   const entry = { date: '2026-10-01', createdAt: 1, updatedAt: 1, painLevel: 5, fatigueLevel: 3, morningStiffness: 'lt30', morningStiffnessSeverity: 4, nightWakings: 2, dailyInterference: 6 } as const
-  assert.equal(withoutUnoffered(entry, false), entry)
+  assert.deepEqual(withoutUnoffered(entry, false), entry)
   assert.equal(withoutUnoffered(entry, true), entry)
+  const withWords = { ...entry, painWords: ['burning'] }
+  assert.deepEqual(withoutUnoffered(withWords, false), entry)
+  assert.equal(withoutUnoffered(withWords, true), withWords)
 })
 
 test('the options inside sleep are listed under it, and leave the list of rows', () => {

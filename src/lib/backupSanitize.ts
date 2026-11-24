@@ -56,6 +56,7 @@ import { cleanSettleDays } from './treatmentReview.ts'
 import { cleanGestures } from './gestures.ts'
 import { currentLabels } from './renamedSuggestions.ts'
 import { planFromBackup } from './hardDaysPlan.ts'
+import { cleanPainWords } from './painWords.ts'
 import { cleanMdphGestures } from './mdph.ts'
 import { noteFromBackup } from './goodDayNote.ts'
 import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
@@ -245,6 +246,10 @@ export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry 
     })(),
     restDay: raw.restDay === true ? true : undefined,
     sensorySensitivity: num(raw.sensorySensitivity, 0, 10),
+    painWords: (() => {
+      const words = cleanPainWords(raw.painWords)
+      return words && words.length ? words : undefined
+    })(),
     sensoryStimuli: (() => {
       const list = strings(raw.sensoryStimuli)
       return list && ([...new Set(list.filter((s) => (SENSORY_STIMULI as readonly string[]).includes(s)))] as DailyEntry['sensoryStimuli'])

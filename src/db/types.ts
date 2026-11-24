@@ -37,6 +37,7 @@ export const ALL_FACTORS = [
   'feverInfection',
   'newSymptomMarker',
   'sensorySensitivity',
+  'painWords',
 ] as const
 
 export type FactorKey = (typeof ALL_FACTORS)[number]
@@ -211,6 +212,8 @@ export interface DailyEntry {
   sensorySensitivity?: number
   /** The stimuli that bothered on the day. An empty list is an answer (none), unlike a day left blank. */
   sensoryStimuli?: SensoryStimulus[]
+  /** « Les mots de ma douleur »: up to three words for what the pain feels like, ids of the palette (lib/painWords.ts) or as typed. Our own everyday words, not a questionnaire; no score. An empty list is not stored. */
+  painWords?: string[]
 
   weather?: WeatherInfo
   /** What was taken that day, pointing at the Medication registry. */
