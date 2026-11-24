@@ -45,6 +45,9 @@ import { markedSpans, timelineItems, trialSpans } from '../lib/trendsTimeline'
 import { weekdayProfile } from '../lib/weekdays'
 import { format, useLocale, useTranslation } from '../i18n'
 import { IndicatorsCard } from '../components/trends/IndicatorsCard'
+import { PainWordsCard } from '../components/trends/PainWordsCard'
+import { isOffered } from '../lib/indicatorCatalog'
+import { useEarlyAccess } from '../lib/earlyAccess'
 import { shiftISO, todayISO } from '../lib/dates'
 
 /** The colour of each layer of the pain curve, the same as its dot in the "what happened" list below it. */
@@ -59,6 +62,7 @@ type Detail = 'zones' | 'treatments' | 'habits' | 'compare'
 export function TrendsPage() {
   const entries = useLoggedEntries()
   const settings = useSettings()
+  const earlyAccessOn = useEarlyAccess()
   const i18n = useTranslation()
   const t = usePalette()
   // The weather look: a sky behind the title, figures in bold, chips and tiles like the day's page, the daily weather under the chart.
@@ -132,6 +136,8 @@ export function TrendsPage() {
   const rangeFrom = rangeDays == null ? (entries?.at(-1)?.date ?? today) : shiftISO(today, -rangeDays)
   const medicationsTracked = settings.enabledFactors.includes('medications')
   const zonesTracked = settings.enabledFactors.includes('painLocations')
+  // The words of the pain: shown once followed and offered (early access until the list has been reviewed).
+  const wordsTracked = settings.enabledFactors.includes('painWords') && isOffered('painWords', earlyAccessOn)
   const flareDays = useMemo(() => flareDaySet(flares?.detectable ? flares.episodes : []), [flares])
   const events = useMemo(() => (medicationsTracked && medications ? treatmentEvents(medications) : []), [medicationsTracked, medications])
   const appointments = useMemo(
@@ -360,6 +366,8 @@ export function TrendsPage() {
               </div>
             )}
           </Card>
+
+          {wordsTracked && <PainWordsCard entries={filtered} flareDays={flares?.detectable ? flareDays : null} />}
 
           {timeline.length > 0 && (
             <TimelineCard

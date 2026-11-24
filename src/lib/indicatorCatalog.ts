@@ -60,6 +60,8 @@ const RAW_INDICATORS: readonly IndicatorDef[] = [
   { key: 'legPain', kind: 'measure', priority: 2, specific: true, reviewed: true, tiers: { lombalgie: R } },
   { key: 'spasms', kind: 'measure', priority: 2, specific: true, reviewed: true, tiers: { sep: R } },
   { key: 'sensorySensitivity', kind: 'measure', priority: 2, reviewed: true, tiers: { fibromyalgie: S } },
+  // Our own palette of everyday words: offered with early access until health professionals have read the list.
+  { key: 'painWords', kind: 'measure', priority: 2, reviewed: false, tiers: {} },
 
   { key: 'nightWaking', kind: 'detail', parent: 'sleep', priority: 0, reviewed: true, tiers: { fibromyalgie: R, spondylarthrite: R, lombalgie: R, myofasciale: R } },
   { key: 'unrefreshedWaking', kind: 'detail', parent: 'sleep', priority: 1, reviewed: true, tiers: { fibromyalgie: R } },
@@ -189,6 +191,7 @@ const ENTRY_FIELDS: Partial<Record<IndicatorKey, readonly (keyof DailyEntry)[]>>
   feverInfection: ['feverInfection'],
   newSymptomMarker: ['newSymptom'],
   sensorySensitivity: ['sensorySensitivity', 'sensoryStimuli'],
+  painWords: ['painWords'],
 }
 
 /** The entry as the screens show it: what an indicator not offered (no early

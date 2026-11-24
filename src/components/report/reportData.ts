@@ -1,3 +1,4 @@
+import { summarizePainWords, type PainWordsSummary } from '../../lib/painWords'
 import type { DailyEntry, FlareFactor, LoggedEntry, Illness, IllnessDetails, MarkedFlare, Medication, PastConsultation } from '../../db/types'
 import type { Language } from '../../i18n'
 import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresApply, type FlareEpisode } from '../../lib/flares'
@@ -74,6 +75,8 @@ export const SYMPTOMS: { key: SymptomKey; better: 1 | -1; max: number }[] = [
 ]
 
 export interface ReportData {
+  /** The words the person chose for the pain, counted in days (lib/painWords.ts). */
+  painWords: PainWordsSummary
   options: ReportOptions
   f: ReportFormat
   p: ReportPeriods
@@ -136,8 +139,11 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
   const given = options.compareSpans
   const spans = given && validSpans(given.a, given.b, options.end) ? given : { a: { from: p.prevStart, to: shiftISO(p.start, -1) }, b: { from: p.start, to: p.end } }
   const compared = comparePeriods(entries, spans.a, spans.b, detectable ? flareDays : null, options.end)
+  // The words of the pain, counted in days, with the flare days among them when flares can be found.
+  const painWords = summarizePainWords(current, detectable ? flareDays : new Set())
   return {
     options,
+    painWords,
     f: reportFormat(options.language),
     p,
     all: [...previous, ...current],

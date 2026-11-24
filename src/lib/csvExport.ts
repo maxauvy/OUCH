@@ -54,6 +54,7 @@ const JOURNAL_COLUMNS = [
   'new_symptom',
   'sensory_sensitivity',
   'sensory_stimuli',
+  'pain_words',
   'notes',
 ] as const
 
@@ -142,6 +143,7 @@ export function journalCsv(entries: DailyEntry[], options: CsvOptions): string {
       new_symptom: e.newSymptom,
       sensory_sensitivity: e.sensorySensitivity,
       sensory_stimuli: e.sensoryStimuli?.join(LIST_SEPARATOR),
+      pain_words: e.painWords?.join(LIST_SEPARATOR),
       notes: e.notes,
     }
     rows.push(columns.map((c) => cells[c]))

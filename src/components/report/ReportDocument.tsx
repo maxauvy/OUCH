@@ -45,6 +45,7 @@ import { FLAT_BELOW, trend, type Trend } from '../../lib/trend'
 import { AppLogo } from '../ui/AppLogo'
 import { summarizeNightWakings } from '../../lib/nightWakings'
 import { otherIndicatorLines } from '../../lib/indicatorLines'
+import { isPaletteWord } from '../../lib/painWords'
 import { summarizeHeadaches } from '../../lib/indicatorSummaries'
 import { MORNING_STIFFNESS_BANDS } from '../../db/types'
 
@@ -1790,7 +1791,20 @@ function NightWakingsBlock({ d }: { d: ReportData }) {
 function OtherIndicatorsBlock({ d }: { d: ReportData }) {
   const { f } = d
   const t = f.t.indicators
-  const lines = otherIndicatorLines(d.current, f.t, f.format, { mohReference: MOH_REFERENCE })
+  const pw = f.all.painWords
+  const wordLabel = (w: string) => (isPaletteWord(w) ? pw.words[w].toLocaleLowerCase(d.options.language) : w)
+  const words = d.painWords.noted > 0
+    ? [
+        f.format(pw.reportLine, { n: d.painWords.noted }),
+        f.format(pw.reportTop, {
+          list: d.painWords.words
+            .slice(0, 6)
+            .map((w) => (w.flareDays > 0 ? f.format(pw.reportItemFlare, { word: wordLabel(w.word), n: w.days, f: w.flareDays }) : f.format(pw.reportItem, { word: wordLabel(w.word), n: w.days })))
+            .join(', '),
+        }),
+      ]
+    : []
+  const lines = [...otherIndicatorLines(d.current, f.t, f.format, { mohReference: MOH_REFERENCE }), ...words]
   if (lines.length === 0) return null
   return (
     <>
@@ -1801,6 +1815,7 @@ function OtherIndicatorsBlock({ d }: { d: ReportData }) {
         ))}
       </ul>
       <p className="r-small">{t.note}</p>
+      {words.length > 0 && <p className="r-small">{pw.reportNote}</p>}
     </>
   )
 }

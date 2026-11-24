@@ -8,6 +8,7 @@ import {
   IconDroplet,
   IconLeaf,
   IconMapPin,
+  IconMessageCircle,
   IconPencil,
   IconPill,
   IconSettings,
@@ -34,6 +35,8 @@ import { WeatherIcon } from '../ui/WeatherIcon'
 import { TagInput } from './TagInput'
 import { MedicationsField } from './MedicationsField'
 import { HardDaysCard } from './HardDaysCard'
+import { PainWordsField } from './PainWordsField'
+import { usualWords } from '../../lib/painWords'
 import { NoteInviteCard } from '../relief/GoodDayNote'
 import { LightExtras, type LightItem } from './LightExtras'
 import { LastBackupLine } from '../backup/LastBackupLine'
@@ -300,6 +303,9 @@ export function HealthEntryLayout({
         />,
       )
     : null
+  const wordsBlock = has('painWords')
+    ? titled(t.painWords.title, IconMessageCircle, 'pain', <PainWordsField value={local.painWords} usual={usualWords(allEntries, date)} onChange={(w) => setField('painWords', w)} />)
+    : null
   const notesBlock = has('notes')
     ? titled(
         t.entryForm.notes,
@@ -327,6 +333,7 @@ export function HealthEntryLayout({
 
   // The lighter form: what follows the pain, offered one part at a time.
   const lightItems: LightItem[] = []
+  if (wordsBlock) lightItems.push({ key: 'words', label: t.painWords.lightLabel, icon: IconMessageCircle, filled: (local.painWords?.length ?? 0) > 0, content: wordsBlock })
   if (zonesBlock) lightItems.push({ key: 'zones', label: t.hardDays.lightZones, icon: IconMapPin, filled: (local.painLocations?.length ?? 0) > 0, content: zonesBlock })
   if (medicationsBlock)
     lightItems.push({
@@ -563,6 +570,8 @@ export function HealthEntryLayout({
       )}
 
       {lightToday && <LightExtras noted={local.painLevel !== undefined} items={lightItems} />}
+
+      {!lightToday && wordsBlock}
 
       {!lightToday && zonesBlock}
 

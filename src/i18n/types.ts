@@ -461,6 +461,7 @@ export interface Translations {
     feverInfection: FactorText
     newSymptomMarker: FactorText
     sensorySensitivity: FactorText
+    painWords: FactorText
   }
 
   /** Full label of every zone identifier ("Épaule gauche"); the old coarse zones say they are old. */
@@ -1539,6 +1540,41 @@ export interface Translations {
     /** Card on the day's page, with the professional's name: `{{name}}` */
     cardSoonWith: string
     cardAfterWith: string
+  }
+  /** « Les mots de ma douleur »: our own palette of everyday words (lib/painWords.ts); not a questionnaire, no score */
+  painWords: {
+    title: string
+    /** {{list}} the usual words */
+    usual: string
+    asUsual: string
+    different: string
+    todayLike: string
+    firstTime: string
+    other: string
+    otherLabel: string
+    add: string
+    /** Said when three words are already chosen */
+    max: string
+    words: Record<'burning' | 'shocks' | 'shooting' | 'tingling' | 'numbness' | 'tightness' | 'crushing' | 'pulling' | 'cramps' | 'throbbing' | 'dull' | 'tender', string>
+    /** On the lighter form of a flare day */
+    lightLabel: string
+    trendsTitle: string
+    /** {{n}} days with words */
+    trendsIntro: string
+    trendsIntroNoFlare: string
+    /** {{word}}, {{f}} flare days among its {{n}} days */
+    trendsFlare: string
+    /** {{n}} */
+    days: string
+    /** {{n}} days with words */
+    reportLine: string
+    /** {{list}} */
+    reportTop: string
+    /** {{word}} {{n}} */
+    reportItem: string
+    /** {{word}} {{n}} {{f}} */
+    reportItemFlare: string
+    reportNote: string
   }
   /** « Mon dossier MDPH »: the journal for the request form (cerfa 15692*01) and the medical certificate (cerfa 15695*01). See lib/mdph.ts */
   mdph: {
