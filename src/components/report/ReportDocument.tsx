@@ -213,41 +213,49 @@ function gpPages(d: ReportData): Block[][] {
   const timeline = reportTimelineItems(d)
   const hasAgenda = agendaItems(d).length > 0 || !!d.options.lastNote
   const toc: TocEntry[] = [
+    { id: 'curve', label: f.t.painChart },
     ...(timeline.length > 0 ? [{ id: 'timeline', label: f.all.trends.timelineTitle }] : []),
-    ...(hasAgenda ? [{ id: 'agenda', label: f.t.agenda }] : []),
     ...(d.meds.length > 0 ? [{ id: 'treatments', label: f.t.treatments }] : []),
     { id: 'symptoms', label: `${f.t.symptoms} · ${f.t.zones}` },
     ...(d.options.includeNotes && notes.length > 0 ? [{ id: 'notes', label: f.t.notes }] : []),
     { id: 'method', label: f.t.method },
   ]
   return [
-    // Page 1: who, in a sentence, the figures, the curve, the days by intensity, and where the rest is.
+    // Page 1, « en une minute »: who, in a sentence, then four blocks in the order of an appointment: what changed, the decision taken last
+    // time and what followed, the treatments taken as needed against the period before, and what the patient wants to bring up. The curve,
+    // the days by intensity and the rest follow on page 2.
     [
       <Header d={d} />,
       <Brief d={d} />,
-      <GpTiles d={d} />,
-      <div className="r-card r-chart">
-        <H level={2} kind="pain">
-          {f.t.painChart}
-        </H>
-        <p className="r-small" style={{ marginTop: -4 }}>
-          {f.t.chartHint}
-          {chartFlares(d).length > 0 && f.t.chartHintFlares}
-        </p>
-        <PainChart entries={d.all} p={d.p} f={f} width={DASH_CHART_WIDTH * 1.45} height={185} summary={painSummary(d)} flares={chartFlares(d)} />
-      </div>,
-      <DayMix d={d} />,
-      <Toc entries={toc} f={f} />,
-    ],
-    // Page 2: what happened, what the patient wants to bring up, the treatments, the symptoms and the zones.
-    [
+      <>
+        <H level={2} kind="pain">{f.t.oneMinChanged}</H>
+        <GpTiles d={d} />
+      </>,
       d.decided && <DecisionsBlock d={d} />,
-      timeline.length > 0 && rowsBlock(timeline.length, (from, to, continued) => <ReportTimeline d={d} items={timeline} from={from} to={to} continued={continued} />, 'timeline'),
+      asNeededRows(d).length > 0 && <AsNeededBlock d={d} />,
       hasAgenda && (
         <TocBlock id="agenda">
           <Agenda d={d} />
         </TocBlock>
       ),
+      <Toc entries={toc} f={f} />,
+    ],
+    // Page 2: the curve and the days by intensity, what happened, the treatments, the symptoms and the zones.
+    [
+      <TocBlock id="curve">
+        <div className="r-card r-chart">
+          <H level={2} kind="pain">
+            {f.t.painChart}
+          </H>
+          <p className="r-small" style={{ marginTop: -4 }}>
+            {f.t.chartHint}
+            {chartFlares(d).length > 0 && f.t.chartHintFlares}
+          </p>
+          <PainChart entries={d.all} p={d.p} f={f} width={DASH_CHART_WIDTH * 1.45} height={185} summary={painSummary(d)} flares={chartFlares(d)} />
+        </div>
+      </TocBlock>,
+      <DayMix d={d} />,
+      timeline.length > 0 && rowsBlock(timeline.length, (from, to, continued) => <ReportTimeline d={d} items={timeline} from={from} to={to} continued={continued} />, 'timeline'),
       d.meds.length > 0 &&
         rowsBlock(d.meds.length, (from, to, continued) => (
           <>
@@ -2093,6 +2101,47 @@ function Noticed({ d }: { d: ReportData }) {
         {trials.some((x) => !x.trial.plan && x.result.gap > 0) && ` ${f.t.noticedTrialHarder}`}
         {trials.some((x) => x.trial.plan) && ` ${f.t.noticedTrialDrawnNote}`}
       </p>
+    </>
+  )
+}
+
+/** The treatments taken as needed: doses noted in the period, and in the period before (shorter when the journal began inside it). */
+function asNeededRows(d: ReportData): { name: string; now: number; days: number; before: number | null }[] {
+  const doses = (entries: readonly LoggedEntry[], id: string) =>
+    entries.reduce((n, e) => n + (e.intakes ?? []).filter((i) => i.medicationId === id).reduce((k, i) => k + (i.doses ?? 1), 0), 0)
+  return d.meds
+    .filter((m) => m.regimen === 'asNeeded' && m.doses > 0)
+    .map((m) => ({ name: m.med.name, now: m.doses, days: m.daysTaken, before: d.previous.length ? doses(d.previous, m.med.id) : null }))
+    .sort((a, b) => b.now - a.now)
+}
+
+function AsNeededBlock({ d }: { d: ReportData }) {
+  const { f } = d
+  const rows = asNeededRows(d)
+  if (!rows.length) return null
+  return (
+    <>
+      <H level={2} kind="treatments">{f.t.oneMinAsNeeded}</H>
+      <table className="r-asneeded">
+        <thead>
+          <tr>
+            <th scope="col">{f.t.oneMinAsNeededCol}</th>
+            <th scope="col" className="r">{f.format(f.t.oneMinNow, { n: d.p.periodDays })}</th>
+            <th scope="col" className="r">{f.format(f.t.oneMinBefore, { n: d.p.prevDays })}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.name} data-row>
+              <th scope="row">{r.name}</th>
+              <td className="r num">
+                <b>{f.format(f.t.oneMinDoses, { n: r.now })}</b> <span className="r-hint">· {f.format(f.t.oneMinDays, { n: r.days })}</span>
+              </td>
+              <td className="r num">{r.before === null ? '—' : f.format(f.t.oneMinDoses, { n: r.before })}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </>
   )
 }
