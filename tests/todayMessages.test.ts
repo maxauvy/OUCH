@@ -186,3 +186,17 @@ test('a fall of pressure tomorrow is a word of the day when the person lets it t
   // Today only: the answer of a day does not carry over to the next.
   assert.deepEqual(kinds(todayMessages({ ...on, today: shiftISO(TODAY, 1), later: markDone(undefined, `weather:${TODAY}`) })), [`weather:${shiftISO(TODAY, 1)}`])
 })
+
+test('a good day: the hint today only, and not again within a week of one answered', () => {
+  const line = { key: 'sleepHours' as const, n: 20, observed: 14, expected: 5, low: 2, high: 9, verdict: 'above' as const }
+  const on = { ...base, goodDay: line, allow: { ...base.allow, goodDay: true } }
+  assert.deepEqual(kinds(todayMessages(on)), [`goodDay:${TODAY}`])
+  assert.deepEqual(kinds(todayMessages({ ...on, allow: { ...base.allow, goodDay: false } })), [])
+  assert.deepEqual(kinds(todayMessages({ ...on, quiet: true })), [])
+  // Answered five days ago: not today.
+  const recent = markDone(undefined, `goodDay:${shiftISO(TODAY, -5)}`)
+  assert.deepEqual(kinds(todayMessages({ ...on, later: recent })), [])
+  // Answered more than a week ago: back.
+  const old = postpone(undefined, `goodDay:${shiftISO(TODAY, -LATER_DAYS - 1)}`, shiftISO(TODAY, -LATER_DAYS - 1))
+  assert.deepEqual(kinds(todayMessages({ ...on, later: old })), [`goodDay:${TODAY}`])
+})

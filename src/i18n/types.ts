@@ -860,6 +860,14 @@ export interface Translations {
     /** `{{overall}}`, `{{min}}` days of the least represented weekday, `{{band}}` */
     weekdaysNote: string
     weekdaysLegend: string
+    /** "Before the good days": lib/beforeGoodDays.ts over the whole diary */
+    goodDaysTitle: string
+    goodDaysColMeasure: string
+    goodDaysColSeen: string
+    goodDaysColChance: string
+    /** `{{n}}` rows of good days */
+    goodDaysNote: string
+    goodDaysMeasures: Record<'sleepHours' | 'sleepQuality' | 'stressLevel' | 'fatigueLevel' | 'brainFog' | 'moodLevel', string>
     colReviewChange: string
     colReviewPain: string
     colReviewFlares: string
@@ -2151,6 +2159,28 @@ export interface Translations {
     chance: string
     you: string
     measures: Record<'sleepHours' | 'sleepQuality' | 'stressLevel' | 'fatigueLevel' | 'brainFog' | 'moodLevel', { row: string; what: string }>
+  }
+  /** "Avant tes bons jours": what the eve of the good days looked like, against chance (see lib/beforeGoodDays.ts); the hint on the day's page too */
+  beforeGoodDays: {
+    title: string
+    /** `{{n}}` rows of good days compared */
+    nothing: string
+    /** `{{k}}` of `{{n}}` good days, `{{what}}` (one of `measures.*.what`), `{{chance}}` what chance gives */
+    found: string
+    foundNone: string
+    /** What a good day is, and that a row counts once */
+    whatIsGood: string
+    notCause: string
+    /** `{{k}}` of `{{n}}` */
+    count: string
+    measures: Record<'sleepHours' | 'sleepQuality' | 'stressLevel' | 'fatigueLevel' | 'brainFog' | 'moodLevel', { row: string; what: string; short: string }>
+    /** The hint on the day's page, on the first good day of a row */
+    hintLabel: string
+    /** `{{what}}` one of `measures.*.short`, `{{k}}` of `{{n}}`, `{{chance}}` */
+    hintText: string
+    hintNote: string
+    hintSee: string
+    hintThanks: string
   }
   todayList: {
     /** `{{n}} {{n:thing|things}}`: how many things wait. */
