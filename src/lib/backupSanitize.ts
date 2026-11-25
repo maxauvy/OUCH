@@ -349,7 +349,7 @@ function leadTrial(v: unknown): LeadTrial | undefined {
   if (v.plan === undefined) return trial
   // A draw that does not cover the days exactly would compare the wrong days: the trial is dropped rather than misread.
   const plan = Array.isArray(v.plan) && v.plan.length === days + 1 && v.plan.every((a) => a === 'with' || a === 'without') ? (v.plan as TrialArm[]) : undefined
-  return plan ? { ...trial, plan } : undefined
+  return plan ? { ...trial, plan, ...(v.byDoctor === true ? { byDoctor: true as const } : {}) } : undefined
 }
 
 /** The weeks closed: each one well formed, a cap of them. */

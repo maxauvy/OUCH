@@ -1482,8 +1482,20 @@ export interface Translations {
   decisions: {
     title: string
     hint: string
-    kinds: Record<'treatment' | 'habit' | 'exam' | 'other', string>
-    placeholders: Record<'treatment' | 'habit' | 'exam' | 'other', string>
+    kinds: Record<'treatment' | 'habit' | 'trial' | 'exam' | 'other', string>
+    placeholders: Record<'treatment' | 'habit' | 'trial' | 'exam' | 'other', string>
+    trialActionLabel: string
+    trialHint: string
+    trialBusy: string
+    trialNotStarted: string
+    /** `{{day}}`, `{{length}}` */
+    trialRunning: string
+    /** `{{with}}`, `{{nWith}}`, `{{without}}`, `{{nWithout}}` */
+    trialResult: string
+    /** `{{with}}`, `{{without}}` */
+    trialNext: string
+    trialTooFew: string
+    byDoctor: string
     medLabel: string
     medNone: string
     actionLabel: string

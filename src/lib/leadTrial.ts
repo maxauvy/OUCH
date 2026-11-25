@@ -44,6 +44,8 @@ export interface LeadTrial {
   end: string
   /** The draw, one arm per day from `start`. Absent: a week where the person chose the days. */
   plan?: TrialArm[]
+  /** Suggested by the doctor at an appointment (« Ce qu'on a décidé »): said on the trial's card and in the report. */
+  byDoctor?: true
 }
 
 /** Half the days with the action, half without, in an order drawn at random (Fisher–Yates). */
@@ -73,7 +75,7 @@ export function restartTrial(trial: LeadTrial, today: string, random?: () => num
   return newTrial(trial.key, trial.action, today, random)
 }
 
-interface TrialDay {
+export interface TrialDay {
   date: string
   state: 'with' | 'without' | 'unlogged' | 'future'
   /** Drawn trials: what the draw gave the day */
@@ -84,14 +86,14 @@ interface TrialDay {
   rescue?: boolean
 }
 
-interface Comparison {
+export interface Comparison {
   with: { mean: number; n: number }
   without: { mean: number; n: number }
   /** with.mean − without.mean */
   gap: number
 }
 
-interface TrialResult extends Comparison {
+export interface TrialResult extends Comparison {
   /** Same way as the lead it started from; null when either has no direction. Older weeks only. */
   sameDirection: boolean | null
   /** Drawn trials: the pain on the next day, after a day with and after a day without; null with too few pairs */
@@ -100,7 +102,7 @@ interface TrialResult extends Comparison {
   rescues?: number
 }
 
-interface TrialStatus {
+export interface TrialStatus {
   /** The days were drawn */
   drawn: boolean
   /** Days in the trial: 10, or 7 for an older week */
