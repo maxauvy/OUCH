@@ -1652,6 +1652,39 @@ export interface Translations {
   }
   /** « Mon dossier MDPH »: the journal for the request form (cerfa 15692*01) and the medical certificate (cerfa 15695*01). See lib/mdph.ts */
   mdph: {
+    /** « Ton parcours »: which parts of the request form to fill in (lib/mdphParcours.ts) */
+    parcours: {
+      title: string
+      intro: string
+      kindLabel: string
+      kinds: Record<'first' | 'changed' | 'review' | 'renewal', string>
+      /** The box of page 1, in the form's own French words (the form exists in French only) */
+      formKinds: Record<'first' | 'changed' | 'review' | 'renewal', string>
+      asksLabel: string
+      asksHint: string
+      asks: Record<'aah' | 'rqth' | 'orientation' | 'cmi' | 'pch' | 'unsure', string>
+      studying: string
+      partsTitle: string
+      /** `{{n}}` parts to fill in */
+      partsCount: string
+      /** `{{from}}`–`{{to}}` pages */
+      pages: string
+      partNames: Record<'A' | 'B' | 'C' | 'D' | 'E' | 'F', string>
+      reasons: Record<'always' | 'needs' | 'renewalSkip' | 'studying' | 'notStudying' | 'askWork' | 'askAah' | 'workMaybe' | 'carer', string>
+      /** What to do in parts A and E, which depends on the answers: `{{kind}}`, the box to tick on page 1 */
+      partA: string
+      /** `{{list}}` the requests to tick in part E */
+      partE: string
+      partENone: string
+      /** `{{boxes}}` the boxes OUCH has cards for */
+      helped: string
+      seeCard: string
+      fill: Record<'yes' | 'maybe' | 'no', string>
+      attachTitle: string
+      attach: Record<'certificate' | 'identity' | 'address' | 'protection', string>
+      attachNote: string
+      boxesTitle: string
+    }
     row: string
     rowHint: string
     title: string

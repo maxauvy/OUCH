@@ -16,6 +16,7 @@ import { format, useLanguage, useLocale, useTranslation } from '../i18n'
 import { Segmented } from '../components/ui/Segmented'
 import { MdphDocument, type MdphInput } from '../components/mdph/MdphDocument'
 import { MonthBars } from '../components/mdph/MonthBars'
+import { ParcoursCard } from '../components/mdph/ParcoursCard'
 import { b3Sentence, d1Sentence, monthLabeller } from '../components/mdph/sentences'
 import '../components/report/report.css'
 
@@ -23,10 +24,10 @@ import '../components/report/report.css'
 const canPrint = !(navigator as Navigator & { standalone?: boolean }).standalone
 
 /** A card named after the box of the form or of the certificate it helps to fill in. */
-function BoxCard({ box, title, children }: { box: string; title: string; children: ReactNode }) {
+function BoxCard({ box, title, anchor, children }: { box: string; title: string; anchor?: string; children: ReactNode }) {
   const id = useId()
   return (
-    <section aria-labelledby={id} className="rounded-[var(--radius-card)] p-4 flex flex-col gap-2" style={{ background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}>
+    <section id={anchor ? `mdph-${anchor}` : undefined} aria-labelledby={id} className="scroll-mt-20 rounded-[var(--radius-card)] p-4 flex flex-col gap-2" style={{ background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}>
       <span className="self-start text-caption font-semibold px-2 py-0.5 rounded-full" style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }}>
         {box}
       </span>
@@ -166,6 +167,10 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
         {t.intro}
       </p>
 
+      <ParcoursCard cardsShown={!!data && data.logged >= MIN_TRACKED} />
+
+      <h2 className="section-title text-heading font-bold px-1 mt-2">{t.parcours.boxesTitle}</h2>
+
       <Segmented label={t.periodLabel} options={PERIODS.map((n) => ({ value: n, label: format(t.periodOption, { n }, language) }))} value={months} onChange={setMonths} />
 
       {data && (
@@ -178,18 +183,18 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
 
       {data && data.logged >= MIN_TRACKED && (
         <>
-          <BoxCard box={format(t.refForm, { box: 'B3', page: 8 }, language)} title={t.b3Title}>
+          <BoxCard anchor="B3" box={format(t.refForm, { box: 'B3', page: 8 }, language)} title={t.b3Title}>
             <CopyText key={`b3-${months}`} text={b3Sentence(data, t, language, long(data.start))} />
           </BoxCard>
 
-          <BoxCard box={format(t.refForm, { box: 'D1', page: 13 }, language)} title={t.d1Title}>
+          <BoxCard anchor="D1" box={format(t.refForm, { box: 'D1', page: 13 }, language)} title={t.d1Title}>
             <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
               {t.d1Hint}
             </p>
             <CopyText key={`d1-${months}`} text={d1Sentence(data, t, language)} />
           </BoxCard>
 
-          <BoxCard box={format(t.refForm, { box: 'B2', page: '6-7' }, language)} title={t.b2Title}>
+          <BoxCard anchor="B2" box={format(t.refForm, { box: 'B2', page: '6-7' }, language)} title={t.b2Title}>
             <p className="text-body" style={{ color: 'var(--color-ink-muted)' }}>
               {t.b2Intro}
             </p>
