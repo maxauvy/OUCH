@@ -4,6 +4,7 @@
 import type { Language } from '../i18n/language'
 import type { HardDaysSeen } from '../lib/hardDays'
 import type { LeadChoices } from '../lib/leads'
+import type { MdphParcours } from '../lib/mdphParcours'
 import type { LeadsSeen } from '../lib/leadHints'
 import type { LeadTrial } from '../lib/leadTrial'
 import type { ForecastCache } from '../lib/forecast'
@@ -596,6 +597,8 @@ export interface Settings {
   yearWish?: { year: number; text: string }
   /** « Mon dossier MDPH »: how often the pain gets in the way of each gesture of the form's part B2, as the person answered once (see lib/mdph.ts). Kept for the next renewal; restored from a backup. */
   mdphGestures?: Partial<Record<string, 'often' | 'sometimes' | 'no'>>
+  /** « Mon dossier MDPH »: the answers of « Ton parcours » and the documents ticked as ready (see lib/mdphParcours.ts). Restored from a backup. */
+  mdphParcours?: MdphParcours
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness

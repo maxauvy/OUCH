@@ -58,6 +58,7 @@ import { currentLabels } from './renamedSuggestions.ts'
 import { planFromBackup } from './hardDaysPlan.ts'
 import { cleanPainWords } from './painWords.ts'
 import { cleanMdphGestures } from './mdph.ts'
+import { cleanParcours } from './mdphParcours.ts'
 import { yearWishFromBackup } from './yearReview.ts'
 import { noteFromBackup } from './goodDayNote.ts'
 import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
@@ -465,6 +466,7 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     forecastEnabled: bool(raw.forecastEnabled),
     markedFlares: markedFlares(raw.markedFlares),
     mdphGestures: cleanMdphGestures(raw.mdphGestures),
+    mdphParcours: cleanParcours(raw.mdphParcours),
     yearWish: yearWishFromBackup(raw.yearWish),
   })
 }
