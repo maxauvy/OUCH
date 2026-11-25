@@ -6,16 +6,23 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.18.0] - 2026-11-25
+
+OUCH pour les médecins traitants. Le patient note après un rendez-vous ce qui a été décidé, et le rapport suivant montre ce que son journal a vu depuis ; la première page du rapport se lit en une minute ; le médecin peut proposer un essai tiré au sort, recommander OUCH avec une carte à donner, et trouver dans une feuille ce qu’il y gagne. Tous les PDF, les captures et l’image du README sont refaits pour cette version, avec deux nouveaux documents : la carte A6 et « Pourquoi recommander OUCH ».
+
 ### Ajouté
-- **Pour les médecins traitants : « Pourquoi recommander OUCH », un pilote et un mail type.** Dans `docs/medecins-traitants/` : une feuille A4 recto verso en « Aube » (ce que le médecin gagne en consultation, ce que OUCH ne fait pas, comment le recommander avec la carte A6), le protocole d’un pilote de deux mois avec 3 à 5 généralistes (durée des consultations avec et sans rapport, trois questions, aucune donnée de patient) et un mail pour une CPTS ou l’URPS.
-- **Une carte à donner par le médecin, et un accueil qui la reconnaît.** Une carte A6 recto verso (`docs/carte-medecin/`) que le médecin garde au cabinet : quoi noter chaque soir (à cocher), la date du prochain rendez-vous, et un code QR. Ouvert depuis cette carte, l’accueil d’OUCH commence par « Ton médecin t’a conseillé ce carnet » et propose de noter le prochain rendez-vous, avec sa carte de rappel quinze jours avant. Rien ne part vers le médecin.
-- **Le rapport dit comment le faire parvenir au médecin.** Sous les boutons du rapport : le déposer dans Mon espace santé (rubrique Documents), le joindre à la prise de rendez-vous en ligne quand le site le permet, ou le montrer et l’imprimer comme avant.
-- **Un essai proposé par le médecin.** Dans « Ce qu’on a décidé », le type « Essai » : on choisit une action de « ce qui a aidé », et l’essai de 10 jours tirés au sort commence le lendemain, marqué « Proposé par ton médecin » sur sa carte. Seulement pour ce que la personne fait elle-même, jamais un médicament. Si un essai est déjà en cours, la décision est notée et l’essai pourra être lancé depuis Soulager. Au rendez-vous suivant et dans le rapport, la décision dit où en est l’essai, ou son résultat : la douleur des jours avec et sans, et le lendemain.
 - **« Ce qu’on a décidé » : d’une consultation à l’autre.** Après un rendez-vous, sous « Après le rendez-vous » (et dans la fiche d’un rendez-vous passé), une à quatre décisions, chacune avec son type : traitement (relié au registre si tu veux), habitude, examen ou autre. Pour une habitude, OUCH demande quel geste de « ce qui a aidé » la compte et combien de fois par semaine. Au rendez-vous suivant et dans les deux rapports, « Depuis la consultation du … » reprend chaque décision avec ce que le journal a vu depuis : pour un traitement, la douleur moyenne des 28 jours d’avant et des 28 jours après ses jours d’adaptation, et les jours où un effet indésirable a été noté ; pour une habitude, les jours notés contre les fois prévues, et la douleur les jours avec et sans. Rien n’est jugé : le rapport rappelle qu’une évolution peut venir d’autre chose. Les décisions vont dans la sauvegarde chiffrée ; la démo en a deux.
+- **Un essai proposé par le médecin.** Dans « Ce qu’on a décidé », le type « Essai » : on choisit une action de « ce qui a aidé », et l’essai de 10 jours tirés au sort commence le lendemain, marqué « Proposé par ton médecin » sur sa carte. Seulement pour ce que la personne fait elle-même, jamais un médicament. Si un essai est déjà en cours, la décision est notée et l’essai pourra être lancé depuis Soulager. Au rendez-vous suivant et dans le rapport, la décision dit où en est l’essai, ou son résultat : la douleur des jours avec et sans, et le lendemain.
+- **Le rapport dit comment le faire parvenir au médecin.** Sous les boutons du rapport : le déposer dans Mon espace santé (rubrique Documents), le joindre à la prise de rendez-vous en ligne quand le site le permet, ou le montrer et l’imprimer comme avant.
+- **Une carte à donner par le médecin, et un accueil qui la reconnaît.** Une carte A6 recto verso (`docs/carte-medecin/`) que le médecin garde au cabinet : quoi noter chaque soir (à cocher), la date du prochain rendez-vous, et un code QR. Ouvert depuis cette carte, l’accueil d’OUCH commence par « Ton médecin t’a conseillé ce carnet » et propose de noter le prochain rendez-vous, avec sa carte de rappel quinze jours avant. Rien ne part vers le médecin.
+- **Pour les médecins traitants : « Pourquoi recommander OUCH », un pilote et un mail type.** Dans `docs/medecins-traitants/` : une feuille A4 recto verso en « Aube » (ce que le médecin gagne en consultation, ce que OUCH ne fait pas, comment le recommander avec la carte A6), le protocole d’un pilote de deux mois avec 3 à 5 généralistes (durée des consultations avec et sans rapport, trois questions, aucune donnée de patient) et un mail pour une CPTS ou l’URPS.
 
 ### Modifié
 - **Documents à jour pour les décisions et la page une minute.** « Lire un rapport » (la page et ses flyers Aube), la plaquette soignants, le guide et le diaporama de présentation, et le guide des utilisateurs décrivent la nouvelle page 1 du rapport médecin traitant (ce qui a changé, la décision suivie, les prises au besoin, les questions ; la courbe en page 2) et les décisions notées après un rendez-vous, y compris l’essai proposé par le médecin. La note méthodologique explique leurs calculs, le dictionnaire des données leurs champs. Le guide des utilisateurs dit comment déposer le rapport dans Mon espace santé, et le guide de présentation liste la carte à donner au patient et « Pourquoi recommander OUCH ». Captures refaites.
 - **Rapport médecin traitant : une première page qui se lit en une minute.** Sous l’en-tête et « En bref », quatre blocs dans l’ordre d’une consultation : ce qui a changé (les chiffres clés et leur flèche), la décision du dernier rendez-vous et ce que le journal a vu depuis, les traitements pris au besoin sur la période et sur la période d’avant (en prises), et ce que le patient veut aborder. La courbe de la douleur et la répartition des jours ouvrent la page 2. Le nombre de pages ne change pas.
+
+### Tests
+- 785 tests automatiques, dont de nouveaux pour : les décisions et leur suivi (traitement, habitude, essai, examen), le dernier rendez-vous avec décisions avant une date, l’essai proposé par le médecin (pas commencé, en cours, fini), et l’ouverture de l’app depuis la carte du médecin.
 
 ## [0.17.0] - 2026-11-25
 
@@ -632,7 +639,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.17.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.18.0...HEAD
+[0.18.0]: https://github.com/maxauvy/OUCH/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/maxauvy/OUCH/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/maxauvy/OUCH/compare/v0.15.2...v0.16.0
 [0.15.2]: https://github.com/maxauvy/OUCH/compare/v0.15.1...v0.15.2
