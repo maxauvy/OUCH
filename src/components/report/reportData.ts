@@ -16,6 +16,7 @@ import { reportFormat, type ReportFormat } from './reportFormat'
 import { shiftISO } from '../../lib/dates'
 import { markedOverlapping, type ResolvedFlare } from '../../lib/markedFlares'
 import { comparePeriods, validSpans, type Comparison, type Span } from '../../lib/periodComparison'
+import { followDecisions, lastDecided, type DecisionFollow } from '../../lib/decisions'
 
 export type ReportVariant = 'gp' | 'painClinic'
 
@@ -111,6 +112,8 @@ export interface ReportData {
   goodDays: BeforeGoodDays | null
   /** The one-week trials that ended in the two periods and can be compared */
   trials: ReportTrial[]
+  /** « Ce qu'on a décidé »: the last appointment of the two periods with decisions, and what the journal shows since each one */
+  decided: { date: string; follows: DecisionFollow[] } | null
 }
 
 /** Flares found in the whole history, since the usual level before one
@@ -170,6 +173,10 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     compare: compared.enough ? compared : null,
     compareSpans: spans,
     weekdays: weekdayProfile(current),
+    decided: (() => {
+      const a = lastDecided(options.appointments, p.end)
+      return a && a.date >= p.prevStart ? { date: a.date, follows: followDecisions(a.decisions!, a.date, p.end, entries, medications) } : null
+    })(),
     goodDays: (() => {
       const reading = beforeGoodDays(
         entries.filter((e) => e.date <= options.end),

@@ -59,6 +59,7 @@ import { planFromBackup } from './hardDaysPlan.ts'
 import { cleanPainWords } from './painWords.ts'
 import { cleanMdphGestures } from './mdph.ts'
 import { cleanParcours } from './mdphParcours.ts'
+import { cleanDecisions } from './decisions.ts'
 import { yearWishFromBackup } from './yearReview.ts'
 import { noteFromBackup } from './goodDayNote.ts'
 import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
@@ -379,7 +380,8 @@ function pastConsultationList(v: unknown): PastConsultation[] | undefined {
     const notes = typeof p.notes === 'string' ? p.notes.trim().slice(0, MAX_NOTES_LENGTH) : ''
     const questions = (strings(p.questions, MAX_QUESTION_LENGTH) ?? []).map((q) => cleanLine(q)).filter(Boolean).slice(0, MAX_QUESTIONS)
     const goal = typeof p.goal === 'string' ? cleanLine(p.goal, MAX_GOAL_LENGTH) : ''
-    return [{ date: p.date, kind, ...(doctor ? { doctor } : {}), ...(notes ? { notes } : {}), ...(questions.length ? { questions } : {}), ...(goal ? { goal } : {}) }]
+    const decisions = cleanDecisions(p.decisions)
+    return [{ date: p.date, kind, ...(doctor ? { doctor } : {}), ...(notes ? { notes } : {}), ...(questions.length ? { questions } : {}), ...(goal ? { goal } : {}), ...(decisions ? { decisions } : {}) }]
   })
   // Nothing in the file was usable: keep what this device holds, rather than clearing it.
   if (v.length > 0 && list.length === 0) return undefined
