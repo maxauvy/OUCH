@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { DailyEntry } from '../src/db/types.ts'
-import { MIN_DAYS, cleanWish, entryCardYear, reviewYear, yearReview, yearWishFromBackup } from '../src/lib/yearReview.ts'
+import { MIN_DAYS, trialCount, cleanWish, entryCardYear, reviewYear, yearReview, yearWishFromBackup } from '../src/lib/yearReview.ts'
 import { shiftISO } from '../src/lib/dates.ts'
 
 const entry = (date: string, painLevel: number, more: Partial<DailyEntry> = {}): DailyEntry => ({ date, painLevel, createdAt: 0, updatedAt: 0, ...more })
@@ -74,7 +74,7 @@ test('what helped, trials, the note and appointments of that year only', () => {
   })!
   assert.equal(r.helped[0]!.label, 'Repos / sieste')
   assert.equal(r.helped[1]!.label, 'Marche courte')
-  assert.deepEqual(r.trials, ['Marche courte'])
+  assert.deepEqual(r.trials, [{ action: 'Marche courte', times: 1 }])
   assert.equal(r.wroteNote, true)
   assert.equal(r.appointments, 1)
 })
@@ -85,4 +85,21 @@ test('the line for the year to come is one tidy line, and a backup gives it back
   assert.deepEqual(yearWishFromBackup({ year: 2026, text: ' Respirer ' }), { year: 2026, text: 'Respirer' })
   assert.equal(yearWishFromBackup({ year: '2026', text: 'x' }), undefined)
   assert.equal(yearWishFromBackup({ year: 2026, text: '  ' }), undefined)
+})
+
+test('an action tried several times is one line with its times, not repeated', () => {
+  const entries = journal('2026-09-01', '2026-12-10', () => ({}))
+  const trial = (action: string, start: string, end: string) => ({ key: `action:${action.toLowerCase()}`, action, start, end })
+  const r = yearReview({
+    entries,
+    year: 2026,
+    today: '2026-12-10',
+    flaresApply: true,
+    trials: [trial('Chaleur', '2026-09-02', '2026-09-11'), trial('chaleur ', '2026-09-20', '2026-09-29'), trial('Marche courte', '2026-10-05', '2026-10-14'), trial('Chaleur', '2026-11-01', '2026-11-10')],
+  })!
+  assert.deepEqual(r.trials, [
+    { action: 'Chaleur', times: 3 },
+    { action: 'Marche courte', times: 1 },
+  ])
+  assert.equal(trialCount(r.trials), 4)
 })

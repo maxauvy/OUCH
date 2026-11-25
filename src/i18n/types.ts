@@ -1586,6 +1586,10 @@ export interface Translations {
     didDays: string
     didTrial: string
     didTrials: string
+    /** `{{n}}` trials, all of `{{action}}` */
+    didTrialsSame: string
+    /** One action of the list tried `{{n}}` times */
+    trialTimes: string
     didNote: string
     didAppointments: string
     endTitle: string

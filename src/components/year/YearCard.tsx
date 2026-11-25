@@ -5,7 +5,7 @@ import { format, useLanguage, useTranslation } from '../../i18n'
 import { downloadBlob } from '../../lib/backup'
 import { cardToPng } from '../../lib/cardImage'
 import { helperIn } from '../../lib/careSheet'
-import { MAX_WISH, cleanWish, type YearReview } from '../../lib/yearReview'
+import { MAX_WISH, cleanWish, trialCount, type YearReview } from '../../lib/yearReview'
 import { CORAL, INK, MUTED } from './yearStyle'
 import { Confetti, YearSky } from './YearStory'
 
@@ -33,7 +33,7 @@ export function YearCard({ review, onBack }: { review: YearReview; onBack: () =>
   if (review.flares.length) tiles.push([f(t.tileFlares, { n: review.flares.length }), f(t.tileFlaresSub, { n: review.flares.length })])
   if (review.calm) tiles.push([f(t.tileCalm, { n: review.calm.days }), t.tileCalmSub])
   if (review.helped[0]) tiles.push([helperIn(review.helped[0].label, language), t.tileHelpedSub])
-  if (review.trials.length) tiles.push([f(t.tileTrials, { n: review.trials.length }), review.trials.join(', ').toLocaleLowerCase(language)])
+  if (review.trials.length) tiles.push([f(t.tileTrials, { n: trialCount(review.trials) }), review.trials.map((x) => x.action).join(', ').toLocaleLowerCase(language)])
   if (review.wroteNote) tiles.push([t.tileNote, t.tileNoteSub])
   const shown = tiles.slice(0, 4)
 
