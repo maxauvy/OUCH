@@ -1,11 +1,13 @@
 import { createContext, createElement, isValidElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
-import { IconActivityHeartbeat, IconBodyScan, IconBook2, IconBulb, IconCalendar, IconCalendarWeek, IconChartDots, IconChartLine, IconCloudStorm, IconHeart, IconHeartbeat, IconInfoCircle, IconLeaf, IconListCheck, IconListDetails, IconMessageQuestion, IconMoodSmile, IconMoon, IconNotes, IconPill, IconRuler2, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
+import { IconActivityHeartbeat, IconBodyScan, IconBook2, IconBulb, IconCalendar, IconCalendarWeek, IconChartDots, IconChartLine, IconClipboardCheck, IconCloudStorm, IconHeart, IconHeartbeat, IconInfoCircle, IconLeaf, IconListCheck, IconListDetails, IconMessageQuestion, IconMoodSmile, IconMoon, IconNotes, IconPill, IconRuler2, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
 import { periodDayOf } from '../../lib/periodDay'
 import { lateCount } from '../../lib/lateEntries'
 import { dayMix, type MixDirection } from '../../lib/dayMix'
 import { timelineItems, type TimelineItem } from '../../lib/trendsTimeline'
 import { treatmentEvents } from '../../lib/treatmentEvents'
 import { treatmentEventText } from '../trends/treatmentEventText'
+import { getTranslations } from '../../i18n'
+import { followLines } from '../consultation/decisionTexts'
 import './report.css'
 import type { LoggedEntry } from '../../db/types'
 import { DRAW_ORDER, pieces, type View } from '../../lib/bodyOutlines'
@@ -95,6 +97,7 @@ const KINDS = {
   keyPoints: { icon: IconListCheck, tone: 'brand' },
   compare: { icon: IconChartDots, tone: 'brand' },
   weekdays: { icon: IconCalendarWeek, tone: 'brand' },
+  decisions: { icon: IconClipboardCheck, tone: 'brand' },
   goodDays: { icon: IconSun, tone: 'brand' },
   noticed: { icon: IconBulb, tone: 'brand' },
   agenda: { icon: IconMessageQuestion, tone: 'brand' },
@@ -238,6 +241,7 @@ function gpPages(d: ReportData): Block[][] {
     ],
     // Page 2: what happened, what the patient wants to bring up, the treatments, the symptoms and the zones.
     [
+      d.decided && <DecisionsBlock d={d} />,
       timeline.length > 0 && rowsBlock(timeline.length, (from, to, continued) => <ReportTimeline d={d} items={timeline} from={from} to={to} continued={continued} />, 'timeline'),
       hasAgenda && (
         <TocBlock id="agenda">
@@ -393,6 +397,7 @@ function painClinicLayout(d: ReportData): { pages: Block[][]; labels: string[] }
       title: f.t.partTreatments,
       hint: f.t.partTreatmentsHint,
       blocks: [
+        d.decided && <DecisionsBlock d={d} />,
         d.meds.length > 0 ? (
           <>
             <H level={3} kind="treatments">{f.t.treatments}</H>
@@ -2087,6 +2092,41 @@ function Noticed({ d }: { d: ReportData }) {
         {noticed.length > 0 && f.t.noticedNote} {trials.some((x) => !x.trial.plan) && f.t.noticedTrialNote}
         {trials.some((x) => !x.trial.plan && x.result.gap > 0) && ` ${f.t.noticedTrialHarder}`}
         {trials.some((x) => x.trial.plan) && ` ${f.t.noticedTrialDrawnNote}`}
+      </p>
+    </>
+  )
+}
+
+/** « Ce qu'on a décidé »: the decisions of the last appointment and what the journal shows since each one, counted and never judged. */
+function DecisionsBlock({ d }: { d: ReportData }) {
+  const { f, decided } = d
+  if (!decided) return null
+  const t = getTranslations(d.options.language).decisions
+  return (
+    <>
+      <H level={2} kind="decisions">{f.format(t.sinceTitle, { date: f.fullDate(decided.date) })}</H>
+      <table className="r-decisions">
+        <thead>
+          <tr>
+            <th scope="col" style={{ width: '34%' }}>{f.t.decisionsColDecision}</th>
+            <th scope="col">{f.t.decisionsColJournal}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {decided.follows.map((x, i) => (
+            <tr key={i} data-row>
+              <th scope="row">
+                <b>{x.decision.text}</b>
+                <br />
+                <span className="r-small">{t.kinds[x.decision.kind].toLocaleLowerCase(d.options.language)}</span>
+              </th>
+              <td>{followLines(x, t, d.options.language, (v) => f.nf(v)).join(' ') || '—'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="r-small">
+        {t.declared} {t.caveat}
       </p>
     </>
   )

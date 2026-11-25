@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **« Ce qu’on a décidé » : d’une consultation à l’autre.** Après un rendez-vous, sous « Après le rendez-vous » (et dans la fiche d’un rendez-vous passé), une à quatre décisions, chacune avec son type : traitement (relié au registre si tu veux), habitude, examen ou autre. Pour une habitude, OUCH demande quel geste de « ce qui a aidé » la compte et combien de fois par semaine. Au rendez-vous suivant et dans les deux rapports, « Depuis la consultation du … » reprend chaque décision avec ce que le journal a vu depuis : pour un traitement, la douleur moyenne des 28 jours d’avant et des 28 jours après ses jours d’adaptation, et les jours où un effet indésirable a été noté ; pour une habitude, les jours notés contre les fois prévues, et la douleur les jours avec et sans. Rien n’est jugé : le rapport rappelle qu’une évolution peut venir d’autre chose. Les décisions vont dans la sauvegarde chiffrée ; la démo en a deux.
+
 ## [0.17.0] - 2026-11-25
 
 Les cinq idées qui rendent OUCH à part : un mot pour soi rendu pendant une poussée, ce qui précédait les bons jours, un dossier MDPH qui guide jusqu’au formulaire officiel pré-rempli et prépare le certificat médical pour la consultation, les mots de la douleur, et « Mon année » racontée en fin d’année. Les essais se font sur des jours tirés au sort, l’app et le rapport passent aux couleurs de l’aube, et la barre d’onglets se détache mieux des cartes. Tous les PDF, les captures et l’image du README sont refaits pour cette version.
