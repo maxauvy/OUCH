@@ -25,6 +25,10 @@ const fr: Translations = {
   },
 
   setup: {
+    byDoctorTitle: 'Ton médecin t’a conseillé ce carnet',
+    byDoctorBody: 'Une minute par jour suffit. Au prochain rendez-vous, tu lui montreras ton rapport : ce qui a changé, ce que vous aviez décidé, tes questions.',
+    byDoctorDate: 'Ton prochain rendez-vous, si tu le connais',
+    byDoctorHint: 'Quinze jours avant, une carte douce te rappellera de préparer ton rapport. Rien n’est envoyé à ton médecin : c’est toi qui le lui montres.',
     progress: 'Étape {{n}} sur {{total}}',
     skipAll: 'Passer',
     begin: 'Préparer mon suivi',
@@ -942,6 +946,13 @@ const fr: Translations = {
   },
 
   doctorReport: {
+    sendTitle: 'Le faire parvenir à ton médecin',
+    sendDms: 'Mon espace santé',
+    sendDmsHint: 'Rubrique Documents, « Ajouter un document » : ton médecin le voit s’il consulte ton dossier.',
+    sendBooking: 'À la prise de rendez-vous en ligne',
+    sendBookingHint: 'Certains sites permettent de joindre un document au rendez-vous.',
+    sendHand: 'Sur ton téléphone ou imprimé',
+    sendHandHint: 'Tu le montres ou tu le donnes pendant la consultation.',
     entryTitle: 'Rapport pour mon médecin',
     entryHelper: 'Un résumé imprimable de ton suivi, à apporter en consultation.',
     title: 'Rapport pour mon médecin',

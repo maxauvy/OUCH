@@ -6,6 +6,10 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Une carte à donner par le médecin, et un accueil qui la reconnaît.** Une carte A6 recto verso (`docs/carte-medecin/`) que le médecin garde au cabinet : quoi noter chaque soir (à cocher), la date du prochain rendez-vous, et un code QR. Ouvert depuis cette carte, l’accueil d’OUCH commence par « Ton médecin t’a conseillé ce carnet » et propose de noter le prochain rendez-vous, avec sa carte de rappel quinze jours avant. Rien ne part vers le médecin.
+- **Le rapport dit comment le faire parvenir au médecin.** Sous les boutons du rapport : le déposer dans Mon espace santé (rubrique Documents), le joindre à la prise de rendez-vous en ligne quand le site le permet, ou le montrer et l’imprimer comme avant.
+
 ## [0.17.0] - 2026-11-25
 
 Les cinq idées qui rendent OUCH à part : un mot pour soi rendu pendant une poussée, ce qui précédait les bons jours, un dossier MDPH qui guide jusqu’au formulaire officiel pré-rempli et prépare le certificat médical pour la consultation, les mots de la douleur, et « Mon année » racontée en fin d’année. Les essais se font sur des jours tirés au sort, l’app et le rapport passent aux couleurs de l’aube, et la barre d’onglets se détache mieux des cartes. Tous les PDF, les captures et l’image du README sont refaits pour cette version.

@@ -23,6 +23,10 @@ const en: Translations = {
   },
 
   setup: {
+    byDoctorTitle: 'Your doctor suggested this journal',
+    byDoctorBody: 'One minute a day is enough. At your next appointment, you show them your report: what changed, what you had decided, your questions.',
+    byDoctorDate: 'Your next appointment, if you know it',
+    byDoctorHint: 'Two weeks before, a gentle card will remind you to prepare your report. Nothing is sent to your doctor: you are the one who shows it.',
     progress: 'Step {{n}} of {{total}}',
     skipAll: 'Skip',
     begin: 'Set up my tracking',
@@ -940,6 +944,13 @@ const en: Translations = {
   },
 
   doctorReport: {
+    sendTitle: 'Getting it to your doctor',
+    sendDms: 'Mon espace santé (France)',
+    sendDmsHint: 'Documents, “Add a document”: your doctor sees it when they open your record.',
+    sendBooking: 'When booking online',
+    sendBookingHint: 'Some booking sites let you attach a document to the appointment.',
+    sendHand: 'On your phone or printed',
+    sendHandHint: 'You show it or hand it over during the appointment.',
     entryTitle: 'Report for my doctor',
     entryHelper: 'A printable summary of your log, to bring to your appointment.',
     title: 'Report for my doctor',

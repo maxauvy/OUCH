@@ -36,6 +36,10 @@ export interface Translations {
   }
 
   setup: {
+    byDoctorTitle: string
+    byDoctorBody: string
+    byDoctorDate: string
+    byDoctorHint: string
     /** "Step {{n}} of {{total}}" */
     progress: string
     skipAll: string
@@ -737,6 +741,13 @@ export interface Translations {
 
   /** Export page (in the app's language). */
   doctorReport: {
+    sendTitle: string
+    sendDms: string
+    sendDmsHint: string
+    sendBooking: string
+    sendBookingHint: string
+    sendHand: string
+    sendHandHint: string
     entryTitle: string
     entryHelper: string
     title: string
