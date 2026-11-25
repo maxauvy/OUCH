@@ -6,6 +6,7 @@
 //   (the treatment's own, 7 when absent), as in the before-and-after review; and the days a side effect of it was noted since;
 // - a habit, tied to an action of « ce qui a aidé »: how many days it was noted since, against the times planned, and the mean pain on the
 //   days with and without it;
+// - a trial, suggested by the doctor and drawn like any other (lib/leadTrial.ts): where it stands, or its result;
 // - an exam or anything else: the sentence only.
 //
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
@@ -13,15 +14,16 @@
 import type { LoggedEntry, Medication, PastConsultation } from '../db/types.ts'
 import { daysBetween, shiftISO } from './dates.ts'
 import { mean } from './stats.ts'
+import { trialStatus, type LeadTrial, type TrialStatus } from './leadTrial.ts'
 
-export const DECISION_KINDS = ['treatment', 'habit', 'exam', 'other'] as const
+export const DECISION_KINDS = ['treatment', 'habit', 'trial', 'exam', 'other'] as const
 export type DecisionKind = (typeof DECISION_KINDS)[number]
 
 export interface Decision {
   kind: DecisionKind
   /** The decision in the person's words. */
   text: string
-  /** A habit: the action of « ce qui a aidé » that counts it. */
+  /** A habit or a trial: the action of « ce qui a aidé » it is about. */
   action?: string
   /** A habit: the times a week planned. */
   perWeek?: number
@@ -49,8 +51,8 @@ export function cleanDecisions(raw: unknown): Decision[] | undefined {
     if (!(DECISION_KINDS as readonly unknown[]).includes(d.kind)) continue
     const kind = d.kind as DecisionKind
     const text = line(d.text, MAX_DECISION_LENGTH)
-    const action = kind === 'habit' ? line(d.action, 80) : ''
-    if (!text && !action) continue
+    const action = kind === 'habit' || kind === 'trial' ? line(d.action, 80) : ''
+    if ((!text && !action) || (kind === 'trial' && !action)) continue
     const perWeek = kind === 'habit' && (PER_WEEK as readonly unknown[]).includes(d.perWeek) ? (d.perWeek as number) : undefined
     const medicationId = kind === 'treatment' && typeof d.medicationId === 'string' && d.medicationId ? d.medicationId : undefined
     out.push({ kind, text: text || action, ...(action ? { action } : {}), ...(perWeek ? { perWeek } : {}), ...(medicationId ? { medicationId } : {}) })
@@ -67,12 +69,13 @@ export function lastDecided(past: readonly PastConsultation[] | undefined, to: s
 export type DecisionFollow =
   | { kind: 'treatment'; decision: Decision; name?: string; before: { mean: number; n: number } | null; after: { mean: number; n: number } | null; settleDays: number; effectDays: number; effects: string[] }
   | { kind: 'habit'; decision: Decision; done: number; planned: number | null; withMean: number | null; withoutMean: number | null; withDays: number; withoutDays: number }
+  | { kind: 'trial'; decision: Decision; trial: LeadTrial | null; status: TrialStatus | null }
   | { kind: 'note'; decision: Decision }
 
 const sameAction = (a: string, b: string) => a.trim().toLocaleLowerCase() === b.trim().toLocaleLowerCase()
 
 /** What the journal shows since the appointment of `date`, up to `to`, for each decision. */
-export function followDecisions(decisions: readonly Decision[], date: string, to: string, entries: readonly LoggedEntry[], medications: readonly Medication[]): DecisionFollow[] {
+export function followDecisions(decisions: readonly Decision[], date: string, to: string, entries: readonly LoggedEntry[], medications: readonly Medication[], trials: readonly LeadTrial[] = []): DecisionFollow[] {
   const sorted = [...entries].sort((a, b) => a.date.localeCompare(b.date))
   const between = (from: string, until: string) => sorted.filter((e) => e.date >= from && e.date <= until)
   const side = (list: LoggedEntry[]) => (list.length >= MIN_SIDE ? { mean: mean(list.map((e) => e.painLevel)), n: list.length } : null)
@@ -110,6 +113,11 @@ export function followDecisions(decisions: readonly Decision[], date: string, to
         withDays: withDays.length,
         withoutDays: withoutDays.length,
       }
+    }
+    if (decision.kind === 'trial' && decision.action) {
+      // The first trial of that action that started after the appointment.
+      const trial = [...trials].filter((t) => t.start > date && sameAction(t.action, decision.action!)).sort((a, b) => a.start.localeCompare(b.start))[0] ?? null
+      return { kind: 'trial', decision, trial, status: trial && trial.start <= to ? trialStatus(trial, sorted, to) : null }
     }
     return { kind: 'note', decision }
   })

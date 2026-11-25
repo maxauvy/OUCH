@@ -175,7 +175,7 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     weekdays: weekdayProfile(current),
     decided: (() => {
       const a = lastDecided(options.appointments, p.end)
-      return a && a.date >= p.prevStart ? { date: a.date, follows: followDecisions(a.decisions!, a.date, p.end, entries, medications) } : null
+      return a && a.date >= p.prevStart ? { date: a.date, follows: followDecisions(a.decisions!, a.date, p.end, entries, medications, [...(options.leadTrials?.history ?? []), ...(options.leadTrials?.current ? [options.leadTrials.current] : [])]) } : null
     })(),
     goodDays: (() => {
       const reading = beforeGoodDays(

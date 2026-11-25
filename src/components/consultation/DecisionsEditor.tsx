@@ -28,7 +28,7 @@ function actionChoices(entries: readonly LoggedEntry[] | undefined, suggestions:
  * « Ce qu'on a décidé »: one line per decision, with its kind. A habit also asks which action of « ce qui a aidé » counts it and how many
  * times a week; a treatment can point at the registry. Nothing more: the report follows them up.
  */
-export function DecisionsEditor({ decisions, onChange, entries, medications }: { decisions: Decision[]; onChange: (d: Decision[]) => void; entries?: readonly LoggedEntry[]; medications?: readonly Medication[] }) {
+export function DecisionsEditor({ decisions, onChange, entries, medications, trialBusy = false }: { decisions: Decision[]; onChange: (d: Decision[]) => void; entries?: readonly LoggedEntry[]; medications?: readonly Medication[]; /** A trial is under way: a new one is noted but not started. */ trialBusy?: boolean }) {
   const i18n = useTranslation()
   const t = i18n.decisions
   const language = useLanguage()
@@ -41,14 +41,15 @@ export function DecisionsEditor({ decisions, onChange, entries, medications }: {
   const actions = useMemo(() => actionChoices(entries, i18n.entryForm.positiveActionsSuggestions), [entries, i18n])
   const active = (medications ?? []).filter((m) => m.periods.some((p) => !p.end))
   const full = decisions.length >= MAX_DECISIONS
-  const canAdd = !full && (text.trim() || (kind === 'habit' && action))
+  const hasTrial = decisions.some((d) => d.kind === 'trial')
+  const canAdd = !full && (kind === 'trial' ? !!action && !hasTrial : text.trim() || (kind === 'habit' && action))
 
   const add = () => {
     if (!canAdd) return
     const d: Decision = {
       kind,
       text: text.trim().slice(0, MAX_DECISION_LENGTH) || (action ?? ''),
-      ...(kind === 'habit' && action ? { action } : {}),
+      ...((kind === 'habit' || kind === 'trial') && action ? { action } : {}),
       ...(kind === 'habit' && perWeek ? { perWeek } : {}),
       ...(kind === 'treatment' && medicationId ? { medicationId } : {}),
     }
@@ -107,6 +108,21 @@ export function DecisionsEditor({ decisions, onChange, entries, medications }: {
                   <Chip key={n} label={n === 7 ? t.everyDay : format(t.perWeek, { n }, language)} selected={perWeek === n} onClick={() => setPerWeek(perWeek === n ? null : n)} />
                 ))}
               </div>
+            </>
+          )}
+          {kind === 'trial' && (
+            <>
+              <p id={`${ids}-trial`} className="text-control font-semibold">
+                {t.trialActionLabel}
+              </p>
+              <div role="group" aria-labelledby={`${ids}-trial`} className="flex flex-wrap gap-2">
+                {actions.map((a) => (
+                  <Chip key={a} label={a} selected={action === a} onClick={() => setAction(action === a ? null : a)} />
+                ))}
+              </div>
+              <p className="text-control" style={{ color: 'var(--color-ink-muted)' }}>
+                {trialBusy ? t.trialBusy : t.trialHint}
+              </p>
             </>
           )}
           {kind === 'treatment' && active.length > 0 && (

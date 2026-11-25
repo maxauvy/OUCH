@@ -76,3 +76,21 @@ test('a habit: days noted against the times planned, pain with and without', () 
 test('an exam or anything else: the sentence only', () => {
   assert.deepEqual(followDecisions([{ kind: 'exam', text: 'Bilan thyroïdien' }], D, day(20), [], []), [{ kind: 'note', decision: { kind: 'exam', text: 'Bilan thyroïdien' } }])
 })
+
+test('a trial needs its action, and follows the first drawn trial of that action after the appointment', async () => {
+  assert.equal(cleanDecisions([{ kind: 'trial', text: 'La chaleur' }]), undefined)
+  assert.deepEqual(cleanDecisions([{ kind: 'trial', text: '', action: 'Chaleur', perWeek: 3 }]), [{ kind: 'trial', text: 'Chaleur', action: 'Chaleur' }])
+  const plan = ['with', 'without', 'with', 'without', 'with', 'without', 'with', 'without', 'with', 'without'] as const
+  const trial = { key: 'action:chaleur', action: 'Chaleur', start: day(1), end: day(10), plan: [...plan], byDoctor: true as const }
+  const older = { key: 'action:chaleur', action: 'Chaleur', start: day(-30), end: day(-21), plan: [...plan] }
+  const entries = Array.from({ length: 12 }, (_, i) => entry(1 + i, plan[i] === 'with' ? 3 : 5))
+  const d = { kind: 'trial' as const, text: 'Chaleur', action: 'Chaleur' }
+  const [notYet] = followDecisions([d], D, day(0), entries, [], [trial, older])
+  assert.ok(notYet!.kind === 'trial' && notYet!.status === null && notYet!.trial === trial)
+  const [running] = followDecisions([d], D, day(4), entries, [], [trial])
+  assert.ok(running!.kind === 'trial' && running!.status!.over === false && running!.status!.day === 4)
+  const [done] = followDecisions([d], D, day(12), entries, [], [trial])
+  assert.ok(done!.kind === 'trial' && done!.status!.result!.with.mean === 3 && done!.status!.result!.without.mean === 5)
+  const [none] = followDecisions([d], D, day(12), entries, [], [])
+  assert.ok(none!.kind === 'trial' && none!.trial === null)
+})

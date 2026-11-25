@@ -19,5 +19,15 @@ export function followLines(f: DecisionFollow, t: Translations['decisions'], lan
     const pain = f.withMean !== null && f.withoutMean !== null ? [format(t.habitPain, { with: num(f.withMean), without: num(f.withoutMean) }, language)] : []
     return [done, ...pain]
   }
+  if (f.kind === 'trial') {
+    if (!f.status) return [t.trialNotStarted]
+    if (!f.status.over) return [format(t.trialRunning, { day: f.status.day, length: f.status.length }, language)]
+    const r = f.status.result
+    if (!r) return [t.trialTooFew]
+    return [
+      format(t.trialResult, { with: num(r.with.mean), nWith: r.with.n, without: num(r.without.mean), nWithout: r.without.n }, language),
+      ...(r.next ? [format(t.trialNext, { with: num(r.next.with.mean), without: num(r.next.without.mean) }, language)] : []),
+    ]
+  }
   return []
 }

@@ -20,6 +20,8 @@ import { ModalSheet } from '../ui/ModalSheet'
 import { PrescriptionFields } from '../prescription/PrescriptionFields'
 import { draftPrescription, prescriptionEnd, type PrescriptionDraft } from '../../lib/prescription'
 import { followDecisions, type Decision } from '../../lib/decisions'
+import { archiveTrial, newTrial } from '../../lib/leadTrial'
+import { actionKey } from '../../lib/leads'
 import { DecisionsEditor } from './DecisionsEditor'
 import { followLines } from './decisionTexts'
 
@@ -95,9 +97,20 @@ export function ConsultationSheet({
     save(addQuestion(c, question))
     setQuestion('')
   }
+  // A trial under way (not over yet): a trial decided now is noted, not started.
+  const trialBusy = !!settings.leadTrial && today <= settings.leadTrial.end
   function finish() {
     const prescription = draftPrescription(rx)
-    void updateSettings({ ...finishConsultation(settings, notes, decisions), ...(prescription ? { prescription, prescriptionCardState: undefined } : {}) })
+    const trial = decisions.find((d) => d.kind === 'trial' && d.action)
+    // A trial suggested by the doctor starts tomorrow, drawn like any other; a finished one still open is archived first.
+    const started =
+      trial && !trialBusy
+        ? {
+            leadTrial: { ...newTrial(`action:${actionKey(trial.action!)}`, trial.action!, today), byDoctor: true as const },
+            ...(settings.leadTrial ? { leadTrialHistory: archiveTrial(settings.leadTrialHistory, settings.leadTrial) } : {}),
+          }
+        : {}
+    void updateSettings({ ...finishConsultation(settings, notes, decisions), ...(prescription ? { prescription, prescriptionCardState: undefined } : {}), ...started })
     onClose()
   }
   function remove() {
@@ -276,7 +289,7 @@ export function ConsultationSheet({
                 {i18n.decisions.title}
               </p>
               <ul className="flex flex-col gap-1.5 mt-0.5">
-                {followDecisions(last.decisions, last.date, today, entries, medications ?? []).map((f, k) => (
+                {followDecisions(last.decisions, last.date, today, entries, medications ?? [], [...(settings.leadTrialHistory ?? []), ...(settings.leadTrial ? [settings.leadTrial] : [])]).map((f, k) => (
                   <li key={k} className="text-body">
                     <b>{f.decision.text}</b>
                     {followLines(f, i18n.decisions, language, (v) => nf.format(v)).map((l) => (
@@ -321,7 +334,7 @@ export function ConsultationSheet({
                 style={field}
               />
               <div className="mt-4">
-                <DecisionsEditor decisions={decisions} onChange={setDecisions} entries={entries} medications={medications} />
+                <DecisionsEditor decisions={decisions} onChange={setDecisions} entries={entries} medications={medications} trialBusy={trialBusy} />
               </div>
               <div className="mt-4">
                 <h4 className="text-caption font-semibold mb-0.5">{tp.afterTitle}</h4>
