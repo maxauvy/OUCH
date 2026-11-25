@@ -6,6 +6,11 @@
 export type LaunchTarget = 'souffler' | 'douleur'
 
 /** The screen asked for by the address the app was opened with, if it is one we know. */
+/** Opened from the card a doctor hands out (`?de=medecin`): the setup says so and asks for the next appointment. */
+export function fromDoctor(search: string): boolean {
+  return new URLSearchParams(search).get('de') === 'medecin'
+}
+
 export function launchTarget(search: string): LaunchTarget | null {
   const go = new URLSearchParams(search).get('go')
   return go === 'souffler' || go === 'douleur' ? go : null
