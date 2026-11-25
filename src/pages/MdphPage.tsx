@@ -12,7 +12,8 @@ import { downloadBlob } from '../lib/backup'
 import { todayISO } from '../lib/dates'
 import { formatPosology } from '../lib/medicationFormat'
 import { GESTURES, GESTURE_ANSWERS, MIN_TRACKED, PERIODS, cleanMdphGestures, mdphData, type MdphGesture, type MdphPeriod } from '../lib/mdph'
-import { format, useLanguage, useLocale, useTranslation } from '../i18n'
+import { format, getTranslations, useLanguage, useLocale, useTranslation } from '../i18n'
+import { fr as dateFr } from 'date-fns/locale'
 import { Segmented } from '../components/ui/Segmented'
 import { MdphDocument, type MdphInput } from '../components/mdph/MdphDocument'
 import { MonthBars } from '../components/mdph/MonthBars'
@@ -102,6 +103,13 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
   const input: MdphInput | null = data && { language, today, name: settings.displayName.trim(), data, gestures }
   const long = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMMM yyyy', { locale: dateFnsLocale })
   const fileTitle = `${t.title} ${today}`
+  // The texts written into the form are French whatever the app's language: the form is French.
+  const formTexts = useMemo(() => {
+    if (!data || data.logged < MIN_TRACKED) return null
+    const fr = getTranslations('fr').mdph
+    const from = formatDate(new Date(data.start + 'T00:00:00'), 'd MMMM yyyy', { locale: dateFr })
+    return { b3: b3Sentence(data, fr, 'fr', from), d1: d1Sentence(data, fr, 'fr'), months }
+  }, [data, months])
 
   // Browsers name the saved PDF after the page title.
   useEffect(() => {
@@ -167,7 +175,7 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
         {t.intro}
       </p>
 
-      <ParcoursCard cardsShown={!!data && data.logged >= MIN_TRACKED} />
+      <ParcoursCard cardsShown={!!data && data.logged >= MIN_TRACKED} texts={formTexts} today={today} />
 
       <h2 className="section-title text-heading font-bold px-1 mt-2">{t.parcours.boxesTitle}</h2>
 
