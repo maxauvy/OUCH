@@ -57,7 +57,7 @@ export function TabBar({
     >
       <div
         ref={pillRef}
-        className="glass-float pointer-events-auto relative flex items-center max-w-full"
+        className="glass-float tabbar-glass pointer-events-auto relative flex items-center max-w-full"
         style={{ height: 58, padding: 5, borderRadius: 999 }}
       >
         {/* The soft disc under the open tab: one for the bar, so it can glide from a tab to the next. */}
@@ -65,7 +65,7 @@ export function TabBar({
           aria-hidden
           data-pill-disc
           className="absolute left-0 top-[5px] bottom-[5px] rounded-full"
-          style={{ background: 'var(--color-brand-soft)', width: 0 }}
+          style={{ background: 'var(--tabbar-pill)', width: 0 }}
         />
         {TABS.map((tab) => {
           const isActive = active === tab.id

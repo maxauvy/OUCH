@@ -773,6 +773,33 @@ html.page-fading main ~ nav {
   transform: none;
   pointer-events: auto;
 }
+/* The tab bar stands out from the cards it floats over: a lilac a little deeper than them in light mode, lighter than them in
+   dark mode, a firmer edge and shadow, and the open tab on a white pill (a lighter lilac in dark mode). The other bubbles keep
+   the plain glass. */
+:root {
+  --tabbar-pill: var(--color-surface);
+  --tabbar-shadow: 0 12px 28px -12px rgba(60, 40, 120, 0.45);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --tabbar-pill: color-mix(in srgb, var(--color-brand) 22%, var(--color-brand-soft));
+    --tabbar-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.7);
+  }
+}
+:root[data-theme='dark'] {
+  --tabbar-pill: color-mix(in srgb, var(--color-brand) 22%, var(--color-brand-soft));
+  --tabbar-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.7);
+}
+.glass-float.tabbar-glass {
+  background: color-mix(in srgb, color-mix(in srgb, var(--color-brand) 8%, var(--color-brand-soft)) 92%, transparent);
+  border-color: color-mix(in srgb, var(--color-brand) 24%, transparent);
+  box-shadow: var(--tabbar-shadow);
+}
+.tabbar-glass [data-pill-disc] {
+  background: var(--tabbar-pill);
+  box-shadow: 0 1px 3px rgba(60, 40, 120, 0.15);
+}
+
 /* Buttons that keep their own soft fill in the page (the bell of « Nouveautés ») take the glass around them instead. */
 .float-rounds button {
   background: transparent !important;
@@ -1109,5 +1136,94 @@ html[data-covered]::after {
 @keyframes save-text-in {
   from {
     opacity: 0;
+  }
+}
+
+/* « Mon année »: each screen arrives once, then stays still. Its parts rise one after the other, the sky fills row by row, the
+   flare bars grow, the sun rises, the confetti falls once and stays where it lands, the highlighter slides under the words to
+   keep, and the bar of the screen fills. Nothing loops. For those who asked for less motion, the screens simply appear. */
+.ys-rise > * {
+  animation: ys-rise 550ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.ys-rise > :nth-child(2) {
+  animation-delay: 120ms;
+}
+.ys-rise > :nth-child(3) {
+  animation-delay: 300ms;
+}
+.ys-rise > :nth-child(n + 4) {
+  animation-delay: 1000ms;
+}
+.ys-pop {
+  animation: ys-pop 350ms ease both;
+}
+.ys-grow {
+  transform-origin: left;
+  animation: ys-grow 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.ys-sun {
+  animation: ys-sun 1400ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.ys-fall {
+  animation: ys-fall 1600ms cubic-bezier(0.3, 0.6, 0.3, 1) both;
+}
+.ys-sweep {
+  animation: ys-sweep 700ms ease 900ms both;
+}
+.ys-fill {
+  transform-origin: left;
+  animation: ys-grow 450ms ease both;
+}
+@keyframes ys-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes ys-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+@keyframes ys-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes ys-sun {
+  from {
+    opacity: 0.3;
+    transform: translateY(90px);
+  }
+}
+@keyframes ys-fall {
+  from {
+    opacity: 0;
+    translate: 0 -160px;
+  }
+  20% {
+    opacity: 0.75;
+  }
+}
+@keyframes ys-sweep {
+  from {
+    background-size: 0% 100%;
+    background-repeat: no-repeat;
+  }
+  to {
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ys-rise > *,
+  .ys-pop,
+  .ys-grow,
+  .ys-sun,
+  .ys-fall,
+  .ys-sweep,
+  .ys-fill {
+    animation: none;
   }
 }
