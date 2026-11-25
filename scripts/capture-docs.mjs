@@ -32,7 +32,7 @@ async function open(lang, viewport, dpr) {
   await page.getByRole('button', { name: T[lang].skip }).click({ timeout: 4000 }).catch(() => {})
   await sleep(500)
   // The "Demo" tag on the tab bar: keep it out of the pictures.
-  await page.addStyleTag({ content: '[class*="DemoPill"], [data-demo-pill]{display:none!important}' })
+  await page.addStyleTag({ content: '[class*="DemoPill"], [data-demo-pill], [data-year-tile]{display:none!important}' })
   return { ctx, page }
 }
 // The floating "Demo mode" pill, what floats in at the top (and, when asked, the fixed tab bar) are kept out of the pictures.
