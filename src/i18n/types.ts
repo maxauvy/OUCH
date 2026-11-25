@@ -1652,6 +1652,37 @@ export interface Translations {
   }
   /** « Mon dossier MDPH »: the journal for the request form (cerfa 15692*01) and the medical certificate (cerfa 15695*01). See lib/mdph.ts */
   mdph: {
+    /** « Mon formulaire pré-rempli »: the review before OUCH writes into the official form (lib/mdphForm.ts) */
+    form: {
+      title: string
+      intro: string
+      open: string
+      needsKind: string
+      sheetTitle: string
+      close: string
+      lastName: string
+      firstNames: string
+      namesHint: string
+      birth: string
+      birthSub: string
+      kindSub: string
+      /** `{{n}}` needs */
+      b2: string
+      b2Sub: string
+      /** `{{n}}` months */
+      b3Sub: string
+      d1Sub: string
+      asksSub: string
+      cmiNote: string
+      under20: string
+      byHandTitle: string
+      byHand: string
+      reread: string
+      make: string
+      making: string
+      failed: string
+      fileName: string
+    }
     /** « Ton parcours »: which parts of the request form to fill in (lib/mdphParcours.ts) */
     parcours: {
       title: string
