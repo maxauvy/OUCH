@@ -48,6 +48,8 @@ const hideFixed = (page, withNav) =>
     }
     // The demo's tag on the tab bar.
     document.querySelectorAll('[data-demo-pill]').forEach((el) => { el.style.display = 'none' })
+    // « Ton année » is a December and January tile that the demo shows all year round (early access): not what a document shows.
+    document.querySelectorAll('[data-year-tile]').forEach((el) => { el.style.display = 'none' })
     // What floats in at the top once the page scrolls (the glass rounds, the period bar, the way back) is not the page itself.
     if (!document.getElementById('no-float')) document.head.insertAdjacentHTML('beforeend', '<style id="no-float">.float-in{display:none!important}</style>')
     if (nav) document.querySelectorAll('nav').forEach((el) => { if (getComputedStyle(el).position === 'fixed') el.style.display = 'none' })

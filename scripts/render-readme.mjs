@@ -68,8 +68,8 @@ p.line { margin-top: 26px; font-size: 21px; line-height: 1.42; color: #3b3863; w
 .phone { position: absolute; left: 690px; top: 70px; width: 236px; height: 560px; border-radius: 30px; overflow: hidden; border: 7px solid #0f0e26; box-shadow: 16px 20px 0 #ffb58a; transform: rotate(-4deg); background: #f4f6f9; }
 .phone img, .card img { display: block; width: 100%; }
 .card { position: absolute; background: #fff; overflow: hidden; border: 1.5px solid #1f1d4433; }
-.lead { left: 940px; top: 26px; width: 228px; height: 336px; border-radius: 18px; transform: rotate(3deg); box-shadow: 0 22px 40px -26px rgba(31,29,68,.55); }
-.report { left: 770px; top: 396px; width: 410px; height: 250px; border-radius: 10px; transform: rotate(-2.5deg); box-shadow: 0 22px 40px -26px rgba(31,29,68,.55); }
+.lead { left: 940px; top: 26px; width: 228px; height: 336px; border-radius: 18px; transform: rotate(3deg); box-shadow: 10px 12px 0 #ffd2b3; }
+.report { left: 770px; top: 396px; width: 410px; height: 250px; border-radius: 10px; transform: rotate(-2.5deg); box-shadow: 10px 12px 0 #ffd2b3; }
 </style></head><body>
 <div class="left">
   <div class="brand"><img src="${data('public/apple-touch-icon.png', 'image/png')}" alt="">OUCH</div>

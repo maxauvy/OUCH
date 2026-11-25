@@ -75,6 +75,7 @@ export function YearTrendsTile() {
       <button
         type="button"
         onClick={() => setOpen(true)}
+        data-year-tile
         className="relative overflow-hidden text-left rounded-[20px] p-3.5 flex items-center gap-3"
         style={{ background: 'linear-gradient(135deg,#ffe3d1,#efe2fb)', color: '#1f1d44' }}
       >

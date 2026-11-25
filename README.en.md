@@ -16,7 +16,7 @@ Existing pain trackers (Pain Diary, MyPainDiary…) are either closed or a chore
 
 **Understand, without promising anything.** Over time your notes start to tell you things: what comes before a flare, what comes back on the good days. OUCH shows associations, never causes: you keep what speaks to you and set the rest aside. You walk into your appointment with a report that says what happened, instead of digging through memory.
 
-**Ease the pain, with the gestures that work for you.** You note what helped (a short walk, a hot bath, stretching…). You can try one of those actions for a week and put your days with and without side by side. When a flare ends, the app tells you how many days it took for your pain to get back to its usual level. No score, no streak, A “A moment to breathe” screen offers, offline, a slow breathing exercise and two short relaxation exercises, with nothing noted or counted. The “For you” list can also remind you, without judgement, of missed doses of a background treatment, and what studies say about exercise for the illness you track, with their sources (Settings › Scientific sources). All of it lives in the “Relief” tab, with “My plan for hard days” (a few lines you write ahead of time) and “My go-to moves” (what helps you, with a timer whose length you choose). No score, no streak, nothing to lose.
+**Ease the pain, with the gestures that work for you.** You note what helped (a short walk, a hot bath, stretching…). You can try one of those actions for ten days: OUCH draws five days with it and five without, then sets the pain of those days side by side. When a flare ends, the app tells you how many days it took for your pain to get back to its usual level. A “A moment to breathe” screen offers, offline, a slow breathing exercise and two short relaxation exercises, with nothing noted or counted. The “For you” list can also remind you, without judgement, of missed doses of a background treatment, and what studies say about exercise for the illness you track, with their sources (Settings › Scientific sources). All of it lives in the “Relief” tab, with “My plan for hard days” (a few lines you write ahead of time) and “My go-to moves” (what helps you, with a timer whose length you choose). No score, no streak, nothing to lose.
 
 OUCH is free software and free of charge, and it is a diary, not medical advice: it makes no diagnosis and recommends no treatment.
 
@@ -144,7 +144,7 @@ The detailed version, with what each outside service receives, is in [`PRIVACY.m
 
 OUCH is not a medical device: it describes what the person logs, makes no diagnosis, recommends no treatment, and does not replace medical advice.
 
-A two-page brochure ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.16.0/OUCH-plaquette-soignants-v0.16.0.pdf)), a methodology note detailing every calculation, threshold and source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.16.0/OUCH-note-methodologique-v0.16.0.pdf)), and a clinical feedback form are gathered in [`docs/soignants/`](docs/soignants/README.md) (all in French).
+A two-page brochure ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.17.0/OUCH-plaquette-soignants-v0.17.0.pdf)), a methodology note detailing every calculation, threshold and source ([PDF](https://github.com/maxauvy/OUCH/releases/download/v0.17.0/OUCH-note-methodologique-v0.17.0.pdf)), and a clinical feedback form are gathered in [`docs/soignants/`](docs/soignants/README.md) (all in French).
 
 ## Contributing
 

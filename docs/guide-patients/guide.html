@@ -73,7 +73,7 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
  <figure class="shot"><div class="scr"><img src="../presentation-soignants/img/consultation.png"></div></figure>
 </div>
 <div style="position:absolute;left:15mm;right:15mm;bottom:14mm;display:flex;gap:8mm;align-items:flex-end;justify-content:space-between">
- <div class="small" style="max-width:112mm">Décrit d’après la version 0.16.0 · 22 novembre 2026. Les captures d’écran viennent du mode démonstration : <b>données fictives</b>. OUCH est un carnet : il ne remplace pas l’avis de ton médecin, ne pose pas de diagnostic et ne recommande aucun traitement. Logiciel libre, licence CeCILL v2.1.</div>
+ <div class="small" style="max-width:112mm">Décrit d’après la version 0.17.0 · 25 novembre 2026. Les captures d’écran viennent du mode démonstration : <b>données fictives</b>. OUCH est un carnet : il ne remplace pas l’avis de ton médecin, ne pose pas de diagnostic et ne recommande aucun traitement. Logiciel libre, licence CeCILL v2.1.</div>
  <div style="text-align:center;font-size:7.6pt;line-height:1.3"><img src="../presentation-soignants/qr.svg" style="width:22mm;display:block;margin:0 auto 1mm"><b>maxauvy.github.io/OUCH</b></div>
 </div></div>
 
@@ -101,7 +101,7 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
 </div>
 <div class="two">
 <div class="box" style="margin:0"><h3>Ce qu’OUCH fait pour toi</h3>
-<ul class="ic" style="margin:0"><li>Garder la trace de tes journées, même les plus courtes.</li><li>Te montrer l’évolution, et les jours plus difficiles que d’habitude.</li><li>Relever ce qui revient les bons jours, et ce qui précède les mauvais.</li><li>Te proposer d’essayer une chose une semaine, puis de comparer.</li><li>Préparer ta consultation, et un rapport pour ton médecin.</li></ul></div>
+<ul class="ic" style="margin:0"><li>Garder la trace de tes journées, même les plus courtes.</li><li>Te montrer l’évolution, et les jours plus difficiles que d’habitude.</li><li>Relever ce qui revient les bons jours, et ce qui précède les mauvais.</li><li>Te proposer d’essayer une chose dix jours, sur des jours tirés au sort, puis de comparer.</li><li>Préparer ta consultation, et un rapport pour ton médecin.</li></ul></div>
 <div class="box l" style="margin:0"><h3>Ce qu’il te laisse décider</h3>
 <ul class="ic no" style="margin:0"><li>Il ne pose aucun diagnostic et ne te dit pas quel traitement prendre.</li><li>Il ne te note pas : pas de score, pas de série à tenir, rien à perdre.</li><li>Il ne conclut pas à ta place : un rapprochement reste une piste.</li><li>Il n’envoie rien sans que tu l’aies demandé.</li></ul></div></div>
 <h3 style="margin-top:5mm">Quatre lettres, quatre gestes</h3>
@@ -210,7 +210,7 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
 <li><b>Tes traitements</b> : ce que tu as pris, le soulagement, les effets notés, et l’avant-après d’un changement de dose.</li>
 <li><b>Les jours de la semaine</b> où ça va le mieux ou le moins bien.</li>
 <li><b>Comparer deux périodes</b>, par exemple depuis ta dernière consultation.</li>
-<li><b>Après tes jours actifs</b> : si les lendemains des jours où tu as beaucoup donné sont plus durs que d’habitude.</li>
+<li><b>Après tes jours actifs</b> : si les lendemains des jours où tu as beaucoup donné sont plus durs que d’habitude.</li><li><b>Avant tes poussées, avant tes bons jours</b> : ce qui les précédait (sommeil, stress…), à côté de ce que donnerait le hasard.</li><li><b>Ton année</b> : en décembre et en janvier, ton année racontée, sans score.</li>
 </ul>
 <p class="small">Les jours « nettement plus durs que d’habitude » sont ceux où ta douleur dépasse ton niveau habituel pendant au moins trois jours. Dans Tendances et dans le rapport, l’app les appelle « poussées ».</p>
 </div>
@@ -219,7 +219,7 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
 <p>Au fil des semaines, l’app peut relever un rapprochement dans tes notes : le sommeil, le stress, l’activité de la veille, ce qui a aidé. Elle te montre les deux moyennes et le nombre de jours, et tu choisis :</p>
 <ul class="ic">
 <li><b>Garder pour ta consultation</b> : la piste apparaîtra dans ton rapport.</li>
-<li><b>Essayer une semaine</b> : tu notes la chose les jours où tu peux la faire, sans objectif. À la fin, l’app met côte à côte les jours avec et sans.</li>
+<li><b>Essayer dix jours</b> : l’app tire au sort cinq jours avec et cinq jours sans, et t’annonce chaque soir le lendemain. Un jour sans trop dur, tu peux la faire quand même. À la fin, l’app met côte à côte les jours avec et sans.</li>
 <li><b>« Pas vraiment »</b> : elle est mise de côté, et ne revient que si elle se précise.</li>
 </ul>
 <div class="q"><b>Une piste reste une piste.</b> Les jours où tu marches, tu as peut-être moins mal ; ou bien tu marches parce que tu as moins mal. L’app te le rappelle à chaque fois. C’est une idée à regarder, et à discuter avec ton médecin si elle te parle.</div>
@@ -239,11 +239,11 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
 <div class="two">
 <div>
 <h3 style="margin-top:0">Mon plan des jours difficiles</h3>
-<p>Un jour où tu te sens assez bien, prends cinq minutes pour répondre à quatre questions : <b>ce que je m’autorise</b> (annuler, me reposer, demander de l’aide), <b>ce qui m’aide</b>, <b>qui prévenir</b>, et <b>ce que je ne dois pas oublier</b>. Le jour où ça va mal, tu n’as plus à réfléchir : tu ouvres ton plan, et tu relis ce que tu t’es écrit. Une version papier est à la fin de ce guide.</p>
+<p>Un jour où tu te sens assez bien, prends cinq minutes pour répondre à quatre questions : <b>ce que je m’autorise</b> (annuler, me reposer, demander de l’aide), <b>ce qui m’aide</b>, <b>qui prévenir</b>, et <b>ce que je ne dois pas oublier</b>. Le jour où ça va mal, tu n’as plus à réfléchir : tu ouvres ton plan, et tu relis ce que tu t’es écrit. Après une poussée, l’app te propose aussi d’écrire un mot à toi-même : il revient pendant la poussée suivante, avec la durée de tes poussées passées. Une version papier du plan est à la fin de ce guide.</p>
 <h3>Mes gestes</h3>
 <p>Les choses qui t’aident le plus souvent (bain chaud, marche courte, étirements…), chacune avec un minuteur. C’est toi qui choisis les gestes et leur durée.</p>
 <h3>Respirer, se détendre</h3>
-<p>Un niveau d’eau monte et descend : tu inspires quand il monte, tu souffles quand il descend. Vibreur et musique d’ambiance si tu veux. Deux exercices lus pas à pas : relâcher le corps zone par zone, et un geste doux pour la nuque et les épaules.</p>
+<p>Un soleil se lève dans un galet : tu inspires quand il monte, tu souffles quand il redescend. Vibreur et musique d’ambiance si tu veux. Deux exercices lus pas à pas : relâcher le corps zone par zone, et un geste doux pour la nuque et les épaules.</p>
 </div>
 <div>
 <h3 style="margin-top:0">Dans « Pour toi », de temps en temps</h3>
@@ -273,6 +273,8 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
 <div class="step"><div class="n">3</div><div><b>Après</b>Écris ce que ton médecin t’a dit. Si une ordonnance t’a été remise, note sa durée : l’app te prévient une semaine avant la fin (ou deux, au choix).</div></div>
 <h3>La fiche pour un soignant</h3>
 <p style="margin:0">Pour les urgences ou un nouveau médecin : tes maladies, tes traitements, les effets indésirables notés, ta douleur habituelle, ce qui te soulage. Tu y ajoutes toi-même tes allergies et des personnes à joindre. À montrer, imprimer ou enregistrer en PDF, en français ou en anglais.</p>
+<h3>Mon dossier MDPH</h3>
+<p style="margin:0">Ton parcours dans le formulaire, le formulaire officiel pré-rempli avec tes réponses, et ton certificat préparé pour ta consultation. Rien n’est envoyé.</p>
 </div>
 <div>
 <h3 style="margin-top:0">Le rapport : quelle version choisir ?</h3>
@@ -367,7 +369,7 @@ td:first-child{font-weight:700}tr{break-inside:avoid}
 </div>
 <div>
 <b>L’app me montre une piste. Dois-je changer quelque chose ?</b>
-<p>Rien ne t’y oblige. Une piste est une idée tirée de tes notes. Si elle te parle, tu peux l’essayer une semaine, ou la garder pour en parler à ton médecin. Pour un traitement, ne change rien sans lui.</p>
+<p>Rien ne t’y oblige. Une piste est une idée tirée de tes notes. Si elle te parle, tu peux l’essayer dix jours, ou la garder pour en parler à ton médecin. Pour un traitement, ne change rien sans lui.</p>
 <b>Mon médecin n’a jamais entendu parler d’OUCH.</b>
 <p>Le rapport se lit sans connaître l’app. Tu peux aussi lui laisser « Lire un rapport OUCH » (une page) ou la plaquette pour les soignants.</p>
 <b>Est-ce que quelqu’un peut lire mon journal ?</b>
