@@ -32,6 +32,7 @@ const CARD: CSSProperties = { background: 'var(--color-brand-soft)', boxShadow: 
 function DrawnTrialCard({ trial, history, entries, today, lead, choices }: TrialCardProps) {
   const t = useTranslation()
   const lh = t.leadHints
+  const doctorLabel = t.decisions.byDoctor
   const language = useLanguage()
   const { intlLocale } = useLocale()
   const todayEntry = useEntry(today)
@@ -137,6 +138,7 @@ function DrawnTrialCard({ trial, history, entries, today, lead, choices }: Trial
       <section aria-label={lh.trialLabel} className="rounded-[var(--radius-card)] p-4 flex flex-col gap-2.5" style={CARD}>
         <p className="text-caption font-semibold uppercase tracking-[0.06em]" style={{ color: 'var(--color-brand)' }}>
           {todayDay ? format(lh.trialDrawnDay, { day: status.day, n: status.length }, language) : lh.trialStartsTomorrow}
+          {trial.byDoctor && <> · {doctorLabel}</>}
         </p>
         {body}
         {strip}

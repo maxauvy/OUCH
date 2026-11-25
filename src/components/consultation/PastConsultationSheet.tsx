@@ -2,7 +2,14 @@ import { useState } from 'react'
 import { format as formatDate } from 'date-fns'
 import { updateSettings } from '../../db'
 import type { PastConsultation, Settings } from '../../db/types'
-import { MAX_NOTES_LENGTH, withoutPast, withPastNote } from '../../lib/consultation'
+import { MAX_NOTES_LENGTH, withoutPast, withPastDecisions } from '../../lib/consultation'
+import type { Decision } from '../../lib/decisions'
+import { useLoggedEntries } from '../../hooks/useEntries'
+import { useMedications } from '../../hooks/useMedications'
+import { DecisionsEditor } from './DecisionsEditor'
+import { archiveTrial, newTrial } from '../../lib/leadTrial'
+import { actionKey } from '../../lib/leads'
+import { todayISO } from '../../lib/dates'
 import { useLocale, useTranslation } from '../../i18n'
 import { ModalSheet } from '../ui/ModalSheet'
 
@@ -13,11 +20,25 @@ export function PastConsultationSheet({ settings, past, onClose }: { settings: S
   const t = useTranslation().consultation
   const { dateFnsLocale } = useLocale()
   const [notes, setNotes] = useState(past.notes ?? '')
+  const [decisions, setDecisions] = useState<Decision[]>(past.decisions ?? [])
+  const entries = useLoggedEntries()
+  const medications = useMedications()
   const day = formatDate(new Date(past.date + 'T00:00:00'), 'd MMMM yyyy', { locale: dateFnsLocale })
   const who = [past.kind === 'cetd' ? t.kindCetd : t.kindGp, past.doctor].filter(Boolean).join(' · ')
 
+  const today = todayISO()
+  const trialBusy = !!settings.leadTrial && today <= settings.leadTrial.end
   function save() {
-    void updateSettings(withPastNote(settings, past.date, past.kind, notes))
+    // A trial added here (not one already noted) starts tomorrow, unless another is under way.
+    const trial = decisions.find((d) => d.kind === 'trial' && d.action && !(past.decisions ?? []).some((p) => p.kind === 'trial' && p.action === d.action))
+    const started =
+      trial && !trialBusy
+        ? {
+            leadTrial: { ...newTrial(`action:${actionKey(trial.action!)}`, trial.action!, today), byDoctor: true as const },
+            ...(settings.leadTrial ? { leadTrialHistory: archiveTrial(settings.leadTrialHistory, settings.leadTrial) } : {}),
+          }
+        : {}
+    void updateSettings({ ...withPastDecisions(settings, past.date, past.kind, notes, decisions), ...started })
     onClose()
   }
   function forget() {
@@ -63,6 +84,7 @@ export function PastConsultationSheet({ settings, past, onClose }: { settings: S
           style={field}
         />
       </div>
+      <DecisionsEditor decisions={decisions} onChange={setDecisions} entries={entries} medications={medications} trialBusy={trialBusy} />
       <button type="button" onClick={save} className="btn-primary">
         {t.pastSave}
       </button>

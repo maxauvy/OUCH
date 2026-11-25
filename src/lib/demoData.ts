@@ -453,6 +453,18 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     reliefGestures: [{ name: 'Bain / douche chaude', minutes: 15 }, { name: 'Marche courte', minutes: 10 }, { name: 'Étirements doux', minutes: 10 }],
     leadChoices,
     ...(walkTrial && { leadTrialHistory: [walkTrial] }),
+    // The appointment where duloxetine went to 60 mg, with its two decisions: the report and the appointment sheet follow them up.
+    pastConsultations: [
+      {
+        date: doseChangeDate,
+        kind: 'gp',
+        notes: 'Duloxétine passée de 30 à 60 mg. Reprendre la marche doucement.',
+        decisions: [
+          { kind: 'treatment', text: 'Duloxétine 60 mg le matin', medicationId: MED.dulox },
+          { kind: 'habit', text: 'Marcher 20 minutes', action: 'Marche courte', perWeek: 3 },
+        ],
+      },
+    ],
   }
 
   const history = { entries, medications, settings }
@@ -482,6 +494,9 @@ const EN_STRINGS: Record<string, string> = {
   'Règles, ventre et bas du dos douloureux.': 'Period, painful belly and lower back.',
   'Arrêt de la prégabaline avec l’accord du médecin : trop de somnolence.': 'Stopped pregabalin with the doctor’s agreement: too much drowsiness.',
   'Consultation chez le médecin traitant : duloxétine passée de 30 à 60 mg.': 'GP appointment: duloxetine raised from 30 to 60 mg.',
+  'Duloxétine passée de 30 à 60 mg. Reprendre la marche doucement.': 'Duloxetine raised from 30 to 60 mg. Ease back into walking.',
+  'Duloxétine 60 mg le matin': 'Duloxetine 60 mg in the morning',
+  'Marcher 20 minutes': 'Walk 20 minutes',
   'Ne rien faire d’autre que noter ma douleur.': 'Do nothing but note my pain.',
   'La bouillotte, un bain chaud, ma série légère.': 'The hot water bottle, a warm bath, my light series.',
   'Léa, 06 00 00 00 00, si ça dure plus de trois jours.': 'Léa, 06 00 00 00 00, if it lasts more than three days.',

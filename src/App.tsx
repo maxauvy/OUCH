@@ -12,7 +12,7 @@ import { PageBack } from './components/layout/PageBack'
 import { ReliefContext } from './components/relief/reliefContext'
 import { BackupContext } from './components/settings/backupContext'
 import type { SoulagerView } from './pages/SoulagerPage'
-import { launchTarget } from './lib/launchTarget'
+import { fromDoctor, launchTarget } from './lib/launchTarget'
 import { DemoTag } from './components/demo/DemoTag'
 import { UpdatedPill } from './components/layout/UpdatedPill'
 import { IS_DEMO } from './lib/demoMode'
@@ -97,6 +97,7 @@ function useAppliedLanguage(language: Language) {
 function AppShell() {
   // Opened from a shortcut of the icon: the breathing screen, or the day's page (the default).
   const [launch] = useState(() => launchTarget(window.location.search))
+  const [byDoctor] = useState(() => fromDoctor(window.location.search))
   const [tab, setTabOnly] = useState<Tab>(launch === 'souffler' ? 'soulager' : 'today')
   // Settings and the kids' page open from the day's page, as pages of their own: the tab bar stays, with Today lit.
   const [screen, setScreen] = useState<'settings' | 'kids' | null>(null)
@@ -201,8 +202,8 @@ function AppShell() {
 
   // The word of the shortcut is spent: a reload or a bookmark opens the app as usual.
   useEffect(() => {
-    if (launch) window.history.replaceState(null, '', window.location.pathname + window.location.hash)
-  }, [launch])
+    if (launch || byDoctor) window.history.replaceState(null, '', window.location.pathname + window.location.hash)
+  }, [launch, byDoctor])
 
   // A page opened from Today starts at its top.
   useEffect(() => {
@@ -219,6 +220,7 @@ function AppShell() {
       <Suspense fallback={null}>
         <SetupWizard
           wiped={wiped}
+          byDoctor={byDoctor}
           onDone={() => {
             setTab('today')
             updateSettings({ onboardingDone: true })

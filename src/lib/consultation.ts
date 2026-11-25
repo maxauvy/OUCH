@@ -8,6 +8,7 @@ import type { FlareEpisode } from './flares.ts'
 import type { ResolvedFlare } from './markedFlares.ts'
 import type { TreatmentEvent } from './treatmentEvents.ts'
 import { daysBetween } from './dates.ts'
+import { cleanDecisions, type Decision } from './decisions.ts'
 
 export const MAX_QUESTIONS = 20
 export const MAX_QUESTION_LENGTH = 200
@@ -115,6 +116,7 @@ export function withPast(settings: Pick<Settings, 'pastConsultations' | 'lastCon
   const notes = entry.notes?.trim().slice(0, MAX_NOTES_LENGTH)
   const questions = (entry.questions ?? []).map((q) => cleanLine(q)).filter(Boolean).slice(0, MAX_QUESTIONS)
   const goal = cleanLine(entry.goal ?? '', MAX_GOAL_LENGTH)
+  const decisions = cleanDecisions(entry.decisions)
   const clean: PastConsultation = {
     date: entry.date,
     kind: entry.kind,
@@ -122,6 +124,7 @@ export function withPast(settings: Pick<Settings, 'pastConsultations' | 'lastCon
     ...(notes ? { notes } : {}),
     ...(questions.length ? { questions } : {}),
     ...(goal ? { goal } : {}),
+    ...(decisions ? { decisions } : {}),
   }
   const rest = pastConsultations(settings).filter((p) => !(p.date === clean.date && p.kind === clean.kind))
   const merged = capPast([clean, ...rest])
@@ -130,10 +133,10 @@ export function withPast(settings: Pick<Settings, 'pastConsultations' | 'lastCon
 }
 
 /** What the appointment became: remembered among the past ones (its date starts the next report of its kind), with the person's note, and nothing planned any more. */
-export function finishConsultation(settings: Settings, notes: string): Partial<Settings> {
+export function finishConsultation(settings: Settings, notes: string, decisions: readonly Decision[] = []): Partial<Settings> {
   const c = settings.consultation
   if (!c) return {}
-  const entry: PastConsultation = { date: c.date, kind: kindOf(c), ...(c.doctor ? { doctor: c.doctor } : {}), ...(notes.trim() ? { notes } : {}), questions: c.questions, ...(c.goal ? { goal: c.goal } : {}) }
+  const entry: PastConsultation = { date: c.date, kind: kindOf(c), ...(c.doctor ? { doctor: c.doctor } : {}), ...(notes.trim() ? { notes } : {}), questions: c.questions, ...(c.goal ? { goal: c.goal } : {}), ...(decisions.length ? { decisions: [...decisions] } : {}) }
   return { ...withPast(settings, entry), consultation: undefined, consultationCardClosed: undefined }
 }
 
@@ -197,6 +200,14 @@ export function withPastNote(settings: Pick<Settings, 'pastConsultations' | 'las
   if (!found) return {}
   const { notes: _old, ...rest } = found
   return withPast(settings, { ...rest, ...(notes.trim() ? { notes } : {}) })
+}
+
+/** The decisions of an appointment that took place, noted or changed afterwards. */
+export function withPastDecisions(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>, date: string, kind: ConsultationKind, notes: string, decisions: readonly Decision[]): Partial<Settings> {
+  const found = pastConsultations(settings).find((p) => p.date === date && p.kind === kind)
+  if (!found) return {}
+  const { notes: _old, decisions: _d, ...rest } = found
+  return withPast(settings, { ...rest, ...(notes.trim() ? { notes } : {}), ...(decisions.length ? { decisions: [...decisions] } : {}) })
 }
 
 /** An appointment that took place, forgotten. */
