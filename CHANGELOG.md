@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté
+- **Pour les médecins traitants : « Pourquoi recommander OUCH », un pilote et un mail type.** Dans `docs/medecins-traitants/` : une feuille A4 recto verso en « Aube » (ce que le médecin gagne en consultation, ce que OUCH ne fait pas, comment le recommander avec la carte A6), le protocole d’un pilote de deux mois avec 3 à 5 généralistes (durée des consultations avec et sans rapport, trois questions, aucune donnée de patient) et un mail pour une CPTS ou l’URPS.
+
 ## [0.17.0] - 2026-11-25
 
 Les cinq idées qui rendent OUCH à part : un mot pour soi rendu pendant une poussée, ce qui précédait les bons jours, un dossier MDPH qui guide jusqu’au formulaire officiel pré-rempli et prépare le certificat médical pour la consultation, les mots de la douleur, et « Mon année » racontée en fin d’année. Les essais se font sur des jours tirés au sort, l’app et le rapport passent aux couleurs de l’aube, et la barre d’onglets se détache mieux des cartes. Tous les PDF, les captures et l’image du README sont refaits pour cette version.
