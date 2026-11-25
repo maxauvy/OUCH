@@ -19,6 +19,11 @@ import { Chip } from '../ui/Chip'
 import { ModalSheet } from '../ui/ModalSheet'
 import { PrescriptionFields } from '../prescription/PrescriptionFields'
 import { draftPrescription, prescriptionEnd, type PrescriptionDraft } from '../../lib/prescription'
+import { followDecisions, type Decision } from '../../lib/decisions'
+import { archiveTrial, newTrial } from '../../lib/leadTrial'
+import { actionKey } from '../../lib/leads'
+import { DecisionsEditor } from './DecisionsEditor'
+import { followLines } from './decisionTexts'
 
 const field = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 const fieldClass = 'w-full rounded-xl px-3.5 py-2.5 text-body outline-none'
@@ -61,6 +66,7 @@ export function ConsultationSheet({
   const [kindChoice, setKindChoice] = useState<ConsultationKind>(kindOf(c))
   const [afterOpen, setAfterOpen] = useState(startAfter)
   const [notes, setNotes] = useState('')
+  const [decisions, setDecisions] = useState<Decision[]>([])
   // Nothing is chosen by default: a prescription is only noted if the person picks a length.
   const [rx, setRx] = useState<PrescriptionDraft>({ months: null, start: c?.date ?? today, remindDays: 7, label: '' })
   const nf = new Intl.NumberFormat(intlLocale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
@@ -91,9 +97,20 @@ export function ConsultationSheet({
     save(addQuestion(c, question))
     setQuestion('')
   }
+  // A trial under way (not over yet): a trial decided now is noted, not started.
+  const trialBusy = !!settings.leadTrial && today <= settings.leadTrial.end
   function finish() {
     const prescription = draftPrescription(rx)
-    void updateSettings({ ...finishConsultation(settings, notes), ...(prescription ? { prescription, prescriptionCardState: undefined } : {}) })
+    const trial = decisions.find((d) => d.kind === 'trial' && d.action)
+    // A trial suggested by the doctor starts tomorrow, drawn like any other; a finished one still open is archived first.
+    const started =
+      trial && !trialBusy
+        ? {
+            leadTrial: { ...newTrial(`action:${actionKey(trial.action!)}`, trial.action!, today), byDoctor: true as const },
+            ...(settings.leadTrial ? { leadTrialHistory: archiveTrial(settings.leadTrialHistory, settings.leadTrial) } : {}),
+          }
+        : {}
+    void updateSettings({ ...finishConsultation(settings, notes, decisions), ...(prescription ? { prescription, prescriptionCardState: undefined } : {}), ...started })
     onClose()
   }
   function remove() {
@@ -266,6 +283,25 @@ export function ConsultationSheet({
               ))}
             </ul>
           )}
+          {last.decisions && last.decisions.length > 0 && entries && (
+            <div className="mt-2">
+              <p className="text-control" style={{ color: 'var(--color-ink-muted)' }}>
+                {i18n.decisions.title}
+              </p>
+              <ul className="flex flex-col gap-1.5 mt-0.5">
+                {followDecisions(last.decisions, last.date, today, entries, medications ?? [], [...(settings.leadTrialHistory ?? []), ...(settings.leadTrial ? [settings.leadTrial] : [])]).map((f, k) => (
+                  <li key={k} className="text-body">
+                    <b>{f.decision.text}</b>
+                    {followLines(f, i18n.decisions, language, (v) => nf.format(v)).map((l) => (
+                      <span key={l} className="block text-control" style={{ color: 'var(--color-ink-muted)' }}>
+                        {l}
+                      </span>
+                    ))}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {last.notes && (
             <div className="mt-2">
               <p className="text-control" style={{ color: 'var(--color-ink-muted)' }}>
@@ -297,6 +333,9 @@ export function ConsultationSheet({
                 className={fieldClass}
                 style={field}
               />
+              <div className="mt-4">
+                <DecisionsEditor decisions={decisions} onChange={setDecisions} entries={entries} medications={medications} trialBusy={trialBusy} />
+              </div>
               <div className="mt-4">
                 <h4 className="text-caption font-semibold mb-0.5">{tp.afterTitle}</h4>
                 <p className="text-control mb-2" style={{ color: 'var(--color-ink-muted)' }}>

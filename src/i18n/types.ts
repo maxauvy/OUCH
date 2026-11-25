@@ -864,6 +864,19 @@ export interface Translations {
     /** Band on every page of a report made in the demo */
     demoBand: string
     weekdaysTitle: string
+    decisionsColDecision: string
+    decisionsColJournal: string
+    oneMinChanged: string
+    oneMinAsNeeded: string
+    oneMinAsNeededCol: string
+    /** `{{n}}` days */
+    oneMinNow: string
+    /** `{{n}}` days */
+    oneMinBefore: string
+    /** `{{n}}` doses */
+    oneMinDoses: string
+    /** `{{n}}` days */
+    oneMinDays: string
     weekdaysColDay: string
     weekdaysColMean: string
     weekdaysColGap: string
@@ -1476,6 +1489,52 @@ export interface Translations {
     weeklySee: string
   }
   /** The quiet line under the title of the day's page, and the sheet it opens. */
+  /** « Ce qu'on a décidé »: decisions noted after an appointment and what the journal shows since (lib/decisions.ts). Shared by the app and the report. */
+  decisions: {
+    title: string
+    hint: string
+    kinds: Record<'treatment' | 'habit' | 'trial' | 'exam' | 'other', string>
+    placeholders: Record<'treatment' | 'habit' | 'trial' | 'exam' | 'other', string>
+    trialActionLabel: string
+    trialHint: string
+    trialBusy: string
+    trialNotStarted: string
+    /** `{{day}}`, `{{length}}` */
+    trialRunning: string
+    /** `{{with}}`, `{{nWith}}`, `{{without}}`, `{{nWithout}}` */
+    trialResult: string
+    /** `{{with}}`, `{{without}}` */
+    trialNext: string
+    trialTooFew: string
+    byDoctor: string
+    medLabel: string
+    medNone: string
+    actionLabel: string
+    perWeekLabel: string
+    /** `{{n}}` times a week */
+    perWeek: string
+    everyDay: string
+    add: string
+    remove: string
+    /** `{{date}}` */
+    sinceTitle: string
+    /** `{{before}}`, `{{after}}`, `{{n}}` logged days after, `{{settle}}` */
+    treatment: string
+    /** `{{settle}}` */
+    treatmentWait: string
+    treatmentNoBefore: string
+    /** `{{n}}` days, `{{list}}` */
+    effects: string
+    noEffects: string
+    /** `{{done}}`, `{{action}}` */
+    habitDone: string
+    /** `{{planned}}` */
+    habitPlanned: string
+    /** `{{with}}`, `{{without}}` */
+    habitPain: string
+    caveat: string
+    declared: string
+  }
   consultation: {
     /** Card on the day's page, a few days before: `{{date}}` and `{{n}} {{n:day|days}}` */
     cardLabel: string

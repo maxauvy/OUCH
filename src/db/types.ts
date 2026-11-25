@@ -5,6 +5,7 @@ import type { Language } from '../i18n/language'
 import type { HardDaysSeen } from '../lib/hardDays'
 import type { LeadChoices } from '../lib/leads'
 import type { MdphParcours } from '../lib/mdphParcours'
+import type { Decision } from '../lib/decisions'
 import type { LeadsSeen } from '../lib/leadHints'
 import type { LeadTrial } from '../lib/leadTrial'
 import type { ForecastCache } from '../lib/forecast'
@@ -418,6 +419,8 @@ export interface PastConsultation {
   /** What the person had prepared to ask and to say first, kept with the appointment. */
   questions?: string[]
   goal?: string
+  /** « Ce qu'on a décidé »: one to four decisions noted after the appointment (see lib/decisions.ts). */
+  decisions?: Decision[]
 }
 
 /** What the person thinks may have played in a difficult period; they only suggest, nothing is measured. */
