@@ -1786,6 +1786,8 @@ const fr: Translations = {
     didDays: 'Tu as noté {{n}} jours.',
     didTrial: 'Tu as mené un essai jusqu’au bout : {{list}}.',
     didTrials: 'Tu as mené {{n}} essais jusqu’au bout : {{list}}.',
+    didTrialsSame: 'Tu as mené {{n}} essais de {{action}} jusqu’au bout.',
+    trialTimes: '{{action}} ({{n}} fois)',
     didNote: 'Tu as écrit un mot pour les jours plus durs.',
     didAppointments: 'Tu as noté {{n}} {{n:rendez-vous|rendez-vous}} chez un soignant.',
     endTitle: 'Merci d’avoir pris soin de toi.',

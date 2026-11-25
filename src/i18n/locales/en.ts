@@ -1781,6 +1781,8 @@ const en: Translations = {
     didDays: 'You noted {{n}} days.',
     didTrial: 'You saw a trial through: {{list}}.',
     didTrials: 'You saw {{n}} trials through: {{list}}.',
+    didTrialsSame: 'You saw {{n}} trials of {{action}} through.',
+    trialTimes: '{{action}} ({{n}} times)',
     didNote: 'You wrote a note for harder days.',
     didAppointments: 'You noted {{n}} {{n:appointment|appointments}} with a health professional.',
     endTitle: 'Thank you for taking care of yourself.',
