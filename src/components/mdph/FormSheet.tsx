@@ -2,7 +2,7 @@ import { useId, useState } from 'react'
 import { IconFileTypePdf } from '@tabler/icons-react'
 import { useSettings } from '../../hooks/useSettings'
 import { format, useLanguage, useTranslation } from '../../i18n'
-import { downloadBlob } from '../../lib/backup'
+import { sharePdf } from './sharePdf'
 import { cleanMdphGestures } from '../../lib/mdph'
 import type { MdphParcours } from '../../lib/mdphParcours'
 import { CERFA_FILE, ageOn, formFields, type FormChoice, type FormFields } from '../../lib/mdphForm'
@@ -13,6 +13,35 @@ export interface FormTexts {
   b3: string
   d1: string
   months: number
+}
+
+/** The names typed for the form and the certificate: kept by the page while it is open, never stored. */
+export interface Names {
+  lastName: string
+  firstNames: string
+}
+
+/** The two name fields, shared by the form's sheet and the certificate's. */
+export function NamesFields({ names, onNames }: { names: Names; onNames: (n: Names) => void }) {
+  const f = useTranslation().mdph.form
+  const ids = useId()
+  const input = 'w-full min-h-11 rounded-[var(--radius-control)] px-3 text-body'
+  const inputStyle = { background: 'var(--color-input, var(--color-surface))', border: '1px solid var(--color-hairline)', color: 'var(--color-ink)' }
+  return (
+    <div className="grid grid-cols-1 gap-2">
+      <label htmlFor={`${ids}-last`} className="text-control font-semibold">
+        {f.lastName}
+      </label>
+      <input id={`${ids}-last`} value={names.lastName} onChange={(e) => onNames({ ...names, lastName: e.target.value })} autoComplete="family-name" className={input} style={inputStyle} />
+      <label htmlFor={`${ids}-first`} className="text-control font-semibold">
+        {f.firstNames}
+      </label>
+      <input id={`${ids}-first`} value={names.firstNames} onChange={(e) => onNames({ ...names, firstNames: e.target.value })} autoComplete="given-name" className={input} style={inputStyle} />
+      <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+        {f.namesHint}
+      </p>
+    </div>
+  )
 }
 
 type Block = 'birth' | 'kind' | 'b2' | 'b3' | 'd1' | 'asks'
@@ -58,12 +87,11 @@ function Toggle({ on, onChange, label, sub }: { on: boolean; onChange: (on: bool
  * « Ce que OUCH écrit pour toi »: every block that goes into the form, each one switchable, before the form is made. The names are typed here
  * and not kept; nothing else personal is asked. The form is made on the phone and shared or saved from there: nothing is sent.
  */
-export function FormSheet({ parcours, texts, today, onClose }: { parcours: MdphParcours; texts: FormTexts | null; today: string; onClose: () => void }) {
+export function FormSheet({ parcours, texts, today, names, onNames, onClose }: { parcours: MdphParcours; texts: FormTexts | null; today: string; names: Names; onNames: (n: Names) => void; onClose: () => void }) {
   const t = useTranslation().mdph
   const f = t.form
   const language = useLanguage()
   const settings = useSettings()
-  const ids = useId()
   const renewal = parcours.kind === 'renewal'
   const gestures = cleanMdphGestures(settings.mdphGestures)
   const needs = Object.values(gestures ?? {}).filter((a) => a === 'often' || a === 'sometimes').length
@@ -72,8 +100,6 @@ export function FormSheet({ parcours, texts, today, onClose }: { parcours: MdphP
   const asked = (parcours.asks ?? []).filter((a) => a === 'aah' || a === 'pch' || a === 'rqth' || a === 'orientation')
   const list = (items: string[]) => new Intl.ListFormat(language, { type: 'conjunction' }).format(items)
 
-  const [lastName, setLastName] = useState('')
-  const [firstNames, setFirstNames] = useState(settings.displayName.trim())
   const [off, setOff] = useState<Set<Block>>(new Set(['d1']))
   const [state, setState] = useState<'idle' | 'busy' | 'failed'>('idle')
   const on = (b: Block) => !off.has(b)
@@ -97,8 +123,7 @@ export function FormSheet({ parcours, texts, today, onClose }: { parcours: MdphP
   const make = async () => {
     setState('busy')
     const choice: FormChoice = {
-      lastName,
-      firstNames,
+      ...names,
       birthDate: on('birth') ? birthDate : undefined,
       kind: on('kind') ? parcours.kind : undefined,
       gestures: on('b2') && !renewal ? gestures : undefined,
@@ -107,22 +132,7 @@ export function FormSheet({ parcours, texts, today, onClose }: { parcours: MdphP
       d1: on('d1') && !renewal ? texts?.d1 : undefined,
     }
     try {
-      const blob = await fillCerfa(formFields(choice, today))
-      const file = new File([blob], `${f.fileName}-${today}.pdf`, { type: 'application/pdf' })
-      const phone = window.matchMedia('(pointer: coarse)').matches
-      if (phone && navigator.canShare?.({ files: [file] })) {
-        try {
-          await navigator.share({ files: [file], title: f.sheetTitle })
-          setState('idle')
-          return
-        } catch (e) {
-          if (e instanceof DOMException && e.name === 'AbortError') {
-            setState('idle')
-            return
-          }
-        }
-      }
-      downloadBlob(blob, file.name)
+      await sharePdf(await fillCerfa(formFields(choice, today)), `${f.fileName}-${today}.pdf`, f.sheetTitle)
       setState('idle')
     } catch (e) {
       console.error(e)
@@ -130,25 +140,10 @@ export function FormSheet({ parcours, texts, today, onClose }: { parcours: MdphP
     }
   }
 
-  const input = 'w-full min-h-11 rounded-[var(--radius-control)] px-3 text-body'
-  const inputStyle = { background: 'var(--color-input, var(--color-surface))', border: '1px solid var(--color-hairline)', color: 'var(--color-ink)' }
-
   return (
     <ModalSheet title={f.sheetTitle} closeLabel={f.close} busy={state === 'busy'} onClose={onClose}>
       <div className="flex flex-col gap-3">
-        <div className="grid grid-cols-1 gap-2">
-          <label htmlFor={`${ids}-last`} className="text-control font-semibold">
-            {f.lastName}
-          </label>
-          <input id={`${ids}-last`} value={lastName} onChange={(e) => setLastName(e.target.value)} autoComplete="family-name" className={input} style={inputStyle} />
-          <label htmlFor={`${ids}-first`} className="text-control font-semibold">
-            {f.firstNames}
-          </label>
-          <input id={`${ids}-first`} value={firstNames} onChange={(e) => setFirstNames(e.target.value)} autoComplete="given-name" className={input} style={inputStyle} />
-          <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-            {f.namesHint}
-          </p>
-        </div>
+        <NamesFields names={names} onNames={onNames} />
 
         <ul className="flex flex-col">
           {rows.map((r) => (

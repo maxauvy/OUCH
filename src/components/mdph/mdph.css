@@ -52,3 +52,15 @@
 .cs-paper.md .md-ref {
   font-size: 11.5px;
 }
+/* On the phone's screen, the title of each part sits above its figures: side by side, the tables of figures had no room and ran off the
+   sheet. The paper copy keeps its column of titles. */
+.md .cs-rub > div {
+  min-width: 0;
+}
+.md:not(.cs-paper) .cs-rub {
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+.md-table .md-n {
+  white-space: nowrap;
+}
