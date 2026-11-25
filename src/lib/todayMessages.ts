@@ -26,6 +26,7 @@ import type { Lead, LeadChoices } from './leads.ts'
 import type { LeadTrial } from './leadTrial.ts'
 import type { MonthSummary } from './monthSummary.ts'
 import type { WeeklyFinding } from './weeklySentence.ts'
+import type { BeforeGoodDaysRow } from './beforeGoodDays.ts'
 import { daysBetween, shiftISO } from './dates.ts'
 
 /** A flare is still worth a word of recognition this many days after its last day. */
@@ -61,6 +62,7 @@ export type TodayMessage =
   | { kind: 'calm'; key: string; episode: FlareEpisode }
   | { kind: 'month'; key: string; summary: MonthSummary }
   | { kind: 'trial'; key: 'trial'; trial: LeadTrial }
+  | { kind: 'goodDay'; key: string; line: BeforeGoodDaysRow }
 
 export interface TodayMessages {
   /** In the order the sheet lists them. */
@@ -75,7 +77,7 @@ export interface TodayMessagesInput {
   quiet: boolean
   later: MessageLaterMap | undefined
   /** Which suggestions the person lets through. */
-  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean; month: boolean; rest?: boolean; weather?: boolean; regularity?: boolean; activity?: boolean }
+  allow: { leads: boolean; weekly: boolean; trials: boolean; calm: boolean; month: boolean; rest?: boolean; weather?: boolean; regularity?: boolean; activity?: boolean; goodDay?: boolean }
   /** The leads Trends shows by default (`LeadList.shown`). */
   leads: Lead[]
   leadChoices: LeadChoices | undefined
@@ -101,6 +103,8 @@ export interface TodayMessagesInput {
   regularity?: Regularity | null
   /** The tracked illnesses that have a source on exercise (`activityIllnesses`): said once, in one card. */
   activity?: ActivityIllness[]
+  /** Today is the first good day of a row and something stands out before such days (`goodDayHint`): a soft word, at most once a week. */
+  goodDay?: BeforeGoodDaysRow | null
   /** The trial under way, or just over and waiting to be closed. */
   trial: LeadTrial | undefined
 }
@@ -112,6 +116,11 @@ export function isAway(later: MessageLater | undefined, today: string): boolean 
   return later.until !== undefined && today < later.until
 }
 
+/** Whether a message whose key is `prefix` and a day was answered (done or set aside) on or after `since`. */
+function answeredSince(later: MessageLaterMap | undefined, prefix: string, since: string): boolean {
+  return Object.entries(later ?? {}).some(([key, v]) => key.startsWith(prefix) && key.slice(prefix.length) >= since && (v.done || v.count > 0))
+}
+
 /** The last flare that is over, when it ended within `CALM_DAYS` and the pain came back to the usual level at least a day later. */
 export function recentReturn(episodes: readonly FlareEpisode[], today: string): FlareEpisode | null {
   const over = episodes.filter((e) => !e.ongoing && !e.endUnknown && (e.recoveryDays ?? 0) >= 1 && daysBetween(e.end, today) <= CALM_DAYS)
@@ -119,7 +128,7 @@ export function recentReturn(episodes: readonly FlareEpisode[], today: string): 
 }
 
 export function todayMessages(input: TodayMessagesInput): TodayMessages {
-  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, yesterday, weather, regularity, activity, trial } = input
+  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, yesterday, weather, regularity, activity, goodDay, trial } = input
   if (quiet) return { items: trial?.plan ? [{ kind: 'trial', key: 'trial', trial }] : [], count: 0 }
   const waiting = (key: string) => !isAway(later?.[key], today)
 
@@ -131,6 +140,9 @@ export function todayMessages(input: TodayMessagesInput): TodayMessages {
   const regularityKey = regularity ? `regularity:${regularity.medicationId}:${regularity.last}` : ''
   if (allow.regularity && regularity && waiting(regularityKey)) items.push({ kind: 'regularity', key: regularityKey, reading: regularity })
   if (allow.activity && activity?.length && waiting('activity')) items.push({ kind: 'activity', key: 'activity', illnesses: activity })
+  // Today only, and not again within a week of one answered: a good day is a good day, not a lesson.
+  if (allow.goodDay && goodDay && waiting(`goodDay:${today}`) && !answeredSince(later, 'goodDay:', shiftISO(today, -LATER_DAYS)))
+    items.push({ kind: 'goodDay', key: `goodDay:${today}`, line: goodDay })
   if (allow.weekly && weekly && waiting(`weekly:${today}`)) items.push({ kind: 'weekly', key: `weekly:${today}`, finding: weekly })
   if (allow.leads) {
     for (const lead of leads) {

@@ -6,6 +6,7 @@ import { LinkRow } from '../components/ui/LinkRow'
 import { PageBack } from '../components/layout/PageBack'
 import { CompareCard } from '../components/trends/CompareCard'
 import { BeforeFlaresCard } from '../components/trends/BeforeFlaresCard'
+import { BeforeGoodDaysCard } from '../components/trends/BeforeGoodDaysCard'
 import { PacingCard } from '../components/trends/PacingCard'
 import { TimelineCard } from '../components/trends/TimelineCard'
 import { TrialsCard } from '../components/trends/TrialsCard'
@@ -255,6 +256,7 @@ export function TrendsPage() {
               <IndicatorsCard entries={filtered} />
               {settings.enabledFactors.includes('activity') && <PacingCard entries={entries} />}
               {flares?.detectable && <BeforeFlaresCard entries={entries} episodes={flares.episodes} />}
+              <BeforeGoodDaysCard entries={entries} flareDays={flareDays} />
               {weekdays ? <WeekdayCard profile={weekdays} /> : entries.length >= PATTERN_MIN_DAYS && <WeekdayWaiting />}
               {entries.length >= PATTERN_MIN_DAYS && (
                 <LeadsCard

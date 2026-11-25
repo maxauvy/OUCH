@@ -3,7 +3,8 @@ import { updateSettings } from '../db'
 import { todayISO } from '../lib/dates'
 import { IS_DEMO } from '../lib/demoMode'
 import { useEarlyAccess } from '../lib/earlyAccess'
-import { flaresApply } from '../lib/flares'
+import { flareDaySet, flaresApply } from '../lib/flares'
+import { goodDayHint } from '../lib/beforeGoodDays'
 import { forecastReading, isFresh } from '../lib/forecast'
 import { activityIllnesses } from '../lib/activityEvidence'
 import { regularityReading } from '../lib/regularity'
@@ -65,7 +66,7 @@ export function useTodayMessages(): TodayMessages | null {
       today,
       quiet: flare,
       later: settings.leadsSeen?.later,
-      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled, month: settings.suggestionsEnabled, rest: settings.suggestionsEnabled && settings.enabledFactors.includes('activity'), weather: settings.suggestionsEnabled && forecastOn, regularity: settings.suggestionsEnabled, activity: settings.suggestionsEnabled },
+      allow: { leads: settings.suggestionsEnabled, weekly: settings.suggestionsEnabled, trials: trialsOn, calm: settings.suggestionsEnabled, month: settings.suggestionsEnabled, rest: settings.suggestionsEnabled && settings.enabledFactors.includes('activity'), weather: settings.suggestionsEnabled && forecastOn, regularity: settings.suggestionsEnabled, activity: settings.suggestionsEnabled, goodDay: settings.suggestionsEnabled },
       leads: leadList.shown,
       leadChoices: settings.leadChoices,
       tried: triedKeys(settings.leadTrial, settings.leadTrialHistory),
@@ -87,6 +88,7 @@ export function useTodayMessages(): TodayMessages | null {
       activity: activityIllnesses(settings.illnesses),
       regularity: medications ? regularityReading(logged, medications, today) : null,
       yesterday: settings.suggestionsEnabled ? missedYesterday(logged, today) : null,
+      goodDay: goodDayHint(logged, flareDaySet(flares?.detectable ? flares.episodes : []), today),
       trial: settings.leadTrial,
     })
   }, [logged, allEntries, leadList, settings, earlyAccess, today, flares, forecastOn, medications])

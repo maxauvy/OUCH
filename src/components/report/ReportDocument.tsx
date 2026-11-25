@@ -95,6 +95,7 @@ const KINDS = {
   keyPoints: { icon: IconListCheck, tone: 'brand' },
   compare: { icon: IconChartDots, tone: 'brand' },
   weekdays: { icon: IconCalendarWeek, tone: 'brand' },
+  goodDays: { icon: IconSun, tone: 'brand' },
   noticed: { icon: IconBulb, tone: 'brand' },
   agenda: { icon: IconMessageQuestion, tone: 'brand' },
   notes: { icon: IconNotes, tone: 'brand' },
@@ -285,6 +286,7 @@ function gpPages(d: ReportData): Block[][] {
       d.options.includeNightWakings && <NightWakingsBlock d={d} />,
       <OtherIndicatorsBlock d={d} />,
       d.weekdays && <WeekdaysBlock d={d} />,
+      d.goodDays && <GoodDaysBlock d={d} />,
       (d.noticed.length > 0 || d.trials.length > 0) && <Noticed d={d} />,
       d.options.includeNotes &&
         notes.length > 0 &&
@@ -511,6 +513,7 @@ function painClinicLayout(d: ReportData): { pages: Block[][]; labels: string[] }
           <p className="r-small">{f.t.zonesWpi}</p>
         </>,
         d.weekdays && <WeekdaysBlock d={d} />,
+        d.goodDays && <GoodDaysBlock d={d} />,
         (d.noticed.length > 0 || d.trials.length > 0) && <Noticed d={d} />,
         <Associations d={d} />,
       ],
@@ -1565,6 +1568,41 @@ function WeekdaysBlock({ d }: { d: ReportData }) {
       </table>
       <p className="r-small">{f.t.weekdaysLegend}</p>
       <p className="r-small">{f.format(f.t.weekdaysNote, { overall: f.nf(w.overall), min: w.minDays, band: f.nf(w.band) })}</p>
+    </>
+  )
+}
+
+/** What the eve of the good days looked like, over the whole diary, against chance (see `lib/beforeGoodDays.ts`). Only when a line stands out; every line is
+ * shown then, the ones within the band included, so that nothing is fished out alone. */
+function GoodDaysBlock({ d }: { d: ReportData }) {
+  const { f, goodDays: g } = d
+  if (!g) return null
+  const band = (low: number, high: number) => (low === high ? String(low) : `${low}–${high}`)
+  return (
+    <>
+      <H level={3} kind="goodDays">{f.t.goodDaysTitle}</H>
+      <table className="r-weekdays">
+        <thead>
+          <tr>
+            <th scope="col">{f.t.goodDaysColMeasure}</th>
+            <th scope="col" className="r">{f.t.goodDaysColSeen}</th>
+            <th scope="col" className="r">{f.t.goodDaysColChance}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {g.lines.map((l) => {
+            const above = l.verdict === 'above'
+            return (
+              <tr key={l.key} data-row style={above ? { fontWeight: 700 } : undefined}>
+                <th scope="row" style={above ? { fontWeight: 700 } : undefined}>{f.t.goodDaysMeasures[l.key]}</th>
+                <td className="r num">{`${l.observed} / ${l.n}`}</td>
+                <td className="r num">{band(l.low, l.high)}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+      <p className="r-small">{f.format(f.t.goodDaysNote, { n: g.rows })}</p>
     </>
   )
 }

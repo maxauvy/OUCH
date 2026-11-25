@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconBarbell, IconLeaf, IconPill, IconRepeat, IconSparkles, type Icon } from '@tabler/icons-react'
+import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconBarbell, IconLeaf, IconPill, IconRepeat, IconSparkles, IconSun, type Icon } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { LoggedEntry, Settings } from '../../db/types'
 import { useLeadList } from '../../hooks/useLeadList'
@@ -250,6 +250,34 @@ export function TodayList({
             <ActivityDetail illnesses={m.illnesses} />
             <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
               {canTry ? `${t.activity.pace} ${t.activity.tryHint}` : t.activity.pace}
+            </p>
+          </ListCard>
+        )
+      }
+      case 'goodDay': {
+        const g = t.beforeGoodDays
+        const r = m.line
+        const chance = r.high === 0 ? t.beforeFlares.chanceNone : format(r.low === r.high ? t.beforeFlares.chanceOne : t.beforeFlares.chanceRange, { lo: r.low, hi: r.high }, language)
+        return (
+          <ListCard
+            key={m.key}
+            icon={IconSun}
+            label={g.hintLabel}
+            actions={[
+              { label: g.hintThanks, primary: true, onClick: () => done(m.key) },
+              {
+                label: g.hintSee,
+                onClick: () => {
+                  done(m.key)
+                  setOpen(false)
+                  onGoToTab('trends')
+                },
+              },
+            ]}
+          >
+            <p className="text-body mt-0.5">{format(g.hintText, { what: g.measures[r.key].short, k: r.observed, n: r.n, chance }, language)}</p>
+            <p className="text-caption mt-1" style={{ color: 'var(--color-ink-muted)' }}>
+              {g.hintNote}
             </p>
           </ListCard>
         )

@@ -11,6 +11,7 @@ import { findLeads, keptLeads, type Lead, type LeadChoices, type LeadFactors } f
 import { reportTrials, type LeadTrial, type ReportTrial } from '../../lib/leadTrial'
 import { DEFAULT_REVIEW_OPTIONS, treatmentReviews, type TreatmentReview } from '../../lib/treatmentReview'
 import { weekdayProfile, type WeekdayProfile } from '../../lib/weekdays'
+import { beforeGoodDays, type BeforeGoodDays } from '../../lib/beforeGoodDays'
 import { reportFormat, type ReportFormat } from './reportFormat'
 import { shiftISO } from '../../lib/dates'
 import { markedOverlapping, type ResolvedFlare } from '../../lib/markedFlares'
@@ -106,6 +107,8 @@ export interface ReportData {
   weekdays: WeekdayProfile | null
   /** The leads the patient kept for the appointment, over both periods, as the diary reads today */
   noticed: Lead[]
+  /** What the eve of the good days looked like against chance, over the whole diary; null when too few, and left off when nothing stands out */
+  goodDays: BeforeGoodDays | null
   /** The one-week trials that ended in the two periods and can be compared */
   trials: ReportTrial[]
 }
@@ -167,6 +170,13 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     compare: compared.enough ? compared : null,
     compareSpans: spans,
     weekdays: weekdayProfile(current),
+    goodDays: (() => {
+      const reading = beforeGoodDays(
+        entries.filter((e) => e.date <= options.end),
+        detectable ? flareDays : new Set()
+      )
+      return reading && reading.above.length > 0 ? reading : null
+    })(),
     noticed: keptLeads(findLeads([...previous, ...current], options.leadFactors), options.leadChoices),
     trials: reportTrials(options.leadTrials?.history, options.leadTrials?.current, entries, p.prevStart, p.end),
     reviews: treatmentReviews(entries, medications, detectable ? flareDays : null, options.end).filter(
