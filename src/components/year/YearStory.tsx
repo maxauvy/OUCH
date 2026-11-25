@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { format as formatDate } from 'date-fns'
 import { IconX } from '@tabler/icons-react'
@@ -7,34 +7,68 @@ import { useSettings } from '../../hooks/useSettings'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { helperIn } from '../../lib/careSheet'
 import { theme } from '../../lib/theme'
-import type { YearReview } from '../../lib/yearReview'
+import { trialCount, type YearReview } from '../../lib/yearReview'
 import { YearCard } from './YearCard'
 import { APRICOT, CORAL, DAWN, INK, MUTED, confettiFlecks } from './yearStyle'
 
 
 /** A few flecks in the dawn colours, set once in a corner, never moving: festive without stirring. */
-export function Confetti({ n, seed, x = [0, 100], y = [0, 30] }: { n: number; seed: number; x?: [number, number]; y?: [number, number] }) {
+export function Confetti({ n, seed, x = [0, 100], y = [0, 30], fall = false }: { n: number; seed: number; x?: [number, number]; y?: [number, number]; fall?: boolean }) {
   return (
     <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
       {confettiFlecks(n, seed, x, y).map((c, i) => (
-        <span key={i} className="absolute" style={{ left: `${c.left}%`, top: `${c.top}%`, width: c.size, height: c.size, borderRadius: c.round ? '50%' : 2, background: c.colour, opacity: 0.75, transform: `rotate(${c.turn}deg)` }} />
+        <span key={i} className={fall ? 'absolute ys-fall' : 'absolute'} style={{ left: `${c.left}%`, top: `${c.top}%`, width: c.size, height: c.size, borderRadius: c.round ? '50%' : 2, background: c.colour, opacity: 0.75, transform: `rotate(${c.turn}deg)`, animationDelay: fall ? `${i * 50}ms` : undefined }} />
       ))}
     </div>
   )
 }
 
 /** One square per day noted, in the colour of its weather; the gentlest days glow a little. */
-export function YearSky({ days, size }: { days: YearReview['days']; size?: number }) {
+export function YearSky({ days, size, animate = false }: { days: YearReview['days']; size?: number; animate?: boolean }) {
   const n = days.length
   const s = size ?? (n <= 100 ? 18 : n <= 200 ? 13 : 10)
   const cols = n <= 100 ? 12 : n <= 200 ? 16 : 22
   return (
     <div aria-hidden className="grid justify-center" style={{ gridTemplateColumns: `repeat(${cols}, ${s}px)`, gap: Math.max(2, Math.round(s / 5)) }}>
-      {days.map((d) => (
-        <span key={d.date} style={{ width: s, height: s, borderRadius: s / 3.5, background: theme.weather[d.level].color, boxShadow: d.level === 1 ? '0 0 6px 1px rgba(227,167,59,.7)' : undefined }} />
+      {days.map((d, k) => (
+        <span
+          key={d.date}
+          className={animate ? 'ys-pop' : undefined}
+          style={{
+            width: s,
+            height: s,
+            borderRadius: s / 3.5,
+            background: theme.weather[d.level].color,
+            boxShadow: d.level === 1 ? '0 0 6px 1px rgba(227,167,59,.7)' : undefined,
+            // Row by row, a little after the title: the sky fills in about a second and a half, then holds still.
+            animationDelay: animate ? `${300 + Math.floor(k / cols) * Math.min(110, 1200 / Math.ceil(n / cols)) + (k % cols) * 12}ms` : undefined,
+          }}
+        />
       ))}
     </div>
   )
+}
+
+/** A figure that climbs from 0 to `to` in under a second when `run` turns on; straight to `to` for those who asked for less motion. */
+function useCountUp(to: number, run: boolean): number {
+  const [n, setN] = useState(0)
+  const still = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  useEffect(() => {
+    if (!run || still) return
+    let raf = 0
+    const start = performance.now()
+    const step = (now: number) => {
+      const p = Math.min(1, (now - start) / 900)
+      setN(Math.round(to * (1 - (1 - p) ** 3)))
+      if (p < 1) raf = requestAnimationFrame(step)
+    }
+    raf = requestAnimationFrame(step)
+    return () => {
+      cancelAnimationFrame(raf)
+      setN(0)
+    }
+  }, [to, run, still])
+  return run && !still ? n : to
 }
 
 const marked = { background: `linear-gradient(transparent 58%, ${APRICOT} 58%, ${APRICOT} 92%, transparent 92%)` }
@@ -52,6 +86,8 @@ export function YearStory({ review, onClose }: { review: YearReview; onClose: ()
   const settings = useSettings()
   const closeRef = useRef<HTMLButtonElement>(null)
   const [i, setI] = useState(0)
+  // The sky is always the second screen: its count of days climbs when it opens.
+  const skyCount = useCountUp(review.logged, i === 1)
   const next = review.year + 1
   const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMMM', { locale: dateFnsLocale })
   const f = (template: string, vars: Record<string, string | number>) => format(template, vars, language)
@@ -78,7 +114,7 @@ export function YearStory({ review, onClose }: { review: YearReview; onClose: ()
     const sinceStart = review.first > `${review.year}-01-01`
     out.push({
       key: 'cover',
-      confetti: <Confetti n={30} seed={11} x={[4, 96]} y={[6, 26]} />,
+      confetti: <Confetti n={30} seed={11} x={[4, 96]} y={[6, 26]} fall />,
       sun: true,
       content: (
         <>
@@ -95,14 +131,33 @@ export function YearStory({ review, onClose }: { review: YearReview; onClose: ()
       content: (
         <>
           {kicker(t.skyKicker)}
-          {title(f(t.skyTitle, { n: review.logged }), 30)}
-          <YearSky days={review.days} />
+          <h2 className="m-0 mb-4 font-extrabold leading-[1.12] text-balance" style={{ fontFamily: 'var(--font-display)', fontSize: 30 }}>
+            <span className="sr-only">{f(t.skyTitle, { n: review.logged })}</span>
+            {/* The final sentence, with only its figures climbing in a box as wide as the final one: the title never changes shape. */}
+            <span aria-hidden>
+              {f(t.skyTitle, { n: review.logged })
+                .split(String(review.logged))
+                .flatMap((part, k) =>
+                  k === 0
+                    ? [part]
+                    : [
+                        <span key={k} className="inline-block text-right tabular-nums" style={{ minWidth: `${String(review.logged).length}ch` }}>
+                          {skyCount}
+                        </span>,
+                        part,
+                      ]
+                )}
+            </span>
+          </h2>
+          <YearSky days={review.days} animate />
           <div className="mt-5">
             {body(
               review.gentle > 0 ? (
                 <>
                   {t.skyGentleBefore}
-                  <b style={marked}>{f(t.skyGentleMarked, { n: review.gentle })}</b>
+                  <b className="ys-sweep" style={marked}>
+                    {f(t.skyGentleMarked, { n: review.gentle })}
+                  </b>
                   {t.skyGentleAfter}
                 </>
               ) : (
@@ -125,7 +180,7 @@ export function YearStory({ review, onClose }: { review: YearReview; onClose: ()
             <div aria-hidden className="flex flex-col gap-2 mb-5">
               {review.flares.slice(-8).map((d, k) => (
                 <div key={k} className="flex items-center gap-2">
-                  <span className="h-2 rounded" style={{ width: `${Math.max(6, (d / longest) * 60)}%`, background: 'rgba(87,74,122,.45)' }} />
+                  <span className="h-2 rounded ys-grow" style={{ width: `${Math.max(6, (d / longest) * 60)}%`, background: 'rgba(87,74,122,.45)', animationDelay: `${300 + k * 120}ms` }} />
                   <span className="w-3 h-3 rounded-full shrink-0" style={{ background: APRICOT, boxShadow: `0 0 8px ${APRICOT}` }} />
                   <span className="text-[14px]" style={{ color: MUTED }}>
                     {f(t.days, { n: d })}
@@ -174,10 +229,18 @@ export function YearStory({ review, onClose }: { review: YearReview; onClose: ()
         ),
       })
     }
+    // One line per action: « chaleur (3 fois) et marche courte », never « chaleur, chaleur, chaleur ».
+    function trialLines(): string[] {
+      const total = trialCount(review.trials)
+      const named = (a: string) => a.toLocaleLowerCase(language)
+      if (total === 0) return []
+      if (total === 1) return [f(t.didTrial, { list: named(review.trials[0]!.action) })]
+      if (review.trials.length === 1) return [f(t.didTrialsSame, { n: total, action: named(review.trials[0]!.action) })]
+      return [f(t.didTrials, { n: total, list: list(review.trials.map((x) => (x.times > 1 ? f(t.trialTimes, { action: named(x.action), n: x.times }) : named(x.action)))) })]
+    }
     const did = [
       f(t.didDays, { n: review.logged }),
-      ...(review.trials.length === 1 ? [f(t.didTrial, { list: review.trials[0]!.toLocaleLowerCase(language) })] : []),
-      ...(review.trials.length > 1 ? [f(t.didTrials, { n: review.trials.length, list: list(review.trials.map((x) => x.toLocaleLowerCase(language))) })] : []),
+      ...trialLines(),
       ...(review.wroteNote ? [t.didNote] : []),
       ...(review.appointments > 0 ? [f(t.didAppointments, { n: review.appointments })] : []),
     ]
@@ -200,7 +263,7 @@ export function YearStory({ review, onClose }: { review: YearReview; onClose: ()
     })
     out.push({
       key: 'end',
-      confetti: <Confetti n={36} seed={23} x={[4, 96]} y={[5, 24]} />,
+      confetti: <Confetti n={36} seed={23} x={[4, 96]} y={[5, 24]} fall />,
       sun: true,
       content: (
         <div className="text-center">
@@ -255,13 +318,16 @@ export function YearStory({ review, onClose }: { review: YearReview; onClose: ()
         go(e.clientX < window.innerWidth / 3 ? i - 1 : i + 1)
       }}
     >
-      {screen?.confetti}
+      {/* Keyed by screen, so each one plays its arrival once when it opens. */}
+      <Fragment key={`confetti-${screen?.key}`}>{screen?.confetti}</Fragment>
       {screen?.sun && (
-        <div aria-hidden className="absolute left-1/2 -bottom-[170px] w-[380px] h-[380px] -ml-[190px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle,#ffd27a 0%,#f6c79a 38%,rgba(246,199,154,.35) 58%,transparent 72%)' }} />
+        <div key={`sun-${screen.key}`} aria-hidden className="ys-sun absolute left-1/2 -bottom-[170px] w-[380px] h-[380px] -ml-[190px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle,#ffd27a 0%,#f6c79a 38%,rgba(246,199,154,.35) 58%,transparent 72%)' }} />
       )}
       <div className="absolute left-4 right-4 flex gap-1" style={{ top: 'calc(var(--root-pad-top, 0px) + 14px)' }} role="img" aria-label={f(t.progress, { i: i + 1, n: count })}>
         {Array.from({ length: count }, (_, k) => (
-          <span key={k} className="flex-1 h-[3px] rounded" style={{ background: k <= i ? '#2c2860' : 'rgba(44,40,96,.18)' }} />
+          <span key={k} className="flex-1 h-[3px] rounded overflow-hidden" style={{ background: k < i ? '#2c2860' : 'rgba(44,40,96,.18)' }}>
+            {k === i && <span key={i} className="ys-fill block h-full" style={{ background: '#2c2860' }} />}
+          </span>
         ))}
       </div>
       <button
@@ -278,7 +344,7 @@ export function YearStory({ review, onClose }: { review: YearReview; onClose: ()
       {onCard ? (
         <YearCard review={review} onBack={() => go(0)} />
       ) : (
-        <div className="absolute inset-x-0 mx-auto max-w-[440px] px-6" style={{ top: screen?.key === 'cover' ? '28%' : screen?.key === 'end' ? '30%' : '14%' }} aria-live="polite">
+        <div key={`screen-${screen?.key}`} className="ys-rise absolute inset-x-0 mx-auto max-w-[440px] px-6" style={{ top: screen?.key === 'cover' ? '28%' : screen?.key === 'end' ? '30%' : '14%' }} aria-live="polite">
           {screen?.content}
         </div>
       )}

@@ -53,13 +53,28 @@ export interface YearReview {
   calm: { start: string; end: string; days: number } | null
   /** What the person noted as helping most often, as typed, with its days. */
   helped: { label: string; days: number }[]
-  /** The trials finished in the year. */
-  trials: string[]
+  /** The trials finished in the year, one line per action (as first typed), with how many times it was tried: the same action can be tried again. */
+  trials: { action: string; times: number }[]
   /** The note for harder days, when written in the year. */
   wroteNote: boolean
   /** Appointments the person noted in the year. */
   appointments: number
 }
+
+/** One line per action, in the order first tried; an action tried again counts its times. */
+function trialsByAction(trials: readonly LeadTrial[]): { action: string; times: number }[] {
+  const byKey = new Map<string, { action: string; times: number }>()
+  for (const t of trials) {
+    const key = t.action.trim().toLowerCase()
+    const seen = byKey.get(key)
+    if (seen) seen.times++
+    else byKey.set(key, { action: t.action.trim(), times: 1 })
+  }
+  return [...byKey.values()]
+}
+
+/** The total of trials, the times an action was tried again included. */
+export const trialCount = (trials: YearReview['trials']) => trials.reduce((n, t) => n + t.times, 0)
 
 /** The year as the journal holds it; null under `MIN_DAYS` noted days. */
 export function yearReview(input: {
@@ -121,7 +136,7 @@ export function yearReview(input: {
       .filter((c) => c.days >= MIN_HELPED)
       .sort((a, b) => b.days - a.days || a.label.localeCompare(b.label))
       .slice(0, 3),
-    trials: (input.trials ?? []).filter((t) => inYear(t.end)).map((t) => t.action),
+    trials: trialsByAction((input.trials ?? []).filter((t) => inYear(t.end))),
     wroteNote: !!input.note && inYear(input.note.date),
     appointments: (input.appointments ?? []).filter((a) => inYear(a.date)).length,
   }
