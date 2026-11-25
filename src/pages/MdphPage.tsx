@@ -18,6 +18,9 @@ import { Segmented } from '../components/ui/Segmented'
 import { MdphDocument, type MdphInput } from '../components/mdph/MdphDocument'
 import { MonthBars } from '../components/mdph/MonthBars'
 import { ParcoursCard } from '../components/mdph/ParcoursCard'
+import { CertificateSheet } from '../components/mdph/CertificateSheet'
+import type { Names } from '../components/mdph/FormSheet'
+import { formatIllnessList } from '../lib/childView'
 import { b3Sentence, d1Sentence, monthLabeller } from '../components/mdph/sentences'
 import '../components/report/report.css'
 
@@ -91,6 +94,10 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
   const [months, setMonths] = useState<MdphPeriod>(12)
   const [capturing, setCapturing] = useState(false)
   const [exportFailed, setExportFailed] = useState(false)
+  // Typed once for the form and the certificate, kept while the page is open, never stored.
+  const [typedNames, setNames] = useState<Names | null>(null)
+  const names: Names = typedNames ?? { lastName: '', firstNames: settings.displayName.trim() }
+  const [certOpen, setCertOpen] = useState(false)
   const today = todayISO()
 
   useEffect(() => {
@@ -100,7 +107,8 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
 
   const data = useMemo(() => (entries && medications ? mdphData({ entries, medications, today, months }) : null), [entries, medications, today, months])
   const gestures = cleanMdphGestures(settings.mdphGestures)
-  const input: MdphInput | null = data && { language, today, name: settings.displayName.trim(), data, gestures }
+  const illnesses = settings.illnesses.length ? formatIllnessList(language, settings.illnesses, { status: settings.illnessStatus, otherName: settings.otherIllnessName, year: settings.illnessYear }) : undefined
+  const input: MdphInput | null = data && { language, today, name: settings.displayName.trim(), data, gestures, illnesses }
   const long = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMMM yyyy', { locale: dateFnsLocale })
   const fileTitle = `${t.title} ${today}`
   // The texts written into the form are French whatever the app's language: the form is French.
@@ -175,7 +183,7 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
         {t.intro}
       </p>
 
-      <ParcoursCard cardsShown={!!data && data.logged >= MIN_TRACKED} texts={formTexts} today={today} />
+      <ParcoursCard cardsShown={!!data && data.logged >= MIN_TRACKED} texts={formTexts} today={today} names={names} onNames={setNames} />
 
       <h2 className="section-title text-heading font-bold px-1 mt-2">{t.parcours.boxesTitle}</h2>
 
@@ -272,31 +280,52 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
             {data.careDays > 0 && <p className="text-body">{format(t.doc.careRow, { n: data.careDays }, language)}</p>}
           </BoxCard>
 
-          <div className="flex flex-col gap-2">
-            <button type="button" onClick={() => { setExportFailed(false); setCapturing(true) }} disabled={!input || capturing} aria-describedby={`${ids}-help`} className="btn-primary w-full">
-              <IconFileTypePdf size={18} aria-hidden />
-              {capturing ? t.exporting : t.exportPdf}
-            </button>
-            {canPrint && (
-              <button type="button" onClick={() => window.print()} disabled={!input} className="btn-secondary w-full">
-                <IconPrinter size={18} aria-hidden />
-                {t.print}
-              </button>
-            )}
-            <p id={`${ids}-help`} className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
-              {t.exportHelper}
-            </p>
-            <p role="alert" className="text-caption text-center font-medium" style={{ color: 'var(--color-weather-5-text)' }}>
-              {exportFailed ? t.exportFailed : ''}
-            </p>
-          </div>
-
-          <h2 className="text-caption font-semibold px-1 mt-2" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.docPreview}
-          </h2>
-          {input && <MdphDocument input={input} />}
         </>
       )}
+
+      <section aria-labelledby={`${ids}-consult`} className="rounded-[var(--radius-card)] p-4 flex flex-col gap-3" style={{ background: 'var(--color-surface)', border: 'var(--card-border, 1px solid var(--color-hairline))', boxShadow: 'var(--card-shadow)' }}>
+        <h2 id={`${ids}-consult`} className="section-title text-heading font-bold">
+          {t.cert.title}
+        </h2>
+        <p className="text-body" style={{ color: 'var(--color-ink-muted)' }}>
+          {t.cert.intro}
+        </p>
+        <button type="button" onClick={() => setCertOpen(true)} className="btn-primary w-full">
+          {t.cert.open}
+        </button>
+        {data && data.logged >= MIN_TRACKED && (
+          <>
+            <h3 className="text-body font-bold mt-2">{t.cert.notesTitle}</h3>
+            <p className="text-body" style={{ color: 'var(--color-ink-muted)' }}>
+              {t.cert.notesIntro}
+            </p>
+              <div className="flex flex-col gap-2">
+                <button type="button" onClick={() => { setExportFailed(false); setCapturing(true) }} disabled={!input || capturing} aria-describedby={`${ids}-help`} className="btn-primary w-full">
+                  <IconFileTypePdf size={18} aria-hidden />
+                  {capturing ? t.exporting : t.exportPdf}
+                </button>
+                {canPrint && (
+                  <button type="button" onClick={() => window.print()} disabled={!input} className="btn-secondary w-full">
+                    <IconPrinter size={18} aria-hidden />
+                    {t.print}
+                  </button>
+                )}
+                <p id={`${ids}-help`} className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
+                  {t.exportHelper}
+                </p>
+                <p role="alert" className="text-caption text-center font-medium" style={{ color: 'var(--color-weather-5-text)' }}>
+                  {exportFailed ? t.exportFailed : ''}
+                </p>
+              </div>
+
+              <h2 className="text-caption font-semibold px-1 mt-2" style={{ color: 'var(--color-ink-muted)' }}>
+                {t.docPreview}
+              </h2>
+              {input && <MdphDocument input={input} />}
+          </>
+        )}
+      </section>
+      {certOpen && <CertificateSheet names={names} onNames={setNames} today={today} onClose={() => setCertOpen(false)} />}
 
       {/* The copy that gets printed: full size, hidden on screen. */}
       {input &&

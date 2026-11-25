@@ -3,7 +3,7 @@ import { IconCheck } from '@tabler/icons-react'
 import { db, updateSettings } from '../../db'
 import { useSettings } from '../../hooks/useSettings'
 import { format, useLanguage, useTranslation } from '../../i18n'
-import { FormSheet, type FormTexts } from './FormSheet'
+import { FormSheet, type FormTexts, type Names } from './FormSheet'
 import { ASKS, ATTACHMENTS, PART_PAGES, REQUEST_KINDS, cleanParcours, parcoursParts, toggleAsk, type MdphParcours } from '../../lib/mdphParcours'
 
 /** Brings the card of a box into view and moves the focus to its title, without touching the address (the app keeps its own). */
@@ -43,7 +43,7 @@ function Chip({ on, onClick, role, children }: { on: boolean; onClick: () => voi
  * « Ton parcours »: three answers, then the parts of the request form to fill in, in its order, with their pages and why (the form's own rules,
  * lib/mdphParcours.ts), where OUCH helps, and the documents of page 4 to tick as they are ready. Never what someone is entitled to.
  */
-export function ParcoursCard({ cardsShown, texts, today }: { cardsShown: boolean; texts: FormTexts | null; today: string }) {
+export function ParcoursCard({ cardsShown, texts, today, names, onNames }: { cardsShown: boolean; texts: FormTexts | null; today: string; names: Names; onNames: (n: Names) => void }) {
   const all = useTranslation().mdph
   const t = all.parcours
   const [formOpen, setFormOpen] = useState(false)
@@ -188,7 +188,7 @@ export function ParcoursCard({ cardsShown, texts, today }: { cardsShown: boolean
           </button>
         </>
       )}
-      {formOpen && <FormSheet parcours={p} texts={texts} today={today} onClose={() => setFormOpen(false)} />}
+      {formOpen && <FormSheet parcours={p} texts={texts} today={today} names={names} onNames={onNames} onClose={() => setFormOpen(false)} />}
     </section>
   )
 }

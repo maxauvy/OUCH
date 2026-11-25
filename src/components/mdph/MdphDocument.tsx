@@ -4,8 +4,7 @@ import { GESTURES, enough, type MdphData, type MdphGestures, type MdphMonth } fr
 import { formatPosology } from '../../lib/medicationFormat'
 import { IS_DEMO } from '../../lib/demoMode'
 import { format, getTranslations, type Language } from '../../i18n'
-import { MonthBars } from './MonthBars'
-import { monthLabeller } from './sentences'
+import { frequencyClasses } from '../../lib/mdphCertificate'
 import '../caresheet/caresheet.css'
 import './mdph.css'
 
@@ -17,6 +16,8 @@ export interface MdphInput {
   name: string
   data: MdphData
   gestures?: MdphGestures
+  /** The illnesses as declared in Settings, as one sentence in the sheet's language */
+  illnesses?: string
 }
 
 /**
@@ -26,19 +27,21 @@ export interface MdphInput {
  * the sheet for a health professional, whose layout it shares.
  */
 export function MdphDocument({ input, paper = false }: { input: MdphInput; paper?: boolean }) {
-  const { language, today, name, data, gestures } = input
+  const { language, today, name, data, gestures, illnesses } = input
   const t = getTranslations(language)
   const d = t.mdph.doc
   const intl = INTL[language]
   const locale = language === 'en' ? dateEn : dateFr
   const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMM', { locale })
   const long = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMMM yyyy', { locale })
-  const monthLabel = monthLabeller(data.months, intl)
   const monthName = (m: MdphMonth) => new Date(`${m.month}-15T12:00:00`).toLocaleDateString(intl, { month: 'long', year: 'numeric' })
-  const often = GESTURES.filter((g) => gestures?.[g] === 'often').map((g) => t.mdph.gestures[g].toLocaleLowerCase(language))
-  const sometimes = GESTURES.filter((g) => gestures?.[g] === 'sometimes').map((g) => t.mdph.gestures[g].toLocaleLowerCase(language))
-  // Some gestures hold a comma (« vie sociale, loisirs »): a semicolon keeps them apart.
-  const list = (items: string[]) => items.join(language === 'fr' ? ' ; ' : '; ')
+  const classes = frequencyClasses(data.months)
+  // Part 6 of the certificate names some gestures itself: those are shown under its words, the others under the form's.
+  const inCertificate = Object.keys(d.certGestures) as (keyof typeof d.certGestures)[]
+  const declared = GESTURES.filter((g) => gestures?.[g] === 'often' || gestures?.[g] === 'sometimes')
+  const certRows = declared.filter((g): g is (typeof inCertificate)[number] => (inCertificate as string[]).includes(g))
+  const otherRows = declared.filter((g) => !(inCertificate as string[]).includes(g))
+  const answer = (g: (typeof GESTURES)[number]) => t.mdph.answers[gestures![g]!]
 
   const rub = (title: string, ref: string, children: React.ReactNode) => (
     <div className="cs-rub">
@@ -50,7 +53,7 @@ export function MdphDocument({ input, paper = false }: { input: MdphInput; paper
     </div>
   )
   const row = (label: string, value: string) => (
-    <tr>
+    <tr key={label}>
       <td>{label}</td>
       <td className="md-n">{value}</td>
     </tr>
@@ -65,11 +68,27 @@ export function MdphDocument({ input, paper = false }: { input: MdphInput; paper
         <p className="cs-meta">{format(d.meta, { from: long(data.start), to: long(today), logged: data.logged, span: data.span }, language)}</p>
       </header>
       <div className="cs-body">
+        {illnesses &&
+          rub(
+            d.pathology,
+            format(d.certPart, { n: 1 }, language),
+            <>
+              <p className="cs-line">{format(d.pathologyLine, { list: illnesses }, language)}</p>
+              <p className="cs-line cs-sub">{d.pathologyNote}</p>
+            </>
+          )}
         {rub(
           d.frequency,
           format(d.certPart, { n: 3 }, language),
           <>
-            <MonthBars months={data.months} label={d.chartLabel} lineLabel={format(d.lineLabel, { n: 15 }, language)} monthLabel={monthLabel} ink="#1f1d44" muted="#5e5a80" bar="#8d86b8" />
+            <p className="cs-line">{d.classesIntro}</p>
+            <table className="md-table">
+              <tbody>
+                {row(d.over15, format(d.monthsCount, { n: classes.over15 }, language))}
+                {row(d.upTo15, format(d.monthsCount, { n: classes.upTo15 }, language))}
+                {row(d.noneMonth, format(d.monthsCount, { n: classes.none }, language))}
+              </tbody>
+            </table>
             <table className="md-table">
               <thead>
                 <tr>
@@ -144,13 +163,34 @@ export function MdphDocument({ input, paper = false }: { input: MdphInput; paper
               </tbody>
             </table>
           )}
-        {(often.length > 0 || sometimes.length > 0) &&
+        {declared.length > 0 &&
           rub(
             d.gestures,
-            d.formPart,
+            format(d.certPart, { n: 6 }, language),
             <>
-              {often.length > 0 && <p className="cs-line">{format(d.often, { list: list(often) }, language)}</p>}
-              {sometimes.length > 0 && <p className="cs-line">{format(d.sometimes, { list: list(sometimes) }, language)}</p>}
+              {certRows.length > 0 && (
+                <table className="md-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{d.certRubric}</th>
+                      <th scope="col" className="md-n">
+                        {d.answer}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>{certRows.map((g) => row(d.certGestures[g], answer(g)))}</tbody>
+                </table>
+              )}
+              {otherRows.length > 0 && (
+                <>
+                  <p className="cs-line" style={{ marginTop: 6 }}>
+                    {d.otherGestures}
+                  </p>
+                  <table className="md-table">
+                    <tbody>{otherRows.map((g) => row(t.mdph.gestures[g], answer(g)))}</tbody>
+                  </table>
+                </>
+              )}
               <p className="cs-line cs-sub">{d.declared}</p>
             </>
           )}

@@ -1652,6 +1652,27 @@ export interface Translations {
   }
   /** « Mon dossier MDPH »: the journal for the request form (cerfa 15692*01) and the medical certificate (cerfa 15695*01). See lib/mdph.ts */
   mdph: {
+    /** The medical certificate: page 1's patient box (lib/mdphCertificate.ts) and the notes for the doctor */
+    cert: {
+      title: string
+      intro: string
+      open: string
+      sheetTitle: string
+      sheetIntro: string
+      birth: string
+      dossier: string
+      needs: string
+      /** `{{n}}` characters of `{{max}}` */
+      needsHint: string
+      needsEmpty: string
+      needsReset: string
+      byHand: string
+      make: string
+      failed: string
+      fileName: string
+      notesTitle: string
+      notesIntro: string
+    }
     /** « Mon formulaire pré-rempli »: the review before OUCH writes into the official form (lib/mdphForm.ts) */
     form: {
       title: string
@@ -1771,6 +1792,21 @@ export interface Translations {
     print: string
     /** The page for the doctor */
     doc: {
+      pathology: string
+      /** `{{list}}` illnesses as declared */
+      pathologyLine: string
+      pathologyNote: string
+      /** Part 3, months sorted as the certificate asks */
+      classesIntro: string
+      over15: string
+      upTo15: string
+      noneMonth: string
+      /** `{{n}}` months */
+      monthsCount: string
+      certRubric: string
+      answer: string
+      otherGestures: string
+      certGestures: Record<'hygiene' | 'dressing' | 'eating' | 'moveHome' | 'moveOut', string>
       heading: string
       title: string
       /** {{name}} */
