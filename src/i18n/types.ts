@@ -855,6 +855,17 @@ export interface Translations {
     weekdaysTitle: string
     decisionsColDecision: string
     decisionsColJournal: string
+    oneMinChanged: string
+    oneMinAsNeeded: string
+    oneMinAsNeededCol: string
+    /** `{{n}}` days */
+    oneMinNow: string
+    /** `{{n}}` days */
+    oneMinBefore: string
+    /** `{{n}}` doses */
+    oneMinDoses: string
+    /** `{{n}}` days */
+    oneMinDays: string
     weekdaysColDay: string
     weekdaysColMean: string
     weekdaysColGap: string
