@@ -12,6 +12,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { ReminderSettings } from '../settings/ReminderSettings'
 import { radioGroupProps, radioProps } from '../../lib/a11y'
 import { formatIllnessList } from '../../lib/childView'
+import { newConsultation } from '../../lib/consultation'
 import { format, getTranslations, LANGUAGES, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { AboutCard } from '../about/AboutCard'
 import { Acronym } from '../about/Acronym'
@@ -34,7 +35,7 @@ type Step = 'welcome' | 'illness' | 'profile' | 'tracking' | 'medications' | 're
 
 const inputStyle = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 
-export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wiped?: boolean }) {
+export function SetupWizard({ onDone, wiped = false, byDoctor = false }: { onDone: () => void; wiped?: boolean; /** Opened from a doctor's card (`?de=medecin`). */ byDoctor?: boolean }) {
   const t = useTranslation()
   const settings = useSettings()
   const earlyAccess = useEarlyAccess()
@@ -142,6 +143,7 @@ export function SetupWizard({ onDone, wiped = false }: { onDone: () => void; wip
                 {heading(t.welcome.title)}
                 <Acronym className="text-caption mt-1" />
               </div>
+              {byDoctor && <FromDoctorCard />}
               <AboutCard />
               <Intro>{t.setup.welcomeIntro}</Intro>
             </>
@@ -506,5 +508,38 @@ function InfoRow({ icon: IconComponent, title, body }: { icon: Icon; title: stri
         </p>
       </div>
     </div>
+  )
+}
+
+/** Opened from the card a doctor hands out: who suggested the journal, and the next appointment, so the report is ready on the right day. Nothing goes to the doctor. */
+function FromDoctorCard() {
+  const t = useTranslation().setup
+  const settings = useSettings()
+  const ids = useId()
+  const date = settings.consultation?.date ?? ''
+  return (
+    <section aria-labelledby={`${ids}-t`} className="rounded-[var(--radius-card)] p-4 flex flex-col gap-2" style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}>
+      <h2 id={`${ids}-t`} className="text-body font-bold">
+        {t.byDoctorTitle}
+      </h2>
+      <p className="text-body">{t.byDoctorBody}</p>
+      <label htmlFor={`${ids}-d`} className="text-control font-semibold">
+        {t.byDoctorDate}
+      </label>
+      <input
+        id={`${ids}-d`}
+        type="date"
+        value={date}
+        onChange={(e) => {
+          const d = e.target.value
+          void updateSettings({ consultation: d ? { ...(settings.consultation ?? newConsultation(d)), date: d, kind: 'gp' } : undefined })
+        }}
+        className="w-full rounded-xl px-3.5 py-2.5 text-body outline-none"
+        style={{ background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }}
+      />
+      <p className="text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+        {t.byDoctorHint}
+      </p>
+    </section>
   )
 }

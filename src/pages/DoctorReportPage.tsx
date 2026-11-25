@@ -427,6 +427,33 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
         <p role="alert" className="text-caption text-center font-medium" style={{ color: 'var(--color-weather-5-text)' }}>
           {exportFailed ? t.doctorReport.exportFailed : ''}
         </p>
+        {/* So the doctor has it before opening the door: three ways, none of them through OUCH. */}
+        <section aria-labelledby={`${ids}-send`} className="rounded-[var(--radius-card)] p-4 flex flex-col gap-2 mt-2" style={{ background: 'var(--color-brand-soft)', boxShadow: 'var(--tint-edge, none)' }}>
+          <h2 id={`${ids}-send`} className="text-body font-bold">
+            {t.doctorReport.sendTitle}
+          </h2>
+          <ol className="flex flex-col gap-2">
+            {(
+              [
+                [t.doctorReport.sendDms, t.doctorReport.sendDmsHint],
+                [t.doctorReport.sendBooking, t.doctorReport.sendBookingHint],
+                [t.doctorReport.sendHand, t.doctorReport.sendHandHint],
+              ] as const
+            ).map(([title, hint], k) => (
+              <li key={title} className="flex gap-3 items-start">
+                <span aria-hidden className="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-caption font-bold" style={{ background: 'var(--color-surface)', color: 'var(--color-brand)' }}>
+                  {k + 1}
+                </span>
+                <span className="text-body">
+                  <b>{title}</b>
+                  <span className="block text-caption" style={{ color: 'var(--color-ink-muted)' }}>
+                    {hint}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        </section>
       </div>
 
       {data && logged > 0 && (

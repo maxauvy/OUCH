@@ -10,3 +10,11 @@ test('only the two words of the shortcuts open a screen', () => {
   assert.equal(launchTarget('?go='), null)
   assert.equal(launchTarget(''), null)
 })
+
+test('the card a doctor hands out is recognised, nothing else', async () => {
+  const { fromDoctor } = await import('../src/lib/launchTarget.ts')
+  assert.equal(fromDoctor('?de=medecin'), true)
+  assert.equal(fromDoctor('?de=medecin&go=douleur'), true)
+  assert.equal(fromDoctor('?de=autre'), false)
+  assert.equal(fromDoctor(''), false)
+})
