@@ -49,7 +49,7 @@ Rien n'oblige à passer à la phase B : la phase A est utile seule.
 
 Le soignant peut arrêter à tout moment, sans raison à donner. Un patient aussi : supprimer ses données se fait dans Réglages, et cela n'a aucune conséquence sur sa prise en charge.
 
-À la semaine 0, le soignant rappelle au patient de **faire une sauvegarde** (Réglages, Mes données) et d'en refaire une vers la semaine 3, ou, s'il a un compte Dropbox, de mettre en place la sauvegarde automatique, qui s'en charge ensuite : c'est la seule façon de ne pas perdre son journal en changeant de téléphone ou si le navigateur efface les données du site.
+À la semaine 0, le soignant rappelle au patient de **faire une sauvegarde** (Réglages, Confidentialité et données) et d'en refaire une vers la semaine 3, ou, s'il a un compte Dropbox, de mettre en place la sauvegarde automatique, qui s'en charge ensuite : c'est la seule façon de ne pas perdre son journal en changeant de téléphone ou si le navigateur efface les données du site.
 
 ## 5. Ce qui est recueilli
 
