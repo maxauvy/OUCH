@@ -2504,13 +2504,6 @@ export interface Translations {
   }
 
   shareSheet: {
-    flare: {
-      title: string
-      hint: string
-      noteLabel: string
-      notePlaceholder: string
-      noteHint: string
-    }
     title: string
     close: string
     /** Accessible summary of the card preview. */
@@ -2661,6 +2654,14 @@ export interface Translations {
     audienceDetail: { title: string; items: readonly string[] }
     lightFormTitle: string
     lightFormHelper: string
+    /** Early access: the flare on the shared image (lib/sharedFlare.ts). */
+    flareImage: {
+      title: string
+      helper: string
+      noteLabel: string
+      notePlaceholder: string
+      noteHint: string
+    }
     appearanceTitle: string
     /** Accessible name of the light/dark choice (no visible title). */
     themeTitle: string

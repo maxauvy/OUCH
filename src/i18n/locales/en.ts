@@ -2701,13 +2701,6 @@ const en: Translations = {
   },
 
   shareSheet: {
-    flare: {
-      title: 'Harder days',
-      hint: 'When the app spots harder days, your image says since when, then "Easing off" once they pass.',
-      noteLabel: 'A sentence for your relatives on those days',
-      notePlaceholder: 'No need to reply, a short message is enough.',
-      noteHint: 'Optional. It goes on the image while the harder days last, the daily image included.',
-    },
     title: "Share my weather",
     close: 'Close',
     previewLabel: 'Image preview: {{weather}}, pain {{pain}} out of 10',
@@ -2854,6 +2847,13 @@ const en: Translations = {
         'Why: to know how many installations are in use. It is an anonymous audience count, based on legitimate interest and exempt from consent; the numbers are an order of magnitude, not an exact count.',
       ],
     },
+    flareImage: {
+      title: 'Harder days on your shared weather',
+      helper: 'When the app spots harder days, the image you share says since when, then "Easing off" once they pass. By hand and daily through Dropbox.',
+      noteLabel: 'A sentence for your relatives on those days',
+      notePlaceholder: 'No need to reply, a short message is enough.',
+      noteHint: 'Optional. It goes on the image while the harder days last.',
+    },
     lightFormTitle: 'Lighter screen on hard days',
     lightFormHelper:
       'During a flare, the day’s screen asks for your pain first, then offers the rest. You can always show the full form.',
@@ -2912,7 +2912,7 @@ const en: Translations = {
     factorsCountOther: '{{n}} factors tracked',
     summaryReminderOn: 'Reminder at {{time}}',
     summaryReminderOff: 'No reminder',
-    summaryMessages: '{{n}} of 3 on',
+    summaryMessages: '{{n}} of {{total}} on',
     privacyNote:
       "OUCH keeps all your data on this device, in local storage: no health data ever leaves it. Only automatic weather, with your position and never your journal, and the anonymous audience count (one signal a week, which you can turn off in Settings) contact outside services. Sharing your weather and making backups is always something you choose to do.",
     notMedicalDevice:

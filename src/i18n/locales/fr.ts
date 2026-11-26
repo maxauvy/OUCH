@@ -2706,13 +2706,6 @@ const fr: Translations = {
   },
 
   shareSheet: {
-    flare: {
-      title: 'Les jours plus durs',
-      hint: 'Quand l’app repère des jours plus durs, ton image dit depuis quand, puis « Ça s’apaise » quand ça passe.',
-      noteLabel: 'Une phrase pour tes proches ces jours-là',
-      notePlaceholder: 'Pas besoin de répondre, un petit message suffit.',
-      noteHint: 'Facultatif. Elle s’ajoute à l’image tant que les jours plus durs durent, y compris l’image envoyée chaque jour.',
-    },
     title: 'Partager ma météo',
     close: 'Fermer',
     previewLabel: "Aperçu de l'image : {{weather}}, douleur {{pain}} sur 10",
@@ -2859,6 +2852,13 @@ const fr: Translations = {
         'Pourquoi : savoir combien d’installations sont utilisées. C’est une mesure d’audience anonyme, fondée sur l’intérêt légitime et dispensée de consentement ; les chiffres donnent un ordre de grandeur, pas un décompte exact.',
       ],
     },
+    flareImage: {
+      title: 'Les jours plus durs sur ta météo partagée',
+      helper: 'Quand l’app repère des jours plus durs, l’image que tu partages dit depuis quand, puis « Ça s’apaise » quand ça passe. À la main comme chaque jour par Dropbox.',
+      noteLabel: 'Une phrase pour tes proches ces jours-là',
+      notePlaceholder: 'Pas besoin de répondre, un petit message suffit.',
+      noteHint: 'Facultatif. Elle s’ajoute à l’image tant que les jours plus durs durent.',
+    },
     lightFormTitle: 'Écran allégé les jours difficiles',
     lightFormHelper:
       'Pendant une poussée, l’écran du jour demande d’abord la douleur, puis propose le reste. Tu peux toujours afficher le formulaire complet.',
@@ -2917,7 +2917,7 @@ const fr: Translations = {
     factorsCountOther: '{{n}} facteurs suivis',
     summaryReminderOn: 'Rappel à {{time}}',
     summaryReminderOff: 'Pas de rappel',
-    summaryMessages: '{{n}} sur 3 actifs',
+    summaryMessages: '{{n}} sur {{total}} actifs',
     privacyNote:
       "OUCH garde toutes tes données sur cet appareil, dans son stockage local : aucune donnée de santé n'en sort. Seules la météo automatique, avec ta position et jamais ton journal, et la mesure d'audience anonyme (un signal par semaine, que tu peux couper dans Réglages) contactent des services extérieurs. Le partage de ta météo et les sauvegardes sont toujours une action volontaire de ta part.",
     notMedicalDevice:
