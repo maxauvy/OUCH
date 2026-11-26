@@ -5,6 +5,7 @@
 import type { BodyZone, COARSE_ZONES, FlareFactor, HeadacheDuration, JointKey, JointRegion, LegPain, MorningStiffness, PeriodFlow, Refreshed, SensoryStimulus, SymptomTag } from '../db/types'
 import type { BodyGroupId, BodyRegion } from '../lib/bodyZones'
 import type { ChildTone } from '../lib/childView'
+import type { SettingId } from '../lib/settingsSearch'
 
 interface FactorText {
   label: string
@@ -2708,17 +2709,20 @@ export interface Translations {
     backupTitle: string
     privacyNote: string
     notMedicalDevice: string
-    /** Titles of the collapsible groups of the settings page. */
-    groups: { profile: string; tracking: string; messages: string; display: string; data: string; about: string }
-    /** The weather look: the names of the two cards that gather the groups */
+    /** Titles of the collapsible groups of the settings page, by what people come to do. */
+    groups: { trial: string; profile: string; tracking: string; help: string; hardDays: string; appearance: string; data: string; about: string }
+    /** The weather look: the names of the cards that gather the groups */
+    clusterTrial: string
     clusterYou: string
     clusterApp: string
-    /** One-line summaries shown on a group's header while it is folded. */
-    factorsCountOne: string
-    factorsCountOther: string
-    summaryReminderOn: string
-    summaryReminderOff: string
-    summaryMessages: string
+    /** Each setting's short name: a folded group lists those of its settings, and search looks at them (lib/settingsSearch.ts). */
+    short: Record<SettingId, string>
+    /** Extra words search finds each setting by, separated by spaces. */
+    keywords: Record<SettingId, string>
+    search: { label: string; placeholder: string; clear: string; resultsOne: string; resultsOther: string; none: string }
+    /** The early-access group: what is on trial on this device. */
+    trial: { webdavTitle: string; webdavText: string; webdavOpen: string; others: string; note: string; leave: string }
+    privacyTitle: string
   }
 
   childView: {

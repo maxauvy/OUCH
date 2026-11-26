@@ -50,7 +50,7 @@ L'export CSV (Réglages, zone sensible) est différent : il produit deux fichier
 
 ## Verrou par code
 
-Facultatif, désactivé par défaut, réglé dans Réglages (Rappel et affichage). C'est un **verrou d'affichage** : il cache le journal à quelqu'un qui regarde un appareil déverrouillé (un proche, un collègue, un appareil prêté). Il **ne chiffre rien** : les données restent en clair dans le navigateur, et quiconque sait ouvrir les outils du navigateur ou lire le stockage du site peut les lire. Il ne remplace donc ni le verrouillage de l'appareil, ni un chiffrement de disque.
+Facultatif, désactivé par défaut, réglé dans Réglages (Confidentialité et données). C'est un **verrou d'affichage** : il cache le journal à quelqu'un qui regarde un appareil déverrouillé (un proche, un collègue, un appareil prêté). Il **ne chiffre rien** : les données restent en clair dans le navigateur, et quiconque sait ouvrir les outils du navigateur ou lire le stockage du site peut les lire. Il ne remplace donc ni le verrouillage de l'appareil, ni un chiffrement de disque.
 
 - **Le code :** quatre chiffres. L'app n'en garde qu'une **empreinte salée** (PBKDF2-SHA-256, 100 000 itérations, volontairement légères puisque ce n'est pas du chiffrement). Le code lui-même n'est enregistré nulle part : **il ne peut pas être réaffiché**, seulement changé ou retiré, en donnant le code actuel.
 - **Où :** une clé de `localStorage` de l'appareil (lue avant d'afficher quoi que ce soit, pour que le journal n'apparaisse pas un instant). Elle ne fait partie d'aucune sauvegarde, d'aucun export ni d'aucune copie automatique : un nouvel appareil démarre sans code.
@@ -64,7 +64,7 @@ Facultatif, désactivé par défaut, réglé dans Réglages (Rappel et affichage
 
 ## Sauvegarde automatique
 
-Facultative et désactivée par défaut : on l'active dans Réglages › Mes données, carte « Sauvegarde automatique ». La personne choisit un mot de passe, relie son compte Dropbox (l'accord se donne sur le site de Dropbox, OUCH n'en voit jamais le mot de passe) et OUCH y dépose des copies chiffrées de son journal.
+Facultative et désactivée par défaut : on l'active dans Réglages › Confidentialité et données, carte « Sauvegarde automatique ». La personne choisit un mot de passe, relie son compte Dropbox (l'accord se donne sur le site de Dropbox, OUCH n'en voit jamais le mot de passe) et OUCH y dépose des copies chiffrées de son journal.
 
 - **Ce qui part :** le même fichier que la sauvegarde exportée (AES-256-GCM, même format), fabriqué dans le navigateur avant l'envoi. Dropbox ne reçoit que ce fichier chiffré, son nom (par exemple `ouch-20261013-172542.json`), sa taille et le moment de l'envoi. Il ne peut pas lire le journal.
 - **Où :** dans le dossier réservé à OUCH (« App folder » : `Applications/` du Dropbox de la personne). OUCH n'a pas accès au reste du Dropbox. Permissions demandées : lire et écrire des fichiers dans ce dossier, et le lister.
