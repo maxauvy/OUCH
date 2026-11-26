@@ -24,6 +24,8 @@ import { MedicationsSection } from '../components/settings/MedicationsSection'
 import { IllnessPicker } from '../components/settings/IllnessPicker'
 import { SettingsCluster, SettingsGroup } from '../components/settings/SettingsGroup'
 import { SettingToggle } from '../components/settings/SettingToggle'
+import { FlareImageSetting } from '../components/settings/FlareImageSetting'
+import { flaresApply } from '../lib/flares'
 import { ReminderSettings } from '../components/settings/ReminderSettings'
 import { formatCoordinates } from '../lib/weather'
 import { saveCurrentLocation } from '../lib/weatherLocation'
@@ -82,8 +84,10 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
     .filter(Boolean)
     .join(' · ')
 
-  const messagesOn = [settings.hardDaysCardEnabled, settings.lightFormEnabled, settings.suggestionsEnabled].filter(Boolean).length
-  const messagesSummary = format(t.settings.summaryMessages, { n: messagesOn })
+  // The flare on the shared image: early access, and not for a migraine alone (as the reading itself).
+  const flareImageShown = earlyAccess && flaresApply(settings.illnesses)
+  const messages = [settings.hardDaysCardEnabled, settings.lightFormEnabled, settings.suggestionsEnabled, ...(flareImageShown ? [settings.flareOnImage !== false] : [])]
+  const messagesSummary = format(t.settings.summaryMessages, { n: messages.filter(Boolean).length, total: messages.length })
 
   const displaySummary = [
     settings.reminderEnabled || settings.agendaReminder ? format(t.settings.summaryReminderOn, { time: settings.reminderTime }) : t.settings.summaryReminderOff,
@@ -248,6 +252,7 @@ export function SettingsPage({ openBackup = false, onReplayTour }: { openBackup?
           checked={settings.lightFormEnabled}
           onChange={(v) => updateSettings({ lightFormEnabled: v })}
         />
+        {flareImageShown && <FlareImageSetting settings={settings} />}
         <SettingToggle
           icon={IconSparkles}
           title={t.settings.suggestionsTitle}
