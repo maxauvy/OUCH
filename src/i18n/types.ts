@@ -2504,6 +2504,13 @@ export interface Translations {
   }
 
   shareSheet: {
+    flare: {
+      title: string
+      hint: string
+      noteLabel: string
+      notePlaceholder: string
+      noteHint: string
+    }
     title: string
     close: string
     /** Accessible summary of the card preview. */
@@ -2582,6 +2589,15 @@ export interface Translations {
     scaleHigh: string
     painLabel: string
     outside: string
+    /** What the image says of a flare (early access, lib/sharedFlare.ts). */
+    flare: {
+      harder: string
+      day: string
+      easing: string
+      bracket: string
+      date: string
+      noteTitle: string
+    }
   }
 
   settings: {

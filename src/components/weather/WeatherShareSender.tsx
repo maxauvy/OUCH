@@ -6,6 +6,8 @@ import { cardToPng } from '../../lib/cardImage'
 import { onWeatherImageNow, readyWeatherShare, RETRY_AFTER_MS, sendWeatherImage, takeNowRequest, weatherImageKey } from '../../lib/weatherShareRuntime'
 import { WeatherCard } from './WeatherCard'
 import { useLook } from '../../lib/look'
+import { useImageFlare } from '../../hooks/useImageFlare'
+import { sharedFlareKey } from '../../lib/sharedFlare'
 
 /** Quiet time after the last change of the day before the image is made and
  * sent: a day is often a few edits in a row. Short, so that closing the app
@@ -28,7 +30,10 @@ export function WeatherShareSender() {
   const look = useLook()
 
   const logged = entry && hasPain(entry) ? entry : null
-  const key = logged ? weatherImageKey(logged, { displayName: settings.displayName || undefined, language: settings.language, look }) : null
+  // What the image says of a flare is part of what it is made from: a change there sends it again.
+  const imageFlare = useImageFlare(logged?.date ?? '')
+  const flareKey = sharedFlareKey(imageFlare?.flare ?? null, imageFlare?.note)
+  const key = logged ? weatherImageKey(logged, { displayName: settings.displayName || undefined, language: settings.language, look, flare: flareKey }) : null
   // `permission` waits for the person to allow the link in the share sheet.
   // A share from before the encryption has no key yet: its image goes again (encrypted, with a new link) even if the day did not change.
   const due = !!share && !!key && (key !== share.sentKey || !share.key) && share.lastFailure !== 'permission'

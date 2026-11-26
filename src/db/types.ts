@@ -532,6 +532,10 @@ export interface Settings {
   suggestionsEnabled: boolean
   /** Pain first, the rest on request, while a flare is under way. Switchable, restored from a backup. */
   lightFormEnabled: boolean
+  /** The day's image for relatives says when a flare is under way, then « Ça s'apaise » (early access, lib/sharedFlare.ts). On unless turned off. Restored from a backup. */
+  flareOnImage?: boolean
+  /** A sentence the person wrote for their relatives, on the image while a flare is under way. Restored from a backup. */
+  flareImageNote?: string
   /** The Kids tab in the tab bar: a page to explain the illness to a child, which not everyone needs. Off until the person says yes (the setup asks), so no answer is a no. A preference, restored from a backup. */
   kidsTabEnabled: boolean
   /** The day the person asked for the full form: it holds for that day only. Per device. */

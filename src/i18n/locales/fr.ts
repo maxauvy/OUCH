@@ -2706,6 +2706,13 @@ const fr: Translations = {
   },
 
   shareSheet: {
+    flare: {
+      title: 'Les jours plus durs',
+      hint: 'Quand l’app repère des jours plus durs, ton image dit depuis quand, puis « Ça s’apaise » quand ça passe.',
+      noteLabel: 'Une phrase pour tes proches ces jours-là',
+      notePlaceholder: 'Pas besoin de répondre, un petit message suffit.',
+      noteHint: 'Facultatif. Elle s’ajoute à l’image tant que les jours plus durs durent, y compris l’image envoyée chaque jour.',
+    },
     title: 'Partager ma météo',
     close: 'Fermer',
     previewLabel: "Aperçu de l'image : {{weather}}, douleur {{pain}} sur 10",
@@ -2773,6 +2780,14 @@ const fr: Translations = {
     scaleHigh: 'Beaucoup de douleur',
     painLabel: 'Douleur :',
     outside: 'Dehors',
+    flare: {
+      harder: 'Des jours plus durs depuis {{since}}',
+      day: '{{n}}ᵉ jour',
+      easing: 'Ça s’apaise depuis {{since}}',
+      bracket: 'depuis {{since}}',
+      date: 'le {{date}}',
+      noteTitle: 'Ces jours-là',
+    },
   },
 
   settings: {

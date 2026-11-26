@@ -12,8 +12,9 @@ import { cleanReturnAddress, finishDropboxLink, forgetPendingDropboxLink, getDro
 const image = () => dropboxWeatherImage(getDropboxToken)
 
 /** What an image is made from, as far as it shows: a new key means a new image to send. */
-export function weatherImageKey(entry: DailyEntry, extra: { displayName?: string; language: string; look: string }): string {
-  return [entry.date, entry.updatedAt, extra.displayName ?? '', extra.language, extra.look].join('|')
+export function weatherImageKey(entry: DailyEntry, extra: { displayName?: string; language: string; look: string; flare?: string }): string {
+  // The flare only when there is one, so the images already sent keep their key and do not go again.
+  return [entry.date, entry.updatedAt, extra.displayName ?? '', extra.language, extra.look, ...(extra.flare ? [extra.flare] : [])].join('|')
 }
 
 const NOW_EVENT = 'ouch:weathershare-now'

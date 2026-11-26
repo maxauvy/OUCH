@@ -2,7 +2,9 @@ import { forwardRef, type CSSProperties } from 'react'
 import type { LoggedEntry, PainWeather, PainWeatherLevel } from '../../db/types'
 import { colorForPainValue, computePainWeather, painWeatherByLevel } from '../../lib/painWeather'
 import { useRichLook } from '../../lib/look'
-import { shiftISO } from '../../lib/dates'
+import { daysBetween, shiftISO } from '../../lib/dates'
+import { useImageFlare, type ImageFlare } from '../../hooks/useImageFlare'
+import type { SharedFlare } from '../../lib/sharedFlare'
 import { AppLogo } from '../ui/AppLogo'
 import { WeatherIcon } from '../ui/WeatherIcon'
 import { IconArrowDownRight, IconArrowRight, IconArrowUpRight } from '@tabler/icons-react'
@@ -31,6 +33,8 @@ const CARD_MUTED = '#4d5a64'
 const CARD_TITLE_FONT = '"Bricolage Grotesque Variable", "Public Sans Variable", system-ui, sans-serif'
 const LEVELS: PainWeatherLevel[] = [1, 2, 3, 4, 5]
 const GAUGE = { on: '#4d5a64', off: '#d5dde2' }
+/** A flare on the image: the storm's violet, soft, as for the flare bands in Trends. Text at 8:1 or more on its tint. */
+const FLARE = { ink: '#574a7a', text: '#45395f', tint: 'rgba(87, 74, 122, 0.12)', line: 'rgba(87, 74, 122, 0.5)' }
 /** The weather look's card: its ink, and the first colour of each weather's sky (index.css, --sky-1 to --sky-5, light). */
 const CARD_INK = '#1d2433'
 const SKY_TOP_LIGHT = ['#fbe2b4', '#f6e5c1', '#e2dee9', '#d4e0ec', '#ddd4ec']
@@ -43,7 +47,7 @@ const CURVE_BANDS: [number, number, PainWeatherLevel][] = [[0, 1.5, 1], [1.5, 3.
 /** The last 14 days' pain as a line over the weather bands, a dot per logged
  * day in its weather's colour, the day itself ringed. A day without a note
  * breaks the line. No numbers: the axis reads "harder" to "easier". */
-function CardCurve({ date, byDate, t, intlLocale }: { date: string; byDate: Map<string, LoggedEntry>; t: Translations; intlLocale: string }) {
+function CardCurve({ date, byDate, t, intlLocale, band }: { date: string; byDate: Map<string, LoggedEntry>; t: Translations; intlLocale: string; band?: { from: string; to: string } | null }) {
   const days = Array.from({ length: 14 }, (_, i) => shiftISO(date, i - 13))
   const x = (i: number) => CURVE.pad + (i * (CURVE.w - 2 * CURVE.pad)) / 13
   const y = (p: number) => CURVE.pad + ((10 - p) / 10) * (CURVE.h - 2 * CURVE.pad)
@@ -56,6 +60,13 @@ function CardCurve({ date, byDate, t, intlLocale }: { date: string; byDate: Map<
     open = true
   })
   const short = (d: string) => new Date(d + 'T00:00:00').toLocaleDateString(intlLocale, { day: 'numeric', month: 'short' })
+  // The flare's days, tinted in the storm's violet from half a step before its first day to half a step after its last (or the edge).
+  const step = (CURVE.w - 2 * CURVE.pad) / 13
+  const bandFrom = band ? Math.max(0, daysBetween(days[0]!, band.from)) : 0
+  const bandTo = band ? daysBetween(days[0]!, band.to) : -1
+  const showBand = !!band && bandTo >= 0 && bandFrom <= 13
+  const bandX0 = bandFrom === 0 && band && band.from < days[0]! ? 0 : x(bandFrom) - step / 2
+  const bandX1 = bandTo >= 13 ? CURVE.w : x(bandTo) + step / 2
   return (
     <div>
       <div style={{ display: 'flex', gap: 8 }}>
@@ -69,6 +80,13 @@ function CardCurve({ date, byDate, t, intlLocale }: { date: string; byDate: Map<
           ))}
           <rect x={0} y={0} width={CURVE.w} height={y(10)} fill={painWeatherByLevel(5).soft} />
           <rect x={0} y={y(0)} width={CURVE.w} height={CURVE.h - y(0)} fill={painWeatherByLevel(1).soft} />
+          {showBand && (
+            <>
+              <rect x={bandX0} y={0} width={bandX1 - bandX0} height={CURVE.h} fill={FLARE.ink} fillOpacity={0.13} />
+              {bandX0 > 0 && <line x1={bandX0} y1={0} x2={bandX0} y2={CURVE.h} stroke={FLARE.ink} strokeOpacity={0.45} strokeWidth={1.5} strokeDasharray="3 3" />}
+              {bandX1 < CURVE.w && <line x1={bandX1} y1={0} x2={bandX1} y2={CURVE.h} stroke={FLARE.ink} strokeOpacity={0.45} strokeWidth={1.5} strokeDasharray="3 3" />}
+            </>
+          )}
           <path d={path} fill="none" stroke={CARD_MUTED} strokeWidth={2.4} strokeLinejoin="round" strokeLinecap="round" />
           {days.map((d, i) => {
             const e = byDate.get(d)
@@ -83,6 +101,50 @@ function CardCurve({ date, byDate, t, intlLocale }: { date: string; byDate: Map<
         <span>{short(days[7])}</span>
         <span>{short(date)}</span>
       </div>
+    </div>
+  )
+}
+
+/** The day a flare started or eased, as said on the image: the weekday within the last week, the date before that. */
+function sinceText(since: string, date: string, t: Translations, intlLocale: string): string {
+  const d = new Date(since + 'T00:00:00')
+  if (daysBetween(since, date) <= 6) return d.toLocaleDateString(intlLocale, { weekday: 'long' })
+  return format(t.weatherCard.flare.date, { date: d.toLocaleDateString(intlLocale, { day: 'numeric', month: 'long' }) })
+}
+
+/** The line under the title: « Des jours plus durs depuis dimanche · 5ᵉ jour », or « Ça s'apaise depuis mardi ». */
+function FlareLine({ flare, date, t, intlLocale }: { flare: SharedFlare; date: string; t: Translations; intlLocale: string }) {
+  const f = t.weatherCard.flare
+  const text = flare.kind === 'harder' ? format(f.harder, { since: sinceText(flare.start, date, t, intlLocale) }) : format(f.easing, { since: sinceText(flare.since, date, t, intlLocale) })
+  return (
+    <span style={{ alignSelf: 'flex-start', display: 'inline-flex', alignItems: 'center', gap: 8, background: FLARE.tint, color: FLARE.text, borderRadius: 999, padding: '6px 12px 6px 8px', fontSize: 14, fontWeight: 700, lineHeight: 1.25 }}>
+      {/* A ring in the storm's violet, full while it lasts, open once it eases. */}
+      <span style={{ width: 18, height: 18, borderRadius: 999, boxSizing: 'border-box', border: `5px solid ${FLARE.ink}`, background: flare.kind === 'harder' ? '#e7e2f0' : 'transparent', flexShrink: 0 }} />
+      <span>
+        {text}
+        {flare.kind === 'harder' && <span style={{ fontWeight: 500, fontSize: 13, whiteSpace: 'nowrap' }}> · {format(f.day, { n: flare.day })}</span>}
+      </span>
+    </span>
+  )
+}
+
+/** The person's sentence for relatives, while a flare lasts. */
+function FlareNote({ note, t }: { note: string; t: Translations }) {
+  return (
+    <div style={{ background: '#ffffff', borderRadius: '20px 20px 20px 6px', padding: '12px 16px', border: '1.5px solid rgba(87, 74, 122, 0.22)' }}>
+      <div style={{ fontSize: 12.5, fontWeight: 700, color: FLARE.ink, marginBottom: 4 }}>{t.weatherCard.flare.noteTitle}</div>
+      <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.45 }}>{note}</p>
+    </div>
+  )
+}
+
+/** Under the week, the days of the flare grouped by a soft bracket, « depuis dimanche » beneath. `from` is the first column (0–6). */
+function WeekBracket({ from, label }: { from: number; label: string }) {
+  const left = `calc(${(from / 7) * 100}% + 2px)`
+  return (
+    <div style={{ marginTop: 4 }}>
+      <div style={{ marginLeft: left, marginRight: 2, height: 7, border: `2px solid ${FLARE.line}`, borderTop: 'none', borderRadius: '0 0 8px 8px' }} />
+      <div style={{ marginLeft: left, marginRight: 2, textAlign: 'center', fontSize: 12, fontWeight: 700, color: FLARE.text, marginTop: 2 }}>{label}</div>
     </div>
   )
 }
@@ -215,6 +277,8 @@ export const WeatherCard = forwardRef<
   const logged = useLoggedEntries() ?? []
   const trend = painTrend(entry, logged)
   const rich = useRichLook()
+  const imageFlare: ImageFlare | null = useImageFlare(entry.date)
+  const flare = imageFlare?.flare ?? null
 
   // Scores are told in words with a gauge rather than as "6/10", which means
   // little to someone who doesn't use the app.
@@ -267,6 +331,8 @@ export const WeatherCard = forwardRef<
           <span style={{ fontSize: 13 }}>{capitalizeFirst(shortDate)}</span>
         </div>
 
+        {flare && <FlareLine flare={flare} date={entry.date} t={t} intlLocale={intlLocale} />}
+
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <span style={{ color: weather.ink, display: 'flex', flexShrink: 0 }}>
             <WeatherIcon name={weather.icon as never} size={96} />
@@ -315,7 +381,7 @@ export const WeatherCard = forwardRef<
 
         <div style={box}>
           <div style={{ ...label, marginBottom: 8 }}>{t.weatherCard.weekLabel}</div>
-          <CardCurve date={entry.date} byDate={byDate} t={t} intlLocale={intlLocale} />
+          <CardCurve date={entry.date} byDate={byDate} t={t} intlLocale={intlLocale} band={flare ? { from: flare.start, to: flare.kind === 'harder' ? entry.date : flare.end } : null} />
           <div style={{ display: 'grid', marginTop: 12, gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 5 }}>
             {days.map((date) => {
               const e = byDate.get(date)
@@ -347,8 +413,11 @@ export const WeatherCard = forwardRef<
               )
             })}
           </div>
+          {flare?.kind === 'harder' && <WeekBracket from={Math.max(0, daysBetween(days[0]!, flare.start))} label={format(t.weatherCard.flare.bracket, { since: sinceText(flare.start, entry.date, t, intlLocale) })} />}
           {weekTrend && <div style={{ fontSize: 13.5, lineHeight: 1.4, marginTop: 10 }}>{weekTrendText}</div>}
         </div>
+
+        {imageFlare?.note && <FlareNote note={imageFlare.note} t={t} />}
 
         {message && (
           <p style={{ margin: 0, background: 'rgba(255, 255, 255, 0.82)', borderRadius: '16px 16px 16px 4px', padding: '11px 14px', fontSize: 16, lineHeight: 1.45 }}>
@@ -394,6 +463,8 @@ export const WeatherCard = forwardRef<
             {format(t.weatherCard.levelOf, { n: weather.level })}
           </div>
         </div>
+
+        {flare && <FlareLine flare={flare} date={entry.date} t={t} intlLocale={intlLocale} />}
 
         <CardScale level={weather.level} t={t} />
 
@@ -475,6 +546,8 @@ export const WeatherCard = forwardRef<
             {message}
           </p>
         )}
+
+        {imageFlare?.note && <FlareNote note={imageFlare.note} t={t} />}
 
         <div style={{ fontSize: 12, color: CARD_MUTED, letterSpacing: 0.3 }}>
           <strong>OUCH</strong> · Ouch, Understand, Chart, Heal
