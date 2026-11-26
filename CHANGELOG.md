@@ -16,6 +16,11 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ### Modifié
 - **« Kiné / soins » devient « Séance de kiné ».** Dans « Ce qui a aidé », pour tout le monde : les jours déjà notés, les gestes gardés, les décisions, les réponses aux pistes et les essais passent au nouveau nom (et « Physiotherapy / care » à « Physio session » en anglais), à l’ouverture de l’app comme à la restauration d’une sauvegarde.
+### Ajouté
+- **Kinésithérapie et douleur chronique : ce que disent les études.** Une note pour les soignants (`docs/soignants/kinesitherapie.md`) : pour chaque maladie suivie, ce que les études disent de l’exercice et de la kinésithérapie et avec quelle certitude, les traitements passifs, l’observance des exercices à domicile, l’accès direct au kiné en France, et ce qu’OUCH peut en dire ou non. Les sources ont été vérifiées sur leur page officielle (résumés).
+
+### Modifié
+- **« Bouger, ce que disent les études » : des sources à jour.** Pour la polyarthrite et la spondylarthrite, la carte cite la mise à jour 2025 des recommandations EULAR sur l’activité physique (publiée en 2026), qui remplace celle de 2018 ; la référence est changée dans Réglages › Sources scientifiques, au même numéro. Pour la douleur myofasciale, la carte dit qu’il s’agit d’une petite revue (8 études), à court terme, qui ne montre pas d’effet sur la gêne au quotidien.
 - **Mon dossier MDPH : les comptes rendus des spécialistes à joindre.** La liste « À joindre » propose aussi les comptes rendus de tes spécialistes (centre de la douleur, rhumatologue…), si tu en as, pour appuyer le certificat médical. Un conseil de Rudy, de la MDPH 59 : merci à lui.
 
 ### Corrigé

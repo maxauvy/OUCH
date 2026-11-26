@@ -307,7 +307,7 @@ const fr: Translations = {
       },
       {
         summary:
-          "Recommandations EULAR sur l’activité physique dans la polyarthrite rhumatoïde, la spondyloarthrite et l’arthrose de la hanche et du genou : 4 principes et 10 recommandations ; l’activité physique fait partie intégrante des soins courants, vu son efficacité, sa faisabilité et sa sécurité.",
+          "Mise à jour 2025 des recommandations EULAR sur l’activité physique dans les rhumatismes inflammatoires et l’arthrose : 4 principes et 11 recommandations ; promouvoir l’activité physique fait partie des soins courants, et les recommandations portent aussi sur la réduction du temps passé assis. Elle remplace la version de 2018.",
         usage:
           "Source de la carte « Bouger » pour la polyarthrite et la spondylarthrite. Pas dans le rapport.",
       },
@@ -325,7 +325,7 @@ const fr: Translations = {
       },
       {
         summary:
-          "Revue systématique de l’exercice dans la douleur myofasciale : effets petits à modérés sur l’intensité de la douleur à court terme, sur un nombre limité d’essais ; la combinaison d’étirements et de renforcement semble donner de meilleurs effets ; ces estimations peuvent changer.",
+          "Revue systématique de l’exercice dans la douleur myofasciale (8 études, 255 participants) : effets petits à modérés sur l’intensité de la douleur à court terme, sur un nombre limité d’essais ; pas d’effet montré sur l’incapacité ; la combinaison d’étirements et de renforcement semble donner de meilleurs effets ; ces estimations peuvent changer.",
         usage:
           "Source de la carte « Bouger » pour la douleur myofasciale. Pas dans le rapport.",
       },
@@ -2303,11 +2303,11 @@ const fr: Translations = {
     tryHint: 'Pour l’essai, OUCH tire au sort les jours avec et sans marche : chaque soir, tu découvres le lendemain.',
     items: {
       fibromyalgie: { short: 'Fibromyalgie : l’exercice est la piste la mieux soutenue (EULAR, 2016).', more: 'Fibromyalgie : dans les recommandations européennes (EULAR, 2016), l’exercice est la seule recommandation « forte » fondée sur des méta-analyses. Une revue Cochrane (2017) trouve que l’aérobie améliore probablement la qualité de vie et peut diminuer un peu la douleur.' },
-      arthrite: { short: 'Polyarthrite : l’activité physique fait partie des soins courants (EULAR, 2018).', more: 'Polyarthrite rhumatoïde : les recommandations européennes (EULAR, 2018) font de l’activité physique une partie des soins courants.' },
-      spondylarthrite: { short: 'Spondylarthrite : l’activité physique fait partie des soins courants (EULAR, 2018) et l’exercice est efficace (revue ASAS-EULAR, 2022).', more: 'Spondylarthrite : les recommandations européennes (EULAR, 2018) font de l’activité physique une partie des soins courants, et une revue systématique de la mise à jour 2022 des recommandations ASAS-EULAR confirme l’efficacité de l’exercice.' },
+      arthrite: { short: 'Polyarthrite : l’activité physique fait partie des soins courants (EULAR, 2025).', more: 'Polyarthrite rhumatoïde : les recommandations européennes (EULAR, mise à jour 2025) font de la promotion de l’activité physique une partie des soins courants.' },
+      spondylarthrite: { short: 'Spondylarthrite : l’activité physique fait partie des soins courants (EULAR, 2025) et l’exercice est efficace (revue ASAS-EULAR, 2022).', more: 'Spondylarthrite : les recommandations européennes (EULAR, mise à jour 2025) font de la promotion de l’activité physique une partie des soins courants, et une revue systématique de la mise à jour 2022 des recommandations ASAS-EULAR confirme l’efficacité de l’exercice.' },
       lombalgie: { short: 'Lombalgie chronique : l’exercice soulage probablement la douleur (Cochrane, 2021).', more: 'Lombalgie chronique : une revue Cochrane (2021) trouve que l’exercice est probablement efficace contre la douleur, comparé à l’absence de traitement, aux soins habituels ou au placebo.' },
       migraine: { short: 'Migraine : l’aérobie réduit un peu les jours de migraine (méta-analyse, 2019).', more: 'Migraine : une méta-analyse (2019, 6 études) trouve, avec une preuve de qualité moyenne, environ 0,6 jour de migraine en moins par mois avec l’exercice aérobie.' },
-      myofasciale: { short: 'Douleur myofasciale : l’exercice aide un peu à court terme (revue, 2017).', more: 'Douleur myofasciale : une revue (2017) trouve un effet petit à moyen à court terme, surtout en combinant étirements et renforcement.' },
+      myofasciale: { short: 'Douleur myofasciale : l’exercice aide un peu à court terme (revue, 2017).', more: 'Douleur myofasciale : une petite revue (2017, 8 études) trouve un effet petit à moyen sur la douleur, à court terme, surtout en combinant étirements et renforcement ; elle ne montre pas d’effet sur la gêne au quotidien.' },
     },
     pace: 'Va doucement, à ton rythme.',
     action: 'Marche courte',

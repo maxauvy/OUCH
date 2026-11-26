@@ -144,8 +144,8 @@ export const REFERENCES: Reference[] = [
   },
   {
     citation:
-      'Rausch Osthoff AK, Niedermann K, Braun J, et al. 2018 EULAR recommendations for physical activity in people with inflammatory arthritis and osteoarthritis. Ann Rheum Dis. 2018;77(9):1251-1260.',
-    pmid: '29997112',
+      'Rausch Osthoff AK, Vliet Vlieland TPM, Ferreira RJO, et al. EULAR recommendations for physical activity in people with inflammatory arthritis and osteoarthritis: 2025 update. Ann Rheum Dis. 2026;85(6):1026-1038.',
+    pmid: '42036268',
     appOnly: true,
   },
   {
