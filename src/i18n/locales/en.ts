@@ -2004,7 +2004,7 @@ const en: Translations = {
       fill: { yes: 'To fill in', maybe: 'Up to you', no: 'Not for you' },
       attachTitle: 'To attach',
       attach: {
-        certificate: 'Medical certificate under 6 months old (cerfa 15695*01), filled in by your doctor',
+        certificate: 'Medical certificate under 12 months old (cerfa 15695*01), filled in by your doctor',
         identity: 'Two-sided copy of your ID or residence permit',
         address: 'Copy of a proof of address',
         protection: 'The legal protection ruling, if you have one',

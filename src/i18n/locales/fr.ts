@@ -2009,7 +2009,7 @@ const fr: Translations = {
       fill: { yes: 'À remplir', maybe: 'Selon toi', no: 'Pas pour toi' },
       attachTitle: 'À joindre',
       attach: {
-        certificate: 'Certificat médical de moins de 6 mois (cerfa 15695*01), rempli par ton médecin',
+        certificate: 'Certificat médical de moins de 12 mois (cerfa 15695*01), rempli par ton médecin',
         identity: 'Photocopie recto verso de ta pièce d’identité ou de ton titre de séjour',
         address: 'Photocopie d’un justificatif de domicile',
         protection: 'Le jugement de protection juridique, si tu en as une',
