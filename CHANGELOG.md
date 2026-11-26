@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Corrigé
+- **Mon dossier MDPH : le certificat médical vaut 12 mois.** La liste des pièces à joindre demandait un certificat de moins de 6 mois ; il est valable 12 mois.
+
 ## [0.18.0] - 2026-11-25
 
 OUCH pour les médecins traitants. Le patient note après un rendez-vous ce qui a été décidé, et le rapport suivant montre ce que son journal a vu depuis ; la première page du rapport se lit en une minute ; le médecin peut proposer un essai tiré au sort, recommander OUCH avec une carte à donner, et trouver dans une feuille ce qu’il y gagne. Tous les PDF, les captures et l’image du README sont refaits pour cette version, avec deux nouveaux documents : la carte A6 et « Pourquoi recommander OUCH ».
