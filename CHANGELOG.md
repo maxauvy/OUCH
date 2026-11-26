@@ -7,7 +7,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 ## [Non publié]
 
 ### Corrigé
-- **Mon dossier MDPH : le certificat médical vaut 12 mois.** La liste des pièces à joindre demandait un certificat de moins de 6 mois  ; il est valable 12 mois. Merci à Rudy, de la MDPH, de nous l’avoir signalé.
+- **Mon dossier MDPH : le certificat médical vaut 12 mois.** La liste des pièces à joindre demandait un certificat de moins de 6 mois ; il est valable 12 mois. Merci à Rudy, de la MDPH, de nous l’avoir signalé.
 
 ## [0.18.0] - 2026-11-25
 
