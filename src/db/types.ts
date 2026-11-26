@@ -221,6 +221,9 @@ export interface DailyEntry {
   /** What was taken that day, pointing at the Medication registry. */
   intakes?: MedicationIntake[]
   positiveActions?: string[]
+  /** « Suivi kiné »: the answer to « Tes exercices du kiné » that evening. « Done » and « part » also put the exercises among the day's
+   * actions; « part » counts as half a day in what is done against what was planned (see lib/physio.ts). */
+  physioExercises?: PhysioExercisesAnswer
   painLocations?: BodyZone[]
   periodDay?: boolean
   notes?: string
@@ -385,8 +388,9 @@ export interface WeatherShareState {
   lastFailure?: 'permission' | 'auth' | 'network' | 'quota' | 'other'
 }
 
-/** Who the appointment is with: the family doctor ("médecin traitant") or a pain clinic (CETD). Each has its own report and its own dates. */
-export const CONSULTATION_KINDS = ['gp', 'cetd'] as const
+/** Who the appointment is with: the family doctor ("médecin traitant"), a pain clinic (CETD), or a physiotherapist ("kiné", with « Suivi kiné »,
+ * see lib/physio.ts). The two first each have their own report and their own dates; a physio appointment has no report of its own. */
+export const CONSULTATION_KINDS = ['gp', 'cetd', 'kine'] as const
 export type ConsultationKind = (typeof CONSULTATION_KINDS)[number]
 
 /** An appointment being prepared: what the person wants to ask and say. */
@@ -602,6 +606,22 @@ export interface Settings {
   mdphGestures?: Partial<Record<string, 'often' | 'sometimes' | 'no'>>
   /** « Mon dossier MDPH »: the answers of « Ton parcours » and the documents ticked as ready (see lib/mdphParcours.ts). Restored from a backup. */
   mdphParcours?: MdphParcours
+  /** « Suivi kiné » (early access): the physio appointments, the evening question on the exercises, the screen for the physio and the block in
+   * the reports. Shown only with the early access on this device; restored from a backup. */
+  physioTracking?: boolean
+  /** « Suivi kiné »: the series of sessions under way, how many were planned and the day it started; the sessions are counted from the days
+   * marked « Séance de kiné » and the physio appointments noted. Restored from a backup. */
+  physioSeries?: PhysioSeries
+}
+
+/** The evening answer on the physio's exercises. */
+export const PHYSIO_EXERCISES_ANSWERS = ['done', 'part', 'no'] as const
+export type PhysioExercisesAnswer = (typeof PHYSIO_EXERCISES_ANSWERS)[number]
+
+/** A series of physio sessions: how many were prescribed (or planned without a prescription), from which day. */
+export interface PhysioSeries {
+  total: number
+  start: string
 }
 
 /** Settings saved before schema v6. Before v4 they held a single illness

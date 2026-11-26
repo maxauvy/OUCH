@@ -7,6 +7,7 @@ import { todayISO } from '../../lib/dates'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { Card } from '../ui/Card'
 import { ConsultationSheet } from './ConsultationSheet'
+import { kindLabel } from './kindLabel'
 
 /** On the day's page, shortly before an appointment (to prepare it) and on and after the day (to note what was said). Soft, and it can be closed. */
 export function AppointmentCard() {
@@ -33,7 +34,7 @@ export function AppointmentCard() {
       <Card>
         <section aria-label={t.cardLabel}>
           <p className="text-caption font-semibold uppercase tracking-[0.06em] mb-1" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.cardLabel} · {kindOf(c) === 'cetd' ? t.kindCetd : t.kindGp}
+            {t.cardLabel} · {kindLabel(kindOf(c), t)}
           </p>
           <p className="text-body mb-2">{text}</p>
           <div className="flex gap-4">

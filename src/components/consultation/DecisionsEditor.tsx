@@ -4,6 +4,7 @@ import type { LoggedEntry, Medication } from '../../db/types'
 import { format, useLanguage, useTranslation } from '../../i18n'
 import { DECISION_KINDS, MAX_DECISIONS, MAX_DECISION_LENGTH, PER_WEEK, type Decision, type DecisionKind } from '../../lib/decisions'
 import { Chip } from '../ui/Chip'
+import { EXERCISES_LABELS, isExercisesLabel } from '../../lib/physio'
 
 const field = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 const fieldClass = 'w-full rounded-xl px-3.5 py-2.5 text-body outline-none'
@@ -28,17 +29,21 @@ function actionChoices(entries: readonly LoggedEntry[] | undefined, suggestions:
  * « Ce qu'on a décidé »: one line per decision, with its kind. A habit also asks which action of « ce qui a aidé » counts it and how many
  * times a week; a treatment can point at the registry. Nothing more: the report follows them up.
  */
-export function DecisionsEditor({ decisions, onChange, entries, medications, trialBusy = false }: { decisions: Decision[]; onChange: (d: Decision[]) => void; entries?: readonly LoggedEntry[]; medications?: readonly Medication[]; /** A trial is under way: a new one is noted but not started. */ trialBusy?: boolean }) {
+export function DecisionsEditor({ decisions, onChange, entries, medications, trialBusy = false, physio = false }: { decisions: Decision[]; onChange: (d: Decision[]) => void; entries?: readonly LoggedEntry[]; medications?: readonly Medication[]; /** A trial is under way: a new one is noted but not started. */ trialBusy?: boolean; /** After a physio appointment (« Suivi kiné »): the exercises come first, already chosen. */ physio?: boolean }) {
   const i18n = useTranslation()
   const t = i18n.decisions
   const language = useLanguage()
   const ids = useId()
   const [kind, setKind] = useState<DecisionKind>('habit')
   const [text, setText] = useState('')
-  const [action, setAction] = useState<string | null>(null)
-  const [perWeek, setPerWeek] = useState<number | null>(3)
+  const exercises = EXERCISES_LABELS[language]
+  const [action, setAction] = useState<string | null>(physio ? exercises : null)
+  const [perWeek, setPerWeek] = useState<number | null>(physio ? 5 : 3)
   const [medicationId, setMedicationId] = useState('')
-  const actions = useMemo(() => actionChoices(entries, i18n.entryForm.positiveActionsSuggestions), [entries, i18n])
+  const actions = useMemo(() => {
+    const list = actionChoices(entries, i18n.entryForm.positiveActionsSuggestions)
+    return physio ? [exercises, ...list.filter((a) => !isExercisesLabel(a))].slice(0, 8) : list
+  }, [entries, i18n, physio, exercises])
   const active = (medications ?? []).filter((m) => m.periods.some((p) => !p.end))
   const full = decisions.length >= MAX_DECISIONS
   const hasTrial = decisions.some((d) => d.kind === 'trial')

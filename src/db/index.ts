@@ -4,9 +4,11 @@ import { DEFAULT_SETTINGS } from './types'
 import { createLegacyConverter } from '../lib/medications'
 import { todayISO } from '../lib/dates'
 import { buildDemoHistory } from '../lib/demoData'
+import { isEarlyAccess } from '../lib/earlyAccess'
 import { DEMO_DB_NAME, DEMO_LANGUAGE, type DemoLanguage } from '../lib/demoMode'
 import { upgradeLegacySettings } from './settingsUpgrade'
-import { currentGestures, currentLabels } from '../lib/renamedSuggestions'
+import { currentActionKey, currentGestures, currentLabel, currentLabels } from '../lib/renamedSuggestions'
+import { cleanDecisions } from '../lib/decisions'
 
 export { upgradeLegacySettings }
 
@@ -39,7 +41,7 @@ class OuchDB extends Dexie {
     // days counted back from today, in the demo's language.
     if (demoLanguage) {
       this.on('populate', (tx) => {
-        const history = buildDemoHistory({ endDate: todayISO(), language: demoLanguage, autoWeather: false })
+        const history = buildDemoHistory({ endDate: todayISO(), language: demoLanguage, autoWeather: false, physio: isEarlyAccess() })
         tx.table('entries').bulkAdd(history.entries)
         tx.table('medications').bulkAdd(history.medications)
         tx.table('settings').add({ ...DEFAULT_SETTINGS, ...history.settings, id: 1 })
@@ -122,6 +124,37 @@ class OuchDB extends Dexie {
           .toCollection()
           .modify((s) => {
             if (Array.isArray(s.reliefGestures)) s.reliefGestures = currentGestures(s.reliefGestures)
+          })
+      })
+    // v10 put « Kiné / soins » under its new wording « Séance de kiné » (« Suivi kiné » gives the exercises their own action): in the days'
+    // actions and the kept gestures as in v9, and also in the decisions, the answers to the leads and the trials, which name an action.
+    this.version(10)
+      .stores({
+        entries: '++id, &date, painLevel, createdAt',
+        settings: 'id',
+        medications: 'id, name',
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table<DailyEntry>('entries')
+          .toCollection()
+          .modify((entry) => {
+            if (Array.isArray(entry.positiveActions)) entry.positiveActions = currentLabels(entry.positiveActions)
+          })
+        await tx
+          .table<Settings>('settings')
+          .toCollection()
+          .modify((s) => {
+            if (Array.isArray(s.reliefGestures)) s.reliefGestures = currentGestures(s.reliefGestures)
+            if (Array.isArray(s.pastConsultations)) s.pastConsultations = s.pastConsultations.map((p) => {
+              const decisions = cleanDecisions(p.decisions)
+              const { decisions: _old, ...rest } = p
+              return decisions ? { ...rest, decisions } : rest
+            })
+            if (s.leadChoices) s.leadChoices = Object.fromEntries(Object.entries(s.leadChoices).map(([k, v]) => [currentActionKey(k), v]))
+            const trial = <T extends { key: string; action: string }>(t: T): T => ({ ...t, key: currentActionKey(t.key), action: currentLabel(t.action) })
+            if (s.leadTrial) s.leadTrial = trial(s.leadTrial)
+            if (Array.isArray(s.leadTrialHistory)) s.leadTrialHistory = s.leadTrialHistory.map(trial)
           })
       })
   }

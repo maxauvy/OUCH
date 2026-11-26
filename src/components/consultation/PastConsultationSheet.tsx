@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { usePhysio } from '../../hooks/usePhysio'
+import { kindLabel } from './kindLabel'
 import { format as formatDate } from 'date-fns'
 import { updateSettings } from '../../db'
 import type { PastConsultation, Settings } from '../../db/types'
@@ -18,13 +20,14 @@ const field = { background: 'var(--color-input)', color: 'var(--color-ink)', box
 /** An appointment that took place: what was prepared for it, what the doctor said (which can be corrected), and a way to forget it. */
 export function PastConsultationSheet({ settings, past, onClose }: { settings: Settings; past: PastConsultation; onClose: () => void }) {
   const t = useTranslation().consultation
+  const physio = usePhysio(settings)
   const { dateFnsLocale } = useLocale()
   const [notes, setNotes] = useState(past.notes ?? '')
   const [decisions, setDecisions] = useState<Decision[]>(past.decisions ?? [])
   const entries = useLoggedEntries()
   const medications = useMedications()
   const day = formatDate(new Date(past.date + 'T00:00:00'), 'd MMMM yyyy', { locale: dateFnsLocale })
-  const who = [past.kind === 'cetd' ? t.kindCetd : t.kindGp, past.doctor].filter(Boolean).join(' · ')
+  const who = [kindLabel(past.kind, t), past.doctor].filter(Boolean).join(' · ')
 
   const today = todayISO()
   const trialBusy = !!settings.leadTrial && today <= settings.leadTrial.end
@@ -72,7 +75,7 @@ export function PastConsultationSheet({ settings, past, onClose }: { settings: S
         </div>
       )}
       <div>
-        <h3 className="text-caption font-semibold mb-1">{t.pastNote}</h3>
+        <h3 className="text-caption font-semibold mb-1">{past.kind === 'kine' ? t.pastNoteKine : t.pastNote}</h3>
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
@@ -84,7 +87,7 @@ export function PastConsultationSheet({ settings, past, onClose }: { settings: S
           style={field}
         />
       </div>
-      <DecisionsEditor decisions={decisions} onChange={setDecisions} entries={entries} medications={medications} trialBusy={trialBusy} />
+      <DecisionsEditor decisions={decisions} onChange={setDecisions} entries={entries} medications={medications} trialBusy={trialBusy} physio={physio && past.kind === 'kine'} />
       <button type="button" onClick={save} className="btn-primary">
         {t.pastSave}
       </button>

@@ -56,6 +56,8 @@ interface DemoOptions {
   autoWeather?: boolean
   /** End the last flare before the end instead of leaving it going on, so the day's page is not in a flare */
   calmEnd?: boolean
+  /** « Suivi kiné » (early access): a series of physio sessions on Tuesdays, exercises given at the second, done most days, some in part */
+  physio?: boolean
 }
 
 interface DemoHistory {
@@ -90,7 +92,7 @@ interface Flare {
 }
 
 export function buildDemoHistory(options: DemoOptions): DemoHistory {
-  const { endDate, language, emptyToday = false, autoWeather = true, calmEnd = false } = options
+  const { endDate, language, emptyToday = false, autoWeather = true, calmEnd = false, physio = false } = options
   const illnesses = options.illnesses ?? ['fibromyalgie']
   const STORY_DAYS = DEMO_STORY_DAYS
   const DAYS = Math.max(STORY_DAYS, options.days ?? STORY_DAYS)
@@ -156,7 +158,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
   const ACTIONS: Action[] = [
     { name: 'Méditation / respiration', p: () => 0.35, effect: 1.5 },
     { name: 'Marche courte', p: (base) => (base < 4.5 ? 0.6 : 0.08), effect: 1.2 },
-    { name: 'Kiné / soins', p: (_, weekday) => (weekday === 2 ? 0.9 : 0), effect: 1.4 },
+    { name: 'Séance de kiné', p: (_, weekday) => (weekday === 2 ? 0.9 : 0), effect: 1.4 },
     { name: 'Étirements doux', p: () => 0.3, effect: 0.6 },
     { name: 'Bain / douche chaude', p: () => 0.2, effect: 0.6 },
     { name: 'Moment social agréable', p: (_, weekday) => (weekday === 0 || weekday === 6 ? 0.5 : 0.12), effect: 1 },
@@ -341,7 +343,7 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
       KEY_NOTES[s] ??
       (flareBoost(i) > 1.5 && noteRoll < 0.7 ? pick(NOTE_FLARE) :
       isStorm && painLevel >= 5 && noteRoll < 0.6 ? NOTE_STORM :
-      positiveActions.includes('Kiné / soins') && noteRoll < 0.5 ? pick(NOTE_KINE) :
+      positiveActions.includes('Séance de kiné') && noteRoll < 0.5 ? pick(NOTE_KINE) :
       isPeriodDay(i) && (i + 9) % 28 === 0 ? NOTE_PERIOD :
       noteRoll < 0.2 ? (painLevel >= 6 ? pick(NOTES_HARD) : pick(NOTES_CALM)) :
       undefined)
@@ -393,6 +395,31 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
   // history itself: the numbers a choice was made on are the ones the lead has
   // (a set-aside lead comes back when it gets stronger). English tags make
   // English keys.
+  // « Suivi kiné »: the series started on the fifth Tuesday back; the exercises, given at the second session, are done on most days after it
+  // (not on a session day), a few in part, none on the hardest days. Drawn from the day, not from the random draw, so the story is unchanged.
+  let physioSettings: Partial<Settings> = {}
+  if (physio) {
+    const weekday = (iso: string) => new Date(iso + 'T12:00:00Z').getUTCDay()
+    let first = shiftISO(endDate, -35)
+    while (weekday(first) !== 2) first = shiftISO(first, 1)
+    const given = shiftISO(first, 7)
+    for (const e of entries) {
+      if (e.date <= given || e.date > endDate || e.painLevel === undefined || weekday(e.date) === 2 || e.painLevel >= 7) continue
+      const n = Number(e.date.slice(8, 10))
+      if (n % 5 === 3) continue
+      e.positiveActions = [...(e.positiveActions ?? []), 'Exercices du kiné']
+      if (n % 6 === 1) e.physioExercises = 'part'
+      else e.physioExercises = 'done'
+    }
+    physioSettings = {
+      physioTracking: true,
+      physioSeries: { total: 10, start: first },
+      pastConsultations: [
+        { date: given, kind: 'kine', doctor: 'Mme Durand', notes: 'Gainage et étirements les jours sans séance. On refait le point dans trois semaines.', decisions: [{ kind: 'habit', text: 'Gainage et étirements, 15 min', action: 'Exercices du kiné', perWeek: 5 }] },
+      ],
+    }
+  }
+
   const recent = findLeads((entries as LoggedEntry[]).filter((e) => e.date >= shiftISO(endDate, -30)))
   const answerKey = (name: string) => `action:${actionKey(language === 'en' ? (EN_STRINGS[name] ?? name) : name)}`
   const leadChoices: LeadChoices = {}
@@ -464,7 +491,9 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
           { kind: 'habit', text: 'Marcher 20 minutes', action: 'Marche courte', perWeek: 3 },
         ],
       },
+      ...(physioSettings.pastConsultations ?? []),
     ],
+    ...(physioSettings.physioTracking ? { physioTracking: true, physioSeries: physioSettings.physioSeries } : {}),
   }
 
   const history = { entries, medications, settings }
@@ -474,7 +503,9 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
 // English: the tags, notes and medication names are stored as plain text, so
 // an English UI would show them in French. They are translated in the data.
 const EN_STRINGS: Record<string, string> = {
-  'Méditation / respiration': 'Meditation / breathing', 'Marche courte': 'Short walk', 'Kiné / soins': 'Physiotherapy / care',
+  'Méditation / respiration': 'Meditation / breathing', 'Marche courte': 'Short walk', 'Séance de kiné': 'Physio session', 'Exercices du kiné': 'Physio exercises',
+  'Gainage et étirements, 15 min': 'Core work and stretching, 15 min',
+  'Gainage et étirements les jours sans séance. On refait le point dans trois semaines.': 'Core work and stretching on the days without a session. We will review it in three weeks.',
   'Étirements doux': 'Gentle stretching', 'Bain / douche chaude': 'Warm bath / shower', 'Moment social agréable': 'Pleasant social time', 'Repos / sieste': 'Rest / nap',
   'Bonne journée, balade au parc avec les enfants.': 'Good day, walk in the park with the kids.',
   'Journée tranquille à la maison.': 'Quiet day at home.',

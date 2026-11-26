@@ -1,6 +1,6 @@
 import { lazy, Suspense, useRef, useState, useEffect } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconCalendarCheck, IconCalendarHeart, IconFileText, IconMessageQuestion, IconNotes, IconPill, IconStethoscope, IconFolder } from '@tabler/icons-react'
+import { IconCalendarCheck, IconCalendarHeart, IconFileText, IconHeartHandshake, IconMessageQuestion, IconNotes, IconPill, IconStethoscope, IconFolder } from '@tabler/icons-react'
 import { useSettings } from '../hooks/useSettings'
 import { consultationCard, daysUntil, kindOf, pastConsultations } from '../lib/consultation'
 import { prescriptionEnd } from '../lib/prescription'
@@ -17,8 +17,12 @@ import type { PastConsultation } from '../db/types'
 import { useRichLook } from '../lib/look'
 import { NavTile, NavTiles } from '../components/ui/NavTile'
 import { PageSky } from '../components/entry/TodaySky'
+import { kindLabel } from '../components/consultation/kindLabel'
+import { PhysioSeriesCard } from '../components/physio/PhysioSeriesCard'
+import { usePhysio } from '../hooks/usePhysio'
 
 const CareSheetPage = lazy(() => import('./CareSheetPage').then((m) => ({ default: m.CareSheetPage })))
+const PhysioPage = lazy(() => import('./PhysioPage').then((m) => ({ default: m.PhysioPage })))
 const MdphPage = lazy(() => import('./MdphPage').then((m) => ({ default: m.MdphPage })))
 const DoctorReportPage = lazy(() => import('./DoctorReportPage').then((m) => ({ default: m.DoctorReportPage })))
 
@@ -34,6 +38,8 @@ export function ConsultationPage() {
   const [reporting, setReporting] = useState(false)
   const [careSheet, setCareSheet] = useState(false)
   const [mdph, setMdph] = useState(false)
+  const [physioPage, setPhysioPage] = useState(false)
+  const physio = usePhysio(settings)
   const mdphRow = useRef<HTMLButtonElement>(null)
   const mdphFrom = useRef(false)
   const [openPast, setOpenPast] = useState<PastConsultation | null>(null)
@@ -95,14 +101,24 @@ export function ConsultationPage() {
     )
   }
 
+  if (physioPage) {
+    return (
+      <Suspense fallback={null}>
+        <PhysioPage onBack={() => setPhysioPage(false)} />
+      </Suspense>
+    )
+  }
+
   const c = settings.consultation
   const p = settings.prescription
+  // « Suivi kiné »: the next appointment is with the physio, so its big button opens the screen for them, and the report moves to a tile.
+  const kineNext = physio && !!c && kindOf(c) === 'kine'
   const day = (iso: string) => formatDate(new Date(iso + 'T00:00:00'), 'd MMMM', { locale: dateFnsLocale })
   const n = c ? daysUntil(c, today) : 0
   const when = !c ? '' : n > 0 ? format(t.inDays, { n }, language) : n === 0 ? t.todayLabel : t.passedLabel
   const afterKind = consultationCard(settings, today) === 'after'
   const past = pastConsultations(settings)
-  const who = c ? [kindOf(c) === 'cetd' ? t.kindCetd : t.kindGp, c.doctor].filter(Boolean).join(' · ') : ''
+  const who = c ? [kindLabel(kindOf(c), t), c.doctor].filter(Boolean).join(' · ') : ''
 
   const openCareSheet = () => {
     careSheetFrom.current = true
@@ -146,11 +162,11 @@ export function ConsultationPage() {
                 ref={reportButton}
                 data-tour="report"
                 type="button"
-                onClick={() => setReporting(true)}
+                onClick={() => (kineNext ? setPhysioPage(true) : setReporting(true))}
                 className="btn-primary"
               >
                 <IconFileText size={18} aria-hidden />
-                {t.prepareReport}
+                {kineNext ? i18n.physio.screenButton : t.prepareReport}
               </button>
               <button type="button" onClick={() => setSheet('appointment')} className="btn-secondary">
                 {c ? <IconMessageQuestion size={18} aria-hidden /> : <IconCalendarHeart size={18} aria-hidden />}
@@ -167,8 +183,12 @@ export function ConsultationPage() {
             </div>
           </section>
 
+          {physio && <PhysioSeriesCard settings={settings} today={today} onOpen={() => setPhysioPage(true)} showButton={false} />}
+
           <NavTiles>
-            {afterKind && <NavTile icon={IconNotes} tone="mood" title={t.afterRow} hint={t.afterRowHint} onClick={() => setSheet('after')} />}
+            {afterKind && <NavTile icon={IconNotes} tone="mood" title={kineNext ? i18n.physio.afterRow : t.afterRow} hint={kineNext ? i18n.physio.afterRowHint : t.afterRowHint} onClick={() => setSheet('after')} />}
+            {kineNext && <NavTile icon={IconFileText} tone="activity" title={i18n.physio.reportTile} hint={i18n.physio.reportTileHint} onClick={() => setReporting(true)} />}
+            {physio && !kineNext && <NavTile icon={IconHeartHandshake} tone="activity" title={i18n.physio.screenButton} hint={i18n.physio.screenHint} onClick={() => setPhysioPage(true)} />}
             <NavTile icon={IconPill} tone="meds" title={t.prescriptionRow} hint={prescriptionHint} onClick={() => setSheet('prescription')} />
             <NavTile buttonRef={careSheetRow} icon={IconStethoscope} tone="fog" title={i18n.careSheet.row} hint={i18n.careSheet.rowHint} onClick={openCareSheet} />
             <NavTile buttonRef={mdphRow} icon={IconFolder} tone="sleep" title={i18n.mdph.row} hint={i18n.mdph.rowHint} onClick={() => setMdph(true)} />
@@ -196,14 +216,16 @@ export function ConsultationPage() {
           ref={reportButton}
           data-tour="report"
           type="button"
-          onClick={() => setReporting(true)}
+          onClick={() => (kineNext ? setPhysioPage(true) : setReporting(true))}
           className="inline-flex items-center justify-center gap-2 min-h-12 rounded-[var(--radius-control)] text-body font-semibold"
           style={{ background: 'var(--color-surface)', color: 'var(--color-brand)' }}
         >
           <IconFileText size={18} aria-hidden />
-          {t.prepareReport}
+          {kineNext ? i18n.physio.screenButton : t.prepareReport}
         </button>
       </section>
+
+      {physio && <PhysioSeriesCard settings={settings} today={today} onOpen={() => setPhysioPage(true)} showButton={false} />}
 
       <Card>
         <div className="flex flex-col">
@@ -213,7 +235,9 @@ export function ConsultationPage() {
             hint={c ? (c.questions.length ? format(t.questionsCount, { n: c.questions.length }, language) : t.questionsNone) : undefined}
             onClick={() => setSheet('appointment')}
           />
-          {afterKind && <LinkRow icon={IconNotes} title={t.afterRow} hint={t.afterRowHint} onClick={() => setSheet('after')} />}
+          {afterKind && <LinkRow icon={IconNotes} title={kineNext ? i18n.physio.afterRow : t.afterRow} hint={kineNext ? i18n.physio.afterRowHint : t.afterRowHint} onClick={() => setSheet('after')} />}
+          {kineNext && <LinkRow icon={IconFileText} title={i18n.physio.reportTile} hint={i18n.physio.reportTileHint} onClick={() => setReporting(true)} />}
+          {physio && !kineNext && <LinkRow icon={IconHeartHandshake} title={i18n.physio.screenButton} hint={i18n.physio.screenHint} onClick={() => setPhysioPage(true)} />}
           <LinkRow
             icon={IconPill}
             title={t.prescriptionRow}
@@ -245,14 +269,14 @@ export function ConsultationPage() {
                   key={`${p.date}-${p.kind}`}
                   icon={IconCalendarCheck}
                   title={`${day(p.date)} ${p.date.slice(0, 4)}`}
-                  hint={[p.kind === 'cetd' ? t.kindCetd : t.kindGp, p.doctor, p.notes && p.notes.length > 60 ? `${p.notes.slice(0, 60)}…` : p.notes].filter(Boolean).join(' · ')}
+                  hint={[kindLabel(p.kind, t), p.doctor, p.notes && p.notes.length > 60 ? `${p.notes.slice(0, 60)}…` : p.notes].filter(Boolean).join(' · ')}
                   onClick={() => setOpenPast(p)}
                 />
               ))}
             </div>
           </Card>
           <p className="text-caption px-1" style={{ color: 'var(--color-ink-muted)' }}>
-            {t.pastHint}
+            {physio ? i18n.physio.pastHint : t.pastHint}
           </p>
         </section>
       )}

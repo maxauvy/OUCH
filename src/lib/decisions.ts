@@ -15,6 +15,8 @@ import type { LoggedEntry, Medication, PastConsultation } from '../db/types.ts'
 import { daysBetween, shiftISO } from './dates.ts'
 import { mean } from './stats.ts'
 import { trialStatus, type LeadTrial, type TrialStatus } from './leadTrial.ts'
+import { exercisesPart } from './physio.ts'
+import { currentLabel } from './renamedSuggestions.ts'
 
 export const DECISION_KINDS = ['treatment', 'habit', 'trial', 'exam', 'other'] as const
 export type DecisionKind = (typeof DECISION_KINDS)[number]
@@ -50,8 +52,11 @@ export function cleanDecisions(raw: unknown): Decision[] | undefined {
     const d = r as Record<string, unknown>
     if (!(DECISION_KINDS as readonly unknown[]).includes(d.kind)) continue
     const kind = d.kind as DecisionKind
-    const text = line(d.text, MAX_DECISION_LENGTH)
-    const action = kind === 'habit' || kind === 'trial' ? line(d.action, 80) : ''
+    // An action of « ce qui a aidé » under its current wording (« Kiné / soins » became « Séance de kiné »), and the sentence with it when it was only the action.
+    const rawAction = kind === 'habit' || kind === 'trial' ? line(d.action, 80) : ''
+    const action = rawAction && currentLabel(rawAction)
+    const rawText = line(d.text, MAX_DECISION_LENGTH)
+    const text = rawText && rawAction && rawText === rawAction ? action : rawText
     if ((!text && !action) || (kind === 'trial' && !action)) continue
     const perWeek = kind === 'habit' && (PER_WEEK as readonly unknown[]).includes(d.perWeek) ? (d.perWeek as number) : undefined
     const medicationId = kind === 'treatment' && typeof d.medicationId === 'string' && d.medicationId ? d.medicationId : undefined
@@ -68,7 +73,7 @@ export function lastDecided(past: readonly PastConsultation[] | undefined, to: s
 
 export type DecisionFollow =
   | { kind: 'treatment'; decision: Decision; name?: string; before: { mean: number; n: number } | null; after: { mean: number; n: number } | null; settleDays: number; effectDays: number; effects: string[] }
-  | { kind: 'habit'; decision: Decision; done: number; planned: number | null; withMean: number | null; withoutMean: number | null; withDays: number; withoutDays: number }
+  | { kind: 'habit'; decision: Decision; /** Days with the action, a day of physio exercises done in part counted as half. */ done: number; /** Of them, the days in part. */ part: number; planned: number | null; withMean: number | null; withoutMean: number | null; withDays: number; withoutDays: number }
   | { kind: 'trial'; decision: Decision; trial: LeadTrial | null; status: TrialStatus | null }
   | { kind: 'note'; decision: Decision }
 
@@ -103,10 +108,12 @@ export function followDecisions(decisions: readonly Decision[], date: string, to
       const withDays = since.filter(has)
       const withoutDays = since.filter((e) => !has(e))
       const weeks = Math.floor((daysBetween(date, to) + 0) / 7)
+      const part = withDays.filter(exercisesPart).length
       return {
         kind: 'habit',
         decision,
-        done: withDays.length,
+        done: withDays.length - part / 2,
+        part,
         planned: decision.perWeek && weeks > 0 ? decision.perWeek * weeks : null,
         withMean: withDays.length >= 3 ? mean(withDays.map((e) => e.painLevel)) : null,
         withoutMean: withoutDays.length >= 3 ? mean(withoutDays.map((e) => e.painLevel)) : null,

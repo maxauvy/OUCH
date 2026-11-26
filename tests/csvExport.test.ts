@@ -47,7 +47,7 @@ test('the journal has one row per day, oldest first, an empty cell for what was 
   )
   const rows = csv.split('\r\n')
   assert.equal(rows.at(-1), '')
-  assert.equal(rows[0], 'date,pain,fatigue,sleep_quality,sleep_hours,stress,brain_fog,mood,activity,period_day,weather_source,weather_condition,temperature_c,pressure_hpa,pain_locations,positive_actions,morning_stiffness,morning_stiffness_severity,night_wakings,daily_interference,waking_refreshed,joints_felt,joint_areas,period_flow,off_cycle_bleeding,bowel_pain,urinary,headache,headache_duration,headache_aura,headache_nausea,headache_sensitivity,headache_triggers,headache_acute_med,leg_pain,symptom_tags,spasms,fever_infection,new_symptom,sensory_sensitivity,sensory_stimuli,pain_words,notes')
+  assert.equal(rows[0], 'date,pain,fatigue,sleep_quality,sleep_hours,stress,brain_fog,mood,activity,period_day,weather_source,weather_condition,temperature_c,pressure_hpa,pain_locations,positive_actions,physio_exercises,morning_stiffness,morning_stiffness_severity,night_wakings,daily_interference,waking_refreshed,joints_felt,joint_areas,period_flow,off_cycle_bleeding,bowel_pain,urinary,headache,headache_duration,headache_aura,headache_nausea,headache_sensitivity,headache_triggers,headache_acute_med,leg_pain,symptom_tags,spasms,fever_infection,new_symptom,sensory_sensitivity,sensory_stimuli,pain_words,notes')
   const columns = rows[0]!.split(',').length
   assert.equal(rows[1], '2026-10-01' + ','.repeat(columns - 1) + 'seulement une note')
   assert.ok(rows[2]!.startsWith('2026-10-02,6,7,,5.5,,,,,0,auto,pluvieux,-1.5,1012,lowerBack|neck,,'))

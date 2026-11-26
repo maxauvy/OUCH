@@ -15,8 +15,9 @@ export const MAX_QUESTION_LENGTH = 200
 export const MAX_GOAL_LENGTH = 300
 export const MAX_NOTES_LENGTH = 2_000
 export const MAX_DOCTOR_LENGTH = 60
-/** How many past appointments are kept, by kind: a family doctor is seen more often than a pain clinic, whose last two visits are what a report is compared with. */
-export const MAX_PAST_BY_KIND: Record<ConsultationKind, number> = { gp: 6, cetd: 2 }
+/** How many past appointments are kept, by kind: a family doctor is seen more often than a pain clinic, whose last two visits are what a report is compared with; a
+ * physio, weekly, keeps a series. */
+export const MAX_PAST_BY_KIND: Record<ConsultationKind, number> = { gp: 6, cetd: 2, kine: 10 }
 
 /** The card on the day's page appears this many days before the appointment. */
 export const CARD_WINDOW_DAYS = 14
@@ -85,7 +86,7 @@ export function cleanDoctor(s: string | undefined): string | undefined {
 /** The appointments that took place, newest first: the list, plus the single "last appointment" of the first version when it is not in it (read as a family doctor's). */
 /** The past appointments newest first, within the cap of each kind. */
 export function capPast(list: readonly PastConsultation[]): PastConsultation[] {
-  const seen: Record<ConsultationKind, number> = { gp: 0, cetd: 0 }
+  const seen: Record<ConsultationKind, number> = { gp: 0, cetd: 0, kine: 0 }
   return [...list]
     .sort((a, b) => b.date.localeCompare(a.date))
     .filter((p) => ++seen[p.kind] <= MAX_PAST_BY_KIND[p.kind])

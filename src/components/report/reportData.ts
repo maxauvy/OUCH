@@ -1,5 +1,5 @@
 import { summarizePainWords, type PainWordsSummary } from '../../lib/painWords'
-import type { DailyEntry, FlareFactor, LoggedEntry, Illness, IllnessDetails, MarkedFlare, Medication, PastConsultation } from '../../db/types'
+import type { DailyEntry, FlareFactor, LoggedEntry, Illness, IllnessDetails, MarkedFlare, Medication, PastConsultation, PhysioSeries } from '../../db/types'
 import type { Language } from '../../i18n'
 import { canDetectFlares, detectFlares, flareDayCount, flareDaySet, flaresApply, type FlareEpisode } from '../../lib/flares'
 import { flareContext, type FlareContext } from '../../lib/flareContext'
@@ -17,6 +17,7 @@ import { shiftISO } from '../../lib/dates'
 import { markedOverlapping, type ResolvedFlare } from '../../lib/markedFlares'
 import { comparePeriods, validSpans, type Comparison, type Span } from '../../lib/periodComparison'
 import { followDecisions, lastDecided, type DecisionFollow } from '../../lib/decisions'
+import { physioReport, type PhysioReport } from '../../lib/physio'
 
 export type ReportVariant = 'gp' | 'painClinic'
 
@@ -50,6 +51,8 @@ interface ReportOptions {
   leadFactors?: LeadFactors
   /** The appointments that took place (family doctor or pain clinic), for the list of what happened in the period */
   appointments?: PastConsultation[]
+  /** « Suivi kiné » is on: the physio sessions and exercises of the period go on the report, with the series under way */
+  physio?: { series?: PhysioSeries }
   /** The one-week trials: the weeks closed, and the one under way (kept if it is over) */
   leadTrials?: { history?: LeadTrial[]; current?: LeadTrial }
   /** The patient follows the morning stiffness (and it is offered): its description goes on the report */
@@ -114,6 +117,8 @@ export interface ReportData {
   trials: ReportTrial[]
   /** « Ce qu'on a décidé »: the last appointment of the two periods with decisions, and what the journal shows since each one */
   decided: { date: string; follows: DecisionFollow[] } | null
+  /** « Suivi kiné »: what the period shows of the physio sessions and the exercises; null when off or with nothing to say. */
+  physio: PhysioReport | null
 }
 
 /** Flares found in the whole history, since the usual level before one
@@ -174,9 +179,11 @@ export function buildReportData(allEntries: DailyEntry[], medications: Medicatio
     compareSpans: spans,
     weekdays: weekdayProfile(current),
     decided: (() => {
-      const a = lastDecided(options.appointments, p.end)
+      // A physio appointment's decisions (the exercises) go in the physio block, not here.
+      const a = lastDecided(options.appointments?.filter((x) => x.kind !== 'kine'), p.end)
       return a && a.date >= p.prevStart ? { date: a.date, follows: followDecisions(a.decisions!, a.date, p.end, entries, medications, [...(options.leadTrials?.history ?? []), ...(options.leadTrials?.current ? [options.leadTrials.current] : [])]) } : null
     })(),
+    physio: options.physio ? physioReport({ entries, allEntries, past: options.appointments, series: options.physio.series, from: p.start, to: p.end }) : null,
     goodDays: (() => {
       const reading = beforeGoodDays(
         entries.filter((e) => e.date <= options.end),

@@ -7,6 +7,9 @@
 const RENAMED: Record<string, string> = {
   'bain chaud': 'Bain / douche chaude',
   'warm bath': 'Warm bath / shower',
+  // « Kiné / soins » counted the physio sessions; with « Suivi kiné » the exercises have their own action.
+  'kiné / soins': 'Séance de kiné',
+  'physiotherapy / care': 'Physio session',
 }
 
 const tidy = (s: string) => s.replace(/\s+/g, ' ').trim().toLocaleLowerCase()
@@ -34,4 +37,11 @@ export function currentGestures<T extends { name: string }>(list: readonly T[]):
     if (!out.some((o) => tidy(o.name) === tidy(name))) out.push({ ...g, name })
   }
   return out
+}
+
+/** A lead or trial key (`action:<name>`) under the current wording of its action. */
+export function currentActionKey(key: string): string {
+  if (!key.startsWith('action:')) return key
+  const label = currentLabel(key.slice('action:'.length))
+  return `action:${label.trim().toLowerCase()}`
 }
