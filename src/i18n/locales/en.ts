@@ -305,7 +305,7 @@ const en: Translations = {
       },
       {
         summary:
-          "EULAR recommendations on physical activity in rheumatoid arthritis, spondyloarthritis and hip and knee osteoarthritis: 4 principles and 10 recommendations; physical activity is an integral part of standard care, given its effectiveness, feasibility and safety.",
+          "2025 update of the EULAR recommendations on physical activity in inflammatory arthritis and osteoarthritis: 4 principles and 11 recommendations; promoting physical activity is part of standard care, and the recommendations also cover reducing time spent sitting. It replaces the 2018 version.",
         usage:
           "Source of the “Moving” card for rheumatoid arthritis and spondyloarthritis. Not in the report.",
       },
@@ -323,7 +323,7 @@ const en: Translations = {
       },
       {
         summary:
-          "Systematic review of exercise in myofascial pain: small to moderate effects on pain intensity in the short term, from a limited number of trials; combining stretching and strengthening seems to work better; these estimates may change.",
+          "Systematic review of exercise in myofascial pain (8 studies, 255 participants): small to moderate effects on pain intensity in the short term, from a limited number of trials; no effect shown on disability; combining stretching and strengthening seems to work better; these estimates may change.",
         usage:
           "Source of the “Moving” card for myofascial pain. Not in the report.",
       },
@@ -2294,11 +2294,11 @@ const en: Translations = {
     tryHint: 'For the trial, OUCH draws the days with and without a walk: each evening, you find out about the next day.',
     items: {
       fibromyalgie: { short: 'Fibromyalgia: exercise is the best-supported lead (EULAR, 2016).', more: 'Fibromyalgia: in the European recommendations (EULAR, 2016), exercise is the only “strong for” recommendation based on meta-analyses. A Cochrane review (2017) finds that aerobic exercise probably improves quality of life and may lower pain a little.' },
-      arthrite: { short: 'Rheumatoid arthritis: physical activity is part of routine care (EULAR, 2018).', more: 'Rheumatoid arthritis: the European recommendations (EULAR, 2018) make physical activity part of routine care.' },
-      spondylarthrite: { short: 'Spondyloarthritis: physical activity is part of routine care (EULAR, 2018) and exercise is efficacious (ASAS-EULAR review, 2022).', more: 'Spondyloarthritis: the European recommendations (EULAR, 2018) make physical activity part of routine care, and a systematic review behind the 2022 update of the ASAS-EULAR recommendations confirms that exercise is efficacious.' },
+      arthrite: { short: 'Rheumatoid arthritis: physical activity is part of routine care (EULAR, 2025).', more: 'Rheumatoid arthritis: the European recommendations (EULAR, 2025 update) make promoting physical activity part of routine care.' },
+      spondylarthrite: { short: 'Spondyloarthritis: physical activity is part of routine care (EULAR, 2025) and exercise is efficacious (ASAS-EULAR review, 2022).', more: 'Spondyloarthritis: the European recommendations (EULAR, 2025 update) make promoting physical activity part of routine care, and a systematic review behind the 2022 update of the ASAS-EULAR recommendations confirms that exercise is efficacious.' },
       lombalgie: { short: 'Chronic low back pain: exercise probably eases pain (Cochrane, 2021).', more: 'Chronic low back pain: a Cochrane review (2021) finds that exercise is probably effective against pain, compared with no treatment, usual care or placebo.' },
       migraine: { short: 'Migraine: aerobic exercise slightly reduces migraine days (meta-analysis, 2019).', more: 'Migraine: a meta-analysis (2019, 6 studies) finds, with moderate-quality evidence, about 0.6 fewer migraine days a month with aerobic exercise.' },
-      myofasciale: { short: 'Myofascial pain: exercise helps a little in the short term (review, 2017).', more: 'Myofascial pain: a review (2017) finds a small to moderate effect in the short term, mostly when stretching and strengthening are combined.' },
+      myofasciale: { short: 'Myofascial pain: exercise helps a little in the short term (review, 2017).', more: 'Myofascial pain: a small review (2017, 8 studies) finds a small to moderate effect on pain in the short term, mostly when stretching and strengthening are combined; it shows no effect on everyday limitation.' },
     },
     pace: 'Go gently, at your own pace.',
     action: 'Short walk',
