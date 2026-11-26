@@ -6,6 +6,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Modifié
+- **Mon dossier MDPH : les comptes rendus des spécialistes à joindre.** La liste « À joindre » propose aussi les comptes rendus de tes spécialistes (centre de la douleur, rhumatologue…), si tu en as, pour appuyer le certificat médical. Un conseil de Rudy, de la MDPH 59 : merci à lui.
+
 ### Corrigé
 - **Mon dossier MDPH : le certificat médical vaut 12 mois.** La liste des pièces à joindre demandait un certificat de moins de 6 mois ; il est valable 12 mois. Merci à Rudy, de la MDPH 59, de nous l’avoir signalé.
 

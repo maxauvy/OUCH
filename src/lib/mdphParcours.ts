@@ -3,7 +3,7 @@
 // - page 1: a renewal of the same rights because nothing changed needs parts A and E only; otherwise the whole form, to say every need;
 // - part E: a request for the AAH, or about work (RQTH, vocational guidance), needs part D too;
 // - part C is the school or studies, part F is for the family carer who wishes to write;
-// - page 4: what to attach, always.
+// - page 4: what to attach, always; plus the specialists' reports, which the MDPH advises adding to the certificate.
 // OUCH never says what someone is entitled to: it says which parts the form asks for.
 //
 // Imports carry a `.ts` extension so this file can be tested with plain Node.
@@ -15,7 +15,7 @@ export type MdphRequestKind = (typeof REQUEST_KINDS)[number]
 export const ASKS = ['aah', 'rqth', 'orientation', 'cmi', 'pch', 'unsure'] as const
 export type MdphAsk = (typeof ASKS)[number]
 
-export const ATTACHMENTS = ['certificate', 'identity', 'address', 'protection'] as const
+export const ATTACHMENTS = ['certificate', 'reports', 'identity', 'address', 'protection'] as const
 export type MdphAttachment = (typeof ATTACHMENTS)[number]
 
 export interface MdphParcours {

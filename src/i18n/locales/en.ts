@@ -2005,11 +2005,12 @@ const en: Translations = {
       attachTitle: 'To attach',
       attach: {
         certificate: 'Medical certificate under 12 months old (cerfa 15695*01), filled in by your doctor',
+        reports: 'Your specialists’ reports (pain clinic, rheumatologist…), if you have any: they back up the certificate',
         identity: 'Two-sided copy of your ID or residence permit',
         address: 'Copy of a proof of address',
         protection: 'The legal protection ruling, if you have one',
       },
-      attachNote: 'The list on page 4 of the form. Tick as you go: it is kept on this phone.',
+      attachNote: 'The list on page 4 of the form, plus the reports the MDPH advises adding. Tick as you go: it is kept on this phone.',
       boxesTitle: 'The boxes your journal helps with',
     },
     row: 'My MDPH file',

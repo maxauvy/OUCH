@@ -2010,11 +2010,12 @@ const fr: Translations = {
       attachTitle: 'À joindre',
       attach: {
         certificate: 'Certificat médical de moins de 12 mois (cerfa 15695*01), rempli par ton médecin',
+        reports: 'Les comptes rendus de tes spécialistes (centre de la douleur, rhumatologue…), si tu en as : ils appuient le certificat',
         identity: 'Photocopie recto verso de ta pièce d’identité ou de ton titre de séjour',
         address: 'Photocopie d’un justificatif de domicile',
         protection: 'Le jugement de protection juridique, si tu en as une',
       },
-      attachNote: 'La liste de la page 4 du formulaire. Coche au fur et à mesure : c’est gardé sur ce téléphone.',
+      attachNote: 'La liste de la page 4 du formulaire, avec les comptes rendus que la MDPH conseille d’ajouter. Coche au fur et à mesure : c’est gardé sur ce téléphone.',
       boxesTitle: 'Les cases où ton journal t’aide',
     },
     row: 'Mon dossier MDPH',
