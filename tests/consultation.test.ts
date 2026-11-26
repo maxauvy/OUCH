@@ -160,8 +160,8 @@ test('since the last appointment: the flares and marked periods that touch it, t
   assert.deepEqual([r.detected, r.marked, r.treatments.length], [2, 1, 2])
 })
 
-test('the history keeps the last 6 appointments with the family doctor and the last 2 at the pain clinic, each kind apart', () => {
-  assert.deepEqual(MAX_PAST_BY_KIND, { gp: 6, cetd: 2 })
+test('the history keeps the last 6 appointments with the family doctor, the last 2 at the pain clinic and the last 10 with the physio, each kind apart', () => {
+  assert.deepEqual(MAX_PAST_BY_KIND, { gp: 6, cetd: 2, kine: 10 })
   const gps = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({ date: `2025-${String(n).padStart(2, '0')}-01`, kind: 'gp' as const }))
   const cetd = [1, 2, 3].map((n) => ({ date: `2025-${String(n).padStart(2, '0')}-15`, kind: 'cetd' as const }))
   const out = capPast([...gps, ...cetd])

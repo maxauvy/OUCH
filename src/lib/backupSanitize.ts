@@ -25,7 +25,9 @@ import {
   SENSORY_STIMULI,
   MEDICATION_REGIMENS,
   MEDICATION_STOP_REASONS,
+  PHYSIO_EXERCISES_ANSWERS,
 } from '../db/types.ts'
+import type { PhysioSeries } from '../db/types.ts'
 import type {
   DailyEntry,
   Dose,
@@ -54,7 +56,7 @@ import { makePrescription } from './prescription.ts'
 import { careSheetFromBackup } from './careSheet.ts'
 import { cleanSettleDays } from './treatmentReview.ts'
 import { cleanGestures } from './gestures.ts'
-import { currentLabels } from './renamedSuggestions.ts'
+import { currentActionKey, currentLabel, currentLabels } from './renamedSuggestions.ts'
 import { planFromBackup } from './hardDaysPlan.ts'
 import { cleanPainWords } from './painWords.ts'
 import { cleanMdphGestures } from './mdph.ts'
@@ -265,6 +267,7 @@ export function sanitizeEntry(raw: unknown, now = Date.now()): LegacyDailyEntry 
       const list = strings(raw.positiveActions)
       return list && currentLabels(list)
     })(),
+    physioExercises: oneOf(raw.physioExercises, PHYSIO_EXERCISES_ANSWERS),
     // Zones of every version are valid; an unknown one (or a repeat) is dropped.
     painLocations: (() => {
       const zones = strings(raw.painLocations)
@@ -321,6 +324,12 @@ export function sanitizeMedication(raw: unknown, now = Date.now()): Medication |
 const MAX_LEAD_CHOICES = 100
 
 /** What was answered to each lead: a known answer, when, and the numbers it was given on. */
+/** « Suivi kiné »: a series of a sensible size, from a real day. */
+function physioSeries(v: unknown): PhysioSeries | undefined {
+  if (!isRecord(v) || !isISODate(v.start) || typeof v.total !== 'number' || !Number.isInteger(v.total) || v.total < 1 || v.total > 60) return undefined
+  return { total: v.total, start: v.start }
+}
+
 function leadChoices(v: unknown): LeadChoices | undefined {
   if (!isRecord(v)) return undefined
   const entries = Object.entries(v).slice(0, MAX_LEAD_CHOICES)
@@ -331,7 +340,7 @@ function leadChoices(v: unknown): LeadChoices | undefined {
     const at = num(raw.at, 0, Number.MAX_SAFE_INTEGER)
     const gap = num(raw.gap, -10, 10)
     const days = num(raw.days, 0, MAX_ENTRIES)
-    if (choice && at !== undefined && gap !== undefined && days !== undefined) out[key] = { choice, at, gap, days }
+    if (choice && at !== undefined && gap !== undefined && days !== undefined) out[currentActionKey(key)] = { choice, at, gap, days }
   }
   // Nothing in the file was usable: keep what this device holds, rather than clearing it.
   return entries.length > 0 && Object.keys(out).length === 0 ? undefined : out
@@ -345,7 +354,7 @@ function leadTrial(v: unknown): LeadTrial | undefined {
   if (!key?.startsWith('action:') || !action?.trim() || !isISODate(v.start) || !isISODate(v.end)) return undefined
   const days = (Date.parse(`${v.end}T12:00:00Z`) - Date.parse(`${v.start}T12:00:00Z`)) / 86_400_000
   if (!(days >= 0 && days <= 30)) return undefined
-  const trial: LeadTrial = { key, action, start: v.start, end: v.end }
+  const trial: LeadTrial = { key: currentActionKey(key), action: currentLabel(action), start: v.start, end: v.end }
   if (v.plan === undefined) return trial
   // A draw that does not cover the days exactly would compare the wrong days: the trial is dropped rather than misread.
   const plan = Array.isArray(v.plan) && v.plan.length === days + 1 && v.plan.every((a) => a === 'with' || a === 'without') ? (v.plan as TrialArm[]) : undefined
@@ -470,6 +479,8 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     mdphGestures: cleanMdphGestures(raw.mdphGestures),
     mdphParcours: cleanParcours(raw.mdphParcours),
     yearWish: yearWishFromBackup(raw.yearWish),
+    physioTracking: bool(raw.physioTracking),
+    physioSeries: physioSeries(raw.physioSeries),
   })
 }
 

@@ -1,5 +1,5 @@
 import { createContext, createElement, isValidElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
-import { IconActivityHeartbeat, IconBodyScan, IconBook2, IconBulb, IconCalendar, IconCalendarWeek, IconChartDots, IconChartLine, IconClipboardCheck, IconCloudStorm, IconHeart, IconHeartbeat, IconInfoCircle, IconLeaf, IconListCheck, IconListDetails, IconMessageQuestion, IconMoodSmile, IconMoon, IconNotes, IconPill, IconRuler2, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
+import { IconActivityHeartbeat, IconBodyScan, IconBook2, IconBulb, IconCalendar, IconCalendarWeek, IconChartDots, IconChartLine, IconClipboardCheck, IconCloudStorm, IconHeart, IconHeartbeat, IconInfoCircle, IconLeaf, IconListCheck, IconListDetails, IconMessageQuestion, IconMoodSmile, IconMoon, IconNotes, IconPill, IconRuler2, IconStretching, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
 import { periodDayOf } from '../../lib/periodDay'
 import { lateCount } from '../../lib/lateEntries'
 import { dayMix, type MixDirection } from '../../lib/dayMix'
@@ -90,6 +90,7 @@ const KINDS = {
   flares: { icon: IconCloudStorm, tone: 'flare' },
   treatments: { icon: IconPill, tone: 'meds' },
   habits: { icon: IconLeaf, tone: 'meds' },
+  physio: { icon: IconStretching, tone: 'meds' },
   symptoms: { icon: IconHeartbeat, tone: 'body' },
   stiffness: { icon: IconSunrise, tone: 'body' },
   indicators: { icon: IconListDetails, tone: 'body' },
@@ -266,6 +267,7 @@ function gpPages(d: ReportData): Block[][] {
             <TreatmentsTable d={d} detailed={false} from={from} to={to} />
           </>
         ), 'treatments'),
+      d.physio && <PhysioBlock d={d} />,
       d.reviews.length > 0 && reviewBlock(d),
       d.marked.length > 0 && markedBlock(d),
       <TocBlock id="symptoms">
@@ -495,6 +497,7 @@ function painClinicLayout(d: ReportData): { pages: Block[][]; labels: string[] }
       hint: f.t.partContextHint,
       blocks: [
         <NonDrug d={d} />,
+        d.physio && <PhysioBlock d={d} />,
         <>
           <H level={2} kind="calendar">{f.t.calendar}</H>
           <PainCalendar entries={d.all} p={p} f={f} />
@@ -980,7 +983,7 @@ function ReportTimeline({ d, items, from, to, continued }: { d: ReportData; item
       case 'trial':
         return { text: f.format(t.timelineTrial, { action: item.trial.action }), note: `${range(item.trial.start, item.trial.end)} · ${item.running ? t.timelineTrialRunning : t.timelineTrialDone}` }
       case 'appointment':
-        return { text: item.appointment.kind === 'cetd' ? t.timelineAppointmentCetd : t.timelineAppointmentGp, note: [f.dayMonth(item.date), item.appointment.doctor].filter(Boolean).join(' · ') }
+        return { text: item.appointment.kind === 'cetd' ? t.timelineAppointmentCetd : item.appointment.kind === 'kine' ? t.timelineAppointmentKine : t.timelineAppointmentGp, note: [f.dayMonth(item.date), item.appointment.doctor].filter(Boolean).join(' · ') }
     }
   }
   return (
@@ -2024,6 +2027,36 @@ function NonDrug({ d }: { d: ReportData }) {
         ))}
       </div>
     </>
+  )
+}
+
+/** « Suivi kiné »: the physio sessions of the period, the series under way, the exercises done against those planned (a day in part counts as
+ * half) and the pain on the days with and without them. Counted, as the patient noted it; nothing is read into it. */
+function PhysioBlock({ d }: { d: ReportData }) {
+  const { f, physio } = d
+  if (!physio) return null
+  const t = getTranslations(d.options.language).physio
+  const lang = d.options.language
+  const ex = physio.exercises
+  const sessions =
+    f.format(t.reportSessions, { n: physio.sessions }) +
+    (physio.series ? f.format(t.reportSeries, { total: physio.series.total, date: f.fullDate(physio.series.start), done: physio.series.done }) : '') +
+    (physio.therapist ? f.format(t.reportTherapist, { name: physio.therapist }) : '') +
+    '.'
+  return (
+    <div className="r-card">
+      <H level={2} kind="physio">{t.reportTitle}</H>
+      <p>{sessions}</p>
+      {ex && (
+        <p>
+          {f.format(t.reportExercises, { text: ex.text, done: Number.isInteger(ex.count.done) ? ex.count.done : f.nf(ex.count.done), date: f.fullDate(ex.since) })}
+          {ex.count.planned ? f.format(t.reportPlanned, { planned: ex.count.planned }) : ''}
+          {ex.count.part ? getTranslations(lang).decisions.habitPartial.replace('{{n}}', String(ex.count.part)) : ''}.
+          {ex.pain.with !== null && ex.pain.without !== null ? ` ${f.format(t.reportPain, { with: f.nf(ex.pain.with), without: f.nf(ex.pain.without) })}` : ''}
+        </p>
+      )}
+      <p className="r-small">{t.reportCaveat}</p>
+    </div>
   )
 }
 

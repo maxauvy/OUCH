@@ -1,4 +1,6 @@
 import { useState, type ReactNode } from 'react'
+import { PhysioExercisesCard } from '../physio/PhysioExercisesCard'
+import { physioActive } from '../../lib/physio'
 import {
   IconActivityHeartbeat,
   IconAdjustmentsHorizontal,
@@ -201,6 +203,7 @@ export function HealthEntryLayout({
   const t = useTranslation()
   const { intlLocale } = useLocale()
   const earlyAccess = useEarlyAccess()
+  const physio = physioActive(settings, earlyAccess)
   const has = (key: FactorKey) => settings.enabledFactors.includes(key) && isOffered(key, earlyAccess)
   const isToday = date === todayISO()
   // The weather look: titles inside the cards, no small icons in front of them; today's page opens on the day's sky.
@@ -593,6 +596,7 @@ export function HealthEntryLayout({
 
       {!lightToday && medicationsBlock}
 
+      {!lightToday && physio && <PhysioExercisesCard date={date} local={local} setField={setField} settings={settings} allEntries={allEntries} />}
       {!lightToday && has('positiveActions') && (
         <>
           <GroupCaption icon={IconLeaf} tone="mood">

@@ -15,7 +15,12 @@ export function followLines(f: DecisionFollow, t: Translations['decisions'], lan
     return [main, effects]
   }
   if (f.kind === 'habit') {
-    const done = format(t.habitDone, { done: f.done, action: f.decision.action ?? f.decision.text }, language) + (f.planned ? format(t.habitPlanned, { planned: f.planned }, language) : '') + '.'
+    // A day of physio exercises done in part counts as half: the figure then has a decimal, and the sentence says how many were in part.
+    const done =
+      format(t.habitDone, { done: Number.isInteger(f.done) ? f.done : num(f.done), action: f.decision.action ?? f.decision.text }, language) +
+      (f.planned ? format(t.habitPlanned, { planned: f.planned }, language) : '') +
+      (f.part ? format(t.habitPartial, { n: f.part }, language) : '') +
+      '.'
     const pain = f.withMean !== null && f.withoutMean !== null ? [format(t.habitPain, { with: num(f.withMean), without: num(f.withoutMean) }, language)] : []
     return [done, ...pain]
   }

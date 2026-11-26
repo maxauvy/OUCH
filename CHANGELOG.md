@@ -6,6 +6,16 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+### Ajouté en accès anticipé
+- **Suivi kiné.** Un interrupteur dans Réglages › Mon suivi, visible avec l’accès anticipé. Allumé :
+  - **un rendez-vous « Kiné »**, à côté du médecin traitant et du centre douleur, avec « Combien de séances ? » (6 à 20, ou « Je ne sais pas ») : la carte « Tes séances de kiné » compte les séances de la série, d’après les rendez-vous chez le kiné et les jours marqués « Séance de kiné » ;
+  - **les exercices donnés par le kiné**, notés après la séance dans « Ce qu’on a décidé » (une habitude comptée par le nouveau geste « Exercices du kiné », 5 fois par semaine proposé d’office) ; tant qu’ils courent, la saisie du soir demande « Tes exercices du kiné » : Faits, En partie ou Pas aujourd’hui, avec la semaine en cases douces, sans série ni score. Un jour « en partie » compte pour moitié dans les jours faits contre les jours prévus (la part de la dose faite, la façon habituelle de compter l’observance), et parmi les jours avec pour la douleur ;
+  - **« Pour ton kiné »**, un écran à montrer en arrivant : la douleur depuis la séance précédente, les exercices faits contre prévus, la douleur autour des dernières séances (la veille, le jour, le lendemain, deux jours après, sans seuil ni conseil) et les questions notées. Quand le prochain rendez-vous est chez le kiné, c’est le grand bouton de la page Consultation, et le rapport passe dans une tuile ;
+  - **dans les rapports** (médecin traitant et centre douleur), un bloc « Kinésithérapie » : les séances de la période, la série, les exercices faits contre prévus et la douleur les jours avec et sans ; les séances figurent aussi dans « Ce qui s’est passé ». Les décisions d’un rendez-vous chez le kiné ne remplacent pas celles du médecin dans « Depuis la consultation du … ».
+  OUCH ne propose, ne choisit ni ne dose aucun exercice. La réponse du soir est dans la sauvegarde et dans l’export CSV (colonne `physio_exercises`). Les sources sur la kinésithérapie sont dans `docs/soignants/kinesitherapie.md`.
+
+### Modifié
+- **« Kiné / soins » devient « Séance de kiné ».** Dans « Ce qui a aidé », pour tout le monde : les jours déjà notés, les gestes gardés, les décisions, les réponses aux pistes et les essais passent au nouveau nom (et « Physiotherapy / care » à « Physio session » en anglais), à l’ouverture de l’app comme à la restauration d’une sauvegarde.
 ### Ajouté
 - **Kinésithérapie et douleur chronique : ce que disent les études.** Une note pour les soignants (`docs/soignants/kinesitherapie.md`) : pour chaque maladie suivie, ce que les études disent de l’exercice et de la kinésithérapie et avec quelle certitude, les traitements passifs, l’observance des exercices à domicile, l’accès direct au kiné en France, et ce qu’OUCH peut en dire ou non. Les sources ont été vérifiées sur leur page officielle (résumés).
 

@@ -263,6 +263,7 @@ export interface Translations {
     timelineTrialDone: string
     timelineAppointmentGp: string
     timelineAppointmentCetd: string
+    timelineAppointmentKine: string
     timelineAppointmentOpen: string
     zonesTitle: string
     zonesLess: string
@@ -1530,6 +1531,8 @@ export interface Translations {
     habitDone: string
     /** `{{planned}}` */
     habitPlanned: string
+    /** `{{n}}`: days of physio exercises done in part */
+    habitPartial: string
     /** `{{with}}`, `{{without}}` */
     habitPain: string
     caveat: string
@@ -1613,6 +1616,8 @@ export interface Translations {
     kindTitle: string
     kindGp: string
     kindCetd: string
+    kindKine: string
+    pastNoteKine: string
     doctorLabel: string
     doctorPlaceholder: string
     /** Card on the day's page, with the professional's name: `{{name}}` */
@@ -2737,5 +2742,75 @@ export interface Translations {
     closeUpdated: string
     earlyOn: string
     earlyOff: string
+  }
+  physio: {
+    settingTitle: string
+    settingHelper: string
+    sessionsTitle: string
+    sessionsHint: string
+    sessionsUnsure: string
+    /** `{{date}}` */
+    seriesRestart: string
+    seriesTitle: string
+    /** `{{done}}`, `{{total}}` */
+    seriesCount: string
+    /** `{{date}}` */
+    seriesSince: string
+    seriesToday: string
+    seriesDone: string
+    screenHint: string
+    pastHint: string
+    screenButton: string
+    /** `{{date}}` */
+    screenSince: string
+    screenSinceDays: string
+    painTitle: string
+    sessionMark: string
+    /** `{{v}}` */
+    painNextDay: string
+    /** `{{v}}` */
+    painMedian: string
+    exercisesTitle: string
+    /** `{{done}}`, `{{planned}}` */
+    exercisesDone: string
+    /** `{{done}}` */
+    exercisesDoneNoPlan: string
+    /** `{{n}}` */
+    exercisesPart: string
+    /** `{{text}}`, `{{date}}` */
+    exercisesGiven: string
+    exercisesNone: string
+    aroundTitle: string
+    aroundCols: [string, string, string, string]
+    aroundHint: string
+    aroundNone: string
+    questionsTitle: string
+    cardTitle: string
+    /** `{{text}}`, `{{n}}` */
+    cardPlan: string
+    answers: { done: string; part: string; no: string }
+    /** `{{done}}` */
+    cardWeek: string
+    /** `{{n}}` */
+    cardWeekPart: string
+    cardNote: string
+    reportTitle: string
+    /** `{{n}}` */
+    reportSessions: string
+    /** `{{total}}`, `{{date}}`, `{{done}}` */
+    reportSeries: string
+    /** `{{name}}` */
+    reportTherapist: string
+    /** `{{text}}`, `{{done}}`, `{{date}}` */
+    reportExercises: string
+    /** `{{planned}}` */
+    reportPlanned: string
+    /** `{{with}}`, `{{without}}` */
+    reportPain: string
+    reportCaveat: string
+    reportTile: string
+    reportTileHint: string
+    afterRow: string
+    afterRowHint: string
   }
 }

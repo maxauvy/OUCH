@@ -1,11 +1,13 @@
 import type { ReactNode } from 'react'
+import { usePhysio } from '../../hooks/usePhysio'
+import { EXERCISES_LABELS } from '../../lib/physio'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { DailyEntry } from '../../db/types'
 import { useAllEntries, useEntry, upsertEntry } from '../../hooks/useEntries'
 import { useSettings } from '../../hooks/useSettings'
 import { useMedications } from '../../hooks/useMedications'
 import { defaultIntakes } from '../../lib/medications'
-import { useTranslation } from '../../i18n'
+import { useLanguage, useTranslation } from '../../i18n'
 import { HealthEntryLayout } from './HealthEntryLayout'
 
 export function DailyEntryForm({ date, onGoToBackup, onOpenSettings, headerAction, afterHeader }: { date: string; onGoToBackup?: () => void; onOpenSettings?: () => void; headerAction?: ReactNode; afterHeader?: ReactNode }) {
@@ -14,6 +16,8 @@ export function DailyEntryForm({ date, onGoToBackup, onOpenSettings, headerActio
   const allEntries = useAllEntries()
   const medications = useMedications()
   const t = useTranslation()
+  const language = useLanguage()
+  const physio = usePhysio(settings)
   const [local, setLocal] = useState<Partial<DailyEntry>>(() => dbEntry ?? {})
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle')
   const dirtyRef = useRef(false)
@@ -91,6 +95,7 @@ export function DailyEntryForm({ date, onGoToBackup, onOpenSettings, headerActio
       ...(settings.leadTrial ? [settings.leadTrial.action] : []),
       ...(allEntries ?? []).flatMap((e) => e.positiveActions ?? []),
       ...t.entryForm.positiveActionsSuggestions,
+      ...(physio ? [EXERCISES_LABELS[language]] : []),
     ])
   )
 

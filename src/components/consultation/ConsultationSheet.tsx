@@ -24,6 +24,9 @@ import { archiveTrial, newTrial } from '../../lib/leadTrial'
 import { actionKey } from '../../lib/leads'
 import { DecisionsEditor } from './DecisionsEditor'
 import { followLines } from './decisionTexts'
+import { kindLabel } from './kindLabel'
+import { SessionsField } from '../physio/SessionsField'
+import { usePhysio } from '../../hooks/usePhysio'
 
 const field = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
 const fieldClass = 'w-full rounded-xl px-3.5 py-2.5 text-body outline-none'
@@ -61,6 +64,7 @@ export function ConsultationSheet({
   const leadList = useLeadList()
   const medications = useMedications()
   const c = settings.consultation
+  const physio = usePhysio(settings)
   const [question, setQuestion] = useState('')
   // With a family doctor or a pain clinic: chosen before the date is, so it is kept apart until the appointment exists.
   const [kindChoice, setKindChoice] = useState<ConsultationKind>(kindOf(c))
@@ -130,10 +134,10 @@ export function ConsultationSheet({
       <div role="group" aria-label={t.kindTitle}>
         <p className="text-caption font-semibold mb-1.5">{t.kindTitle}</p>
         <div className="flex flex-wrap gap-2">
-          {CONSULTATION_KINDS.map((k) => (
+          {CONSULTATION_KINDS.filter((k) => k !== 'kine' || physio || kindChoice === 'kine').map((k) => (
             <Chip
               key={k}
-              label={k === 'gp' ? t.kindGp : t.kindCetd}
+              label={kindLabel(k, t)}
               selected={kindChoice === k}
               onClick={() => {
                 setKindChoice(k)
@@ -143,6 +147,8 @@ export function ConsultationSheet({
           ))}
         </div>
       </div>
+
+      {physio && kindChoice === 'kine' && <SessionsField settings={settings} today={today} appointment={c?.date} />}
 
       {c && (
         <div>
@@ -334,7 +340,7 @@ export function ConsultationSheet({
                 style={field}
               />
               <div className="mt-4">
-                <DecisionsEditor decisions={decisions} onChange={setDecisions} entries={entries} medications={medications} trialBusy={trialBusy} />
+                <DecisionsEditor decisions={decisions} onChange={setDecisions} entries={entries} medications={medications} trialBusy={trialBusy} physio={physio && kindOf(c) === 'kine'} />
               </div>
               <div className="mt-4">
                 <h4 className="text-caption font-semibold mb-0.5">{tp.afterTitle}</h4>

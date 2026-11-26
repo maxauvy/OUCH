@@ -1,4 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { physioActive } from '../lib/physio'
 import { createPortal } from 'react-dom'
 import { IconArrowLeft, IconFileTypePdf, IconPrinter } from '@tabler/icons-react'
 import { useAllEntries } from '../hooks/useEntries'
@@ -90,6 +91,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
   const lastNoteText = lastOfKind?.date === consultation ? lastOfKind.notes : undefined
   const lastNote = useMemo(() => (lastNoteText ? { date: consultation, text: lastNoteText } : undefined), [lastNoteText, consultation])
 
+  const physioOn = physioActive(settings, earlyAccess)
   const pastAppointments = useMemo(
     () => pastConsultations({ pastConsultations: settings.pastConsultations, lastConsultation: settings.lastConsultation }),
     [settings.pastConsultations, settings.lastConsultation]
@@ -115,7 +117,8 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             leadChoices: settings.leadChoices,
             leadFactors: leadFactors(settings.enabledFactors),
             leadTrials: { history: settings.leadTrialHistory, current: settings.leadTrial },
-            appointments: pastAppointments,
+            appointments: physioOn ? pastAppointments : pastAppointments.filter((a) => a.kind !== 'kine'),
+            physio: physioOn ? { series: settings.physioSeries } : undefined,
             includeStiffness: settings.enabledFactors.includes('morningStiffness') && isOffered('morningStiffness', earlyAccess),
             includeNightWakings: settings.enabledFactors.includes('nightWaking') && isOffered('nightWaking', earlyAccess),
             includeNotes,
@@ -123,7 +126,7 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
             demo: IS_DEMO,
           })
         : null,
-    [entries, medications, variant, language, consultation, lastOfKind?.date, previousStart, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, earlyAccess, settings.leadTrialHistory, settings.leadTrial, settings.markedFlares, pastAppointments, lastNote, includeLastNote, customCompare, compareValid, spanA, spanB, agenda, includeNotes, includeCycle]
+    [entries, medications, variant, language, consultation, lastOfKind?.date, previousStart, today, patientName, birthDate, settings.illnesses, settings.illnessStatus, settings.otherIllnessName, settings.illnessYear, settings.leadChoices, settings.enabledFactors, earlyAccess, settings.leadTrialHistory, settings.leadTrial, settings.markedFlares, physioOn, settings.physioSeries, pastAppointments, lastNote, includeLastNote, customCompare, compareValid, spanA, spanB, agenda, includeNotes, includeCycle]
   )
 
   // Browsers name the saved PDF after the page title.

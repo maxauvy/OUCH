@@ -54,7 +54,7 @@ export function TimelineCard({ items, onRemoveMarked, onOpenAppointment }: { ite
         const a = item.appointment
         return {
           dot: 'var(--cat-activity)',
-          text: a.kind === 'cetd' ? t.timelineAppointmentCetd : t.timelineAppointmentGp,
+          text: a.kind === 'cetd' ? t.timelineAppointmentCetd : a.kind === 'kine' ? t.timelineAppointmentKine : t.timelineAppointmentGp,
           note: [day(item.date), a.doctor].filter(Boolean).join(' · '),
         }
       }
