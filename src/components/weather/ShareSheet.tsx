@@ -10,6 +10,7 @@ import { downloadBlob } from '../../lib/backup'
 import { format, useTranslation } from '../../i18n'
 import { cardToPng, loadCardTitleFont } from '../../lib/cardImage'
 import { AutoShareSection } from './AutoShareSection'
+import { FlareShareSection } from './FlareShareSection'
 import { useSettings } from '../../hooks/useSettings'
 import type { WeatherShareNotice } from '../../lib/weatherShareRuntime'
 
@@ -228,6 +229,7 @@ export function ShareSheet({
             </button>
           </div>
           <AutoShareSection notice={notice} />
+          <FlareShareSection />
           <p className="text-caption text-center" style={{ color: 'var(--color-ink-muted)' }}>
             {autoOn ? t.shareSheet.auto.footerOn : t.shareSheet.footer}
           </p>

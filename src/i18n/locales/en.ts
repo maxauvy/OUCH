@@ -2701,6 +2701,13 @@ const en: Translations = {
   },
 
   shareSheet: {
+    flare: {
+      title: 'Harder days',
+      hint: 'When the app spots harder days, your image says since when, then "Easing off" once they pass.',
+      noteLabel: 'A sentence for your relatives on those days',
+      notePlaceholder: 'No need to reply, a short message is enough.',
+      noteHint: 'Optional. It goes on the image while the harder days last, the daily image included.',
+    },
     title: "Share my weather",
     close: 'Close',
     previewLabel: 'Image preview: {{weather}}, pain {{pain}} out of 10',
@@ -2768,6 +2775,14 @@ const en: Translations = {
     scaleHigh: 'A lot of pain',
     painLabel: 'Pain:',
     outside: 'Outside',
+    flare: {
+      harder: 'Harder days since {{since}}',
+      day: 'day {{n}}',
+      easing: 'Easing off since {{since}}',
+      bracket: 'since {{since}}',
+      date: '{{date}}',
+      noteTitle: 'These days',
+    },
   },
 
   settings: {

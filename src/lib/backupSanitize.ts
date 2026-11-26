@@ -64,6 +64,7 @@ import { cleanParcours } from './mdphParcours.ts'
 import { cleanDecisions } from './decisions.ts'
 import { yearWishFromBackup } from './yearReview.ts'
 import { noteFromBackup } from './goodDayNote.ts'
+import { FLARE_NOTE_MAX } from './sharedFlare.ts'
 import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
 import { capPast, cleanDoctor, cleanLine, MAX_GOAL_LENGTH, MAX_NOTES_LENGTH, MAX_QUESTIONS, MAX_QUESTION_LENGTH } from './consultation.ts'
 
@@ -480,6 +481,8 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     mdphParcours: cleanParcours(raw.mdphParcours),
     yearWish: yearWishFromBackup(raw.yearWish),
     physioTracking: bool(raw.physioTracking),
+    flareOnImage: bool(raw.flareOnImage),
+    flareImageNote: str(raw.flareImageNote, FLARE_NOTE_MAX),
     physioSeries: physioSeries(raw.physioSeries),
   })
 }
