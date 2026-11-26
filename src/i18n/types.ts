@@ -1807,7 +1807,7 @@ export interface Translations {
       seeCard: string
       fill: Record<'yes' | 'maybe' | 'no', string>
       attachTitle: string
-      attach: Record<'certificate' | 'identity' | 'address' | 'protection', string>
+      attach: Record<'certificate' | 'reports' | 'identity' | 'address' | 'protection', string>
       attachNote: string
       boxesTitle: string
     }
