@@ -22,6 +22,8 @@ export type SharedFlare =
   | { kind: 'easing'; start: string; end: string; since: string }
 
 export function sharedFlare(entries: readonly LoggedEntry[], date: string): SharedFlare | null {
+  // No day, no image: and the date maths below would throw on it, which brought the whole app down at launch.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null
   const before = entries.filter((e) => e.date < date).sort((a, b) => a.date.localeCompare(b.date))
   const episodes = detectFlares(before, { asOf: shiftISO(date, -1) })
   const ongoing = episodes.find((e) => e.ongoing)
