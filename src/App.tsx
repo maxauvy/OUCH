@@ -133,7 +133,11 @@ function AppShell() {
     duoEligible: loggedBy(logged, DUO_CUTOFF),
     seen: settings.newsSeen ?? [],
   }
-  const quiet = quietDay({ illnesses: settings.illnesses, logged, all: allEntries ?? [], markedFlares: settings.markedFlares, today })
+  // Detects the flares over the whole journal: only again when the journal or what the reading depends on changes.
+  const quiet = useMemo(
+    () => quietDay({ illnesses: settings.illnesses, logged, all: allEntries ?? [], markedFlares: settings.markedFlares, today }),
+    [settings.illnesses, logged, allEntries, settings.markedFlares, today]
+  )
   const unread = unreadNews(newsState)
   const [newsOpen, setNewsOpen] = useState(false)
   const [newsItem, setNewsItem] = useState<NewsId | null>(null)
@@ -265,6 +269,7 @@ function AppShell() {
               setScreen('settings')
             }}
             news={{ unread: quiet ? 0 : unread.length, onOpen: () => setNewsOpen(true) }}
+            messages={messages}
             onOpenKids={settings.kidsTabEnabled ? () => setScreen('kids') : undefined}
             onGoToTab={(next, date) => {
               setBackupRequested(false)
