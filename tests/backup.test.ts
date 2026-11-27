@@ -411,3 +411,11 @@ test('identifiers that are names JavaScript gives meaning to are refused', () =>
   }
   assert.equal(sanitizeMedication({ id: 'm-proto', name: 'x' })?.id, 'm-proto')
 })
+
+test('an older backup still carries autoWeatherEnabled: the place comes back, the old switch is dropped', () => {
+  const s = sanitizeSettings({ autoWeatherEnabled: true, autoWeatherLat: 45.764, autoWeatherLon: 4.8357, autoWeatherLabel: 'Lyon' })
+  assert.equal(s?.autoWeatherLat, 45.764)
+  assert.equal(s?.autoWeatherLon, 4.8357)
+  assert.equal(s?.autoWeatherLabel, 'Lyon')
+  assert.equal('autoWeatherEnabled' in (s ?? {}), false)
+})

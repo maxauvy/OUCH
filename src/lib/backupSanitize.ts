@@ -432,7 +432,6 @@ export function sanitizeSettings(raw: unknown): LegacySettings | undefined {
     reminderTime: time ? (raw.reminderTime as string) : undefined,
     cycleTrackingEnabled: bool(raw.cycleTrackingEnabled),
     displayName: str(raw.displayName),
-    autoWeatherEnabled: bool(raw.autoWeatherEnabled),
     autoWeatherLat: num(raw.autoWeatherLat, -90, 90),
     autoWeatherLon: num(raw.autoWeatherLon, -180, 180),
     autoWeatherLabel: str(raw.autoWeatherLabel),

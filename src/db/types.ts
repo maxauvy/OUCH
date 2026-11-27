@@ -500,7 +500,6 @@ export interface Settings {
   agendaReminder?: { time: string; sequence: number }
   cycleTrackingEnabled: boolean
   displayName: string
-  autoWeatherEnabled: boolean
   autoWeatherLat?: number
   autoWeatherLon?: number
   autoWeatherLabel?: string
@@ -652,7 +651,6 @@ export const DEFAULT_SETTINGS: Settings = {
   reminderTime: '20:00',
   cycleTrackingEnabled: false,
   displayName: '',
-  autoWeatherEnabled: false,
   onboardingDone: false,
   language: 'fr',
   parentGender: 'maman',
