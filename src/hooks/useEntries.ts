@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { useRememberedLiveQuery } from './rememberedLiveQuery'
 import { db } from '../db'
 import type { DailyEntry, LoggedEntry } from '../db/types'
@@ -6,22 +5,33 @@ import { hasPain, loggedEntries } from '../lib/loggedEntries'
 import { todayISO } from '../lib/dates'
 
 export function useAllEntries(): DailyEntry[] | undefined {
-  return useRememberedLiveQuery('entries', () => db.entries.orderBy('date').reverse().toArray(), [])
+  return useRememberedLiveQuery('entries', () => db.entries.orderBy('date').reverse().toArray())
 }
 
 /** The days with a pain level, for statistics; undefined until read. */
 export function useLoggedEntries(): LoggedEntry[] | undefined {
   const all = useAllEntries()
-  return useMemo(() => (all ? loggedEntries(all) : undefined), [all])
+  return all ? loggedOf(all) : undefined
+}
+
+// One filtered list per read of the journal, shared by every component that asks: the same array for all of them.
+const logged = new WeakMap<DailyEntry[], LoggedEntry[]>()
+function loggedOf(all: DailyEntry[]): LoggedEntry[] {
+  let l = logged.get(all)
+  if (!l) {
+    l = loggedEntries(all)
+    logged.set(all, l)
+  }
+  return l
 }
 
 /** How many days have a pain level; undefined until counted. */
 export function useEntryCount(): number | undefined {
-  return useRememberedLiveQuery('entries:count', () => db.entries.filter(hasPain).count(), [])
+  return useRememberedLiveQuery('entries:count', () => db.entries.filter(hasPain).count())
 }
 
 export function useEntry(date: string): DailyEntry | undefined {
-  return useRememberedLiveQuery(`entry:${date}`, () => db.entries.where('date').equals(date).first(), [date])
+  return useRememberedLiveQuery(`entry:${date}`, () => db.entries.where('date').equals(date).first())
 }
 
 export function useTodayEntry(): DailyEntry | undefined {
