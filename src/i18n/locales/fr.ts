@@ -2679,6 +2679,9 @@ const fr: Translations = {
     erase: 'Effacer les données de cet appareil',
     eraseConfirm: 'Effacer toutes les données de cet appareil ? Cette action est définitive, sauf si tu as une sauvegarde.',
     details: 'Détails pour signaler le problème',
+    shareDetails: 'Partager les détails',
+    copyDetails: 'Copier les détails',
+    copied: 'Copié',
   },
 
   shareSheet: {
