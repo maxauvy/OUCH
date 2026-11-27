@@ -227,20 +227,6 @@ export interface Translations {
     flareOngoing: string
     /** In the chart's legend and tooltip */
     flareBand: string
-    /** The block at the top of Trends, for the consultation. */
-    consultTitle: string
-    consultIntro: string
-    factPain: string
-    /** `{{v}}` is the mean. */
-    factPainValue: string
-    factFlares: string
-    /** `{{n}} {{days}}`: how many flares, how many days in all. */
-    factFlaresValue: string
-    factFlaresNone: string
-    factZone: string
-    /** `{{k}}` days of `{{n}}` logged. */
-    factZoneDays: string
-    factTreatment: string
     /** The chips that switch what the curve shows. */
     layersLabel: string
     layerFlares: string
@@ -623,8 +609,6 @@ export interface Translations {
     sensoryStimulusLabels: Record<SensoryStimulus, string>
     spasmsEndNone: string
     spasmsEndStrong: string
-    sensoryEndNone: string
-    sensoryEndStrong: string
     offCycleBleeding: string
     bowelPain: string
     urinary: string
@@ -751,7 +735,6 @@ export interface Translations {
     sendHand: string
     sendHandHint: string
     entryTitle: string
-    entryHelper: string
     title: string
     back: string
     recipientTitle: string
@@ -953,7 +936,6 @@ export interface Translations {
     tocTitle: string
     tocPage: string
     partSummary: string
-    partOne: string
     partRange: string
     partPain: string
     partPainHint: string
@@ -1432,7 +1414,6 @@ export interface Translations {
     /** `{{action}}` in the middle of a sentence, `{{where}}` the title of the "what helped" field */
     trialNote: string
     trialStop: string
-    trialPaused: string
     trialDoneLabel: string
     repeatLabel: string
     /** `{{action}}` as written, `{{n}}` weeks since it ended */
@@ -1579,9 +1560,6 @@ export interface Translations {
     remove: string
     /** Prefix of the goal line in the report's list */
     goalPrefix: string
-    /** Trends and Settings entry points; `{{date}}` is the appointment day */
-    trendsPrepare: string
-    trendsPrepareNew: string
     pageKicker: string
     pastTitle: string
     pastHint: string
@@ -1601,7 +1579,6 @@ export interface Translations {
     passedLabel: string
     prepareReport: string
     addAppointment: string
-    changeAppointment: string
     questionsRow: string
     questionsCount: string
     questionsNone: string
@@ -1611,7 +1588,6 @@ export interface Translations {
     reportNote: string
     settingsTitle: string
     settingsNone: string
-    settingsNext: string
     /** Report form: the list is filled from the preparation */
     reportFilled: string
     kindTitle: string
@@ -1758,7 +1734,6 @@ export interface Translations {
       title: string
       intro: string
       open: string
-      needsKind: string
       sheetTitle: string
       close: string
       lastName: string
@@ -1902,7 +1877,6 @@ export interface Translations {
       certPart: string
       /** The nights and mornings: clinical signs (part 3) and their impact (part 6) */
       nightsPart: string
-      formPart: string
       month: string
       logged: string
       flareDays: string
@@ -1974,8 +1948,6 @@ export interface Translations {
     notePlaceholder: string
     formHelper: string
     close: string
-    /** What the sheet is made of, said to the person */
-    fromJournal: string
     /** The sheet itself, read in the language chosen for it */
     doc: {
       heading: string
@@ -2035,8 +2007,6 @@ export interface Translations {
     settingsNone: string
     /** `{{end}}` */
     settingsCurrent: string
-    settingsAdd: string
-    settingsEdit: string
     /** In the appointment sheet: what to remember, and the prescription given at it */
     prepTitle: string
     prepNone: string
@@ -2279,7 +2249,6 @@ export interface Translations {
     breatheOut: string
     ready: string
     startedAnnounce: string
-    otherTitle: string
     next: string
     previous: string
     close: string

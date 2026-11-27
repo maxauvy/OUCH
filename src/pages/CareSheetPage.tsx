@@ -4,9 +4,7 @@ import { IconArrowLeft, IconFileTypePdf, IconPencil, IconPrinter } from '@tabler
 import { useAllEntries } from '../hooks/useEntries'
 import { useMedications } from '../hooks/useMedications'
 import { useSettings } from '../hooks/useSettings'
-import { buildImagePdf } from '../lib/pdf'
-import { capturePages } from '../lib/capturePages'
-import { downloadBlob } from '../lib/backup'
+import { usePaperPdf } from '../hooks/usePaperPdf'
 import { careSheetData } from '../lib/careSheet'
 import { todayISO } from '../lib/dates'
 import { LANGUAGES, getTranslations, useLanguage, useTranslation, type Language } from '../i18n'
@@ -28,11 +26,8 @@ export function CareSheetPage({ onBack }: { onBack: () => void }) {
   const medications = useMedications()
   const ids = useId()
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const captureRef = useRef<HTMLDivElement>(null)
   const [language, setLanguage] = useState<Language>(appLanguage)
   const [editing, setEditing] = useState(false)
-  const [capturing, setCapturing] = useState(false)
-  const [exportFailed, setExportFailed] = useState(false)
   const today = todayISO()
   const docT = getTranslations(language).careSheet
 
@@ -54,49 +49,7 @@ export function CareSheetPage({ onBack }: { onBack: () => void }) {
     info: settings.careSheet,
   }
 
-  // Browsers name the saved PDF after the page title.
-  useEffect(() => {
-    const previous = document.title
-    document.title = `${docT.title} ${today}`
-    return () => {
-      document.title = previous
-    }
-  }, [docT.title, today])
-
-  // The PDF is made from a copy of the paper sheet laid out out of sight, only while it is being made.
-  useEffect(() => {
-    if (!capturing) return
-    let live = true
-    void (async () => {
-      try {
-        await document.fonts?.ready
-        await new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
-        if (!captureRef.current) return
-        const blob = buildImagePdf(await capturePages(captureRef.current), `${docT.title} ${today}`)
-        const file = new File([blob], `${docT.title.replace(/\s+/g, '-').toLowerCase()}-${today}.pdf`, { type: 'application/pdf' })
-        // On a phone the share sheet is the way to keep the file; a computer just downloads it.
-        const phone = window.matchMedia('(pointer: coarse)').matches
-        if (phone && navigator.canShare?.({ files: [file] })) {
-          try {
-            await navigator.share({ files: [file], title: docT.title })
-            return
-          } catch (e) {
-            if (e instanceof DOMException && e.name === 'AbortError') return
-            // Making the file can take long enough for the browser to stop counting the tap: download instead.
-          }
-        }
-        downloadBlob(blob, file.name)
-      } catch (e) {
-        console.error(e)
-        if (live) setExportFailed(true)
-      } finally {
-        if (live) setCapturing(false)
-      }
-    })()
-    return () => {
-      live = false
-    }
-  }, [capturing, docT.title, today])
+  const { captureRef, capturing, failed: exportFailed, start: startPdf } = usePaperPdf(`${docT.title} ${today}`, `${docT.title.replace(/\s+/g, '-').toLowerCase()}-${today}.pdf`, docT.title)
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-28">
@@ -122,7 +75,7 @@ export function CareSheetPage({ onBack }: { onBack: () => void }) {
           <IconPencil size={18} aria-hidden />
           {t.edit}
         </button>
-        <button type="button" onClick={() => { setExportFailed(false); setCapturing(true) }} disabled={!input || capturing} aria-describedby={`${ids}-help`} className="btn-primary w-full">
+        <button type="button" onClick={startPdf} disabled={!input || capturing} aria-describedby={`${ids}-help`} className="btn-primary w-full">
           <IconFileTypePdf size={18} aria-hidden />
           {capturing ? t.exporting : t.exportPdf}
         </button>

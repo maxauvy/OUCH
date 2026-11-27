@@ -63,6 +63,7 @@ import { cleanMdphGestures } from './mdph.ts'
 import { cleanParcours } from './mdphParcours.ts'
 import { cleanDecisions } from './decisions.ts'
 import { yearWishFromBackup } from './yearReview.ts'
+import { isISODate } from './dates.ts'
 import { noteFromBackup } from './goodDayNote.ts'
 import { FLARE_NOTE_MAX } from './sharedFlare.ts'
 import { cleanFactors, cleanNote, MAX_MARKED } from './markedFlares.ts'
@@ -104,13 +105,6 @@ function oneOf<T extends string>(v: unknown, allowed: readonly T[]): T | undefin
 function strings(v: unknown, max = MAX_SHORT_TEXT): string[] | undefined {
   if (!Array.isArray(v)) return undefined
   return v.filter((s): s is string => typeof s === 'string').slice(0, MAX_LIST).map((s) => s.slice(0, max))
-}
-
-/** 'YYYY-MM-DD' naming a real calendar day. */
-export function isISODate(v: unknown): v is string {
-  if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return false
-  const d = new Date(`${v}T12:00:00Z`)
-  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v
 }
 
 /** Statuses by known illness, each one of the two allowed words. */
