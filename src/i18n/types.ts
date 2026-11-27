@@ -2473,6 +2473,10 @@ export interface Translations {
     eraseConfirm: string
     /** The folded technical details under the buttons, to send to the developer */
     details: string
+    /** The small button under the details: the share sheet on a phone, the clipboard elsewhere, then a word that it is done */
+    shareDetails: string
+    copyDetails: string
+    copied: string
   }
 
   shareSheet: {
