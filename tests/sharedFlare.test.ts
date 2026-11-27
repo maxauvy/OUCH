@@ -58,3 +58,9 @@ test('the key changes with the day of the flare and the sentence, not otherwise'
   assert.notEqual(sharedFlareKey(a, 'Un message suffit.'), sharedFlareKey(a, undefined))
   assert.equal(sharedFlareKey(null, 'Un message suffit.'), '')
 })
+
+test('no day yet (nothing noted today): nothing to say, and nothing thrown', () => {
+  // The sender asks before today is noted, with an empty day: shiftISO('') used to throw « Invalid Date » and the app fell on the crash screen.
+  assert.equal(sharedFlare(series([7, 8, 7]), ''), null)
+  assert.equal(sharedFlare([], ''), null)
+})
