@@ -69,9 +69,6 @@ const fr: Translations = {
     medicationsIntro:
       'Ton médecin voudra savoir ce que tu prends, à quelle dose, et ce qui a changé depuis la dernière fois. Le rapport le montre si tes traitements sont décrits ici.',
     medicationsLater: 'Tu peux aussi le faire plus tard, dans Réglages → Médicaments.',
-    reminderTitle: 'Un petit rappel ?',
-    reminderIntro:
-      'Le rapport est d’autant plus fiable qu’il couvre beaucoup de jours : il indique combien de jours ont été notés sur la période. Un rappel le soir aide à ne pas oublier.',
     reminderTime: 'Heure du rappel',
     reminderDenied:
       'Les notifications sont bloquées pour ce site. Tu peux les autoriser dans les réglages du navigateur, puis réactiver le rappel dans Réglages.',
@@ -83,9 +80,6 @@ const fr: Translations = {
     checkFactors: 'La douleur et {{n}} autres facteurs suivis',
     checkMedications: 'Traitements décrits : {{n}}',
     checkNoMedications: 'Aucun traitement décrit pour l’instant',
-    checkReminder: 'Rappel chaque jour à {{time}}',
-    checkAgenda: 'Rappel dans ton agenda à {{time}}',
-    checkNoReminder: 'Pas de rappel quotidien',
     checkNotInstalled: 'OUCH n’est pas encore installée',
     sourcesTitle: 'Pour les curieux et les curieuses',
     sourcesBody:
@@ -2535,6 +2529,15 @@ const fr: Translations = {
     hintNote: 'C’est un lien, pas une règle.',
     hintSee: 'Voir dans Tendances',
     hintThanks: 'Merci',
+  },
+  reminderOffer: {
+    label: 'Un petit rappel ?',
+    body: 'Un rappel le soir aide à ne pas oublier : plus il y a de jours notés, plus ton rapport est fiable.',
+    choose: 'Choisir l’heure',
+    later: 'Plus tard',
+    title: 'Un petit rappel ?',
+    intro: 'Le rapport est d’autant plus fiable qu’il couvre beaucoup de jours : il indique combien de jours ont été notés sur la période. Un rappel le soir aide à ne pas oublier.',
+    close: 'Fermer',
   },
   todayList: {
     line: '{{n}} {{n:petite chose|petites choses}} pour toi',

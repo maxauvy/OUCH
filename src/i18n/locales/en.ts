@@ -67,9 +67,6 @@ const en: Translations = {
     medicationsIntro:
       'Your doctor will want to know what you take, at what dose, and what changed since last time. The report shows it when your medications are described here.',
     medicationsLater: 'You can also do this later, in Settings → Medications.',
-    reminderTitle: 'A little reminder?',
-    reminderIntro:
-      'The report is more reliable when it covers many days: it states how many days were logged over the period. An evening reminder helps you not forget.',
     reminderTime: 'Reminder time',
     reminderDenied:
       'Notifications are blocked for this site. You can allow them in your browser settings, then turn the reminder back on in Settings.',
@@ -81,9 +78,6 @@ const en: Translations = {
     checkFactors: 'Pain and {{n}} other factors tracked',
     checkMedications: 'Medications described: {{n}}',
     checkNoMedications: 'No medication described yet',
-    checkReminder: 'Reminder every day at {{time}}',
-    checkAgenda: 'Reminder in your calendar at {{time}}',
-    checkNoReminder: 'No daily reminder',
     checkNotInstalled: 'OUCH is not installed yet',
     sourcesTitle: 'For the curious',
     sourcesBody:
@@ -2530,6 +2524,15 @@ const en: Translations = {
     hintNote: 'It is a link, not a rule.',
     hintSee: 'See in Trends',
     hintThanks: 'Thanks',
+  },
+  reminderOffer: {
+    label: 'A little reminder?',
+    body: 'A reminder in the evening helps you not to forget: the more days you note, the more reliable your report.',
+    choose: 'Choose the time',
+    later: 'Later',
+    title: 'A little reminder?',
+    intro: 'The report is more reliable when it covers many days: it states how many days were logged over the period. An evening reminder helps you not forget.',
+    close: 'Close',
   },
   todayList: {
     line: '{{n}} small {{n:thing|things}} for you',

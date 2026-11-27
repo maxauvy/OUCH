@@ -9,7 +9,6 @@ import { ClinicianPage } from './ClinicianPage'
 import { useSettings } from '../../hooks/useSettings'
 import { useMedications } from '../../hooks/useMedications'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { ReminderSettings } from '../settings/ReminderSettings'
 import { radioGroupProps, radioProps } from '../../lib/a11y'
 import { formatIllnessList } from '../../lib/illnessNames'
 import { newConsultation } from '../../lib/consultation'
@@ -30,7 +29,7 @@ import { useInstallKind } from '../../hooks/useInstall'
 // relies on: a name to prefill, the factors it describes, the medication
 // registry, and regular logging.
 
-type Step = 'welcome' | 'illness' | 'profile' | 'tracking' | 'medications' | 'reminder' | 'done'
+type Step = 'welcome' | 'illness' | 'profile' | 'tracking' | 'medications' | 'done'
 
 
 const inputStyle = { background: 'var(--color-input)', color: 'var(--color-ink)', boxShadow: 'inset 0 0 0 1px var(--color-input-ring)' }
@@ -42,7 +41,7 @@ export function SetupWizard({ onDone, wiped = false, byDoctor = false }: { onDon
   const ids = useId()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const tracksMedications = settings.enabledFactors.includes('medications')
-  const steps: Step[] = ['welcome', 'illness', 'profile', 'tracking', ...(tracksMedications ? (['medications'] as const) : []), 'reminder', 'done']
+  const steps: Step[] = ['welcome', 'illness', 'profile', 'tracking', ...(tracksMedications ? (['medications'] as const) : []), 'done']
   const [step, setStep] = useState<Step>('welcome')
   // A page for healthcare professionals, over the setup (reached from the welcome screen).
   const [clinician, setClinician] = useState(false)
@@ -199,7 +198,6 @@ export function SetupWizard({ onDone, wiped = false, byDoctor = false }: { onDon
             </>
           )}
 
-          {step === 'reminder' && <ReminderStep heading={heading(t.setup.reminderTitle)} />}
 
           {step === 'done' && <DoneStep heading={heading(t.setup.doneTitle)} />}
 
@@ -409,17 +407,6 @@ function IllnessStep({ heading }: { heading: ReactNode }) {
   )
 }
 
-function ReminderStep({ heading }: { heading: ReactNode }) {
-  const t = useTranslation()
-  return (
-    <>
-      {heading}
-      <Intro>{t.setup.reminderIntro}</Intro>
-      <ReminderSettings primary />
-    </>
-  )
-}
-
 function DoneStep({ heading }: { heading: ReactNode }) {
   const t = useTranslation()
   const settings = useSettings()
@@ -448,7 +435,6 @@ function DoneStep({ heading }: { heading: ReactNode }) {
     ...(tracksMedications
       ? [{ done: described > 0, text: described > 0 ? format(t.setup.checkMedications, { n: described }) : t.setup.checkNoMedications }]
       : []),
-    { done: settings.reminderEnabled || !!settings.agendaReminder, text: settings.reminderEnabled ? format(t.setup.checkReminder, { time: settings.reminderTime }) : settings.agendaReminder ? format(t.setup.checkAgenda, { time: settings.agendaReminder.time }) : t.setup.checkNoReminder },
     ...(installKind === 'installed' ? [] : [{ done: false, text: t.setup.checkNotInstalled }]),
   ]
 
