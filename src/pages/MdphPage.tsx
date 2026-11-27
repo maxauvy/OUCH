@@ -6,9 +6,7 @@ import { useAllEntries } from '../hooks/useEntries'
 import { useMedications } from '../hooks/useMedications'
 import { useSettings } from '../hooks/useSettings'
 import { db, updateSettings } from '../db'
-import { buildImagePdf } from '../lib/pdf'
-import { capturePages } from '../lib/capturePages'
-import { downloadBlob } from '../lib/backup'
+import { usePaperPdf } from '../hooks/usePaperPdf'
 import { todayISO } from '../lib/dates'
 import { formatPosology } from '../lib/medicationFormat'
 import { GESTURES, GESTURE_ANSWERS, MIN_TRACKED, PERIODS, cleanMdphGestures, mdphData, type MdphGesture, type MdphPeriod } from '../lib/mdph'
@@ -20,7 +18,7 @@ import { MonthBars } from '../components/mdph/MonthBars'
 import { ParcoursCard } from '../components/mdph/ParcoursCard'
 import { CertificateSheet } from '../components/mdph/CertificateSheet'
 import type { Names } from '../components/mdph/FormSheet'
-import { formatIllnessList } from '../lib/childView'
+import { formatIllnessList } from '../lib/illnessNames'
 import { b3Sentence, d1Sentence, monthLabeller } from '../components/mdph/sentences'
 import '../components/report/report.css'
 
@@ -90,10 +88,7 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
   const medications = useMedications()
   const ids = useId()
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const captureRef = useRef<HTMLDivElement>(null)
   const [months, setMonths] = useState<MdphPeriod>(12)
-  const [capturing, setCapturing] = useState(false)
-  const [exportFailed, setExportFailed] = useState(false)
   // Typed once for the form and the certificate, kept while the page is open, never stored.
   const [typedNames, setNames] = useState<Names | null>(null)
   const names: Names = typedNames ?? { lastName: '', firstNames: settings.displayName.trim() }
@@ -119,47 +114,7 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
     return { b3: b3Sentence(data, fr, 'fr', from), d1: d1Sentence(data, fr, 'fr'), months }
   }, [data, months])
 
-  // Browsers name the saved PDF after the page title.
-  useEffect(() => {
-    const previous = document.title
-    document.title = fileTitle
-    return () => {
-      document.title = previous
-    }
-  }, [fileTitle])
-
-  // The PDF is made from a copy of the paper sheet laid out out of sight, only while it is being made.
-  useEffect(() => {
-    if (!capturing) return
-    let live = true
-    void (async () => {
-      try {
-        await document.fonts?.ready
-        await new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
-        if (!captureRef.current) return
-        const blob = buildImagePdf(await capturePages(captureRef.current), fileTitle)
-        const file = new File([blob], `${t.title.replace(/\s+/g, '-').toLowerCase()}-${today}.pdf`, { type: 'application/pdf' })
-        const phone = window.matchMedia('(pointer: coarse)').matches
-        if (phone && navigator.canShare?.({ files: [file] })) {
-          try {
-            await navigator.share({ files: [file], title: t.title })
-            return
-          } catch (e) {
-            if (e instanceof DOMException && e.name === 'AbortError') return
-          }
-        }
-        downloadBlob(blob, file.name)
-      } catch (e) {
-        console.error(e)
-        if (live) setExportFailed(true)
-      } finally {
-        if (live) setCapturing(false)
-      }
-    })()
-    return () => {
-      live = false
-    }
-  }, [capturing, fileTitle, t.title, today])
+  const { captureRef, capturing, failed: exportFailed, start: startPdf } = usePaperPdf(fileTitle, `${t.title.replace(/\s+/g, '-').toLowerCase()}-${today}.pdf`, t.title)
 
   // Read from the stored settings, not from this render: two quick taps must not write over each other.
   const answer = (g: MdphGesture, a: (typeof GESTURE_ANSWERS)[number]) =>
@@ -300,7 +255,7 @@ export function MdphPage({ onBack }: { onBack: () => void }) {
               {t.cert.notesIntro}
             </p>
               <div className="flex flex-col gap-2">
-                <button type="button" onClick={() => { setExportFailed(false); setCapturing(true) }} disabled={!input || capturing} aria-describedby={`${ids}-help`} className="btn-primary w-full">
+                <button type="button" onClick={startPdf} disabled={!input || capturing} aria-describedby={`${ids}-help`} className="btn-primary w-full">
                   <IconFileTypePdf size={18} aria-hidden />
                   {capturing ? t.exporting : t.exportPdf}
                 </button>
