@@ -6,6 +6,8 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 
 ## [Non publié]
 
+## [0.19.0] - 2026-11-27
+
 ### Ajouté en accès anticipé
 - **Suivi kiné.** Un interrupteur dans Réglages › Accès anticipé, visible avec l’accès anticipé. Allumé :
   - **un rendez-vous « Kiné »**, à côté du médecin traitant et du centre douleur, avec « Combien de séances ? » (6 à 20, ou « Je ne sais pas ») : la carte « Tes séances de kiné » compte les séances de la série, d’après les rendez-vous chez le kiné et les jours marqués « Séance de kiné » ;
@@ -15,6 +17,9 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
   OUCH ne propose, ne choisit ni ne dose aucun exercice. La réponse du soir est dans la sauvegarde et dans l’export CSV (colonne `physio_exercises`). Les sources sur la kinésithérapie sont dans `docs/soignants/kinesitherapie.md`.
 
 - **Les jours plus durs sur l’image partagée.** Quand l’app repère des jours plus durs (le même repérage que la carte « Un mot pour toi », donc à partir du 4ᵉ jour), l’image de la météo du jour le dit à tes proches : « Des jours plus durs depuis dimanche · 5ᵉ jour » sous le titre, ces jours teintés sur la courbe des 14 jours et regroupés sous la semaine. Quand ça passe, l’image suivante dit « Ça s’apaise depuis mardi », une fois. Tu peux ajouter une phrase pour tes proches ces jours-là (« Pas besoin de répondre, un petit message suffit »). C’est dans Réglages › Accès anticipé, activé d’office et désactivable ; cela vaut pour l’image partagée à la main comme pour celle envoyée chaque jour par Dropbox. Rien n’est déduit ni conseillé : l’image dit ce que tu as noté.
+
+### Ajouté
+- **Kinésithérapie et douleur chronique : ce que disent les études.** Une note pour les soignants (`docs/soignants/kinesitherapie.md`) : pour chaque maladie suivie, ce que les études disent de l’exercice et de la kinésithérapie et avec quelle certitude, les traitements passifs, l’observance des exercices à domicile, l’accès direct au kiné en France, et ce qu’OUCH peut en dire ou non. Les sources ont été vérifiées sur leur page officielle (résumés).
 
 ### Modifié
 - **Un pas de moins à l’accueil.** L’étape « Rappel » quitte la première ouverture : le rappel est proposé une fois dans « Pour toi », après deux jours notés (« Un petit rappel ? », « Choisir l’heure » ou « Plus tard »), et reste dans Réglages. Il n’est proposé qu’aux personnes qui commencent (jusqu’à 14 jours notés) et jamais un jour plus dur.
@@ -27,10 +32,6 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
   - **Des groupes rangés selon ce qu’on vient faire :** Mon profil, Ce que je note, Ce que l’app fait pour moi, Les jours difficiles, Apparence, Confidentialité et données, À propos. Sous chaque titre, la liste de ce qu’il contient plutôt que des valeurs. Ce qui change de place : le rappel, les suggestions et la météo (lieu, « Prévoir demain ») vont dans « Ce que l’app fait pour moi » ; la langue, le thème, le look et la tuile « Mes enfants » dans « Apparence » ; le verrou par code rejoint les sauvegardes dans « Confidentialité et données » ; « Revoir l’accueil » passe dans « Mon profil ».
   - **Avec l’accès anticipé, un groupe « Accès anticipé » en haut :** toutes les fonctions à l’essai au même endroit (Suivi kiné, les jours plus durs sur la météo partagée, le serveur WebDAV), et « Ne plus voir les fonctions à l’essai ». Quand une fonction s’ouvre à tous, elle rejoint son groupe.
 - **« Kiné / soins » devient « Séance de kiné ».** Dans « Ce qui a aidé », pour tout le monde : les jours déjà notés, les gestes gardés, les décisions, les réponses aux pistes et les essais passent au nouveau nom (et « Physiotherapy / care » à « Physio session » en anglais), à l’ouverture de l’app comme à la restauration d’une sauvegarde.
-### Ajouté
-- **Kinésithérapie et douleur chronique : ce que disent les études.** Une note pour les soignants (`docs/soignants/kinesitherapie.md`) : pour chaque maladie suivie, ce que les études disent de l’exercice et de la kinésithérapie et avec quelle certitude, les traitements passifs, l’observance des exercices à domicile, l’accès direct au kiné en France, et ce qu’OUCH peut en dire ou non. Les sources ont été vérifiées sur leur page officielle (résumés).
-
-### Modifié
 - **« Bouger, ce que disent les études » : des sources à jour.** Pour la polyarthrite et la spondylarthrite, la carte cite la mise à jour 2025 des recommandations EULAR sur l’activité physique (publiée en 2026), qui remplace celle de 2018 ; la référence est changée dans Réglages › Sources scientifiques, au même numéro. Pour la douleur myofasciale, la carte dit qu’il s’agit d’une petite revue (8 études), à court terme, qui ne montre pas d’effet sur la gêne au quotidien.
 - **Mon dossier MDPH : les comptes rendus des spécialistes à joindre.** La liste « À joindre » propose aussi les comptes rendus de tes spécialistes (centre de la douleur, rhumatologue…), si tu en as, pour appuyer le certificat médical. Un conseil de Rudy, de la MDPH 59 : merci à lui.
 
@@ -675,7 +676,8 @@ Première version publique.
 - 84 tests sur les sauvegardes, les tendances, le rapport et la météo de la douleur.
 - GitHub Actions épinglées par SHA, mises à jour groupées par Dependabot, déploiement continu sur GitHub Pages.
 
-[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.18.0...HEAD
+[Non publié]: https://github.com/maxauvy/OUCH/compare/v0.19.0...HEAD
+[0.19.0]: https://github.com/maxauvy/OUCH/compare/v0.18.0...v0.19.0
 [0.18.0]: https://github.com/maxauvy/OUCH/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/maxauvy/OUCH/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/maxauvy/OUCH/compare/v0.15.2...v0.16.0
