@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { hardDaysCard, lightFormActive, type HardDaysCard } from '../lib/hardDays'
 import { flaresApply } from '../lib/flares'
 import { noteInvite } from '../lib/goodDayNote'
@@ -18,6 +19,17 @@ export function useHardDays(
   entriesLoaded: boolean
 ): { ready: boolean; card: HardDaysCard | null; light: boolean; invite: string | null } {
   const settings = useStoredSettings()
+  // Worked out again only when the journal, the settings or the day change, not at each keystroke of the form:
+  // each of the three detects the flares over the whole journal.
+  return useMemo(() => hardDaysOf(date, entries, entriesLoaded, settings), [date, entries, entriesLoaded, settings])
+}
+
+function hardDaysOf(
+  date: string,
+  entries: DailyEntry[],
+  entriesLoaded: boolean,
+  settings: ReturnType<typeof useStoredSettings>
+): { ready: boolean; card: HardDaysCard | null; light: boolean; invite: string | null } {
   if (!settings || !entriesLoaded) return { ready: false, card: null, light: false, invite: null }
   // A stretch the person marked as harder is as good as a detected flare for the lighter form: they said it, whatever the illness.
   // The soft card is not shown for it: they know.

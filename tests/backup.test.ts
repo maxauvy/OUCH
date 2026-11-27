@@ -3,7 +3,8 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { decryptJSON, encryptJSON, isEncryptedPayload } from '../src/lib/crypto.ts'
 import { daysLate } from '../src/lib/lateEntries.ts'
-import { isISODate, sanitizeBackup, sanitizeEntry, sanitizeMedication, sanitizeSettings } from '../src/lib/backupSanitize.ts'
+import { isISODate } from '../src/lib/dates.ts'
+import { sanitizeBackup, sanitizeEntry, sanitizeMedication, sanitizeSettings } from '../src/lib/backupSanitize.ts'
 
 const entry = { date: '2026-05-04', painLevel: 6, createdAt: 1, updatedAt: 2 }
 

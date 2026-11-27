@@ -18,7 +18,7 @@
 
 import type { LoggedEntry } from '../db/types'
 import { actionKey, type Lead } from './leads.ts'
-import { shiftISO } from './dates.ts'
+import { daysBetween, shiftISO } from './dates.ts'
 import { mean } from './stats.ts'
 
 /** Length of a trial started before the draw: a week, the action noted when the person could. */
@@ -163,7 +163,7 @@ function drawnStatus(trial: LeadTrial, plan: TrialArm[], entries: LoggedEntry[],
       rescues: days.filter((d) => d.rescue).length,
     }
   }
-  const elapsed = Math.round((Date.parse(`${today}T12:00:00Z`) - Date.parse(`${trial.start}T12:00:00Z`)) / 86_400_000) + 1
+  const elapsed = daysBetween(trial.start, today) + 1
   return {
     drawn: true,
     length: plan.length,
@@ -203,7 +203,7 @@ export function trialStatus(
     const c = compare(withPain, withoutPain)
     result = { ...c, sameDirection: leadGap === undefined || c.gap === 0 || leadGap === 0 ? null : Math.sign(c.gap) === Math.sign(leadGap) }
   }
-  const elapsed = Math.round((Date.parse(`${today}T12:00:00Z`) - Date.parse(`${trial.start}T12:00:00Z`)) / 86_400_000) + 1
+  const elapsed = daysBetween(trial.start, today) + 1
   return {
     drawn: false,
     length: TRIAL_DAYS,
