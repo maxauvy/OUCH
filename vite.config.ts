@@ -98,10 +98,9 @@ export default defineConfig(({ command, mode }) => {
       __APP_IS_TAGGED_RELEASE__: JSON.stringify(tagged),
     },
     build: {
-      // Screens are split and loaded on first opening (App.tsx), all precached
-      // for offline use; a page left open across a release reloads once if a
-      // file it asks for is gone (lib/staleChunk.ts). The biggest chunks are
-      // charts and pdf-lib, loaded on demand: the size warning is not a to-do.
+      // One bundle on purpose (see main.tsx): a page still running after an
+      // update must not ask for a chunk the new release has removed, and the
+      // report has to open offline. So the size warning is not a to-do.
       chunkSizeWarningLimit: 1500,
     },
     plugins: [

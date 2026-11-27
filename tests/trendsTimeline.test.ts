@@ -4,7 +4,7 @@ import { test } from 'node:test'
 import type { FlareEpisode } from '../src/lib/flares.ts'
 import type { LeadTrial } from '../src/lib/leadTrial.ts'
 import type { TreatmentEvent } from '../src/lib/treatmentEvents.ts'
-import { timelineItems, trialSpans } from '../src/lib/trendsTimeline.ts'
+import { lastTreatmentEvent, timelineItems, trialSpans } from '../src/lib/trendsTimeline.ts'
 
 const flare = (start: string, end: string): FlareEpisode => ({ start, end, days: 5, peak: 8, baseline: 3, recoveryDays: 2, ongoing: false, endUnknown: false })
 const trial = (key: string, start: string, end: string): LeadTrial => ({ key, action: key, start, end })
@@ -51,6 +51,12 @@ test('the trial under way is listed once and marked as running; a week over is n
 test('the trials make bands under the curve', () => {
   const r = timelineItems({ ...base, flares: [flare('2026-10-03', '2026-10-08')], history: [trial('action:marche', '2026-10-14', '2026-10-20')] })
   assert.deepEqual(trialSpans(r), [{ from: '2026-10-14', to: '2026-10-20' }])
+})
+
+test('the last change of treatment is the latest one up to today', () => {
+  const events = [event('2026-08-01', 'started'), event('2026-09-17'), event('2026-11-05')]
+  assert.equal(lastTreatmentEvent(events, '2026-10-30')?.date, '2026-09-17')
+  assert.equal(lastTreatmentEvent([], '2026-10-30'), undefined)
 })
 
 test('the appointments that took place join the list, within the range, after a treatment of the same day', () => {

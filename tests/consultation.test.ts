@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import {
-  addQuestion, agendaLines, consultationCard, finishConsultation, kindOf, lastOf, MAX_PAST_BY_KIND, capPast, withPastDecisions, withoutPast, MAX_QUESTIONS, newConsultation, pastConsultations, previousOf, removeQuestion, reportStart, sinceFacts, sinceLast, withGoal, withPast,
+  addQuestion, agendaLines, consultationCard, finishConsultation, kindOf, lastOf, MAX_PAST_BY_KIND, capPast, withPastNote, withoutPast, MAX_QUESTIONS, newConsultation, pastConsultations, previousOf, removeQuestion, reportStart, sinceFacts, sinceLast, withGoal, withPast,
 } from '../src/lib/consultation.ts'
 import { sanitizeSettings } from '../src/lib/backupSanitize.ts'
 import { DEFAULT_SETTINGS } from '../src/db/types.ts'
@@ -180,9 +180,9 @@ test('an appointment keeps its questions and its priority with its note', () => 
 
 test('a past appointment\'s note can be changed or cleared, and the appointment forgotten', () => {
   const s = { pastConsultations: [{ date: '2026-10-01', kind: 'gp' as const, doctor: 'Dr M', notes: 'old', questions: ['Q'] }] }
-  assert.deepEqual(withPastDecisions(s, '2026-10-01', 'gp', ' new ', []).pastConsultations, [{ date: '2026-10-01', kind: 'gp', doctor: 'Dr M', notes: 'new', questions: ['Q'] }])
-  assert.deepEqual(withPastDecisions(s, '2026-10-01', 'gp', '  ', []).pastConsultations, [{ date: '2026-10-01', kind: 'gp', doctor: 'Dr M', questions: ['Q'] }])
-  assert.deepEqual(withPastDecisions(s, '2020-01-01', 'gp', 'x', []), {})
+  assert.deepEqual(withPastNote(s, '2026-10-01', 'gp', ' new ').pastConsultations, [{ date: '2026-10-01', kind: 'gp', doctor: 'Dr M', notes: 'new', questions: ['Q'] }])
+  assert.deepEqual(withPastNote(s, '2026-10-01', 'gp', '  ').pastConsultations, [{ date: '2026-10-01', kind: 'gp', doctor: 'Dr M', questions: ['Q'] }])
+  assert.deepEqual(withPastNote(s, '2020-01-01', 'gp', 'x'), {})
   assert.deepEqual(withoutPast(s, '2026-10-01', 'gp').pastConsultations, [])
   assert.equal(withoutPast(s, '2026-10-01', 'cetd').pastConsultations!.length, 1)
 })

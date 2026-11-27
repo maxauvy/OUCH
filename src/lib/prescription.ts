@@ -8,6 +8,7 @@ import { daysBetween, shiftISO } from './dates.ts'
 
 export const DURATION_MONTHS = [1, 3, 6] as const
 export const MAX_MONTHS = 24
+export const REMIND_DAYS = [7, 14] as const
 export const DEFAULT_REMIND_DAYS = 7
 export const MAX_LABEL_LENGTH = 60
 /** The card stays this many days after the end, for someone who has not renewed yet. */

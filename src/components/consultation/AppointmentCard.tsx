@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { useState } from 'react'
 import { format as formatDate } from 'date-fns'
 import { updateSettings } from '../../db'
 import { useSettings } from '../../hooks/useSettings'
@@ -6,10 +6,8 @@ import { consultationCard, daysUntil, kindOf } from '../../lib/consultation'
 import { todayISO } from '../../lib/dates'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
 import { Card } from '../ui/Card'
+import { ConsultationSheet } from './ConsultationSheet'
 import { kindLabel } from './kindLabel'
-
-// The sheet is loaded when it opens (and early, with the Consultation tab, once the app is idle): not on the day's page.
-const ConsultationSheet = lazy(() => import('./ConsultationSheet').then((m) => ({ default: m.ConsultationSheet })))
 
 /** On the day's page, shortly before an appointment (to prepare it) and on and after the day (to note what was said). Soft, and it can be closed. */
 export function AppointmentCard() {
@@ -49,11 +47,7 @@ export function AppointmentCard() {
           </div>
         </section>
       </Card>
-      {open && (
-        <Suspense fallback={null}>
-          <ConsultationSheet settings={settings} today={today} startAfter={kind === 'after'} onClose={() => setOpen(false)} />
-        </Suspense>
-      )}
+      {open && <ConsultationSheet settings={settings} today={today} startAfter={kind === 'after'} onClose={() => setOpen(false)} />}
     </>
   )
 }

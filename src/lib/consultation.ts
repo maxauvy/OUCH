@@ -195,6 +195,14 @@ export function sinceFacts(input: { from: string; to: string; flares: readonly F
   }
 }
 
+/** An appointment that took place, with its note changed (or cleared): the same one, kept in place. */
+export function withPastNote(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>, date: string, kind: ConsultationKind, notes: string): Partial<Settings> {
+  const found = pastConsultations(settings).find((p) => p.date === date && p.kind === kind)
+  if (!found) return {}
+  const { notes: _old, ...rest } = found
+  return withPast(settings, { ...rest, ...(notes.trim() ? { notes } : {}) })
+}
+
 /** The decisions of an appointment that took place, noted or changed afterwards. */
 export function withPastDecisions(settings: Pick<Settings, 'pastConsultations' | 'lastConsultation'>, date: string, kind: ConsultationKind, notes: string, decisions: readonly Decision[]): Partial<Settings> {
   const found = pastConsultations(settings).find((p) => p.date === date && p.kind === kind)

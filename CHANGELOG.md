@@ -30,9 +30,7 @@ Chaque version est aussi une [release GitHub](https://github.com/maxauvy/OUCH/re
 - **Mon dossier MDPH : les comptes rendus des spécialistes à joindre.** La liste « À joindre » propose aussi les comptes rendus de tes spécialistes (centre de la douleur, rhumatologue…), si tu en as, pour appuyer le certificat médical. Un conseil de Rudy, de la MDPH 59 : merci à lui.
 
 ### Corrigé
-- **Après une mise à jour, plus d’écran d’erreur en ouvrant un onglet.** Quand l’app restait ouverte pendant la sortie d’une nouvelle version, ouvrir Consultation, Soulager, le rapport ou le dossier MDPH pouvait afficher « Quelque chose s’est mal passé » : le fichier de l’écran n’existait plus. L’app se recharge maintenant une fois sur la nouvelle version, et Soulager comme Consultation sont préparés en arrière-plan dès l’ouverture.
-- **Une sauvegarde avec une date impossible dans le mot des bons jours ne bloque plus la restauration.** Le mot est simplement laissé de côté.
-- **Plus fluide en notant sa journée.** Le formulaire ne recalcule plus les poussées de tout le journal à chaque touche, et la page du jour ne recalcule plus ses messages à chaque affichage ; l’app charge moins de code au démarrage.
+- **L’écran « Un problème est survenu » dit ce qui s’est passé.** Sous les boutons, « Détails pour signaler le problème » déplie l’erreur, la version et l’appareil, à recopier ou à photographier pour la signaler. Rien n’est envoyé.
 - **Mon dossier MDPH : le certificat médical vaut 12 mois.** La liste des pièces à joindre demandait un certificat de moins de 6 mois ; il est valable 12 mois. Merci à Rudy, de la MDPH 59, de nous l’avoir signalé.
 
 ## [0.18.0] - 2026-11-25

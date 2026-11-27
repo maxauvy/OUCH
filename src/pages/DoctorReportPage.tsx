@@ -10,7 +10,7 @@ import { formatISODate } from '../lib/medicationFormat'
 import { buildImagePdf } from '../lib/pdf'
 import { capturePages } from '../lib/capturePages'
 import { ScaledPreview } from '../components/report/ScaledPreview'
-import { sharePdf } from '../lib/sharePdf'
+import { downloadBlob } from '../lib/backup'
 import { IS_DEMO } from '../lib/demoMode'
 import { radioGroupProps, radioProps } from '../lib/a11y'
 import { format, LANGUAGES, useLanguage, useLocale, useTranslation, type Language } from '../i18n'
@@ -144,7 +144,21 @@ export function DoctorReportPage({ onBack }: { onBack: () => void }) {
     setExportFailed(false)
     try {
       const blob = buildImagePdf(await capturePages(previewRef.current), `${t.doctorReport.title} ${today}`)
-      await sharePdf(blob, `${t.doctorReport.fileName}-${today}.pdf`, t.doctorReport.title)
+      const file = new File([blob], `${t.doctorReport.fileName}-${today}.pdf`, { type: 'application/pdf' })
+      // On a phone the share sheet is the way to keep the file (Files, mail,
+      // print…); a computer just downloads it.
+      const phone = window.matchMedia('(pointer: coarse)').matches
+      if (phone && navigator.canShare?.({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: t.doctorReport.title })
+          return
+        } catch (e) {
+          if (e instanceof DOMException && e.name === 'AbortError') return
+          // Making the file can take long enough for the browser to stop
+          // counting the tap as the reason for sharing; download instead.
+        }
+      }
+      downloadBlob(blob, file.name)
     } catch (e) {
       console.error(e)
       setExportFailed(true)
