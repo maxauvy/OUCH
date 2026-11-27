@@ -2502,6 +2502,8 @@ export interface Translations {
     reload: string
     erase: string
     eraseConfirm: string
+    /** The folded technical details under the buttons, to send to the developer */
+    details: string
   }
 
   shareSheet: {

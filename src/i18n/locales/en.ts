@@ -2698,6 +2698,7 @@ const en: Translations = {
     reload: 'Reload',
     erase: 'Erase data from this device',
     eraseConfirm: 'Erase all data from this device? This cannot be undone unless you have a backup.',
+    details: 'Details to report the problem',
   },
 
   shareSheet: {
