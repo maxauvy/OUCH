@@ -461,7 +461,6 @@ export function buildDemoHistory(options: DemoOptions): DemoHistory {
     parentGender: 'maman',
     kidsTabEnabled: true,
     cycleTrackingEnabled: true,
-    autoWeatherEnabled: autoWeather,
     ...(autoWeather ? { autoWeatherLat: 45.764, autoWeatherLon: 4.8357 } : {}),
     // The look ahead to tomorrow is on; the in-app demo makes no network call, so a forecast is made up (a fall of 9 hPa tomorrow).
     forecastEnabled: true,

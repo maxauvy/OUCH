@@ -7,6 +7,6 @@ import { getCurrentPosition, reverseGeocode } from './weather'
 export async function saveCurrentLocation(language: string): Promise<{ lat: number; lon: number }> {
   const { lat, lon } = await getCurrentPosition()
   const label = await reverseGeocode(lat, lon, language)
-  await updateSettings({ autoWeatherEnabled: true, autoWeatherLat: lat, autoWeatherLon: lon, autoWeatherLabel: label })
+  await updateSettings({ autoWeatherLat: lat, autoWeatherLon: lon, autoWeatherLabel: label })
   return { lat, lon }
 }

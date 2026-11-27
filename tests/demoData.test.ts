@@ -88,11 +88,10 @@ test('the settings describe a finished setup, with statuses, and no network weat
   const h = buildDemoHistory({ endDate: END, language: 'fr', autoWeather: false })
   assert.equal(h.settings.onboardingDone, true)
   assert.equal(h.settings.kidsTabEnabled, true)
-  assert.equal(h.settings.autoWeatherEnabled, false)
   assert.equal(h.settings.autoWeatherLat, undefined)
   assert.deepEqual(h.settings.illnessStatus, { fibromyalgie: 'diagnosed' })
   assert.equal(h.settings.illnessYear?.fibromyalgie, 2019)
-  assert.equal(buildDemoHistory({ endDate: END, language: 'fr' }).settings.autoWeatherEnabled, true)
+  assert.equal(buildDemoHistory({ endDate: END, language: 'fr' }).settings.autoWeatherLat, 45.764)
 })
 
 test('the English history has no French left in its tags, notes, medications and effects', () => {

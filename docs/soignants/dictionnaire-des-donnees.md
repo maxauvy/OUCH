@@ -105,7 +105,7 @@ Un changement de dose ferme la période en cours la veille et en ouvre une nouve
 | `audienceMeasurementEnabled` | vrai / faux (vrai tant que la personne n'a rien dit) | Oui. Le signal anonyme hebdomadaire « actif cette semaine » (voir [`PRIVACY.md`](../../PRIVACY.md)). Le repère local de la dernière semaine envoyée (`ouch.audience.lastWeek`) n'est pas un réglage de la base, ni une donnée de santé : il n'est jamais sauvegardé ni exporté |
 | `enabledFactors` | parmi : fatigue, sommeil, stress, brouillard mental, humeur, activité, météo, médicaments, actions positives, zones douloureuses, notes | Oui |
 | `cycleTrackingEnabled` | vrai / faux | Oui |
-| `autoWeatherEnabled`, `autoWeatherLat`, `autoWeatherLon`, `autoWeatherLabel` | booléen, **latitude et longitude exactes**, nom de la ville | Oui : une sauvegarde contient donc la position exacte, si elle a été enregistrée |
+| `autoWeatherLat`, `autoWeatherLon`, `autoWeatherLabel` | **latitude et longitude exactes**, nom de la ville | Oui : une sauvegarde contient donc la position exacte, si elle a été enregistrée |
 | `reminderEnabled`, `reminderTime` | booléen, `HH:MM` | Oui. L'heure sert au rappel dans l'appli et à l'événement d'agenda |
 | `agendaReminder` | `{ heure, numéro }` ou absent | Non (propre à l'appareil). L'heure pour laquelle le fichier d'agenda a été proposé et combien de fois : l'appli ne voit pas l'agenda, cela dit ce qui a été proposé, pas ce qui a été ajouté |
 | `language`, `theme`, `onboardingDone`, `parentGender` | `fr` / `en`, `system` / `light` / `dark`, booléen, `maman` / `papa` (écran Enfants) | Oui |
