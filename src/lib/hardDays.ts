@@ -83,7 +83,7 @@ export function hardDaysCard(input: {
 
 /** What the person noted as helping on days inside a flare. Free text, so
  * "Bain chaud" and "bain chaud " count as one; the first spelling is kept. */
-export function helpedDuring(entries: LoggedEntry[], episodes: FlareEpisode[]): string[] {
+export function helpedDuring(entries: LoggedEntry[], episodes: readonly Readonly<FlareEpisode>[]): string[] {
   const counts = new Map<string, { label: string; n: number }>()
   for (const e of [...entries].sort((a, b) => a.date.localeCompare(b.date))) {
     if (!episodes.some((ep) => e.date >= ep.start && e.date <= ep.end)) continue

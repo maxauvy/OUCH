@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import type { LoggedEntry } from '../src/db/types.ts'
-import { INVITE_DAYS, MAX_NOTE, cleanNote, flareSpan, noteDate, noteFromBackup, noteInvite, pastFlareLengths } from '../src/lib/goodDayNote.ts'
+import { INVITE_DAYS, MAX_NOTE, cleanNote, flareSpan, flaresAsOfYesterday, noteDate, noteFromBackup, noteInvite, pastFlareLengths } from '../src/lib/goodDayNote.ts'
 import { hardDaysCard } from '../src/lib/hardDays.ts'
 import { detectFlares } from '../src/lib/flares.ts'
 import { shiftISO } from '../src/lib/dates.ts'
@@ -74,4 +74,20 @@ test('no invitation while a flare is under way, nor before any flare', () => {
 test('the date of the note has the year only when it is not this one', () => {
   assert.equal(noteDate('2026-10-12', 'fr-FR', '2026-11-24'), '12 octobre')
   assert.equal(noteDate('2025-10-12', 'fr-FR', '2026-11-24'), '12 octobre 2025')
+})
+
+test('the flares as of yesterday are read once while the days before today stay the same, and again as soon as one changes', () => {
+  const entries = series(TWO)
+  const today = day(14 + TWO.length) // the day after the last one noted
+  const first = flaresAsOfYesterday(entries, today)
+  assert.deepEqual(first, detectFlares(entries, { asOf: shiftISO(today, -1) }))
+  // Today's pain changes nothing before today: the same reading, not worked out again.
+  assert.equal(flaresAsOfYesterday([...entries, entry(today, 9)], today), first)
+  // A past day changed (an edit in the journal): read again, and it shows.
+  const edited = entries.map((e) => (e.date === day(1) ? entry(e.date, 2) : e))
+  const again = flaresAsOfYesterday(edited, today)
+  assert.notEqual(again, first)
+  assert.deepEqual(again, detectFlares(edited, { asOf: shiftISO(today, -1) }))
+  // Another day: read again.
+  assert.deepEqual(flaresAsOfYesterday(entries, day(10)), detectFlares(entries.filter((e) => e.date < day(10)), { asOf: day(9) }))
 })

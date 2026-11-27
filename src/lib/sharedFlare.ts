@@ -7,7 +7,7 @@
 
 import type { LoggedEntry } from '../db/types.ts'
 import { daysBetween, shiftISO } from './dates.ts'
-import { detectFlares } from './flares.ts'
+import { flaresAsOfYesterday } from './goodDayNote.ts'
 
 /** The sentence for relatives on the image, like the share sheet's word. */
 export const FLARE_NOTE_MAX = 80
@@ -24,8 +24,8 @@ export type SharedFlare =
 export function sharedFlare(entries: readonly LoggedEntry[], date: string): SharedFlare | null {
   // No day, no image: and the date maths below would throw on it, which brought the whole app down at launch.
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null
-  const before = entries.filter((e) => e.date < date).sort((a, b) => a.date.localeCompare(b.date))
-  const episodes = detectFlares(before, { asOf: shiftISO(date, -1) })
+  // The same reading as the card on the day's page (and the same, shared, result).
+  const episodes = flaresAsOfYesterday(entries, date)
   const ongoing = episodes.find((e) => e.ongoing)
   if (ongoing) return { kind: 'harder', start: ongoing.start, day: daysBetween(ongoing.start, date) + 1 }
 
@@ -35,7 +35,7 @@ export function sharedFlare(entries: readonly LoggedEntry[], date: string): Shar
   const since = shiftISO(last.end, last.recoveryDays)
   if (daysBetween(since, date) > EASING_WINDOW) return null
   // Once only: on the day after, or the first one noted since if that day was skipped.
-  if (before.some((e) => e.date > since)) return null
+  if (entries.some((e) => e.date > since && e.date < date)) return null
   return { kind: 'easing', start: last.start, end: last.end, since }
 }
 

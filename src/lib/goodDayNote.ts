@@ -37,12 +37,21 @@ export function pastFlareLengths(episodes: readonly FlareEpisode[]): number[] {
   return episodes.filter((e) => !e.ongoing && !e.endUnknown).map((e) => e.days)
 }
 
-/** The flares of the journal as of yesterday: what is logged today changes nothing, as for the soft card. */
-export function flaresAsOfYesterday(entries: readonly LoggedEntry[], today: string): FlareEpisode[] {
-  return detectFlares(
-    entries.filter((e) => e.date < today),
-    { asOf: shiftISO(today, -1) }
-  )
+/** The last reading, by what it was made from: the day's page asks for it several times per save (the card, the lighter form,
+ * the quiet day, the invitation, the image for relatives), always on the same days, and only days before today count. */
+let lastReading: { key: string; episodes: readonly Readonly<FlareEpisode>[] } | null = null
+
+/** The flares of the journal as of yesterday: what is logged today changes nothing, as for the soft card.
+ * Read-only: the same result is handed to every caller while the days before today stay the same. */
+export function flaresAsOfYesterday(entries: readonly LoggedEntry[], today: string): readonly Readonly<FlareEpisode>[] {
+  const before = entries.filter((e) => e.date < today)
+  // The detection reads the date and the pain of each day, nothing else.
+  let key = today
+  for (const e of before) key += `|${e.date}:${e.painLevel}`
+  if (lastReading?.key === key) return lastReading.episodes
+  const episodes = detectFlares(before, { asOf: shiftISO(today, -1) })
+  lastReading = { key, episodes }
+  return episodes
 }
 
 /** What the sentence says: how many flares ended, the shortest and the longest. Null below `MIN_PAST`. */
