@@ -48,11 +48,13 @@ import { withPageFade } from './lib/pageFade'
 const loadTrends = () => import('./pages/TrendsPage').then((m) => ({ default: m.TrendsPage }))
 const loadSettings = () => import('./pages/SettingsPage').then((m) => ({ default: m.SettingsPage }))
 const loadKids = () => import('./pages/ChildViewPage').then((m) => ({ default: m.ChildViewPage }))
+const loadConsultation = () => import('./pages/ConsultationPage').then((m) => ({ default: m.ConsultationPage }))
+const loadSoulager = () => import('./pages/SoulagerPage').then((m) => ({ default: m.SoulagerPage }))
 const TrendsPage = lazy(loadTrends)
 const SettingsPage = lazy(loadSettings)
-const ConsultationPage = lazy(() => import('./pages/ConsultationPage').then((m) => ({ default: m.ConsultationPage })))
+const ConsultationPage = lazy(loadConsultation)
 const ChildViewPage = lazy(loadKids)
-const SoulagerPage = lazy(() => import('./pages/SoulagerPage').then((m) => ({ default: m.SoulagerPage })))
+const SoulagerPage = lazy(loadSoulager)
 const SetupWizard = lazy(() => import('./components/setup/SetupWizard').then((m) => ({ default: m.SetupWizard })))
 const DemoTour = lazy(() => import('./components/demo/DemoTour').then((m) => ({ default: m.DemoTour })))
 
@@ -144,9 +146,12 @@ function AppShell() {
   useEffect(() => {
     if (!settings.onboardingDone) return
     const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 2000))
+    // All the tabs: a page left open across a release then already holds them (see main.tsx).
     idle(() => {
       void loadTrends()
       void loadSettings()
+      void loadSoulager()
+      void loadConsultation()
     })
   }, [settings.onboardingDone])
   useAppliedLook(settings.theme)
