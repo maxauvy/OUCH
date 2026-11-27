@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconBarbell, IconLeaf, IconPill, IconSparkles, IconSun, type Icon } from '@tabler/icons-react'
+import { IconAdjustmentsHorizontal, IconBell, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconBarbell, IconLeaf, IconPill, IconSparkles, IconSun, type Icon } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { LoggedEntry, Settings } from '../../db/types'
 import { useLeadList } from '../../hooks/useLeadList'
@@ -18,6 +18,7 @@ import { BUTTON, PRIMARY, SECONDARY } from './cardStyles'
 import { InviteSheet } from '../home/InviteSheet'
 import { leadDayNote, leadSentence } from '../trends/leadTexts'
 import { ModalSheet } from '../ui/ModalSheet'
+import { ReminderSettings } from '../settings/ReminderSettings'
 import type { Tab } from '../layout/TabBar'
 
 interface CardAction {
@@ -76,6 +77,7 @@ export function TodayList({
   const leadList = useLeadList()
   const [open, setOpen] = useState(false)
   const [inviteOpen, setInviteOpen] = useState(false)
+  const [reminderOpen, setReminderOpen] = useState(false)
   const lh = t.leadHints
 
   const later = (key: string) => setLater((m) => postpone(m, key, today))
@@ -83,6 +85,28 @@ export function TodayList({
 
   function card(m: TodayMessage): ReactNode {
     switch (m.kind) {
+      case 'reminder':
+        // Offered once instead of at the first opening; it goes away by itself once a reminder is set (`reminderOfferDue`).
+        return (
+          <ListCard
+            key={m.key}
+            icon={IconBell}
+            label={t.reminderOffer.label}
+            actions={[
+              {
+                label: t.reminderOffer.choose,
+                primary: true,
+                onClick: () => {
+                  setOpen(false)
+                  setReminderOpen(true)
+                },
+              },
+              { label: t.reminderOffer.later, onClick: () => later(m.key) },
+            ]}
+          >
+            <p className="text-body mt-0.5">{t.reminderOffer.body}</p>
+          </ListCard>
+        )
       case 'yesterday':
         return (
           <ListCard
@@ -304,6 +328,14 @@ export function TodayList({
         </ModalSheet>
       )}
       {inviteOpen && <InviteSheet settings={settings} earlyAccess={earlyAccess} today={today} onClose={() => setInviteOpen(false)} />}
+      {reminderOpen && (
+        <ModalSheet title={t.reminderOffer.title} closeLabel={t.reminderOffer.close} onClose={() => setReminderOpen(false)}>
+          <p className="text-body mb-3" style={{ color: 'var(--color-ink-muted)' }}>
+            {t.reminderOffer.intro}
+          </p>
+          <ReminderSettings primary />
+        </ModalSheet>
+      )}
     </>
   )
 }

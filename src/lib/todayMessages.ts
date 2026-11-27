@@ -51,6 +51,7 @@ export type MessageLaterMap = Record<string, MessageLater>
 
 export type TodayMessage =
   | { kind: 'yesterday'; key: string; date: string }
+  | { kind: 'reminder'; key: 'reminder' }
   | { kind: 'weekly'; key: string; finding: WeeklyFinding }
   | { kind: 'lead'; key: string; lead: Lead }
   | { kind: 'invite'; key: 'invite' }
@@ -90,6 +91,8 @@ export interface TodayMessagesInput {
   calm: FlareEpisode | null
   /** The summary of the month that just ended (`monthSummary`). */
   month: MonthSummary | null
+  /** The daily reminder, offered once to someone new who has none (`reminderOfferDue`): it is no longer asked at the first opening. */
+  reminder?: boolean
   /** Yesterday has no pain level, though the day before has (`missedYesterday`): a gentle offer to write it, today only. */
   yesterday?: string | null
   /** Yesterday was a big day for this person (`bigDayBefore`): a soft word for today only. */
@@ -125,13 +128,14 @@ export function recentReturn(episodes: readonly FlareEpisode[], today: string): 
 }
 
 export function todayMessages(input: TodayMessagesInput): TodayMessages {
-  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, invite, calm, month, rest, yesterday, weather, regularity, activity, goodDay, trial } = input
+  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, invite, calm, month, rest, yesterday, reminder, weather, regularity, activity, goodDay, trial } = input
   if (quiet) return { items: trial?.plan ? [{ kind: 'trial', key: 'trial', trial }] : [], count: 0 }
   const waiting = (key: string) => !isAway(later?.[key], today)
 
   const items: TodayMessage[] = []
   // Today only: the key carries the day, so tomorrow it is gone whatever was answered.
   if (yesterday && waiting(`yesterday:${yesterday}`)) items.push({ kind: 'yesterday', key: `yesterday:${yesterday}`, date: yesterday })
+  if (reminder && waiting('reminder')) items.push({ kind: 'reminder', key: 'reminder' })
   if (allow.rest && rest && waiting(`rest:${today}`)) items.push({ kind: 'rest', key: `rest:${today}` })
   if (allow.weather && weather && waiting(`weather:${today}`)) items.push({ kind: 'weather', key: `weather:${today}`, reading: weather })
   const regularityKey = regularity ? `regularity:${regularity.medicationId}:${regularity.last}` : ''

@@ -22,6 +22,7 @@ import { useFlares } from './useFlares'
 import { useLeadList } from './useLeadList'
 import { useAllEntries, useLoggedEntries } from './useEntries'
 import { isRestDay } from '../lib/restDay'
+import { reminderOfferDue } from '../lib/reminderOffer'
 import { useMedications } from './useMedications'
 import { useSettings } from './useSettings'
 
@@ -78,6 +79,7 @@ export function useTodayMessages(): TodayMessages | null {
       activity: activityIllnesses(settings.illnesses),
       regularity: medications ? regularityReading(logged, medications, today) : null,
       yesterday: settings.suggestionsEnabled ? missedYesterday(logged, today) : null,
+      reminder: !IS_DEMO && reminderOfferDue({ loggedDays: logged.length, reminderEnabled: settings.reminderEnabled, agendaReminder: !!settings.agendaReminder }),
       goodDay: goodDayHint(logged, flareDaySet(flares?.detectable ? flares.episodes : []), today),
       trial: settings.leadTrial,
     })

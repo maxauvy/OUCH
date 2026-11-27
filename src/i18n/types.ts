@@ -84,8 +84,6 @@ export interface Translations {
     medicationsTitle: string
     medicationsIntro: string
     medicationsLater: string
-    reminderTitle: string
-    reminderIntro: string
     reminderTime: string
     reminderDenied: string
     doneTitle: string
@@ -96,9 +94,6 @@ export interface Translations {
     checkFactors: string
     checkMedications: string
     checkNoMedications: string
-    checkReminder: string
-    checkAgenda: string
-    checkNoReminder: string
     checkNotInstalled: string
     reportTitle: string
     reportBody: string
@@ -2339,6 +2334,16 @@ export interface Translations {
     hintNote: string
     hintSee: string
     hintThanks: string
+  }
+  /** « Un petit rappel ? » in « Pour toi », once, instead of a step of the first opening */
+  reminderOffer: {
+    label: string
+    body: string
+    choose: string
+    later: string
+    title: string
+    intro: string
+    close: string
   }
   todayList: {
     /** `{{n}} {{n:thing|things}}`: how many things wait. */
