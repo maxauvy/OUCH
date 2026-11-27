@@ -120,12 +120,16 @@ export function detectFlares(entries: LoggedEntry[], options: Partial<FlareOptio
     }
   }
 
-  /** Usual level before `date`, leaving out days already in a flare. */
+  /** Usual level before `date`, leaving out days already in a flare. Only the window is read (found by
+   * dichotomy in the sorted days), not the whole journal for each day: the same days, in the same order. */
+  const dates = sorted.map((e) => e.date)
   const baselineBefore = (date: string): number | null => {
     const from = shiftISO(date, -o.baselineDays)
-    const values = sorted
-      .filter((e) => e.date >= from && e.date < date && !episodes.some((ep) => e.date >= ep.start && e.date <= ep.end))
-      .map((e) => e.painLevel)
+    const values: number[] = []
+    for (let i = firstAtOrAfter(dates, from); i < sorted.length && dates[i] < date; i++) {
+      const d = dates[i]
+      if (!episodes.some((ep) => d >= ep.start && d <= ep.end)) values.push(sorted[i].painLevel)
+    }
     return values.length >= o.minBaselineDays ? median(values) : null
   }
 
@@ -180,10 +184,21 @@ export function detectFlares(entries: LoggedEntry[], options: Partial<FlareOptio
  * "too few entries to say" would read the same. */
 export function canDetectFlares(entries: LoggedEntry[], options: Partial<FlareOptions> = {}): boolean {
   const o = { ...DEFAULT_FLARE_OPTIONS, ...options }
-  return entries.some((e) => {
-    const from = shiftISO(e.date, -o.baselineDays)
-    return entries.filter((x) => x.date >= from && x.date < e.date).length >= o.minBaselineDays
-  })
+  // How many days fall in [from, date): counted by dichotomy in the sorted dates, not by reading them all for each day.
+  const dates = entries.map((e) => e.date).sort()
+  return entries.some((e) => firstAtOrAfter(dates, e.date) - firstAtOrAfter(dates, shiftISO(e.date, -o.baselineDays)) >= o.minBaselineDays)
+}
+
+/** Index of the first of the sorted `dates` on or after `date` (their length when there is none). */
+function firstAtOrAfter(dates: readonly string[], date: string): number {
+  let lo = 0
+  let hi = dates.length
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1
+    if (dates[mid] < date) lo = mid + 1
+    else hi = mid
+  }
+  return lo
 }
 
 /** The episodes that touch [from, to] (inclusive), even if they start before. */

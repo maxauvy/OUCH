@@ -151,3 +151,26 @@ test('the flare reading is off for a person who follows migraine and nothing els
   assert.equal(flaresApply(['migraine', 'fibromyalgie']), true)
   assert.equal(flaresApply(['migraine', 'autre']), true)
 })
+
+test('the usual level is read from the 28 days before, found by dichotomy: same flares as reading every day', () => {
+  // The straightforward reading, kept here as the reference: every logged day, filtered for each day.
+  const naiveCanDetect = (entries: LoggedEntry[]) =>
+    entries.some((e) => entries.filter((x) => x.date >= shiftISO(e.date, -28) && x.date < e.date).length >= 10)
+  let seed = 7
+  const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2 ** 31) / 2 ** 31)
+  for (let k = 0; k < 200; k++) {
+    const entries: LoggedEntry[] = []
+    let d = '2025-01-01'
+    let level = 3
+    for (let i = 0; i < 20 + Math.floor(rnd() * 150); i++) {
+      d = shiftISO(d, rnd() < 0.2 ? 2 + Math.floor(rnd() * 4) : 1)
+      if (rnd() < 0.06) level = Math.min(10, level + 4)
+      else if (rnd() < 0.3) level = Math.max(0, Math.min(10, level + Math.round((rnd() - 0.5) * 3)))
+      entries.push({ date: d, painLevel: level } as LoggedEntry)
+    }
+    const shuffled = [...entries].sort(() => rnd() - 0.5)
+    assert.equal(canDetectFlares(shuffled), naiveCanDetect(shuffled))
+    // Unsorted or sorted, the days give the same flares.
+    assert.deepEqual(detectFlares(shuffled), detectFlares(entries))
+  }
+})

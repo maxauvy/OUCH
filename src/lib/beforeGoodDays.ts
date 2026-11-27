@@ -76,18 +76,20 @@ export function goodDayCeiling(usual: number): number {
 /** The logged days that are good days: a pain well under the median of the 28 days before (flare days left out, at least 10 logged). */
 export function goodDaySet(entries: readonly LoggedEntry[], flareDays: ReadonlySet<string>): Set<string> {
   const pain = new Map(entries.map((e) => [e.date, e.painLevel]))
-  const good = new Set<string>()
-  for (const e of entries) {
-    if (flareDays.has(e.date)) continue
-    const usual: number[] = []
-    for (let i = 1; i <= USUAL_DAYS; i++) {
-      const d = shiftISO(e.date, -i)
-      const p = pain.get(d)
-      if (p !== undefined && !flareDays.has(d)) usual.push(p)
-    }
-    if (usual.length >= MIN_USUAL && e.painLevel <= goodDayCeiling(median(usual))) good.add(e.date)
+  return new Set(entries.filter((e) => isGoodDay(pain, flareDays, e.date)).map((e) => e.date))
+}
+
+/** Whether a logged day is a good day; it depends on that day and the 28 before it only. */
+function isGoodDay(pain: ReadonlyMap<string, number>, flareDays: ReadonlySet<string>, date: string): boolean {
+  const level = pain.get(date)
+  if (level === undefined || flareDays.has(date)) return false
+  const usual: number[] = []
+  for (let i = 1; i <= USUAL_DAYS; i++) {
+    const d = shiftISO(date, -i)
+    const p = pain.get(d)
+    if (p !== undefined && !flareDays.has(d)) usual.push(p)
   }
-  return good
+  return usual.length >= MIN_USUAL && level <= goodDayCeiling(median(usual))
 }
 
 /** The first day of each row of good days (the day before is not a good one). */
@@ -140,8 +142,9 @@ export function beforeGoodDays(entries: readonly LoggedEntry[], flareDays: Reado
 
 /** For the day's page: today is the first good day of a row, and something stands out before such days. The line that stands out most, or null. */
 export function goodDayHint(entries: readonly LoggedEntry[], flareDays: ReadonlySet<string>, today: string): BeforeGoodDaysRow | null {
-  const good = goodDaySet(entries, flareDays)
-  if (!good.has(today) || good.has(shiftISO(today, -1))) return null
+  // Only today and the day before are asked: the whole journal is read only on the rare day that is the first good one of a row.
+  const pain = new Map(entries.map((e) => [e.date, e.painLevel]))
+  if (!isGoodDay(pain, flareDays, today) || isGoodDay(pain, flareDays, shiftISO(today, -1))) return null
   // Today is left out of the reading: the hint speaks of the days before it.
   const reading = beforeGoodDays(
     entries.filter((e) => e.date < today),

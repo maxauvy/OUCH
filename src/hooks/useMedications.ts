@@ -5,7 +5,7 @@ import { newMedicationId, sameName } from '../lib/medications'
 
 /** All medications, alphabetical. */
 export function useMedications(): Medication[] | undefined {
-  return useRememberedLiveQuery('medications', () => db.medications.orderBy('name').toArray(), [])
+  return useRememberedLiveQuery('medications', () => db.medications.orderBy('name').toArray())
 }
 
 /** Returns the medication with this name, creating it if needed. Used by the
