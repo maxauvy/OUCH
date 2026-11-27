@@ -4,12 +4,11 @@ import { actionInSentence } from '../../lib/leads'
 import { trialStatus, type LeadTrial } from '../../lib/leadTrial'
 import { usePalette } from '../../hooks/usePalette'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
-import { Card, SectionTitle } from '../ui/Card'
-import { capitalise } from './leadTexts'
+import { capitalise } from '../trends/leadTexts'
 
-/** The trials the person closed, newest first, so a result is not lost
- * once the card on Today is gone, and a trial can be done again. */
-export function TrialsCard({
+/** In Soulager, under « Est-ce que ça t'aide vraiment ? », the one home of the trials: those the person closed, newest first,
+ * so a result is not lost once the card on Today is gone, and a trial can be done again. */
+export function TrialHistory({
   history,
   entries,
   today,
@@ -32,8 +31,8 @@ export function TrialsCard({
   const weeks = [...history].sort((a, b) => b.end.localeCompare(a.end))
 
   return (
-    <Card>
-      <SectionTitle>{t.trialsTitle}</SectionTitle>
+    <div className="flex flex-col mt-2">
+      <p className="text-body font-semibold">{t.trialsTitle}</p>
       <p className="text-caption" style={{ color: palette.inkMuted }}>
         {t.trialsCaption}
       </p>
@@ -79,11 +78,6 @@ export function TrialsCard({
           )
         })}
       </ul>
-      {running && (
-        <p className="text-caption mt-1" style={{ color: palette.inkMuted }}>
-          {t.trialsRunning}
-        </p>
-      )}
-    </Card>
+    </div>
   )
 }

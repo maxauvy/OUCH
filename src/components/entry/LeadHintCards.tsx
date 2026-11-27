@@ -10,6 +10,7 @@ import { useEntry } from '../../hooks/useEntries'
 import { RESCUE, WITH, WITHOUT, setHelped, trialCellStyle } from './trialStrip'
 import { capitalise } from '../trends/leadTexts'
 import { BUTTON, MARKER, PRIMARY, SECONDARY } from '../today/cardStyles'
+import { useOpenRelief } from '../relief/reliefContext'
 
 type TrialCardProps = {
   trial: LeadTrial
@@ -36,6 +37,8 @@ function DrawnTrialCard({ trial, history, entries, today, lead, choices }: Trial
   const language = useLanguage()
   const { intlLocale } = useLocale()
   const todayEntry = useEntry(today)
+  // The trial's home is in Soulager: from here, the way there.
+  const openRelief = useOpenRelief()
   const nf = new Intl.NumberFormat(intlLocale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
   const status = trialStatus(trial, entries, today)
   const action = actionInSentence(trial.action)
@@ -136,10 +139,17 @@ function DrawnTrialCard({ trial, history, entries, today, lead, choices }: Trial
     const canNeed = todayDay?.arm === 'without' && !neededToday
     return (
       <section aria-label={lh.trialLabel} className="rounded-[var(--radius-card)] p-4 flex flex-col gap-2.5" style={CARD}>
-        <p className="text-caption font-semibold uppercase tracking-[0.06em]" style={{ color: 'var(--color-brand)' }}>
-          {todayDay ? format(lh.trialDrawnDay, { day: status.day, n: status.length }, language) : lh.trialStartsTomorrow}
-          {trial.byDoctor && <> · {doctorLabel}</>}
-        </p>
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="text-caption font-semibold uppercase tracking-[0.06em]" style={{ color: 'var(--color-brand)' }}>
+            {todayDay ? format(lh.trialDrawnDay, { day: status.day, n: status.length }, language) : lh.trialStartsTomorrow}
+            {trial.byDoctor && <> · {doctorLabel}</>}
+          </p>
+          {openRelief && (
+            <button type="button" onClick={() => openRelief('home')} className="shrink-0 text-control font-semibold underline underline-offset-2 min-h-11" style={{ color: 'var(--color-brand)' }}>
+              {lh.trialSee}
+            </button>
+          )}
+        </div>
         {body}
         {strip}
         {legend(status.days.some((d) => d.rescue) || !!neededToday)}

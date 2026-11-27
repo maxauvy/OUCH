@@ -9,7 +9,7 @@ import { BeforeFlaresCard } from '../components/trends/BeforeFlaresCard'
 import { BeforeGoodDaysCard } from '../components/trends/BeforeGoodDaysCard'
 import { PacingCard } from '../components/trends/PacingCard'
 import { TimelineCard } from '../components/trends/TimelineCard'
-import { TrialsCard } from '../components/trends/TrialsCard'
+import { useOpenRelief } from '../components/relief/reliefContext'
 import { LeadsCard } from '../components/trends/LeadsCard'
 import { MedicationsCard } from '../components/trends/MedicationsCard'
 import { PainTrendChart, type ChartMarker } from '../components/trends/PainTrendChart'
@@ -37,7 +37,7 @@ import { lastOf, pastConsultations } from '../lib/consultation'
 import { PastConsultationSheet } from '../components/consultation/PastConsultationSheet'
 import type { PastConsultation } from '../db/types'
 import { remember } from '../lib/leadHints'
-import { restartTrial, startTrial, type LeadTrial } from '../lib/leadTrial'
+import { startTrial } from '../lib/leadTrial'
 import { arrangeLeads, choiceFor, findLeads, leadFactors, PATTERN_MIN_DAYS, type Lead, type LeadChoice } from '../lib/leads'
 import { updateLeadsSeen } from '../lib/leadsSeenStore'
 import { formatPosology } from '../lib/medicationFormat'
@@ -62,6 +62,7 @@ const LAYER_COLOR = {
 type Detail = 'zones' | 'treatments' | 'habits' | 'compare'
 
 export function TrendsPage() {
+  const openRelief = useOpenRelief()
   const entries = useLoggedEntries()
   const settings = useSettings()
   const earlyAccessOn = useEarlyAccess()
@@ -124,7 +125,6 @@ export function TrendsPage() {
     const trial = startTrial(lead, todayISO())
     if (trial) void updateSettings({ leadTrial: trial })
   }
-  const againTrial = (past: LeadTrial) => void updateSettings({ leadTrial: restartTrial(past, todayISO()) })
   const declineTrial = (lead: Lead) => void updateLeadsSeen((seen) => ({ ...seen, declined: remember(seen.declined, [lead.key]) }))
   const clearLead = (lead: Lead) => {
     const { [lead.key]: _gone, ...rest } = settings.leadChoices ?? {}
@@ -238,8 +238,14 @@ export function TrendsPage() {
                   <TreatmentReviewCard entries={entries} medications={medications} episodes={flares?.detectable ? flares.episodes : null} today={today} />
                 </>
               )}
-              {settings.leadTrialHistory && settings.leadTrialHistory.length > 0 && (
-                <TrialsCard history={settings.leadTrialHistory} entries={entries} today={today} running={!!settings.leadTrial} onAgain={againTrial} />
+              {/* The trials have one home, in Soulager: here, only the way there. */}
+              {settings.leadTrialHistory && settings.leadTrialHistory.length > 0 && openRelief && (
+                <p className="text-control px-1" style={{ color: t.inkMuted }}>
+                  {i18n.trends.trialsMoved}{' '}
+                  <button type="button" onClick={() => openRelief('home')} className="font-semibold underline underline-offset-2 min-h-11" style={{ color: 'var(--color-brand)' }}>
+                    {i18n.trends.trialsMovedLink}
+                  </button>
+                </p>
               )}
             </>
           )}

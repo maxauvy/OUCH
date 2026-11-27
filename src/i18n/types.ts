@@ -363,7 +363,9 @@ export interface Translations {
     trialsAgain: string
     trialsDrawn: string
     trialsNext: string
-    trialsRunning: string
+    /** In Mes traitements: the trials are in Soulager now */
+    trialsMoved: string
+    trialsMovedLink: string
     medicationsTitle: string
     medicationsCaption: string
     daysOne: string
@@ -1415,9 +1417,6 @@ export interface Translations {
     trialNote: string
     trialStop: string
     trialDoneLabel: string
-    repeatLabel: string
-    /** `{{action}}` as written, `{{n}}` weeks since it ended */
-    repeatBody: string
     /** After a trial whose days with the action were the harder ones */
     trialHarder: string
     trialSmall: string
@@ -1446,6 +1445,8 @@ export interface Translations {
     trialDrawnHow: string
     trialWithHint: string
     trialDidIt: string
+    /** On Today's trial card: to the trial's home, in Soulager */
+    trialSee: string
     trialDidItNoted: string
     trialWithoutHint: string
     trialWas: string
@@ -2113,13 +2114,9 @@ export interface Translations {
     intro: string
     showMore: string
     hideMore: string
-    tryHint: string
     /** A short line per illness, and the fuller sentence with its source behind "see the detail" */
     items: Record<'fibromyalgie' | 'arthrite' | 'spondylarthrite' | 'lombalgie' | 'migraine' | 'myofasciale', { short: string; more: string }>
     pace: string
-    /** Same wording as the matching entry of the entry form's suggestions, so ticking it counts in the trial */
-    action: string
-    tryIt: string
     thanks: string
   }
   regularity: {
