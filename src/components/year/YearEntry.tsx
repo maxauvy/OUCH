@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 import { IconConfetti } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import { useAllEntries } from '../../hooks/useEntries'
@@ -8,8 +8,11 @@ import { todayISO } from '../../lib/dates'
 import { useEarlyAccess } from '../../lib/earlyAccess'
 import { flaresApply } from '../../lib/flares'
 import { entryCardYear, reviewYear, yearReview, type YearReview } from '../../lib/yearReview'
-import { Confetti, YearStory } from './YearStory'
+import { Confetti } from './YearDecor'
 import { CORAL } from './yearStyle'
+
+// The story is loaded when it opens: the card stays on the day's page for weeks, the story is read once or twice.
+const YearStory = lazy(() => import('./YearStory').then((m) => ({ default: m.YearStory })))
 
 /** The year to tell now, when the journal holds enough of it: in December and January, or any time with early access (to look at it ahead). */
 function useYear(): YearReview | null {
@@ -58,7 +61,11 @@ export function YearEntryCard() {
           </div>
         </section>
       )}
-      {open && <YearStory review={review} onClose={() => setOpen(false)} />}
+      {open && (
+        <Suspense fallback={null}>
+          <YearStory review={review} onClose={() => setOpen(false)} />
+        </Suspense>
+      )}
     </>
   )
 }
@@ -90,7 +97,11 @@ export function YearTrendsTile() {
           </span>
         </span>
       </button>
-      {open && <YearStory review={review} onClose={() => setOpen(false)} />}
+      {open && (
+        <Suspense fallback={null}>
+          <YearStory review={review} onClose={() => setOpen(false)} />
+        </Suspense>
+      )}
     </>
   )
 }

@@ -1,5 +1,8 @@
 import type { Language } from '../i18n/language'
-import type { Illness, IllnessDetails, ParentGender, PainWeatherLevel } from '../db/types'
+import type { Illness, ParentGender, PainWeatherLevel } from '../db/types'
+
+// The names alone live apart, so the screens that list illnesses do not load the children's texts.
+export { formatIllnessList, getIllnessLabel, getIllnessTitle } from './illnessNames.ts'
 
 export type ChildTone = 'young' | 'older' | 'teen'
 
@@ -225,13 +228,6 @@ const EN_LEVELS: Record<PainWeatherLevel, LevelTones> = {
 }
 
 interface IllnessCopy {
-  /** Bare name, for chip/button lists ("Fibromyalgie", "Migraine"...). */
-  label: string
-  /** Capitalized, with its article, for use as a sentence subject — French
-   * needs this (a bare disease name can't head a sentence: "Fibromyalgie,
-   * c'est quoi ?" is wrong, "La fibromyalgie, c'est quoi ?" is right), so
-   * this is the one place per illness where that article is decided. */
-  titleWithArticle: string
   young: (p: ParentInfo) => string
   older: (p: ParentInfo) => string
   /** Without the closing reassurance, which `TEEN_OUTRO` adds for every illness. */
@@ -242,71 +238,51 @@ interface IllnessCopy {
 // would read as "maman". Refer to the illness as "cette maladie" instead.
 const FR_ILLNESSES: Record<Illness, IllnessCopy> = {
   fibromyalgie: {
-    label: 'Fibromyalgie',
-    titleWithArticle: 'La fibromyalgie',
     young: (P) => `${P.Noun} a une maladie qui s'appelle fibromyalgie. ${P.Subj} a souvent mal un peu partout et ${P.subj} est très ${agree('fatigué', P.fem)}, même quand ${P.subj} a bien dormi. On ne l'attrape pas comme un rhume, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie chronique qui s'appelle fibromyalgie. Cette maladie provoque des douleurs et une grande fatigue qui changent d'un jour à l'autre, parfois sans raison précise. C'est une maladie invisible : ${P.noun} peut avoir mal même si ça ne se voit pas. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} a une fibromyalgie, une maladie chronique qui touche la façon dont le système nerveux gère la douleur : le corps envoie des signaux de douleur plus forts que la normale. Résultat : des douleurs diffuses, une grosse fatigue, parfois des troubles du sommeil ou de la concentration, qui varient beaucoup d'un jour à l'autre. Ça ne se voit pas de l'extérieur, mais c'est bien réel.`,
   },
   arthrite: {
-    label: 'Polyarthrite rhumatoïde',
-    titleWithArticle: 'La polyarthrite rhumatoïde',
     young: (P) => `${P.Noun} a une maladie qui s'appelle polyarthrite rhumatoïde. Ça fait gonfler et fait mal aux articulations (genoux, mains...), surtout le matin. Ce n'est pas contagieux, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie inflammatoire chronique, la polyarthrite rhumatoïde : le corps attaque un peu ses propres articulations, ce qui cause douleurs, gonflements et raideur, surtout le matin. Les jours changent selon l'inflammation du moment. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} a une polyarthrite rhumatoïde, une maladie auto-immune : le système immunitaire, censé protéger le corps, attaque par erreur les articulations. Ça provoque inflammation, douleurs, gonflements et raideur, surtout le matin. Des traitements aident à la calmer, mais il y a des périodes plus difficiles, qu'on appelle des poussées. Ce n'est pas contagieux.`,
   },
   spondylarthrite: {
-    label: 'Spondyloarthrite',
-    titleWithArticle: 'La spondyloarthrite',
     young: (P) => `${P.Noun} a une maladie qui s'appelle spondyloarthrite. Ça fait mal au dos et ça raidit le corps, surtout la nuit et le matin au réveil. Bouger doucement aide ${P.noun} à aller mieux. Ce n'est pas contagieux, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie inflammatoire chronique, la spondyloarthrite, qui touche surtout le dos et le bassin et provoque douleurs et raideur, surtout la nuit et le matin. Bouger aide souvent à se sentir mieux, alors que rester longtemps immobile aggrave la raideur. Les jours changent selon l'inflammation du moment. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} a une spondyloarthrite, une maladie inflammatoire chronique qui touche surtout la colonne vertébrale et le bassin. Cette maladie provoque douleurs et raideur, surtout la nuit et le matin ; bouger aide, alors que rester immobile longtemps aggrave les choses. Il y a des périodes plus calmes et des poussées. Ce n'est pas contagieux.`,
   },
   'rhumatisme-psoriasique': {
-    label: 'Rhumatisme psoriasique',
-    titleWithArticle: 'Le rhumatisme psoriasique',
     young: (P) => `${P.Noun} a une maladie qui s'appelle rhumatisme psoriasique. Elle fait mal aux articulations, parfois avec la peau, et elle raidit le corps, surtout le matin. Ce n'est pas contagieux, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie inflammatoire chronique, le rhumatisme psoriasique : elle touche les articulations, qui deviennent douloureuses, gonflées ou raides, et peut aller avec une maladie de peau, le psoriasis. Les jours changent selon l'inflammation du moment. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} a un rhumatisme psoriasique, une maladie inflammatoire chronique des articulations qui peut s'accompagner de psoriasis, une maladie de peau. Elle provoque douleurs, gonflements et raideur, parfois aussi une grande fatigue. Il y a des périodes plus calmes et des poussées, et des traitements aident à la calmer. Ce n'est pas contagieux.`,
   },
   endometriose: {
-    label: 'Endométriose',
-    titleWithArticle: "L'endométriose",
     young: (P) => `${P.Noun} a une maladie qui s'appelle endométriose. Ça lui donne des douleurs fortes dans le ventre, surtout certains jours. Ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie chronique appelée endométriose, qui provoque des douleurs parfois très fortes dans le ventre et le bas du dos, surtout à certaines périodes. La douleur va et vient, et n'est pas toujours visible de l'extérieur. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} a une endométriose : un tissu qui ressemble à celui qui tapisse l'intérieur de l'utérus se développe ailleurs dans le ventre, ce qui provoque inflammation et douleurs parfois très fortes, notamment pendant les règles. Ça peut aussi entraîner une grande fatigue. Ça ne se voit pas, mais c'est bien réel.`,
   },
   migraine: {
-    label: 'Migraine',
-    titleWithArticle: 'La migraine',
     young: (P) => `${P.Noun} a des migraines : de très fortes douleurs de tête qui reviennent souvent. Quand ça arrive, ${P.subj} a besoin de calme, de silence et parfois d'obscurité. Ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} souffre de migraine chronique : des maux de tête intenses, parfois avec nausées ou sensibilité à la lumière, qui reviennent plusieurs fois par mois. Le calme et le repos aident à passer la crise. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} a une migraine chronique : pas de simples maux de tête, mais des crises neurologiques qui peuvent durer plusieurs heures, voire plusieurs jours, avec parfois des nausées et une forte sensibilité à la lumière et au bruit. Pendant une crise, le calme et l'obscurité aident.`,
   },
   lombalgie: {
-    label: 'Mal de dos',
-    titleWithArticle: 'Le mal de dos',
     young: (P) => `${P.Noun} a mal au dos très souvent. Rester ${agree('assis', P.fem)} ou debout longtemps peut lui faire mal. Ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} vit avec des douleurs de dos chroniques : une douleur installée depuis longtemps, plus ou moins forte selon les jours, la fatigue ou la position. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} a une lombalgie chronique : une douleur du bas du dos présente depuis plus de trois mois. Son intensité varie selon la fatigue, les efforts ou la position, ce qui peut limiter certaines activités. Ça ne se voit pas, mais c'est bien réel.`,
   },
   sep: {
-    label: 'Sclérose en plaques',
-    titleWithArticle: 'La sclérose en plaques',
     young: (P) => `${P.Noun} a une maladie qui s'appelle sclérose en plaques. Cette maladie peut donner beaucoup de fatigue, des picotements ou du mal à bouger certains jours. Ce n'est pas contagieux, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une maladie chronique du système nerveux appelée sclérose en plaques. Cette maladie peut provoquer fatigue intense, troubles de l'équilibre ou de la sensibilité, qui varient beaucoup d'un jour à l'autre. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} a une sclérose en plaques, une maladie auto-immune du système nerveux : les défenses du corps abîment la gaine qui protège les nerfs, ce qui perturbe les messages entre le cerveau et le reste du corps. Ça peut provoquer une fatigue intense, des troubles de l'équilibre, de la vue ou de la sensibilité, qui varient beaucoup. Des traitements existent pour limiter les poussées. Ce n'est pas contagieux.`,
   },
   myofasciale: {
-    label: 'Douleur myofasciale',
-    titleWithArticle: 'La douleur myofasciale',
     young: (P) => `${P.Noun} a une maladie qui s'appelle douleur myofasciale. Certains muscles restent tendus et font mal, parfois toujours au même endroit, et ${P.subj} a besoin de se ménager. Ce n'est pas contagieux, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} a une douleur chronique des muscles, appelée douleur myofasciale : certains muscles restent contractés et sensibles, souvent à des endroits précis, et la douleur peut s'étendre autour. Elle varie d'un jour à l'autre et ne se voit pas de l'extérieur. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} a une douleur myofasciale : des muscles restent tendus et sensibles, avec parfois des points précis très douloureux au toucher. Les médecins l'expliquent encore de façons différentes et aucun examen ne la prouve, ce qui ne rend pas la douleur moins réelle.`,
   },
   autre: {
-    label: 'Autre',
-    titleWithArticle: 'Cette maladie',
     young: (P) => `${P.Noun} a une maladie qui dure longtemps et qui lui donne mal ou rend très ${agree('fatigué', P.fem)}, selon les jours. Ce n'est pas quelque chose qu'on attrape, et ce n'est jamais à cause de toi.`,
     older: (P) => `${P.Noun} vit avec une maladie chronique : cette maladie dure dans le temps et son intensité varie d'un jour à l'autre, parfois sans raison visible. Ce n'est jamais à cause de toi.`,
     teen: (P) => `${P.Noun} vit avec une maladie chronique, c'est-à-dire qui dure dans le temps. Son intensité varie d'un jour à l'autre, parfois sans raison visible, et ça ne se voit pas toujours de l'extérieur.`,
@@ -315,71 +291,51 @@ const FR_ILLNESSES: Record<Illness, IllnessCopy> = {
 
 const EN_ILLNESSES: Record<Illness, IllnessCopy> = {
   fibromyalgie: {
-    label: 'Fibromyalgia',
-    titleWithArticle: 'Fibromyalgia',
     young: (P) => `${P.Noun} has an illness called fibromyalgia. ${P.Subj} often hurts all over and gets very tired, even after a good night's sleep. You can't catch it like a cold, and it's never your fault.`,
     older: (P) => `${P.Noun} has a chronic illness called fibromyalgia. It causes pain and deep fatigue that change from day to day, sometimes for no clear reason. It's an invisible illness: ${P.noun} can be in pain even when it doesn't show. It's never your fault.`,
     teen: (P) => `${P.Noun} has fibromyalgia, a chronic condition that affects how the nervous system handles pain: the body sends stronger pain signals than normal. The result is widespread pain, deep fatigue, and sometimes trouble sleeping or concentrating — all of which vary a lot from day to day. You can't see it from the outside, but it's very real.`,
   },
   arthrite: {
-    label: 'Rheumatoid arthritis',
-    titleWithArticle: 'Rheumatoid arthritis',
     young: (P) => `${P.Noun} has an illness called rheumatoid arthritis. It makes ${P.poss} joints (like knees and hands) swell and hurt, especially in the morning. It's not contagious, and it's never your fault.`,
     older: (P) => `${P.Noun} has a chronic inflammatory illness called rheumatoid arthritis: the body attacks its own joints a little, causing pain, swelling and stiffness, especially in the morning. Some days are worse than others depending on the inflammation. It's never your fault.`,
     teen: (P) => `${P.Noun} has rheumatoid arthritis, an autoimmune disease: the immune system, which is supposed to protect the body, attacks the joints by mistake. That causes inflammation, pain, swelling and stiffness, especially in the morning. Treatments help keep it under control, but there are harder periods called flares. It's not contagious.`,
   },
   spondylarthrite: {
-    label: 'Spondyloarthritis',
-    titleWithArticle: 'Spondyloarthritis',
     young: (P) => `${P.Noun} has an illness called spondyloarthritis. It makes ${P.poss} back hurt and ${P.poss} body feel stiff, especially at night and when ${P.subj} wakes up. Moving gently helps ${P.obj} feel better. It's not contagious, and it's never your fault.`,
     older: (P) => `${P.Noun} has a chronic inflammatory illness called spondyloarthritis: it mainly affects the spine and pelvis, causing pain and stiffness, especially at night and in the morning. Moving often helps ${P.obj} feel better, while staying still for a long time makes the stiffness worse. Some days are worse than others depending on the inflammation. It's never your fault.`,
     teen: (P) => `${P.Noun} has spondyloarthritis, a chronic inflammatory disease that mainly affects the spine and pelvis. It causes pain and stiffness, especially at night and in the morning; moving helps, while staying still for a long time makes it worse. There are calmer periods and flares. It's not contagious.`,
   },
   'rhumatisme-psoriasique': {
-    label: 'Psoriatic arthritis',
-    titleWithArticle: 'Psoriatic arthritis',
     young: (P) => `${P.Noun} has an illness called psoriatic arthritis. It makes the joints hurt, sometimes with the skin too, and it makes the body stiff, mostly in the morning. It's not contagious, and it's never your fault.`,
     older: (P) => `${P.Noun} has a chronic inflammatory illness, psoriatic arthritis: it affects the joints, which become painful, swollen or stiff, and can come with a skin condition called psoriasis. Days change with the inflammation of the moment. It's never your fault.`,
     teen: (P) => `${P.Noun} has psoriatic arthritis, a chronic inflammatory disease of the joints that can come with psoriasis, a skin condition. It causes pain, swelling and stiffness, sometimes great tiredness too. There are calmer periods and flares, and treatments help calm it. It's not contagious.`,
   },
   endometriose: {
-    label: 'Endometriosis',
-    titleWithArticle: 'Endometriosis',
     young: (P) => `${P.Noun} has an illness called endometriosis. It gives ${P.obj} strong pain in ${P.poss} belly, especially on certain days. It's never your fault.`,
     older: (P) => `${P.Noun} has a chronic illness called endometriosis, which causes pain — sometimes very intense — in the belly and lower back, especially at certain times. The pain comes and goes, and isn't always visible from the outside. It's never your fault.`,
     teen: (P) => `${P.Noun} has endometriosis: tissue similar to the lining of the uterus grows elsewhere in the belly, causing inflammation and pain that can be very intense, especially during periods. It can also bring a lot of fatigue. You can't see it, but it's very real.`,
   },
   migraine: {
-    label: 'Migraine',
-    titleWithArticle: 'Migraine',
     young: (P) => `${P.Noun} gets migraines: very strong headaches that come back often. When it happens, ${P.subj} needs calm, quiet, and sometimes darkness. It's never your fault.`,
     older: (P) => `${P.Noun} has chronic migraine: intense headaches, sometimes with nausea or sensitivity to light, that come back several times a month. Calm and rest help the attack pass. It's never your fault.`,
     teen: (P) => `${P.Noun} has chronic migraine: not just headaches, but neurological attacks that can last hours or even days, sometimes with nausea and strong sensitivity to light and noise. During an attack, calm and darkness help.`,
   },
   lombalgie: {
-    label: 'Back pain',
-    titleWithArticle: 'Back pain',
     young: (P) => `${P.Noun}'s back hurts very often. Sitting or standing for a long time can make it worse. It's never your fault.`,
     older: (P) => `${P.Noun} lives with chronic back pain: pain that has lasted a long time, more or less intense depending on the day, tiredness, or posture. It's never your fault.`,
     teen: (P) => `${P.Noun} has chronic low back pain: pain in the lower back that has lasted more than three months. How strong it is depends on fatigue, effort or posture, and it can limit some activities. You can't see it, but it's very real.`,
   },
   sep: {
-    label: 'Multiple sclerosis',
-    titleWithArticle: 'Multiple sclerosis',
     young: (P) => `${P.Noun} has an illness called multiple sclerosis. It can cause a lot of tiredness, tingling, or trouble moving on some days. It's not contagious, and it's never your fault.`,
     older: (P) => `${P.Noun} has a chronic illness of the nervous system called multiple sclerosis. It can cause intense fatigue, balance issues, or changes in sensation, which vary a lot from day to day. It's never your fault.`,
     teen: (P) => `${P.Noun} has multiple sclerosis, an autoimmune disease of the nervous system: the body's defenses damage the coating that protects the nerves, which disrupts messages between the brain and the rest of the body. It can cause intense fatigue and problems with balance, vision or sensation, which vary a lot. Treatments exist to limit relapses. It's not contagious.`,
   },
   myofasciale: {
-    label: 'Myofascial pain',
-    titleWithArticle: 'Myofascial pain',
     young: (P) => `${P.Noun} has an illness called myofascial pain. Some muscles stay tight and hurt, often in the same place, and ${P.subj} needs to take it easy. It's not contagious, and it's never your fault.`,
     older: (P) => `${P.Noun} has chronic muscle pain called myofascial pain: some muscles stay tight and sensitive, often in specific spots, and the pain can spread around them. It changes from day to day and doesn't show from the outside. It's never your fault.`,
     teen: (P) => `${P.Noun} has myofascial pain: muscles stay tense and sensitive, sometimes with specific spots that hurt a lot when touched. Doctors still explain it in different ways and no test proves it, which doesn't make the pain any less real.`,
   },
   autre: {
-    label: 'Other',
-    titleWithArticle: 'This illness',
     young: (P) => `${P.Noun} has an illness that lasts a long time and makes ${P.obj} hurt or feel very tired, depending on the day. It's not something you catch, and it's never your fault.`,
     older: (P) => `${P.Noun} lives with a chronic illness: it lasts over time and its intensity changes from day to day, sometimes for no visible reason. It's never your fault.`,
     teen: (P) => `${P.Noun} lives with a chronic illness — one that lasts over time. Its intensity changes from day to day, sometimes for no visible reason, and it doesn't always show from the outside.`,
@@ -424,44 +380,6 @@ export function getChildViewCopy(
   const P = parentInfo(language, gender)
   const entry = (language === 'en' ? EN_LEVELS : FR_LEVELS)[level][tone]
   return { headline: entry.headline(P), body: entry.body(P), help: entry.help(P) }
-}
-
-export function getIllnessLabel(language: Language, illness: Illness): string {
-  return (language === 'en' ? EN_ILLNESSES : FR_ILLNESSES)[illness].label
-}
-
-/** "Other" means nothing inside a sentence; this is what lists say instead. */
-const OTHER_IN_LIST: Record<Language, string> = { fr: 'autre maladie chronique', en: 'other chronic illness' }
-
-const STATUS_WORDS: Record<Language, Record<'diagnosed' | 'suspected', string>> = {
-  fr: { diagnosed: 'diagnostiquée', suspected: 'suspectée' },
-  en: { diagnosed: 'diagnosed', suspected: 'suspected' },
-}
-const IN_YEAR: Record<Language, string> = { fr: 'en', en: 'in' }
-
-/** "Fibromyalgie (diagnostiquée), endométriose et migraine": one
- * sentence-case list, in the given language (the report's may differ from the
- * app's). With `details`, a declared status follows each illness (with the
- * year of the diagnosis, when given) and the name typed for "autre" replaces
- * its generic wording, as typed (it can be an
- * acronym or a proper noun, so it is never lowercased). */
-export function formatIllnessList(language: Language, illnesses: Illness[], details: IllnessDetails = {}): string {
-  const names = illnesses.map((illness, i) => {
-    const typed = illness === 'autre' ? details.otherName?.trim() : undefined
-    const label = typed || (illness === 'autre' ? OTHER_IN_LIST[language] : getIllnessLabel(language, illness))
-    const cased = typed ? label : i === 0 ? label.charAt(0).toUpperCase() + label.slice(1) : label.toLocaleLowerCase(language)
-    const status = details.status?.[illness]
-    const year = status === 'diagnosed' ? details.year?.[illness] : undefined
-    return status ? `${cased} (${STATUS_WORDS[language][status]}${year ? ` ${IN_YEAR[language]} ${year}` : ''})` : cased
-  })
-  return new Intl.ListFormat(language, { type: 'conjunction' }).format(names)
-}
-
-/** The illness name as a sentence subject, with its article in French
- * ("La fibromyalgie", "La polyarthrite rhumatoïde"...) — use this instead of `getIllnessLabel`
- * anywhere the name opens a sentence. */
-export function getIllnessTitle(language: Language, illness: Illness): string {
-  return (language === 'en' ? EN_ILLNESSES : FR_ILLNESSES)[illness].titleWithArticle
 }
 
 export function getIllnessExplanation(
