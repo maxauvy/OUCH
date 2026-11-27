@@ -2016,6 +2016,17 @@ export interface Translations {
     afterTitle: string
     afterHint: string
   }
+  /** « Une journée à part ? »: the one link under the day's pain that offers a quiet day or a harder stretch */
+  dayApart: {
+    link: string
+    title: string
+    intro: string
+    close: string
+    restTitle: string
+    restBody: string
+    markedTitle: string
+    markedBody: string
+  }
   /** "Journée tranquille": a day the person chooses to take gently (see lib/restDay.ts) */
   restDay: {
     /** The quiet link under the day's pain */
@@ -2193,9 +2204,8 @@ export interface Translations {
     proofEnd: string
     /** {{n}} days, under a bar */
     days: string
-    waiting: string
-    /** {{date}} */
-    writtenOn: string
+    /** Under « Mon plan » on the hard days card, when the note is there */
+    waitingShort: string
     /** {{date}} */
     letterTitle: string
     inviteLabel: string

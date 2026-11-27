@@ -9,7 +9,7 @@ import { useSettings } from '../../hooks/useSettings'
 import { hasPlan } from '../../lib/hardDaysPlan'
 import { useRichLook } from '../../lib/look'
 import { MARKER } from '../today/cardStyles'
-import { FlareProof, NoteWaitingRow } from '../relief/GoodDayNote'
+import { FlareProof } from '../relief/GoodDayNote'
 
 // What the person wrote down as helping reads in their own words ("Bain
 // chaud"), so it goes in the middle of a sentence in lower case, unless it
@@ -30,6 +30,8 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
   const tr = useTranslation().relief
   const openRelief = useOpenRelief()
   const tp = useTranslation().plan
+  // The note written after an earlier flare is read inside « Mon plan »: the button says it is there.
+  const tn = useTranslation().goodDayNote
   const settings = useSettings()
   const plan = settings.hardDaysPlan
   const note = settings.goodDayNote
@@ -75,11 +77,6 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
             <FlareProof lengths={card.past} />
           </div>
         )}
-        {note && openRelief && (
-          <div className={rich ? 'mt-3 -mr-8' : 'mt-3'}>
-            <NoteWaitingRow note={note} onOpen={() => openRelief('plan')} />
-          </div>
-        )}
         {card.helped.length > 0 && (
           <p className={rich ? 'text-body mt-2.5 leading-[1.7]' : 'text-heading font-medium mt-3 leading-[1.7]'}>
             {before}
@@ -98,12 +95,12 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
         {openRelief &&
           (rich ? (
             <div className="flex gap-2 mt-3 -mr-8">
-              {hasPlan(plan) && <ShortAction icon={IconMessageHeart} label={tp.shortTitle} onClick={() => openRelief('plan')} />}
+              {(hasPlan(plan) || note) && <ShortAction icon={IconMessageHeart} label={tp.shortTitle} hint={note ? tn.waitingShort : undefined} onClick={() => openRelief('plan')} />}
               <ShortAction icon={IconWind} label={tr.cardButtonShort} onClick={() => openRelief('breath')} />
             </div>
           ) : (
             <div className="flex flex-col gap-2 mt-3">
-              {hasPlan(plan) && <Action icon={IconMessageHeart} label={tp.open} onClick={() => openRelief('plan')} />}
+              {(hasPlan(plan) || note) && <Action icon={IconMessageHeart} label={tp.open} hint={note ? tn.waitingShort : undefined} onClick={() => openRelief('plan')} />}
               <Action icon={IconWind} label={tr.cardButton} onClick={() => openRelief('breath')} />
             </div>
           ))}
@@ -132,22 +129,38 @@ export function HardDaysCard({ date, card, light }: { date: string; card: Card |
 }
 
 /** A way to feel better, one tap away: a white row with a round icon, like the rows of the Consultation tab. */
-function Action({ icon, label, onClick }: { icon: Icon; label: string; onClick: () => void }) {
+function Action({ icon, label, hint, onClick }: { icon: Icon; label: string; hint?: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className="flex items-center gap-3 w-full min-h-12 py-1.5 pl-2 pr-3 rounded-[var(--radius-control)] text-left text-control font-semibold" style={{ background: 'var(--color-surface)' }}>
       <RoundIcon icon={icon} />
-      <span className="flex-1 min-w-0">{label}</span>
+      <span className="flex-1 min-w-0">
+        {label}
+        {hint && (
+          <span className="block text-caption font-normal" style={{ color: 'var(--color-ink-muted)' }}>
+            {hint}
+          </span>
+        )}
+      </span>
       <IconChevronRight size={20} aria-hidden style={{ color: 'var(--color-ink-muted)' }} />
     </button>
   )
 }
 
 /** The weather look's way to feel better: a white button, its icon and two words, sharing the row with the other one. */
-function ShortAction({ icon: I, label, onClick }: { icon: Icon; label: string; onClick: () => void }) {
+function ShortAction({ icon: I, label, hint, onClick }: { icon: Icon; label: string; hint?: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className="flex-1 min-w-0 flex items-center justify-center gap-2 min-h-11 px-3 rounded-[14px] text-control font-semibold" style={{ background: 'var(--color-surface)' }}>
       <I size={18} stroke={1.8} aria-hidden style={{ color: 'var(--color-brand)' }} />
-      {label}
+      {hint ? (
+        <span className="flex flex-col items-start leading-tight">
+          {label}
+          <span className="text-caption font-normal" style={{ color: 'var(--color-ink-muted)' }}>
+            {hint}
+          </span>
+        </span>
+      ) : (
+        label
+      )}
     </button>
   )
 }
