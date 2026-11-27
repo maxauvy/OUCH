@@ -1,4 +1,3 @@
-import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { fileURLToPath } from 'node:url'
 
@@ -30,6 +29,20 @@ const policy = [
 
 export default defineConfig(({ command }) => ({
   root: fileURLToPath(new URL('./duo', import.meta.url)),
+  // Duo runs on Preact, not React: the same code (hooks, createRoot) in about a tenth of the size, for a
+  // small app a relative opens on any phone. The React imports of Duo and of the few OUCH files it shares
+  // (AppLogo, lib/duoLink…) are pointed at Preact's compatibility layer; OUCH itself stays on React.
+  resolve: {
+    alias: [
+      { find: /^react-dom\/client$/, replacement: 'preact/compat/client' },
+      { find: /^react-dom$/, replacement: 'preact/compat' },
+      { find: /^react\/jsx-runtime$/, replacement: 'preact/jsx-runtime' },
+      { find: /^react\/jsx-dev-runtime$/, replacement: 'preact/jsx-dev-runtime' },
+      { find: /^react$/, replacement: 'preact/compat' },
+    ],
+  },
+  // JSX compiled straight for Preact (React's plugin and its hot reload expect React itself).
+  oxc: { jsx: { runtime: 'automatic', importSource: 'preact' } },
   base: command === 'build' ? '/OUCH/duo/' : '/duo/',
   server: { port: 5174, strictPort: true, host: true },
   build: {
@@ -56,6 +69,5 @@ export default defineConfig(({ command }) => ({
         handler: (html) => html.replace('src="../src/duo/main.tsx"', `src="/@fs${fileURLToPath(new URL('./src/duo/main.tsx', import.meta.url))}"`),
       },
     },
-    react(),
   ],
 }))
