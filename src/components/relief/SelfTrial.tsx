@@ -6,18 +6,21 @@ import { format, useLanguage, useTranslation } from '../../i18n'
 import { todayISO } from '../../lib/dates'
 import { MAX_NAME, notedActions, trialName, trialOptions } from '../../lib/gestures'
 import { actionInSentence, actionKey } from '../../lib/leads'
-import { newTrial, trialStatus, type LeadTrial } from '../../lib/leadTrial'
+import { newTrial, restartTrial, trialStatus, type LeadTrial } from '../../lib/leadTrial'
+import { TrialHistory } from './TrialHistory'
 import { BUTTON, MARKER, PRIMARY, SECONDARY } from '../today/cardStyles'
 import { ModalSheet } from '../ui/ModalSheet'
 import { trialCellStyle } from '../entry/trialStrip'
 
-/** Under "Mes gestes": the way to check whether something helps, on days drawn at random, or where the one trial under way stands. */
+/** Under "Mes gestes", the one home of the trials: the way to check whether something helps, on days drawn at random, where the one trial
+ * under way stands, and the trials done before, to read again or do again. Elsewhere (Today, a lead in Trends) only leads here or starts one. */
 export function SelfTrial() {
   const t = useTranslation().gestures
   const language = useLanguage()
   const settings = useSettings()
   const [open, setOpen] = useState(false)
   const trial = settings.leadTrial
+  const entries = useLoggedEntries()
 
   return (
     <div className="border-t pt-3 mt-3 flex flex-col gap-2" style={{ borderColor: 'var(--color-hairline)' }}>
@@ -35,6 +38,15 @@ export function SelfTrial() {
             </button>
           </div>
         </>
+      )}
+      {settings.leadTrialHistory && settings.leadTrialHistory.length > 0 && entries && (
+        <TrialHistory
+          history={settings.leadTrialHistory}
+          entries={entries}
+          today={todayISO()}
+          running={!!trial}
+          onAgain={(past) => void updateSettings({ leadTrial: restartTrial(past, todayISO()) })}
+        />
       )}
       {open && <StartSheet onClose={() => setOpen(false)} />}
     </div>

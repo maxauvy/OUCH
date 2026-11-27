@@ -53,7 +53,6 @@ export type TodayMessage =
   | { kind: 'yesterday'; key: string; date: string }
   | { kind: 'weekly'; key: string; finding: WeeklyFinding }
   | { kind: 'lead'; key: string; lead: Lead }
-  | { kind: 'repeat'; key: string; trial: LeadTrial }
   | { kind: 'invite'; key: 'invite' }
   | { kind: 'rest'; key: string }
   | { kind: 'weather'; key: string; reading: ForecastReading }
@@ -85,8 +84,6 @@ export interface TodayMessagesInput {
   tried: string[]
   /** The Sunday sentence, if there is one this Sunday. */
   weekly: WeeklyFinding | null
-  /** A past trial due to be offered again (`trialToRepeat`). */
-  repeat: LeadTrial | null
   /** The invitation to follow new indicators shows today (`shouldShowInvite`). */
   invite: boolean
   /** A flare that just ended and whose way back to the usual level is known (`recentReturn`). */
@@ -128,7 +125,7 @@ export function recentReturn(episodes: readonly FlareEpisode[], today: string): 
 }
 
 export function todayMessages(input: TodayMessagesInput): TodayMessages {
-  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, repeat, invite, calm, month, rest, yesterday, weather, regularity, activity, goodDay, trial } = input
+  const { today, quiet, later, allow, leads, leadChoices, tried, weekly, invite, calm, month, rest, yesterday, weather, regularity, activity, goodDay, trial } = input
   if (quiet) return { items: trial?.plan ? [{ kind: 'trial', key: 'trial', trial }] : [], count: 0 }
   const waiting = (key: string) => !isAway(later?.[key], today)
 
@@ -151,8 +148,6 @@ export function todayMessages(input: TodayMessagesInput): TodayMessages {
     }
   }
   // Keyed by the trial it follows: after the next week done, the offer is a new one.
-  const repeatKey = repeat ? `repeat:${repeat.key}:${repeat.end}` : ''
-  if (allow.trials && repeat && waiting(repeatKey)) items.push({ kind: 'repeat', key: repeatKey, trial: repeat })
   if (invite) items.push({ kind: 'invite', key: 'invite' })
   const calmKey = calm ? `calm:${calm.start}` : ''
   if (allow.calm && calm && waiting(calmKey)) items.push({ kind: 'calm', key: calmKey, episode: calm })

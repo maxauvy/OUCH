@@ -11,7 +11,6 @@ import { regularityReading } from '../lib/regularity'
 import { fetchPressureForecast } from '../lib/weather'
 import { flareUnderWay } from '../lib/hardDays'
 import { shouldShowInvite } from '../lib/indicatorInvite'
-import { NO_LEADS_SEEN, trialToRepeat } from '../lib/leadHints'
 import { triedKeys } from '../lib/leadTrial'
 import { monthSummary } from '../lib/monthSummary'
 import { ongoingMarked } from '../lib/markedFlares'
@@ -71,15 +70,6 @@ export function useTodayMessages(): TodayMessages | null {
       leadChoices: settings.leadChoices,
       tried: triedKeys(settings.leadTrial, settings.leadTrialHistory),
       weekly: weeklyFinding(logged, today, flare),
-      repeat: trialToRepeat({
-        history: settings.leadTrialHistory,
-        current: settings.leadTrial,
-        seen: { ...NO_LEADS_SEEN, ...settings.leadsSeen },
-        entries: logged,
-        today,
-        enabled: trialsOn,
-        quiet: flare,
-      }),
       invite: !IS_DEMO && shouldShowInvite(settings, { earlyAccess, today, quiet: flare }),
       calm: recentReturn(flares?.episodes ?? [], today),
       month: monthSummary({ today, entries: logged, history: settings.leadTrialHistory ?? [], episodes: flares?.episodes ?? [] }),

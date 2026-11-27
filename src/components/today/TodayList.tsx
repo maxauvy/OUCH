@@ -1,16 +1,14 @@
 import { useState, type ReactNode } from 'react'
 import { format as formatDate } from 'date-fns'
-import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconBarbell, IconLeaf, IconPill, IconRepeat, IconSparkles, IconSun, type Icon } from '@tabler/icons-react'
+import { IconAdjustmentsHorizontal, IconCalendarEvent, IconCloudRain, IconCalendarMonth, IconCalendarWeek, IconBarbell, IconLeaf, IconPill, IconSparkles, IconSun, type Icon } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { LoggedEntry, Settings } from '../../db/types'
 import { useLeadList } from '../../hooks/useLeadList'
-import { daysBetween } from '../../lib/dates'
 import { formatIllnessList } from '../../lib/illnessNames'
 import { snoozeInvite } from '../../lib/indicatorInvite'
 import { frenchOfMonth } from '../../lib/monthName'
-import { actionInSentence, actionKey } from '../../lib/leads'
+import { actionInSentence } from '../../lib/leads'
 import type { ActivityIllness } from '../../lib/activityEvidence'
-import { newTrial, restartTrial } from '../../lib/leadTrial'
 import { updateLeadsSeen } from '../../lib/leadsSeenStore'
 import { DROP_HPA } from '../../lib/forecast'
 import { markDone, postpone, type TodayMessage, type TodayMessages } from '../../lib/todayMessages'
@@ -160,30 +158,6 @@ export function TodayList({
             </p>
           </ListCard>
         )
-      case 'repeat': {
-        const weeks = Math.round(daysBetween(m.trial.end, today) / 7)
-        return (
-          <ListCard
-            key={m.key}
-            icon={IconRepeat}
-            label={lh.repeatLabel}
-            actions={[
-              {
-                label: t.trends.leadTrialStart,
-                primary: true,
-                // One write after the other: side by side, the later one wipes the earlier on the settings.
-                onClick: () =>
-                  void updateSettings({ leadTrial: restartTrial(m.trial, today) })
-                    .then(() => updateLeadsSeen((seen) => ({ ...seen, repeatShown: { ...seen.repeatShown, [m.trial.key]: today } })))
-                    .then(() => done(m.key)),
-              },
-              { label: t.trends.leadTrialLater, onClick: () => later(m.key) },
-            ]}
-          >
-            <p className="text-body mt-0.5">{format(lh.repeatBody, { action: actionInSentence(m.trial.action), n: weeks }, language)}</p>
-          </ListCard>
-        )
-      }
       case 'invite':
         return (
           <ListCard
@@ -221,24 +195,13 @@ export function TodayList({
         )
       }
       case 'activity': {
-        const canTry = !settings.leadTrial && settings.enabledFactors.includes('positiveActions')
         return (
           <ListCard
             key={m.key}
             icon={IconBarbell}
             label={t.activity.label}
             actions={[
-              ...(canTry
-                ? [
-                    {
-                      label: t.activity.tryIt,
-                      primary: true,
-                      // The trial is written first, then the card is put away: the two writes on the settings must not run side by side, or the second wipes the first.
-                      onClick: () => void updateSettings({ leadTrial: newTrial(`action:${actionKey(t.activity.action)}`, t.activity.action, today) }).then(() => done(m.key)),
-                    },
-                  ]
-                : []),
-              { label: t.activity.thanks, primary: !canTry, onClick: () => done(m.key) },
+              { label: t.activity.thanks, primary: true, onClick: () => done(m.key) },
             ]}
           >
             <p className="text-body mt-0.5">{t.activity.intro}</p>
@@ -249,7 +212,7 @@ export function TodayList({
             </ul>
             <ActivityDetail illnesses={m.illnesses} />
             <p className="text-caption mt-2" style={{ color: 'var(--color-ink-muted)' }}>
-              {canTry ? `${t.activity.pace} ${t.activity.tryHint}` : t.activity.pace}
+              {t.activity.pace}
             </p>
           </ListCard>
         )

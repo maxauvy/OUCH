@@ -21,7 +21,6 @@ const base: TodayMessagesInput = {
   leadChoices: undefined,
   tried: [],
   weekly: null,
-  repeat: null,
   invite: false,
   calm: null,
   month: null,
@@ -44,17 +43,17 @@ test('a drawn trial under way stays within reach on a hard day, and nothing else
   assert.deepEqual(r, { items: [{ kind: 'trial', key: 'trial', trial: drawn }], count: 0 })
 })
 
-test('the sheet lists the Sunday sentence, then the leads, a trial to repeat, the invitation, and the trial under way last', () => {
+test('the sheet lists the Sunday sentence, then the leads, the invitation, and the trial under way last', () => {
   const r = todayMessages({
     ...base,
     weekly: { kind: 'sleep' },
     leads: [lead('sleep'), lead('action:bain')],
-    repeat: trial('action:etirements'),
     invite: true,
     trial: trial(),
   })
-  assert.deepEqual(kinds(r), [`weekly:${TODAY}`, 'lead:sleep', 'lead:action:bain', 'repeat:action:etirements:2026-10-31', 'invite', 'trial'])
-  assert.equal(r.count, 5)
+  assert.deepEqual(kinds(r), [`weekly:${TODAY}`, 'lead:sleep', 'lead:action:bain', 'invite', 'trial'])
+  // The trial under way is listed but not counted.
+  assert.equal(r.count, 4)
 })
 
 test('a trial under way is listed but not counted, and alone it is not a count', () => {
@@ -74,7 +73,7 @@ test('a lead already answered, or under trial, is not brought again', () => {
 })
 
 test('suggestions switched off stay out, a trial under way stays', () => {
-  const r = todayMessages({ ...base, allow: { leads: false, weekly: false, trials: false, calm: false, month: false }, leads: [lead('sleep')], weekly: { kind: 'sleep' }, repeat: trial(), trial: trial() })
+  const r = todayMessages({ ...base, allow: { leads: false, weekly: false, trials: false, calm: false, month: false }, leads: [lead('sleep')], weekly: { kind: 'sleep' }, trial: trial() })
   assert.deepEqual(kinds(r), ['trial'])
 })
 
