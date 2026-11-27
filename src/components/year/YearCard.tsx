@@ -7,7 +7,7 @@ import { cardToPng } from '../../lib/cardImage'
 import { helperIn } from '../../lib/careSheet'
 import { MAX_WISH, cleanWish, trialCount, type YearReview } from '../../lib/yearReview'
 import { CORAL, INK, MUTED } from './yearStyle'
-import { Confetti, YearSky } from './YearDecor'
+import { Confetti, YearSky } from './YearStory'
 
 /**
  * The card of the year, at the end of the story: the sky, up to four good

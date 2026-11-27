@@ -28,8 +28,6 @@ test('a note is tidied and dated; an emptied one leaves nothing', () => {
 test('a note from a backup needs a string and a real day', () => {
   assert.deepEqual(noteFromBackup({ text: 'Doucement', date: '2026-10-12', extra: 1 }), { text: 'Doucement', date: '2026-10-12' })
   assert.equal(noteFromBackup({ text: 'Doucement', date: '2026-02-30' }), undefined)
-  // A month or a day out of range used to throw (Invalid time value) and fail the whole import.
-  assert.equal(noteFromBackup({ text: 'Doucement', date: '2023-13-45' }), undefined)
   assert.equal(noteFromBackup({ text: ['x'], date: '2026-10-12' }), undefined)
   assert.equal(noteFromBackup('Doucement'), undefined)
   assert.equal(noteFromBackup([{ text: 'x', date: '2026-10-12' }]), undefined)

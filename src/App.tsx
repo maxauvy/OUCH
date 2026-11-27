@@ -48,13 +48,11 @@ import { withPageFade } from './lib/pageFade'
 const loadTrends = () => import('./pages/TrendsPage').then((m) => ({ default: m.TrendsPage }))
 const loadSettings = () => import('./pages/SettingsPage').then((m) => ({ default: m.SettingsPage }))
 const loadKids = () => import('./pages/ChildViewPage').then((m) => ({ default: m.ChildViewPage }))
-const loadConsultation = () => import('./pages/ConsultationPage').then((m) => ({ default: m.ConsultationPage }))
-const loadSoulager = () => import('./pages/SoulagerPage').then((m) => ({ default: m.SoulagerPage }))
 const TrendsPage = lazy(loadTrends)
 const SettingsPage = lazy(loadSettings)
-const ConsultationPage = lazy(loadConsultation)
+const ConsultationPage = lazy(() => import('./pages/ConsultationPage').then((m) => ({ default: m.ConsultationPage })))
 const ChildViewPage = lazy(loadKids)
-const SoulagerPage = lazy(loadSoulager)
+const SoulagerPage = lazy(() => import('./pages/SoulagerPage').then((m) => ({ default: m.SoulagerPage })))
 const SetupWizard = lazy(() => import('./components/setup/SetupWizard').then((m) => ({ default: m.SetupWizard })))
 const DemoTour = lazy(() => import('./components/demo/DemoTour').then((m) => ({ default: m.DemoTour })))
 
@@ -133,11 +131,7 @@ function AppShell() {
     duoEligible: loggedBy(logged, DUO_CUTOFF),
     seen: settings.newsSeen ?? [],
   }
-  // Detects the flares over the whole journal: only again when the journal or what the reading depends on changes.
-  const quiet = useMemo(
-    () => quietDay({ illnesses: settings.illnesses, logged, all: allEntries ?? [], markedFlares: settings.markedFlares, today }),
-    [settings.illnesses, logged, allEntries, settings.markedFlares, today]
-  )
+  const quiet = quietDay({ illnesses: settings.illnesses, logged, all: allEntries ?? [], markedFlares: settings.markedFlares, today })
   const unread = unreadNews(newsState)
   const [newsOpen, setNewsOpen] = useState(false)
   const [newsItem, setNewsItem] = useState<NewsId | null>(null)
@@ -150,12 +144,9 @@ function AppShell() {
   useEffect(() => {
     if (!settings.onboardingDone) return
     const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 2000))
-    // All the tabs: a page left open across a release then already holds them (see main.tsx).
     idle(() => {
       void loadTrends()
       void loadSettings()
-      void loadSoulager()
-      void loadConsultation()
     })
   }, [settings.onboardingDone])
   useAppliedLook(settings.theme)
@@ -269,7 +260,6 @@ function AppShell() {
               setScreen('settings')
             }}
             news={{ unread: quiet ? 0 : unread.length, onOpen: () => setNewsOpen(true) }}
-            messages={messages}
             onOpenKids={settings.kidsTabEnabled ? () => setScreen('kids') : undefined}
             onGoToTab={(next, date) => {
               setBackupRequested(false)

@@ -8,8 +8,9 @@
 // days of an earlier flare; nothing is suggested from outside.
 
 import type { LoggedEntry } from '../db/types'
-import type { FlareEpisode } from './flares.ts'
-import { flaresAsOfYesterday, pastFlareLengths } from './goodDayNote.ts'
+import { detectFlares, type FlareEpisode } from './flares.ts'
+import { shiftISO } from './dates.ts'
+import { pastFlareLengths } from './goodDayNote.ts'
 
 /** The flare the card was last shown for, kept in the settings. */
 export interface HardDaysSeen {
@@ -35,7 +36,7 @@ const MAX_HELPED = 3
  * what is logged today neither summons nor removes them mid-session. */
 function ongoingFlare(entries: LoggedEntry[], today: string) {
   const before = entries.filter((e) => e.date < today)
-  const episodes = flaresAsOfYesterday(before, today)
+  const episodes = detectFlares(before, { asOf: shiftISO(today, -1) })
   return { before, episodes, episode: episodes.find((e) => e.ongoing) ?? null }
 }
 

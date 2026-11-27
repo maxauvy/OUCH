@@ -1,4 +1,4 @@
-import { createContext, createElement, isValidElement, useContext, useLayoutEffect, useMemo, useRef, type ReactNode } from 'react'
+import { createContext, createElement, isValidElement, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
 import { IconActivityHeartbeat, IconBodyScan, IconBook2, IconBulb, IconCalendar, IconCalendarWeek, IconChartDots, IconChartLine, IconClipboardCheck, IconCloudStorm, IconHeart, IconHeartbeat, IconInfoCircle, IconLeaf, IconListCheck, IconListDetails, IconMessageQuestion, IconMoodSmile, IconMoon, IconNotes, IconPill, IconRuler2, IconStretching, IconSun, IconSunrise, type Icon as TablerIcon } from '@tabler/icons-react'
 import { periodDayOf } from '../../lib/periodDay'
 import { lateCount } from '../../lib/lateEntries'
@@ -13,7 +13,7 @@ import type { LoggedEntry } from '../../db/types'
 import { DRAW_ORDER, pieces, type View } from '../../lib/bodyOutlines'
 import { zoneSummary } from '../../lib/bodyZones'
 import { periodOn } from '../../lib/medications'
-import { formatIllnessList } from '../../lib/illnessNames'
+import { formatIllnessList } from '../../lib/childView'
 import {
   association,
   pressureChange,
@@ -136,9 +136,7 @@ export function ReportDocument({
   onCut?: (cut: Cut) => void
 }) {
   const { options, f, p } = data
-  // Built once per report: each cut found while measuring renders the report again, and the same
-  // elements let React skip the blocks that did not move (charts, associations over all entries).
-  const layout = useMemo(() => (data.options.variant === 'gp' ? { pages: gpPages(data), labels: undefined } : painClinicLayout(data)), [data])
+  const layout = options.variant === 'gp' ? { pages: gpPages(data), labels: undefined } : painClinicLayout(data)
   const pages = layout.pages
   const running = options.variant === 'gp' ? f.t.runningGp : f.t.runningPainClinic
   const sheets = buildSheets(pages, cuts)
@@ -794,16 +792,14 @@ function Tile({ label, value, compare, trend: tr, f, tone, icon }: { label: stri
   )
 }
 
-/** "Before: …" when there is a period before to compare with. */
-function beforeOf(d: ReportData) {
-  return (v: string) => (d.painPrev ? d.f.format(d.f.t.before, { v }) : undefined)
-}
-
-/** The mean pain over the period, with the period before. */
-function meanPainTile(d: ReportData, pain: NonNullable<ReportData['pain']>) {
-  const { f, painPrev } = d
-  const before = beforeOf(d)
-  return (
+function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
+  const { f, pain, painPrev } = d
+  if (!pain) return null
+  const before = (v: string) => (painPrev ? f.format(f.t.before, { v }) : undefined)
+  const sleep = meanOf(d.current, 'sleepHours')
+  const sleepPrev = meanOf(d.previous, 'sleepHours')
+  const quality = meanOf(d.current, 'sleepQuality')
+  const tiles = [
     <Tile
       key="mean"
       tone="pain"
@@ -818,48 +814,30 @@ function meanPainTile(d: ReportData, pain: NonNullable<ReportData['pain']>) {
       compare={painPrev && painPrev.mean > 0 ? `${before(f.nf(painPrev.mean))} · ${f.signedPct((pain.mean - painPrev.mean) / painPrev.mean)}` : undefined}
       trend={painPrev ? trend(pain.mean, painPrev.mean, 'lower', FLAT_BELOW.score) : null}
       f={f}
-    />
-  )
-}
-
-/** The mean sleep over the period, with the period before and the sleep quality; nothing when no sleep was noted. */
-function sleepTile(d: ReportData) {
-  const { f } = d
-  const sleep = meanOf(d.current, 'sleepHours')
-  if (!sleep) return null
-  const sleepPrev = meanOf(d.previous, 'sleepHours')
-  const quality = meanOf(d.current, 'sleepQuality')
-  const before = beforeOf(d)
-  return (
-    <Tile
-      key="sleep"
-      tone="sleep"
-      icon={IconMoon}
-      label={f.t.tileSleep}
-      value={
-        <>
-          {f.nf(sleep.mean)}
-          <small> h</small>
-        </>
-      }
-      compare={[sleepPrev && before(f.format(f.t.hours, { v: f.nf(sleepPrev.mean) })), quality && f.format(f.t.sleepQuality, { v: f.nf(quality.mean) })].filter(Boolean).join(' · ')}
-      trend={sleepPrev ? trend(sleep.mean, sleepPrev.mean, 'higher', FLAT_BELOW.hours) : null}
-      f={f}
-    />
-  )
-}
-
-function Tiles({ d, detailed }: { d: ReportData; detailed: boolean }) {
-  const { f, pain, painPrev } = d
-  if (!pain) return null
-  const before = (v: string) => (painPrev ? f.format(f.t.before, { v }) : undefined)
-  const sleep = sleepTile(d)
-  const tiles = [
-    meanPainTile(d, pain),
+    />,
     <Tile key="severe" tone="severe" icon={IconSun} label={f.t.tileSevere} value={f.pct(pain.severe)} compare={painPrev ? before(f.pct(painPrev.severe)) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
     <Tile key="mild" tone="brand" icon={IconMoodSmile} label={f.t.tileMild} value={f.pct(pain.mild)} compare={painPrev ? before(f.pct(painPrev.mild)) : undefined} trend={painPrev ? trend(pain.mild, painPrev.mild, 'higher', FLAT_BELOW.share) : null} f={f} />,
   ]
-  if (sleep) tiles.push(sleep)
+  if (sleep)
+    tiles.push(
+      <Tile
+        key="sleep"
+        tone="sleep"
+        icon={IconMoon}
+        label={f.t.tileSleep}
+        value={
+          <>
+            {f.nf(sleep.mean)}
+            <small> h</small>
+          </>
+        }
+        compare={[sleepPrev && before(f.format(f.t.hours, { v: f.nf(sleepPrev.mean) })), quality && f.format(f.t.sleepQuality, { v: f.nf(quality.mean) })]
+          .filter(Boolean)
+          .join(' · ')}
+        trend={sleep && sleepPrev ? trend(sleep.mean, sleepPrev.mean, 'higher', FLAT_BELOW.hours) : null}
+        f={f}
+      />
+    )
   if (detailed)
     tiles.push(
       <Tile
@@ -1080,7 +1058,21 @@ function GpTiles({ d }: { d: ReportData }) {
   const severeN = Math.round(pain.severe * pain.n)
   const stiff = d.options.includeStiffness ? summarizeMorningStiffness(d.current) : null
   const tiles: ReactNode[] = [
-    meanPainTile(d, pain),
+    <Tile
+      key="mean"
+      tone="pain"
+      icon={IconActivityHeartbeat}
+      label={f.t.tileMeanPain}
+      value={
+        <>
+          {f.nf(pain.mean)}
+          <small> /10</small>
+        </>
+      }
+      compare={painPrev && painPrev.mean > 0 ? `${before(f.nf(painPrev.mean))} · ${f.signedPct((pain.mean - painPrev.mean) / painPrev.mean)}` : undefined}
+      trend={painPrev ? trend(pain.mean, painPrev.mean, 'lower', FLAT_BELOW.score) : null}
+      f={f}
+    />,
     <Tile key="severe" tone="severe" icon={IconSun} label={f.t.tileSevere} value={severeN} compare={painPrev ? (d.p.prevDays === d.p.periodDays ? before(String(Math.round(painPrev.severe * painPrev.n))) : f.format(f.t.beforeOfDays, { v: Math.round(painPrev.severe * painPrev.n), days: d.p.prevDays })) : undefined} trend={painPrev ? trend(pain.severe, painPrev.severe, 'lower', FLAT_BELOW.share) : null} f={f} />,
   ]
   const flaresTileOf = flaresTile(flares.detectable, flares.current.length, d.marked.length)
@@ -1102,9 +1094,28 @@ function GpTiles({ d }: { d: ReportData }) {
       />
     )
   }
-  const sleep = sleepTile(d)
-  if (sleep) tiles.push(sleep)
-  else if (stiff?.commonest)
+  const sleep = meanOf(d.current, 'sleepHours')
+  if (sleep) {
+    const sleepPrev = meanOf(d.previous, 'sleepHours')
+    const quality = meanOf(d.current, 'sleepQuality')
+    tiles.push(
+      <Tile
+        key="sleep"
+        tone="sleep"
+        icon={IconMoon}
+        label={f.t.tileSleep}
+        value={
+          <>
+            {f.nf(sleep.mean)}
+            <small> h</small>
+          </>
+        }
+        compare={[sleepPrev && before(f.format(f.t.hours, { v: f.nf(sleepPrev.mean) })), quality && f.format(f.t.sleepQuality, { v: f.nf(quality.mean) })].filter(Boolean).join(' · ')}
+        trend={sleepPrev ? trend(sleep.mean, sleepPrev.mean, 'higher', FLAT_BELOW.hours) : null}
+        f={f}
+      />
+    )
+  } else if (stiff?.commonest)
     tiles.push(<Tile key="stiffness" tone="body" icon={IconSunrise} label={f.t.stiffness.title} value={<small>{f.t.stiffness.bands[stiff.commonest]}</small>} compare={f.format(f.t.stiffness.noted, { n: stiff.noted })} />)
   return <div className="r-tiles r-first-tiles">{tiles}</div>
 }

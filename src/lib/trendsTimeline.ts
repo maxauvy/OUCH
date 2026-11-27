@@ -61,3 +61,8 @@ export function trialSpans(items: readonly TimelineItem[]): { from: string; to: 
 export function markedSpans(items: readonly TimelineItem[]): { from: string; to: string }[] {
   return items.flatMap((i) => (i.kind === 'marked' ? [{ from: i.flare.start, to: i.flare.last }] : []))
 }
+
+/** The last change of treatment up to today, of any kind; undefined when there is none. */
+export function lastTreatmentEvent(events: readonly TreatmentEvent[], today: string): TreatmentEvent | undefined {
+  return events.filter((e) => e.date <= today).at(-1)
+}

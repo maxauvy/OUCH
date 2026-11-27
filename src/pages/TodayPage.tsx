@@ -5,7 +5,7 @@ import { DailyEntryForm } from '../components/entry/DailyEntryForm'
 import { Footer } from '../components/layout/Footer'
 import { hasPain } from '../lib/loggedEntries'
 import { useLoggedEntries, useTodayEntry } from '../hooks/useEntries'
-import type { TodayMessages } from '../lib/todayMessages'
+import { useTodayMessages } from '../hooks/useTodayMessages'
 import type { Tab } from '../components/layout/TabBar'
 import { useSettings } from '../hooks/useSettings'
 import { format, useLocale, useTranslation } from '../i18n'
@@ -27,7 +27,6 @@ export function TodayPage({
   news,
   onOpenKids,
   onGoToTab,
-  messages,
 }: {
   onGoToBackup: () => void
   onOpenSettings: () => void
@@ -36,8 +35,6 @@ export function TodayPage({
   /** Absent when the kids' page is turned off in the settings. */
   onOpenKids?: () => void
   onGoToTab: (tab: Tab, date?: string) => void
-  /** What waits on the day's page: worked out once, by the app, which also needs it for the Trends dot. */
-  messages: TodayMessages | null
 }) {
   const entry = useTodayEntry()
   const settings = useSettings()
@@ -53,6 +50,7 @@ export function TodayPage({
   // list (never during a flare: the soft word of the hard days stands alone).
   // The backup reminder keeps its own card: losing the journal is the worst case.
   const logged = useLoggedEntries()
+  const messages = useTodayMessages()
   const canShareWeather = !!entry && hasPain(entry)
   // The daily image went to Dropbox on its own today: the tile says when.
   const autoSentAt = settings.weatherShare?.sentAt
