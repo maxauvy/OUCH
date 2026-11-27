@@ -23,6 +23,10 @@ Elles viennent de ce à quoi le projet tient. Une PR qui les enfreint sera discu
 5. **Rien ne quitte l'appareil sans geste de la personne.** Les seuls appels sortants sont ceux de [`PRIVACY.md`](PRIVACY.md) ; la politique de sécurité de contenu (`vite.config.ts`) les limite. Ajouter un appel réseau, un script tiers ou une mesure d'audience change cette promesse : cela demande une discussion préalable et la mise à jour de `PRIVACY.md`.
 6. **Français et anglais ensemble.** Chaque texte visible existe dans `src/i18n/locales/fr.ts` et `en.ts`, et les pluriels passent par `{{n:jour|jours}}`.
 7. **Accessible.** Contraste suffisant, cibles à toucher assez grandes, texte qui suit la taille réglée sur l'appareil, lecteurs d'écran : tester avant de proposer une modification d'interface.
+8. **Simple d'abord.** Chaque écran de plus est un écran de plus à comprendre pour quelqu'un qui a mal. Trois garde-fous :
+   - **Une seule maison par idée.** Une fonction a un seul endroit où on la règle et où on la suit ; ailleurs, un lien y mène, sans la refaire.
+   - **L'accès anticipé est une porte.** Une fonction à l'essai n'en sort que si elle remplace ou regroupe quelque chose d'existant, ou si des personnes qui l'utilisent la demandent ; sinon elle est retirée. OUCH ne mesure pas l'usage des fonctions : la décision repose sur les retours.
+   - **Des budgets fixes.** Le nombre d'onglets (5) et d'entrées de Réglages (30 fin novembre 2026, la liste `SETTING_IDS` de `src/lib/settingsSearch.ts`) ne grandit pas : en ajouter un, c'est en retirer ou en regrouper un autre. Une PR qui ajoute un écran, un onglet ou un réglage dit ce qu'elle remplace.
 
 ## Pour les développeurs
 
