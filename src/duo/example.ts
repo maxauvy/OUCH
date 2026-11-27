@@ -4,12 +4,14 @@
 // explanations point at this example rather than at the day's image.
 //
 // The images are 630 px wide captures of the weather card (420 CSS px, the
-// "Météo" look) with three gauges and no message for relatives. If the card's
+// "Météo" look) with three gauges and no message for relatives, saved as WebP
+// (quality 80: a third of the JPEG, the same to the eye; every browser Duo
+// runs in reads it). If the card's
 // layout changes (src/components/weather/WeatherCard.tsx), capture them again
 // from the demo and measure the parts anew.
 
-import exampleFr from './assets/example-fr.jpg'
-import exampleEn from './assets/example-en.jpg'
+import exampleFr from './assets/example-fr.webp'
+import exampleEn from './assets/example-en.webp'
 
 export const EXAMPLE_IMAGE = { fr: exampleFr, en: exampleEn } as const
 
