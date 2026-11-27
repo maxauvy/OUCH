@@ -27,10 +27,10 @@ import { Card, GroupCaption } from '../ui/Card'
 import { BodyMap } from './BodyMap'
 import { Slider } from '../ui/Slider'
 import { FlarePainScale } from './FlarePainScale'
-import { MarkedFlareLine } from '../flare/MarkedFlareLine'
 import { ContributorsCard } from './ContributorsCard'
 import { isUnusual, unusualDay } from '../../lib/contributors'
-import { RestDayCard, RestDayLink } from './RestDay'
+import { RestDayCard } from './RestDay'
+import { DayApart } from './DayApart'
 import { isRestDay } from '../../lib/restDay'
 import { Toggle } from '../ui/Toggle'
 import { WeatherIcon } from '../ui/WeatherIcon'
@@ -551,8 +551,7 @@ export function HealthEntryLayout({
           </>
         )}
 
-        {isToday && <MarkedFlareLine />}
-        {isToday && !restToday && <RestDayLink date={date} />}
+        {isToday && <DayApart date={date} rest={restToday} />}
       </Card>
 
       {showContributors && <ContributorsCard date={date} selected={local.contributors} />}

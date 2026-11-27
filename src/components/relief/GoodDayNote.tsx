@@ -1,5 +1,5 @@
 import { useId, useLayoutEffect, useRef, useState } from 'react'
-import { IconChevronRight, IconMail, IconSunrise, IconWriting } from '@tabler/icons-react'
+import { IconMail, IconSunrise, IconWriting } from '@tabler/icons-react'
 import { updateSettings } from '../../db'
 import type { GoodDayNote } from '../../db/types'
 import { format, useLanguage, useLocale, useTranslation } from '../../i18n'
@@ -44,26 +44,6 @@ export function FlareProof({ lengths, bars = false }: { lengths: readonly number
         )}
       </div>
     </div>
-  )
-}
-
-/** In the soft card of a hard day: the note is there, to open when the person wants. */
-export function NoteWaitingRow({ note, onOpen }: { note: GoodDayNote; onOpen: () => void }) {
-  const t = useTranslation().goodDayNote
-  const date = noteDate(note.date, useLocale().intlLocale, todayISO())
-  return (
-    <button type="button" onClick={onOpen} className="flex items-center gap-3 w-full min-h-14 py-2.5 pl-3 pr-3 rounded-[16px] text-left" style={{ background: 'var(--color-surface)' }}>
-      <span className="w-10 h-10 shrink-0 rounded-full flex items-center justify-center" style={{ background: 'var(--color-brand-soft)', color: 'var(--color-brand)' }} aria-hidden>
-        <IconMail size={20} stroke={1.8} />
-      </span>
-      <span className="flex-1 min-w-0">
-        <span className="block text-control font-semibold">{t.waiting}</span>
-        <span className="block text-caption" style={{ color: 'var(--color-ink-muted)' }}>
-          {format(t.writtenOn, { date })}
-        </span>
-      </span>
-      <IconChevronRight size={20} aria-hidden style={{ color: 'var(--color-ink-muted)' }} />
-    </button>
   )
 }
 
