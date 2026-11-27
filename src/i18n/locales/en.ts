@@ -1760,6 +1760,7 @@ const en: Translations = {
     remove: 'Delete this appointment',
     goalPrefix: 'Priority:',
     pageKicker: 'For my doctor',
+    otherCarersTitle: 'For other health professionals',
     pastTitle: "Past appointments",
     pastHint: "OUCH keeps the last 6 appointments with the family doctor and the last 2 at the pain clinic. These notes stay on your device and in your backup.",
     pastSheetTitle: "A past appointment",

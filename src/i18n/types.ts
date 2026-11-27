@@ -1562,6 +1562,8 @@ export interface Translations {
     /** Prefix of the goal line in the report's list */
     goalPrefix: string
     pageKicker: string
+    /** The list of papers and screens for other professionals than this doctor */
+    otherCarersTitle: string
     pastTitle: string
     pastHint: string
     pastSheetTitle: string

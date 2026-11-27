@@ -15,7 +15,6 @@ import { PastConsultationSheet } from '../components/consultation/PastConsultati
 import { GroupCaption } from '../components/ui/Card'
 import type { PastConsultation } from '../db/types'
 import { useRichLook } from '../lib/look'
-import { NavTile, NavTiles } from '../components/ui/NavTile'
 import { PageSky } from '../components/entry/TodaySky'
 import { kindLabel } from '../components/consultation/kindLabel'
 import { PhysioSeriesCard } from '../components/physio/PhysioSeriesCard'
@@ -126,6 +125,30 @@ export function ConsultationPage() {
   }
   const prescriptionHint = p ? [format(i18n.prescription.settingsCurrent, { end: day(prescriptionEnd(p)) }, language), p.label].filter(Boolean).join(' · ') : i18n.prescription.settingsNone
 
+  // What goes with this appointment, under it: the note after it, the report when the next one is with the physio, and the prescription to renew.
+  const appointmentRows = (
+    <>
+      {afterKind && <LinkRow icon={IconNotes} title={kineNext ? i18n.physio.afterRow : t.afterRow} hint={kineNext ? i18n.physio.afterRowHint : t.afterRowHint} onClick={() => setSheet('after')} />}
+      {kineNext && <LinkRow icon={IconFileText} title={i18n.physio.reportTile} hint={i18n.physio.reportTileHint} onClick={() => setReporting(true)} />}
+      <LinkRow icon={IconPill} title={t.prescriptionRow} hint={prescriptionHint} onClick={() => setSheet('prescription')} />
+    </>
+  )
+  // The papers and screens for someone else than this doctor, together under their own name.
+  const otherCarers = (
+    <section aria-labelledby="other-carers-title" className="flex flex-col gap-2">
+      <GroupCaption>
+        <span id="other-carers-title">{t.otherCarersTitle}</span>
+      </GroupCaption>
+      <Card>
+        <div className="flex flex-col">
+          <LinkRow buttonRef={careSheetRow} icon={IconStethoscope} title={i18n.careSheet.row} hint={i18n.careSheet.rowHint} onClick={openCareSheet} />
+          {physio && !kineNext && <LinkRow icon={IconHeartHandshake} title={i18n.physio.screenButton} hint={i18n.physio.screenHint} onClick={() => setPhysioPage(true)} />}
+          <LinkRow buttonRef={mdphRow} icon={IconFolder} title={i18n.mdph.row} hint={i18n.mdph.rowHint} onClick={() => setMdph(true)} />
+        </div>
+      </Card>
+    </section>
+  )
+
   return (
     <div className="relative isolate flex flex-col gap-4 px-4 pt-4 pb-28">
       <PageSky />
@@ -181,18 +204,12 @@ export function ConsultationPage() {
                 </span>
               </button>
             </div>
+            <div className="flex flex-col border-t -mb-2" style={{ borderColor: 'var(--color-hairline)' }}>{appointmentRows}</div>
           </section>
 
           {physio && <PhysioSeriesCard settings={settings} today={today} onOpen={() => setPhysioPage(true)} showButton={false} />}
 
-          <NavTiles>
-            {afterKind && <NavTile icon={IconNotes} tone="mood" title={kineNext ? i18n.physio.afterRow : t.afterRow} hint={kineNext ? i18n.physio.afterRowHint : t.afterRowHint} onClick={() => setSheet('after')} />}
-            {kineNext && <NavTile icon={IconFileText} tone="activity" title={i18n.physio.reportTile} hint={i18n.physio.reportTileHint} onClick={() => setReporting(true)} />}
-            {physio && !kineNext && <NavTile icon={IconHeartHandshake} tone="activity" title={i18n.physio.screenButton} hint={i18n.physio.screenHint} onClick={() => setPhysioPage(true)} />}
-            <NavTile icon={IconPill} tone="meds" title={t.prescriptionRow} hint={prescriptionHint} onClick={() => setSheet('prescription')} />
-            <NavTile buttonRef={careSheetRow} icon={IconStethoscope} tone="fog" title={i18n.careSheet.row} hint={i18n.careSheet.rowHint} onClick={openCareSheet} />
-            <NavTile buttonRef={mdphRow} icon={IconFolder} tone="sleep" title={i18n.mdph.row} hint={i18n.mdph.rowHint} onClick={() => setMdph(true)} />
-          </NavTiles>
+          {otherCarers}
         </>
       ) : (
         <>
@@ -235,25 +252,11 @@ export function ConsultationPage() {
             hint={c ? (c.questions.length ? format(t.questionsCount, { n: c.questions.length }, language) : t.questionsNone) : undefined}
             onClick={() => setSheet('appointment')}
           />
-          {afterKind && <LinkRow icon={IconNotes} title={kineNext ? i18n.physio.afterRow : t.afterRow} hint={kineNext ? i18n.physio.afterRowHint : t.afterRowHint} onClick={() => setSheet('after')} />}
-          {kineNext && <LinkRow icon={IconFileText} title={i18n.physio.reportTile} hint={i18n.physio.reportTileHint} onClick={() => setReporting(true)} />}
-          {physio && !kineNext && <LinkRow icon={IconHeartHandshake} title={i18n.physio.screenButton} hint={i18n.physio.screenHint} onClick={() => setPhysioPage(true)} />}
-          <LinkRow
-            icon={IconPill}
-            title={t.prescriptionRow}
-            hint={prescriptionHint}
-            onClick={() => setSheet('prescription')}
-          />
-          <LinkRow
-            buttonRef={careSheetRow}
-            icon={IconStethoscope}
-            title={i18n.careSheet.row}
-            hint={i18n.careSheet.rowHint}
-            onClick={openCareSheet}
-          />
-          <LinkRow buttonRef={mdphRow} icon={IconFolder} title={i18n.mdph.row} hint={i18n.mdph.rowHint} onClick={() => setMdph(true)} />
+          {appointmentRows}
         </div>
       </Card>
+
+      {otherCarers}
         </>
       )}
 

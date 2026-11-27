@@ -1765,6 +1765,7 @@ const fr: Translations = {
     remove: 'Supprimer ce rendez-vous',
     goalPrefix: 'Priorité :',
     pageKicker: 'Pour mon médecin',
+    otherCarersTitle: 'Pour d’autres soignants',
     pastTitle: "Rendez-vous passés",
     pastHint: "OUCH garde les 6 derniers rendez-vous chez le médecin traitant et les 2 derniers au centre de la douleur. Ces notes restent sur ton appareil et dans ta sauvegarde.",
     pastSheetTitle: "Un rendez-vous passé",
