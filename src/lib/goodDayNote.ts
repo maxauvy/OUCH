@@ -8,10 +8,7 @@
 
 import type { GoodDayNote, LoggedEntry } from '../db/types.ts'
 import { detectFlares, type FlareEpisode } from './flares.ts'
-import { shiftISO } from './dates.ts'
-
-/** 'YYYY-MM-DD' naming a real calendar day (as in backupSanitize, which imports this file). */
-const isDay = (v: unknown): v is string => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && new Date(`${v}T12:00:00Z`).toISOString().slice(0, 10) === v
+import { isISODate as isDay, shiftISO } from './dates.ts'
 
 export const MAX_NOTE = 500
 /** The invitation to write waits this many days after a flare ends, then lets it go. */

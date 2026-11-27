@@ -7,7 +7,7 @@ import { cleanParcours } from '../../lib/mdphParcours'
 import { CERT_FILE, NEEDS_MAX, certificateFields, needsSentence } from '../../lib/mdphCertificate'
 import { ModalSheet } from '../ui/ModalSheet'
 import { NamesFields, type Names } from './FormSheet'
-import { sharePdf } from './sharePdf'
+import { sharePdf } from '../../lib/sharePdf'
 
 /** Writes page 1's patient box into the official certificate, fetched the first time. The fields stay editable. */
 async function fillCertificate(texts: Record<string, string>): Promise<Blob> {
